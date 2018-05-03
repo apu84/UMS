@@ -41,6 +41,8 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
           + "EMERGENCY_NAME = ?, EMERGENCY_RELATION = ?, EMERGENCY_PHONE = ?, EMERGENCY_ADDRESS = ?, LAST_MODIFIED = "
           + getLastModifiedSql() + " ";
 
+  static String EXISTS_ONE = "SELECT COUNT(EMPLOYEE_ID) FROM EMP_PERSONAL_INFO ";
+
   private JdbcTemplate mJdbcTemplate;
 
   public PersistentPersonalInformationDao(final JdbcTemplate pJdbcTemplate) {
@@ -71,6 +73,12 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
     List<PersonalInformation> personalInformationList =
         mJdbcTemplate.query(query, new Object[] {pEmailAddress}, new PersonalInformationRowMapper());
     return personalInformationList.size() == 1 ? Optional.of(personalInformationList.get(0)) : Optional.empty();
+  }
+
+  @Override
+  public boolean exists(String pId) {
+    String query = EXISTS_ONE + " WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, Boolean.class);
   }
 
   @Override

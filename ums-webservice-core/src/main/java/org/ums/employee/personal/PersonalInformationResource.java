@@ -1,5 +1,6 @@
 package org.ums.employee.personal;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.logs.GetLog;
 
@@ -15,12 +16,15 @@ import javax.ws.rs.core.Request;
 @Path("employee/personal")
 public class PersonalInformationResource extends MutablePersonalInformationResource {
 
+  @Autowired
+  private PersonalInformationResourceHelper mHelper;
+
   @GET
   @Path("/get/employeeId/{employee-id}")
   @GetLog(message = "Get employee information (personal data)")
   public JsonObject getPersonalInformation(@Context HttpServletRequest pHttpServletRequest,
       final @PathParam("employee-id") String pEmployeeId, final @Context Request pRequest) {
-    return mHelper.getPersonalInformation(pEmployeeId, mUriInfo);
+    return mHelper.get(pEmployeeId, mUriInfo);
   }
 
   @GET
