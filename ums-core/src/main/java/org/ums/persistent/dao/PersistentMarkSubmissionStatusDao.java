@@ -98,7 +98,7 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
   public MarksSubmissionStatus get(Integer pSemesterId, String pCourseId, ExamType pExamType) {
     String query =
         SELECT_ALL
-            + "WHERE MARKS_SUBMISSION_STATUS.SEMESTER_ID = ? AND MARKS_SUBMISSION_STATUS.COURSE_ID = ? AND MARKS_SUBMISSION_STATUS.EXAM_TYPE = ?";
+            + " AND MARKS_SUBMISSION_STATUS.SEMESTER_ID = ? AND MARKS_SUBMISSION_STATUS.COURSE_ID = ? AND MARKS_SUBMISSION_STATUS.EXAM_TYPE = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterId, pCourseId, pExamType.getId()},
         new MarksSubmissionStatusRowMapper());
   }
