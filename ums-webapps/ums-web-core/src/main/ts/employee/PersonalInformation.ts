@@ -159,7 +159,6 @@ module ums {
         private getPersonalInformation() {
             this.employeeInformationService.getPersonalInformation(this.userId)
                 .then((data: any) => {
-                    console.log(data.general.spouseName);
                     this.initializePersonalObjects('all');
                     this.entry.general = data.general;
                     this.entry.contact = data.contact;
