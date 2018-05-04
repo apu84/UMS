@@ -112,6 +112,7 @@ public class ChartOfAccountsReportGenerator {
 
   private Document createGroupBasedAccountReport(Document pDocument, List<Group> pGroupList,
       Map<String, List<Account>> pGroupWithAccountMap) throws Exception {
+
     for(Group group : pGroupList) {
       if(pGroupWithAccountMap.containsKey(group.getGroupCode())) {
         Paragraph paragraph = new Paragraph(group.getGroupName(), mBoldFont);
@@ -123,12 +124,15 @@ public class ChartOfAccountsReportGenerator {
           paragraph = new Paragraph(account.getAccountName(), mLiteFont);
           pDocument.add(paragraph);
         }
+
+        pDocument.add(new Paragraph(" "));
+        pDocument.add(new Paragraph(" "));
       }
 
-      pDocument.add(new Paragraph(" "));
-      pDocument.add(new Paragraph(" "));
     }
 
+    pDocument.add(new Paragraph(" "));
+    pDocument.add(new Paragraph(" "));
     return pDocument;
   }
 

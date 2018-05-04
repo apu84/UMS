@@ -129,10 +129,18 @@ public class PersistentAccountDao extends AccountDaoDecorator {
   public Long create(MutableAccount pMutable) {
     String query =
         "insert into MST_ACCOUNT(ID, ACCOUNT_CODE, ACCOUNT_NAME, ACC_GROUP_CODE,  MODIFIED_DATE, MODIFIED_BY, COMP_CODE, LAST_MODIFIED) "
-            + "            VALUES (?,?,?,?,?,?, ?," + getLastModifiedSql() + " )";
+            + "            VALUES (:id,:accountCode,:accountName,:accGroupCode,:modifiedDate,:modifiedBy, :compCode,"
+            + getLastModifiedSql() + " )";
     Long id = mIdGenerator.getNumericId();
-    mJdbcTemplate.update(query, id, pMutable.getAccountCode(), pMutable.getAccountName(), pMutable.getAccGroupCode(),
-        pMutable.getModifiedDate(), pMutable.getModifiedBy(), pMutable.getCompany().getId());
+    Map parameterMap = new HashMap();
+    parameterMap.put("id", id);
+    parameterMap.put("accountCode", pMutable.getAccGroupCode());
+    parameterMap.put("accountName", pMutable.getAccountName());
+    parameterMap.put("accGroupCode", pMutable.getAccGroupCode());
+    parameterMap.put("modifiedDate", pMutable.getModifiedDate());
+    parameterMap.put("modifiedBy", pMutable.getModifiedBy());
+    parameterMap.put("compCode", pMutable.getCompanyId());
+    mNamedParameterJdbcTemplate.update(query, parameterMap);
     return id;
   }
 

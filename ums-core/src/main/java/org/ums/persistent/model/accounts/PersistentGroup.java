@@ -2,10 +2,12 @@ package org.ums.persistent.model.accounts;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.accounts.MutableGroup;
 import org.ums.manager.accounts.GroupManager;
+import org.ums.serializer.UmsDateSerializer;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -37,7 +39,7 @@ public class PersistentGroup implements MutableGroup {
   private String mDefaultComp;
   private String mStatusFlag;
   private String mStatusUpFlag;
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+  @JsonIgnore
   private Date mModifiedDate;
   private String mModifiedBy;
   private String mLastModified;
@@ -158,6 +160,7 @@ public class PersistentGroup implements MutableGroup {
   }
 
   @Override
+  @JsonIgnore
   public void setModifiedDate(Date pLastModifiedDate) {
     mModifiedDate = pLastModifiedDate;
   }
@@ -243,6 +246,7 @@ public class PersistentGroup implements MutableGroup {
   }
 
   @Override
+  @JsonSerialize(using = UmsDateSerializer.class)
   public Date getModifiedDate() {
     return mModifiedDate;
   }
