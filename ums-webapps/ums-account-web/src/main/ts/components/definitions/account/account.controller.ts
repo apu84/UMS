@@ -68,6 +68,7 @@ module ums {
     public addModalClicked() {
       this.account = <IAccount>{};
       this.account.yearOpenBalanceType = BalanceType.Dr;
+      this.account.yearOpenBalance=0;
       /* this.employeeService.getAll().then((employees: Employee[]) => {
          this.employeeNames = [];
          employees.forEach((e: Employee) => this.employeeNames.push(e.employeeName));

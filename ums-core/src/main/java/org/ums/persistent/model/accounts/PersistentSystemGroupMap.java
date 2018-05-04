@@ -196,6 +196,14 @@ public class PersistentSystemGroupMap implements MutableSystemGroupMap {
     setLastModified(pSystemGroupMap.getLastModified());
   }
 
+  @Override
+  public String toString() {
+    return "PersistentSystemGroupMap{" + "mId='" + mId + '\'' + ", mGroupType=" + mGroupType + ", mGroup=" + mGroup
+        + ", mGroupId=" + mGroupId + ", mCompany=" + mCompany + ", mCompanyId='" + mCompanyId + '\''
+        + ", mModifiedBy='" + mModifiedBy + '\'' + ", mModifierName='" + mModifierName + '\'' + ", mModifiedDate="
+        + mModifiedDate + ", mLastModified='" + mLastModified + '\'' + '}';
+  }
+
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sGroupManager = applicationContext.getBean("groupManager", GroupManager.class);

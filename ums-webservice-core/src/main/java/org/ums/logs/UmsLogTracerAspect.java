@@ -4,6 +4,7 @@ import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -34,6 +35,11 @@ public class UmsLogTracerAspect {
     printLog(pHttpServletRequest, log.message(), pJsonObject.toString());
   }
 
+  @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pObject,..)")
+  public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, Object pObject, PostLog log) {
+    printLog(pHttpServletRequest, log.message(), pObject.toString());
+  }
+
   // ******* PUT *******//
   @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pJsonObject,..)")
   public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonObject pJsonObject, PutLog log) {
@@ -43,6 +49,11 @@ public class UmsLogTracerAspect {
   @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pJsonArray,..)")
   public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonArray pJsonArray, PutLog log) {
     printLog(pHttpServletRequest, log.message(), pJsonArray.toString());
+  }
+
+  @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pObject,..)")
+  public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, Object pObject, PutLog log) {
+    printLog(pHttpServletRequest, log.message(), pObject.toString());
   }
 
   // ******* GET *******//

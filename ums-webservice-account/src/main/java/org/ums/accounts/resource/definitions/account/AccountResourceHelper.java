@@ -16,6 +16,7 @@ import org.ums.enums.accounts.definitions.financial.account.year.YearClosingFlag
 import org.ums.enums.accounts.definitions.group.GroupFlag;
 import org.ums.enums.accounts.definitions.group.GroupType;
 import org.ums.generator.IdGenerator;
+import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
 import org.ums.persistent.model.accounts.PersistentAccount;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
@@ -67,6 +68,8 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
   private AccountBalanceService mAccountBalanceService;
   @Autowired
   private SystemGroupMapManager mSystemGroupMapManager;
+  @Autowired
+  private CompanyManager mCompanyManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -83,7 +86,8 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     account.setModifiedBy(user.getEmployeeId());
     account.setModifiedDate(new Date());
-    account.setAccountCode(account.getAccountCode() == null ? Math.abs(mIdGenerator.getNumericId()) : account.getAccountCode());
+    account.setAccountCode(account.getAccountCode() == null || account.getAccGroupCode().equals("") ? mIdGenerator.getNumericId() : account.getAccountCode());
+    account.setCompanyId(mCompanyManager.getDefaultCompany().getId());
     Long id = getContentManager().create(account);
     account.setId(id);
     MutableAccountBalance accountBalance = new PersistentAccountBalance();
