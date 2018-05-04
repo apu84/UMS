@@ -12,9 +12,7 @@ import java.util.Date;
 public interface MutablePersonalInformation extends PersonalInformation, Editable<String>, MutableIdentifier<String>,
     MutableLastModifier {
 
-  void setFirstName(final String pFirstName);
-
-  void setLastName(final String pLastName);
+  void setName(final String pName);
 
   void setGender(final String pGender);
 
@@ -109,6 +107,4 @@ public interface MutablePersonalInformation extends PersonalInformation, Editabl
   void setEmergencyContactPhone(final String pEmergencyContactPhone);
 
   void setEmergencyContactAddress(final String pEmergencyContactAddress);
-
-  void setFullName(final String pFullName);
 }

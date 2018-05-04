@@ -526,8 +526,8 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
 
   public void setModifierName(String pModifierName) {
     modifierName =
-        pModifierName == null || pModifierName.equals("") ? sPersonalInformationManager.get(modifiedBy).getFirstName()
-            + " " + sPersonalInformationManager.get(modifiedBy).getLastName() : pModifierName;
+        pModifierName == null || pModifierName.equals("") ? sPersonalInformationManager.get(modifiedBy).getName()
+            : pModifierName;
   }
 
   @Override

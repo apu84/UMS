@@ -32,7 +32,8 @@
                                      ng-class="{ 'has-error' : nGeneralForm.nName.$invalid && !nGeneralForm.nName.$pristine }">
                                     <label for="iName" class="control-label">Name<span
                                             data-ng-show="!vm.generalReadOnly"
-                                            class='require'>*</span></label>
+                                            class='require'>*</span>
+                                    </label>
                                     <input type="text"
                                            id="iName"
                                            name="nName"
@@ -261,7 +262,7 @@
                     </div>
                 </div>
 
-                <div ng-if="vm.entry.personal.maritalStatus.id==2">
+                <div ng-if="vm.entry.general.maritalStatus.id==2">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group"

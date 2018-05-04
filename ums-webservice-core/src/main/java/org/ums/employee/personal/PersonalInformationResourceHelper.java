@@ -43,7 +43,7 @@ public class PersonalInformationResourceHelper extends
         List<PersonalInformation> personalInformationList = mManager.getAll();
         for (PersonalInformation personalInformation : personalInformationList) {
             JaccardDistance jaccardDistance = new JaccardDistance();
-            Double score = 1 - jaccardDistance.apply(fullName, personalInformation.getFullName().toLowerCase());
+            Double score = 1 - jaccardDistance.apply(fullName, personalInformation.getName().toLowerCase());
             if (score > 0.70) {
                 similarUsers.put(personalInformation, score);
             }
