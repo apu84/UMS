@@ -124,7 +124,7 @@ module ums {
 
     private saveAll() {
       let newlyAddedGroups: IGroup[] = [];
-      newlyAddedGroups = this.groups.filter((g: IGroup) => g.stringId == null);
+      newlyAddedGroups = this.groups.filter((g: IGroup) => g.id == null);
       this.groupService.saveAllGroup(newlyAddedGroups).then((groups) => {
         this.assignToGroupAndMap(groups);
       });
