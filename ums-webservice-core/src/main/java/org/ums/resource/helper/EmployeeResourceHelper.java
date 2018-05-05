@@ -137,7 +137,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
       mutableUser.setTemporaryPassword(tempPassword.toCharArray());
       mUserManager.create(mutableUser);
 
-      mNewIUMSAccountInfoEmailService.sendEmail(mutablePersonalInformation.getFullName(), mutableUser.getId(),
+      mNewIUMSAccountInfoEmailService.sendEmail(mutablePersonalInformation.getName(), mutableUser.getId(),
           tempPassword, mutablePersonalInformation.getPersonalEmail(), "IUMS", "AUST: IUMS Account Credentials");
     }
 
@@ -263,8 +263,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
 
   private void preparePersonalInformation(MutablePersonalInformation pMutablePersonalInformation, JsonObject pJsonObject) {
     pMutablePersonalInformation.setId(pJsonObject.getString("id"));
-    pMutablePersonalInformation.setFirstName(pJsonObject.getString("firstName"));
-    pMutablePersonalInformation.setLastName(pJsonObject.getString("lastName"));
+    pMutablePersonalInformation.setName(pJsonObject.getString("name"));
     pMutablePersonalInformation.setFatherName(" ");
     pMutablePersonalInformation.setMotherName(" ");
     pMutablePersonalInformation.setGender(" ");

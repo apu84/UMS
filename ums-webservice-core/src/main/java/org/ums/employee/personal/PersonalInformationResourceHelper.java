@@ -27,77 +27,78 @@ public class PersonalInformationResourceHelper extends
   @Autowired
   private PersonalInformationBuilder mBuilder;
 
-  public JsonObject getPersonalInformation(final String pEmployeeId, final UriInfo pUriInfo) {
+  public JsonObject get(final String pEmployeeId, final UriInfo pUriInfo) {
     LocalCache localCache = new LocalCache();
-    PersonalInformation personalInformation = new PersistentPersonalInformation();
-    try {
-      /* personalInformation = mManager.getPersonalInformation(pEmployeeId); */
-      personalInformation = mManager.get(pEmployeeId);
-    } catch(EmptyResultDataAccessException e) {
+    if(mManager.exists(pEmployeeId)) {
+      PersonalInformation personalInformation = mManager.get(pEmployeeId);
+      return toJson(personalInformation, pUriInfo, localCache);
     }
-    return buildJson(personalInformation, pUriInfo, localCache);
+    return null;
   }
 
   public JsonObject getSimilarUsers(final String pFirstName, final String pLastName, UriInfo pUriInfo) {
-    LocalCache localCache = new LocalCache();
-    Map<PersonalInformation, Double> similarUsers = new HashMap<>();
-    String fullName = (pFirstName.trim().concat(" " + pLastName.trim())).toLowerCase();
-    List<PersonalInformation> personalInformationList = mManager.getAll();
-    for(PersonalInformation personalInformation : personalInformationList) {
-      JaccardDistance jaccardDistance = new JaccardDistance();
-      Double score = 1 - jaccardDistance.apply(fullName, personalInformation.getFullName().toLowerCase());
-      if(score > 0.70) {
-        similarUsers.put(personalInformation, score);
-      }
+        LocalCache localCache = new LocalCache();
+        Map<PersonalInformation, Double> similarUsers = new HashMap<>();
+        String fullName = (pFirstName.trim().concat(" " + pLastName.trim())).toLowerCase();
+        List<PersonalInformation> personalInformationList = mManager.getAll();
+        for (PersonalInformation personalInformation : personalInformationList) {
+            JaccardDistance jaccardDistance = new JaccardDistance();
+            Double score = 1 - jaccardDistance.apply(fullName, personalInformation.getName().toLowerCase());
+            if (score > 0.70) {
+                similarUsers.put(personalInformation, score);
+            }
+        }
+        Map sortedSimilarUsersMap = similarUsers.entrySet().stream()
+                .sorted(Map.Entry.<PersonalInformation, Double>comparingByValue().reversed())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+        return buildJson(sortedSimilarUsersMap, pUriInfo);
     }
-    Map sortedSimilarUsersMap = similarUsers.entrySet().stream()
-            .sorted(Map.Entry.<PersonalInformation, Double>comparingByValue().reversed())
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                    (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-    return buildJson(sortedSimilarUsersMap, pUriInfo);
+
+  public Response update(JsonObject pJsonObject, UriInfo pUriInfo) {
+    if(pJsonObject.getJsonObject("entries").containsKey("type")
+        && pJsonObject.getJsonObject("entries").containsKey("employeeId")
+        && !pJsonObject.getJsonObject("entries").getString("type").isEmpty()
+        && !pJsonObject.getJsonObject("entries").getString("employeeId").isEmpty()
+        && mManager.exists(pJsonObject.getJsonObject("entries").getString("employeeId"))) {
+
+      LocalCache localeCache = new LocalCache();
+      MutablePersonalInformation mutablePersonalInformation = new PersistentPersonalInformation();
+      mBuilder.build(mutablePersonalInformation, pJsonObject.getJsonObject("entries"), localeCache);
+      mManager.update(mutablePersonalInformation);
+      localeCache.invalidate();
+      Response.ResponseBuilder builder = Response.created(null);
+      builder.status(Response.Status.CREATED);
+      return builder.build();
+    }
+    Response.ResponseBuilder builder = Response.created(null);
+    builder.status(Response.Status.INTERNAL_SERVER_ERROR);
+    return builder.build();
+
   }
 
-  public Response updatePersonalInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
-    MutablePersonalInformation personalInformation = new PersistentPersonalInformation();
-    LocalCache localeCache = new LocalCache();
-    JsonArray entries = pJsonObject.getJsonArray("entries");
-    JsonObject jsonObject = entries.getJsonObject(0).getJsonObject("personal");
-    mBuilder.build(personalInformation, jsonObject, localeCache);
-    mManager.update(personalInformation);
-    localeCache.invalidate();
-    Response.ResponseBuilder builder = Response.created(null);
-    builder.status(Response.Status.CREATED);
-    return builder.build();
-  }
-
-  public Response savePersonalInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
-    MutablePersonalInformation personalInformation = new PersistentPersonalInformation();
-    LocalCache localeCache = new LocalCache();
-    JsonArray entries = pJsonObject.getJsonArray("entries");
-    JsonObject jsonObject = entries.getJsonObject(0).getJsonObject("personal");
-    mBuilder.build(personalInformation, jsonObject, localeCache);
-    mManager.create(personalInformation);
-    localeCache.invalidate();
-    Response.ResponseBuilder builder = Response.created(null);
-    builder.status(Response.Status.CREATED);
-    return builder.build();
-  }
+  /*
+   * public Response create(JsonObject pJsonObject, UriInfo pUriInfo) { MutablePersonalInformation
+   * personalInformation = new PersistentPersonalInformation(); LocalCache localeCache = new
+   * LocalCache(); JsonArray entries = pJsonObject.getJsonArray("entries"); JsonObject jsonObject =
+   * entries.getJsonObject(0).getJsonObject("personal"); mBuilder.build(personalInformation,
+   * jsonObject, localeCache); mManager.create(personalInformation); localeCache.invalidate();
+   * Response.ResponseBuilder builder = Response.created(null);
+   * builder.status(Response.Status.CREATED); return builder.build(); }
+   */
 
   @Override
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
     throw new NotImplementedException();
   }
 
-  private JsonObject buildJson(PersonalInformation pPersonalInformation, UriInfo pUriInfo, LocalCache localCache) {
-    JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    if(pPersonalInformation.getId() != null) {
-      children.add(toJson(pPersonalInformation, pUriInfo, localCache));
-    }
-    jsonObject.add("entries", children);
-    localCache.invalidate();
-    return jsonObject.build();
-  }
+  /*
+   * private JsonObject buildJson(PersonalInformation pPersonalInformation, UriInfo pUriInfo,
+   * LocalCache localCache) { JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+   * JsonArrayBuilder children = Json.createArrayBuilder(); if(pPersonalInformation.getId() != null)
+   * { children.add(toJson(pPersonalInformation, pUriInfo, localCache)); } jsonObject.add("entries",
+   * children); localCache.invalidate(); return jsonObject.build(); }
+   */
 
   private JsonObject buildJson(Map<PersonalInformation, Double> similarUsers, UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();

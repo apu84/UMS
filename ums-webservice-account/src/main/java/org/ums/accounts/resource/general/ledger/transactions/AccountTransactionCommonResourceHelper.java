@@ -246,7 +246,7 @@ public class AccountTransactionCommonResourceHelper extends
     mutableAccountTransactions.forEach(a -> {
       a.setVoucherNo(a.getVoucherNo().substring(2));
       PersonalInformation personalInformation = mPersonalInformationManager.get(a.getModifiedBy());
-      a.setModifierName(personalInformation.getFirstName() + " " + (personalInformation.getLastName() == null ? "" : personalInformation.getLastName()));
+      a.setModifierName(personalInformation.getName());
     });
     PaginatedVouchers paginatedVouchers = new PaginatedVouchers();
     List<AccountTransaction> accountTransactions = new ArrayList<>(mutableAccountTransactions);

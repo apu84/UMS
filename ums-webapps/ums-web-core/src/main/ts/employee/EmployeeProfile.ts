@@ -1,39 +1,55 @@
 module ums {
     class EmployeeProfile {
-        public static $inject = ['$q', 'notify', 'userService', '$state', '$stateParams'];
+        public static $inject = ['$q', 'notify', '$state', '$stateParams', 'userService'];
 
         private state: any;
+        private stateParams: any;
         private employeeId: string;
+        private tab: string;
 
         constructor(private $q: ng.IQService,
                     private notify: Notify,
-                    private userService: UserService,
                     private $state : any,
-                    private $stateParams: any) {
+                    private $stateParams: any,
+                    private userService: UserService) {
 
-
-            console.log("In Employee Profile------<---->>---");
 
             this.state = $state;
+            this.stateParams = $stateParams;
 
-            console.log("this.state");
-            console.log(this.state);
+            console.log("Current state name ---------- " + this.state.current.name);
+            console.log("Current state url ---------- " + this.state.current.url);
+            console.log("stateParams ID:  ---------  " +  this.stateParams.id);
 
-            console.log("id", this.state.id);
-
-            if(this.state.id == undefined || this.state.id == null || this.state.id == ""){
-                console.log("Printing From here");
+            if(this.stateParams.id == undefined || this.stateParams.id == null || this.stateParams.id == ""){
+                console.log("in if");
                 userService.fetchCurrentUserInfo().then((user: any) => {
+                    this.tab = 'employeeProfile';
                     this.employeeId = user.employeeId;
-                    this.state.go('employeeProfile.personal', {id1: this.employeeId});
+                    //this.initialRouting();
                 });
             }
             else {
-                console.log("Printing From there");
-                this.employeeId = this.state.id;
-                this.state.go('employeeInformation.employeeProfile.personal', {id1: this.employeeId });
+                console.log("in else");
+                this.tab = 'employeeInformation.employeeProfile';
+                this.employeeId = this.stateParams.id;
+                //this.initialRouting();
             }
         }
+
+        private initialRouting() : void{
+            if (this.state.current.url === '/employeeProfile') {
+                this.redirectTo('personal');
+            }
+            else {
+                this.redirectTo(this.state.current.url.split('/')[1]);
+            }
+        }
+
+        public redirectTo(tab: string): void{
+            this.state.go(this.tab + '.' + tab, {id: this.employeeId});
+        }
     }
+
     UMS.controller("EmployeeProfile", EmployeeProfile);
 }

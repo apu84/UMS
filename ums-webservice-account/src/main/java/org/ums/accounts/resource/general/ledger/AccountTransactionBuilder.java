@@ -48,7 +48,7 @@ public class AccountTransactionBuilder implements Builder<AccountTransaction, Mu
     pBuilder.add("statUpFlag", pReadOnly.getStatUpFlag());
     pBuilder.add("receiptId", pReadOnly.getReceiptId().toString());
     pBuilder.add("postDate", UmsUtils.formatDate(pReadOnly.getPostDate(), "dd-MM-yyyy"));
-    pBuilder.add("modifiedBy", mEmployeeManager.get(pReadOnly.getModifiedBy()).getPersonalInformation().getFullName());
+    pBuilder.add("modifiedBy", mEmployeeManager.get(pReadOnly.getModifiedBy()).getPersonalInformation().getName());
     pBuilder.add("modifiedDate", UmsUtils.formatDate(pReadOnly.getModifiedDate(), "dd-MM-yyyy"));
   }
 

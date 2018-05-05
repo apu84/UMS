@@ -17,7 +17,7 @@ module ums{
         }
 
         //PersonalInformationService
-        public savePersonalInformation(json: any): ng.IPromise<any> {
+/*        public savePersonalInformation(json: any): ng.IPromise<any> {
             let defer = this.$q.defer();
             this.httpClient.post(this.personalUrl + "/save", json, 'application/json')
                 .success(() => {
@@ -29,7 +29,7 @@ module ums{
                     defer.resolve("Error");
                 });
             return defer.promise;
-        }
+        }*/
 
         public updatePersonalInformation(json: any): ng.IPromise<any> {
             let defer = this.$q.defer();
@@ -45,10 +45,11 @@ module ums{
         }
 
         public getPersonalInformation(employeeId: string): ng.IPromise<any> {
+            console.log("Employee Id: " + employeeId);
             let defer = this.$q.defer();
             this.httpClient.get(this.personalUrl + "/get/employeeId/" + employeeId, HttpClient.MIME_TYPE_JSON,
                 (json: any, etag: string) => {
-                    defer.resolve(json.entries);
+                    defer.resolve(json);
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {
                     this.notify.error("Error in fetching Personal Information");

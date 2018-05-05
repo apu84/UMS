@@ -12,17 +12,17 @@ import java.util.Optional;
 public class PersistentPersonalInformationDao extends PersonalInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_PERSONAL_INFO (EMPLOYEE_ID, FIRST_NAME, LAST_NAME, GENDER, BLOOD_GROUP, FATHER_NAME, MOTHER_NAME,"
+      "INSERT INTO EMP_PERSONAL_INFO (EMPLOYEE_ID, NAME, GENDER, BLOOD_GROUP, FATHER_NAME, MOTHER_NAME,"
           + " NATIONALITY, RELIGION, DATE_OF_BIRTH, NID_NO, MARITAL_STATUS, SPOUSE_NAME, SPOUSE_NID_NO, "
           + "WEBSITE, ORGANIZATIONAL_EMAIL, PERSONAL_EMAIL, MOBILE, PHONE, PRE_ADD_LINE1, PRE_ADD_LINE2, PRE_ADD_COUNTRY, "
           + "PRE_ADD_DIVISION, PRE_ADD_DISTRICT, PRE_ADD_THANA, PRE_ADD_POST_CODE, PER_ADD_LINE1, PER_ADD_LINE2, PER_ADD_COUNTRY, "
           + "PER_ADD_DIVISION, PER_ADD_DISTRICT, PER_ADD_THANA,  PER_ADD_POST_CODE, EMERGENCY_NAME, EMERGENCY_RELATION, "
           + "EMERGENCY_PHONE, EMERGENCY_ADDRESS, LAST_MODIFIED) VALUES (? ,? ,?, ?, ? ,? ,? ,? ,? ,?, "
-          + "? ,? ,?, ?, ? ,? ,? ,? ,? ,?, ? ,? ,?, ?, ? ,? ,? ,? ,? ,?, ? ,? ,?, ?, ? ,? ,?, " + getLastModifiedSql()
+          + "? ,? ,?, ?, ? ,? ,? ,? ,? ,?, ? ,? ,?, ? ,? ,? ,? ,? ,?, ? ,? ,?, ?, ? ,? ,?, " + getLastModifiedSql()
           + ")";
 
   static String GET_ONE =
-      "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, GENDER, BLOOD_GROUP, FATHER_NAME, MOTHER_NAME, NATIONALITY, RELIGION, "
+      "SELECT EMPLOYEE_ID, NAME, GENDER, BLOOD_GROUP, FATHER_NAME, MOTHER_NAME, NATIONALITY, RELIGION, "
           + "DATE_OF_BIRTH, NID_NO, MARITAL_STATUS, SPOUSE_NAME, "
           + "SPOUSE_NID_NO, WEBSITE, ORGANIZATIONAL_EMAIL, PERSONAL_EMAIL, MOBILE, PHONE, PRE_ADD_LINE1, PRE_ADD_LINE2, "
           + "PRE_ADD_COUNTRY, PRE_ADD_DIVISION, PRE_ADD_DISTRICT, PRE_ADD_THANA, PRE_ADD_POST_CODE, PER_ADD_LINE1, "
@@ -32,7 +32,7 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
   static String DELETE_ONE = "DELETE FROM EMP_PERSONAL_INFO ";
 
   static String UPDATE_ONE =
-      "UPDATE EMP_PERSONAL_INFO SET FIRST_NAME = ?, LAST_NAME = ?, GENDER = ?, BLOOD_GROUP = ?, FATHER_NAME = ?, "
+      "UPDATE EMP_PERSONAL_INFO SET NAME = ?, GENDER = ?, BLOOD_GROUP = ?, FATHER_NAME = ?, "
           + "MOTHER_NAME = ?, NATIONALITY = ?, RELIGION = ?, DATE_OF_BIRTH = ?, NID_NO = ?, "
           + "MARITAL_STATUS = ?, SPOUSE_NAME = ?, SPOUSE_NID_NO = ?, WEBSITE = ?, ORGANIZATIONAL_EMAIL = ?, "
           + "PERSONAL_EMAIL = ?, MOBILE = ?, PHONE = ?, PRE_ADD_LINE1 = ?, PRE_ADD_LINE2 = ?, PRE_ADD_COUNTRY = ?, "
@@ -40,6 +40,8 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
           + "PER_ADD_LINE2 = ?, PER_ADD_COUNTRY = ?, PER_ADD_DIVISION = ?, PER_ADD_DISTRICT = ?, PER_ADD_THANA = ?, PER_ADD_POST_CODE = ?, "
           + "EMERGENCY_NAME = ?, EMERGENCY_RELATION = ?, EMERGENCY_PHONE = ?, EMERGENCY_ADDRESS = ?, LAST_MODIFIED = "
           + getLastModifiedSql() + " ";
+
+  static String EXISTS_ONE = "SELECT COUNT(EMPLOYEE_ID) FROM EMP_PERSONAL_INFO ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -74,19 +76,25 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
   }
 
   @Override
+  public boolean exists(String pId) {
+    String query = EXISTS_ONE + " WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, Boolean.class);
+  }
+
+  @Override
   public String create(MutablePersonalInformation pMutablePersonalInformation) {
     String query = INSERT_ONE;
-    mJdbcTemplate.update(query, pMutablePersonalInformation.getId(), pMutablePersonalInformation.getFirstName(),
-        pMutablePersonalInformation.getLastName(), pMutablePersonalInformation.getGender(),
-        pMutablePersonalInformation.getBloodGroupId(), pMutablePersonalInformation.getFatherName(),
-        pMutablePersonalInformation.getMotherName(), pMutablePersonalInformation.getNationalityId(),
-        pMutablePersonalInformation.getReligionId(), pMutablePersonalInformation.getDateOfBirth(),
-        pMutablePersonalInformation.getNidNo(), pMutablePersonalInformation.getMaritalStatusId(),
-        pMutablePersonalInformation.getSpouseName(), pMutablePersonalInformation.getSpouseNidNo(),
-        pMutablePersonalInformation.getWebsite(), pMutablePersonalInformation.getOrganizationalEmail(),
-        pMutablePersonalInformation.getPersonalEmail(), pMutablePersonalInformation.getMobileNumber(),
-        pMutablePersonalInformation.getPhoneNumber(), pMutablePersonalInformation.getPresentAddressLine1(),
-        pMutablePersonalInformation.getPresentAddressLine2(), pMutablePersonalInformation.getPresentAddressCountryId(),
+    mJdbcTemplate.update(query, pMutablePersonalInformation.getId(), pMutablePersonalInformation.getName(),
+        pMutablePersonalInformation.getGender(), pMutablePersonalInformation.getBloodGroupId(),
+        pMutablePersonalInformation.getFatherName(), pMutablePersonalInformation.getMotherName(),
+        pMutablePersonalInformation.getNationalityId(), pMutablePersonalInformation.getReligionId(),
+        pMutablePersonalInformation.getDateOfBirth(), pMutablePersonalInformation.getNidNo(),
+        pMutablePersonalInformation.getMaritalStatusId(), pMutablePersonalInformation.getSpouseName(),
+        pMutablePersonalInformation.getSpouseNidNo(), pMutablePersonalInformation.getWebsite(),
+        pMutablePersonalInformation.getOrganizationalEmail(), pMutablePersonalInformation.getPersonalEmail(),
+        pMutablePersonalInformation.getMobileNumber(), pMutablePersonalInformation.getPhoneNumber(),
+        pMutablePersonalInformation.getPresentAddressLine1(), pMutablePersonalInformation.getPresentAddressLine2(),
+        pMutablePersonalInformation.getPresentAddressCountryId(),
         pMutablePersonalInformation.getPresentAddressDivisionId(),
         pMutablePersonalInformation.getPresentAddressDistrictId(),
         pMutablePersonalInformation.getPresentAddressThanaId(),
@@ -108,8 +116,7 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
   @Override
   public int update(MutablePersonalInformation pMutablePersonalInformation) {
     String query = UPDATE_ONE + " WHERE EMPLOYEE_ID = ?";
-    return mJdbcTemplate.update(query, pMutablePersonalInformation.getFirstName(),
-        pMutablePersonalInformation.getLastName(), pMutablePersonalInformation.getGender(),
+    return mJdbcTemplate.update(query, pMutablePersonalInformation.getName(), pMutablePersonalInformation.getGender(),
         pMutablePersonalInformation.getBloodGroupId(), pMutablePersonalInformation.getFatherName(),
         pMutablePersonalInformation.getMotherName(), pMutablePersonalInformation.getNationalityId(),
         pMutablePersonalInformation.getReligionId(), pMutablePersonalInformation.getDateOfBirth(),
@@ -140,8 +147,7 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
     public PersonalInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentPersonalInformation personalInformation = new PersistentPersonalInformation();
       personalInformation.setId(resultSet.getString("EMPLOYEE_ID"));
-      personalInformation.setFirstName(resultSet.getString("FIRST_NAME"));
-      personalInformation.setLastName(resultSet.getString("LAST_NAME"));
+      personalInformation.setName(resultSet.getString("NAME"));
       personalInformation.setGender(resultSet.getString("GENDER"));
       personalInformation.setBloodGroupId(resultSet.getInt("BLOOD_GROUP"));
       personalInformation.setFatherName(resultSet.getString("FATHER_NAME"));

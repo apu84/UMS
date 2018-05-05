@@ -14,18 +14,20 @@ import javax.ws.rs.core.Response;
 public class MutablePersonalInformationResource extends Resource {
 
   @Autowired
-  PersonalInformationResourceHelper mHelper;
+  private PersonalInformationResourceHelper mHelper;
 
-  @POST
-  @Path("/save")
-  public Response savePersonalInformation(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject) {
-    return mHelper.savePersonalInformation(pJsonObject, mUriInfo);
-  }
+  /*
+   * @POST
+   * 
+   * @Path("/save") public Response savePersonalInformation(@Context HttpServletRequest
+   * pHttpServletRequest, final JsonObject pJsonObject) { return mHelper.create(pJsonObject,
+   * mUriInfo); }
+   */
 
   @PUT
   @Path("/update")
   public Response updatePersonalInformation(@Context HttpServletRequest pHttpServletRequest,
       final JsonObject pJsonObject) {
-    return mHelper.updatePersonalInformation(pJsonObject, mUriInfo);
+    return mHelper.update(pJsonObject, mUriInfo);
   }
 }

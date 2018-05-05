@@ -28,7 +28,7 @@ public class EmployeeUserResolver implements UserPropertyResolver {
     Employee employee = mEmployeeManager.get(pUser.getEmployeeId());
     if(employee != null) {
       mutableUser.setDepartment(employee.getDepartment());
-      mutableUser.setName(employee.getPersonalInformation().getFullName());
+      mutableUser.setName(employee.getPersonalInformation().getName());
       mutableUser.setEmployeeId(employee.getId());
       mutableUser.setEmail(employee.getPersonalInformation().getPersonalEmail());
     }

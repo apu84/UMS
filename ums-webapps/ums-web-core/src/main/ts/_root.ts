@@ -122,3 +122,5 @@
 /// <reference path='employee/ExperienceInformation.ts'/>
 /// <reference path='employee/AdditionalInformation.ts'/>
 /// <reference path='employee/ServiceInformation.ts'/>
+
+/// <reference path='library/SearchLibrary.ts'/>
