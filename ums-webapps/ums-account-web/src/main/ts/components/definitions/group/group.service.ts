@@ -1,6 +1,6 @@
 module ums {
   export interface IGroup {
-    id: number;
+    id: string;
     stringId: string;
     compCode: string;
     groupCode: string;
