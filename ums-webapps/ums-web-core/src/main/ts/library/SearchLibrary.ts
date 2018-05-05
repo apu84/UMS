@@ -41,7 +41,7 @@ module ums {
             $scope.navigateRecord = this.navigateRecord.bind(this);
             $scope.doSearch = this.doSearch.bind(this);
             $scope.search = {
-                queryTerm: '',
+                queryTerm: null,
                 searchType: 'basic',
                 itemType: Array(),
                 title: '',
