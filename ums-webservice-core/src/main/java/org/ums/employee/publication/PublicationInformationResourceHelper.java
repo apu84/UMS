@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.Employee;
 import org.ums.manager.ContentManager;
 import org.ums.manager.EmployeeManager;
 import org.ums.resource.ResourceHelper;
@@ -15,8 +16,10 @@ import org.ums.usermanagement.permission.AdditionalRolePermissionsManager;
 import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Component
 public class PublicationInformationResourceHelper extends
@@ -94,7 +97,9 @@ public class PublicationInformationResourceHelper extends
   }
 
   @Transactional
-  public Response savePublicationInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
+  public Response savePublicationInformation(JsonObject pJsonObject, UriInfo pUriInfo) throws InterruptedException,
+      ExecutionException, IOException {
+    Employee employee = mEmployeeManager.get("021017");
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
     JsonArray publicationJsonArray = entries.getJsonObject(0).getJsonArray("publication");
@@ -134,6 +139,7 @@ public class PublicationInformationResourceHelper extends
     if(deleteMutablePublicationInformation.size() != 0) {
       mPublicationInformationManager.deletePublicationInformation(deleteMutablePublicationInformation);
     }
+    mApprovePublicationService.setNotification("arm", employee);
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();

@@ -56,6 +56,9 @@ public class UMSConfiguration {
   @Value("${accounts.jdbc.password}")
   private String mAccountJdbcPassword;
 
+  @Value("${fcm.service-account-file}")
+  private String mFcmServiceFile;
+
   public boolean isOwnerOnlyModification() {
     return mOwnerOnlyModification;
   }
@@ -126,5 +129,9 @@ public class UMSConfiguration {
 
   public String getAccountJdbcPassword() {
     return mAccountJdbcPassword;
+  }
+
+  public String getFcmServiceFile() {
+    return mFcmServiceFile;
   }
 }

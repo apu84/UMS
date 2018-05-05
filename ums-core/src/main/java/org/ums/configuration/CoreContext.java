@@ -14,7 +14,10 @@ import org.ums.bank.BankManager;
 import org.ums.bank.branch.BranchCache;
 import org.ums.bank.branch.BranchDao;
 import org.ums.bank.branch.BranchManager;
-import org.ums.bank.branch.user.*;
+import org.ums.bank.branch.user.BranchUserCache;
+import org.ums.bank.branch.user.BranchUserDao;
+import org.ums.bank.branch.user.BranchUserManager;
+import org.ums.bank.branch.user.BranchUserPostTransaction;
 import org.ums.bank.designation.BankDesignationCache;
 import org.ums.bank.designation.BankDesignationDao;
 import org.ums.bank.designation.BankDesignationManager;
@@ -76,7 +79,6 @@ import org.ums.usermanagement.userView.UserViewCache;
 import org.ums.usermanagement.userView.UserViewManager;
 import org.ums.util.Constants;
 
-import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -157,6 +159,7 @@ public class CoreContext {
     UserPropertyDecorator userPropertyDecorator =
         new UserPropertyDecorator(personalInformationManager(), studentManager(), userPropertyResolvers);
     userPropertyDecorator.setManager(userCache);
+    branchUserPostTransaction().setUserManager(userPropertyDecorator);
     return userPropertyDecorator;
   }
 
@@ -525,12 +528,24 @@ public class CoreContext {
   }
 
   @Bean
-  @Qualifier("branchUserManager")
   BranchUserManager branchUserManager() {
     BranchUserDao branchDao = new BranchUserDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
-    branchDao.setManager(new BranchUserPostTransaction(mNewIUMSAccountInfoEmailService, roleManager()));
+    branchDao.setManager(branchUserPostTransaction());
     BranchUserCache branchUserCache = new BranchUserCache(mCacheFactory.getCacheManager());
     branchUserCache.setManager(branchDao);
     return branchUserCache;
+  }
+
+  @Bean
+  BranchUserPostTransaction branchUserPostTransaction() {
+    BranchUserPostTransaction branchUserPostTransaction = new BranchUserPostTransaction();
+    branchUserPostTransaction.setNewIUMSAccountInfoEmailService(mNewIUMSAccountInfoEmailService);
+    return branchUserPostTransaction;
+  }
+
+  @Bean
+  FCMTokenManager fcmTokenManager() {
+    return new PersistentFCMTokenDao(mTemplateFactory.getJdbcTemplate());
+
   }
 }

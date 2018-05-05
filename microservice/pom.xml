@@ -180,6 +180,12 @@
       <version>11.2.0.3</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>com.google.firebase</groupId>
+      <artifactId>firebase-admin</artifactId>
+      <version>5.9.0</version>
+      <scope>compile</scope>
+    </dependency>
 
     <!-- Logback dependencies -->
     <dependency>

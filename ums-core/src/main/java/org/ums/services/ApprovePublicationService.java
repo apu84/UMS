@@ -1,16 +1,20 @@
 package org.ums.services;
 
 import org.apache.shiro.SecurityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.ums.configuration.FirebaseConfig;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Notification;
+import org.ums.manager.FCMTokenManager;
 import org.ums.manager.NotificationManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Component
 public class ApprovePublicationService {
@@ -23,7 +27,12 @@ public class ApprovePublicationService {
   @Autowired
   private NotificationGenerator mNotificationGenerator;
 
-  public void setNotification(String userId, Employee sender) {
+  @Autowired
+  private FirebaseMessagingImpl mFirebaseMessaging;
+
+  public void setNotification(String userId, Employee sender) throws IOException, ExecutionException,
+      InterruptedException {
+
     Notifier notifier = new Notifier() {
 
       @Override
@@ -35,7 +44,7 @@ public class ApprovePublicationService {
 
       @Override
       public String producer() {
-        return SecurityUtils.getSubject().getPrincipal().toString();
+        return sender.getId();
       }
 
       @Override
