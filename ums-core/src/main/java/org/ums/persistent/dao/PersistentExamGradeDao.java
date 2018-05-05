@@ -302,7 +302,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       "Select Count(Student_Id) From UG_SESSIONAL_MARKS Where Semester_Id=? and Course_Id=? and Exam_Type=? and Status in (0,1)";
 
   String SELECT_MARKS_SUBMISSION_STATUS_LOG = "  SELECT MARKS_SUBMISSION_SLOG.User_Id, "
-      + "         EMPLOYEES.FIRST_NAME||' '|| EMPLOYEES.LAST_NAME  EMPLOYEE_NAME, ROLE, "
+      + "         EMPLOYEES.NAME  EMPLOYEE_NAME, ROLE, "
       + "         TO_CHAR (MARKS_SUBMISSION_SLOG.Inserted_On, " + "                  'DD-MM-YYYY HH:MI:SS AM') "
       + "            Inserted_On, " + "         MARKS_SUBMISSION_SLOG.Status "
       + "    FROM MARKS_SUBMISSION_SLOG, EMP_PERSONAL_INFO EMPLOYEES, USERS "
@@ -311,7 +311,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       + "         AND Course_Id = ? " + "         AND Exam_Type = ? " + "ORDER BY Inserted_On desc";
 
   String SELECT_THEORY_LOG =
-      "Select UG_THEORY_MARKS_LOG.User_Id, EMPLOYEES.FIRST_NAME||' '|| EMPLOYEES.LAST_NAME  EMPLOYEE_NAME, ROLE,  "
+      "Select UG_THEORY_MARKS_LOG.User_Id, EMPLOYEES.NAME  EMPLOYEE_NAME, ROLE,  "
           + "TO_CHAR (UG_THEORY_MARKS_LOG.Inserted_On,'DD-MM-YYYY HH:MI:SS AM')  Inserted_On, Quiz,Class_Performance,Part_A,Part_B, "
           + "Total,Grade_Letter,UG_THEORY_MARKS_LOG.Status,Recheck_Status  "
           + "From EMP_PERSONAL_INFO EMPLOYEES,USERS,UG_THEORY_MARKS_LOG "
@@ -320,7 +320,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + "Order by Inserted_On desc";
 
   String SELECT_SESSIONAL_LOG =
-      "Select UG_SESSIONAL_MARKS_LOG.User_Id, EMPLOYEES.FIRST_NAME||' '|| EMPLOYEES.LAST_NAME  EMPLOYEE_NAME, ROLE,  "
+      "Select UG_SESSIONAL_MARKS_LOG.User_Id, EMPLOYEES.NAME  EMPLOYEE_NAME, ROLE,  "
           + "TO_CHAR (UG_SESSIONAL_MARKS_LOG.Inserted_On,'DD-MM-YYYY HH:MI:SS AM')  Inserted_On, TOTAL,GRADE_LETTER,UG_SESSIONAL_MARKS_LOG.Status,Recheck_Status  "
           + "From EMP_PERSONAL_INFO EMPLOYEES,USERS,UG_SESSIONAL_MARKS_LOG "
           + "Where EMPLOYEES.EMPLOYEE_ID=USERS.EMPLOYEE_ID " + "And UG_SESSIONAL_MARKS_LOG.USER_ID=USERS.USER_ID "

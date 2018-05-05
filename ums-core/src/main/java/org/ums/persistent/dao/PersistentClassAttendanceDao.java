@@ -63,7 +63,7 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
   @Override
   public List<ClassAttendanceDto> getDateList(int pSemesterId, String pCourseId, String pSection) {
     String query =
-        "Select TO_Char(Class_Date,'DD MON, YY') Class_Date,To_Char(Class_Date,'DDMMYYYY') CLASS_DATE_F1,Serial,Teacher_Id ,ID,FIRST_NAME|| LAST_NAME EMPLOYEE_NAME,SHORT_NAME  "
+        "Select TO_Char(Class_Date,'DD MON, YY') Class_Date,To_Char(Class_Date,'DDMMYYYY') CLASS_DATE_F1,Serial,Teacher_Id ,ID, NAME EMPLOYEE_NAME,SHORT_NAME  "
             + "From MST_CLASS_ATTENDANCE,EMP_PERSONAL_INFO, EMPLOYEES Where Semester_Id= ? And Course_id=? And Section=? And EMPLOYEES.EMPLOYEE_ID=Teacher_Id and EMP_PERSONAL_INFO.EMPLOYEE_ID = EMPLOYEES.EMPLOYEE_ID AND MST_CLASS_ATTENDANCE.TEACHER_ID=EMPLOYEES.EMPLOYEE_ID "
             + "Order by Serial desc";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pSection}, new AttendanceDateRowMapper());
