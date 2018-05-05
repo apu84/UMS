@@ -302,9 +302,9 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       "Select Count(Student_Id) From UG_SESSIONAL_MARKS Where Semester_Id=? and Course_Id=? and Exam_Type=? and Status in (0,1)";
 
   String SELECT_MARKS_SUBMISSION_STATUS_LOG = "  SELECT MARKS_SUBMISSION_SLOG.User_Id, "
-      + "         EMPLOYEES.NAME  EMPLOYEE_NAME, ROLE, "
-      + "         TO_CHAR (MARKS_SUBMISSION_SLOG.Inserted_On, " + "                  'DD-MM-YYYY HH:MI:SS AM') "
-      + "            Inserted_On, " + "         MARKS_SUBMISSION_SLOG.Status "
+      + "         EMPLOYEES.NAME  EMPLOYEE_NAME, ROLE, " + "         TO_CHAR (MARKS_SUBMISSION_SLOG.Inserted_On, "
+      + "                  'DD-MM-YYYY HH:MI:SS AM') " + "            Inserted_On, "
+      + "         MARKS_SUBMISSION_SLOG.Status "
       + "    FROM MARKS_SUBMISSION_SLOG, EMP_PERSONAL_INFO EMPLOYEES, USERS "
       + "    WHERE     MARKS_SUBMISSION_SLOG.User_Id = Users.User_Id "
       + "         AND USERS.EMPLOYEE_ID = EMPLOYEES.EMPLOYEE_ID " + "         AND Semester_Id = ?"

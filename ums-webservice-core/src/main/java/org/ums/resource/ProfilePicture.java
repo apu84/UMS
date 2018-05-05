@@ -94,7 +94,7 @@ public class ProfilePicture extends Resource {
       }
       else {
         try {
-          mLogger.error("[" + userId + "] :" + photoId + ".jpg image not found", e);
+          mLogger.info("[" + userId + "] :" + photoId + ".jpg image not found", e);
           imageData = mGateway.read("files/user.png");
           mLogger.info("[" + userId + "]: Using default user photo from ftp.", e);
         } catch(Exception e1) {
