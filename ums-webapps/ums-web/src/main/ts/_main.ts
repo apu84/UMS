@@ -270,6 +270,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/CRUDDetectionService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformationService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformationModel.ts' />
+/// <reference path='../../../../ums-web-core/src/main/ts/library/SearchLibrary.ts' />
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CountryService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DivisionService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DistrictService.ts'/>
@@ -294,3 +295,6 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/ExperienceInformation.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/AdditionalInformation.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/ServiceInformation.ts'/>
+
+
+/// <reference path='../../../../ums-library-web/src/main/ts/types/Interfaces.ts'/>

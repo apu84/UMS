@@ -55,6 +55,7 @@ module ums {
 
   UMS.constant("appConstants", Constants.Default());
   UMS.constant("registrarConstants", Constants.RegistrarConstant());
+  UMS.constant("libConstants", Constants.LibConstant());
 
   UMS.filter('$split', function () {
     return function (input) {
@@ -1182,6 +1183,21 @@ module ums {
             templateUrl: 'views/employee/service-information.html',
             controller: 'ServiceInformation',
             controllerAs: 'vm'
+        })
+        .state('searchLibrary', {
+            url: "/searchLibrary",
+            controller: 'SearchLibrary',
+            templateUrl: 'views/library/search-library.html',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        files: [
+                            'vendors/bootstrap-select/bootstrap-select.min.js',
+                            'vendors/bootstrap-select/bootstrap-select.css'
+                        ]
+                    });
+                }]
+            }
         })
 
   });

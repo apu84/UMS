@@ -20,12 +20,10 @@ module ums {
     }
 
     export class SearchLibrary {
-        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'catalogingService', '$stateParams', 'supplierService', 'publisherService', 'contributorService'];
+        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'HttpClient'];
 
         constructor(private $scope: IRecordSearch,
-                    private $q: ng.IQService, private notify: Notify, private libConstants: any,
-                    private catalogingService: CatalogingService, private $stateParams: any,
-                    private supplierService: SupplierService, private publisherService: PublisherService, private contributorService: ContributorService) {
+                    private $q: ng.IQService, private notify: Notify, private libConstants: any, private httpClient: HttpClient) {
 
             $scope.recordList = Array<IRecord>();
             $scope.recordIdList = Array<String>();
@@ -57,28 +55,6 @@ module ums {
 
             $scope.recordDetails = this.recordDetails.bind(this);
 
-            /*            if ($stateParams["1"] == null || $stateParams["1"] == "old") {
-                            var filter: IFilter = JSON.parse(localStorage.getItem("lms_search_filter"));
-                            this.$scope.search.queryTerm = filter.basicQueryTerm;
-                            this.$scope.choice = filter.basicQueryField;
-
-                        } else {
-                            this.$scope.search.searchType = "basic";
-                            this.$scope.choice = "any";
-                        }
-
-                        this.prepareFilter();
-
-                        if ($stateParams["1"] == null || $stateParams["1"] == "old") {
-                            var page = Number(localStorage.getItem("lms_page"));
-                            $scope.pagination.currentPage = page;
-                            this.fetchRecords(page);
-                        }
-                        else {
-                            this.fetchRecords(1);
-                        }*/
-
-
             this.$scope.search.searchType = "basic";
             this.$scope.choice = "any";
 
@@ -100,20 +76,6 @@ module ums {
                 filter.basicQueryTerm = this.$scope.search.queryTerm;
             }
             else if (this.$scope.search.searchType == 'advanced') {
-                // filter.advancedQueryMap = <IAdvancedSearchMap>();
-                // // var advanceSearchMap: any = [];
-                // // advanceSearchMap[0] = {key: 'materialType', value: this.$scope.search.itemType};
-                // // advanceSearchMap[1] = {key: 'title', value: this.$scope.search.title};
-                // // advanceSearchMap[2] = {key: 'author', value: this.$scope.search.author};
-                // // advanceSearchMap[3] = {key: 'subject', value: this.$scope.search.subject};
-                // // advanceSearchMap[4] = {key: 'coprAuthor', value: this.$scope.search.coprAuthor};
-                // // advanceSearchMap[5] = {key: 'publisher', value: this.$scope.search.publisher};
-                // // advanceSearchMap[6] = {key: 'yearFrom', value: this.$scope.search.yearFrom};
-                // // advanceSearchMap[7] = {key: 'yearTo', value: this.$scope.search.yearTo};
-                // // for(var i = 0; i < advanceSearchMap.length; i++) {
-                //
-                // filter.advancedQueryMap[0].key = 'material_txt';
-                // filter.advancedQueryMap[0].value = this.$scope.search.itemType;
 
             }
             this.$scope.search.filter = filter;
@@ -132,7 +94,7 @@ module ums {
         }
 
         private fetchRecords(pageNumber: number): void {
-            this.catalogingService.fetchRecords(pageNumber, this.$scope.data.itemPerPage, "", this.$scope.search.filter).then((response: any) => {
+            this.getRecords(pageNumber, this.$scope.data.itemPerPage, "", this.$scope.search.filter).then((response: any) => {
                 this.$scope.recordIdList = Array<String>();
                 this.$scope.recordList = response.entries;
                 this.prepareRecord();
@@ -149,6 +111,24 @@ module ums {
             }, function errorCallback(response) {
                 this.notify.error(response);
             });
+        }
+
+        private getRecords(page: number, itemPerPage: number, orderBy: string, filter: any): ng.IPromise<any> {
+
+            var defer = this.$q.defer();
+            var tPage = page - 1;
+
+            var resourceUrl = "/ums-webservice-library/record/all/ipp/" + itemPerPage + "/page/" + tPage + "/order/3?filter=" + encodeURIComponent(JSON.stringify(filter));
+
+
+            this.httpClient.get(resourceUrl, 'application/json',
+                (json: any, etag: string) => {
+                    defer.resolve(json);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                });
+            return defer.promise;
         }
 
         private navigateRecord(operation: string, mrnNo: string, pageNumber: number, currentIndex: number): void {
@@ -218,27 +198,66 @@ module ums {
         }
 
         private getAllSuppliers(): void {
-            this.supplierService.fetchAllSuppliers().then((response: any) => {
+            this.fetchAllSuppliers().then((response: any) => {
                 this.$scope.supplierList = response.entries;
             }, function errorCallback(response) {
                 this.notify.error(response);
             });
         }
 
+        private fetchAllSuppliers(): ng.IPromise<any> {
+            var resourceUrl = "/ums-webservice-library/supplier/all";
+            var defer = this.$q.defer();
+            this.httpClient.get(resourceUrl, 'application/json',
+                (json: any, etag: string) => {
+                    defer.resolve(json);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                });
+            return defer.promise;
+        }
+
         private getAllPublishers(): void {
-            this.publisherService.fetchAllPublishers().then((response: any) => {
+            this.fetchAllPublishers().then((response: any) => {
                 this.$scope.publisherList = response.entries;
             }, function errorCallback(response) {
                 this.notify.error(response);
             });
         }
 
+        private fetchAllPublishers(): ng.IPromise<any> {
+            var resourceUrl = "/ums-webservice-library/publisher/all";
+            var defer = this.$q.defer();
+            this.httpClient.get(resourceUrl, 'application/json',
+                (json: any, etag: string) => {
+                    defer.resolve(json);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                });
+            return defer.promise;
+        }
+
         private getAllContributors(): void {
-            this.contributorService.fetchAllContributors().then((response: any) => {
+            this.fetchAllContributors().then((response: any) => {
                 this.$scope.contributorList = response.entries;
             }, function errorCallback(response) {
                 this.notify.error(response);
             });
+        }
+
+        private fetchAllContributors(): ng.IPromise<any> {
+            var resourceUrl = "/ums-webservice-library/contributor/all";
+            var defer = this.$q.defer();
+            this.httpClient.get(resourceUrl, 'application/json',
+                (json: any, etag: string) => {
+                    defer.resolve(json);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                });
+            return defer.promise;
         }
 
     }
