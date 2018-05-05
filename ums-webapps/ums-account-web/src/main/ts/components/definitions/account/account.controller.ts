@@ -30,11 +30,8 @@ module ums {
     public pageChanged(pageNumber: number) {
       console.log(pageNumber);
       this.pageNumber = pageNumber;
-      if (this.pageNumber != undefined)
+      if (this.pageNumber != undefined || this.pageNumber!=null)
         this.getPaginatedAccounts();
-      /* this.$timeout(() => {
-         this.getPaginatedAccounts();
-       }, 2000);*/
     }
 
     public initialize() {
@@ -53,6 +50,8 @@ module ums {
         this.groups = [];
         this.groups = groups.filter((g: IGroup) => g.mainGroup != "0");
         this.groupMapWithGroupid = {};
+        console.log("Groups");
+        console.log(groups);
         this.groups.forEach((g: IGroup) => this.groupMapWithGroupid[g.groupCode] = g);
         this.getPaginatedAccounts();
       });
@@ -119,11 +118,13 @@ module ums {
     }
 
     public getPaginatedAccounts() {
-      this.accountService.getAllPaginated(this.itemsPerPage, this.pageNumber).then((accounts: IAccount[]) => {
+      this.accountService.getAllPaginated(this.itemsPerPage>0?this.itemsPerPage: 15, this.pageNumber).then((accounts: IAccount[]) => {
         if (accounts == undefined)
           this.notify.error("Error in fetching data");
         else {
           this.existingAccounts = [];
+          console.log("Accounts");
+          console.log(accounts);
           accounts.forEach((a: IAccount) => a.accGroupName = this.groupMapWithGroupid[a.accGroupCode].groupName);
           this.existingAccounts = accounts;
         }

@@ -8,7 +8,9 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.accounts.Group;
 import org.ums.domain.model.mutable.accounts.MutableGroup;
 import org.ums.generator.IdGenerator;
+import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.GroupManager;
+import org.ums.manager.accounts.SystemGroupMapManager;
 import org.ums.resource.ResourceHelper;
 import org.ums.usermanagement.user.UserManager;
 
@@ -37,6 +39,10 @@ public class GroupResourceHelper extends ResourceHelper<Group, MutableGroup, Lon
   private UserManager mUserManager;
   @Autowired
   private IdGenerator mIdGenerator;
+  @Autowired
+  private SystemGroupMapManager mSystemGroupMapManager;
+  @Autowired
+  private CompanyManager mCompanyManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -62,7 +68,7 @@ public class GroupResourceHelper extends ResourceHelper<Group, MutableGroup, Lon
       newGroupId = pGroup.getMainGroup() + "00" + (savedGroupSize + 1);
     pGroup.setGroupCode(newGroupId);
     pGroup.setDefaultComp("01");
-    pGroup.setCompCode("01");
+    pGroup.setCompCode(mCompanyManager.getDefaultCompany().getId());
     pGroup.setModifiedDate(new Date());
     pGroup.setModifiedBy(mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getEmployeeId());
     if(pGroup.getId() == null) {
@@ -77,6 +83,7 @@ public class GroupResourceHelper extends ResourceHelper<Group, MutableGroup, Lon
 
   public List<Group> deleteAndReturnUpdatedGroups(MutableGroup pGroup) {
     getContentManager().delete(pGroup);
+    mSystemGroupMapManager.delete(pGroup, mCompanyManager.getDefaultCompany());
     return getContentManager().getAll();
   }
 

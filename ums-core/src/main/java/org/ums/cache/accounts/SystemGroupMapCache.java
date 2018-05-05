@@ -2,6 +2,7 @@ package org.ums.cache.accounts;
 
 import org.ums.cache.ContentCache;
 import org.ums.domain.model.immutable.Company;
+import org.ums.domain.model.immutable.accounts.Group;
 import org.ums.domain.model.immutable.accounts.SystemGroupMap;
 import org.ums.domain.model.mutable.accounts.MutableSystemGroupMap;
 import org.ums.manager.CacheManager;
@@ -29,5 +30,10 @@ public class SystemGroupMapCache extends
   @Override
   public List<SystemGroupMap> getAllByCompany(Company pCompany) {
     return getManager().getAllByCompany(pCompany);
+  }
+
+  @Override
+  public int delete(Group pGroup, Company pCompany) {
+    return getManager().delete(pGroup, pCompany);
   }
 }

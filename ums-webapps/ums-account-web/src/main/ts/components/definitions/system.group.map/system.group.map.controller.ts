@@ -72,7 +72,7 @@ module ums {
     public save(systemGroupMap:ISystemGroupMap) {
       console.log("Existing system group map");
       console.log(systemGroupMap);
-      systemGroupMap.groupId = this.systemGroupMap.group.stringId;
+      systemGroupMap.groupId = this.systemGroupMap.group.id;
       if (this.systemGroupMap.id == null) {
         this.systemGroupMapService.post(systemGroupMap).then((output: ISystemGroupMap) => {
           this.map(output, systemGroupMap);
