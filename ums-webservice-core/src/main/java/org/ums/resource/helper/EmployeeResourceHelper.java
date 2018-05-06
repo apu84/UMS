@@ -181,8 +181,9 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     String newId = "";
     try {
       currentMax = mEmployeeManager.getLastEmployeeId(pDepartmentId, pEmployeeType);
-      newId = Integer.parseInt(pDepartmentId) < 10 ? "0" + String.valueOf(Integer.parseInt(currentMax) + 1) :
-              String.valueOf(Integer.parseInt(currentMax) + 1);
+      newId =
+          Integer.parseInt(pDepartmentId) < 10 ? "0" + String.valueOf(Integer.parseInt(currentMax) + 1) : String
+              .valueOf(Integer.parseInt(currentMax) + 1);
     } catch(Exception e) {
       newId = pDepartmentId + pEmployeeType + "001";
     }

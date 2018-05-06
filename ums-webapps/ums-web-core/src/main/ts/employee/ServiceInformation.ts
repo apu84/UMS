@@ -61,37 +61,22 @@ module ums {
             };
 
             this.stateParams = $stateParams;
+            this.userId = this.stateParams.id
+            this.showServiceEditButton = this.stateParams.edit;
             this.initialization();
         }
 
         private initialization() {
-            this.userService.fetchCurrentUserInfo().then((user: any) => {
-                if (user.roleId == 82 || user.roleId == 81) {
-                    this.isRegistrar = true;
-                }
-                else {
-                    this.isRegistrar = false;
-                }
-                if (this.stateParams.id == "" || this.stateParams.id == null || this.stateParams.id == undefined) {
-                    this.userId = user.employeeId;
-                    this.showServiceEditButton = false;
-                }
-                else {
-                    this.userId = this.stateParams.id;
-                    this.showServiceEditButton = true;
-                }
-                this.departmentService.getAll().then((departments: any) => {
-                    this.departments = departments;
-                    this.designationService.getAll().then((designations: any) => {
-                        this.designations = designations;
-                        this.employmentTypeService.getAll().then((employmentTypes: any) => {
-                            this.employmentTypes = employmentTypes;
-                            this.getServiceIntervals();
-                        });
+            this.departmentService.getAll().then((departments: any) => {
+                this.departments = departments;
+                this.designationService.getAll().then((designations: any) => {
+                    this.designations = designations;
+                    this.employmentTypeService.getAll().then((employmentTypes: any) => {
+                        this.employmentTypes = employmentTypes;
+                        this.getServiceIntervals();
                     });
                 });
             });
-
         }
 
         private getServiceIntervals(): void {

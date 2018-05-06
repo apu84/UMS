@@ -5,9 +5,8 @@ module ums {
 
     class EducationInformation {
         public static $inject = ['registrarConstants', '$scope', '$q', 'notify',
-            'countryService', 'divisionService', 'districtService', 'thanaService',
-            'employeeInformationService', 'areaOfInterestService', 'userService', 'academicDegreeService',
-            'cRUDDetectionService', '$stateParams', 'employmentTypeService', 'departmentService', 'designationService', 'FileUpload'];
+            'employeeInformationService', 'academicDegreeService',
+            'cRUDDetectionService', '$stateParams'];
 
         private entry: {
             academic: IAcademicInformationModel[]
@@ -18,65 +17,37 @@ module ums {
         private previousAcademicInformation: IAcademicInformationModel[];
         private academicDeletedObjects: IAcademicInformationModel[];
         private userId: string = "";
-        private tabs: boolean = false;
         private stateParams: any;
-        private isRegistrar: boolean;
-        private test: boolean = true;
+        private showAcademicEditButton: boolean = false;
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeProfile,
                     private $q: ng.IQService,
                     private notify: Notify,
-                    private countryService: CountryService,
-                    private divisionService: DivisionService,
-                    private districtService: DistrictService,
-                    private thanaService: ThanaService,
                     private employeeInformationService: EmployeeInformationService,
-                    private areaOfInterestService: AreaOfInterestService,
-                    private userService: UserService,
                     private academicDegreeService: AcademicDegreeService,
                     private cRUDDetectionService: CRUDDetectionService,
-                    private $stateParams: any,
-                    private employmentTypeService: EmploymentTypeService,
-                    private departmentService: DepartmentService,
-                    private designationService: DesignationService,
-                    private FileUpload: FileUpload) {
-
-
-            console.log("In Academic Profile-------------");
-
+                    private $stateParams: any) {
 
             $scope.submitAcademicForm = this.submitAcademicForm.bind(this);
 
             this.entry = {
                 academic: Array<IAcademicInformationModel>()
-            }
+            };
 
             this.stateParams = $stateParams;
+            this.userId = this.stateParams.id;
+            this.showAcademicEditButton = this.stateParams.edit;
+            console.log("Is It editable " + this.showAcademicInputDiv);
             this.initialization();
         }
 
         private initialization() {
-            this.userService.fetchCurrentUserInfo().then((user: any) => {
-                if (user.roleId == 82 || user.roleId == 81) {
-                    this.isRegistrar = true;
-                }
-                else {
-                    this.isRegistrar = false;
-                }
-                if (this.stateParams.id == "" || this.stateParams.id == null || this.stateParams.id == undefined) {
-                    this.userId = user.employeeId;
-                }
-                else {
-                    this.userId = this.stateParams.id;
-                }
-                this.academicDegreeService.getAcademicDegreeList().then((degree: any) => {
-                    this.degreeNames = degree;
-
-                    this.getAcademicInformation();
-                });
+            this.academicDegreeService.getAcademicDegreeList().then((degree: any) => {
+                this.degreeNames = degree;
+                console.log("In academic Initialization and user id ==== " + this.userId);
+                this.getAcademicInformation();
             });
-
         }
 
 
@@ -139,7 +110,7 @@ module ums {
             let JsonObject = {};
             let JsonArray = [];
             let item: any = {};
-             if (convertThis === "academic") {
+            if (convertThis === "academic") {
                 item['academic'] = obj;
             }
             JsonArray.push(item);

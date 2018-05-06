@@ -22,6 +22,7 @@ module ums {
         private stateParams: any;
         private isRegistrar: boolean;
         private test: boolean = true;
+        private showExperienceEditButton: boolean = false;
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeProfile,
@@ -53,25 +54,13 @@ module ums {
 
             this.stateParams = $stateParams;
             this.experienceTypes = registrarConstants.experienceCategories;
+            this.userId = this.stateParams.id;
+            this.showExperienceEditButton = this.stateParams.edit;
             this.initialization();
         }
 
         private initialization() {
-            this.userService.fetchCurrentUserInfo().then((user: any) => {
-                if(user.roleId == 82 || user.roleId == 81){
-                    this.isRegistrar = true;
-                }
-                else{
-                    this.isRegistrar = false;
-                }
-                if (this.stateParams.id == "" || this.stateParams.id == null || this.stateParams.id == undefined) {
-                    this.userId = user.employeeId;
-                }
-                else {
-                    this.userId = this.stateParams.id;
-                }
-                this.getExperienceInformation();
-            });
+            this.getExperienceInformation();
         }
 
         private submitExperienceForm(): void {
