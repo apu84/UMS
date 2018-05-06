@@ -131,9 +131,9 @@ module ums{
           return defer.promise;
       }
 
-      public getSimilarUsers(firstName: string, lastName: string): ng.IPromise<any>{
+      public getSimilarUsers(name: string): ng.IPromise<any>{
           var defer = this.$q.defer();
-          this.httpClient.get("employee/personal/firstName/" + firstName + "/lastName/" + lastName, 'application/json',
+          this.httpClient.get("employee/personal/firstName/name/" + name, 'application/json',
               (result:any,etag:string)=>{
                   defer.resolve(result.entries);
               },
