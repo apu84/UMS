@@ -41,7 +41,6 @@ public class PersistentSystemGroupMap implements MutableSystemGroupMap {
   @JsonProperty("mGroup")
   private Group mGroup;
   @JsonProperty("groupId")
-  @JsonFormat(shape = JsonFormat.Shape.STRING)
   private Long mGroupId;
   @JsonIgnore
   @JsonProperty("company")
@@ -52,7 +51,7 @@ public class PersistentSystemGroupMap implements MutableSystemGroupMap {
   private String mModifiedBy;
   @JsonProperty("modifierName")
   private String mModifierName;
-  @JsonSerialize(using = UmsDateSerializer.class)
+  @JsonIgnore
   @JsonProperty("modifiedDate")
   private Date mModifiedDate;
   @JsonProperty("lastModified")
@@ -60,7 +59,7 @@ public class PersistentSystemGroupMap implements MutableSystemGroupMap {
 
   @Override
   public String getModifierName() {
-    return mModifierName == null ? sPersonalInformationManager.get(mModifiedBy).getFullName() : mModifierName;
+    return mModifierName == null ? sPersonalInformationManager.get(mModifiedBy).getName() : mModifierName;
   }
 
   @Override
@@ -79,11 +78,13 @@ public class PersistentSystemGroupMap implements MutableSystemGroupMap {
   }
 
   @Override
+  @JsonSerialize(using = UmsDateSerializer.class)
   public Date getModifiedDate() {
     return mModifiedDate;
   }
 
   @Override
+  @JsonIgnore
   public void setModifiedDate(Date pModifiedDate) {
     mModifiedDate = pModifiedDate;
   }
@@ -143,6 +144,7 @@ public class PersistentSystemGroupMap implements MutableSystemGroupMap {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public Long getGroupId() {
     return mGroupId;
   }
@@ -192,6 +194,14 @@ public class PersistentSystemGroupMap implements MutableSystemGroupMap {
     setCompany(pSystemGroupMap.getCompany());
     setCompanyId(pSystemGroupMap.getCompanyId());
     setLastModified(pSystemGroupMap.getLastModified());
+  }
+
+  @Override
+  public String toString() {
+    return "PersistentSystemGroupMap{" + "mId='" + mId + '\'' + ", mGroupType=" + mGroupType + ", mGroup=" + mGroup
+        + ", mGroupId=" + mGroupId + ", mCompany=" + mCompany + ", mCompanyId='" + mCompanyId + '\''
+        + ", mModifiedBy='" + mModifiedBy + '\'' + ", mModifierName='" + mModifierName + '\'' + ", mModifiedDate="
+        + mModifiedDate + ", mLastModified='" + mLastModified + '\'' + '}';
   }
 
   static {

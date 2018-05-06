@@ -1,6 +1,7 @@
 package org.ums.cache.accounts;
 
 import org.ums.cache.ContentCache;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
@@ -53,5 +54,10 @@ public class AccountCache extends ContentCache<Account, MutableAccount, Long, Ac
   @Override
   public List<Account> getIncludingGroups(List<String> groupCodeList) {
     return getManager().getIncludingGroups(groupCodeList);
+  }
+
+  @Override
+  public List<Account> getAccounts(Company pCompany) {
+    return getManager().getAccounts(pCompany);
   }
 }

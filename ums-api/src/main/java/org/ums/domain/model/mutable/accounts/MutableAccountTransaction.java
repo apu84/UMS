@@ -90,4 +90,8 @@ public interface MutableAccountTransaction extends AccountTransaction, Editable<
   void setModifierName(String pModifierName);
 
   void setMessage(String pMessage);
+
+  void setChequeNo(String pChequeNo);
+
+  void setChequeDate(Date pChequeDate);
 }

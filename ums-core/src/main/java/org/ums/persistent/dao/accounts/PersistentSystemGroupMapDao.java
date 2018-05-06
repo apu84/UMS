@@ -3,8 +3,10 @@ package org.ums.persistent.dao.accounts;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.ums.decorator.accounts.SystemGroupMapDaoDecorator;
 import org.ums.domain.model.immutable.Company;
+import org.ums.domain.model.immutable.accounts.Group;
 import org.ums.domain.model.immutable.accounts.SystemGroupMap;
 import org.ums.domain.model.mutable.accounts.MutableSystemGroupMap;
 import org.ums.enums.accounts.definitions.group.GroupType;
@@ -90,6 +92,16 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
     Map parameterMap = new HashMap();
     List<String> idList = pMutableList.stream().map(p -> p.getId()).collect(Collectors.toList());
     parameterMap.put("id", idList);
+    return mNamedParameterJdbcTemplate.update(query, parameterMap);
+  }
+
+  @Override
+  @Async
+  public int delete(Group pGroup, Company pCompany) {
+    String query = "DELETE FROM SYSTEM_GROUP_MAP WHERE GROUP_ID=:groupId AND COMP_ID=:compCode";
+    Map parameterMap = new HashMap();
+    parameterMap.put("groupId", pGroup.getId());
+    parameterMap.put("compCode", pCompany.getId());
     return mNamedParameterJdbcTemplate.update(query, parameterMap);
   }
 

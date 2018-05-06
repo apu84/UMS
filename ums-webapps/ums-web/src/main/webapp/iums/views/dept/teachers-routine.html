@@ -1,19 +1,21 @@
-<div>
-    <div class="panel panel-default" data-ng-init="getRoutines()">
-        <div class="panel-heading">Class Routine</div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-12" data-ng-if="showRoutineDirective==true">
-                    <div  class-routine-dir routines="routines" course-map="courseMap"  room-map="roomMap"></div>
-                </div>
+<div class="panel" data-ng-init="getRoutines()">
+    <div class="panel-body">
+
+        <div class="alert alert-danger alert-dismissable" style="-moz-border-radius: 15px !important;border-radius: 15px !important;">
+            <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
+            If this routine is empty or inaccurate, please contact with <strong>Dept./School Admin Officer.</strong> He is responsible for updating this information.
+        </div>
+
+        <div class="row">
+            <div class="col-md-12" data-ng-if="showRoutineDirective==true">
+                <div  class-routine-dir routines="routines" course-map="courseMap"  room-map="roomMap"></div>
             </div>
-            <div class="row" align="right">
-                <!--<embed data-ng-src="{{pdfFile}}" width="100%" height="500px" />-->
-                <div class="col-md-12">
-                    <button class="btn btn-success" data-ng-click="showRoutineReport()">Print</button>
-                </div>
+        </div>
+        <div class="row" align="right">
+            <div class="col-md-12">
+                <button class="btn btn-success" data-ng-click="showRoutineReport()">Print</button>
             </div>
-            <!--<button class="btn btn-success" ng-click="getTeachersRoutine()">Get Routine</button>-->
         </div>
     </div>
 </div>
+

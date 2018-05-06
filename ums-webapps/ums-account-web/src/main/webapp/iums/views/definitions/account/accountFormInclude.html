@@ -7,7 +7,17 @@
                     <input id="accountName" ng-model="vm.account.accountName" type="text" placeholder=""
                            class="form-control"/>
                 </div>
-                
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="accountName" class="col-md-3 control-label">Account Code</label>
+            <div class="col-md-9">
+                <div class="input-icon right">
+                    <input id="accountCode" ng-model="vm.account.accountCode" type="text" placeholder=""
+                           class="form-control"/>
+                </div>
+
             </div>
         </div>
         <div class="form-group">
@@ -27,11 +37,11 @@
             <label for="openingBalance" class="col-md-3 control-label">Opening Balance</label>
             <div class="col-md-5">
                 <div class="input-icon right">
-                    <input id="openingBalance" ng-model="vm.account.yearOpenBalance" type="text" placeholder=""
+                    <input ng-disabled="true" id="openingBalance" ng-model="vm.account.yearOpenBalance"  type="text" placeholder=""
                            class="form-control"/>
                 </div>
             </div>
-            <div class="col-md-4" balance-type-directive balance-type="vm.account.yearOpenBalanceType"></div>
+            <div ng-disabled="true" class="col-md-4" balance-type-directive balance-type="vm.account.yearOpenBalanceType"></div>
         </div>
         <div class="form-group">
             <label for="closingBalance" class="col-md-3 control-label">Closing Balance</label>

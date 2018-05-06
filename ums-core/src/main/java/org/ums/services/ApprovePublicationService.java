@@ -46,7 +46,7 @@ public class ApprovePublicationService {
       @Override
       public String payload() {
         try {
-          return sender.getPersonalInformation().getFullName() + "'s publication is waiting for your approval";
+          return sender.getPersonalInformation().getName() + "'s publication is waiting for your approval";
         } catch(Exception e) {
           mLogger.error("Exception while looking for user: ", e);
         }

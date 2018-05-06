@@ -152,7 +152,7 @@ public class PersistentGroupDao extends GroupDaoDecorator {
     @Override
     public Group mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableGroup group = new PersistentGroup();
-      group.setStringId(rs.getLong("id"));
+      group.setId(rs.getLong("id"));
       group.setCompCode(rs.getString("comp_code"));
       group.setGroupCode(rs.getString("group_code"));
       group.setGroupName(rs.getString("group_name"));

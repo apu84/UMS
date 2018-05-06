@@ -51,7 +51,7 @@ module ums{
       $scope.viewStudentById=this.viewStudentById.bind(this);
       $scope.viewStudentByIdAndName = this.viewStudentByName.bind(this);
     }
-//asdfasdfas fa fasfa sdf asdf asdf
+
     private getTeacherInfo():void{
 
     }

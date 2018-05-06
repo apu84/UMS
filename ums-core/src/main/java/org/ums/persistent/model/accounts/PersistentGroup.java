@@ -2,10 +2,16 @@ package org.ums.persistent.model.accounts;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.deser.std.NumberDeserializers;
+import com.fasterxml.jackson.databind.ser.std.StringSerializer;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.accounts.MutableGroup;
 import org.ums.manager.accounts.GroupManager;
+import org.ums.serializer.UmsDateSerializer;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -24,6 +30,7 @@ public class PersistentGroup implements MutableGroup {
   }
 
   private Long mId;
+  @JsonIgnore
   private String mStringId;
   private String mCompanyCode;
   private String mGroupCode;
@@ -37,7 +44,7 @@ public class PersistentGroup implements MutableGroup {
   private String mDefaultComp;
   private String mStatusFlag;
   private String mStatusUpFlag;
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+  @JsonIgnore
   private Date mModifiedDate;
   private String mModifiedBy;
   private String mLastModified;
@@ -80,6 +87,7 @@ public class PersistentGroup implements MutableGroup {
     return mMainGroupObject;
   }
 
+  @JsonIgnore
   public void setMainGroupObject(PersistentGroup pMainGroupObject) {
     mMainGroupObject = pMainGroupObject;
   }
@@ -93,6 +101,7 @@ public class PersistentGroup implements MutableGroup {
   }
 
   @Override
+  @JsonIgnore
   public void setStringId(Long pId) {
     mStringId = pId.toString();
   }
@@ -158,6 +167,7 @@ public class PersistentGroup implements MutableGroup {
   }
 
   @Override
+  @JsonIgnore
   public void setModifiedDate(Date pLastModifiedDate) {
     mModifiedDate = pLastModifiedDate;
   }
@@ -183,6 +193,7 @@ public class PersistentGroup implements MutableGroup {
   }
 
   @Override
+  @JsonDeserialize(as = Long.class)
   public void setId(Long pId) {
     mId = pId;
   }
@@ -243,6 +254,7 @@ public class PersistentGroup implements MutableGroup {
   }
 
   @Override
+  @JsonSerialize(using = UmsDateSerializer.class)
   public Date getModifiedDate() {
     return mModifiedDate;
   }
@@ -258,8 +270,9 @@ public class PersistentGroup implements MutableGroup {
   }
 
   @Override
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public Long getId() {
-    return Long.parseLong(mStringId);
+    return mId;
   }
 
   @Override

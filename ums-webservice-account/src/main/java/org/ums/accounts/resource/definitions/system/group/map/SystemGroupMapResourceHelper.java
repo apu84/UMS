@@ -46,7 +46,6 @@ public class SystemGroupMapResourceHelper extends ResourceHelper<SystemGroupMap,
   }
 
   public List<SystemGroupMap> getAllSystemGroupMapByCompany() {
-    mLogger.debug("Request for all company related system group map data ");
     // todo get user's company
     Company company = mCompanyManager.getDefaultCompany();
     List<SystemGroupMap> systemGroupMapList = mSystemGroupMapManager.getAllByCompany(company);
@@ -54,7 +53,6 @@ public class SystemGroupMapResourceHelper extends ResourceHelper<SystemGroupMap,
   }
 
   public void save(MutableSystemGroupMap pMutableSystemGroupMap) throws Exception {
-    mLogger.debug("Requested to save data: {} ", pMutableSystemGroupMap);
     if(pMutableSystemGroupMap.getGroupType() == null || pMutableSystemGroupMap.getGroup() == null)
       throw new Exception("All fields are not properly filled");
     pMutableSystemGroupMap.setId(pMutableSystemGroupMap.getGroupType().getValue());
@@ -65,12 +63,10 @@ public class SystemGroupMapResourceHelper extends ResourceHelper<SystemGroupMap,
   }
 
   public SystemGroupMap get(String pId) {
-    mLogger.debug("Requested for system group map by id {}", pId);
     return mSystemGroupMapManager.get(pId);
   }
 
   public void update(MutableSystemGroupMap pMutableSystemGroupMap) {
-    mLogger.debug("Requested for updating data: {} ", pMutableSystemGroupMap);
     pMutableSystemGroupMap.setModifiedBy(mUserResourceHelper.getLoggedUser().getEmployeeId());
     pMutableSystemGroupMap.setModifiedDate(new Date());
     mSystemGroupMapManager.update(pMutableSystemGroupMap);

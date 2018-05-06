@@ -3,7 +3,9 @@ package org.ums.persistent.model.accounts;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
+import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.AccountManager;
 
 import java.math.BigDecimal;
@@ -15,9 +17,11 @@ import java.util.Date;
 public class PersistentAccount implements MutableAccount {
 
   private static AccountManager sAccountManager;
+  private static CompanyManager sCompanyManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sCompanyManager = applicationContext.getBean("companyManager", CompanyManager.class);
     sAccountManager = applicationContext.getBean("accountManager", AccountManager.class);
   }
 
@@ -35,6 +39,8 @@ public class PersistentAccount implements MutableAccount {
   private Date mModifiedDate;
   private String mModifiedBy;
   private String mLastModified;
+  private Company mCompany;
+  private String mCompanyId;
 
   public PersistentAccount() {}
 
@@ -51,6 +57,26 @@ public class PersistentAccount implements MutableAccount {
     mStatUpFlag = pPersistentAccount.getStatUpFlag();
     mModifiedDate = pPersistentAccount.getModifiedDate();
     mModifiedBy = pPersistentAccount.getModifiedBy();
+  }
+
+  @Override
+  public Company getCompany() {
+    return mCompany == null ? sCompanyManager.get(mCompanyId) : mCompany;
+  }
+
+  @Override
+  public void setCompany(Company pCompany) {
+    mCompany = pCompany;
+  }
+
+  @Override
+  public String getCompanyId() {
+    return mCompanyId;
+  }
+
+  @Override
+  public void setCompanyId(String pCompanyId) {
+    mCompanyId = pCompanyId;
   }
 
   @Override

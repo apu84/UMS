@@ -59,8 +59,6 @@ module ums {
             this.showEmployeeProfilePanel = true;
             this.showInformationPanel = true;
             Utils.expandRightDiv();
-            console.log("In Employee Information.........................");
-            console.log(this.employee.id);
             this.state.go("employeeInformation.employeeProfile", {id: this.employee.id});
         }
 

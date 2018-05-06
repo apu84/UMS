@@ -780,10 +780,8 @@ module ums {
 
         if(r.updated==true || r.status=='deleted' || r.status=='created'){
           var item:any={};
-          if(r.id==null || r.id<0 ){
-            item['id']="";
-          }else{
-            item['id']=r.id;
+          if(r.id!=null || r.id>0 ){
+              item['id']=r.id;
           }
           item['semesterId']=this.$scope.semesterId;
           item['courseId']=this.$scope.courseNoMapCourseId[r.courseNo];

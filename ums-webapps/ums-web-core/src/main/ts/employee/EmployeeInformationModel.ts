@@ -1,8 +1,13 @@
 module ums{
     export interface IPersonalInformationModel {
+        general: IGeneralInformationModel;
+        contact: IContactInformationModel;
+        emergencyContact: IEmergencyContactInformationModel;
+    }
+
+    export interface IGeneralInformationModel{
         employeeId: string;
-        firstName: string;
-        lastName: string;
+        name: string;
         fatherName: string;
         motherName: string;
         gender: IGender;
@@ -15,6 +20,11 @@ module ums{
         bloodGroup: ICommon;
         spouseNidNo: string;
         website: string;
+        type: string;
+    }
+
+    export interface IContactInformationModel{
+        employeeId: string;
         organizationalEmail: string;
         personalEmail: string;
         mobile: string;
@@ -33,10 +43,16 @@ module ums{
         perAddressDistrict: ICommon;
         perAddressThana: ICommon;
         perAddressPostCode: string;
+        type: string;
+    }
+
+    export interface IEmergencyContactInformationModel{
+        employeeId: string;
         emergencyContactName: string;
         emergencyContactRelation: ICommon;
         emergencyContactPhone: string;
         emergencyContactAddress: string;
+        type: string;
     }
 
     export interface IAcademicInformationModel{

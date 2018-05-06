@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
- <!-- scan="true" debug="true" -->
-  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <layout class="ch.qos.logback.classic.PatternLayout">
-      <Pattern>
-        %d{hh:mm:ss.SSS aa} [%thread] %-5level %logger{36} - %msg%n
-      </Pattern>
-    </layout>
-  </appender>
+    <!-- scan="true" debug="true" -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{hh:mm:ss.SSS aa} [%thread] %-5level %logger{200} - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
 
 
-  <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>${CATALINA_HOME}/logs/ums-logs.log</file>
-    <append>true</append>
-    <encoder>
-      <Pattern>
-        %d{hh:mm:ss.SSS aa} [%thread] %-5level %logger{36} - %msg%n
-      </Pattern>
-      <!--<pattern>%d %-5level %logger{35} - %msg%n</pattern>-->
-    </encoder>
-    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-      <!-- daily rollover -->
-      <fileNamePattern>${CATALINA_HOME}/logs/ums-logs_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-      <maxFileSize>10MB</maxFileSize>
-      <!-- keep 30 days' worth of history -->
-      <maxHistory>30</maxHistory>
-      <totalSizeCap>1GB</totalSizeCap>
-    </rollingPolicy>
-  </appender>
+    <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${CATALINA_HOME}/logs/ums-logs.log</file>
+        <append>true</append>
+        <encoder>
+            <Pattern>
+                %d{hh:mm:ss.SSS aa} [%thread] %-5level %logger{200} - %msg%n
+            </Pattern>
+            <!--<pattern>%d %-5level %logger{35} - %msg%n</pattern>-->
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${CATALINA_HOME}/logs/ums-logs_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
 
     <appender name="dbLogAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${CATALINA_HOME}/logs/ums-db.log</file>
@@ -48,66 +48,30 @@
         </rollingPolicy>
     </appender>
 
-  <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
-    <queueSize>600</queueSize>
-    <discardingThreshold>0</discardingThreshold>
-    <appender-ref ref="fileAppender"/>
-  </appender>
-
-    <appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>172.16.22.44:5000</destination>
-
-        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
-            <providers>
-                <mdc/>
-                <context/>
-                <version/>
-                <logLevel/>
-                <loggerName/>
-
-                <pattern>
-                    <pattern>
-                    {
-                        "appName": "iums",
-                        "appVersion": "1.0"
-                        }
-                    </pattern>
-                </pattern>
-
-                <threadName/>
-                <message/>
-
-                <logstashMarkers/>
-                <arguments/>
-
-                <stackTrace/>
-            </providers>
-        </encoder>
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>600</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="fileAppender"/>
     </appender>
-  <!--
-  <root level="error">
-    <appender-ref ref="ASYNC"/>
-  </root>
--->
-  <root level="error">
-    <appender-ref ref="fileAppender" />
-    <appender-ref ref="STDOUT" />
-  </root>
 
+
+    <logger name="org.ums" level="ALL"/>
+    <logger name="springfox.documentation" level="WARN"/>
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="org.apache" level="WARN"/>
+    <logger name="org.pentaho" level="WARN"/>
+    <logger name="org.springframework.jdbc.core" level="ERROR"/>
+
+
+    <root level="info">
+        <appender-ref ref="ASYNC" />
+        <appender-ref ref="STDOUT" />
+    </root>
 
     <logger name="org.ums.statistics" level="debug" additivity="false">
         <appender-ref ref="dbLogAppender"/>
     </logger>
 
-  <logger name="org.ums" level="debug" additivity="false">
-    <appender-ref ref="fileAppender"/>
-    <appender-ref ref="STDOUT" />
-      <appender-ref ref="STASH"/>
-  </logger>
-
-   <!--Comment out this block to debug sql query and prepared statements-->
-  <Logger name="org.springframework.jdbc.core" level="ERROR" additivity="false">
-    <Appender-Ref ref="fileAppender"/>
-  </Logger>
 
 </configuration>

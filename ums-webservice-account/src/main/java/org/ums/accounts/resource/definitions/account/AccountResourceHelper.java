@@ -16,6 +16,7 @@ import org.ums.enums.accounts.definitions.financial.account.year.YearClosingFlag
 import org.ums.enums.accounts.definitions.group.GroupFlag;
 import org.ums.enums.accounts.definitions.group.GroupType;
 import org.ums.generator.IdGenerator;
+import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
 import org.ums.persistent.model.accounts.PersistentAccount;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
@@ -65,6 +66,10 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
   private GroupManager mGroupManager;
   @Autowired
   private AccountBalanceService mAccountBalanceService;
+  @Autowired
+  private SystemGroupMapManager mSystemGroupMapManager;
+  @Autowired
+  private CompanyManager mCompanyManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -81,7 +86,8 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     account.setModifiedBy(user.getEmployeeId());
     account.setModifiedDate(new Date());
-    account.setAccountCode(Math.abs(mIdGenerator.getNumericId()));
+    account.setAccountCode(account.getAccountCode() == null || account.getAccGroupCode().equals("") ? mIdGenerator.getNumericId() : account.getAccountCode());
+    account.setCompanyId(mCompanyManager.getDefaultCompany().getId());
     Long id = getContentManager().create(account);
     account.setId(id);
     MutableAccountBalance accountBalance = new PersistentAccountBalance();
@@ -117,20 +123,24 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
 
   public JsonObject getCustomerAndVendorAccounts(final UriInfo pUriInfo) {
     List<String> groupCodeList = new ArrayList<>();
-    groupCodeList.add(GroupType.SUNDRY_CREDITOR.getValue());
-    groupCodeList.add(GroupType.SUNDRY_DEBTOR.getValue());
+    // groupCodeList.add(GroupType.SUNDRY_CREDITOR.getValue());
+    groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_CREDITOR.getValue()).getGroup().getGroupCode());
+    // groupCodeList.add(GroupType.SUNDRY_DEBTOR.getValue());
+    groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_DEBTOR.getValue()).getGroup().getGroupCode());
     return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
   }
 
   public JsonObject getVendorAccounts(final UriInfo pUriInfo) {
     List<String> groupCodeList = new ArrayList<>();
-    groupCodeList.add(GroupType.SUNDRY_CREDITOR.getValue());
+    // groupCodeList.add(GroupType.SUNDRY_CREDITOR.getValue());
+    groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_CREDITOR.getValue()).getGroup().getGroupCode());
     return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
   }
 
   public JsonObject getCustomerAccounts(final UriInfo pUriInfo) {
     List<String> groupCodeList = new ArrayList<>();
-    groupCodeList.add(GroupType.SUNDRY_DEBTOR.getValue());
+    // groupCodeList.add(GroupType.SUNDRY_DEBTOR.getValue());
+    groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_DEBTOR.getValue()).getGroup().getGroupCode());
     return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
   }
 
@@ -148,16 +158,20 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
 
   public JsonObject getBankAndCostTypeAccounts(final UriInfo pUriInfo) {
     List<String> groupCodeList = new ArrayList<String>();
-    groupCodeList.add(GroupType.BANK_ACCOUNTS.getValue());
-    groupCodeList.add(GroupType.CASH_IN_HAND.getValue());
+    // groupCodeList.add(GroupType.BANK_ACCOUNTS.getValue());
+    groupCodeList.add(mSystemGroupMapManager.get(GroupType.BANK_ACCOUNTS.getValue()).getGroup().getGroupCode());
+    // groupCodeList.add(GroupType.CASH_IN_HAND.getValue());
+    groupCodeList.add(mSystemGroupMapManager.get(GroupType.CASH_IN_HAND.getValue()).getGroup().getGroupCode());
     return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
 
   }
 
   public JsonObject getExcludingBankAndCostTypeAccounts(final UriInfo pUriInfo) {
     List<String> groupCodeList = new ArrayList<String>();
-    groupCodeList.add(GroupType.BANK_ACCOUNTS.getValue());
-    groupCodeList.add(GroupType.CASH_IN_HAND.getValue());
+    // groupCodeList.add(GroupType.BANK_ACCOUNTS.getValue());
+    groupCodeList.add(mSystemGroupMapManager.get(GroupType.BANK_ACCOUNTS.getValue()).getGroup().getGroupCode());
+    // groupCodeList.add(GroupType.CASH_IN_HAND.getValue());
+    groupCodeList.add(mSystemGroupMapManager.get(GroupType.CASH_IN_HAND.getValue()).getGroup().getGroupCode());
     return getAccountExcludingGroupList(groupCodeList, pUriInfo);
   }
 

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.TaskStatus;
+import org.ums.logs.GetLog;
 import org.ums.response.type.GenericResponse;
 import org.ums.usermanagement.user.User;
 import org.ums.enums.CourseCategory;
@@ -14,6 +15,7 @@ import org.ums.usermanagement.user.UserManager;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -103,8 +105,9 @@ public class CourseTeacherResource extends Resource {
 
   @GET
   @Path("/{semester-id}/{teacher-id}/course")
-  public JsonObject getByCourse(final @Context Request pRequest, final @PathParam("semester-id") Integer pSemesterId,
-      final @PathParam("teacher-id") String pTeacherId) {
+  @GetLog(message = "Accessed assigned course list for a teacher of a semester")
+  public JsonObject getByCourse(@Context HttpServletRequest pHttpServletRequest, final @Context Request pRequest,
+      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("teacher-id") String pTeacherId) {
     return mResourceHelper.getAssignedCourses(pSemesterId, pTeacherId, mUriInfo);
   }
 

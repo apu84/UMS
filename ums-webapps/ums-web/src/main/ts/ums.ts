@@ -55,6 +55,7 @@ module ums {
 
   UMS.constant("appConstants", Constants.Default());
   UMS.constant("registrarConstants", Constants.RegistrarConstant());
+  UMS.constant("libConstants", Constants.LibConstant());
 
   UMS.filter('$split', function () {
     return function (input) {
@@ -1114,7 +1115,7 @@ module ums {
         .state('employeeProfile.personal', {
             url: "/personal",
             params : {
-                'id1': null
+                'id': null
             },
             templateUrl: 'views/employee/personal-information.html',
             controller: 'PersonalInformation',
@@ -1123,7 +1124,7 @@ module ums {
         .state('employeeProfile.academic', {
             url: "/academic",
             params : {
-                'id2': null
+                'id': null
             },
             templateUrl: 'views/employee/academic-information.html',
             controller: 'EducationInformation',
@@ -1132,7 +1133,7 @@ module ums {
         .state('employeeProfile.publication', {
             url: "/publication",
             params : {
-                'id3': null
+                'id': null
             },
             templateUrl: 'views/employee/publication-information.html',
             controller: 'PublicationInformation',
@@ -1141,7 +1142,7 @@ module ums {
         .state('employeeProfile.training', {
             url: "/training",
             params : {
-                'id4': null
+                'id': null
             },
             templateUrl: 'views/employee/training-information.html',
             controller: 'TrainingInformation',
@@ -1150,7 +1151,7 @@ module ums {
         .state('employeeProfile.award', {
             url: "/award",
             params : {
-                'id5': null
+                'id': null
             },
             templateUrl: 'views/employee/award-information.html',
             controller: 'AwardInformation',
@@ -1159,7 +1160,7 @@ module ums {
         .state('employeeProfile.experience', {
             url: "/experience",
             params : {
-                'id6': null
+                'id': null
             },
             templateUrl: 'views/employee/experience-information.html',
             controller: 'ExperienceInformation',
@@ -1168,7 +1169,7 @@ module ums {
         .state('employeeProfile.additional', {
             url: "/additional",
             params : {
-                'id7': null
+                'id': null
             },
             templateUrl: 'views/employee/additional-information.html',
             controller: 'AdditionalInformation',
@@ -1177,11 +1178,26 @@ module ums {
         .state('employeeProfile.service', {
             url: "/service",
             params : {
-                'id8': null
+                'id': null
             },
             templateUrl: 'views/employee/service-information.html',
             controller: 'ServiceInformation',
             controllerAs: 'vm'
+        })
+        .state('searchLibrary', {
+            url: "/searchLibrary",
+            controller: 'SearchLibrary',
+            templateUrl: 'views/library/search-library.html',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        files: [
+                            'vendors/bootstrap-select/bootstrap-select.min.js',
+                            'vendors/bootstrap-select/bootstrap-select.css'
+                        ]
+                    });
+                }]
+            }
         })
 
   });

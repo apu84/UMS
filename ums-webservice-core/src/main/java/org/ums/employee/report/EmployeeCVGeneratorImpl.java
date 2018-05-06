@@ -209,10 +209,9 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
     innerTable.setWidthPercentage(100);
     innerTable.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 
-    String fName = personalInformation.getFirstName() == null ? "" : personalInformation.getFirstName();
-    String lName = personalInformation.getLastName() == null ? "" : personalInformation.getLastName();
+    String name = personalInformation.getName();
     innerTable.addCell(prepareCell(new Chunk(), new PdfPCell(), "Name:", generalFont));
-    innerTable.addCell(prepareCell(new Chunk(), new PdfPCell(), fName + " " + lName, generalFont));
+    innerTable.addCell(prepareCell(new Chunk(), new PdfPCell(), name, generalFont));
     innerTable.addCell(prepareCell(new Chunk(), new PdfPCell(), "Email: ", generalFont));
     String personalEmail = personalInformation.getPersonalEmail() == null ? "" : personalInformation.getPersonalEmail();
     String orgEmail =
