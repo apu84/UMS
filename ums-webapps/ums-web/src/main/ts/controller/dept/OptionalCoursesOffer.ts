@@ -74,6 +74,11 @@ module ums {
     optionalTheoryCrHr: number;
     optionalSessionalCrHr: number;
   }
+  interface IOption {
+    id: number;
+    name: string;
+    shortName: string;
+  }
 
   var map: {[key:string]: string} = {};
   map["statistics_url"] = "academic/optional/application/stat/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}";
@@ -95,9 +100,9 @@ module ums {
   map["save_section"] =  "academic/optional/application/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/course/{COURSE-ID}/section/{SECTION-NAME}";
 
   export class OptionalCoursesOffer {
-    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify'];
+    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify','semesterService', 'commonService',];
 
-    constructor(private appConstants:any, private httpClient:HttpClient, private $scope:IOptCourseOffer, private $q:ng.IQService,private notify: Notify) {
+    constructor(private appConstants:any, private httpClient:HttpClient, private $scope:IOptCourseOffer, private $q:ng.IQService,private notify: Notify,private semesterService: SemesterService,private commonService: CommonService) {
       $scope.optional = {
         approvedCallForApplicationCourses: Array<IOptCourse>(),
         appliedCoursesForSingleStudent: Array<IOptStudent>(),
@@ -115,10 +120,15 @@ module ums {
         allStudentCourseId:'',
         sectionCourseId:'',
         semesterId:'',
+        deptId:'',
         semester:'',
         program: '',
         studentId:'',
-        year:''
+        year:'',
+        semesters: Array<IOption>(),
+        depts: Array<IOption>(),
+        yearSemesters: Array<any>(),
+        yearSemester:''
       };
 
       $scope.saveApplicationStatusForSingleStudent=this.saveApplicationStatusForSingleStudent.bind(this);
@@ -141,12 +151,58 @@ module ums {
       $scope.resetChanges=this.resetChanges.bind(this);
       $scope.saveSection = this.saveSection.bind(this);
       $scope.goToTab=this.goToTab.bind(this);
+
+      this.loadSemesters();
     }
 
     private goToTab(tabIndex:number):void{
       $('.nav-tabs li:eq('+tabIndex+') a').tab('show');
     }
 
+    private loadSemesters(): void {
+      this.semesterService.fetchSemesters(Utils.UG).then((semesters: Array<IOption>) => {
+        if (semesters.length == 0) {
+          semesters.splice(0, 0, this.appConstants.initSemester[0]);
+        }
+        this.$scope.optional.semesters = semesters;
+        this.$scope.optional.semesterId = semesters[0].id;
+      });
+
+      this.commonService.fetchCurrentUser().then((departmentJson: any) => {
+        this.$scope.optional.depts = [departmentJson];
+        this.$scope.optional.deptId = departmentJson.id;
+        this.loadPrograms();
+      });
+    }
+
+    private loadPrograms(): void {
+      var programArr: any;
+      var controllerScope = this.$scope;
+        programArr = this.appConstants.ugPrograms;
+      var programJson = $.map(programArr, function (el) {
+        return el
+      });
+      var resultPrograms: any = $.grep(programJson, function (e: any) {
+        return e.deptId == controllerScope.optional.deptId;
+      });
+
+      if(resultPrograms[0] == undefined) {
+        this.$scope.optional.programs = null;
+        this.$scope.optional.programId = null;
+      }  else {
+        this.$scope.optional.programs = resultPrograms[0].programs;
+        this.$scope.optional.programId = resultPrograms[0].programs[0].id;
+      }
+
+      var yearSemesterList = (this.appConstants.optionalCourseYearSemester[this.$scope.optional.programId]);
+      for (var ind in yearSemesterList) {
+        var yearSemester:any = yearSemesterList[ind];
+        var yearSemesterStr:string = yearSemester.year+" - "+yearSemester.semester;
+        var option  ={"id":yearSemesterStr,"name":yearSemesterStr};
+        this.$scope.optional.yearSemesters[ind] = option;
+      }
+      this.$scope.optional.yearSemester = this.$scope.optional.yearSemesters[0].id;
+    }
 
     private showCourses():void {
 
@@ -718,9 +774,9 @@ module ums {
 
 private urlPlaceholderReplace(inputUrl:string):string{
   var url=inputUrl.replace("{SEMESTER-ID}",this.$scope.optional.semesterId);
-  url=url.replace("{PROGRAM-ID}",this.$scope.optional.program);
-  url=url.replace("{YEAR}",this.$scope.optional.year);
-  url=url.replace("{SEMESTER}",this.$scope.optional.semester);
+  url=url.replace("{PROGRAM-ID}",this.$scope.optional.programId);
+  url=url.replace("{YEAR}",this.$scope.optional.yearSemester.split(" - ")[0]);
+  url=url.replace("{SEMESTER}",this.$scope.optional.yearSemester.split(" - ")[1]);
   return url;
 }
 
