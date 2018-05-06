@@ -364,7 +364,15 @@ module ums {
                     '110707': ['BSc in IPE'],
                     '110708': ['BSc in ME']
                 },
-                theorySectionsGrid: ":None;A:A;B:B;C:C;D:D",
+                optionalCourseYearSemester: {
+                    '110200':[{'year':'4','semester':'1'},{'year':'4','semester':'2'}],
+                    '110400':[{'year':'4','semester':'2'}],
+                    '110500':[{'year':'4','semester':'1'},{'year':'4','semester':'2'}],
+                    '110600':[{'year':'4','semester':'1'},{'year':'4','semester':'2'}],
+                    '110707':[{'year':'4','semester':'1'},{'year':'4','semester':'2'}],
+                    '110708':[{'year':'4','semester':'1'},{'year':'4','semester':'2'}]
+                },
+          theorySectionsGrid: ":None;A:A;B:B;C:C;D:D",
                 theorySections: [
                     {id: "A", name: "A"},
                     {id: "B", name: "B"},
