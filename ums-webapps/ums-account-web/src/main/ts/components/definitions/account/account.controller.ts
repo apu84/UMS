@@ -1,5 +1,7 @@
 module ums {
-  export class AccountController {
+  import IAccountBalance = ums.IAccountBalance;
+
+    export class AccountController {
 
     public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'employeeService'];
 
@@ -105,7 +107,9 @@ module ums {
 
     public add() {
       this.account.accGroupCode = this.selectedGroup.groupCode;
-      this.accountService.saveAccountPaginated(this.account, this.itemsPerPage, 1).then((accounts: IAccount[]) => {
+      let accountBalance:IAccountBalance = <IAccountBalance>{};
+      accountBalance.yearOpenBalanceType = this.account.yearClosingBalanceType;
+      this.accountService.saveAccountPaginated(this.account, accountBalance, this.itemsPerPage, 1).then((accounts: IAccount[]) => {
         if (accounts == undefined)
           this.notify.error("Error in saving data");
         else {

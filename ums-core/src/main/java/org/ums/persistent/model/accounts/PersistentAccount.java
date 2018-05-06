@@ -1,12 +1,18 @@
 package org.ums.persistent.model.accounts;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
+import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.AccountManager;
+import org.ums.serializer.UmsDateSerializer;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -14,14 +20,18 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 28-Dec-17.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PersistentAccount implements MutableAccount {
 
   private static AccountManager sAccountManager;
   private static CompanyManager sCompanyManager;
+  private static PersonalInformationManager sPersonalInformationManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sCompanyManager = applicationContext.getBean("companyManager", CompanyManager.class);
+    sPersonalInformationManager =
+        applicationContext.getBean("personalInformationManager", PersonalInformationManager.class);
     sAccountManager = applicationContext.getBean("accountManager", AccountManager.class);
   }
 
@@ -36,9 +46,14 @@ public class PersistentAccount implements MutableAccount {
   private String mDefaultComp;
   private String mStatFlag;
   private String mStatUpFlag;
+  @JsonIgnore
   private Date mModifiedDate;
+  @JsonIgnore
   private String mModifiedBy;
+  private String mModifierName;
+  @JsonIgnore
   private String mLastModified;
+  @JsonIgnore
   private Company mCompany;
   private String mCompanyId;
 
@@ -60,11 +75,23 @@ public class PersistentAccount implements MutableAccount {
   }
 
   @Override
+  public void setModifierName(String pModifierName) {
+    mModifierName = pModifierName;
+  }
+
+  @Override
+  public String getModifierName() {
+    return mModifierName;
+  }
+
+  @Override
+  @JsonProperty("company")
   public Company getCompany() {
     return mCompany == null ? sCompanyManager.get(mCompanyId) : mCompany;
   }
 
   @Override
+  @JsonIgnore
   public void setCompany(Company pCompany) {
     mCompany = pCompany;
   }
@@ -135,6 +162,7 @@ public class PersistentAccount implements MutableAccount {
   }
 
   @Override
+  @JsonIgnore
   public void setModifiedDate(Date pModifiedDate) {
     mModifiedDate = pModifiedDate;
   }
@@ -226,6 +254,7 @@ public class PersistentAccount implements MutableAccount {
   }
 
   @Override
+  @JsonSerialize(using = UmsDateSerializer.class)
   public Date getModifiedDate() {
     return mModifiedDate;
   }
@@ -238,5 +267,16 @@ public class PersistentAccount implements MutableAccount {
   @Override
   public void setLastModified(String pLastModified) {
     mLastModified = pLastModified;
+  }
+
+  @Override
+  public String toString() {
+    return "PersistentAccount{" + "mId=" + mId + ", mAccountcode=" + mAccountcode + ", mRowNumber=" + mRowNumber
+        + ", mAccountName='" + mAccountName + '\'' + ", mAccGroupCode='" + mAccGroupCode + '\'' + ", mReserved="
+        + mReserved + ", mTaxLimit=" + mTaxLimit + ", mTaxCode='" + mTaxCode + '\'' + ", mDefaultComp='" + mDefaultComp
+        + '\'' + ", mStatFlag='" + mStatFlag + '\'' + ", mStatUpFlag='" + mStatUpFlag + '\'' + ", mModifiedDate="
+        + mModifiedDate + ", mModifiedBy='" + mModifiedBy + '\'' + ", mModifierName='" + mModifierName + '\''
+        + ", mLastModified='" + mLastModified + '\'' + ", mCompany=" + mCompany + ", mCompanyId='" + mCompanyId + '\''
+        + '}';
   }
 }

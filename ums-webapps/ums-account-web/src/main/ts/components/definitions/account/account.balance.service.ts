@@ -1,4 +1,15 @@
 module ums {
+
+
+  export interface IAccountBalance{
+      id: string;
+      accountCode: string;
+      yearOpenBalance: number;
+      yearCloseBalance: number;
+      yearOpenBalanceType:any;
+      modifiedDate: string;
+  }
+
   export class AccountBalanceService {
     private url: string;
 
