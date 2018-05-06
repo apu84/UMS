@@ -5,16 +5,23 @@ import org.springframework.stereotype.Service;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.immutable.accounts.AccountBalance;
 import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
+import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.enums.accounts.definitions.MonthType;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
+import org.ums.enums.accounts.definitions.financial.account.year.YearClosingFlagType;
+import org.ums.generator.IdGenerator;
 import org.ums.manager.accounts.AccountBalanceManager;
 import org.ums.manager.accounts.CurrencyManager;
+import org.ums.manager.accounts.FinancialAccountYearManager;
+import org.ums.persistent.model.accounts.PersistentAccount;
+import org.ums.usermanagement.user.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 /**
  * Created by Monjur-E-Morshed on 23-Mar-18.
@@ -25,6 +32,10 @@ public class AccountBalanceService {
   private AccountBalanceManager accountBalanceManager;
   @Autowired
   private CurrencyManager currencyManager;
+  @Autowired
+  private FinancialAccountYearManager mFinancialAccountYearManager;
+  @Autowired
+  private IdGenerator mIdGenerator;
 
   public BigDecimal getTillLastMonthBalance(final Account pAccount, final FinancialAccountYear pFinancialAccountYear,
       final Date pDate, final AccountBalance pAccountBalance) {
@@ -184,6 +195,31 @@ public class AccountBalanceService {
     }
 
     return pAccountBalance;
+  }
+
+  public MutableAccountBalance createAccountBalance(MutableAccount account, User user, MutableAccountBalance accountBalance) {
+    if (accountBalance != null) {
+      FinancialAccountYear financialAccountYears = mFinancialAccountYearManager.getAll().stream().filter(f -> f.getYearClosingFlag().equals(YearClosingFlagType.OPEN)).collect(Collectors.toList()).get(0);
+      accountBalance.setId(  mIdGenerator.getNumericId());
+      accountBalance.setYearOpenBalanceType(BalanceType.Dr);
+      accountBalance.setYearOpenBalance(accountBalance.getYearOpenBalance() == null ? new BigDecimal(0.00) : accountBalance.getYearOpenBalance());
+      accountBalance.setFinStartDate(financialAccountYears.getCurrentStartDate());
+      accountBalance.setFinEndDate(financialAccountYears.getCurrentEndDate());
+      accountBalance.setAccountCode(((PersistentAccount) account).getId());
+      accountBalance.setTotDebitTrans(accountBalance.getYearOpenBalance() == null ? new BigDecimal(0.00) : accountBalance.getYearOpenBalance());
+      accountBalance.setTotCreditTrans(new BigDecimal(0.000));
+      accountBalance.setModifiedBy(user.getEmployeeId());
+      accountBalance.setModifiedDate(new Date());
+      accountBalance = setMonthAccountBalance(accountBalance, account);
+      accountBalanceManager.insertFromAccount(accountBalance);
+    }
+    return accountBalance;
+  }
+
+  public MutableAccountBalance updateAccountBalance(MutableAccount account, User user,
+      MutableAccountBalance accountBalance) {
+
+    return null;
   }
 
 }

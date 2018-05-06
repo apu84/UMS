@@ -3,7 +3,7 @@ module ums {
 
     export class AccountController {
 
-    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'employeeService'];
+    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'employeeService', 'AccountBalanceService'];
 
     private groups: IGroup[];
     private selectedGroup: IGroup;
@@ -23,7 +23,9 @@ module ums {
                 private notify: Notify,
                 private accountService: AccountService,
                 private groupService: GroupService,
-                private $timeout: ng.ITimeoutService, private employeeService: EmployeeService) {
+                private $timeout: ng.ITimeoutService,
+                private employeeService: EmployeeService,
+                private accountBalanceService: AccountBalanceService) {
 
       this.initialize();
 
@@ -109,6 +111,7 @@ module ums {
       this.account.accGroupCode = this.selectedGroup.groupCode;
       let accountBalance:IAccountBalance = <IAccountBalance>{};
       accountBalance.yearOpenBalanceType = this.account.yearClosingBalanceType;
+      accountBalance.yearOpenBalance = this.account.yearOpenBalance;
       //todo configure account balance information
       this.accountService.saveAccountPaginated(this.account, accountBalance, this.itemsPerPage, 1).then((accounts: IAccount[]) => {
         if (accounts == undefined)
@@ -127,6 +130,10 @@ module ums {
       this.selectedGroup = this.groupMapWithGroupid[this.account.accGroupCode];
       this.account.yearOpenBalance=0;
       this.account.yearOpenBalanceType = BalanceType.Dr;
+
+      this.accountBalanceService.getAccountBalance(this.account.id).then((balance:number)=>{
+        this.account.yearOpenBalance=balance;
+      });
     }
 
     public getPaginatedAccounts() {

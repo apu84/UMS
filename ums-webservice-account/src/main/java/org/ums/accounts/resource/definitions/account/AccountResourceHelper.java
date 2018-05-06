@@ -7,6 +7,7 @@ import org.ums.accounts.resource.definitions.account.balance.AccountBalanceBuild
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.accounts.Account;
+import org.ums.domain.model.immutable.accounts.AccountBalance;
 import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
 import org.ums.domain.model.immutable.accounts.Group;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
@@ -22,6 +23,8 @@ import org.ums.persistent.model.accounts.PersistentAccount;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
 import org.ums.resource.ResourceHelper;
 import org.ums.service.AccountBalanceService;
+import org.ums.service.AccountService;
+import org.ums.service.AccountTransactionService;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
@@ -70,48 +73,41 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
   private SystemGroupMapManager mSystemGroupMapManager;
   @Autowired
   private CompanyManager mCompanyManager;
+  @Autowired
+  private AccountService mAccountService;
+  @Autowired
+  private AccountTransactionService mAccountTransactionService;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     return null;
   }
 
-  public List<Account> createAccount( PersistentAccount pAccount, PersistentAccountBalance pAccountBalance, int pItemPerPage, int pItemNumber) {
-//    JsonArray entries = pJsonObject.getJsonArray("entries");
+  public List<Account> createAccount(PersistentAccount pAccount, PersistentAccountBalance pAccountBalance,
+      int pItemPerPage, int pItemNumber) throws Exception {
+    // JsonArray entries = pJsonObject.getJsonArray("entries");
     LocalCache cache = new LocalCache();
     MutableAccount account = pAccount;
-//    JsonObject jsonObject = entries.getJsonObject(0);
+    // JsonObject jsonObject = entries.getJsonObject(0);
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     account.setModifiedBy(user.getEmployeeId());
     account.setModifiedDate(new Date());
-    account.setAccountCode(account.getAccountCode() == null || account.getAccountCode().equals("") ? mIdGenerator.getNumericId() : account.getAccountCode());
+    account.setAccountCode(account.getAccountCode() == null || account.getAccountCode().equals("") ? mIdGenerator
+        .getNumericId() : account.getAccountCode());
     account.setCompanyId(mCompanyManager.getDefaultCompany().getId());
-    if(account.getId()==null){
+    if(account.getId() == null) {
       Long id = getContentManager().create(account);
-      account.setId( id);
-      //todo update account balance info
-      return getAllPaginated(pItemPerPage, pItemNumber);
-    }else{
+      account.setId(id);
+    }
+    else {
       getContentManager().update(account);
     }
 
     MutableAccountBalance accountBalance = pAccountBalance;
-    if (accountBalance != null) {
-      FinancialAccountYear financialAccountYears = mFinancialAccountYearManager.getAll().stream().filter(f -> f.getYearClosingFlag().equals(YearClosingFlagType.OPEN)).collect(Collectors.toList()).get(0);
-      accountBalance.setId(  mIdGenerator.getNumericId());
-      accountBalance.setYearOpenBalanceType(BalanceType.Dr);
-      accountBalance.setYearOpenBalance(accountBalance.getYearOpenBalance() == null ? new BigDecimal(0.00) : accountBalance.getYearOpenBalance());
-      accountBalance.setFinStartDate(financialAccountYears.getCurrentStartDate());
-      accountBalance.setFinEndDate(financialAccountYears.getCurrentEndDate());
-      accountBalance.setAccountCode(((PersistentAccount) account).getId());
-      accountBalance.setTotDebitTrans(accountBalance.getYearOpenBalance() == null ? new BigDecimal(0.00) : accountBalance.getYearOpenBalance());
-      accountBalance.setTotCreditTrans(new BigDecimal(0.000));
-      accountBalance.setModifiedBy(user.getEmployeeId());
-      accountBalance.setModifiedDate(new Date());
-      accountBalance = mAccountBalanceService.setMonthAccountBalance(accountBalance, account);
-      mAccountBalanceManager.insertFromAccount(accountBalance);
-    }
+    accountBalance = mAccountBalanceService.createAccountBalance(account, user, accountBalance);
 
+    if(!accountBalance.getYearOpenBalance().equals(0))
+      mAccountTransactionService.createOpeningBalanceJournalEntry(account, accountBalance);
     return getAllPaginated(pItemPerPage, pItemNumber);
   }
 

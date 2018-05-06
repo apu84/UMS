@@ -1,6 +1,7 @@
 package org.ums.accounts.resource.definitions.account.balance;
 
 import org.springframework.stereotype.Component;
+import org.ums.logs.GetLog;
 import org.ums.resource.Resource;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ public class AccountBalanceResource extends MutableAccountBalanceResource {
 
   @GET
   @Path("/account-id/{account-id}")
+  @GetLog(message = "Requested for account balance based on account id")
   public BigDecimal getAccountBalance(HttpServletRequest pHttpServletRequest, @PathParam("account-id") String pAccountId) {
     return mHelper.getAccountBalance(pAccountId);
   }

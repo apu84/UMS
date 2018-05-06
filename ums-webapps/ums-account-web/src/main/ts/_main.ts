@@ -105,7 +105,6 @@
 /// <reference path='components/definitions/group/group.controller.ts'/>
 /// <reference path='components/definitions/group/group.service.ts'/>
 /// <reference path='components/definitions/account/account.controller.ts'/>
-/// <reference path='components/definitions/account.balance/account.balance.service.ts'/>
 /// <reference path='components/definitions/account/account.service.ts'/>
 /// <reference path='components/definitions/account/account.balance.service.ts'/>
 /// <reference path='components/definitions/currency/currency.service.ts'/>

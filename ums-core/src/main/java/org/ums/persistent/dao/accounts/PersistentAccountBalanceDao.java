@@ -133,6 +133,13 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
     return mNamedParameterJdbcTemplate.batchUpdate(query, parameterObjects).length;
   }
 
+  @Override
+  public int update(MutableAccountBalance pMutable) {
+    String query = UPDATE_ONE;
+    Map parameterMap = getInsertParameters(pMutable);
+    return mNamedParameterJdbcTemplate.update(query, parameterMap);
+  }
+
   private Map<String, Object>[] getParameterObjects(List<MutableAccountBalance> pMutableAccountBalances) {
     Map<String, Object>[] parameterMaps = new HashMap[pMutableAccountBalances.size()];
     for(int i = 0; i < pMutableAccountBalances.size(); i++) {

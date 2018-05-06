@@ -37,7 +37,7 @@
             <label for="openingBalance" class="col-md-3 control-label">Opening Balance</label>
             <div class="col-md-5">
                 <div class="input-icon right">
-                    <input ng-disabled="true" id="openingBalance" ng-model="vm.account.yearOpenBalance"  type="text" placeholder=""
+                    <input  id="openingBalance" ng-model="vm.account.yearOpenBalance"  type="text" placeholder=""
                            class="form-control"/>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                            placeholder="" class="form-control"/>
                 </div>
             </div>
-            <div ng-disabled="true" class="col-md-4" balance-type-directive balance-type="'Cr'"></div>
+            <div ng-disabled="true" class="col-md-4" balance-type-directive balance-type="vm.account.yearOpenBalanceType"></div>
         </div>
     </div>
 

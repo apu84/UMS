@@ -99,8 +99,10 @@ public class PersistentAccountDao extends AccountDaoDecorator {
 
   @Override
   public Account get(Long pId) {
-    String query = "select * from mst_account where id=?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentAccountRowMapper());
+    String query = "select * from mst_account where id=:id";
+    Map parameterMap = new HashMap();
+    parameterMap.put("id", pId);
+    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentAccountRowMapper());
   }
 
   @Override
@@ -137,9 +139,8 @@ public class PersistentAccountDao extends AccountDaoDecorator {
   public Long create(MutableAccount pMutable) {
     String query =
         "insert into MST_ACCOUNT(ID, ACCOUNT_CODE, ACCOUNT_NAME, ACC_GROUP_CODE,  MODIFIED_DATE, MODIFIED_BY, COMP_CODE, LAST_MODIFIED) "
-            + "            VALUES (:id,:accountCode,:accountName,:accGroupCode,:modifiedDate,:modifiedBy, :compCode,"
-            + getLastModifiedSql() + " )";
-    Long id = mIdGenerator.getNumericId();
+            + "            VALUES (:id,:accountCode,:accountName,:accGroupCode,:modifiedDate,:modifiedBy, :compCode,:lastModified )";
+    Long id = pMutable.getId() == null ? mIdGenerator.getNumericId() : pMutable.getId();
     Map parameterMap = getAccountParameterMap(pMutable, id);
     mNamedParameterJdbcTemplate.update(query, parameterMap);
     return id;
@@ -166,7 +167,10 @@ public class PersistentAccountDao extends AccountDaoDecorator {
 
   @Override
   public boolean exists(Long pId) {
-    return super.exists(pId);
+    String query = "select count(*) from mst_account where id=:id";
+    Map parameterMap = new HashMap();
+    parameterMap.put("id", pId);
+    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, Integer.class) == 0 ? false : true;
   }
 
   class PersistentAccountRowMapper implements RowMapper<Account> {
