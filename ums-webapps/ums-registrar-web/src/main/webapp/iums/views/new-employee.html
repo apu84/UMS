@@ -203,33 +203,20 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group"
-                                     ng-class="{ 'has-error' : nEmployeeForm.nFirstName.$invalid && !nEmployeeForm.nFirstName.$pristine }">
-                                    <label for="iFirstName" class="control-label">First Name<span
+                                     ng-class="{ 'has-error' : nEmployeeForm.nName.$invalid && !nEmployeeForm.nName.$pristine }">
+                                    <label for="iName" class="control-label">Employee Name<span
                                             class="require">*</span></label>
                                     <input type="text"
-                                           id="iFirstName"
-                                           name="nFirstName"
+                                           id="iName"
+                                           name="nName"
                                            class="form-control"
                                            ng-blur="vm.findSimilarUsers()"
-                                           ng-model="vm.newEmployee.firstName" required>
-                                    <label data-ng-show="nEmployeeForm.nFirstName.$invalid && !nEmployeeForm.nFirstName.$pristine"
-                                           class="help-block control-label">First Name is required.</label>
+                                           ng-model="vm.newEmployee.name" required>
+                                    <label data-ng-show="nEmployeeForm.nName.$invalid && !nEmployeeForm.nName.$pristine"
+                                           class="help-block control-label">Name is required.</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group"
-                                     ng-class="{ 'has-error' : nEmployeeForm.nLastName.$invalid && !nEmployeeForm.nLastName.$pristine }">
-                                    <label for="iLastName" class="control-label">Last Name<span
-                                            class="require">*</span></label>
-                                    <input type="text"
-                                           id="iLastName"
-                                           name="nLastName"
-                                           class="form-control"
-                                           ng-blur="vm.findSimilarUsers()"
-                                           ng-model="vm.newEmployee.lastName" required>
-                                    <label data-ng-show="nEmployeeForm.nLastName.$invalid && !nEmployeeForm.nLastName.$pristine"
-                                           class="help-block control-label">Last Name is required.</label>
-                                </div>
                             </div>
                         </div>
 
@@ -338,13 +325,29 @@
             <fieldset>
                 <legend>Similar Employees</legend>
                 <div class="row">
-                    <div data-ng-repeat="user in vm.similarUsers track by user.employeeId">
+                    <div data-ng-repeat="user in vm.similarUsers track by user.general.employeeId">
                         <div class="col-md-4">
                             <div class="card">
-                                <img src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png"
-                                     alt="John" style="width:15%">
-                                <h4>{{$index + 1}}. {{user.firstName}}{{user.lastName}}</h4>({{user.employeeId}})
-                                {{user.score}}% similar
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div align="center">
+                                            <h3>{{$index + 1}}.</h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div align="center">
+                                            <img class="img-circle"
+                                                 style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0);"
+                                                 src=""
+                                                 img-id="user.general.employeeId"
+                                                 data-profile-picture="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>{{user.general.name}}</h5>({{user.general.employeeId}})
+                                        {{user.score}}% similar
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

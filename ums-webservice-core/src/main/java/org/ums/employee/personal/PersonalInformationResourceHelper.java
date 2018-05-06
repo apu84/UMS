@@ -36,15 +36,16 @@ public class PersonalInformationResourceHelper extends
     return null;
   }
 
-  public JsonObject getSimilarUsers(final String pFirstName, final String pLastName, UriInfo pUriInfo) {
+  public JsonObject getSimilarUsers(final String pName, UriInfo pUriInfo) {
         LocalCache localCache = new LocalCache();
         Map<PersonalInformation, Double> similarUsers = new HashMap<>();
-        String fullName = (pFirstName.trim().concat(" " + pLastName.trim())).toLowerCase();
         List<PersonalInformation> personalInformationList = mManager.getAll();
+        CharSequence target = pName.trim().toLowerCase();
         for (PersonalInformation personalInformation : personalInformationList) {
-            JaccardDistance jaccardDistance = new JaccardDistance();
-            Double score = 1 - jaccardDistance.apply(fullName, personalInformation.getName().toLowerCase());
-            if (score > 0.70) {
+          CharSequence source = personalInformation.getName().trim().toLowerCase();
+            JaroWinklerDistance jaroWinklerDistance = new JaroWinklerDistance();
+            Double score = jaroWinklerDistance.apply(target, source);
+            if (score > 0.9) {
                 similarUsers.put(personalInformation, score);
             }
         }

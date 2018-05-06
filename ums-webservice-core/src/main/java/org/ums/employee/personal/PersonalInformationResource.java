@@ -28,10 +28,10 @@ public class PersonalInformationResource extends MutablePersonalInformationResou
   }
 
   @GET
-  @Path("/firstName/{first-name}/lastName/{last-name}")
+  @Path("/firstName/name/{employee-name}")
   @GetLog(message = "Get employee information (get Similar Users)")
   public JsonObject getSimilarUsers(@Context HttpServletRequest pHttpServletRequest, final @Context Request pRequest,
-      final @PathParam("first-name") String pFirstName, final @PathParam("last-name") String pLastName) {
-    return mHelper.getSimilarUsers(pFirstName, pLastName, mUriInfo);
+      final @PathParam("employee-name") String pName) {
+    return mHelper.getSimilarUsers(pName, mUriInfo);
   }
 }
