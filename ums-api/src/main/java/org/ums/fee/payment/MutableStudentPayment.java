@@ -3,6 +3,7 @@ package org.ums.fee.payment;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.ums.bank.branch.Branch;
 import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Semester;
@@ -37,4 +38,8 @@ public interface MutableStudentPayment extends StudentPayment, Editable<Long>, M
   void setFeeCategory(FeeCategory feeCategory);
 
   void setTransactionValidTill(Date pDate);
+
+  void setBankBranchId(Long pBankBranchId);
+
+  void setBankBranch(Branch pBankBranch);
 }

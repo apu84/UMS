@@ -1,12 +1,5 @@
 package org.ums.fee.payment;
 
-import com.google.common.collect.Lists;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.transaction.annotation.Transactional;
-import org.ums.fee.FeeType;
-import org.ums.generator.IdGenerator;
-
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,12 +8,20 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.transaction.annotation.Transactional;
+import org.ums.fee.FeeType;
+import org.ums.generator.IdGenerator;
+
+import com.google.common.collect.Lists;
+
 public class StudentPaymentDao extends StudentPaymentDaoDecorator {
   String SELECT_ALL = "SELECT ID, TRANSACTION_ID, STUDENT_ID, SEMESTER_ID, AMOUNT, STATUS, APPLIED_ON, VERIFIED_ON, "
-      + "TRANSACTION_VALID_TILL, LAST_MODIFIED, FEE_CATEGORY FROM STUDENT_PAYMENT ";
+      + "TRANSACTION_VALID_TILL, BRANCH_ID, LAST_MODIFIED, FEE_CATEGORY FROM STUDENT_PAYMENT ";
   String INSERT_ALL =
       "INSERT INTO STUDENT_PAYMENT (ID, TRANSACTION_ID, STUDENT_ID, SEMESTER_ID, AMOUNT, STATUS, APPLIED_ON, "
-          + "TRANSACTION_VALID_TILL, LAST_MODIFIED, FEE_CATEGORY) VALUES (?, ?, ?, ?, ?, ?, SYSDATE, ?, "
+          + "TRANSACTION_VALID_TILL, BRANCH_ID, LAST_MODIFIED, FEE_CATEGORY) VALUES (?, ?, ?, ?, ?, ?, SYSDATE, ?, "
           + getLastModifiedSql() + ", ?) ";
   String UPDATE_ALL = "UPDATE STUDENT_PAYMENT SET STATUS = ?, VERIFIED_ON = SYSDATE, LAST_MODIFIED = "
       + getLastModifiedSql() + " ";
@@ -94,9 +95,11 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
     String transactionId = mIdGenerator.getAlphaNumericId();
     List<Object[]> params = new ArrayList<>();
     for(StudentPayment studentPayment : pStudentPayments) {
-      params.add(new Object[] {mIdGenerator.getNumericId(), transactionId, studentPayment.getStudentId(),
-          studentPayment.getSemesterId(), studentPayment.getAmount(), studentPayment.getStatus().getValue(),
-          studentPayment.getTransactionValidTill(), studentPayment.getFeeCategoryId()});
+      params
+          .add(new Object[] {mIdGenerator.getNumericId(), transactionId, studentPayment.getStudentId(),
+              studentPayment.getSemesterId(), studentPayment.getAmount(), studentPayment.getStatus().getValue(),
+              studentPayment.getTransactionValidTill(), studentPayment.getBankBranchId(),
+              studentPayment.getFeeCategoryId()});
     }
     return params;
   }
@@ -117,7 +120,7 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
   @Override
   public List<StudentPayment> getPayments(String pStudentId, FeeType pFeeType) {
     String query = SELECT_ALL + "WHERE STUDENT_ID = ? " + ORDER_BY;
-    return mJdbcTemplate.query(query, new Object[]{pStudentId}, new StudentPaymentRowMapper()).stream()
+    return mJdbcTemplate.query(query, new Object[] {pStudentId}, new StudentPaymentRowMapper()).stream()
         .filter(payment -> payment.getFeeCategory().getType().getId().intValue() == pFeeType.getId())
         .collect(Collectors.toList());
   }
@@ -155,6 +158,7 @@ public class StudentPaymentDao extends StudentPaymentDaoDecorator {
       studentPayment.setTransactionValidTill(rs.getTimestamp("TRANSACTION_VALID_TILL"));
       studentPayment.setLastModified(rs.getString("LAST_MODIFIED"));
       studentPayment.setFeeCategoryId(rs.getString("FEE_CATEGORY"));
+      studentPayment.setBankBranchId(rs.getLong("BRANCH_ID"));
       AtomicReference<StudentPayment> atomicReference = new AtomicReference<>(studentPayment);
       return atomicReference.get();
     }
