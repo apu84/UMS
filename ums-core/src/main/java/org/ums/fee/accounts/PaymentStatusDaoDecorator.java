@@ -14,12 +14,12 @@ public class PaymentStatusDaoDecorator extends
   }
 
   @Override
-  public List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber) {
-    return getManager().paginatedList(itemsPerPage, pageNumber);
+  public List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber, Long pBranchId) {
+    return getManager().paginatedList(itemsPerPage, pageNumber, pBranchId);
   }
 
   @Override
-  public List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters) {
-    return getManager().paginatedList(itemsPerPage, pageNumber, pFilters);
+  public List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters, Long pBranchId) {
+    return getManager().paginatedList(itemsPerPage, pageNumber, pFilters, pBranchId);
   }
 }

@@ -8,9 +8,9 @@ import org.ums.manager.ContentManager;
 public interface PaymentStatusManager extends ContentManager<PaymentStatus, MutablePaymentStatus, Long> {
   List<PaymentStatus> getByTransactionId(String pTransactionId);
 
-  List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber);
+  List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber, Long pBranchId);
 
-  List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters);
+  List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters, Long pBranchId);
 
   enum FilterCriteria {
     RECEIVED_START,
@@ -18,6 +18,7 @@ public interface PaymentStatusManager extends ContentManager<PaymentStatus, Muta
     ACCOUNT,
     METHOD_OF_PAYMENT,
     TRANSACTION_ID,
-    PAYMENT_STATUS
+    PAYMENT_STATUS,
+    BRANCH_ID
   }
 }

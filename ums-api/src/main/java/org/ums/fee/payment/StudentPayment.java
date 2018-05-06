@@ -7,6 +7,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.ums.bank.branch.Branch;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
@@ -42,6 +43,10 @@ public interface StudentPayment extends Serializable, EditType<MutableStudentPay
   Integer getFeeTypeId();
 
   Date getTransactionValidTill();
+
+  Long getBankBranchId();
+
+  Branch getBankBranch();
 
   enum Status {
     RECEIVED(1),
