@@ -74,17 +74,28 @@ public class PaymentStatusDao extends PaymentStatusDaoDecorator {
   }
 
   @Override
-  public List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber) {
+  public List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber, Long pBranchId) {
     int startIndex = (itemsPerPage * (pageNumber - 1)) + 1;
     int endIndex = startIndex + itemsPerPage - 1;
     String query =
-        "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL
+        "SELECT TMP2.*, IND FROM (SELECT ROWNUM IND, TMP1.* FROM (" + SELECT_ALL + "WHERE BRANCH_ID = ?"
             + " ORDER BY LAST_MODIFIED DESC) TMP1) TMP2 WHERE IND >= ? and IND <= ?  ";
-    return mJdbcTemplate.query(query, new Object[] {startIndex, endIndex}, new PaymentStatusRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pBranchId, startIndex, endIndex}, new PaymentStatusRowMapper());
   }
 
   @Override
-  public List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters) {
+  public List<PaymentStatus> paginatedList(int itemsPerPage, int pageNumber, List<ListFilter> pFilters, Long pBranchId) {
+    pFilters.add(new ListFilter() {
+      @Override
+      public String getFilterName() {
+        return "branch_id";
+      }
+
+      @Override
+      public Object getFilterValue() {
+        return pBranchId;
+      }
+    });
     FilterQueryBuilder queryBuilder = new FilterQueryBuilder(pFilters);
     int startIndex = (itemsPerPage * (pageNumber - 1)) + 1;
     int endIndex = startIndex + itemsPerPage - 1;
@@ -150,6 +161,9 @@ public class PaymentStatusDao extends PaymentStatusDaoDecorator {
       }
       if(pFilter.getFilterName().equalsIgnoreCase(FilterCriteria.ACCOUNT.toString())) {
         return "ACCOUNT = ?";
+      }
+      if(pFilter.getFilterName().equalsIgnoreCase(FilterCriteria.BRANCH_ID.toString())) {
+        return "BRANCH_ID = ?";
       }
       return "";
     }

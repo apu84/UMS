@@ -38,6 +38,8 @@ public interface MutableAccount extends Account, Editable<Long>, MutableLastModi
 
   void setModifiedBy(String pModifiedBy);
 
+  void setModifierName(String pModifierName);
+
   void setCompany(Company pCompany);
 
   void setCompanyId(String pCompanyId);

@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import org.springframework.context.ApplicationContext;
+import org.ums.bank.branch.Branch;
+import org.ums.bank.branch.BranchManager;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
@@ -17,6 +19,7 @@ public class PersistentStudentPayment implements MutableStudentPayment {
   private static StudentManager sStudentManager;
   private static StudentPaymentManager sStudentPaymentManager;
   private static FeeCategoryManager sFeeCategoryManager;
+  private static BranchManager sBranchManager;
 
   private Long mId;
   private String mTransactionId;
@@ -32,6 +35,8 @@ public class PersistentStudentPayment implements MutableStudentPayment {
   private String mFeeCategoryId;
   private FeeCategory mFeeCategory;
   private Date mTransactionValidTill;
+  private Long mBankBranchId;
+  private Branch mBankBranch;
 
   @Override
   public Long getId() {
@@ -134,6 +139,26 @@ public class PersistentStudentPayment implements MutableStudentPayment {
   }
 
   @Override
+  public Long getBankBranchId() {
+    return mBankBranchId;
+  }
+
+  @Override
+  public Branch getBankBranch() {
+    return mBankBranch == null ? sBranchManager.get(mBankBranchId) : sBranchManager.validate(mBankBranch);
+  }
+
+  @Override
+  public void setBankBranchId(Long pBankBranchId) {
+    mBankBranchId = pBankBranchId;
+  }
+
+  @Override
+  public void setBankBranch(Branch pBankBranch) {
+    mBankBranch = pBankBranch;
+  }
+
+  @Override
   public String getLastModified() {
     return mLastModified;
   }
@@ -213,6 +238,8 @@ public class PersistentStudentPayment implements MutableStudentPayment {
     setAppliedOn(pStudentPayment.getAppliedOn());
     setVerifiedOn(pStudentPayment.getVerifiedOn());
     setTransactionValidTill(pStudentPayment.getTransactionValidTill());
+    setBankBranchId(pStudentPayment.getBankBranchId());
+    setBankBranch(pStudentPayment.getBankBranch());
     setLastModified(pStudentPayment.getLastModified());
   }
 
@@ -222,5 +249,6 @@ public class PersistentStudentPayment implements MutableStudentPayment {
     sStudentManager = applicationContext.getBean("studentManager", StudentManager.class);
     sStudentPaymentManager = applicationContext.getBean("studentPaymentManager", StudentPaymentManager.class);
     sFeeCategoryManager = applicationContext.getBean("feeCategoryManager", FeeCategoryManager.class);
+    sBranchManager = applicationContext.getBean("branchManager", BranchManager.class);
   }
 }

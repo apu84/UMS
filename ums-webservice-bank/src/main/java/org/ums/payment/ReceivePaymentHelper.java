@@ -2,9 +2,12 @@ package org.ums.payment;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.ums.bank.branch.Branch;
+import org.ums.bank.branch.user.BranchUserManager;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.fee.FeeType;
@@ -48,6 +51,8 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
   private PaymentStatusManager mPaymentStatusManager;
   @Autowired
   private CertificateStatusManager mCertificateStatusManager;
+  @Autowired
+  private BranchUserManager mBranchUserManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -79,6 +84,9 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
       paymentDetails = pJsonObject.getString("paymentDetails");
     }
 
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    Branch branch = mBranchUserManager.getByUserId(userId).getBranch();
+
     for(JsonValue entry : entries) {
       MutableStudentPayment payment = new PersistentStudentPayment();
       getBuilder().build(payment, (JsonObject) entry, cache);
@@ -87,6 +95,7 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
       payment.setFeeCategoryId(latestPayment.getFeeCategoryId());
       payment.setSemesterId(latestPayment.getSemesterId());
       payment.setTransactionId(latestPayment.getTransactionId());
+      payment.setBankBranchId(branch.getId());
       /*
        * if(mop == PaymentStatus.PaymentMethod.CASH.getId()) {
        * payment.setStatus(StudentPayment.Status.VERIFIED); } else {

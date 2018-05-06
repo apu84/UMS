@@ -38,6 +38,8 @@ public interface Account extends Serializable, LastModifier, EditType<MutableAcc
 
   String getModifiedBy();
 
+  String getModifierName();
+
   Company getCompany();
 
   String getCompanyId();

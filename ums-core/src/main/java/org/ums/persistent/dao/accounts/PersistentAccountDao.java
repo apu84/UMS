@@ -134,7 +134,7 @@ public class PersistentAccountDao extends AccountDaoDecorator {
     Long id = mIdGenerator.getNumericId();
     Map parameterMap = new HashMap();
     parameterMap.put("id", id);
-    parameterMap.put("accountCode", pMutable.getAccGroupCode());
+    parameterMap.put("accountCode", pMutable.getAccountCode());
     parameterMap.put("accountName", pMutable.getAccountName());
     parameterMap.put("accGroupCode", pMutable.getAccGroupCode());
     parameterMap.put("modifiedDate", pMutable.getModifiedDate());
@@ -173,9 +173,9 @@ public class PersistentAccountDao extends AccountDaoDecorator {
       account.setStatFlag(rs.getString("stat_flag"));
       account.setStatUpFlag(rs.getString("stat_up_flag"));
       account.setModifiedDate(rs.getDate("modified_date"));
-      account.setModifiedBy("modified_by");
-      account.setLastModified("last_modified");
-      account.setCompanyId("comp_code");
+      account.setModifiedBy(rs.getString("modified_by"));
+      account.setLastModified(rs.getString("last_modified"));
+      account.setCompanyId(rs.getString("comp_code"));
       return account;
     }
   }

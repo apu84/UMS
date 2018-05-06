@@ -76,22 +76,19 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     return null;
   }
 
-  public JsonObject createAccount(final JsonObject pJsonObject, int pItemPerPage, int pItemNumber,
-      final UriInfo pUriInfo) {
+  public List<Account> createAccount( PersistentAccount pAccount, PersistentAccountBalance pAccountBalance, int pItemPerPage, int pItemNumber) {
 //    JsonArray entries = pJsonObject.getJsonArray("entries");
     LocalCache cache = new LocalCache();
-    MutableAccount account = new PersistentAccount();
+    MutableAccount account = pAccount;
 //    JsonObject jsonObject = entries.getJsonObject(0);
-    getBuilder().build(account, pJsonObject, cache);
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     account.setModifiedBy(user.getEmployeeId());
     account.setModifiedDate(new Date());
-    account.setAccountCode(account.getAccountCode() == null || account.getAccGroupCode().equals("") ? mIdGenerator.getNumericId() : account.getAccountCode());
+    account.setAccountCode(account.getAccountCode() == null || account.getAccountCode().equals("") ? mIdGenerator.getNumericId() : account.getAccountCode());
     account.setCompanyId(mCompanyManager.getDefaultCompany().getId());
     Long id = getContentManager().create(account);
     account.setId(id);
-    MutableAccountBalance accountBalance = new PersistentAccountBalance();
-    mAccountBalanceBuilder.build(accountBalance, pJsonObject, cache);
+    MutableAccountBalance accountBalance = pAccountBalance;
     if (accountBalance != null) {
       FinancialAccountYear financialAccountYears = mFinancialAccountYearManager.getAll().stream().filter(f -> f.getYearClosingFlag().equals(YearClosingFlagType.OPEN)).collect(Collectors.toList()).get(0);
       accountBalance.setId(mIdGenerator.getNumericId());
@@ -108,12 +105,12 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
       mAccountBalanceManager.insertFromAccount(accountBalance);
     }
 
-    return getAllPaginated(pItemPerPage, pItemNumber, pUriInfo);
+    return getAllPaginated(pItemPerPage, pItemNumber);
   }
 
-  public JsonObject getAll(final UriInfo pUriInfo) {
+  public List<Account> getAll() {
     List<Account> accounts = getContentManager().getAll();
-    return getJsonObject(pUriInfo, accounts);
+    return accounts;
   }
 
   public JsonObject getAccounts(final GroupFlag pGroupFlag, final UriInfo pUriInfo) {
@@ -187,14 +184,14 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     return objectBuilder.build();
   }
 
-  public JsonObject getAllPaginated(final int pItemPerPage, final int pPageNumber, final UriInfo pUriInfo) {
+  public List<Account> getAllPaginated(final int pItemPerPage, final int pPageNumber) {
     List<Account> accounts = getContentManager().getAllPaginated(pItemPerPage, pPageNumber);
-    return getJsonObject(pUriInfo, accounts);
+    return accounts;
   }
 
-  public JsonObject getAccountsByAccountName(final String pAccountName, final UriInfo pUriInfo) {
+  public List<Account> getAccountsByAccountName(final String pAccountName) {
     List<Account> accounts = getContentManager().getAccounts(pAccountName);
-    return getJsonObject(pUriInfo, accounts);
+    return accounts;
   }
 
   private Integer generateSecureAccountId() {
