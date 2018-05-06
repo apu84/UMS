@@ -109,6 +109,7 @@ module ums {
       this.account.accGroupCode = this.selectedGroup.groupCode;
       let accountBalance:IAccountBalance = <IAccountBalance>{};
       accountBalance.yearOpenBalanceType = this.account.yearClosingBalanceType;
+      //todo configure account balance information
       this.accountService.saveAccountPaginated(this.account, accountBalance, this.itemsPerPage, 1).then((accounts: IAccount[]) => {
         if (accounts == undefined)
           this.notify.error("Error in saving data");
@@ -119,6 +120,13 @@ module ums {
           this.getTotalAccountSize();
         }
       });
+    }
+
+    public edit(account:IAccount){
+      this.account = account;
+      this.selectedGroup = this.groupMapWithGroupid[this.account.accGroupCode];
+      this.account.yearOpenBalance=0;
+      this.account.yearOpenBalanceType = BalanceType.Dr;
     }
 
     public getPaginatedAccounts() {

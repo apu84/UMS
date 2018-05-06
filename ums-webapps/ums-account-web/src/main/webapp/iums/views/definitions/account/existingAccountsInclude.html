@@ -11,7 +11,10 @@
     <tr>
         <th>#</th>
         <th>Account Name</th>
+        <th>Account Code</th>
         <th>Account Group</th>
+        <th>Last Modified</th>
+        <th>Action</th>
     </tr>
     </thead>
     <tbody>
@@ -22,7 +25,12 @@
         style="cursor: pointer;">
         <td>{{p.rowNumber}}</td>
         <td>{{p.accountName}}</td>
+        <th>{{p.accountCode}}</th>
         <td>{{p.accGroupName}}</td>
+        <td>{{p.modifiedDate}}</td>
+        <td><button class="btn btn-sm btn-success" ng-click="vm.edit(p)" data-toggle="modal" data-target="#addModal">Edit
+            </button>
+        </td>
     </tr>
 
     </tbody>

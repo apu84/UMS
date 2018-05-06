@@ -1,5 +1,6 @@
 package org.ums.persistent.dao.accounts;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -12,9 +13,11 @@ import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.accounts.PersistentAccount;
+import org.ums.util.UmsUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,7 +110,12 @@ public class PersistentAccountDao extends AccountDaoDecorator {
 
   @Override
   public int update(MutableAccount pMutable) {
-    return super.update(pMutable);
+    String query =
+        "update MST_ACCOUNT " + "set ACCOUNT_CODE=:accountCode, " + "  ACCOUNT_NAME=:accountName, "
+            + "  ACC_GROUP_CODE=:accGroupCode, " + "  MODIFIED_DATE=:modifiedDate, " + "  MODIFIED_BY=:modifiedBy, "
+            + "  COMP_CODE=:compCode, " + "  LAST_MODIFIED=:lastModified " + "where ID=:id";
+    Map parameterMap = getAccountParameterMap(pMutable, pMutable.getId());
+    return mNamedParameterJdbcTemplate.update(query, parameterMap);
   }
 
   @Override
@@ -132,6 +140,13 @@ public class PersistentAccountDao extends AccountDaoDecorator {
             + "            VALUES (:id,:accountCode,:accountName,:accGroupCode,:modifiedDate,:modifiedBy, :compCode,"
             + getLastModifiedSql() + " )";
     Long id = mIdGenerator.getNumericId();
+    Map parameterMap = getAccountParameterMap(pMutable, id);
+    mNamedParameterJdbcTemplate.update(query, parameterMap);
+    return id;
+  }
+
+  @NotNull
+  private Map getAccountParameterMap(MutableAccount pMutable, Long id) {
     Map parameterMap = new HashMap();
     parameterMap.put("id", id);
     parameterMap.put("accountCode", pMutable.getAccountCode());
@@ -140,8 +155,8 @@ public class PersistentAccountDao extends AccountDaoDecorator {
     parameterMap.put("modifiedDate", pMutable.getModifiedDate());
     parameterMap.put("modifiedBy", pMutable.getModifiedBy());
     parameterMap.put("compCode", pMutable.getCompanyId());
-    mNamedParameterJdbcTemplate.update(query, parameterMap);
-    return id;
+    parameterMap.put("lastModified", UmsUtils.formatDate(new Date(), "YYYYMMDDHHMMSS"));
+    return parameterMap;
   }
 
   @Override

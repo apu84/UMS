@@ -86,17 +86,24 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     account.setModifiedDate(new Date());
     account.setAccountCode(account.getAccountCode() == null || account.getAccountCode().equals("") ? mIdGenerator.getNumericId() : account.getAccountCode());
     account.setCompanyId(mCompanyManager.getDefaultCompany().getId());
-    Long id = getContentManager().create(account);
-    account.setId(id);
+    if(account.getId()==null){
+      Long id = getContentManager().create(account);
+      account.setId( id);
+      //todo update account balance info
+      return getAllPaginated(pItemPerPage, pItemNumber);
+    }else{
+      getContentManager().update(account);
+    }
+
     MutableAccountBalance accountBalance = pAccountBalance;
     if (accountBalance != null) {
       FinancialAccountYear financialAccountYears = mFinancialAccountYearManager.getAll().stream().filter(f -> f.getYearClosingFlag().equals(YearClosingFlagType.OPEN)).collect(Collectors.toList()).get(0);
-      accountBalance.setId(mIdGenerator.getNumericId());
+      accountBalance.setId(  mIdGenerator.getNumericId());
       accountBalance.setYearOpenBalanceType(BalanceType.Dr);
       accountBalance.setYearOpenBalance(accountBalance.getYearOpenBalance() == null ? new BigDecimal(0.00) : accountBalance.getYearOpenBalance());
       accountBalance.setFinStartDate(financialAccountYears.getCurrentStartDate());
       accountBalance.setFinEndDate(financialAccountYears.getCurrentEndDate());
-      accountBalance.setAccountCode(id);
+      accountBalance.setAccountCode(((PersistentAccount) account).getId());
       accountBalance.setTotDebitTrans(accountBalance.getYearOpenBalance() == null ? new BigDecimal(0.00) : accountBalance.getYearOpenBalance());
       accountBalance.setTotCreditTrans(new BigDecimal(0.000));
       accountBalance.setModifiedBy(user.getEmployeeId());
