@@ -190,6 +190,7 @@ public class GradeSubmissionService {
     // Checking the role, requested from client side is valid for the user who is trying to do some
     // operation on grades
     // Role Validation
+    mLogger.debug("[{}] Course current status: ",actualStatus.getStatus().getLabel());
     String actualActingRole = getActingRoleForCourse(actualStatus.getStatus());
     if(!actingRoleForCurrentUser.equalsIgnoreCase(actualActingRole)) {
       mLogger.debug("[{}] Current user's role: {}, Role should be: {}", SecurityUtils.getSubject().getPrincipal().toString(), actingRoleForCurrentUser, actualActingRole);
