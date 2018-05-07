@@ -100,7 +100,7 @@ module ums {
   map["save_section"] =  "academic/optional/application/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/course/{COURSE-ID}/section/{SECTION-NAME}";
 
   export class OptionalCoursesOffer {
-    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify','semesterService', 'commonService',];
+    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify','semesterService', 'commonService'];
 
     constructor(private appConstants:any, private httpClient:HttpClient, private $scope:IOptCourseOffer, private $q:ng.IQService,private notify: Notify,private semesterService: SemesterService,private commonService: CommonService) {
       $scope.optional = {

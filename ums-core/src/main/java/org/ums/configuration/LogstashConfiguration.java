@@ -36,6 +36,7 @@ public class LogstashConfiguration {
     if(enabled) {
       addLogstashAppender();
     }
+
   }
 
   public void addLogstashAppender() {
