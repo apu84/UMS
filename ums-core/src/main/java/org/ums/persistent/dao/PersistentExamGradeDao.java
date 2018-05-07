@@ -297,9 +297,9 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + " Values(?,?,?,?,?,?) ";
 
   String THEORY_SUBMIT_COUNT =
-      "Select Count(Student_Id) From UG_THEORY_MARKS Where Semester_Id=? and Course_Id=? and Exam_Type=? and Status in (0,1) ";
+      "Select Count(Student_Id) From UG_THEORY_MARKS_CURR Where Semester_Id=? and Course_Id=? and Exam_Type=? and Status in (0,1) ";
   String SESSIONAL_SUBMIT_COUNT =
-      "Select Count(Student_Id) From UG_SESSIONAL_MARKS Where Semester_Id=? and Course_Id=? and Exam_Type=? and Status in (0,1)";
+      "Select Count(Student_Id) From UG_SESSIONAL_MARKS_CURR Where Semester_Id=? and Course_Id=? and Exam_Type=? and Status in (0,1)";
 
   String SELECT_MARKS_SUBMISSION_STATUS_LOG = "  SELECT MARKS_SUBMISSION_SLOG.User_Id, "
       + "         EMPLOYEES.NAME  EMPLOYEE_NAME, ROLE, " + "         TO_CHAR (MARKS_SUBMISSION_SLOG.Inserted_On, "

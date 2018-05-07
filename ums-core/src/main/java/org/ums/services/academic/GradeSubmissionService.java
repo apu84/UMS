@@ -192,6 +192,7 @@ public class GradeSubmissionService {
     // Role Validation
     String actualActingRole = getActingRoleForCourse(actualStatus.getStatus());
     if(!actingRoleForCurrentUser.equalsIgnoreCase(actualActingRole)) {
+      mLogger.debug("[{}] Current user's role: {}, Role should be: {}", SecurityUtils.getSubject().getPrincipal().toString(), actingRoleForCurrentUser, actualActingRole);
       throw new ValidationException("Sorry, you are not allowed for this operation.");
     }
     // Deadline && Part Info Validation
