@@ -13,6 +13,8 @@ import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.financial.account.year.YearClosingFlagType;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
 import org.ums.enums.accounts.definitions.group.GroupType;
+import org.ums.enums.accounts.definitions.voucher.number.control.VoucherType;
+import org.ums.exceptions.ValidationException;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
@@ -22,6 +24,7 @@ import org.ums.resource.ResourceHelper;
 import org.ums.service.AccountBalanceService;
 import org.ums.service.AccountService;
 import org.ums.service.AccountTransactionService;
+import org.ums.service.VoucherService;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
@@ -74,6 +77,8 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
   private AccountService mAccountService;
   @Autowired
   private AccountTransactionService mAccountTransactionService;
+  @Autowired
+  private VoucherService mVoucherService;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -82,10 +87,13 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
 
   public List<Account> createAccount(PersistentAccount pAccount, PersistentAccountBalance pAccountBalance,
       int pItemPerPage, int pItemNumber) throws Exception {
-    // JsonArray entries = pJsonObject.getJsonArray("entries");
-    LocalCache cache = new LocalCache();
     MutableAccount account = pAccount;
-    // JsonObject jsonObject = entries.getJsonObject(0);
+
+    if(!mVoucherService.checkWhetherTheBalanceExceedsVoucherLimit(VoucherType.JOURNAL_VOUCHER,
+        pAccountBalance.getYearOpenBalance())) {
+      throw new ValidationException("Total limit exceeds for journal voucher");
+    }
+
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     account.setModifiedBy(user.getEmployeeId());
     account.setModifiedDate(new Date());

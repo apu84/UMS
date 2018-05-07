@@ -114,9 +114,7 @@ module ums {
       accountBalance.yearOpenBalance = this.account.yearOpenBalance;
       //todo configure account balance information
       this.accountService.saveAccountPaginated(this.account, accountBalance, this.itemsPerPage, 1).then((accounts: IAccount[]) => {
-        if (accounts == undefined)
-          this.notify.error("Error in saving data");
-        else {
+        if (accounts != undefined) {
           this.existingAccounts = [];
           accounts.forEach((a: IAccount) => a.accGroupName = this.groupMapWithGroupid[a.accGroupCode].groupName);
           this.existingAccounts = accounts;
