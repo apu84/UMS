@@ -6,10 +6,7 @@ import org.springframework.stereotype.Component;
 import org.ums.accounts.resource.definitions.account.balance.AccountBalanceBuilder;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.accounts.Account;
-import org.ums.domain.model.immutable.accounts.AccountBalance;
-import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
-import org.ums.domain.model.immutable.accounts.Group;
+import org.ums.domain.model.immutable.accounts.*;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
@@ -121,42 +118,47 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     return getJsonObject(pUriInfo, accounts);
   }
 
-  public JsonObject getCustomerAndVendorAccounts(final UriInfo pUriInfo) {
+  public List<Account> getCustomerAndVendorAccounts(final UriInfo pUriInfo) {
     List<String> groupCodeList = new ArrayList<>();
-    // groupCodeList.add(GroupType.SUNDRY_CREDITOR.getValue());
-    groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_CREDITOR.getValue()).getGroup().getGroupCode());
+    SystemGroupMap sundryCreditorSystemGroupMap = mSystemGroupMapManager.get(GroupType.SUNDRY_CREDITOR.getValue());
+    SystemGroupMap sundryDebtorSystemGroupMap = mSystemGroupMapManager.get(GroupType.SUNDRY_DEBTOR.getValue());
+    if(sundryCreditorSystemGroupMap != null)
+      groupCodeList.add(sundryCreditorSystemGroupMap.getGroup().getGroupCode());
+    if(sundryDebtorSystemGroupMap != null)
+      groupCodeList.add(sundryDebtorSystemGroupMap.getGroup().getGroupCode());
+    return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
+  }
+
+  public List<Account> getVendorAccounts(final UriInfo pUriInfo) {
+    List<String> groupCodeList = new ArrayList<>();
+    SystemGroupMap sundryCreditorSystemGroupMap = mSystemGroupMapManager.get(GroupType.SUNDRY_CREDITOR.getValue());
+    if(sundryCreditorSystemGroupMap != null)
+      groupCodeList.add(sundryCreditorSystemGroupMap.getGroup().getGroupCode());
+    return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
+  }
+
+  public List<Account> getCustomerAccounts(final UriInfo pUriInfo) {
+    List<String> groupCodeList = new ArrayList<>();
     // groupCodeList.add(GroupType.SUNDRY_DEBTOR.getValue());
-    groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_DEBTOR.getValue()).getGroup().getGroupCode());
+    SystemGroupMap sundryDebtorSystemGroupMap = mSystemGroupMapManager.get(GroupType.SUNDRY_DEBTOR.getValue());
+    if(sundryDebtorSystemGroupMap != null)
+      groupCodeList.add(sundryDebtorSystemGroupMap.getGroup().getGroupCode());
     return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
   }
 
-  public JsonObject getVendorAccounts(final UriInfo pUriInfo) {
-    List<String> groupCodeList = new ArrayList<>();
-    // groupCodeList.add(GroupType.SUNDRY_CREDITOR.getValue());
-    groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_CREDITOR.getValue()).getGroup().getGroupCode());
-    return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
-  }
-
-  public JsonObject getCustomerAccounts(final UriInfo pUriInfo) {
-    List<String> groupCodeList = new ArrayList<>();
-    // groupCodeList.add(GroupType.SUNDRY_DEBTOR.getValue());
-    groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_DEBTOR.getValue()).getGroup().getGroupCode());
-    return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
-  }
-
-  private JsonObject getAccountsBasedOnGroupList(List<String> pGroupCodeList, UriInfo pUriInfo) {
+  private List<Account> getAccountsBasedOnGroupList(List<String> pGroupCodeList, UriInfo pUriInfo) {
     List<Group> groups = mGroupManager.getIncludingMainGroupList(pGroupCodeList);
     List<Account> accounts = mAccountManager.getIncludingGroups(groups.stream().map(a -> a.getGroupCode()).collect(Collectors.toList()));
-    return getJsonObject(pUriInfo, accounts);
+    return accounts;
   }
 
-  private JsonObject getAccountExcludingGroupList(List<String> pGroupCodeList, UriInfo pUriInfo) {
+  private List<Account> getAccountExcludingGroupList(List<String> pGroupCodeList, UriInfo pUriInfo) {
     List<Group> groups = mGroupManager.getExcludingMainGroupList(pGroupCodeList);
     List<Account> accounts = mAccountManager.getIncludingGroups(groups.stream().map(a -> a.getGroupCode()).collect(Collectors.toList()));
-    return getJsonObject(pUriInfo, accounts);
+    return accounts;
   }
 
-  public JsonObject getBankAndCostTypeAccounts(final UriInfo pUriInfo) {
+  public List<Account> getBankAndCostTypeAccounts(final UriInfo pUriInfo) {
     List<String> groupCodeList = new ArrayList<String>();
     // groupCodeList.add(GroupType.BANK_ACCOUNTS.getValue());
     groupCodeList.add(mSystemGroupMapManager.get(GroupType.BANK_ACCOUNTS.getValue()).getGroup().getGroupCode());
@@ -166,7 +168,7 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
 
   }
 
-  public JsonObject getExcludingBankAndCostTypeAccounts(final UriInfo pUriInfo) {
+  public List<Account> getExcludingBankAndCostTypeAccounts(final UriInfo pUriInfo) {
     List<String> groupCodeList = new ArrayList<String>();
     // groupCodeList.add(GroupType.BANK_ACCOUNTS.getValue());
     groupCodeList.add(mSystemGroupMapManager.get(GroupType.BANK_ACCOUNTS.getValue()).getGroup().getGroupCode());

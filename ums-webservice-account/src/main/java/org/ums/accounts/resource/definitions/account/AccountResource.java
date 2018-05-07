@@ -69,32 +69,32 @@ public class AccountResource extends MutableAccountResource {
 
   @GET
   @Path("/bank-cost-type-accounts")
-  public JsonObject getBankAndCostTypeAccounts(final @Context HttpServletRequest pHttpServletRequest) {
+  public List<Account> getBankAndCostTypeAccounts(final @Context HttpServletRequest pHttpServletRequest) {
     return mHelper.getBankAndCostTypeAccounts(mUriInfo);
   }
 
   @GET
   @Path("/excluding-bank-cost-type-accounts")
-  public JsonObject getExcludingBankAndCostTypeAccounts(final @Context HttpServletRequest pHttpServletRequest) {
+  public List<Account> getExcludingBankAndCostTypeAccounts(final @Context HttpServletRequest pHttpServletRequest) {
     return mHelper.getExcludingBankAndCostTypeAccounts(mUriInfo);
   }
 
   @GET
   @Path("/customer-vendor-accounts")
-  public JsonObject getCustomerAndVendorAccounts(final @Context HttpServletRequest pHttpServletRequest)
+  public List<Account> getCustomerAndVendorAccounts(final @Context HttpServletRequest pHttpServletRequest)
       throws Exception {
     return mHelper.getCustomerAndVendorAccounts(mUriInfo);
   }
 
   @GET
   @Path("/vendor-accounts")
-  public JsonObject getVendorAccounts(final @Context HttpServletRequest pHttpServletRequest) throws Exception {
+  public List<Account> getVendorAccounts(final @Context HttpServletRequest pHttpServletRequest) throws Exception {
     return mHelper.getVendorAccounts(mUriInfo);
   }
 
   @GET
   @Path("/customer-accounts")
-  public JsonObject getCustomerAccounts(final @Context HttpServletRequest pHttpServletRequest) throws Exception {
+  public List<Account> getCustomerAccounts(final @Context HttpServletRequest pHttpServletRequest) throws Exception {
     return mHelper.getCustomerAccounts(mUriInfo);
   }
 

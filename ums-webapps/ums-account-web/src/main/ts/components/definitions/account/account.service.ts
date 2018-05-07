@@ -96,35 +96,35 @@ module ums{
     public getBankAndCostTypeAccounts(): ng.IPromise<IAccount[]> {
       let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
       this.httpClient.get(this.accountServiceURL + "/bank-cost-type-accounts", HttpClient.MIME_TYPE_JSON,
-          ((response: IAccountResponse) => defer.resolve(response.entries)));
+          ((response: IAccount[]) => defer.resolve(response)));
       return defer.promise;
     }
 
     public getExcludingBankAndCostTypeAccounts(): ng.IPromise<IAccount[]> {
       let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
       this.httpClient.get(this.accountServiceURL + "/excluding-bank-cost-type-accounts", HttpClient.MIME_TYPE_JSON,
-          ((response: IAccountResponse) => defer.resolve(response.entries)));
+          ((response: IAccount[]) => defer.resolve(response)));
       return defer.promise;
     }
 
     public getCustomerAndVendorTypeAccounts(): ng.IPromise<IAccount[]> {
       let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
       this.httpClient.get(this.accountServiceURL + "/customer-vendor-accounts", HttpClient.MIME_TYPE_JSON,
-          ((response: IAccountResponse) => defer.resolve(response.entries)));
+          ((response: IAccount[]) => defer.resolve(response)));
       return defer.promise;
     }
 
     public getVendorAccounts(): ng.IPromise<IAccount[]> {
       let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
       this.httpClient.get(this.accountServiceURL + "/vendor-accounts", HttpClient.MIME_TYPE_JSON,
-          ((response: IAccountResponse) => defer.resolve(response.entries)));
+          ((response: IAccount[]) => defer.resolve(response)));
       return defer.promise;
     }
 
     public getCustomerAccounts(): ng.IPromise<IAccount[]> {
       let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
       this.httpClient.get(this.accountServiceURL + "/customer-accounts", HttpClient.MIME_TYPE_JSON,
-          ((response: IAccountResponse) => defer.resolve(response.entries)));
+          ((response: IAccount[]) => defer.resolve(response)));
       return defer.promise;
     }
 

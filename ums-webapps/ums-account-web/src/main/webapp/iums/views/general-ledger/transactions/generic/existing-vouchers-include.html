@@ -30,7 +30,7 @@
         style="cursor: pointer;" ng-click="vm.fetchDetails(p)">
         <td align="center">
             <span class="label label-danger" ng-if="p.postDate==null"> Not Posted</span>
-            <span class="label label-info" ng-if="p.postDate!=null">{{ vm.changeDateFormat(p.postDate)}}</span>
+            <span class="label label-info" ng-if="p.postDate!=null">{{p.postDate}}</span>
         </td>
         <td align="center">{{p.voucherNo}}</td>
         <td align="center">{{p.modifierName}}</td>

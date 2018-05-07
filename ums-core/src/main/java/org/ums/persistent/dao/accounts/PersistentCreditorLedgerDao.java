@@ -1,5 +1,7 @@
 package org.ums.persistent.dao.accounts;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -57,9 +59,14 @@ public class PersistentCreditorLedgerDao extends CreditorLedgerDaoDecorator {
   @Override
   public CreditorLedger get(Long pId) {
     String query = SELECT_ALL + " where id=:id";
-    Map parameterMap = new HashMap();
-    parameterMap.put("id", pId);
-    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentCreditorLedgerRowMapper());
+    try {
+      Map parameterMap = new HashMap();
+      parameterMap.put("id", pId);
+      return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentCreditorLedgerRowMapper());
+    } catch(EmptyResultDataAccessException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   @Override

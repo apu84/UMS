@@ -1,5 +1,7 @@
 package org.ums.persistent.dao.accounts;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -53,9 +55,13 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
   @Override
   public SystemGroupMap get(String pId) {
     String query = SELECT_ALL + " WHERE ID=:id";
-    Map parameterMap = new HashMap();
-    parameterMap.put("id", pId);
-    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentSystemGroupMapRowMapper());
+    try {
+      Map parameterMap = new HashMap();
+      parameterMap.put("id", pId);
+      return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentSystemGroupMapRowMapper());
+    } catch(EmptyResultDataAccessException e) {
+      return null;
+    }
   }
 
   @Override

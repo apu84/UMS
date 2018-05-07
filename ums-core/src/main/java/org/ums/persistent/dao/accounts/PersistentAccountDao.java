@@ -1,6 +1,8 @@
 package org.ums.persistent.dao.accounts;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -100,9 +102,14 @@ public class PersistentAccountDao extends AccountDaoDecorator {
   @Override
   public Account get(Long pId) {
     String query = "select * from mst_account where id=:id";
-    Map parameterMap = new HashMap();
-    parameterMap.put("id", pId);
-    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentAccountRowMapper());
+    try {
+      Map parameterMap = new HashMap();
+      parameterMap.put("id", pId);
+      return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentAccountRowMapper());
+    } catch(EmptyResultDataAccessException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   @Override
