@@ -6,6 +6,7 @@ import org.ums.resource.Resource;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import java.math.BigDecimal;
 
 /**
@@ -21,7 +22,8 @@ public class AccountBalanceResource extends MutableAccountBalanceResource {
   @GET
   @Path("/account-id/{account-id}")
   @GetLog(message = "Requested for account balance based on account id")
-  public BigDecimal getAccountBalance(HttpServletRequest pHttpServletRequest, @PathParam("account-id") String pAccountId) {
+  public BigDecimal getAccountBalance(@Context HttpServletRequest pHttpServletRequest,
+      @PathParam("account-id") String pAccountId) {
     return mHelper.getAccountBalance(pAccountId);
   }
 }

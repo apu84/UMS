@@ -8,9 +8,11 @@ import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.enums.accounts.definitions.MonthType;
+import org.ums.enums.accounts.definitions.account.balance.AccountType;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.financial.account.year.YearClosingFlagType;
 import org.ums.generator.IdGenerator;
+import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.AccountBalanceManager;
 import org.ums.manager.accounts.CurrencyManager;
 import org.ums.manager.accounts.FinancialAccountYearManager;
@@ -34,6 +36,8 @@ public class AccountBalanceService {
   private CurrencyManager currencyManager;
   @Autowired
   private FinancialAccountYearManager mFinancialAccountYearManager;
+  @Autowired
+  private CompanyManager companyManager;
   @Autowired
   private IdGenerator mIdGenerator;
 
@@ -206,11 +210,16 @@ public class AccountBalanceService {
       accountBalance.setFinStartDate(financialAccountYears.getCurrentStartDate());
       accountBalance.setFinEndDate(financialAccountYears.getCurrentEndDate());
       accountBalance.setAccountCode(((PersistentAccount) account).getId());
-      accountBalance.setTotDebitTrans(accountBalance.getYearOpenBalance() == null ? new BigDecimal(0.00) : accountBalance.getYearOpenBalance());
-      accountBalance.setTotCreditTrans(new BigDecimal(0.000));
+
       accountBalance.setModifiedBy(user.getEmployeeId());
       accountBalance.setModifiedDate(new Date());
+      BigDecimal openingBalance = accountBalance.getYearOpenBalance();
+      if(account.getId()!=(AccountType.OPENING_BALANCE_ADJUSTMENT_ACCOUNT.getValue()+Long.parseLong(companyManager.getDefaultCompany().getId())))
+        accountBalance.setYearOpenBalance(new BigDecimal(0));
+      accountBalance.setTotDebitTrans(accountBalance.getYearOpenBalance() == null ? new BigDecimal(0.00) : accountBalance.getYearOpenBalance());
+      accountBalance.setTotCreditTrans(new BigDecimal(0.000));
       accountBalance = setMonthAccountBalance(accountBalance, account);
+      accountBalance.setYearOpenBalance(openingBalance);
       accountBalanceManager.insertFromAccount(accountBalance);
     }
     return accountBalance;

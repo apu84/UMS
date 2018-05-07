@@ -52,7 +52,7 @@ module ums {
     public loadAllGroups() {
       this.groupService.getAllGroups().then((groups: IGroup[]) => {
         this.groups = [];
-        this.groups = groups.filter((g: IGroup) => g.mainGroup != "0");
+        this.groups = groups;
         this.groupMapWithGroupid = {};
         console.log("Groups");
         console.log(groups);

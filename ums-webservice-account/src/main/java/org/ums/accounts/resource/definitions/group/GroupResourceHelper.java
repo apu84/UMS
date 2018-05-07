@@ -64,8 +64,10 @@ public class GroupResourceHelper extends ResourceHelper<Group, MutableGroup, Lon
   public List<Group> saveAndReturnUpdatedGroups(MutableGroup pGroup) {
     int savedGroupSize = getContentManager().getGroups(pGroup).size();
     String newGroupId = "";
-    if(String.valueOf(savedGroupSize).length() == 1)
+    if(String.valueOf(savedGroupSize).length() == 1 && savedGroupSize != 9)
       newGroupId = pGroup.getMainGroup() + "00" + (savedGroupSize + 1);
+    else
+      newGroupId = pGroup.getMainGroup() + "0" + (savedGroupSize + 1);
     pGroup.setGroupCode(newGroupId);
     pGroup.setDefaultComp("01");
     pGroup.setCompCode(mCompanyManager.getDefaultCompany().getId());
