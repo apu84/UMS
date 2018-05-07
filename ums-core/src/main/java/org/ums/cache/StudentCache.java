@@ -11,6 +11,11 @@ import java.util.Optional;
 
 public class StudentCache extends ContentCache<Student, MutableStudent, String, StudentManager> implements
     StudentManager {
+  @Override
+  public int updateStudentsSection(List<MutableStudent> pStudents) {
+    return getManager().updateStudentsSection(pStudents);
+  }
+
   private CacheManager<Student, String> mCacheManager;
 
   public StudentCache(final CacheManager<Student, String> pCacheManager) {
