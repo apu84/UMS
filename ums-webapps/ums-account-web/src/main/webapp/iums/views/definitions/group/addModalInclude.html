@@ -24,11 +24,11 @@
                                        data-ng-model="vm.addedGroup.mainGroupObject"
 
                             >
-                                <ui-select-match placeholder="Select Main Group">
+                                <ui-select-match allow-clear="true" placeholder="Select Main Group">
                                     {{vm.addedGroup.mainGroupObject.groupName}}
                                 </ui-select-match>
                                 <ui-select-choices class="ui-select"
-                                                   repeat="g in vm.groups|filter:$select.search" required
+                                                   repeat="g in vm.groupsForSearch|filter:$select.search" required
                                                    name="mainGroup" for="mainGroup">
                                     <small ng-bind-html="g.groupName | highlight:$select.search"></small>
                                 </ui-select-choices>

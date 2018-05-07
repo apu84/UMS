@@ -5,6 +5,7 @@ module ums {
     public static $inject = ['$scope', '$modal', 'notify', 'GroupService'];
 
     public groups: IGroup[];
+    public groupsForSearch: IGroup[];
     public tempGroup: IGroup[];
     public addedGroup: IGroup;
     public removedGroup: IGroup;
@@ -27,6 +28,7 @@ module ums {
     private addModalClicked() {
       this.addedGroup = <IGroup>{};
       this.addedGroup.mainGroup = "";
+      this.initialize();
     }
 
     private removeButtonClicked(group: IGroup) {
@@ -38,6 +40,10 @@ module ums {
 
     private initialize() {
       this.groupService.getAllGroups().then((groups: IGroup[]) => {
+          this.groupsForSearch=[];
+          for(var i=(groups.length-1); i>=0; i--){
+              this.groupsForSearch.push(groups[i]);
+          }
         this.assignToGroupAndMap(groups);
       });
 
@@ -100,7 +106,9 @@ module ums {
     private add() {
       this.addedGroup.mainGroup = this.addedGroup.mainGroupObject.groupCode;
       this.addedGroup.flag = this.addedGroup.flagBoolValue == true ? "Y" : "N";
+      let addedGroupCopy = angular.copy(this.addedGroup);
       this.groups.push(this.addedGroup);
+      this.addedGroup=<IGroup>{};
     }
 
     private editButtonClicked(groupForEdit: IGroup) {
