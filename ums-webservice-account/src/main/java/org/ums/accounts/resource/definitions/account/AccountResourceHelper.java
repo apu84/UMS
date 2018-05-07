@@ -106,7 +106,7 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     MutableAccountBalance accountBalance = pAccountBalance;
     accountBalance = mAccountBalanceService.createAccountBalance(account, user, accountBalance);
 
-    if(!accountBalance.getYearOpenBalance().equals(0))
+    if(accountBalance.getYearOpenBalance().equals(new BigDecimal(0)) == false)
       mAccountTransactionService.createOpeningBalanceJournalEntry(account, accountBalance);
     return getAllPaginated(pItemPerPage, pItemNumber);
   }
