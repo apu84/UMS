@@ -38,7 +38,7 @@ public class SystemGroupMapResource {
   @Path("/id/{id}")
   @GetLog(message = "Getting System Group Map Information by Id")
   public SystemGroupMap get(@Context HttpServletRequest httpServletRequest, @PathParam("id") String pId) {
-    return mHelper.get(pId);
+    return mHelper.get(Long.parseLong(pId));
   }
 
   @PUT
@@ -48,7 +48,7 @@ public class SystemGroupMapResource {
       PersistentSystemGroupMap pMutableSystemGroupMap) {
     mHelper.update(pMutableSystemGroupMap);
     return mResourceContext.getResource(SystemGroupMapResource.class).get(httpServletRequest,
-        pMutableSystemGroupMap.getId());
+        pMutableSystemGroupMap.getId().toString());
   }
 
   @POST
@@ -57,7 +57,8 @@ public class SystemGroupMapResource {
   public SystemGroupMap save(@Context HttpServletRequest httpServletRequest,
       PersistentSystemGroupMap pMutableSystemGroupMap) throws Exception {
     MutableSystemGroupMap systemGroupMap = mHelper.save(pMutableSystemGroupMap);
-    return mResourceContext.getResource(SystemGroupMapResource.class).get(httpServletRequest, systemGroupMap.getId());
+    return mResourceContext.getResource(SystemGroupMapResource.class).get(httpServletRequest,
+        systemGroupMap.getId().toString());
   }
 
 }

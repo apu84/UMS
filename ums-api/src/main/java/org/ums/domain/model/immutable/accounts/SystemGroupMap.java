@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 26-Apr-18.
  */
-public interface SystemGroupMap extends Serializable, EditType<MutableSystemGroupMap>, LastModifier, Identifier<String> {
+public interface SystemGroupMap extends Serializable, EditType<MutableSystemGroupMap>, LastModifier, Identifier<Long> {
 
   GroupType getGroupType();
 

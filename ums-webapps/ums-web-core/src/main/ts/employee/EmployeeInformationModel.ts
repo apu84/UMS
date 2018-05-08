@@ -62,7 +62,6 @@ module ums{
         institution: string;
         passingYear: number;
         result: string;
-        dbAction: string;
     }
 
     export interface IPublicationInformationModel{

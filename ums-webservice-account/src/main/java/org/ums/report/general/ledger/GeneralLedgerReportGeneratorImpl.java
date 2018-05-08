@@ -303,12 +303,14 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
                   ? totalOpeningBalance
                   : totalOpeningBalance.add(transaction.getAmount());
         }
-        else
+        else{
           totalOpeningBalance =(mAccountManager.exists(AccountType.OPENING_BALANCE_ADJUSTMENT_ACCOUNT.getValue(), mCompanyManager.getDefaultCompany())
                   && !mAccountManager.getAccount(AccountType.OPENING_BALANCE_ADJUSTMENT_ACCOUNT.getValue(), mCompanyManager.getDefaultCompany()).equals(transaction.getAccount())
                   && transaction.getAccountTransactionType().equals(AccountTransactionType.OPENING_BALANCE))
-                  ? totalOpeningBalance
-                  : totalOpeningBalance.subtract(transaction.getAmount());
+                  ? totalOpeningBalance.subtract(transaction.getAmount())
+                  :totalOpeningBalance;
+        }
+
 
         cell = new PdfPCell(new Paragraph(UmsAccountUtils.getBalanceInDebitOrCredit(totalOpeningBalance), mLiteFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);

@@ -1,115 +1,114 @@
 module ums {
-    class AcademicInformation {
-        public static $inject = ['registrarConstants', '$q', 'notify',
-            'employeeInformationService', 'academicDegreeService',
-            'cRUDDetectionService', '$stateParams'];
 
-        private academic: boolean = false;
-        private showAcademicInputDiv: boolean = false;
+    class AcademicInformation {
+        public static $inject = [
+            'registrarConstants',
+            '$q',
+            'notify',
+            'employeeInformationService',
+            'academicDegreeService',
+            '$stateParams'];
+
+        private academic: IAcademicInformationModel[] = [];
         private degreeNames: IAcademicDegreeTypes[] = [];
-        private previousAcademicInformation: IAcademicInformationModel[];
-        private academicDeletedObjects: IAcademicInformationModel[];
         private userId: string = "";
         private stateParams: any;
-        private showAcademicEditButton: boolean = false;
-        private entry: any;
+        private enableEdit: boolean[] = [false];
+        private enableEditButton: boolean = false;
 
         constructor(private registrarConstants: any,
                     private $q: ng.IQService,
                     private notify: Notify,
                     private employeeInformationService: EmployeeInformationService,
                     private academicDegreeService: AcademicDegreeService,
-                    private cRUDDetectionService: CRUDDetectionService,
                     private $stateParams: any) {
 
-            this.entry = {
-                academic: Array<IAcademicInformationModel>()
-            };
-
+            this.academic = [];
             this.stateParams = $stateParams;
             this.userId = this.stateParams.id;
-            this.showAcademicEditButton = this.stateParams.edit;
-            this.initialization();
-        }
-
-        private initialization() {
+            this.enableEditButton = this.stateParams.edit;
             this.academicDegreeService.getAcademicDegreeList().then((degree: any) => {
                 this.degreeNames = degree;
-                this.getAcademicInformation();
+                this.get();
             });
         }
 
-        public submit(id: number): void{
-            console.log(this.entry.academic[id].degree.name);
-            console.log(this.entry.academic[id].institution);
-            console.log(this.entry.academic[id].passingYear);
-        }
-
-
-        private submitAcademicForm(): void {
-            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.previousAcademicInformation, angular.copy(this.entry.academic), this.academicDeletedObjects)
-                .then((academicObjects: any) => {
-                    this.convertToJson('academic', academicObjects)
-                        .then((json: any) => {
-                            this.employeeInformationService.saveAcademicInformation(json)
-                                .then((message: any) => {
-                                    if (message == "Error") {
-                                    }
-                                    else {
-                                        this.getAcademicInformation();
-                                        this.showAcademicInputDiv = false;
-                                    }
-                                });
-                        });
-                });
-        }
-
-        private getAcademicInformation() {
-            this.entry.academic = [];
-            this.academicDeletedObjects = [];
-            this.employeeInformationService.getAcademicInformation(this.userId).then((academicInformation: any) => {
-                this.entry.academic = academicInformation;
-            }).then(() => {
-                this.previousAcademicInformation = angular.copy(this.entry.academic);
-            });
-        }
-
-        private addNewRow(divName: string) {
-            if (divName === 'academic') {
-                let academicEntry: IAcademicInformationModel;
-                academicEntry = {
-                    id: "",
-                    employeeId: this.userId,
-                    degree: null,
-                    institution: "",
-                    passingYear: null,
-                    result: "",
-                    dbAction: "Create"
-                };
-                this.entry.academic.push(academicEntry);
-            }
-        }
-
-        private deleteRow(divName: string, index: number, parentIndex?: number) {
-            if (divName === 'academic') {
-                if (this.entry.academic[index].id != "") {
-                    this.entry.academic[index].dbAction = "Delete";
-                    this.academicDeletedObjects.push(this.entry.academic[index]);
+        public submit(index: number): void {
+            this.convertToJson(this.academic[index]).then((json: any) => {
+                if (!this.academic[index].id) {
+                    this.create(json, index);
                 }
-                this.entry.academic.splice(index, 1);
+                else {
+                    this.update(json, index);
+                }
+            });
+        }
+
+
+        private create(json: any, index: number) {
+            this.employeeInformationService.saveAcademicInformation(json).then((data: any) => {
+                console.log(data);
+                this.academic[index] = data;
+                this.enableEdit[index] = false;
+            }).catch((reason: any) => {
+                this.enableEdit[index] = true;
+            });
+        }
+
+        private update(json: any, index: number) {
+            this.employeeInformationService.updateAcademicInformation(json).then((data: any) => {
+                console.log(data);
+                this.academic[index] = data;
+                this.enableEdit[index] = false;
+            }).catch((reason: any) => {
+                this.enableEdit[index] = true;
+            });
+        }
+
+        private get(): void {
+            this.academic = [];
+            this.employeeInformationService.getAcademicInformation(this.userId).then((academicInformation: any) => {
+                if (academicInformation) {
+                    this.academic = academicInformation;
+                }
+                else {
+                    this.academic = [];
+                }
+            });
+        }
+
+        public delete(index: number): void {
+            if (this.academic[index].id) {
+                this.employeeInformationService.deleteAcademicInformation(this.academic[index].id).then((data: any) => {
+                    this.academic.splice(index, 1);
+                });
+            }
+            else {
+                this.academic.splice(index, 1);
             }
         }
 
-        private convertToJson(convertThis: string, obj: any): ng.IPromise<any> {
+        public activeEditButton(index: number, canEdit: boolean): void{
+            this.enableEdit[index] = canEdit;
+        }
+
+        public addNew(): void {
+            let academicEntry: IAcademicInformationModel;
+            academicEntry = {
+                id: "",
+                employeeId: this.userId,
+                degree: null,
+                institution: "",
+                passingYear: null,
+                result: ""
+            };
+            this.academic.push(academicEntry);
+        }
+
+        private convertToJson(object: IAcademicInformationModel): ng.IPromise<any> {
             let defer = this.$q.defer();
             let JsonObject = {};
-            let JsonArray = [];
-            let item: any = {};
-            if (convertThis === "academic") {
-                item['academic'] = obj;
-            }
-            JsonArray.push(item);
-            JsonObject['entries'] = JsonArray;
+            JsonObject['entries'] = object;
             defer.resolve(JsonObject);
             return defer.promise;
         }

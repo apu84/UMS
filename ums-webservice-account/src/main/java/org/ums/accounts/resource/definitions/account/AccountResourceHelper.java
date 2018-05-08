@@ -6,11 +6,10 @@ import org.springframework.stereotype.Component;
 import org.ums.accounts.resource.definitions.account.balance.AccountBalanceBuilder;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.accounts.*;
+import org.ums.domain.model.immutable.accounts.Account;
+import org.ums.domain.model.immutable.accounts.Group;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
-import org.ums.enums.accounts.definitions.account.balance.BalanceType;
-import org.ums.enums.accounts.definitions.financial.account.year.YearClosingFlagType;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
 import org.ums.enums.accounts.definitions.group.GroupType;
 import org.ums.enums.accounts.definitions.voucher.number.control.VoucherType;
@@ -79,6 +78,10 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
   private AccountTransactionService mAccountTransactionService;
   @Autowired
   private VoucherService mVoucherService;
+  @Autowired
+  private VoucherManager mVoucherManager;
+  @Autowired
+  private VoucherNumberControlManager mVoucherNumberControlManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -88,7 +91,10 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
   public List<Account> createAccount(PersistentAccount pAccount, PersistentAccountBalance pAccountBalance,
       int pItemPerPage, int pItemNumber) throws Exception {
     MutableAccount account = pAccount;
-
+    if(mVoucherNumberControlManager.getByVoucher(mVoucherManager.get(VoucherType.JOURNAL_VOUCHER.getId()),
+        mCompanyManager.getDefaultCompany()).getVoucherLimit() == null) {
+      throw new ValidationException("No limit for Journal Voucher, please set up the total limit.");
+    }
     if(!mVoucherService.checkWhetherTheBalanceExceedsVoucherLimit(VoucherType.JOURNAL_VOUCHER,
         pAccountBalance.getYearOpenBalance())) {
       throw new ValidationException("Total limit exceeds for journal voucher");

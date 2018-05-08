@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
@@ -34,7 +35,7 @@ public class PersistentSystemGroupMap implements MutableSystemGroupMap {
   @JsonIgnore
   private static SystemGroupMapManager sSystemGroupMapManager;
   @JsonProperty("id")
-  private String mId;
+  private Long mId;
   @JsonProperty("groupType")
   private GroupType mGroupType;
   @JsonIgnore
@@ -112,12 +113,14 @@ public class PersistentSystemGroupMap implements MutableSystemGroupMap {
   }
 
   @Override
-  public String getId() {
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(String pId) {
+  @JsonDeserialize(as = Long.class)
+  public void setId(Long pId) {
     this.mId = pId;
   }
 
@@ -165,7 +168,7 @@ public class PersistentSystemGroupMap implements MutableSystemGroupMap {
   }
 
   @Override
-  public String create() {
+  public Long create() {
     return sSystemGroupMapManager.create(this);
   }
 

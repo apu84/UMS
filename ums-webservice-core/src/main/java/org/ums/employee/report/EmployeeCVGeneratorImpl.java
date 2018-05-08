@@ -109,7 +109,7 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
 
     List<AcademicInformation> academicInformation = new ArrayList<>();
     try {
-      academicInformation = mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
+      academicInformation = mAcademicInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
