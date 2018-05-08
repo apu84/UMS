@@ -5,7 +5,7 @@
            display: flex;
            flex-direction: column;
            align-items: stretch;
-        height: 700px; /* this can vary */
+        height: 600px; /* this can vary */
        }
 
        table * {
@@ -57,6 +57,7 @@
         <th st-ratio="30" st-sort="displayCode">Display Code</th>
         <th st-ratio="30" st-sort="mainGroup">Under The Main Group Of</th>
         <th st-ration="5" align="center"><p align="center">Sub Ledger</p></th>
+        <th align="center"><p align="center">Reserved</p></th>
         <th st-ration="5">Actions</th>
     </tr>
     </thead>
@@ -68,13 +69,14 @@
         <td st-ratio="5" align="center">
             <label><input type="checkbox" ng-disabled="true" ng-model="g.flagBoolValue"></label>
         </td>
+        <td align="center">{{g.mainGroup==0?"Reserved":"Not-reserved"}}</td>
         <td st-ratio="5">
             <button class="btn btn-default btn-sm" ng-click="vm.editButtonClicked(g)"
                     data-toggle="modal"
                     data-target="#addModal"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
             <button class="btn btn-danger btn-sm" ng-click="vm.removeButtonClicked(g)"
                     data-toggle="modal"
-                    data-target="#removeModal"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                    data-target="#removeModal" data-ng-disabled="g.mainGroup==0"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
         </td>
     </tr>
     </tbody>

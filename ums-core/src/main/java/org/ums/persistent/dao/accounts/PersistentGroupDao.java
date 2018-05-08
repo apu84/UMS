@@ -47,6 +47,8 @@ public class PersistentGroupDao extends GroupDaoDecorator {
 
   @Override
   public List<Group> getExcludingMainGroupList(List<String> pMainGroupCodeList) {
+    if(pMainGroupCodeList.size() == 0)
+      return null;
     String query =
         "select * from MST_GROUP where GROUP_CODE in ( "
             + "select DISTINCT group_code from "
@@ -64,6 +66,8 @@ public class PersistentGroupDao extends GroupDaoDecorator {
 
   @Override
   public List<Group> getIncludingMainGroupList(List<String> pMainGroupCodeList) {
+    if(pMainGroupCodeList.size() == 0)
+      return null;
     String query =
         "select * from MST_GROUP where GROUP_CODE in ( "
             + "select DISTINCT group_code from "
