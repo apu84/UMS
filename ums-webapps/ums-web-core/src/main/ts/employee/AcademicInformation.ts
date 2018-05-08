@@ -1,16 +1,9 @@
 module ums {
-    interface IEmployeeProfile extends ng.IScope {
-        submitAcademicForm: Function;
-    }
-
-    class EducationInformation {
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify',
+    class AcademicInformation {
+        public static $inject = ['registrarConstants', '$q', 'notify',
             'employeeInformationService', 'academicDegreeService',
             'cRUDDetectionService', '$stateParams'];
 
-        private entry: {
-            academic: IAcademicInformationModel[]
-        };
         private academic: boolean = false;
         private showAcademicInputDiv: boolean = false;
         private degreeNames: IAcademicDegreeTypes[] = [];
@@ -19,17 +12,15 @@ module ums {
         private userId: string = "";
         private stateParams: any;
         private showAcademicEditButton: boolean = false;
+        private entry: any;
 
         constructor(private registrarConstants: any,
-                    private $scope: IEmployeeProfile,
                     private $q: ng.IQService,
                     private notify: Notify,
                     private employeeInformationService: EmployeeInformationService,
                     private academicDegreeService: AcademicDegreeService,
                     private cRUDDetectionService: CRUDDetectionService,
                     private $stateParams: any) {
-
-            $scope.submitAcademicForm = this.submitAcademicForm.bind(this);
 
             this.entry = {
                 academic: Array<IAcademicInformationModel>()
@@ -38,16 +29,20 @@ module ums {
             this.stateParams = $stateParams;
             this.userId = this.stateParams.id;
             this.showAcademicEditButton = this.stateParams.edit;
-            console.log("Is It editable " + this.showAcademicInputDiv);
             this.initialization();
         }
 
         private initialization() {
             this.academicDegreeService.getAcademicDegreeList().then((degree: any) => {
                 this.degreeNames = degree;
-                console.log("In academic Initialization and user id ==== " + this.userId);
                 this.getAcademicInformation();
             });
+        }
+
+        public submit(id: number): void{
+            console.log(this.entry.academic[id].degree.name);
+            console.log(this.entry.academic[id].institution);
+            console.log(this.entry.academic[id].passingYear);
         }
 
 
@@ -120,5 +115,5 @@ module ums {
         }
     }
 
-    UMS.controller("EducationInformation", EducationInformation);
+    UMS.controller("AcademicInformation", AcademicInformation);
 }

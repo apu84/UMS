@@ -46,9 +46,6 @@ module ums {
                     private designationService: DesignationService,
                     private FileUpload: FileUpload) {
 
-
-            console.log("In Publication Profile-------------");
-
             $scope.submitPublicationForm = this.submitPublicationForm.bind(this);
 
             this.entry = {
@@ -61,26 +58,14 @@ module ums {
             };
             this.stateParams = $stateParams;
             this.publicationTypes = this.registrarConstants.publicationTypes;
+            this.userId = this.stateParams.id;
+            // this.showPublicationEditButton = this.stateParams.edit;
             this.initialization();
         }
 
         private initialization() {
-            this.userService.fetchCurrentUserInfo().then((user: any) => {
-                if (user.roleId == 82 || user.roleId == 81) {
-                    this.isRegistrar = true;
-                }
-                else {
-                    this.isRegistrar = false;
-                }
-                if (this.stateParams.id == "" || this.stateParams.id == null || this.stateParams.id == undefined) {
-                    this.userId = user.employeeId;
-                }
-                else {
-                    this.userId = this.stateParams.id;
-                }
-
-                this.getPublicationInformationWithPagination();
-            })
+            this.getPublicationInformation();
+            this.getPublicationInformationWithPagination();
         }
 
         private submitPublicationForm(): void {
@@ -90,8 +75,9 @@ module ums {
                         .then((json: any) => {
                             this.employeeInformationService.savePublicationInformation(json)
                                 .then((message: any) => {
-                                    if(message == "Error") {}
-                                    else{
+                                    if (message == "Error") {
+                                    }
+                                    else {
                                         this.getPublicationInformation();
                                         this.getPublicationInformationWithPagination();
                                         this.showPublicationInputDiv = false;

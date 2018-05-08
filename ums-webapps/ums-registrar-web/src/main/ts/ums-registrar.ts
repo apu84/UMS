@@ -67,7 +67,8 @@ module ums {
             .state('employeeProfile.personal', {
                 url: "/personal",
                 params : {
-                    'id1': null
+                    'id': null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/personal-information.html',
                 controller: 'PersonalInformation',
@@ -76,16 +77,18 @@ module ums {
             .state('employeeProfile.academic', {
                 url: "/academic",
                 params : {
-                    'id2': null
+                    'id': null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/academic-information.html',
-                controller: 'EducationInformation',
+                controller: 'AcademicInformation',
                 controllerAs: 'vm'
             })
             .state('employeeProfile.publication', {
                 url: "/publication",
                 params : {
-                    'id3': null
+                    'id': null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/publication-information.html',
                 controller: 'PublicationInformation',
@@ -94,7 +97,8 @@ module ums {
             .state('employeeProfile.training', {
                 url: "/training",
                 params : {
-                    'id4': null
+                    'id': null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/training-information.html',
                 controller: 'TrainingInformation',
@@ -103,7 +107,8 @@ module ums {
             .state('employeeProfile.award', {
                 url: "/award",
                 params : {
-                    'id5': null
+                    'id': null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/award-information.html',
                 controller: 'AwardInformation',
@@ -112,7 +117,8 @@ module ums {
             .state('employeeProfile.experience', {
                 url: "/experience",
                 params : {
-                    'id6': null
+                    'id': null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/experience-information.html',
                 controller: 'ExperienceInformation',
@@ -121,7 +127,8 @@ module ums {
             .state('employeeProfile.additional', {
                 url: "/additional",
                 params : {
-                    'id7': null
+                    'id': null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/additional-information.html',
                 controller: 'AdditionalInformation',
@@ -130,7 +137,8 @@ module ums {
             .state('employeeProfile.service', {
                 url: "/service",
                 params : {
-                    'id8': null
+                    'id': null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/service-information.html',
                 controller: 'ServiceInformation',
@@ -181,7 +189,8 @@ module ums {
             .state('employeeInformation.employeeProfile.personal', {
                 url: "/personal",
                 params : {
-                    'id' : null
+                    'id' : null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/personal-information.html',
                 controller: 'PersonalInformation',
@@ -190,16 +199,18 @@ module ums {
             .state('employeeInformation.employeeProfile.academic', {
                 url: "/academic",
                 params : {
-                    'id' : null
+                    'id' : null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/academic-information.html',
-                controller: 'EducationInformation',
+                controller: 'AcademicInformation',
                 controllerAs: 'vm'
             })
             .state('employeeInformation.employeeProfile.publication', {
                 url: "/publication",
                 params : {
-                    'id' : null
+                    'id' : null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/publication-information.html',
                 controller: 'PublicationInformation',
@@ -208,7 +219,8 @@ module ums {
             .state('employeeInformation.employeeProfile.training', {
                 url: "/training",
                 params : {
-                    'id' : null
+                    'id' : null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/training-information.html',
                 controller: 'TrainingInformation',
@@ -217,7 +229,8 @@ module ums {
             .state('employeeInformation.employeeProfile.award', {
                 url: "/award",
                 params : {
-                    'id' : null
+                    'id' : null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/award-information.html',
                 controller: 'AwardInformation',
@@ -226,7 +239,8 @@ module ums {
             .state('employeeInformation.employeeProfile.experience', {
                 url: "/experience",
                 params : {
-                    'id' : null
+                    'id' : null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/experience-information.html',
                 controller: 'ExperienceInformation',
@@ -235,7 +249,8 @@ module ums {
             .state('employeeInformation.employeeProfile.additional', {
                 url: "/additional",
                 params : {
-                    'id' : null
+                    'id' : null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/additional-information.html',
                 controller: 'AdditionalInformation',
@@ -244,7 +259,8 @@ module ums {
             .state('employeeInformation.employeeProfile.service', {
                 url: "/service",
                 params : {
-                    'id' : null
+                    'id' : null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/service-information.html',
                 controller: 'ServiceInformation',

@@ -1129,7 +1129,7 @@ module ums {
                 'edit': null
             },
             templateUrl: 'views/employee/academic-information.html',
-            controller: 'EducationInformation',
+            controller: 'AcademicInformation',
             controllerAs: 'vm'
         })
         .state('employeeProfile.publication', {
