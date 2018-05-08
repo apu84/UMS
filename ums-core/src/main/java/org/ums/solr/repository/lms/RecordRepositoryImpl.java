@@ -19,9 +19,12 @@ public class RecordRepositoryImpl extends SimpleSolrRepository<RecordDocument, L
     super(solrTemplate);
   }
 
+  private String searchQueryTerm = "";
+
   @Override
   public List<RecordDocument> findByCustomQuery(String searchTerm, Pageable pageable, boolean enableSort) {
 
+    searchQueryTerm = searchTerm;
     SimpleQuery basicSearch = new SimpleQuery(searchTerm);
 
     // new
@@ -32,6 +35,7 @@ public class RecordRepositoryImpl extends SimpleSolrRepository<RecordDocument, L
     // new
     // SimpleQuery(String.format("{!parent which=\"type_s:Record AND (changedTitle_txt:%s OR acquisitionType_txt:%s)\"}roleName_txt:*%s* OR contributorName_txt:*%s*",
     // "Chaneged", "Purchase", "ifti", "Apu"));
+
     basicSearch.setPageRequest(pageable);
     if(enableSort) {
       basicSearch.addSort(sort("cTitle_s"));
@@ -52,9 +56,8 @@ public class RecordRepositoryImpl extends SimpleSolrRepository<RecordDocument, L
 
   @Override
   public long totalDocuments() {
-    SimpleQuery query = new SimpleQuery(new Criteria().is(RecordDocument.DOCUMENT_TYPE));
-    Page<RecordDocument> results = this.getSolrOperations().queryForPage(query, RecordDocument.class);
-    return results.getTotalElements();
+    SimpleQuery query = new SimpleQuery(searchQueryTerm);
+    return this.getSolrOperations().count(query);
   }
 
   private Sort sort(String pFiled) {
