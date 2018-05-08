@@ -28,6 +28,7 @@ import org.ums.util.UmsUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -303,12 +304,14 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
                   ? totalOpeningBalance
                   : totalOpeningBalance.add(transaction.getAmount());
         }
-        else
+        else{
           totalOpeningBalance =(mAccountManager.exists(AccountType.OPENING_BALANCE_ADJUSTMENT_ACCOUNT.getValue(), mCompanyManager.getDefaultCompany())
                   && !mAccountManager.getAccount(AccountType.OPENING_BALANCE_ADJUSTMENT_ACCOUNT.getValue(), mCompanyManager.getDefaultCompany()).equals(transaction.getAccount())
                   && transaction.getAccountTransactionType().equals(AccountTransactionType.OPENING_BALANCE))
-                  ? totalOpeningBalance
-                  : totalOpeningBalance.subtract(transaction.getAmount());
+                  ? totalOpeningBalance.subtract(transaction.getAmount())
+                  :totalOpeningBalance;
+        }
+
 
         cell = new PdfPCell(new Paragraph(UmsAccountUtils.getBalanceInDebitOrCredit(totalOpeningBalance), mLiteFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);

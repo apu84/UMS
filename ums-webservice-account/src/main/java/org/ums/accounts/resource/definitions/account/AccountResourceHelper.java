@@ -79,6 +79,10 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
   private AccountTransactionService mAccountTransactionService;
   @Autowired
   private VoucherService mVoucherService;
+  @Autowired
+  private VoucherManager mVoucherManager;
+  @Autowired
+  private VoucherNumberControlManager mVoucherNumberControlManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -88,7 +92,10 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
   public List<Account> createAccount(PersistentAccount pAccount, PersistentAccountBalance pAccountBalance,
       int pItemPerPage, int pItemNumber) throws Exception {
     MutableAccount account = pAccount;
-
+    if(mVoucherNumberControlManager.getByVoucher(mVoucherManager.get(VoucherType.JOURNAL_VOUCHER.getId()),
+        mCompanyManager.getDefaultCompany()).getVoucherLimit() == null) {
+      throw new ValidationException("No limit for Journal Voucher, please set up the total limit.");
+    }
     if(!mVoucherService.checkWhetherTheBalanceExceedsVoucherLimit(VoucherType.JOURNAL_VOUCHER,
         pAccountBalance.getYearOpenBalance())) {
       throw new ValidationException("Total limit exceeds for journal voucher");

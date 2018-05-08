@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 26-Apr-18.
  */
 public class SystemGroupMapDaoDecorator extends
-    ContentDaoDecorator<SystemGroupMap, MutableSystemGroupMap, String, SystemGroupMapManager> implements
+    ContentDaoDecorator<SystemGroupMap, MutableSystemGroupMap, Long, SystemGroupMapManager> implements
     SystemGroupMapManager {
   @Override
   public List<SystemGroupMap> getAllByCompany(Company pCompany) {

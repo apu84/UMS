@@ -71,7 +71,7 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
   }
 
   @Override
-  public SystemGroupMap get(String pId) {
+  public SystemGroupMap get(Long pId) {
     String query = SELECT_ALL + " WHERE ID=:id";
     try {
       Map parameterMap = new HashMap();
@@ -114,7 +114,7 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
       return 0;
     String query = DELETE_ONE + " where id in(:id)";
     Map parameterMap = new HashMap();
-    List<String> idList = pMutableList.stream().map(p -> p.getId()).collect(Collectors.toList());
+    List<Long> idList = pMutableList.stream().map(p -> p.getId()).collect(Collectors.toList());
     parameterMap.put("id", idList);
     return mNamedParameterJdbcTemplate.update(query, parameterMap);
   }
@@ -130,14 +130,14 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
   }
 
   @Override
-  public String create(MutableSystemGroupMap pMutable) {
+  public Long create(MutableSystemGroupMap pMutable) {
     String query = INSERT_ONE;
     mNamedParameterJdbcTemplate.update(query, getInsertOrUpdateParameters(pMutable));
     return pMutable.getId();
   }
 
   @Override
-  public List<String> create(List<MutableSystemGroupMap> pMutableList) {
+  public List<Long> create(List<MutableSystemGroupMap> pMutableList) {
     String query = INSERT_ONE;
     Map<String, Object>[] parameters = getParameterObjects(pMutableList);
     mNamedParameterJdbcTemplate.batchUpdate(query, parameters);
@@ -145,7 +145,7 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
   }
 
   @Override
-  public boolean exists(String pId) {
+  public boolean exists(Long pId) {
     return get(pId) == null ? false : true;
   }
 
@@ -194,7 +194,7 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
     @Override
     public SystemGroupMap mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableSystemGroupMap systemGroupMap = new PersistentSystemGroupMap();
-      systemGroupMap.setId(rs.getString("id"));
+      systemGroupMap.setId(rs.getLong("id"));
       systemGroupMap.setGroupType(GroupType.get(rs.getString("group_type")));
       systemGroupMap.setGroupId(rs.getLong("group_id"));
       systemGroupMap.setCompanyId(rs.getString("comp_id"));

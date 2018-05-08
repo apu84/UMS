@@ -15,11 +15,11 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 26-Apr-18.
  */
 public class SystemGroupMapCache extends
-    ContentCache<SystemGroupMap, MutableSystemGroupMap, String, SystemGroupMapManager> implements SystemGroupMapManager {
+    ContentCache<SystemGroupMap, MutableSystemGroupMap, Long, SystemGroupMapManager> implements SystemGroupMapManager {
 
-  private CacheManager<SystemGroupMap, String> mSystemGroupMapLongCacheManager;
+  private CacheManager<SystemGroupMap, Long> mSystemGroupMapLongCacheManager;
 
-  public SystemGroupMapCache(CacheManager<SystemGroupMap, String> pSystemGroupMapLongCacheManager) {
+  public SystemGroupMapCache(CacheManager<SystemGroupMap, Long> pSystemGroupMapLongCacheManager) {
     mSystemGroupMapLongCacheManager = pSystemGroupMapLongCacheManager;
   }
 
@@ -34,7 +34,7 @@ public class SystemGroupMapCache extends
   }
 
   @Override
-  protected CacheManager<SystemGroupMap, String> getCacheManager() {
+  protected CacheManager<SystemGroupMap, Long> getCacheManager() {
     return mSystemGroupMapLongCacheManager;
   }
 

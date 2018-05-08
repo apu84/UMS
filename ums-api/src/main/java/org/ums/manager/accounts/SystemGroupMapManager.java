@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Monjur-E-Morshed on 26-Apr-18.
  */
-public interface SystemGroupMapManager extends ContentManager<SystemGroupMap, MutableSystemGroupMap, String> {
+public interface SystemGroupMapManager extends ContentManager<SystemGroupMap, MutableSystemGroupMap, Long> {
   List<SystemGroupMap> getAllByCompany(Company pCompany);
 
   SystemGroupMap get(GroupType pGroupType, Company pCompany);
