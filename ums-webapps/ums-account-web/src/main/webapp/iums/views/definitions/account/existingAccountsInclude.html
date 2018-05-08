@@ -28,7 +28,7 @@
         <th>{{p.accountCode}}</th>
         <td>{{p.accGroupName}}</td>
         <td>{{p.modifiedDate}}</td>
-        <td><button class="btn btn-sm btn-success" ng-click="vm.edit(p)" data-toggle="modal" data-target="#addModal">Edit
+        <td><button class="btn btn-sm btn-success" data-ng-disabled="p.reserved" ng-click="vm.edit(p)" data-toggle="modal" data-target="#addModal">Edit
             </button>
         </td>
     </tr>

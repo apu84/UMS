@@ -11,16 +11,7 @@ import java.util.Map;
  */
 public enum TransactionType {
 
-  JOURNAL_VOUCHER("JV", "Journal Voucher"),
-  CREDIT_NOTE("CN", "Credit Note"),
-  DEBIT_NOTE("DN", "Debit Note"),
-  CASH_PAYMENT("CP", "Cash Payment"),
-  CASH_RECEIPT("CR", "Cash Receipt"),
-  BANK_PAYMENT("BP", "Bank Payment"),
-  BANK_RECEIPT("BR", "Bank Receipt"),
-  CONTRA_VOUCHER("CV", "Contra Voucher"),
-  SALES_INVOICE("SI", "Sales Invoice"),
-  PURCHASE_BILL("PB", "Purchase Bill"),
+  OPENING_BALANCE_TRANSACTION("O", "Opening Balance Voucher Transaction"),
   TR_6("TR", "TR6");
 
   private String label;

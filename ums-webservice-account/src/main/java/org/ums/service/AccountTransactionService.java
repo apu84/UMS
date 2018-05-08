@@ -11,6 +11,7 @@ import org.ums.domain.model.immutable.accounts.Currency;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.currency.CurrencyFlag;
 import org.ums.enums.accounts.definitions.voucher.number.control.VoucherType;
+import org.ums.enums.accounts.general.ledger.vouchers.AccountTransactionType;
 import org.ums.manager.accounts.AccountTransactionManager;
 import org.ums.manager.accounts.CurrencyManager;
 import org.ums.persistent.model.accounts.PersistentAccountTransaction;
@@ -59,6 +60,7 @@ public class AccountTransactionService {
         newAccountJournal.setCurrencyId(baseCurrency.getId());
         newAccountJournal.setConversionFactor(new BigDecimal(1));
         newAccountJournal.setSerialNo(1);
+        newAccountJournal.setAccountTransactionType(AccountTransactionType.OPENING_BALANCE);
         newAccountJournal.setVoucherId(VoucherType.JOURNAL_VOUCHER.getId());
 
         PersistentAccountTransaction openingBalanceTransaction = new PersistentAccountTransaction();
@@ -70,6 +72,7 @@ public class AccountTransactionService {
         openingBalanceTransaction.setCurrencyId(baseCurrency.getId());
         openingBalanceTransaction.setConversionFactor(new BigDecimal(1));
         openingBalanceTransaction.setSerialNo(2);
+        openingBalanceTransaction.setAccountTransactionType(AccountTransactionType.OPENING_BALANCE);
         openingBalanceTransaction.setVoucherId(VoucherType.JOURNAL_VOUCHER.getId());
 
         List<PersistentAccountTransaction> journalEntries = new ArrayList<>();

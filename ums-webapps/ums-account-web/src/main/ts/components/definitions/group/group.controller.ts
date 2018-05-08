@@ -29,6 +29,14 @@ module ums {
       this.addedGroup = <IGroup>{};
       this.addedGroup.mainGroup = "";
       this.initialize();
+      this.setFocusOnTheModal();
+    }
+
+
+    private setFocusOnTheModal(){
+        $("#addModal").on('shown.bs.modal', ()=>{
+            $("#groupName").focus();
+        });
     }
 
     private removeButtonClicked(group: IGroup) {

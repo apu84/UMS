@@ -12,8 +12,8 @@
                     <div class="form-group">
                         <label class="control-label col-sm-4" for="groupName">Group Name</label>
                         <div class="col-sm-6">
-                            <input type="text" ng-model="vm.addedGroup.groupName"
-                                   class="form-control" name="groupName" required/>
+                            <input type="text" id="groupName" ng-model="vm.addedGroup.groupName"
+                                   class="form-control" name="groupName" required  />
                             <span ng-show="addForm.groupName.$touched && addForm.groupName.$invalid ">Group name is required</span>
                         </div>
                     </div>

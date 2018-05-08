@@ -11,10 +11,12 @@ import org.ums.domain.model.immutable.accounts.Currency;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.domain.model.mutable.accounts.MutableChequeRegister;
+import org.ums.enums.accounts.definitions.account.balance.AccountType;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.currency.CurrencyFlag;
 import org.ums.enums.accounts.definitions.group.GroupType;
 import org.ums.enums.accounts.general.ledger.reports.FetchType;
+import org.ums.enums.accounts.general.ledger.vouchers.AccountTransactionType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
@@ -265,7 +267,8 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
         setNoBorderAndAddCell(table, cell);
 
 
-        if (transaction.getAccount().getAccGroupCode().equals(mSystemGroupMapManager.get(GroupType.BANK_ACCOUNTS.getValue()).getGroup().getGroupCode())) {
+        if (mSystemGroupMapManager.exists(GroupType.BANK_ACCOUNTS, mCompanyManager.getDefaultCompany()) &&
+                transaction.getAccount().getAccGroupCode().equals(mSystemGroupMapManager.get(GroupType.BANK_ACCOUNTS, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode())) {
           ChequeRegister chequeRegister = chequeRegisterMapWithTransactionId.get(transaction.getId());
 
           cell = new PdfPCell(new Paragraph(chequeRegister.getChequeNo(), mLiteFont));
@@ -293,10 +296,19 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
         setNoBorderAndAddCell(table, cell);
 
 
-        if (transaction.getBalanceType().equals(BalanceType.Dr))
-          totalOpeningBalance = totalOpeningBalance.add(transaction.getAmount());
+        if (transaction.getBalanceType().equals(BalanceType.Dr)){
+          totalOpeningBalance =(mAccountManager.exists(AccountType.OPENING_BALANCE_ADJUSTMENT_ACCOUNT.getValue(), mCompanyManager.getDefaultCompany())
+                  && !mAccountManager.getAccount(AccountType.OPENING_BALANCE_ADJUSTMENT_ACCOUNT.getValue(), mCompanyManager.getDefaultCompany()).equals(transaction.getAccount())
+                  && transaction.getAccountTransactionType().equals(AccountTransactionType.OPENING_BALANCE))
+                  ? totalOpeningBalance
+                  : totalOpeningBalance.add(transaction.getAmount());
+        }
         else
-          totalOpeningBalance = totalOpeningBalance.subtract(transaction.getAmount());
+          totalOpeningBalance =(mAccountManager.exists(AccountType.OPENING_BALANCE_ADJUSTMENT_ACCOUNT.getValue(), mCompanyManager.getDefaultCompany())
+                  && !mAccountManager.getAccount(AccountType.OPENING_BALANCE_ADJUSTMENT_ACCOUNT.getValue(), mCompanyManager.getDefaultCompany()).equals(transaction.getAccount())
+                  && transaction.getAccountTransactionType().equals(AccountTransactionType.OPENING_BALANCE))
+                  ? totalOpeningBalance
+                  : totalOpeningBalance.subtract(transaction.getAmount());
 
         cell = new PdfPCell(new Paragraph(UmsAccountUtils.getBalanceInDebitOrCredit(totalOpeningBalance), mLiteFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);

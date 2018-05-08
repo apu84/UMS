@@ -3,6 +3,7 @@ package org.ums.accounts.resource.definitions.system.group.map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.accounts.SystemGroupMap;
+import org.ums.domain.model.mutable.accounts.MutableSystemGroupMap;
 import org.ums.logs.GetLog;
 import org.ums.logs.PostLog;
 import org.ums.logs.PutLog;
@@ -52,12 +53,11 @@ public class SystemGroupMapResource {
 
   @POST
   @Path("/save")
-  @PostLog(message = "Creating a row in System Grou pMap")
+  @PostLog(message = "Creating a row in System Group Map")
   public SystemGroupMap save(@Context HttpServletRequest httpServletRequest,
       PersistentSystemGroupMap pMutableSystemGroupMap) throws Exception {
-    mHelper.save(pMutableSystemGroupMap);
-    return mResourceContext.getResource(SystemGroupMapResource.class).get(httpServletRequest,
-        pMutableSystemGroupMap.getGroupType().getValue());
+    MutableSystemGroupMap systemGroupMap = mHelper.save(pMutableSystemGroupMap);
+    return mResourceContext.getResource(SystemGroupMapResource.class).get(httpServletRequest, systemGroupMap.getId());
   }
 
 }

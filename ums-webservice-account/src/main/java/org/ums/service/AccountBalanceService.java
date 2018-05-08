@@ -40,6 +40,8 @@ public class AccountBalanceService {
   private CompanyManager companyManager;
   @Autowired
   private IdGenerator mIdGenerator;
+  @Autowired
+  private AccountService mAccountService;
 
   public BigDecimal getTillLastMonthBalance(final Account pAccount, final FinancialAccountYear pFinancialAccountYear,
       final Date pDate, final AccountBalance pAccountBalance) {
@@ -205,7 +207,7 @@ public class AccountBalanceService {
     if (accountBalance != null) {
       FinancialAccountYear financialAccountYears = mFinancialAccountYearManager.getAll().stream().filter(f -> f.getYearClosingFlag().equals(YearClosingFlagType.OPEN)).collect(Collectors.toList()).get(0);
       accountBalance.setId(  mIdGenerator.getNumericId());
-      accountBalance.setYearOpenBalanceType(BalanceType.Dr);
+      accountBalance.setYearOpenBalanceType(accountBalance.getYearOpenBalanceType()==null? BalanceType.Dr: accountBalance.getYearOpenBalanceType());
       accountBalance.setYearOpenBalance(accountBalance.getYearOpenBalance() == null ? new BigDecimal(0.00) : accountBalance.getYearOpenBalance());
       accountBalance.setFinStartDate(financialAccountYears.getCurrentStartDate());
       accountBalance.setFinEndDate(financialAccountYears.getCurrentEndDate());
@@ -214,7 +216,8 @@ public class AccountBalanceService {
       accountBalance.setModifiedBy(user.getEmployeeId());
       accountBalance.setModifiedDate(new Date());
       BigDecimal openingBalance = accountBalance.getYearOpenBalance();
-      if(account.getId()!=(AccountType.OPENING_BALANCE_ADJUSTMENT_ACCOUNT.getValue()+Long.parseLong(companyManager.getDefaultCompany().getId())))
+      Account openingBalanceAdjustmentAccount = mAccountService.getOpeningBalanceAdjustmentAccount();
+      if(!account.getId().equals(openingBalanceAdjustmentAccount.getId()))
         accountBalance.setYearOpenBalance(new BigDecimal(0));
       accountBalance.setTotDebitTrans(accountBalance.getYearOpenBalance() == null ? new BigDecimal(0.00) : accountBalance.getYearOpenBalance());
       accountBalance.setTotCreditTrans(new BigDecimal(0.000));
