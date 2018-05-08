@@ -72,11 +72,14 @@ module ums {
       this.account = <IAccount>{};
       this.account.yearOpenBalanceType = BalanceType.Dr;
       this.account.yearOpenBalance=0;
-      /* this.employeeService.getAll().then((employees: Employee[]) => {
-         this.employeeNames = [];
-         employees.forEach((e: Employee) => this.employeeNames.push(e.employeeName));
-       });*/
+      this.setFocusOnTheModal();
     }
+
+   private setFocusOnTheModal(){
+       $("#addModal").on('shown.bs.modal', ()=>{
+           $("#accountName").focus();
+       });
+   }
 
     public showSearchSection() {
       console.log("In the show search section");
@@ -112,6 +115,9 @@ module ums {
       let accountBalance:IAccountBalance = <IAccountBalance>{};
       accountBalance.yearOpenBalanceType = this.account.yearClosingBalanceType;
       accountBalance.yearOpenBalance = this.account.yearOpenBalance;
+      accountBalance.yearOpenBalanceType = this.account.yearOpenBalanceType;
+      console.log("account balance");
+      console.log(accountBalance);
       //todo configure account balance information
       this.accountService.saveAccountPaginated(this.account, accountBalance, this.itemsPerPage, 1).then((accounts: IAccount[]) => {
         if (accounts != undefined) {

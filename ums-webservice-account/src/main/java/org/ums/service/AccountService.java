@@ -42,24 +42,25 @@ public class AccountService {
   private UserResourceHelper mUserResourceHelper;
   @Autowired
   private AccountBalanceService mAccountBalanceService;
+  @Autowired
+  private IdGenerator mIdGenerator;
 
   @Transactional
   public Account getOpeningBalanceAdjustmentAccount() {
     Company company = mCompanyManager.getDefaultCompany();
-    Long openingBalanceAdjustmentId =
-        AccountType.OPENING_BALANCE_ADJUSTMENT_ACCOUNT.getValue() + Long.parseLong(company.getId());
+    Long openingBalanceAdjustmentAccountCode = AccountType.OPENING_BALANCE_ADJUSTMENT_ACCOUNT.getValue();
     Account account = new PersistentAccount();
-    if(mAccountManager.exists(openingBalanceAdjustmentId))
-      account = mAccountManager.get(openingBalanceAdjustmentId);
+    if(mAccountManager.exists(openingBalanceAdjustmentAccountCode, company))
+      account = mAccountManager.getAccount(openingBalanceAdjustmentAccountCode, company);
     if(account.getId() == null) {
       PersistentAccount openingBalanceAdjustmentAccount = new PersistentAccount();
-      Long initialId = AccountType.OPENING_BALANCE_ADJUSTMENT_ACCOUNT.getValue();
-      openingBalanceAdjustmentAccount.setId(initialId + Long.parseLong(company.getId()));
+      openingBalanceAdjustmentAccount.setId(mIdGenerator.getNumericId());
       openingBalanceAdjustmentAccount.setAccGroupCode(GroupType.LIABILITIES.getValue());
       openingBalanceAdjustmentAccount.setAccountName("OPENING BALANCE ADJUSTMENT ACCOUNT");
-      openingBalanceAdjustmentAccount.setAccountCode(openingBalanceAdjustmentId);
+      openingBalanceAdjustmentAccount.setAccountCode(openingBalanceAdjustmentAccountCode);
       openingBalanceAdjustmentAccount.setCompanyId(company.getId());
       openingBalanceAdjustmentAccount.setModifiedBy(mUserResourceHelper.getLoggedUser().getEmployeeId());
+      openingBalanceAdjustmentAccount.setReserved(true);
       openingBalanceAdjustmentAccount.setModifiedDate(new Date());
       mAccountManager.create(openingBalanceAdjustmentAccount);
       PersistentAccountBalance accountBalance =

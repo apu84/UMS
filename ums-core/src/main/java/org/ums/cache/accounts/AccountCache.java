@@ -32,6 +32,16 @@ public class AccountCache extends ContentCache<Account, MutableAccount, Long, Ac
   }
 
   @Override
+  public Account getAccount(Long pAccountCode, Company pCompany) {
+    return getManager().getAccount(pAccountCode, pCompany);
+  }
+
+  @Override
+  public boolean exists(Long pAccountCode, Company pCompany) {
+    return getManager().exists(pAccountCode, pCompany);
+  }
+
+  @Override
   public List<Account> getAllPaginated(int itemPerPage, int pageNumber) {
     return getManager().getAllPaginated(itemPerPage, pageNumber);
   }

@@ -5,6 +5,7 @@ import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.Group;
 import org.ums.domain.model.immutable.accounts.SystemGroupMap;
 import org.ums.domain.model.mutable.accounts.MutableSystemGroupMap;
+import org.ums.enums.accounts.definitions.group.GroupType;
 import org.ums.manager.CacheManager;
 import org.ums.manager.accounts.SystemGroupMapManager;
 
@@ -20,6 +21,16 @@ public class SystemGroupMapCache extends
 
   public SystemGroupMapCache(CacheManager<SystemGroupMap, String> pSystemGroupMapLongCacheManager) {
     mSystemGroupMapLongCacheManager = pSystemGroupMapLongCacheManager;
+  }
+
+  @Override
+  public SystemGroupMap get(GroupType pGroupType, Company pCompany) {
+    return getManager().get(pGroupType, pCompany);
+  }
+
+  @Override
+  public boolean exists(GroupType pGroupType, Company pCompany) {
+    return getManager().exists(pGroupType, pCompany);
   }
 
   @Override

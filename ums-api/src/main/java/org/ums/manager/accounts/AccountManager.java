@@ -14,6 +14,10 @@ import java.util.List;
 public interface AccountManager extends ContentManager<Account, MutableAccount, Long> {
   Integer getSize();
 
+  Account getAccount(Long pAccountCode, Company pCompany);
+
+  boolean exists(Long pAccountCode, Company pCompany);
+
   List<Account> getAllPaginated(int itemPerPage, int pageNumber);
 
   List<Account> getAccounts(String pAccountName);

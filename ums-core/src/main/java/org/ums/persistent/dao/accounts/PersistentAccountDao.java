@@ -1,7 +1,6 @@
 package org.ums.persistent.dao.accounts;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -41,6 +40,8 @@ public class PersistentAccountDao extends AccountDaoDecorator {
 
   @Override
   public List<Account> getExcludingGroups(List<String> groupCodeList) {
+    if(groupCodeList.size() == 0)
+      return null;
     String query = "select * from mst_account where acc_group_code not in (:groupCodeList)";
     Map parameterMap = new HashMap();
     parameterMap.put("groupCodeList", groupCodeList);
@@ -57,6 +58,8 @@ public class PersistentAccountDao extends AccountDaoDecorator {
 
   @Override
   public List<Account> getIncludingGroups(List<String> groupCodeList) {
+    if(groupCodeList.size() == 0)
+      return null;
     String query = "select * from mst_account where acc_group_code  in (:groupCodeList)";
     Map parameterMap = new HashMap();
     parameterMap.put("groupCodeList", groupCodeList);
@@ -113,6 +116,15 @@ public class PersistentAccountDao extends AccountDaoDecorator {
   }
 
   @Override
+  public Account getAccount(Long pAccountCode, Company pCompany) {
+    String query = "select * from mst_account where account_code=:accountCode and comp_code=:compCode";
+    Map parameterMap = new HashMap();
+    parameterMap.put("accountCode", pAccountCode);
+    parameterMap.put("compCode", pCompany.getId());
+    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentAccountRowMapper());
+  }
+
+  @Override
   public Account validate(Account pReadonly) {
     return get(pReadonly.getId());
   }
@@ -122,7 +134,7 @@ public class PersistentAccountDao extends AccountDaoDecorator {
     String query =
         "update MST_ACCOUNT " + "set ACCOUNT_CODE=:accountCode, " + "  ACCOUNT_NAME=:accountName, "
             + "  ACC_GROUP_CODE=:accGroupCode, " + "  MODIFIED_DATE=:modifiedDate, " + "  MODIFIED_BY=:modifiedBy, "
-            + "  COMP_CODE=:compCode, " + "  LAST_MODIFIED=:lastModified " + "where ID=:id";
+            + "  COMP_CODE=:compCode, RESERVED=:reserved, " + "  LAST_MODIFIED=:lastModified " + "where ID=:id";
     Map parameterMap = getAccountParameterMap(pMutable, pMutable.getId());
     return mNamedParameterJdbcTemplate.update(query, parameterMap);
   }
@@ -145,8 +157,8 @@ public class PersistentAccountDao extends AccountDaoDecorator {
   @Override
   public Long create(MutableAccount pMutable) {
     String query =
-        "insert into MST_ACCOUNT(ID, ACCOUNT_CODE, ACCOUNT_NAME, ACC_GROUP_CODE,  MODIFIED_DATE, MODIFIED_BY, COMP_CODE, LAST_MODIFIED) "
-            + "            VALUES (:id,:accountCode,:accountName,:accGroupCode,:modifiedDate,:modifiedBy, :compCode,:lastModified )";
+        "insert into MST_ACCOUNT(ID, ACCOUNT_CODE, ACCOUNT_NAME, ACC_GROUP_CODE, RESERVED,  MODIFIED_DATE, MODIFIED_BY, COMP_CODE, LAST_MODIFIED) "
+            + "            VALUES (:id,:accountCode,:accountName,:accGroupCode, :reserved,:modifiedDate,:modifiedBy, :compCode,:lastModified )";
     Long id = pMutable.getId() == null ? mIdGenerator.getNumericId() : pMutable.getId();
     Map parameterMap = getAccountParameterMap(pMutable, id);
     mNamedParameterJdbcTemplate.update(query, parameterMap);
@@ -163,6 +175,7 @@ public class PersistentAccountDao extends AccountDaoDecorator {
     parameterMap.put("modifiedDate", pMutable.getModifiedDate());
     parameterMap.put("modifiedBy", pMutable.getModifiedBy());
     parameterMap.put("compCode", pMutable.getCompanyId());
+    parameterMap.put("reserved", pMutable.getReserved().equals(true) ? 1 : false);
     parameterMap.put("lastModified", UmsUtils.formatDate(new Date(), "YYYYMMDDHHMMSS"));
     return parameterMap;
   }
@@ -177,6 +190,15 @@ public class PersistentAccountDao extends AccountDaoDecorator {
     String query = "select count(*) from mst_account where id=:id";
     Map parameterMap = new HashMap();
     parameterMap.put("id", pId);
+    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, Integer.class) == 0 ? false : true;
+  }
+
+  @Override
+  public boolean exists(Long pAccountCode, Company pCompany) {
+    String query = "select count(*) from mst_account where account_code=:accountCode and comp_code=:compCode";
+    Map parameterMap = new HashMap();
+    parameterMap.put("accountCode", pAccountCode);
+    parameterMap.put("compCode", pCompany.getId());
     return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, Integer.class) == 0 ? false : true;
   }
 

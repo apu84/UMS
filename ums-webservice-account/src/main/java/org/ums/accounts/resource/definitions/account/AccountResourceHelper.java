@@ -97,6 +97,7 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     account.setModifiedBy(user.getEmployeeId());
     account.setModifiedDate(new Date());
+    account.setReserved(account.getReserved() == null ? false : true);
     account.setAccountCode(account.getAccountCode() == null || account.getAccountCode().equals("") ? mIdGenerator
         .getNumericId() : account.getAccountCode());
     account.setCompanyId(mCompanyManager.getDefaultCompany().getId());
@@ -128,60 +129,69 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
 
   public List<Account> getCustomerAndVendorAccounts(final UriInfo pUriInfo) {
     List<String> groupCodeList = new ArrayList<>();
-    SystemGroupMap sundryCreditorSystemGroupMap = mSystemGroupMapManager.get(GroupType.SUNDRY_CREDITOR.getValue());
-    SystemGroupMap sundryDebtorSystemGroupMap = mSystemGroupMapManager.get(GroupType.SUNDRY_DEBTOR.getValue());
-    if(sundryCreditorSystemGroupMap != null)
-      groupCodeList.add(sundryCreditorSystemGroupMap.getGroup().getGroupCode());
-    if(sundryDebtorSystemGroupMap != null)
-      groupCodeList.add(sundryDebtorSystemGroupMap.getGroup().getGroupCode());
+    if(mSystemGroupMapManager.exists(GroupType.SUNDRY_CREDITOR, mCompanyManager.getDefaultCompany()))
+      groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_CREDITOR, mCompanyManager.getDefaultCompany())
+          .getGroup().getGroupCode());
+    if(mSystemGroupMapManager.exists(GroupType.SUNDRY_DEBTOR, mCompanyManager.getDefaultCompany()))
+      groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_DEBTOR, mCompanyManager.getDefaultCompany())
+          .getGroup().getGroupCode());
     return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
   }
 
   public List<Account> getVendorAccounts(final UriInfo pUriInfo) {
     List<String> groupCodeList = new ArrayList<>();
-    SystemGroupMap sundryCreditorSystemGroupMap = mSystemGroupMapManager.get(GroupType.SUNDRY_CREDITOR.getValue());
-    if(sundryCreditorSystemGroupMap != null)
-      groupCodeList.add(sundryCreditorSystemGroupMap.getGroup().getGroupCode());
+    if(mSystemGroupMapManager.exists(GroupType.SUNDRY_CREDITOR, mCompanyManager.getDefaultCompany()))
+      groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_CREDITOR, mCompanyManager.getDefaultCompany())
+          .getGroup().getGroupCode());
     return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
   }
 
   public List<Account> getCustomerAccounts(final UriInfo pUriInfo) {
     List<String> groupCodeList = new ArrayList<>();
     // groupCodeList.add(GroupType.SUNDRY_DEBTOR.getValue());
-    SystemGroupMap sundryDebtorSystemGroupMap = mSystemGroupMapManager.get(GroupType.SUNDRY_DEBTOR.getValue());
-    if(sundryDebtorSystemGroupMap != null)
-      groupCodeList.add(sundryDebtorSystemGroupMap.getGroup().getGroupCode());
+
+    if(mSystemGroupMapManager.exists(GroupType.SUNDRY_DEBTOR, mCompanyManager.getDefaultCompany()))
+      groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_DEBTOR, mCompanyManager.getDefaultCompany())
+          .getGroup().getGroupCode());
     return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
   }
 
   private List<Account> getAccountsBasedOnGroupList(List<String> pGroupCodeList, UriInfo pUriInfo) {
     List<Group> groups = mGroupManager.getIncludingMainGroupList(pGroupCodeList);
-    List<Account> accounts = mAccountManager.getIncludingGroups(groups.stream().map(a -> a.getGroupCode()).collect(Collectors.toList()));
+    List<Account> accounts = new ArrayList<>();
+    if(groups!=null && groups.size()>0)
+    accounts = mAccountManager.getIncludingGroups(groups.stream().map(a -> a.getGroupCode()).collect(Collectors.toList()));
     return accounts;
   }
 
   private List<Account> getAccountExcludingGroupList(List<String> pGroupCodeList, UriInfo pUriInfo) {
     List<Group> groups = mGroupManager.getExcludingMainGroupList(pGroupCodeList);
-    List<Account> accounts = mAccountManager.getIncludingGroups(groups.stream().map(a -> a.getGroupCode()).collect(Collectors.toList()));
+    List<Account> accounts = new ArrayList<>();
+    if(groups!=null && groups.size()>0)
+    accounts = mAccountManager.getIncludingGroups(groups.stream().map(a -> a.getGroupCode()).collect(Collectors.toList()));
     return accounts;
   }
 
   public List<Account> getBankAndCostTypeAccounts(final UriInfo pUriInfo) {
     List<String> groupCodeList = new ArrayList<String>();
-    // groupCodeList.add(GroupType.BANK_ACCOUNTS.getValue());
-    groupCodeList.add(mSystemGroupMapManager.get(GroupType.BANK_ACCOUNTS.getValue()).getGroup().getGroupCode());
-    // groupCodeList.add(GroupType.CASH_IN_HAND.getValue());
-    groupCodeList.add(mSystemGroupMapManager.get(GroupType.CASH_IN_HAND.getValue()).getGroup().getGroupCode());
+    if(mSystemGroupMapManager.exists(GroupType.BANK_ACCOUNTS, mCompanyManager.getDefaultCompany()))
+      groupCodeList.add(mSystemGroupMapManager
+          .get(GroupType.SUNDRY_DEBTOR.BANK_ACCOUNTS, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode());
+    if(mSystemGroupMapManager.exists(GroupType.CASH_IN_HAND, mCompanyManager.getDefaultCompany()))
+      groupCodeList.add(mSystemGroupMapManager.get(GroupType.CASH_IN_HAND, mCompanyManager.getDefaultCompany())
+          .getGroup().getGroupCode());
     return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
 
   }
 
   public List<Account> getExcludingBankAndCostTypeAccounts(final UriInfo pUriInfo) {
     List<String> groupCodeList = new ArrayList<String>();
-    // groupCodeList.add(GroupType.BANK_ACCOUNTS.getValue());
-    groupCodeList.add(mSystemGroupMapManager.get(GroupType.BANK_ACCOUNTS.getValue()).getGroup().getGroupCode());
-    // groupCodeList.add(GroupType.CASH_IN_HAND.getValue());
-    groupCodeList.add(mSystemGroupMapManager.get(GroupType.CASH_IN_HAND.getValue()).getGroup().getGroupCode());
+    if(mSystemGroupMapManager.exists(GroupType.BANK_ACCOUNTS, mCompanyManager.getDefaultCompany()))
+      groupCodeList.add(mSystemGroupMapManager.get(GroupType.BANK_ACCOUNTS, mCompanyManager.getDefaultCompany())
+          .getGroup().getGroupCode());
+    if(mSystemGroupMapManager.exists(GroupType.CASH_IN_HAND, mCompanyManager.getDefaultCompany()))
+      groupCodeList.add(mSystemGroupMapManager.get(GroupType.CASH_IN_HAND, mCompanyManager.getDefaultCompany())
+          .getGroup().getGroupCode());
     return getAccountExcludingGroupList(groupCodeList, pUriInfo);
   }
 
