@@ -56,6 +56,22 @@ public class UmsLogTracerAspect {
     printLog(pHttpServletRequest, log.message(), pObject.toString());
   }
 
+  // ******* DELETE *******//
+  @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pJsonObject,..)")
+  public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonObject pJsonObject, DeleteLog log) {
+    printLog(pHttpServletRequest, log.message(), pJsonObject.toString());
+  }
+
+  @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pJsonArray,..)")
+  public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonArray pJsonArray, DeleteLog log) {
+    printLog(pHttpServletRequest, log.message(), pJsonArray.toString());
+  }
+
+  @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pObject,..)")
+  public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, Object pObject, DeleteLog log) {
+    printLog(pHttpServletRequest, log.message(), pObject.toString());
+  }
+
   // ******* GET *******//
   @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,..)")
   public void callGet(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, GetLog log) {
