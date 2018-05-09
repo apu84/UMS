@@ -96,7 +96,6 @@ module ums{
         trainingDuration: number;
         trainingDurationString: string;
         trainingCategory: ICommon;
-        dbAction: string;
     }
 
     export interface IAwardInformationModel{

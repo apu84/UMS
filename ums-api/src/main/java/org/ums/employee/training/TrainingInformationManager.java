@@ -9,14 +9,7 @@ import java.util.List;
 public interface TrainingInformationManager extends
     ContentManager<TrainingInformation, MutableTrainingInformation, Long> {
 
-  int saveTrainingInformation(final List<MutableTrainingInformation> pMutableTrainingInformation);
+  List<TrainingInformation> get(final String pEmployeeId);
 
-  List<TrainingInformation> getEmployeeTrainingInformation(final String pEmployeeId);
-
-  int deleteTrainingInformation(final String pEmployeeId);
-
-  int updateTrainingInformation(List<MutableTrainingInformation> pMutableTrainingInformation);
-
-  int deleteTrainingInformation(List<MutableTrainingInformation> pMutableTrainingInformation);
-
+  boolean exists(final String pEmployeeId);
 }

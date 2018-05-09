@@ -123,7 +123,7 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
 
     List<TrainingInformation> trainingInformation = new ArrayList<>();
     try {
-      trainingInformation = mTrainingInformationManager.getEmployeeTrainingInformation(pEmployeeId);
+      trainingInformation = mTrainingInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }

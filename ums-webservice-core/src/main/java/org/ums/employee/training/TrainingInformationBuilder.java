@@ -14,6 +14,7 @@ import javax.ws.rs.core.UriInfo;
 
 @Component
 public class TrainingInformationBuilder implements Builder<TrainingInformation, MutableTrainingInformation> {
+
   @Override
   public void build(JsonObjectBuilder pBuilder, TrainingInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId().toString());
@@ -33,14 +34,12 @@ public class TrainingInformationBuilder implements Builder<TrainingInformation, 
           TrainingCategory.get(pReadOnly.getTrainingCategoryId()).getLabel());
       pBuilder.add("trainingCategory", categoryBuilder);
     }
-    pBuilder.add("dbAction", "");
   }
 
   @Override
   public void build(MutableTrainingInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable
-        .setId(pJsonObject.containsKey("dbAction") ? (pJsonObject.getString("dbAction").equals("Update") || pJsonObject
-            .getString("dbAction").equals("Delete")) ? Long.parseLong(pJsonObject.getString("id")) : 0 : 0);
+
+    pMutable.setId(!pJsonObject.getString("id").equals("") ? Long.parseLong(pJsonObject.getString("id")) : null);
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setTrainingName(pJsonObject.getString("trainingName"));
     pMutable.setTrainingInstitute(pJsonObject.getString("trainingInstitution"));
