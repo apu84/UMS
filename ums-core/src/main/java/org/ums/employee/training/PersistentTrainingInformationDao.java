@@ -39,7 +39,7 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
   public Long create(MutableTrainingInformation pMutable) {
     Long id = mIdGenerator.getNumericId();
     mJdbcTemplate.update(INSERT_ONE, id, pMutable.getEmployeeId(), pMutable.getTrainingName(),
-        pMutable.getTrainingInstitute(), pMutable.getTrainingFromDate(), pMutable.getTrainingToDate(),
+        pMutable.getTrainingInstitute(), pMutable.getTrainingFromDate(), pMutable.getTrainingToDate(), pMutable.getTrainingDuration(),
         pMutable.getTrainingDurationString(), pMutable.getTrainingCategoryId());
     return id;
   }
@@ -61,7 +61,7 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
   public int update(MutableTrainingInformation pMutable) {
     String query = UPDATE_ONE + " WHERE ID = ? AND EMPLOYEE_ID = ?";
     return mJdbcTemplate.update(query, pMutable.getTrainingName(), pMutable.getTrainingInstitute(),
-        pMutable.getTrainingFromDate(), pMutable.getTrainingToDate(), pMutable.getTrainingDurationString(),
+        pMutable.getTrainingFromDate(), pMutable.getTrainingToDate(), pMutable.getTrainingDuration(), pMutable.getTrainingDurationString(),
         pMutable.getTrainingCategoryId(), pMutable.getId(), pMutable.getEmployeeId());
   }
 
