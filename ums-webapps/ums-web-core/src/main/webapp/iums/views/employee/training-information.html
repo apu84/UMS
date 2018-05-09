@@ -1,5 +1,5 @@
 <div data-ng-repeat="training in vm.training track by $index">
-    <form name="nForm" ng-submit="vm.submit($index)" novalidate>
+    <form name="nForm[$index]" ng-submit="vm.submit($index)" novalidate>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
