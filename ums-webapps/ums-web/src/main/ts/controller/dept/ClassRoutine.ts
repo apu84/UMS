@@ -427,10 +427,18 @@ module ums {
        routine.updated=true;
        routine.courseType=this.$scope.courseType;*/
       routine= angular.copy(this.$scope.addedRoutine);
-
       routine.status='created';
+      let tempMainRoutineStorage:IClassRoutine[] = angular.copy(this.$scope.routineArr);
+      let tempTemporaryRoutineStorage: IClassRoutine[] = angular.copy(this.$scope.tmpRoutineArr);
+      this.$scope.routineArr=[];
+      this.$scope.tmpRoutineArr=[];
+
       this.$scope.routineArr.push(routine);
       this.$scope.tmpRoutineArr.push(angular.copy(routine));
+
+      tempMainRoutineStorage.forEach((t:IClassRoutine)=> this.$scope.routineArr.push(t));
+      tempTemporaryRoutineStorage.forEach((t:IClassRoutine)=> this.$scope.tmpRoutineArr.push(t));
+
       defer.resolve("done");
       return defer.promise;
     }
