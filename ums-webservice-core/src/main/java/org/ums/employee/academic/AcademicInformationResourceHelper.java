@@ -31,16 +31,15 @@ public class AcademicInformationResourceHelper extends
     MutableAcademicInformation mutableAcademicInformation = new PersistentAcademicInformation();
     mBuilder.build(mutableAcademicInformation, pJsonObject.getJsonObject("entries"), localCache);
     Long id = mManager.create(mutableAcademicInformation);
+    JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+    mBuilder.build(objectBuilder, mManager.get(id), pUriInfo, localCache);
     localCache.invalidate();
-    JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
-    mBuilder.build(jsonObjectBuilder, mManager.get(id), pUriInfo, localCache);
-    return Response.ok(jsonObjectBuilder).build();
+    return Response.ok(objectBuilder.build()).build();
   }
 
   public JsonObject get(final String pEmployeeId, final UriInfo pUriInfo) {
     if(mManager.exists(pEmployeeId)) {
-      List<AcademicInformation> academicInformationList = new ArrayList<>();
-      academicInformationList = mManager.get(pEmployeeId);
+      List<AcademicInformation> academicInformationList = mManager.get(pEmployeeId);
       return buildJsonResponse(academicInformationList, pUriInfo);
     }
     return null;
@@ -51,10 +50,10 @@ public class AcademicInformationResourceHelper extends
     MutableAcademicInformation mutableAcademicInformation = new PersistentAcademicInformation();
     mBuilder.build(mutableAcademicInformation, pJsonObject.getJsonObject("entries"), localCache);
     mManager.update(mutableAcademicInformation);
+    JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+    mBuilder.build(objectBuilder, mManager.get(mutableAcademicInformation.getId()), pUriInfo, localCache);
     localCache.invalidate();
-    JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
-    mBuilder.build(jsonObjectBuilder, mManager.get(mutableAcademicInformation.getId()), pUriInfo, localCache);
-    return Response.ok(jsonObjectBuilder).build();
+    return Response.ok(objectBuilder.build()).build();
   }
 
   public Response delete(Long id, UriInfo pUriInfo) {

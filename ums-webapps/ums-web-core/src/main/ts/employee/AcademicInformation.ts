@@ -1,6 +1,7 @@
 module ums {
 
     class AcademicInformation {
+
         public static $inject = [
             'registrarConstants',
             '$q',
@@ -11,7 +12,7 @@ module ums {
 
         private academic: IAcademicInformationModel[] = [];
         private degreeNames: IAcademicDegreeTypes[] = [];
-        private userId: string = "";
+        readonly userId: string = "";
         private stateParams: any;
         private enableEdit: boolean[] = [false];
         private enableEditButton: boolean = false;
@@ -47,7 +48,6 @@ module ums {
 
         private create(json: any, index: number) {
             this.employeeInformationService.saveAcademicInformation(json).then((data: any) => {
-                console.log(data);
                 this.academic[index] = data;
                 this.enableEdit[index] = false;
             }).catch((reason: any) => {
@@ -57,7 +57,6 @@ module ums {
 
         private update(json: any, index: number) {
             this.employeeInformationService.updateAcademicInformation(json).then((data: any) => {
-                console.log(data);
                 this.academic[index] = data;
                 this.enableEdit[index] = false;
             }).catch((reason: any) => {
