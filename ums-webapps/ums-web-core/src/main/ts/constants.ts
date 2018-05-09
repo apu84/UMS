@@ -185,8 +185,12 @@ module ums {
                         val: '04:20 PM'
                     },
                     {
-                        id: '05:00 PM',
-                        val: '05:00 PM'
+                        id: '05:10 PM',
+                        val: '05:10 PM'
+                    },
+                    {
+                        id: '06:00 PM',
+                        val: '06:00 PM'
                     }
                 ],
                 routineTime: [
@@ -238,6 +242,10 @@ module ums {
                     {
                         counter: '12',
                         id: '05.10 PM'
+                    },
+                    {
+                        counter: '13',
+                        id: '06.00 PM'
                     }
                 ],
                 weekDays: [
