@@ -44,8 +44,8 @@ public class PersistentLmsTypeDao extends LmsTypeDaoDecorator {
       return mJdbcTemplate.query(query, new Object[] {pType.getId()}, new LmsTypeRowMapper());
     }
     else {
-      query = SELECT_ALL + " where type=1 or type=? or type=? order by id";
-      return mJdbcTemplate.query(query, new Object[] {EmployeeLeaveType.FEMALE_LEAVE.getId(), pType.getId()},
+      query = SELECT_ALL + " where type=1 or type=? and type=? order by id";
+      return mJdbcTemplate.query(query, new Object[] {pType.getId(), EmployeeLeaveType.FEMALE_LEAVE.getId()},
           new LmsTypeRowMapper());
     }
   }

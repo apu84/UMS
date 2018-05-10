@@ -664,7 +664,8 @@ module ums {
               {id:"5", name:"Bank Accounts"},
               {id:"6", name:"Cash in hand"},
               {id:"7", name:"Sundry Debtor"},
-              {id:"8", name:"Sundry Creditor"}
+              {id:"8", name:"Sundry Creditor"},
+              {id:"9", name:"Current Liabilities"}
             ]
           }
         }

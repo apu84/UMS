@@ -103,7 +103,7 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     account.setModifiedBy(user.getEmployeeId());
     account.setModifiedDate(new Date());
-    account.setReserved(account.getReserved() == null ? false : true);
+    account.setReserved(account.getReserved() == null ? false : account.getReserved());
     account.setAccountCode(account.getAccountCode() == null || account.getAccountCode().equals("") ? mIdGenerator
         .getNumericId() : account.getAccountCode());
     account.setCompanyId(mCompanyManager.getDefaultCompany().getId());
@@ -113,6 +113,7 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     }
     else {
       getContentManager().update(account);
+      return getAllPaginated(pItemPerPage, pItemNumber);
     }
 
     MutableAccountBalance accountBalance = pAccountBalance;
