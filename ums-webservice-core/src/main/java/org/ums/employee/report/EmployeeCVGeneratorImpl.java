@@ -130,13 +130,13 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
 
     List<AwardInformation> awardInformation = new ArrayList<>();
     try {
-      awardInformation = mAwardInformationManager.getEmployeeAwardInformation(pEmployeeId);
+      awardInformation = mAwardInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
     List<ExperienceInformation> experienceInformation = new ArrayList<>();
     try {
-      experienceInformation = mExperienceInformationManager.getEmployeeExperienceInformation(pEmployeeId);
+      experienceInformation = mExperienceInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }

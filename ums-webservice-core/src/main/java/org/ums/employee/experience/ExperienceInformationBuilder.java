@@ -3,8 +3,6 @@ package org.ums.employee.experience;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.employee.experience.ExperienceInformation;
-import org.ums.employee.experience.MutableExperienceInformation;
 import org.ums.enums.registrar.ExperienceCategory;
 
 import javax.json.Json;
@@ -34,14 +32,12 @@ public class ExperienceInformationBuilder implements Builder<ExperienceInformati
           ExperienceCategory.get(pReadOnly.getExperienceCategoryId()).getLabel());
       pBuilder.add("experienceCategory", categoryBuilder);
     }
-    pBuilder.add("dbAction", "");
   }
 
   @Override
   public void build(MutableExperienceInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable
-        .setId(pJsonObject.containsKey("dbAction") ? (pJsonObject.getString("dbAction").equals("Update") || pJsonObject
-            .getString("dbAction").equals("Delete")) ? Long.parseLong(pJsonObject.getString("id")) : 0 : 0);
+
+    pMutable.setId(!pJsonObject.getString("id").equals("") ? Long.parseLong(pJsonObject.getString("id")) : null);
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setExperienceInstitute(pJsonObject.getString("experienceInstitution"));
     pMutable.setDesignation(pJsonObject.getString("experienceDesignation"));

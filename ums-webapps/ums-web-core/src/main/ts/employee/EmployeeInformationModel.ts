@@ -105,7 +105,6 @@ module ums{
         awardInstitute: string;
         awardedYear: number;
         awardShortDescription: string;
-        dbAction: string;
     }
 
     export interface IExperienceInformationModel{
@@ -118,7 +117,6 @@ module ums{
         experienceDuration: number;
         experienceDurationString: string;
         experienceCategory: ICommon;
-        dbAction: string;
     }
 
     export interface IAdditionalInformationModel{
