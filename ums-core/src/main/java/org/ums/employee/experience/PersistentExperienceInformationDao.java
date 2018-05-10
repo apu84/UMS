@@ -89,8 +89,8 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
       experienceInformation.setEmployeeId(resultSet.getString("EMPLOYEE_ID"));
       experienceInformation.setExperienceInstitute(resultSet.getString("EXPERIENCE_INSTITUTE"));
       experienceInformation.setDesignation(resultSet.getString("EXPERIENCE_DESIGNATION"));
-      experienceInformation.setExperienceFromDate(resultSet.getString("EXPERIENCE_FROM"));
-      experienceInformation.setExperienceToDate(resultSet.getString("EXPERIENCE_TO"));
+      experienceInformation.setExperienceFromDate(resultSet.getDate("EXPERIENCE_FROM"));
+      experienceInformation.setExperienceToDate(resultSet.getDate("EXPERIENCE_TO"));
       experienceInformation.setExperienceDuration(resultSet.getInt("EXPERIENCE_DURATION"));
       experienceInformation.setExperienceDurationString(resultSet.getString("EXPERIENCE_DURATION_STRING"));
       experienceInformation.setExperienceCategoryId(resultSet.getInt("CATEGORY"));

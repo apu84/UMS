@@ -6,6 +6,7 @@ import org.ums.domain.model.common.LastModifier;
 import org.ums.enums.registrar.ExperienceCategory;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public interface ExperienceInformation extends Serializable, EditType<MutableExperienceInformation>, Identifier<Long>,
     LastModifier {
@@ -16,9 +17,9 @@ public interface ExperienceInformation extends Serializable, EditType<MutableExp
 
   String getDesignation();
 
-  String getExperienceFromDate();
+  Date getExperienceFromDate();
 
-  String getExperienceToDate();
+  Date getExperienceToDate();
 
   int getExperienceDuration();
 
