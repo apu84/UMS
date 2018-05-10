@@ -9,27 +9,12 @@ public class AwardInformationDaoDecorator extends
     AwardInformationManager {
 
   @Override
-  public int saveAwardInformation(List<MutableAwardInformation> pMutableAwardInformation) {
-    return getManager().saveAwardInformation(pMutableAwardInformation);
+  public List<AwardInformation> get(String pEmployeeId) {
+    return getManager().get(pEmployeeId);
   }
 
   @Override
-  public List<AwardInformation> getEmployeeAwardInformation(String pEmployeeId) {
-    return getManager().getEmployeeAwardInformation(pEmployeeId);
-  }
-
-  @Override
-  public int deleteAwardInformation(String pEmployeeId) {
-    return getManager().deleteAwardInformation(pEmployeeId);
-  }
-
-  @Override
-  public int updateAwardInformation(List<MutableAwardInformation> pAwardInformation) {
-    return getManager().updateAwardInformation(pAwardInformation);
-  }
-
-  @Override
-  public int deleteAwardInformation(List<MutableAwardInformation> pAwardInformation) {
-    return getManager().deleteAwardInformation(pAwardInformation);
+  public boolean exists(String pEmployeeId) {
+    return getManager().exists(pEmployeeId);
   }
 }

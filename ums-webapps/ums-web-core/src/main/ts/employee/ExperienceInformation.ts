@@ -1,134 +1,111 @@
 module ums {
-    interface IEmployeeProfile extends ng.IScope {
-        submitExperienceForm: Function;
-    }
 
     class ExperienceInformation {
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify',
-            'countryService', 'divisionService', 'districtService', 'thanaService',
-            'employeeInformationService', 'areaOfInterestService', 'userService', 'academicDegreeService',
-            'cRUDDetectionService', '$stateParams', 'employmentTypeService', 'departmentService', 'designationService', 'FileUpload'];
 
-        private entry: {
-            experience: IExperienceInformationModel[]
-        };
-        private experience: boolean = false;
-        private showExperienceInputDiv: boolean = false;
+        public static $inject = ['registrarConstants',
+            '$q',
+            'notify',
+            'employeeInformationService',
+            '$stateParams'
+        ];
+
+        private experience: IExperienceInformationModel[] = []
         private experienceTypes: ICommon[] = [];
-        private previousExperienceInformation: IExperienceInformationModel[];
-        private experienceDeletedObjects: IExperienceInformationModel[];
-        private userId: string = "";
-        private tabs: boolean = false;
+        readonly userId: string = "";
         private stateParams: any;
-        private isRegistrar: boolean;
-        private test: boolean = true;
-        private showExperienceEditButton: boolean = false;
+        private enableEdit: boolean[] = [false];
+        private enableEditButton: boolean = false;
 
         constructor(private registrarConstants: any,
-                    private $scope: IEmployeeProfile,
                     private $q: ng.IQService,
                     private notify: Notify,
-                    private countryService: CountryService,
-                    private divisionService: DivisionService,
-                    private districtService: DistrictService,
-                    private thanaService: ThanaService,
                     private employeeInformationService: EmployeeInformationService,
-                    private areaOfInterestService: AreaOfInterestService,
-                    private userService: UserService,
-                    private academicDegreeService: AcademicDegreeService,
-                    private cRUDDetectionService: CRUDDetectionService,
-                    private $stateParams: any,
-                    private employmentTypeService: EmploymentTypeService,
-                    private departmentService: DepartmentService,
-                    private designationService: DesignationService,
-                    private FileUpload: FileUpload) {
+                    private $stateParams: any) {
 
-
-            console.log("In Experience Profile-------------");
-
-            $scope.submitExperienceForm = this.submitExperienceForm.bind(this);
-
-            this.entry = {
-                experience: Array<IExperienceInformationModel>()
-            };
-
+            this.experience = [];
             this.stateParams = $stateParams;
             this.experienceTypes = registrarConstants.experienceCategories;
             this.userId = this.stateParams.id;
-            this.showExperienceEditButton = this.stateParams.edit;
-            this.initialization();
+            this.enableEditButton = this.stateParams.edit;
+            this.get();
         }
 
-        private initialization() {
-            this.getExperienceInformation();
-        }
-
-        private submitExperienceForm(): void {
-            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.previousExperienceInformation, angular.copy(this.entry.experience), this.experienceDeletedObjects)
-                .then((experienceObjects: any) => {
-                    this.convertToJson('experience', experienceObjects)
-                        .then((json: any) => {
-                            this.employeeInformationService.saveExperienceInformation(json)
-                                .then((message: any) => {
-                                    if(message == "Error"){}
-                                    else {
-                                        this.getExperienceInformation();
-                                        this.showExperienceInputDiv = false;
-                                    }
-                                });
-                        });
-                });
-        }
-
-        private getExperienceInformation() {
-            this.entry.experience = [];
-            this.experienceDeletedObjects = [];
-            this.employeeInformationService.getExperienceInformation(this.userId).then((experienceInformation: any) => {
-                this.entry.experience = experienceInformation;
-            }).then(() => {
-                this.previousExperienceInformation = angular.copy(this.entry.experience);
+        public submit(index: number): void {
+            this.convertToJson(this.experience[index]).then((json: any) => {
+                if (!this.experience[index].id) {
+                    this.create(json, index);
+                }
+                else {
+                    this.update(json, index);
+                }
             });
         }
 
-        private addNewRow(divName: string) {
-            if (divName === 'experience') {
-                let experienceEntry: IExperienceInformationModel;
-                experienceEntry = {
-                    id: "",
-                    employeeId: this.userId,
-                    experienceInstitution: "",
-                    experienceDesignation: "",
-                    experienceFrom: "",
-                    experienceTo: "",
-                    experienceDuration: null,
-                    experienceDurationString: "",
-                    experienceCategory: null,
-                    dbAction: "Create"
-                };
-                this.entry.experience.push(experienceEntry);
-            }
+        private create(json: any, index: number) {
+            this.employeeInformationService.saveExperienceInformation(json).then((data: any) => {
+                this.experience[index] = data;
+                this.enableEdit[index] = false;
+            }).catch((reason: any) => {
+                this.enableEdit[index] = true;
+            });
         }
 
-        private deleteRow(divName: string, index: number, parentIndex?: number) {
-            if (divName === 'experience') {
-                if (this.entry.experience[index].id != "") {
-                    this.entry.experience[index].dbAction = "Delete";
-                    this.experienceDeletedObjects.push(this.entry.experience[index]);
+        private update(json: any, index: number) {
+            this.employeeInformationService.updateExperienceInformation(json).then((data: any) => {
+                this.experience[index] = data;
+                this.enableEdit[index] = false;
+            }).catch((reason: any) => {
+                this.enableEdit[index] = true;
+            });
+        }
+
+        private get(): void {
+            this.experience = [];
+            this.employeeInformationService.getExperienceInformation(this.userId).then((experienceInformation: any) => {
+                if (experienceInformation) {
+                    this.experience = experienceInformation;
                 }
-                this.entry.experience.splice(index, 1);
+                else {
+                    this.experience = [];
+                }
+            });
+        }
+
+        private addNew() {
+            let experienceEntry: IExperienceInformationModel;
+            experienceEntry = {
+                id: "",
+                employeeId: this.userId,
+                experienceInstitution: "",
+                experienceDesignation: "",
+                experienceFrom: "",
+                experienceTo: "",
+                experienceDuration: null,
+                experienceDurationString: "",
+                experienceCategory: null
+            };
+            this.experience.push(experienceEntry);
+        }
+
+        public delete(index: number): void {
+            if (this.experience[index].id) {
+                this.employeeInformationService.deleteExperienceInformation(this.experience[index].id).then((data: any) => {
+                    this.experience.splice(index, 1);
+                });
+            }
+            else {
+                this.experience.splice(index, 1);
             }
         }
 
-        private convertToJson(convertThis: string, obj: any): ng.IPromise<any> {
+        public activeEditButton(index: number, canEdit: boolean): void {
+            this.enableEdit[index] = canEdit;
+        }
+
+        private convertToJson(object: IExperienceInformationModel): ng.IPromise<any> {
             let defer = this.$q.defer();
             let JsonObject = {};
-            let JsonArray = [];
-            let item: any = {};
-            if (convertThis === "experience") {
-                item['experience'] = obj;
-            }
-            JsonArray.push(item);
-            JsonObject['entries'] = JsonArray;
+            JsonObject['entries'] = object;
             defer.resolve(JsonObject);
             return defer.promise;
         }
@@ -164,8 +141,8 @@ module ums {
                         diffDateString = diffDays + " day(s)";
                     }
                     if (tabName == "experience") {
-                        this.entry.experience[index].experienceDuration = diffDays;
-                        this.entry.experience[index].experienceDurationString = diffDateString;
+                        this.experience[index].experienceDuration = diffDays;
+                        this.experience[index].experienceDurationString = diffDateString;
                     }
                 }
             }

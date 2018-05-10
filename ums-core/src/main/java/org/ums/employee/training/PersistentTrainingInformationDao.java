@@ -6,7 +6,6 @@ import org.ums.generator.IdGenerator;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PersistentTrainingInformationDao extends TrainingInformationDaoDecorator {
@@ -87,8 +86,8 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
       trainingInformation.setEmployeeId(resultSet.getString("EMPLOYEE_ID"));
       trainingInformation.setTrainingName(resultSet.getString("TRAINING_NAME"));
       trainingInformation.setTrainingInstitute(resultSet.getString("TRAINING_INSTITUTE"));
-      trainingInformation.setTrainingFromDate(resultSet.getString("TRAINING_FROM"));
-      trainingInformation.setTrainingToDate(resultSet.getString("TRAINING_TO"));
+      trainingInformation.setTrainingFromDate(resultSet.getDate("TRAINING_FROM"));
+      trainingInformation.setTrainingToDate(resultSet.getDate("TRAINING_TO"));
       trainingInformation.setTrainingDuration(resultSet.getInt("TRAINING_DURATION"));
       trainingInformation.setTrainingDurationString(resultSet.getString("TRAINING_DURATION_STRING"));
       trainingInformation.setTrainingCategoryId(resultSet.getInt("CATEGORY"));

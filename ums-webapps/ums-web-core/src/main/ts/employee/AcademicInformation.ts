@@ -8,7 +8,8 @@ module ums {
             'notify',
             'employeeInformationService',
             'academicDegreeService',
-            '$stateParams'];
+            '$stateParams'
+        ];
 
         private academic: IAcademicInformationModel[] = [];
         private degreeNames: IAcademicDegreeTypes[] = [];
