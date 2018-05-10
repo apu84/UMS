@@ -308,7 +308,8 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       + "    FROM MARKS_SUBMISSION_SLOG, EMP_PERSONAL_INFO EMPLOYEES, USERS "
       + "    WHERE     MARKS_SUBMISSION_SLOG.User_Id = Users.User_Id "
       + "         AND USERS.EMPLOYEE_ID = EMPLOYEES.EMPLOYEE_ID " + "         AND Semester_Id = ?"
-      + "         AND Course_Id = ? " + "         AND Exam_Type = ? " + " ORDER BY to_date(Inserted_On,'dd-MM-YYYY HH:MI:SSAM') desc ";
+      + "         AND Course_Id = ? " + "         AND Exam_Type = ? "
+      + " ORDER BY to_date(Inserted_On,'dd-MM-YYYY HH:MI:SSAM') desc ";
 
   String SELECT_THEORY_LOG =
       "Select UG_THEORY_MARKS_LOG.User_Id, EMPLOYEES.NAME  EMPLOYEE_NAME, ROLE,  "
