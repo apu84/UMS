@@ -3,7 +3,15 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-md-9">{{$index + 1}}.</div>
+                    <div class="col-md-9">{{$index + 1}}.
+                        <span data-ng-show="training.trainingFrom && training.trainingTo"><span
+                                data-ng-show="training.trainingFrom">[</span>{{training.trainingFrom}}<span
+                                data-ng-show="training.trainingFrom">]</span>
+                        <span data-ng-show="training.trainingTo"> - </span><span
+                                    data-ng-show="training.trainingTo">[</span>{{training.trainingTo}}<span
+                                    data-ng-show="training.trainingTo">]</span>
+                        </span>
+                    </div>
                     <div class="col-md-3">
                         <div data-ng-show="vm.enableEditButton">
                             <div data-ng-show="!vm.enableEdit[$index]">
@@ -139,7 +147,7 @@
                     <div class="col-md-3">
                         <div class="form-group"
                              ng-class="{ 'has-error' : nForm[$index].nTrainingDurationString.$invalid && !nForm[$index].nTrainingDurationString.$pristine }">
-                            <label for="iTrainingDurationString" class="control-label">Duration<span
+                            <label for="iTrainingDurationString" class="control-label">To<span
                                     data-ng-show="vm.enableEdit[$index]"
                                     class='require'>*</span></label>
                             <div data-ng-show="vm.enableEdit[$index]">
@@ -161,7 +169,7 @@
                     <div class="col-md-3">
                         <div class="form-group"
                              ng-class="{ 'has-error' : nForm[$index].nCategory.$invalid && !nForm[$index].nCategory.$pristine }">
-                            <label for="iCategory" class="control-label">Category<span
+                            <label for="iCategory" class="control-label">Duration<span
                                     data-ng-show="vm.enableEdit[$index]"
                                     class='require'>*</span></label>
 
