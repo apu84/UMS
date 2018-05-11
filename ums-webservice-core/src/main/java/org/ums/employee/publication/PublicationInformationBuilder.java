@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.employee.publication.PublicationInformation;
-import org.ums.employee.publication.MutablePublicationInformation;
 import org.ums.enums.common.PublicationType;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.common.CountryManager;
@@ -68,7 +66,6 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
     pBuilder.add("actionTakenOn",
         pReadOnly.getActionTakenOn() == null ? "" : mDateFormat.format(pReadOnly.getActionTakenOn()));
     pBuilder.add("rowNumber", pReadOnly.getRowNumber());
-    pBuilder.add("dbAction", "");
   }
 
   @Override

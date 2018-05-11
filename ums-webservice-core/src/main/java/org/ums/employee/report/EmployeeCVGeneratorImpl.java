@@ -116,7 +116,7 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
 
     List<PublicationInformation> publicationInformation = new ArrayList<>();
     try {
-      publicationInformation = mPublicationInformationManager.getEmployeePublicationInformation(pEmployeeId);
+      publicationInformation = mPublicationInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
