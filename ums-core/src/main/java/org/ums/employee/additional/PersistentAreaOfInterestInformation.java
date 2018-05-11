@@ -15,7 +15,6 @@ public class PersistentAreaOfInterestInformation implements MutableAreaOfInteres
   }
 
   private String mId;
-  private String mEmployeeId;
   private AreaOfInterest mAreaOfInterest;
   private int mAreaOfInterestId;
   private String mLastModified;
@@ -23,7 +22,6 @@ public class PersistentAreaOfInterestInformation implements MutableAreaOfInteres
   public PersistentAreaOfInterestInformation() {};
 
   public PersistentAreaOfInterestInformation(PersistentAreaOfInterestInformation pPersistentAreaOfInterestInformation) {
-    mEmployeeId = pPersistentAreaOfInterestInformation.getEmployeeId();
     mAreaOfInterest = pPersistentAreaOfInterestInformation.getAreaOfInterest();
     mAreaOfInterestId = pPersistentAreaOfInterestInformation.getAreaOfInterestId();
     mLastModified = pPersistentAreaOfInterestInformation.getLastModified();
@@ -56,7 +54,7 @@ public class PersistentAreaOfInterestInformation implements MutableAreaOfInteres
 
   @Override
   public String getId() {
-    return null;
+    return mId;
   }
 
   @Override
@@ -70,11 +68,6 @@ public class PersistentAreaOfInterestInformation implements MutableAreaOfInteres
   }
 
   @Override
-  public String getEmployeeId() {
-    return mEmployeeId;
-  }
-
-  @Override
   public AreaOfInterest getAreaOfInterest() {
     return mAreaOfInterest;
   }
@@ -82,11 +75,6 @@ public class PersistentAreaOfInterestInformation implements MutableAreaOfInteres
   @Override
   public Integer getAreaOfInterestId() {
     return mAreaOfInterestId;
-  }
-
-  @Override
-  public void setEmployeeId(String pEmployeeId) {
-    mEmployeeId = pEmployeeId;
   }
 
   @Override

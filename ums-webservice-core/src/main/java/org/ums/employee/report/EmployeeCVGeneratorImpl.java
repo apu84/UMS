@@ -142,13 +142,13 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
     }
     AdditionalInformation additionalInformation = new PersistentAdditionalInformation();
     try {
-      additionalInformation = mAdditionalInformationManager.getAdditionalInformation(pEmployeeId);
+      additionalInformation = mAdditionalInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
     }
 
     List<AreaOfInterestInformation> areaOfInterestInformation = new ArrayList<>();
     try {
-      areaOfInterestInformation = mAreaOfInterestInformationManager.getAreaOfInterestInformation(pEmployeeId);
+      areaOfInterestInformation = mAreaOfInterestInformationManager.getAll(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }

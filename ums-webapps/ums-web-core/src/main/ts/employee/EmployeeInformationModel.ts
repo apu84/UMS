@@ -124,10 +124,10 @@ module ums{
         roomNo: string;
         extNo: string;
         academicInitial: string;
-        areaOfInterestInformation: Array<ICommon>;
     }
 
     export interface IAreaOfInterestInformationModel {
+        employeeId: string;
         areaOfInterest: ICommon;
         areaOfInterestId: number;
     }

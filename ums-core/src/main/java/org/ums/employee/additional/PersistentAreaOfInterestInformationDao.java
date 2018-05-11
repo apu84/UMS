@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PersistentAreaOfInterestInformationDao extends AreaOfInterestInformationDaoDecorator {
@@ -13,9 +12,11 @@ public class PersistentAreaOfInterestInformationDao extends AreaOfInterestInform
   static String INSERT_ONE = "INSERT INTO EMP_AOI_INFO (EMPLOYEE_ID, AOI_ID, LAST_MODIFIED) VALUES (?, ?, "
       + getLastModifiedSql() + ")";
 
-  static String GET_ONE = "SELECT AOI_ID FROM EMP_AOI_INFO ";
+  static String GET_ONE = "SELECT EMPLOYEE_ID, AOI_ID FROM EMP_AOI_INFO ";
 
   static String DELETE_ONE = "DELETE FROM EMP_AOI_INFO ";
+
+  static String EXISTS_ONE = "SELECT COUNT(EMPLOYEE_ID) FROM EMP_AOI_INFO";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -24,33 +25,34 @@ public class PersistentAreaOfInterestInformationDao extends AreaOfInterestInform
   }
 
   @Override
-  public int saveAreaOfInterestInformation(
-      final List<MutableAreaOfInterestInformation> pMutableAreaOfInterestInformation) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.batchUpdate(query, getAreaOfInterestInformationParams(pMutableAreaOfInterestInformation)).length;
-  }
-
-  private List<Object[]> getAreaOfInterestInformationParams(
-      final List<MutableAreaOfInterestInformation> pMutableAreaOfInterestInformation) {
-    List<Object[]> params = new ArrayList<>();
-    for(AreaOfInterestInformation areaOfInterestInformation : pMutableAreaOfInterestInformation) {
-      params.add(new Object[] {areaOfInterestInformation.getEmployeeId(),
-          areaOfInterestInformation.getAreaOfInterest().getId()});
-    }
-    return params;
+  public String create(MutableAreaOfInterestInformation pMutable) {
+    mJdbcTemplate.update(INSERT_ONE, pMutable.getId(), pMutable.getAreaOfInterest().getId());
+    return pMutable.getId();
   }
 
   @Override
-  public List<AreaOfInterestInformation> getAreaOfInterestInformation(final String pEmployeeId) {
-    String query = GET_ONE + " WHERE EMPLOYEE_ID=?";
-    return mJdbcTemplate.query(query, new Object[] {pEmployeeId},
+  public AreaOfInterestInformation get(final String pId) {
+    String query = GET_ONE + " WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId},
         new PersistentAreaOfInterestInformationDao.RoleRowMapper());
   }
 
   @Override
-  public int deleteAreaOfInterestInformation(final String pEmployeeId) {
-    String query = DELETE_ONE + " WHERE EMPLOYEE_ID=?";
-    return mJdbcTemplate.update(query, pEmployeeId);
+  public List<AreaOfInterestInformation> getAll(final String pId) {
+    String query = GET_ONE + " WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.query(query, new Object[] {pId}, new PersistentAreaOfInterestInformationDao.RoleRowMapper());
+  }
+
+  @Override
+  public int delete(final MutableAreaOfInterestInformation pMutable) {
+    String query = DELETE_ONE + " WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.update(query, pMutable.getId());
+  }
+
+  @Override
+  public boolean exists(String pEmployeeId) {
+    String query = EXISTS_ONE + " WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pEmployeeId}, Boolean.class);
   }
 
   class RoleRowMapper implements RowMapper<AreaOfInterestInformation> {
@@ -59,6 +61,7 @@ public class PersistentAreaOfInterestInformationDao extends AreaOfInterestInform
     public AreaOfInterestInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentAreaOfInterestInformation persistentAreaOfInterestInformation =
           new PersistentAreaOfInterestInformation();
+      persistentAreaOfInterestInformation.setId(resultSet.getString("EMPLOYEE_ID"));
       persistentAreaOfInterestInformation.setAreaOfInterestId(resultSet.getInt("AOI_ID"));
       return persistentAreaOfInterestInformation;
     }

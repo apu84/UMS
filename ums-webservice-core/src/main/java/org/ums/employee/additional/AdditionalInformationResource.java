@@ -1,5 +1,6 @@
 package org.ums.employee.additional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.logs.GetLog;
 import org.ums.resource.Resource;
@@ -16,11 +17,14 @@ import javax.ws.rs.core.Request;
 @Consumes(Resource.MIME_TYPE_JSON)
 public class AdditionalInformationResource extends MutableAdditionalInformationResource {
 
+  @Autowired
+  private AdditionalInformationResourceHelper mHelper;
+
   @GET
-  @Path("/get/employeeId/{employee-id}")
-  @GetLog(message = "Get employee information (additional data)")
-  public JsonObject getAdditionalInformation(@Context HttpServletRequest pHttpServletRequest,
+  @Path("/{employee-id}")
+  @GetLog(message = "Get additional information list")
+  public JsonObject get(@Context HttpServletRequest pHttpServletRequest,
       final @PathParam("employee-id") String pEmployeeId, final @Context Request pRequest) throws Exception {
-    return mHelper.getAdditionalInformation(pEmployeeId, mUriInfo);
+    return mHelper.get(pEmployeeId, mUriInfo);
   }
 }
