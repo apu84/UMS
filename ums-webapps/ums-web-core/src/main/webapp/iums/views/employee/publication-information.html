@@ -3,7 +3,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-md-9">{{$index + 1}}.</div>
+                    <div class="col-md-9">{{$index + 1}}. {{publication.publicationTitle}}</div>
                     <div class="col-md-3">
                         <div data-ng-show="vm.enableEditButton">
                             <div data-ng-show="!vm.enableEdit[$index]">
@@ -97,7 +97,7 @@
                     <div class="col-md-3">
                         <div class="form-group"
                              ng-class="{ 'has-error' : nForm[$index].nDateOfPublication.$invalid && !nForm[$index].nDateOfPublication.$pristine }">
-                            <label for="iDateOfPublication" class="control-label">Date of Publication<span
+                            <label for="iDateOfPublication" class="control-label">Year of Publication<span
                                     data-ng-show="vm.enableEdit[$index]"
                                     class='require'>*</span></label>
                             <div data-ng-show="vm.enableEdit[$index]">

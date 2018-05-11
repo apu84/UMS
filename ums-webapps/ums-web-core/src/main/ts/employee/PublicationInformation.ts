@@ -32,7 +32,7 @@ module ums {
             this.userId = this.stateParams.id;
             this.enableEditButton = this.stateParams.edit;
             this.countryService.getAll().then((countries: any) => {
-                this.countries = countries.entries;
+                this.countries = countries;
                 this.get();
             });
         }
