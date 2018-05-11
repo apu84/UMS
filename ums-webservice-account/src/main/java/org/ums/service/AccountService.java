@@ -8,17 +8,20 @@ import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.immutable.accounts.AccountBalance;
 import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
+import org.ums.domain.model.immutable.accounts.SystemGroupMap;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.enums.accounts.definitions.account.balance.AccountType;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.financial.account.year.YearClosingFlagType;
 import org.ums.enums.accounts.definitions.group.GroupType;
+import org.ums.exceptions.ValidationException;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.AccountBalanceManager;
 import org.ums.manager.accounts.AccountManager;
 import org.ums.manager.accounts.FinancialAccountYearManager;
+import org.ums.manager.accounts.SystemGroupMapManager;
 import org.ums.mapper.account.AccountBalanceMapper;
 import org.ums.persistent.model.accounts.PersistentAccount;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
@@ -44,6 +47,8 @@ public class AccountService {
   private AccountBalanceService mAccountBalanceService;
   @Autowired
   private IdGenerator mIdGenerator;
+  @Autowired
+  private SystemGroupMapManager mSystemGroupManager;
 
   @Transactional
   public Account getOpeningBalanceAdjustmentAccount() {
@@ -55,7 +60,11 @@ public class AccountService {
     if(account.getId() == null) {
       PersistentAccount openingBalanceAdjustmentAccount = new PersistentAccount();
       openingBalanceAdjustmentAccount.setId(mIdGenerator.getNumericId());
-      openingBalanceAdjustmentAccount.setAccGroupCode(GroupType.LIABILITIES.getValue());
+      if(!mSystemGroupManager.exists(GroupType.CURRENT_LIABILITIES, mCompanyManager.getDefaultCompany()))
+        new ValidationException("Current Liabilities is not assigned in the System Group Map");
+      else
+        openingBalanceAdjustmentAccount.setAccGroupCode(mSystemGroupManager
+            .get(GroupType.CURRENT_LIABILITIES, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode());
       openingBalanceAdjustmentAccount.setAccountName("OPENING BALANCE ADJUSTMENT ACCOUNT");
       openingBalanceAdjustmentAccount.setAccountCode(openingBalanceAdjustmentAccountCode);
       openingBalanceAdjustmentAccount.setCompanyId(company.getId());

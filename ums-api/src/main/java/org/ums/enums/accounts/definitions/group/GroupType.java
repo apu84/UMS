@@ -17,7 +17,8 @@ public enum GroupType {
   BANK_ACCOUNTS("5"),
   CASH_IN_HAND("6"),
   SUNDRY_DEBTOR("7"),
-  SUNDRY_CREDITOR("8");
+  SUNDRY_CREDITOR("8"),
+  CURRENT_LIABILITIES("9");
 
   private static final Map<String, GroupType> Lookup = new HashMap<>();
 
