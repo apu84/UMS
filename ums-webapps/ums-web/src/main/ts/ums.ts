@@ -1192,10 +1192,10 @@ module ums {
             controller: 'ServiceInformation',
             controllerAs: 'vm'
         })
-        .state('searchLibrary', {
-            url: "/searchLibrary",
-            controller: 'SearchLibrary',
-            templateUrl: 'views/library/search-library.html',
+        .state('search', {
+            url: "/search",
+            controller: 'LibrarySearch',
+            templateUrl: 'views/library/library-search.html',
             resolve: {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load({

@@ -19,7 +19,7 @@ module ums {
         contributorList: Array<IContributor>;
     }
 
-    export class SearchLibrary {
+    export class LibrarySearch {
         public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'HttpClient'];
 
         constructor(private $scope: IRecordSearch,
@@ -263,5 +263,5 @@ module ums {
     }
 
 
-    UMS.controller("SearchLibrary", SearchLibrary);
+    UMS.controller("LibrarySearch", LibrarySearch);
 }

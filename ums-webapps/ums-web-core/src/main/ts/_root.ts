@@ -123,4 +123,4 @@
 /// <reference path='employee/AdditionalInformation.ts'/>
 /// <reference path='employee/ServiceInformation.ts'/>
 
-/// <reference path='library/SearchLibrary.ts'/>
+/// <reference path='library/LibrarySearch.ts'/>
