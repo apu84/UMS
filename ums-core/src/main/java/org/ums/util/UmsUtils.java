@@ -65,6 +65,7 @@ public class UmsUtils {
     GPA_MAP.put("C", 2.25);
     GPA_MAP.put("D", 2.00);
     GPA_MAP.put("F", 0.00);
+    GPA_MAP.put("W", 0.00);
     return Collections.unmodifiableMap(GPA_MAP);
   }
 

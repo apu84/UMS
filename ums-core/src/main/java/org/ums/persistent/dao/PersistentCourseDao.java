@@ -58,9 +58,9 @@ public class PersistentCourseDao extends CourseDaoDecorator {
       + " WHERE     mst_course.course_id = course_syllabus_map.course_id\n"
       + "       AND COURSE_SYLLABUS_MAP.SYLLABUS_ID =\n" + "              SEMESTER_SYLLABUS_MAP.SYLLABUS_ID\n"
       + "       AND SEMESTER_SYLLABUS_MAP.SEMESTER = MST_COURSE.SEMESTER\n"
-      + "       AND SEMESTER_SYLLABUS_MAP.YEAR = MST_COURSE.YEAR\n"
-      + "       AND SEMESTER_SYLLABUS_MAP.PROGRAM_ID = ?\n" + "       AND SEMESTER_SYLLABUS_MAP.SEMESTER_ID = ?\n"
-      + "       AND SEMESTER_SYLLABUS_MAP.YEAR = ?\n" + "       AND SEMESTER_SYLLABUS_MAP.SEMESTER = ?";
+      + "       AND SEMESTER_SYLLABUS_MAP.YEAR = MST_COURSE.YEAR\n" + "       AND MST_COURSE.OFFERED_TO_PROGRAM = ?\n"
+      + "       AND SEMESTER_SYLLABUS_MAP.SEMESTER_ID = ?\n" + "       AND SEMESTER_SYLLABUS_MAP.YEAR = ?\n"
+      + "       AND SEMESTER_SYLLABUS_MAP.SEMESTER = ?" + "       AND opt_group_id IS NULL";
   private JdbcTemplate mJdbcTemplate;
 
   public PersistentCourseDao(final JdbcTemplate pJdbcTemplate) {

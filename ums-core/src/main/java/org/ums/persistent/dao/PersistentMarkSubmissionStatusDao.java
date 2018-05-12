@@ -1,5 +1,11 @@
 package org.ums.persistent.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.MarksSubmissionStatusDaoDecorator;
@@ -9,12 +15,6 @@ import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.ExamType;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentMarksSubmissionStatus;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoDecorator {
   String SELECT_ALL =
@@ -107,8 +107,16 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
   public List<MarksSubmissionStatus> get(Integer pProgramId, Integer pSemesterId) {
     String query =
         SELECT_ALL
-            + "WHERE MST_PROGRAM.PROGRAM_ID=? AND  MARKS_SUBMISSION_STATUS.SEMESTER_ID = ? ORDER BY MARKS_SUBMISSION_STATUS.COURSE_ID, MARKS_SUBMISSION_STATUS.EXAM_TYPE DESC";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId}, new MarksSubmissionStatusRowMapper());
+            + " AND MST_PROGRAM.PROGRAM_ID=? AND  MARKS_SUBMISSION_STATUS.SEMESTER_ID = ? ORDER BY MARKS_SUBMISSION_STATUS.COURSE_ID, MARKS_SUBMISSION_STATUS.EXAM_TYPE DESC";
+    return mJdbcTemplate.query(query, new Object[] {pProgramId, pSemesterId}, new MarksSubmissionStatusRowMapper());
+  }
+
+  @Override
+  public List<MarksSubmissionStatus> getByProgramType(Integer pProgramTypeId, Integer pSemesterId) {
+    String query =
+        SELECT_ALL + " AND MST_PROGRAM.TYPE_ID = ? AND  MARKS_SUBMISSION_STATUS.SEMESTER_ID = ? "
+            + "ORDER BY MARKS_SUBMISSION_STATUS.COURSE_ID, MARKS_SUBMISSION_STATUS.EXAM_TYPE DESC";
+    return mJdbcTemplate.query(query, new Object[] {pProgramTypeId, pSemesterId}, new MarksSubmissionStatusRowMapper());
   }
 
   private List<Object[]> getUpdateParamArray(List<MutableMarksSubmissionStatus> pMarksSubmissionStatusList) {
