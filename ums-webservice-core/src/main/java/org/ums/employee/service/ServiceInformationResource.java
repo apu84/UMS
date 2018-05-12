@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
-import javax.ws.rs.core.UriInfo;
 
 @Component
 @Path("employee/service")
@@ -22,10 +21,10 @@ public class ServiceInformationResource extends MutableServiceInformationResourc
   private ServiceInformationResourceHelper mHelper;
 
   @GET
-  @Path("/get/employeeId/{employee-id}")
-  @GetLog(message = "Get employee information (service data)")
-  public JsonObject getEmployeeAcademicInformation(@Context HttpServletRequest pHttpServletRequest,
-      final @Context Request pRequest, final @PathParam("employee-id") String pEmployeeId, final UriInfo pUriInfo) {
-    return mHelper.getServiceInformation(pEmployeeId, pUriInfo);
+  @Path("/{employee-id}")
+  @GetLog(message = "Get service information list")
+  public JsonObject get(@Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("employee-id") String pEmployeeId, final @Context Request pRequest) throws Exception {
+    return mHelper.get(pEmployeeId, mUriInfo);
   }
 }

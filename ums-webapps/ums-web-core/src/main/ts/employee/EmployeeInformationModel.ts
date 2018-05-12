@@ -139,8 +139,7 @@ module ums{
         employmentType: ICommon;
         joiningDate: string;
         resignDate: string;
-        dbAction: string;
-        intervalDetails: Array<IServiceDetailsModel>;
+        intervalDetails: IServiceDetailsModel[];
     }
 
     export interface IServiceDetailsModel{
@@ -150,7 +149,6 @@ module ums{
         endDate: string;
         comment: string;
         serviceId: string;
-        dbAction: string;
     }
 
     export interface IGender {

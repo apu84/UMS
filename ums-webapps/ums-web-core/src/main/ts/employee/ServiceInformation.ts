@@ -1,82 +1,56 @@
 module ums {
-    interface IEmployeeProfile extends ng.IScope {
-        submitServiceForm: Function;
-    }
+
+    import IServiceDetailsModel = ums.IServiceDetailsModel;
+    import IServiceInformationModel = ums.IServiceInformationModel;
 
     class ServiceInformation {
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify',
-            'countryService', 'divisionService', 'districtService', 'thanaService',
-            'employeeInformationService', 'areaOfInterestService', 'userService', 'academicDegreeService',
-            'cRUDDetectionService', '$stateParams', 'employmentTypeService', 'departmentService', 'designationService', 'FileUpload'];
+        public static $inject = ['registrarConstants',
+            '$q',
+            'notify',
+            'employeeInformationService',
+            '$stateParams',
+            'employmentTypeService',
+            'departmentService',
+            'designationService'
+        ];
 
-        private entry: {
-            serviceInfo: IServiceInformationModel[]
-        };
-
-        private service: boolean = false;
-        private showServiceInputDiv: boolean = false;
-        private showServiceEditButton: boolean = false;
-        private previousServiceInformation: IServiceInformationModel[];
-        private serviceDeletedObjects: IServiceInformationModel[];
-        private serviceDetailDeletedObjects: IServiceDetailsModel[];
-        private userId: string = "";
-        private tabs: boolean = false;
+        private service: IServiceInformationModel[] = [];
+        readonly userId: string = "";
         private stateParams: any;
-        private isRegistrar: boolean;
-        private test: boolean = true;
         private designations: ICommon[] = [];
         private employmentTypes: ICommon[] = [];
         private serviceIntervals: ICommon[] = [];
         private serviceRegularIntervals: ICommon[] = [];
         private serviceContractIntervals: ICommon[] = [];
         private departments: IDepartment[] = [];
-
+        private enableEdit: boolean[] = [false];
+        private enableEditButton: boolean = false;
 
         constructor(private registrarConstants: any,
-                    private $scope: IEmployeeProfile,
                     private $q: ng.IQService,
                     private notify: Notify,
-                    private countryService: CountryService,
-                    private divisionService: DivisionService,
-                    private districtService: DistrictService,
-                    private thanaService: ThanaService,
                     private employeeInformationService: EmployeeInformationService,
-                    private areaOfInterestService: AreaOfInterestService,
-                    private userService: UserService,
-                    private academicDegreeService: AcademicDegreeService,
-                    private cRUDDetectionService: CRUDDetectionService,
                     private $stateParams: any,
                     private employmentTypeService: EmploymentTypeService,
                     private departmentService: DepartmentService,
-                    private designationService: DesignationService,
-                    private FileUpload: FileUpload) {
+                    private designationService: DesignationService) {
 
-
-            console.log("In Employee Profile-------------");
-
-            $scope.submitServiceForm = this.submitServiceForm.bind(this);
-
-            this.entry = {
-                serviceInfo: Array<IServiceInformationModel>()
-            };
-
+            this.service = [];
             this.stateParams = $stateParams;
-            this.userId = this.stateParams.id
-            this.showServiceEditButton = this.stateParams.edit;
-            this.initialization();
-        }
-
-        private initialization() {
+            this.userId = this.stateParams.id;
+            this.enableEditButton = this.stateParams.edit;
             this.departmentService.getAll().then((departments: any) => {
                 this.departments = departments;
-                this.designationService.getAll().then((designations: any) => {
-                    this.designations = designations;
-                    this.employmentTypeService.getAll().then((employmentTypes: any) => {
-                        this.employmentTypes = employmentTypes;
-                        this.getServiceIntervals();
-                    });
-                });
             });
+            this.designationService.getAll().then((designations: any) => {
+                this.designations = designations;
+            });
+            this.employmentTypeService.getAll().then((employmentTypes: any) => {
+                this.employmentTypes = employmentTypes;
+                this.getServiceIntervals();
+            });
+
+            this.get();
         }
 
         private getServiceIntervals(): void {
@@ -86,74 +60,51 @@ module ums {
             this.serviceContractIntervals.push(this.registrarConstants.servicePeriods[3]);
         }
 
-        private submitServiceForm(): void {
-            let countEmptyResignDate = 0;
-            for (let i = 0; i < this.entry.serviceInfo.length; i++) {
-                if (this.entry.serviceInfo[i].resignDate == "" || this.entry.serviceInfo[i].resignDate == null) {
-                    countEmptyResignDate++;
-                }
-            }
-            if (countEmptyResignDate > 1) {
-                this.notify.error("You can empty only one resign date");
-            }
-            else {
-                this.cRUDDetectionService.ObjectDetectionForServiceObjects(this.previousServiceInformation, angular.copy(this.entry.serviceInfo), this.serviceDeletedObjects, this.serviceDetailDeletedObjects)
-                    .then((serviceObjects) => {
-                        this.convertToJson('service', serviceObjects).then((json: any) => {
-                            this.employeeInformationService.saveServiceInformation(json).then((message: any) => {
-                                if (message == "Error") {
-                                }
-                                else {
-                                    this.getServiceInformation();
-                                    this.showServiceInputDiv = false;
-                                }
-                            });
-                        });
-                    });
-            }
+        public submit(index: number, type: string): void {
+
         }
 
-        private getServiceInformation(): void {
-            this.entry.serviceInfo = [];
-            this.serviceDeletedObjects = [];
-            this.serviceDetailDeletedObjects = [];
-            this.employeeInformationService.getServiceInformation(this.userId).then((services: any) => {
-                this.entry.serviceInfo = services;
-            }).then(() => {
-                this.previousServiceInformation = angular.copy(this.entry.serviceInfo);
+        private get(): void {
+            this.service = [];
+            this.employeeInformationService.getServiceInformation(this.userId).then((data: any) => {
+                // this.service = data;
             });
         }
 
-        private addNewServiceRow(parameter: string, index?: number): void {
-            if (parameter == "serviceInfo") {
-                if (this.entry.serviceInfo.length == 0) {
-                    this.addNewRow("service");
+        public activeEditButton(index: number, canEdit: boolean): void {
+            this.enableEdit[index] = canEdit;
+        }
+
+        private addNew(type: string, index?: number): void {
+            if (type == "service") {
+                if (this.service.length == 0) {
+                    this.addNewService();
                 }
                 else {
-                    if (this.entry.serviceInfo[this.entry.serviceInfo.length - 1].resignDate == "") {
+                    if (this.service[this.service.length - 1].resignDate == "") {
                         this.notify.error("Please fill up the resign date first");
                     }
                     else {
-                        this.addNewRow("service");
+                        this.addNewService();
                     }
                 }
             }
-            else if (parameter == "serviceDetails") {
-                if (this.entry.serviceInfo[index].intervalDetails.length == 0) {
-                    this.addNewServiceDetailsRow(index);
+            else if (type == "serviceDetails") {
+                if (this.service[index].intervalDetails.length == 0) {
+                    this.addNewServiceDetails(index);
                 }
                 else {
-                    if (this.entry.serviceInfo[index].intervalDetails[this.entry.serviceInfo[index].intervalDetails.length - 1].endDate == "") {
+                    if (this.service[index].intervalDetails[this.service[index].intervalDetails.length - 1].endDate == "") {
                         this.notify.error("Please fill up the end date first");
                     }
                     else {
-                        this.addNewServiceDetailsRow(index);
+                        this.addNewServiceDetails(index);
                     }
                 }
             }
         }
 
-        private addNewServiceDetailsRow(index: number) {
+        private addNewServiceDetails(index: number) {
             let serviceDetailsEntry: IServiceDetailsModel;
             serviceDetailsEntry = {
                 id: "",
@@ -161,57 +112,54 @@ module ums {
                 startDate: "",
                 endDate: "",
                 comment: "",
-                serviceId: null,
-                dbAction: "Create"
+                serviceId: null
             };
-            this.entry.serviceInfo[index].intervalDetails.push(serviceDetailsEntry);
+            this.service[index].intervalDetails.push(serviceDetailsEntry);
         }
 
-        private addNewRow(divName: string) {
-            if (divName = 'service') {
-                let serviceEntry: IServiceInformationModel;
-                serviceEntry = {
-                    id: "",
-                    employeeId: this.userId,
-                    department: null,
-                    designation: null,
-                    employmentType: null,
-                    joiningDate: "",
-                    resignDate: "",
-                    dbAction: "Create",
-                    intervalDetails: Array<IServiceDetailsModel>()
-                };
-                this.entry.serviceInfo.push(serviceEntry);
-            }
+        private addNewService() {
+            let serviceEntry: IServiceInformationModel;
+            serviceEntry = {
+                id: "",
+                employeeId: this.userId,
+                department: null,
+                designation: null,
+                employmentType: null,
+                joiningDate: "",
+                resignDate: "",
+                intervalDetails: []
+            };
+            this.service.push(serviceEntry);
         }
 
-        private deleteRow(divName: string, index: number, parentIndex?: number) {
-            if (divName == "serviceInfo") {
-                if (this.entry.serviceInfo[index].id != "") {
-                    this.entry.serviceInfo[index].dbAction = "Delete";
-                    this.serviceDeletedObjects.push(this.entry.serviceInfo[index]);
+
+        public delete(type: string, index: number, parentIndex?: number): void {
+            if (type === 'service') {
+                if (this.service[index].id) {
+                    this.employeeInformationService.deleteServiceInformation(this.service[index].id).then((data: any) => {
+                        this.service.splice(index, 1);
+                    });
                 }
-                this.entry.serviceInfo.splice(index, 1);
-            }
-            else if (divName == "serviceDetails") {
-                if (this.entry.serviceInfo[parentIndex].intervalDetails[index].id != "") {
-                    this.entry.serviceInfo[parentIndex].intervalDetails[index].dbAction = "Delete";
-                    this.serviceDetailDeletedObjects.push(this.entry.serviceInfo[parentIndex].intervalDetails[index]);
+                else {
+                    this.service.splice(index, 1);
                 }
-                this.entry.serviceInfo[parentIndex].intervalDetails.splice(index, 1);
+            }
+            else if (type === 'serviceDetails') {
+                if (this.service[parentIndex].intervalDetails[index].id) {
+                    this.employeeInformationService.deleteServiceInformation(this.service[parentIndex].intervalDetails[index].id).then((data: any) => {
+                        this.service[parentIndex].intervalDetails[index].splice(index, 1);
+                    });
+                }
+                else {
+                    this.service[parentIndex].intervalDetails.splice(index, 1);
+                }
             }
         }
 
-        private convertToJson(convertThis: string, obj: any): ng.IPromise<any> {
+        private convertToJson(object: any): ng.IPromise<any> {
             let defer = this.$q.defer();
             let JsonObject = {};
-            let JsonArray = [];
-            let item: any = {};
-            if (convertThis === "service") {
-                item['service'] = obj;
-            }
-            JsonArray.push(item);
-            JsonObject['entries'] = JsonArray;
+            JsonObject['entries'] = object;
             defer.resolve(JsonObject);
             return defer.promise;
         }
