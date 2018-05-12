@@ -147,7 +147,7 @@ module ums {
             else if (type === 'serviceDetails') {
                 if (this.service[parentIndex].intervalDetails[index].id) {
                     this.employeeInformationService.deleteServiceInformation(this.service[parentIndex].intervalDetails[index].id).then((data: any) => {
-                        this.service[parentIndex].intervalDetails[index].splice(index, 1);
+                        this.service[parentIndex].intervalDetails.splice(index, 1);
                     });
                 }
                 else {
