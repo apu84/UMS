@@ -14,7 +14,7 @@ public class PersistentServiceInformationDao extends ServiceInformationDaoDecora
       + " EMPLOYMENT, JOINING_DATE, RESIGN_DATE, LAST_MODIFIED) " + "VALUES (?, ?, ?, ?, ?, ?, ?, "
       + getLastModifiedSql() + ")";
 
-  static String GET_ONE = "SELECT ID, EMPLOYEE_ID, DEPARTMENT, DESIGNATION, EMPLOYMENT, JOINING_DATE, RESIGN_DATE "
+  static String GET_ALL = "SELECT ID, EMPLOYEE_ID, DEPARTMENT, DESIGNATION, EMPLOYMENT, JOINING_DATE, RESIGN_DATE "
       + "FROM EMP_SERVICE_INFO ";
 
   static String UPDATE_ONE = "UPDATE EMP_SERVICE_INFO SET DEPARTMENT = ?, DESIGNATION = ?, "
@@ -22,7 +22,7 @@ public class PersistentServiceInformationDao extends ServiceInformationDaoDecora
 
   static String DELETE_ONE = "DELETE FROM EMP_SERVICE_INFO ";
 
-  static String GET_SERVICE_ID = "SELECT ID FROM EMP_SERVICE_INFO ";
+  static String EXISTS_ONE = "SELECT COUNT(EMPLOYEE_ID) FROM EMP_SERVICE_INFO ";
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
@@ -33,35 +33,44 @@ public class PersistentServiceInformationDao extends ServiceInformationDaoDecora
   }
 
   @Override
-  public Long saveServiceInformation(MutableServiceInformation pMutableServiceInformation) {
-    String query = INSERT_ONE;
-    Long serviceId = mIdGenerator.getNumericId();
-    mJdbcTemplate.update(query, serviceId, pMutableServiceInformation.getEmployeeId(), pMutableServiceInformation
-        .getDepartment().getId(), pMutableServiceInformation.getDesignation().getId(), pMutableServiceInformation
-        .getEmployment().getId(), pMutableServiceInformation.getJoiningDate(), pMutableServiceInformation
+  public Long create(MutableServiceInformation pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getEmployeeId(), pMutable.getDepartment().getId(), pMutable
+        .getDesignation().getId(), pMutable.getEmployment().getId(), pMutable.getJoiningDate(), pMutable
         .getResignDate());
-    return serviceId;
+    return id;
   }
 
   @Override
-  public List<ServiceInformation> getServiceInformation(String pEmployeeId) {
-    String query = GET_ONE + " WHERE EMPLOYEE_ID = ? ORDER BY JOINING_DATE DESC";
+  public ServiceInformation get(Long pId) {
+    String query = GET_ALL + " WHERE EMPLOYEE_ID = ? ORDER BY JOINING_DATE DESC";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentServiceInformationDao.RoleRowMapper());
+  }
+
+  @Override
+  public List<ServiceInformation> get(String pEmployeeId) {
+    String query = GET_ALL + " WHERE EMPLOYEE_ID = ? ORDER BY JOINING_DATE DESC";
     return mJdbcTemplate.query(query, new Object[] {pEmployeeId}, new PersistentServiceInformationDao.RoleRowMapper());
   }
 
   @Override
-  public int updateServiceInformation(MutableServiceInformation pMutableServiceInformation) {
+  public int update(MutableServiceInformation pMutable) {
     String query = UPDATE_ONE + " WHERE ID = ? AND EMPLOYEE_ID = ?";
-    return mJdbcTemplate.update(query, pMutableServiceInformation.getDepartment().getId(), pMutableServiceInformation
-        .getDesignation().getId(), pMutableServiceInformation.getEmployment().getId(), pMutableServiceInformation
-        .getJoiningDate(), pMutableServiceInformation.getResignDate(), pMutableServiceInformation.getId(),
-        pMutableServiceInformation.getEmployeeId());
+    return mJdbcTemplate.update(query, pMutable.getDepartment().getId(), pMutable.getDesignation().getId(), pMutable
+        .getEmployment().getId(), pMutable.getJoiningDate(), pMutable.getResignDate(), pMutable.getId(), pMutable
+        .getEmployeeId());
   }
 
   @Override
-  public int deleteServiceInformation(MutableServiceInformation pMutableServiceInformation) {
+  public int delete(MutableServiceInformation pMutable) {
     String query = DELETE_ONE + " WHERE ID = ? AND EMPLOYEE_ID = ?";
-    return mJdbcTemplate.update(query, pMutableServiceInformation.getId(), pMutableServiceInformation.getEmployeeId());
+    return mJdbcTemplate.update(query, pMutable.getId(), pMutable.getEmployeeId());
+  }
+
+  @Override
+  public boolean exists(String pEmployeeId) {
+    String query = EXISTS_ONE + " WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pEmployeeId}, Boolean.class);
   }
 
   class RoleRowMapper implements RowMapper<ServiceInformation> {

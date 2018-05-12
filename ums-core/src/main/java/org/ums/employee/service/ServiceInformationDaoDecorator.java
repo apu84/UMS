@@ -9,22 +9,12 @@ public class ServiceInformationDaoDecorator extends
     ServiceInformationManager {
 
   @Override
-  public Long saveServiceInformation(MutableServiceInformation pMutableServiceInformation) {
-    return getManager().saveServiceInformation(pMutableServiceInformation);
+  public List<ServiceInformation> get(String pEmployeeId) {
+    return getManager().get(pEmployeeId);
   }
 
   @Override
-  public List<ServiceInformation> getServiceInformation(String pEmployeeId) {
-    return getManager().getServiceInformation(pEmployeeId);
-  }
-
-  @Override
-  public int updateServiceInformation(MutableServiceInformation pMutableServiceInformation) {
-    return getManager().updateServiceInformation(pMutableServiceInformation);
-  }
-
-  @Override
-  public int deleteServiceInformation(MutableServiceInformation pMutableServiceInformation) {
-    return getManager().deleteServiceInformation(pMutableServiceInformation);
+  public boolean exists(String pEmployeeId) {
+    return getManager().exists(pEmployeeId);
   }
 }
