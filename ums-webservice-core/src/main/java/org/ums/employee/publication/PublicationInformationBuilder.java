@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.employee.publication.PublicationInformation;
-import org.ums.employee.publication.MutablePublicationInformation;
 import org.ums.enums.common.PublicationType;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.common.CountryManager;
@@ -68,15 +66,12 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
     pBuilder.add("actionTakenOn",
         pReadOnly.getActionTakenOn() == null ? "" : mDateFormat.format(pReadOnly.getActionTakenOn()));
     pBuilder.add("rowNumber", pReadOnly.getRowNumber());
-    pBuilder.add("dbAction", "");
   }
 
   @Override
   public void build(MutablePublicationInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
-    pMutable
-        .setId(pJsonObject.containsKey("dbAction") ? (pJsonObject.getString("dbAction").equals("Update") || pJsonObject
-            .getString("dbAction").equals("Delete")) ? Long.parseLong(pJsonObject.getString("id")) : 0 : 0);
+    pMutable.setId(!pJsonObject.getString("id").equals("") ? Long.parseLong(pJsonObject.getString("id")) : null);
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setTitle(pJsonObject.getString("publicationTitle"));
     pMutable.setInterestGenre(pJsonObject.containsKey("publicationInterestGenre") ? pJsonObject
@@ -100,29 +95,5 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
     pMutable.setAppliedOn(mDateFormat.parse(mDate));
     pMutable.setStatus("0");
     pMutable.setActionTakenOn(null);
-  }
-
-  public void updatePublicationInformationBuilder(MutablePublicationInformation pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache) {
-    pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
-    pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
-    pMutable.setTitle(pJsonObject.getString("publicationTitle"));
-    pMutable.setInterestGenre(pJsonObject.getString("publicationInterestGenre"));
-    pMutable.setPublisherName(pJsonObject.getString("publisherName"));
-    pMutable.setDateOfPublication(pJsonObject.getInt("dateOfPublication"));
-    pMutable.setTypeId(pJsonObject.getJsonObject("publicationType").getInt("id"));
-    pMutable.setWebLink(pJsonObject.getString("publicationWebLink"));
-    pMutable.setISSN(pJsonObject.getString("publicationISSN"));
-    pMutable.setIssue(pJsonObject.getString("publicationIssue"));
-    pMutable.setVolume(pJsonObject.getString("publicationVolume"));
-    pMutable.setJournalName(pJsonObject.getString("publicationJournalName"));
-    pMutable
-        .setCountry(pJsonObject.containsKey("publicationCountry") ? pJsonObject.getJsonObject("publicationCountry") == null ? null
-            : mCountryManager.get(pJsonObject.getJsonObject("publicationCountry").getInt("id"))
-            : null);
-    pMutable.setPages(pJsonObject.getString("publicationPages"));
-    pMutable.setStatus(pJsonObject.getString("status"));
-    pMutable.setAppliedOn(mDateFormat.parse(pJsonObject.getString("appliedOn")));
-    pMutable.setActionTakenOn(mDateFormat.parse(mDate));
   }
 }

@@ -9,6 +9,7 @@ module ums{
         private awardUrl: string = "employee/award";
         private experienceUrl: string = "employee/experience";
         private additionalUrl: string = "employee/additional";
+        private aoiUrl: string = "employee/aoi";
         private serviceUrl: string = "employee/service";
 
         constructor(private httpClient: HttpClient,
@@ -61,21 +62,49 @@ module ums{
         //AcademicInformationService//
         public saveAcademicInformation(json: any): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.post(this.academicUrl + "/save", json, 'application/json')
-                .success(() => {
+            this.httpClient.post(this.academicUrl, json, 'application/json')
+                .success((data: any) => {
                     this.notify.success("Successfully Saved");
-                    defer.resolve("Saved");
+                    defer.resolve(data);
                 })
                 .error((data) => {
                     this.notify.error("Error in Saving");
-                    defer.resolve("Error");
+                    defer.reject(data);
+                });
+            return defer.promise;
+        }
+
+        public updateAcademicInformation(json: any): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.put(this.academicUrl, json, 'application/json')
+                .success((data: any) => {
+                    this.notify.success("Successfully Updated");
+                    defer.resolve(data);
+                })
+                .error((reason: any) => {
+                    this.notify.error("Error in Updating");
+                    defer.reject(reason);
+                });
+            return defer.promise;
+        }
+
+        public deleteAcademicInformation(id: string): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.doDelete(this.academicUrl + "/" + id )
+                .success(() => {
+                    this.notify.success("Delete Successful");
+                    defer.resolve("Delete Successful");
+                })
+                .error((reason: any) => {
+                    this.notify.error("Error in Saving");
+                    defer.reject(reason);
                 });
             return defer.promise;
         }
 
         public getAcademicInformation(employeeId: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.academicUrl + "/get/employeeId/" + employeeId, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.academicUrl + "/" + employeeId, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -89,26 +118,42 @@ module ums{
         //publicationInformationService
         public savePublicationInformation(json: any): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.post(this.publicationUrl + "/save", json, 'application/json')
-                .success(() => {
+            this.httpClient.post(this.publicationUrl, json, 'application/json')
+                .success((data: any) => {
                     this.notify.success("Successfully Saved");
-                    defer.resolve("Saved");
+                    defer.resolve(data);
                 })
                 .error((data) => {
                     this.notify.error("Error in Saving");
-                    defer.resolve("Error");
+                    defer.reject(data);
                 });
             return defer.promise;
         }
 
-        public getPublicationInformation(employeeId: string): ng.IPromise<any> {
+        public updatePublicationInformation(json: any): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.publicationUrl + "/get/employeeId/" + employeeId, HttpClient.MIME_TYPE_JSON,
-                (json: any) => {
-                    defer.resolve(json.entries);
-                },
-                (response: ng.IHttpPromiseCallbackArg<any>) => {
-                    this.notify.error("Error in Fetching Publication Information");
+            this.httpClient.put(this.publicationUrl, json, 'application/json')
+                .success((data: any) => {
+                    this.notify.success("Successfully Updated");
+                    defer.resolve(data);
+                })
+                .error((reason: any) => {
+                    this.notify.error("Error in Updating");
+                    defer.reject(reason);
+                });
+            return defer.promise;
+        }
+
+        public deletePublicationInformation(id: string): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.doDelete(this.publicationUrl + "/" + id )
+                .success(() => {
+                    this.notify.success("Delete Successful");
+                    defer.resolve("Delete Successful");
+                })
+                .error((reason: any) => {
+                    this.notify.error("Error in Saving");
+                    defer.reject(reason);
                 });
             return defer.promise;
         }
@@ -149,9 +194,9 @@ module ums{
             return defer.promise;
         }
 
-        public fetchRecords(employeeId: string, status: string): ng.IPromise<any> {
+        public getPublicationInformation(employeeId: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.publicationUrl + "/get/" + employeeId + "/" + status, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.publicationUrl + "/" + employeeId, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -164,28 +209,55 @@ module ums{
 
         //AwardInformationService
         public saveAwardInformation(json: any): ng.IPromise<any> {
-            let url = this.awardUrl + "/save";
             let defer = this.$q.defer();
-            this.httpClient.post(url, json, 'application/json')
-                .success(() => {
+            this.httpClient.post(this.awardUrl, json, 'application/json')
+                .success((data: any) => {
                     this.notify.success("Successfully Saved");
-                    defer.resolve("Saved");
+                    defer.resolve(data);
                 })
                 .error((data) => {
                     this.notify.error("Error in saving");
-                    defer.resolve("Error");
+                    defer.reject(data);
+                });
+            return defer.promise;
+        }
+
+        public updateAwardInformation(json: any): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.put(this.awardUrl, json, 'application/json')
+                .success((data: any) => {
+                    this.notify.success("Successfully Updated");
+                    defer.resolve(data);
+                })
+                .error((reason: any) => {
+                    this.notify.error("Error in Updating");
+                    defer.reject(reason);
+                });
+            return defer.promise;
+        }
+
+        public deleteAwardInformation(id: string): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.doDelete(this.awardUrl + "/" + id )
+                .success(() => {
+                    this.notify.success("Delete Successful");
+                    defer.resolve("Delete Successful");
+                })
+                .error((reason: any) => {
+                    this.notify.error("Error in Saving");
+                    defer.reject(reason);
                 });
             return defer.promise;
         }
 
         public getAwardInformation(employeeId: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.awardUrl + "/get/employeeId/" + employeeId, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.awardUrl + "/" + employeeId, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {
-                    this.notify.error("Error in Fetching Award Information");
+                    this.notify.error("Error in Fetching Academic Information");
                 });
             return defer.promise;
         }
@@ -194,21 +266,49 @@ module ums{
         //trainingInformationService
         public saveTrainingInformation(json: any): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.post(this.trainingUrl + "/save", json, 'application/json')
-                .success(() => {
+            this.httpClient.post(this.trainingUrl, json, 'application/json')
+                .success((data: any) => {
                     this.notify.success("Successfully Saved");
-                    defer.resolve("Saved");
+                    defer.resolve(data);
                 })
                 .error((data) => {
                     this.notify.error("Error in Saving");
-                    defer.resolve("Error");
+                    defer.reject(data);
+                });
+            return defer.promise;
+        }
+
+        public updateTrainingInformation(json: any): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.put(this.trainingUrl, json, 'application/json')
+                .success((data: any) => {
+                    this.notify.success("Successfully Updated");
+                    defer.resolve(data);
+                })
+                .error((reason: any) => {
+                    this.notify.error("Error in Updating");
+                    defer.reject(reason);
+                });
+            return defer.promise;
+        }
+
+        public deleteTrainingInformation(id: string): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.doDelete(this.trainingUrl + "/" + id )
+                .success(() => {
+                    this.notify.success("Delete Successful");
+                    defer.resolve("Delete Successful");
+                })
+                .error((reason: any) => {
+                    this.notify.error("Error in Saving");
+                    defer.reject(reason);
                 });
             return defer.promise;
         }
 
         public getTrainingInformation(employeeId: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.trainingUrl + "/get/employeeId/" + employeeId, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.trainingUrl + "/" + employeeId, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -222,21 +322,49 @@ module ums{
         //ExperienceInformationService
         public saveExperienceInformation(json: any): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.post(this.experienceUrl + "/save", json, 'application/json')
-                .success(() => {
+            this.httpClient.post(this.experienceUrl, json, 'application/json')
+                .success((data: any) => {
                     this.notify.success("Successfully Saved");
-                    defer.resolve("Saved");
+                    defer.resolve(data);
                 })
                 .error((data) => {
                     this.notify.error("Error in Saving");
-                    defer.resolve("Error");
+                    defer.reject(data);
+                });
+            return defer.promise;
+        }
+
+        public updateExperienceInformation(json: any): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.put(this.experienceUrl, json, 'application/json')
+                .success((data: any) => {
+                    this.notify.success("Successfully Updated");
+                    defer.resolve(data);
+                })
+                .error((reason: any) => {
+                    this.notify.error("Error in Updating");
+                    defer.reject(reason);
+                });
+            return defer.promise;
+        }
+
+        public deleteExperienceInformation(id: string): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.doDelete(this.experienceUrl + "/" + id )
+                .success(() => {
+                    this.notify.success("Delete Successful");
+                    defer.resolve("Delete Successful");
+                })
+                .error((reason: any) => {
+                    this.notify.error("Error in Saving");
+                    defer.reject(reason);
                 });
             return defer.promise;
         }
 
         public getExperienceInformation(employeeId: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.experienceUrl + "/get/employeeId/" + employeeId, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.experienceUrl + "/" + employeeId, HttpClient.MIME_TYPE_JSON,
                 (json: any) => {
                     defer.resolve(json.entries);
                 },
@@ -250,22 +378,50 @@ module ums{
         //AdditionalInformationService
         public saveAdditionalInformation(json: any): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.post(this.additionalUrl + "/save", json, 'application/json')
-                .success(() => {
+            this.httpClient.post(this.additionalUrl, json, 'application/json')
+                .success((data: any) => {
                     this.notify.success("Successfully Saved");
-                    defer.resolve("Saved");
+                    defer.resolve(data);
                 })
                 .error((data) => {
                     this.notify.error("Error in Saving");
-                    defer.resolve("Error");
+                    defer.reject(data);
                 });
             return defer.promise;
         }
 
         public getAdditionalInformation(employeeId: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.additionalUrl + "/get/employeeId/" + employeeId, HttpClient.MIME_TYPE_JSON,
-                (json: any, etag: string) => {
+            this.httpClient.get(this.additionalUrl + "/" + employeeId, HttpClient.MIME_TYPE_JSON,
+                (json: any) => {
+                    defer.resolve(json);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    this.notify.error("Error in Fetching Additional Information");
+                });
+            return defer.promise;
+        }
+
+
+        // AreaOfInterest Information
+        public saveAoiInformation(json: any): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.post(this.aoiUrl, json, 'application/json')
+                .success((data: any) => {
+                    this.notify.success("Successfully Saved");
+                    defer.resolve(data);
+                })
+                .error((data) => {
+                    this.notify.error("Error in Saving");
+                    defer.reject(data);
+                });
+            return defer.promise;
+        }
+
+        public getAoiInformation(employeeId: string): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.get(this.aoiUrl + "/" + employeeId, HttpClient.MIME_TYPE_JSON,
+                (json: any) => {
                     defer.resolve(json.entries);
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {

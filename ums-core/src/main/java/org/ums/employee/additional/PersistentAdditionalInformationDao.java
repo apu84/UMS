@@ -12,9 +12,11 @@ public class PersistentAdditionalInformationDao extends AdditionalInformationDao
       "INSERT INTO EMP_ADDITIONAL_INFO (EMPLOYEE_ID, ROOM_NO, EXT_NO, ACADEMIC_INITIAL, LAST_MODIFIED) VALUES (?, ?, ?, ?, "
           + getLastModifiedSql() + ")";
 
-  static String GET_ONE = "SELECT EMPLOYEE_ID, ROOM_NO, EXT_NO, ACADEMIC_INITIAL FROM EMP_ADDITIONAL_INFO ";
+  static String GET_ALL = "SELECT EMPLOYEE_ID, ROOM_NO, EXT_NO, ACADEMIC_INITIAL FROM EMP_ADDITIONAL_INFO ";
 
   static String DELETE_ONE = "DELETE FROM EMP_ADDITIONAL_INFO ";
+
+  static String EXISTS_ONE = "SELECT COUNT(EMPLOYEE_ID) FROM EMP_ADDITIONAL_INFO";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -23,24 +25,29 @@ public class PersistentAdditionalInformationDao extends AdditionalInformationDao
   }
 
   @Override
-  public int saveAdditionalInformation(MutableAdditionalInformation pMutableAdditionalInformation) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, pMutableAdditionalInformation.getId(),
-        pMutableAdditionalInformation.getRoomNo(), pMutableAdditionalInformation.getExtNo(),
-        pMutableAdditionalInformation.getAcademicInitial());
+  public String create(MutableAdditionalInformation pMutable) {
+    mJdbcTemplate.update(INSERT_ONE, pMutable.getId(), pMutable.getRoomNo(), pMutable.getExtNo(),
+        pMutable.getAcademicInitial());
+    return pMutable.getId();
   }
 
   @Override
-  public AdditionalInformation getAdditionalInformation(String pEmployeeId) {
-    String query = GET_ONE + " WHERE EMPLOYEE_ID = ?";
+  public AdditionalInformation get(String pEmployeeId) {
+    String query = GET_ALL + " WHERE EMPLOYEE_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pEmployeeId},
         new PersistentAdditionalInformationDao.RoleRowMapper());
   }
 
   @Override
-  public int deleteAdditionalInformation(MutableAdditionalInformation pMutableAdditionalInformation) {
+  public int delete(MutableAdditionalInformation pMutable) {
     String query = DELETE_ONE + " WHERE EMPLOYEE_ID = ?";
-    return mJdbcTemplate.update(query, pMutableAdditionalInformation.getId());
+    return mJdbcTemplate.update(query, pMutable.getId());
+  }
+
+  @Override
+  public boolean exists(String pEmployeeId) {
+    String query = EXISTS_ONE + " WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pEmployeeId}, Boolean.class);
   }
 
   class RoleRowMapper implements RowMapper<AdditionalInformation> {

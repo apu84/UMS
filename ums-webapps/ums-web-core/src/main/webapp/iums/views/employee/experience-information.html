@@ -1,77 +1,98 @@
-<form name="nExperienceForm" data-validate="" data-onvalidate="submitExperienceForm">
-    <div data-ng-repeat="experience in vm.entry.experience track by $index">
+<div data-ng-repeat="experience in vm.experience track by $index">
+    <form name="nForm[$index]" ng-submit="vm.submit($index)" novalidate>
         <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-9">{{$index + 1}}.
+                        <span data-ng-show="experience.experienceFrom && experience.experienceTo"><span
+                                data-ng-show="experience.experienceFrom">[</span>{{experience.experienceFrom}}<span
+                                data-ng-show="experience.experienceFrom">]</span>
+                        <span data-ng-show="experience.experienceTo"> - </span><span
+                                    data-ng-show="experience.experienceTo">[</span>{{experience.experienceTo}}<span
+                                    data-ng-show="experience.experienceTo">]</span>
+                        </span>
+                    </div>
+                    <div class="col-md-3">
+                        <div data-ng-show="vm.enableEditButton">
+                            <div data-ng-show="!vm.enableEdit[$index]">
+                                <div align="right">
+                                    <a data-ng-click="vm.activeEditButton($index, true)"
+                                       style="cursor: pointer;">
+                                        <i style="color: blue;" class="fa fa-edit"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-1">
-                        <label class="control-label"><b>{{$index + 1}}.</b></label>
-                    </div>
                     <div class="col-md-10">
-                        <label class="control-label">Organization<span
-                                data-ng-show="vm.showExperienceInputDiv"
-                                class='require'>*</span></label>
-                        <div data-ng-show="vm.showExperienceInputDiv">
-                            <div>
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nExperienceInstitution.$invalid && !nForm[$index].nExperienceInstitution.$pristine }">
+                            <label for="iExperienceInstitution" class="control-label">Institution<span
+                                    data-ng-show="vm.enableEdit[$index]"
+                                    class='require'>*</span></label>
+                            <div data-ng-show="vm.enableEdit[$index]">
                                 <input type="text"
-                                       name="nExperienceInstitution{{$index}}"
-                                       id="iExperienceInstitution{{$index}}"
+                                       name="nExperienceInstitution"
+                                       id="iExperienceInstitution"
                                        data-ng-model="experience.experienceInstitution"
                                        placeholder="Institution/Organization"
                                        maxlength="150"
                                        class="form-control" required>
+                                <label data-ng-show="nForm[$index].nExperienceInstitution.$invalid && !nForm[$index].nExperienceInstitution.$pristine"
+                                       class="help-block control-label">Please specify the institution.</label>
                             </div>
-                        </div>
-                        <div data-ng-show="!vm.showExperienceInputDiv">
-                            <div>
+                            <div data-ng-show="!vm.enableEdit[$index]">
                                 <div class="underlineBox">
                                     <label class="control-label">{{experience.experienceInstitution}}</label>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class='col-md-1'>
-                        <div data-ng-show="vm.showExperienceInputDiv">
-                            [ <i title="Remove Row {{$index + 1}}" data-ng-click="vm.deleteRow('experience' , $index)"
-                                 class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i> ]
-                        </div>
-                    </div>
                 </div>
+
                 <div class="row">
-                    <div class="col-md-1"></div>
                     <div class="col-md-10">
-                        <label class="control-label">Designation<span data-ng-show="vm.showExperienceInputDiv"
-                                                                               class='require'>*</span></label>
-                        <div data-ng-show="vm.showExperienceInputDiv">
-                            <div>
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nExperienceDesignation.$invalid && !nForm[$index].nExperienceDesignation.$pristine }">
+                            <label for="iExperienceDesignation" class="control-label">Designation<span
+                                    data-ng-show="vm.enableEdit[$index]"
+                                    class='require'>*</span></label>
+                            <div data-ng-show="vm.enableEdit[$index]">
                                 <input type="text"
-                                       name="nExperienceDesignation{{$index}}"
-                                       id="iExperienceDesignation{{$index}}"
+                                       name="nExperienceDesignation"
+                                       id="iExperienceDesignation"
                                        data-ng-model="experience.experienceDesignation"
                                        placeholder="Designation"
                                        maxlength="100"
                                        class="form-control" required>
+                                <label data-ng-show="nForm[$index].nExperienceDesignation.$invalid && !nForm[$index].nExperienceDesignation.$pristine"
+                                       class="help-block control-label">Please specify designation.</label>
+
                             </div>
-                        </div>
-                        <div data-ng-show="!vm.showExperienceInputDiv">
-                            <div>
+                            <div data-ng-show="!vm.enableEdit[$index]">
                                 <div class="underlineBox">
                                     <label class="control-label">{{experience.experienceDesignation}}</label>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-1"></div>
                 </div>
+
                 <div class="row">
-                    <div class="col-md-1"></div>
                     <div class="col-md-2">
-                        <label class="control-label">From<span data-ng-show="vm.showExperienceInputDiv"
-                                                                        class='require'>*</span></label>
-                        <div data-ng-show="vm.showExperienceInputDiv">
-                            <div>
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nExperienceFrom.$invalid && !nForm[$index].nExperienceFrom.$pristine }">
+                            <label for="iExperienceFrom" class="control-label">From<span
+                                    data-ng-show="vm.enableEdit[$index]"
+                                    class='require'>*</span></label>
+                            <div data-ng-show="vm.enableEdit[$index]">
                                 <input type="text"
-                                       name="nExperienceFrom{{$index}}"
-                                       id="iExperienceFrom{{$index}}"
+                                       name="nExperienceFrom"
+                                       id="iExperienceFrom"
                                        data-ng-model="experience.experienceFrom"
                                        data-provide="datepicker"
                                        data-date-format="dd/mm/yyyy"
@@ -79,24 +100,29 @@
                                        data-ng-change="vm.calculateDifference('experience', $index, experience.experienceFrom, experience.experienceTo)"
                                        autocomplete="off"
                                        class="form-control" required>
+                                <label data-ng-show="nForm[$index].nExperienceFrom.$invalid && !nForm[$index].nExperienceFrom.$pristine"
+                                       class="help-block control-label">Please specify start date.</label>
                             </div>
-                        </div>
-                        <div data-ng-show="!vm.showExperienceInputDiv">
-                            <div>
+                            <div data-ng-show="!vm.enableEdit[$index]">
                                 <div class="underlineBox">
                                     <label class="control-label">{{experience.experienceFrom}}</label>
                                 </div>
+
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-2">
-                        <label class="control-label">To<span data-ng-show="vm.showExperienceInputDiv"
-                                                                      class='require'>*</span></label>
-                        <div data-ng-show="vm.showExperienceInputDiv">
-                            <div>
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nExperienceTo.$invalid && !nForm[$index].nExperienceTo.$pristine }">
+                            <label for="iExperienceTo" class="control-label">To<span
+                                    data-ng-show="vm.enableEdit[$index]"
+                                    class='require'>*</span></label>
+                            <div data-ng-show="vm.enableEdit[$index]">
+
                                 <input type="text"
-                                       name="nExperienceTo{{$index}}"
-                                       id="iExperienceTo{{$index}}"
+                                       name="nExperienceTo"
+                                       id="iExperienceTo"
                                        data-ng-model="experience.experienceTo"
                                        data-provide="datepicker"
                                        data-date-format="dd/mm/yyyy"
@@ -104,42 +130,47 @@
                                        data-ng-change="vm.calculateDifference('experience', $index, experience.experienceFrom, experience.experienceTo)"
                                        autocomplete="off"
                                        class="form-control" required>
+                                <label data-ng-show="nForm[$index].nExperienceTo.$invalid && !nForm[$index].nExperienceTo.$pristine"
+                                       class="help-block control-label">Please specify end date.</label>
                             </div>
-                        </div>
-                        <div data-ng-show="!vm.showExperienceInputDiv">
-                            <div>
+                            <div data-ng-show="!vm.enableEdit[$index]">
                                 <div class="underlineBox">
                                     <label class="control-label">{{experience.experienceTo}}</label>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-3">
-                        <label class="control-label">Duration<span data-ng-show="vm.showExperienceInputDiv"
-                                                                            class="require">*</span></label>
-                        <div data-ng-show="vm.showExperienceInputDiv">
-                            <div>
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nExperienceDurationString.$invalid && !nForm[$index].nExperienceDurationString.$pristine }">
+                            <label for="iExperienceDurationString" class="control-label">Duration<span
+                                    data-ng-show="vm.enableEdit[$index]"
+                                    class='require'>*</span></label>
+                            <div data-ng-show="vm.enableEdit[$index]">
                                 <input type="text"
-                                       name="nExperienceDurationString{{$index}}"
-                                       id="iExperienceDurationString{{$index}}"
+                                       name="nExperienceDurationString"
+                                       id="iExperienceDurationString"
                                        data-ng-model="experience.experienceDurationString"
                                        placeholder="Duration"
                                        class="form-control" readonly required>
+
                             </div>
-                        </div>
-                        <div data-ng-show="!vm.showExperienceInputDiv">
-                            <div>
+                            <div data-ng-show="!vm.enableEdit[$index]">
                                 <div class="underlineBox">
                                     <label class="control-label">{{experience.experienceDurationString}}</label>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-3">
-                        <label class="control-label" for="iCategory">Category<span data-ng-show="vm.showExperienceInputDiv"
-                                                                                            class="require">*</span></label>
-                        <div data-ng-show="vm.showExperienceInputDiv">
-                            <div>
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nCategory.$invalid && !nForm[$index].nCategory.$pristine }">
+                            <label for="iCategory" class="control-label">Category<span
+                                    data-ng-show="vm.enableEdit[$index]"
+                                    class='require'>*</span></label>
+                            <div data-ng-show="vm.enableEdit[$index]">
                                 <select name="nCategory"
                                         id="iCategory"
                                         data-ng-model="experience.experienceCategory"
@@ -147,65 +178,55 @@
                                         class="form-control" required>
                                     <option value="" selected="selected">Select Category</option>
                                 </select>
+                                <label data-ng-show="nForm[$index].nCategory.$invalid && !nForm[$index].nCategory.$pristine"
+                                       class="help-block control-label">Please specify a category.</label>
                             </div>
-                        </div>
-                        <div data-ng-show="!vm.showExperienceInputDiv">
-                            <div>
+                            <div data-ng-show="!vm.enableEdit[$index]">
                                 <div class="underlineBox">
                                     <label class="control-label">{{experience.experienceCategory.name}}</label>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-1"></div>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <div data-ng-show="vm.showExperienceInputDiv">
-        <div class="row">
-            <div class="col-md-12">
-                <div align="center">
-                    [ <a title="Add New Row" data-ng-click="vm.addNewRow('experience')"><i class="fa fa-plus"
-                                                                                           aria-hidden="true"
-                                                                                           style="cursor: pointer;color: green;"></i></a>
-                    ]
-                </div>
-                <div align="right">
-                    <button type="button" title="Cancel" class="btn"
-                            data-ng-click="vm.showExperienceInputDiv=false; vm.showTab('experience');">Cancel
-                    </button>
-                    <button type="submit" title="Submit" class="btn btn-success"><i
-                            class="fa fa-save"></i>&nbsp;Submit
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div data-ng-show="vm.showExperienceEditButton">
-        <div data-ng-show="!vm.showExperienceInputDiv">
-            <div class="row">
-                <div class="col-md-12">
-                    <div align="right">
-                        <button type="button" title="Cancel" class="btn"
-                                data-ng-click="vm.showExperienceInputDiv=true">
-                            <i class="fa fa-edit"></i>&nbsp;Edit
-                        </button>
+                <div class="row">
+                    <div data-ng-show="vm.enableEdit[$index]">
+                        <div class="col-md-4">
+                           <span data-ng-show="experience.id">
+                               <button type="button" class="btn btn-primary btn-xs"
+                                       data-ng-click="vm.activeEditButton($index, false)"
+                                       style="cursor:pointer;">Cancel
+                            </button>
+                           </span>
+                        </div>
+                        <div class="col-md-8">
+                            <div align="right">
+                                <button type="button" class="btn btn-primary btn-xs"
+                                        title="Remove Row {{$index + 1}}"
+                                        data-ng-click="vm.delete($index)"
+                                        style="cursor:pointer;"><span data-ng-show="!experience.id">Remove</span><span
+                                        data-ng-show="experience.id">Delete</span>
+                                </button>
+                                <button type="submit" title="Submit" class="btn btn-success btn-xs"
+                                        data-ng-disabled="nForm[$index].$invalid"
+                                        style="cursor:pointer;"><span data-ng-show="!experience.id">Save</span><span
+                                        data-ng-show="experience.id">Update</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</form>
-
-<div data-ng-show="!vm.showExperienceEditButton">
-    <div class="row">
-        <div class="col-md-12">
-            <label style="color: darkred"><span data-ng-show="vm.showExperienceInputDiv"><b>*** N.B.</b></span>&nbsp;This(<strong>Experience</strong>)
-                form will
-                be covered by registrar office.</label>
-        </div>
-    </div>
+    </form>
 </div>
 
+<div class="row">
+    <div class="col-md-12">
+        <button title="Add New Row" type="button" class="btn btn-success btn-xs"
+                data-ng-click="vm.addNew(); vm.activeEditButton(vm.experience.length - 1, true)"
+                style="cursor: pointer">Add new
+        </button>
+    </div>
+</div>

@@ -2,6 +2,7 @@ package org.ums.persistent.model.accounts;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -19,6 +20,7 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 20-Dec-17.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PersistentGroup implements MutableGroup {
 
   @JsonIgnore

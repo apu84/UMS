@@ -1,5 +1,7 @@
 package org.ums.persistent.dao.accounts;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -52,9 +54,15 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
   @Override
   public AccountTransaction get(Long pId) {
     String query = "SELECT * FROM DT_TRANSACTION WHERE ID=:ID";
-    Map parameterMap = new HashMap();
-    parameterMap.put("ID", pId);
-    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentAccountTransactionRowMapper());
+    try {
+      Map parameterMap = new HashMap();
+      parameterMap.put("ID", pId);
+      return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap,
+          new PersistentAccountTransactionRowMapper());
+    } catch(EmptyResultDataAccessException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   @Override

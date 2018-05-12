@@ -115,7 +115,7 @@
 /// <reference path='employee/PagerService.ts'/>
 /// <reference path='employee/CRUDDetectionService.ts'/>
 /// <reference path='employee/PersonalInformation.ts'/>
-/// <reference path='employee/EducationInformation.ts'/>
+/// <reference path='employee/AcademicInformation.ts'/>
 /// <reference path='employee/PublicationInformation.ts'/>
 /// <reference path='employee/TrainingInformation.ts'/>
 /// <reference path='employee/AwardInformation.ts'/>
@@ -123,4 +123,4 @@
 /// <reference path='employee/AdditionalInformation.ts'/>
 /// <reference path='employee/ServiceInformation.ts'/>
 
-/// <reference path='library/SearchLibrary.ts'/>
+/// <reference path='library/LibrarySearch.ts'/>

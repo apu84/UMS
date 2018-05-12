@@ -25,7 +25,7 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 28-Apr-18.
  */
 @Component
-public class SystemGroupMapResourceHelper extends ResourceHelper<SystemGroupMap, MutableSystemGroupMap, String> {
+public class SystemGroupMapResourceHelper extends ResourceHelper<SystemGroupMap, MutableSystemGroupMap, Long> {
 
   Logger mLogger = LoggerFactory.getLogger(SystemGroupMapResourceHelper.class);
 
@@ -52,17 +52,18 @@ public class SystemGroupMapResourceHelper extends ResourceHelper<SystemGroupMap,
     return systemGroupMapList;
   }
 
-  public void save(MutableSystemGroupMap pMutableSystemGroupMap) throws Exception {
+  public MutableSystemGroupMap save(MutableSystemGroupMap pMutableSystemGroupMap) throws Exception {
     if(pMutableSystemGroupMap.getGroupType() == null || pMutableSystemGroupMap.getGroup() == null)
       throw new Exception("All fields are not properly filled");
-    pMutableSystemGroupMap.setId(pMutableSystemGroupMap.getGroupType().getValue());
+    pMutableSystemGroupMap.setId(mIdGenerator.getNumericId());
     pMutableSystemGroupMap.setCompanyId(mCompanyManager.getDefaultCompany().getId());
     pMutableSystemGroupMap.setModifiedBy(mUserResourceHelper.getLoggedUser().getEmployeeId());
     pMutableSystemGroupMap.setModifiedDate(new Date());
     mSystemGroupMapManager.create(pMutableSystemGroupMap);
+    return pMutableSystemGroupMap;
   }
 
-  public SystemGroupMap get(String pId) {
+  public SystemGroupMap get(Long pId) {
     return mSystemGroupMapManager.get(pId);
   }
 

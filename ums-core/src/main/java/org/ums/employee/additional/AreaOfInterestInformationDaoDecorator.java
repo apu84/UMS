@@ -8,23 +8,9 @@ public class AreaOfInterestInformationDaoDecorator
     extends
     ContentDaoDecorator<AreaOfInterestInformation, MutableAreaOfInterestInformation, String, AreaOfInterestInformationManager>
     implements AreaOfInterestInformationManager {
-  @Override
-  public List<AreaOfInterestInformation> getAreaOfInterestInformation(String pEmployeeId) {
-    return getManager().getAreaOfInterestInformation(pEmployeeId);
-  }
 
   @Override
-  public int saveAreaOfInterestInformation(List<MutableAreaOfInterestInformation> pMutableAreaOfInterestInformation) {
-    return getManager().saveAreaOfInterestInformation(pMutableAreaOfInterestInformation);
-  }
-
-  @Override
-  public int updateAreaOfInformation(List<MutableAreaOfInterestInformation> pMutableAreaOfInterestInformation) {
-    return getManager().updateAreaOfInformation(pMutableAreaOfInterestInformation);
-  }
-
-  @Override
-  public int deleteAreaOfInterestInformation(String pEmployeeId) {
-    return getManager().deleteAreaOfInterestInformation(pEmployeeId);
+  public List<AreaOfInterestInformation> getAll(String pEmployeeId) {
+    return getManager().getAll(pEmployeeId);
   }
 }

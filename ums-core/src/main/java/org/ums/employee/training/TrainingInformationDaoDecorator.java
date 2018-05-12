@@ -9,27 +9,12 @@ public class TrainingInformationDaoDecorator extends
     TrainingInformationManager {
 
   @Override
-  public int saveTrainingInformation(List<MutableTrainingInformation> pMutableTrainingInformation) {
-    return getManager().saveTrainingInformation(pMutableTrainingInformation);
+  public List<TrainingInformation> get(String pEmployeeId) {
+    return getManager().get(pEmployeeId);
   }
 
   @Override
-  public List<TrainingInformation> getEmployeeTrainingInformation(String pEmployeeId) {
-    return getManager().getEmployeeTrainingInformation(pEmployeeId);
-  }
-
-  @Override
-  public int deleteTrainingInformation(String pEmployeeId) {
-    return getManager().deleteTrainingInformation(pEmployeeId);
-  }
-
-  @Override
-  public int updateTrainingInformation(List<MutableTrainingInformation> pMutableTrainingInformation) {
-    return getManager().updateTrainingInformation(pMutableTrainingInformation);
-  }
-
-  @Override
-  public int deleteTrainingInformation(List<MutableTrainingInformation> pMutableTrainingInformation) {
-    return getManager().deleteTrainingInformation(pMutableTrainingInformation);
+  public boolean exists(String pEmployeeId) {
+    return getManager().exists(pEmployeeId);
   }
 }

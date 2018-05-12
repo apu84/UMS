@@ -1,5 +1,7 @@
 package org.ums.persistent.dao.accounts;
 
+import org.jetbrains.annotations.NotNull;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -12,9 +14,11 @@ import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.accounts.PersistentAccount;
+import org.ums.util.UmsUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +40,8 @@ public class PersistentAccountDao extends AccountDaoDecorator {
 
   @Override
   public List<Account> getExcludingGroups(List<String> groupCodeList) {
+    if(groupCodeList.size() == 0)
+      return null;
     String query = "select * from mst_account where acc_group_code not in (:groupCodeList)";
     Map parameterMap = new HashMap();
     parameterMap.put("groupCodeList", groupCodeList);
@@ -52,6 +58,8 @@ public class PersistentAccountDao extends AccountDaoDecorator {
 
   @Override
   public List<Account> getIncludingGroups(List<String> groupCodeList) {
+    if(groupCodeList.size() == 0)
+      return null;
     String query = "select * from mst_account where acc_group_code  in (:groupCodeList)";
     Map parameterMap = new HashMap();
     parameterMap.put("groupCodeList", groupCodeList);
@@ -96,8 +104,24 @@ public class PersistentAccountDao extends AccountDaoDecorator {
 
   @Override
   public Account get(Long pId) {
-    String query = "select * from mst_account where id=?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentAccountRowMapper());
+    String query = "select * from mst_account where id=:id";
+    try {
+      Map parameterMap = new HashMap();
+      parameterMap.put("id", pId);
+      return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentAccountRowMapper());
+    } catch(EmptyResultDataAccessException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  @Override
+  public Account getAccount(Long pAccountCode, Company pCompany) {
+    String query = "select * from mst_account where account_code=:accountCode and comp_code=:compCode";
+    Map parameterMap = new HashMap();
+    parameterMap.put("accountCode", pAccountCode);
+    parameterMap.put("compCode", pCompany.getId());
+    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentAccountRowMapper());
   }
 
   @Override
@@ -107,7 +131,12 @@ public class PersistentAccountDao extends AccountDaoDecorator {
 
   @Override
   public int update(MutableAccount pMutable) {
-    return super.update(pMutable);
+    String query =
+        "update MST_ACCOUNT " + "set ACCOUNT_CODE=:accountCode, " + "  ACCOUNT_NAME=:accountName, "
+            + "  ACC_GROUP_CODE=:accGroupCode, " + "  MODIFIED_DATE=:modifiedDate, " + "  MODIFIED_BY=:modifiedBy, "
+            + "  COMP_CODE=:compCode, RESERVED=:reserved, " + "  LAST_MODIFIED=:lastModified " + "where ID=:id";
+    Map parameterMap = getAccountParameterMap(pMutable, pMutable.getId());
+    return mNamedParameterJdbcTemplate.update(query, parameterMap);
   }
 
   @Override
@@ -128,20 +157,27 @@ public class PersistentAccountDao extends AccountDaoDecorator {
   @Override
   public Long create(MutableAccount pMutable) {
     String query =
-        "insert into MST_ACCOUNT(ID, ACCOUNT_CODE, ACCOUNT_NAME, ACC_GROUP_CODE,  MODIFIED_DATE, MODIFIED_BY, COMP_CODE, LAST_MODIFIED) "
-            + "            VALUES (:id,:accountCode,:accountName,:accGroupCode,:modifiedDate,:modifiedBy, :compCode,"
-            + getLastModifiedSql() + " )";
-    Long id = mIdGenerator.getNumericId();
+        "insert into MST_ACCOUNT(ID, ACCOUNT_CODE, ACCOUNT_NAME, ACC_GROUP_CODE, RESERVED,  MODIFIED_DATE, MODIFIED_BY, COMP_CODE, LAST_MODIFIED) "
+            + "            VALUES (:id,:accountCode,:accountName,:accGroupCode, :reserved,:modifiedDate,:modifiedBy, :compCode,:lastModified )";
+    Long id = pMutable.getId() == null ? mIdGenerator.getNumericId() : pMutable.getId();
+    Map parameterMap = getAccountParameterMap(pMutable, id);
+    mNamedParameterJdbcTemplate.update(query, parameterMap);
+    return id;
+  }
+
+  @NotNull
+  private Map getAccountParameterMap(MutableAccount pMutable, Long id) {
     Map parameterMap = new HashMap();
     parameterMap.put("id", id);
-    parameterMap.put("accountCode", pMutable.getAccGroupCode());
+    parameterMap.put("accountCode", pMutable.getAccountCode());
     parameterMap.put("accountName", pMutable.getAccountName());
     parameterMap.put("accGroupCode", pMutable.getAccGroupCode());
     parameterMap.put("modifiedDate", pMutable.getModifiedDate());
     parameterMap.put("modifiedBy", pMutable.getModifiedBy());
     parameterMap.put("compCode", pMutable.getCompanyId());
-    mNamedParameterJdbcTemplate.update(query, parameterMap);
-    return id;
+    parameterMap.put("reserved", pMutable.getReserved().equals(true) ? 1 : false);
+    parameterMap.put("lastModified", UmsUtils.formatDate(new Date(), "YYYYMMDDHHMMSS"));
+    return parameterMap;
   }
 
   @Override
@@ -151,7 +187,19 @@ public class PersistentAccountDao extends AccountDaoDecorator {
 
   @Override
   public boolean exists(Long pId) {
-    return super.exists(pId);
+    String query = "select count(*) from mst_account where id=:id";
+    Map parameterMap = new HashMap();
+    parameterMap.put("id", pId);
+    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, Integer.class) == 0 ? false : true;
+  }
+
+  @Override
+  public boolean exists(Long pAccountCode, Company pCompany) {
+    String query = "select count(*) from mst_account where account_code=:accountCode and comp_code=:compCode";
+    Map parameterMap = new HashMap();
+    parameterMap.put("accountCode", pAccountCode);
+    parameterMap.put("compCode", pCompany.getId());
+    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, Integer.class) == 0 ? false : true;
   }
 
   class PersistentAccountRowMapper implements RowMapper<Account> {
@@ -173,9 +221,9 @@ public class PersistentAccountDao extends AccountDaoDecorator {
       account.setStatFlag(rs.getString("stat_flag"));
       account.setStatUpFlag(rs.getString("stat_up_flag"));
       account.setModifiedDate(rs.getDate("modified_date"));
-      account.setModifiedBy("modified_by");
-      account.setLastModified("last_modified");
-      account.setCompanyId("comp_code");
+      account.setModifiedBy(rs.getString("modified_by"));
+      account.setLastModified(rs.getString("last_modified"));
+      account.setCompanyId(rs.getString("comp_code"));
       return account;
     }
   }

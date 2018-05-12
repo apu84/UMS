@@ -1,7 +1,5 @@
 package org.ums.employee.academic;
 
-import org.ums.employee.academic.AcademicInformation;
-import org.ums.employee.academic.MutableAcademicInformation;
 import org.ums.manager.ContentManager;
 
 import java.util.List;
@@ -9,13 +7,7 @@ import java.util.List;
 public interface AcademicInformationManager extends
     ContentManager<AcademicInformation, MutableAcademicInformation, Long> {
 
-  int saveAcademicInformation(final List<MutableAcademicInformation> pMutableAcademicInformation);
+  List<AcademicInformation> get(final String pEmployeeId);
 
-  List<AcademicInformation> getEmployeeAcademicInformation(final String pEmployeeId);
-
-  int deleteAcademicInformation(final String pEmployeeId);
-
-  int updateAcademicInformation(List<MutableAcademicInformation> pMutableAcademicInformation);
-
-  int deleteAcademicInformation(List<MutableAcademicInformation> pMutableAcademicInformation);
+  boolean exists(final String pEmployeeId);
 }

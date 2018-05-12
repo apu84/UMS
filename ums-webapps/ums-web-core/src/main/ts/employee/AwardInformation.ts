@@ -1,145 +1,110 @@
 module ums {
-    interface IEmployeeProfile extends ng.IScope {
-        submitAwardForm: Function;
-    }
 
     class AwardInformation {
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify',
-            'countryService', 'divisionService', 'districtService', 'thanaService',
-            'employeeInformationService', 'areaOfInterestService', 'userService', 'academicDegreeService',
-            'cRUDDetectionService', '$stateParams', 'employmentTypeService', 'departmentService', 'designationService', 'FileUpload'];
 
-        private entry: {
-            award: IAwardInformationModel[],
-        };
-        private award: boolean = false;
-        private showAwardInputDiv: boolean = false;
-        private previousAwardInformation: IAwardInformationModel[];
-        private awardDeletedObjects: IAwardInformationModel[];
-        private userId: string = "";
-        private tabs: boolean = false;
+        public static $inject = [
+            'registrarConstants',
+            '$q',
+            'notify',
+            'employeeInformationService',
+            '$stateParams'];
+
+        private award: IAwardInformationModel[] = [];
+        readonly userId: string = "";
         private stateParams: any;
-        private isRegistrar: boolean;
-        private test: boolean = true;
+        private enableEdit: boolean[] = [false];
+        private enableEditButton: boolean = false;
 
         constructor(private registrarConstants: any,
-                    private $scope: IEmployeeProfile,
                     private $q: ng.IQService,
                     private notify: Notify,
-                    private countryService: CountryService,
-                    private divisionService: DivisionService,
-                    private districtService: DistrictService,
-                    private thanaService: ThanaService,
                     private employeeInformationService: EmployeeInformationService,
-                    private areaOfInterestService: AreaOfInterestService,
-                    private userService: UserService,
-                    private academicDegreeService: AcademicDegreeService,
-                    private cRUDDetectionService: CRUDDetectionService,
-                    private $stateParams: any,
-                    private employmentTypeService: EmploymentTypeService,
-                    private departmentService: DepartmentService,
-                    private designationService: DesignationService,
-                    private FileUpload: FileUpload) {
+                    private $stateParams: any) {
 
 
-            console.log("In Award Profile-------------");
-
-            $scope.submitAwardForm = this.submitAwardForm.bind(this);
-
-            this.entry = {
-                award: Array<IAwardInformationModel>()
-            };
-
+            this.award = [];
             this.stateParams = $stateParams;
-            this.initialization();
+            this.userId = this.stateParams.id;
+            this.enableEditButton = this.stateParams.edit;
+            this.get();
         }
 
-        private initialization() {
-            this.userService.fetchCurrentUserInfo().then((user: any) => {
-                if(user.roleId == 82 || user.roleId == 81){
-                    this.isRegistrar = true;
-                }
-                else{
-                    this.isRegistrar = false;
-                }
-                if (this.stateParams.id == "" || this.stateParams.id == null || this.stateParams.id == undefined) {
-                    this.userId = user.employeeId;
+        public submit(index: number): void {
+            this.convertToJson(this.award[index]).then((json: any) => {
+                if (!this.award[index].id) {
+                    this.create(json, index);
                 }
                 else {
-                    this.userId = this.stateParams.id;
+                    this.update(json, index);
                 }
-
-                this.getAwardInformation();
             });
         }
 
 
-        private submitAwardForm(): void {
-            this.cRUDDetectionService.ObjectDetectionForCRUDOperation(this.previousAwardInformation, angular.copy(this.entry.award), this.awardDeletedObjects)
-                .then((awardObjects: any) => {
-                    this.convertToJson('award', awardObjects)
-                        .then((json: any) => {
-                            this.employeeInformationService.saveAwardInformation(json)
-                                .then((message: any) => {
-                                    if(message == "Error"){}
-                                    else {
-                                        this.getAwardInformation();
-                                        this.showAwardInputDiv = false;
-                                    }
-                                });
-                        });
-                });
-
+        private create(json: any, index: number) {
+            this.employeeInformationService.saveAwardInformation(json).then((data: any) => {
+                this.award[index] = data;
+                this.enableEdit[index] = false;
+            }).catch((reason: any) => {
+                this.enableEdit[index] = true;
+            });
         }
 
-        private getAwardInformation() {
-            this.entry.award = [];
-            this.awardDeletedObjects = [];
+        private update(json: any, index: number) {
+            this.employeeInformationService.updateAwardInformation(json).then((data: any) => {
+                this.award[index] = data;
+                this.enableEdit[index] = false;
+            }).catch((reason: any) => {
+                this.enableEdit[index] = true;
+            });
+        }
+
+        private get() {
+            this.award = [];
             this.employeeInformationService.getAwardInformation(this.userId).then((awardInformation: any) => {
-                this.entry.award = awardInformation;
-            }).then(() => {
-                this.previousAwardInformation = angular.copy(this.entry.award);
-            });
-        }
-
-
-
-        private addNewRow(divName: string) {
-            if (divName === 'award') {
-                let awardEntry: IAwardInformationModel;
-                awardEntry = {
-                    id: "",
-                    employeeId: this.userId,
-                    awardName: "",
-                    awardInstitute: "",
-                    awardedYear: null,
-                    awardShortDescription: "",
-                    dbAction: "Create"
-                };
-                this.entry.award.push(awardEntry);
-            }
-        }
-
-        private deleteRow(divName: string, index: number, parentIndex?: number) {
-            if (divName === 'award') {
-                if (this.entry.award[index].id != "") {
-                    this.entry.award[index].dbAction = "Delete";
-                    this.awardDeletedObjects.push(this.entry.award[index]);
+                if (awardInformation) {
+                    this.award = awardInformation;
                 }
-                this.entry.award.splice(index, 1);
+                else {
+                    this.award = [];
+                }
+            })
+        }
+
+
+        private addNew() {
+            let awardEntry: IAwardInformationModel;
+            awardEntry = {
+                id: "",
+                employeeId: this.userId,
+                awardName: "",
+                awardInstitute: "",
+                awardedYear: null,
+                awardShortDescription: ""
+            };
+            this.award.push(awardEntry);
+        }
+
+        private delete(index: number) {
+            if (this.award[index].id) {
+                this.employeeInformationService.deleteAwardInformation(this.award[index].id).then((data: any) => {
+                    this.award.splice(index, 1);
+                });
+            }
+            else {
+                this.award.splice(index, 1);
             }
         }
 
-        private convertToJson(convertThis: string, obj: any): ng.IPromise<any> {
+        public activeEditButton(index: number, canEdit: boolean): void {
+            this.enableEdit[index] = canEdit;
+        }
+
+
+        private convertToJson(object: IAwardInformationModel): ng.IPromise<any> {
             let defer = this.$q.defer();
             let JsonObject = {};
-            let JsonArray = [];
-            let item: any = {};
-            if (convertThis === "award") {
-                item['award'] = obj;
-            }
-            JsonArray.push(item);
-            JsonObject['entries'] = JsonArray;
+            JsonObject['entries'] = object;
             defer.resolve(JsonObject);
             return defer.promise;
         }

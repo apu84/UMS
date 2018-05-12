@@ -69,7 +69,7 @@
                 <include>org.springframework.data:spring-data-solr</include>
                 <include>com.itextpdf:itextpdf</include>
                 <include>org.springframework.integration:spring-integration-core</include>
-                <include>org.springframework.integration:spring-integration-ftp</include>
+                <include>org.springframework.integration:spring-integration-ftp</include>vaiy
                 <include>org.springframework.integration:spring-integration-file</include>
                 <include>org.springframework.kafka:spring-kafka</include>
                 <include>org.aspectj:aspectjrt</include>

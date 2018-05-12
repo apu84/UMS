@@ -70,7 +70,7 @@
     '/leaveApplication': {title: 'Leave Application', 'breadcrumb': ['Leave Application ']},
     '/leaveApproval': {title: 'Leave Application Approval', 'breadcrumb': ['Leave Application Approval']},
     '/publicHolidays': {title: 'Public Holidays', 'breadcrumb': ['Public Holidays  ']},
-
+      '/search': {title: 'Library:Search', 'breadcrumb': ['Search']},
       '/profile': {title: 'Profile', 'breadcrumb': ['Profile']}
   };
 

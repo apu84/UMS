@@ -5,6 +5,7 @@ import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.Group;
 import org.ums.domain.model.immutable.accounts.SystemGroupMap;
 import org.ums.domain.model.mutable.accounts.MutableSystemGroupMap;
+import org.ums.enums.accounts.definitions.group.GroupType;
 import org.ums.manager.CacheManager;
 import org.ums.manager.accounts.SystemGroupMapManager;
 
@@ -14,16 +15,26 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 26-Apr-18.
  */
 public class SystemGroupMapCache extends
-    ContentCache<SystemGroupMap, MutableSystemGroupMap, String, SystemGroupMapManager> implements SystemGroupMapManager {
+    ContentCache<SystemGroupMap, MutableSystemGroupMap, Long, SystemGroupMapManager> implements SystemGroupMapManager {
 
-  private CacheManager<SystemGroupMap, String> mSystemGroupMapLongCacheManager;
+  private CacheManager<SystemGroupMap, Long> mSystemGroupMapLongCacheManager;
 
-  public SystemGroupMapCache(CacheManager<SystemGroupMap, String> pSystemGroupMapLongCacheManager) {
+  public SystemGroupMapCache(CacheManager<SystemGroupMap, Long> pSystemGroupMapLongCacheManager) {
     mSystemGroupMapLongCacheManager = pSystemGroupMapLongCacheManager;
   }
 
   @Override
-  protected CacheManager<SystemGroupMap, String> getCacheManager() {
+  public SystemGroupMap get(GroupType pGroupType, Company pCompany) {
+    return getManager().get(pGroupType, pCompany);
+  }
+
+  @Override
+  public boolean exists(GroupType pGroupType, Company pCompany) {
+    return getManager().exists(pGroupType, pCompany);
+  }
+
+  @Override
+  protected CacheManager<SystemGroupMap, Long> getCacheManager() {
     return mSystemGroupMapLongCacheManager;
   }
 

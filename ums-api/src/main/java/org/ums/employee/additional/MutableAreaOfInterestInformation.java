@@ -8,8 +8,6 @@ import org.ums.domain.model.mutable.MutableLastModifier;
 public interface MutableAreaOfInterestInformation extends AreaOfInterestInformation, Editable<String>,
     MutableIdentifier<String>, MutableLastModifier {
 
-  void setEmployeeId(final String pEmployeeId);
-
   void setAreaOfInterest(final AreaOfInterest pAreaOfInterest);
 
   void setAreaOfInterestId(final Integer pAreaOfInterestId);

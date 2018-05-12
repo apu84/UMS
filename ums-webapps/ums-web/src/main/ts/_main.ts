@@ -270,7 +270,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/CRUDDetectionService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformationService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformationModel.ts' />
-/// <reference path='../../../../ums-web-core/src/main/ts/library/SearchLibrary.ts' />
+/// <reference path='../../../../ums-web-core/src/main/ts/library/LibrarySearch.ts' />
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CountryService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DivisionService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DistrictService.ts'/>
@@ -288,7 +288,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/ApprovePublicationService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/PagerService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/PersonalInformation.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/employee/EducationInformation.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/AcademicInformation.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/PublicationInformation.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/AwardInformation.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/TrainingInformation.ts'/>

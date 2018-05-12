@@ -127,8 +127,8 @@ module ums {
             this.catalogingService.fetchRecords(pageNumber, this.$scope.data.itemPerPage, "", this.$scope.search.filter).then((response: any) => {
                 this.$scope.recordIdList = Array<String>();
                 this.$scope.recordList = response.entries;
-                this.prepareRecord();
                 this.$scope.data.totalRecord = response.total;
+                this.prepareRecord();
                 for (var i = 0; i < this.$scope.recordList.length; i++) {
                     this.$scope.recordIdList.push(this.$scope.recordList[i].mfnNo);
                 }

@@ -10,8 +10,6 @@ import java.io.Serializable;
 public interface AreaOfInterestInformation extends Serializable, EditType<MutableAreaOfInterestInformation>,
     Identifier<String>, LastModifier {
 
-  String getEmployeeId();
-
   AreaOfInterest getAreaOfInterest();
 
   Integer getAreaOfInterestId();

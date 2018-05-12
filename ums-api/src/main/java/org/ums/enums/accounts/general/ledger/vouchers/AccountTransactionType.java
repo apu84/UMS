@@ -9,7 +9,8 @@ import java.util.Map;
  */
 public enum AccountTransactionType {
   BUYING("B"),
-  SELLING("S");
+  SELLING("S"),
+  OPENING_BALANCE("O");
 
   private static final Map<String, AccountTransactionType> Lookup = new HashMap<>();
 

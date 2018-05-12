@@ -491,6 +491,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
+  @JsonSerialize(using = UmsDateSerializer.class)
   public Date getPostDate() {
     return postDate;
   }

@@ -72,7 +72,7 @@ public class ChartOfAccountsReportGenerator {
     paragraph.setAlignment(Element.ALIGN_CENTER);
     document.add(paragraph);
 
-    Group assetGroup = mSystemGroupMapManager.get(GroupType.ASSETS.getValue()).getGroup();
+    Group assetGroup = mSystemGroupMapManager.get(GroupType.ASSETS, mCompanyManager.getDefaultCompany()).getGroup();
     List<Group> assetRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(assetGroup.getGroupCode()));
     Chunk chunk = new Chunk(assetGroup.getGroupName(), mBoldFont);
     chunk.setUnderline(1, -3);
@@ -81,7 +81,7 @@ public class ChartOfAccountsReportGenerator {
     document = createGroupBasedAccountReport(document, assetRelatedGroupList, groupMapWithAccounts);
 
 
-    Group liabilityGroup = mSystemGroupMapManager.get(GroupType.LIABILITIES.getValue()).getGroup();
+    Group liabilityGroup = mSystemGroupMapManager.get(GroupType.LIABILITIES, mCompanyManager.getDefaultCompany()).getGroup();
     List<Group> liabilityRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(liabilityGroup.getGroupCode()));
     chunk = new Chunk(liabilityGroup.getGroupName(), mBoldFont);
     chunk.setUnderline(1, -3);
@@ -89,7 +89,7 @@ public class ChartOfAccountsReportGenerator {
     document.add(paragraph);
     document = createGroupBasedAccountReport(document, liabilityRelatedGroupList, groupMapWithAccounts);
 
-    Group incomeGroup = mSystemGroupMapManager.get(GroupType.INCOME.getValue()).getGroup();
+    Group incomeGroup = mSystemGroupMapManager.get(GroupType.INCOME, mCompanyManager.getDefaultCompany()).getGroup();
     List<Group> incomeRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(incomeGroup.getGroupCode()));
     chunk = new Chunk(incomeGroup.getGroupName(), mBoldFont);
     chunk.setUnderline(1, -3);
@@ -97,7 +97,7 @@ public class ChartOfAccountsReportGenerator {
     document.add(paragraph);
     document = createGroupBasedAccountReport(document, incomeRelatedGroupList, groupMapWithAccounts);
 
-    Group expenseGroup = mSystemGroupMapManager.get(GroupType.EXPENSES.getValue()).getGroup();
+    Group expenseGroup = mSystemGroupMapManager.get(GroupType.EXPENSES, mCompanyManager.getDefaultCompany()).getGroup();
     List<Group> expenseRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(expenseGroup.getGroupCode()));
     chunk = new Chunk(expenseGroup.getGroupName(), mBoldFont);
     chunk.setUnderline(1, -3);

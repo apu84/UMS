@@ -1,115 +1,75 @@
 package org.ums.employee.award;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.manager.ContentManager;
 import org.ums.resource.ResourceHelper;
 
-import javax.json.*;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class AwardInformationResourceHelper extends ResourceHelper<AwardInformation, MutableAwardInformation, Long> {
 
   @Autowired
-  AwardInformationManager mAwardInformationManager;
+  AwardInformationManager mManager;
 
   @Autowired
-  AwardInformationBuilder mAwardInformationBuilder;
-
-  public JsonObject getAwardInformation(final String pEmployeeId, final UriInfo pUriInfo) {
-    List<AwardInformation> pAwardInformation = new ArrayList<>();
-    try {
-      pAwardInformation = mAwardInformationManager.getEmployeeAwardInformation(pEmployeeId);
-    } catch(EmptyResultDataAccessException e) {
-
-    }
-    return toJson(pAwardInformation, pUriInfo);
-  }
-
-  @Transactional
-  public Response saveAwardInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
-    LocalCache localCache = new LocalCache();
-    JsonArray entries = pJsonObject.getJsonArray("entries");
-    JsonArray awardJsonArray = entries.getJsonObject(0).getJsonArray("award");
-    int sizeOfAwardJsonArray = awardJsonArray.size();
-
-    List<MutableAwardInformation> createMutableAwardInformation = new ArrayList<>();
-    List<MutableAwardInformation> updateMutableAwardInformation = new ArrayList<>();
-    List<MutableAwardInformation> deleteMutableAwardInformation = new ArrayList<>();
-
-    for(int i = 0; i < sizeOfAwardJsonArray; i++) {
-      MutableAwardInformation awardInformation = new PersistentAwardInformation();
-      mAwardInformationBuilder.build(awardInformation, awardJsonArray.getJsonObject(i), localCache);
-      if(awardJsonArray.getJsonObject(i).containsKey("dbAction")) {
-        if(awardJsonArray.getJsonObject(i).getString("dbAction").equals("Create")) {
-          createMutableAwardInformation.add(awardInformation);
-        }
-        else if(awardJsonArray.getJsonObject(i).getString("dbAction").equals("Update")) {
-          updateMutableAwardInformation.add(awardInformation);
-        }
-        else if(awardJsonArray.getJsonObject(i).getString("dbAction").equals("Delete")) {
-          deleteMutableAwardInformation.add(awardInformation);
-        }
-      }
-      else {
-        Response.ResponseBuilder builder = Response.created(null);
-        builder.status(Response.Status.NOT_MODIFIED);
-        return builder.build();
-      }
-    }
-
-    if(createMutableAwardInformation.size() != 0) {
-      mAwardInformationManager.saveAwardInformation(createMutableAwardInformation);
-    }
-    if(updateMutableAwardInformation.size() != 0) {
-      mAwardInformationManager.updateAwardInformation(updateMutableAwardInformation);
-    }
-    if(deleteMutableAwardInformation.size() != 0) {
-      mAwardInformationManager.deleteAwardInformation(deleteMutableAwardInformation);
-    }
-
-    Response.ResponseBuilder builder = Response.created(null);
-    builder.status(Response.Status.CREATED);
-    return builder.build();
-  }
-
-  private JsonObject toJson(List<AwardInformation> pAwardInformation, UriInfo pUriInfo) {
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-
-    for(AwardInformation awardInformation : pAwardInformation) {
-      JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-      getBuilder().build(jsonObject, awardInformation, pUriInfo, localCache);
-      children.add(jsonObject);
-    }
-
-    object.add("entries", children);
-    localCache.invalidate();
-    return object.build();
-  }
+  AwardInformationBuilder mBuilder;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, final UriInfo pUriInfo) {
+    LocalCache localCache = new LocalCache();
+    MutableAwardInformation mutableAwardInformation = new PersistentAwardInformation();
+    mBuilder.build(mutableAwardInformation, pJsonObject.getJsonObject("entries"), localCache);
+    Long id = mManager.create(mutableAwardInformation);
+    JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+    mBuilder.build(objectBuilder, mManager.get(id), pUriInfo, localCache);
+    localCache.invalidate();
+    return Response.ok(objectBuilder.build()).build();
+  }
+
+  public JsonObject get(final String pEmployeeId, final UriInfo pUriInfo) {
+    if(mManager.exists(pEmployeeId)) {
+      List<AwardInformation> awardInformationList = mManager.get(pEmployeeId);
+      return buildJsonResponse(awardInformationList, pUriInfo);
+    }
     return null;
+  }
+
+  public Response update(JsonObject pJsonObject, final UriInfo pUriInfo) {
+    LocalCache localCache = new LocalCache();
+    MutableAwardInformation mutableAwardInformation = new PersistentAwardInformation();
+    mBuilder.build(mutableAwardInformation, pJsonObject.getJsonObject("entries"), localCache);
+    mManager.update(mutableAwardInformation);
+    JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+    mBuilder.build(objectBuilder, mManager.get(mutableAwardInformation.getId()), pUriInfo, localCache);
+    localCache.invalidate();
+    return Response.ok(objectBuilder.build()).build();
+  }
+
+  public Response delete(Long id, UriInfo pUriInfo) {
+    LocalCache localCache = new LocalCache();
+    MutableAwardInformation mutableAwardInformation = (MutableAwardInformation) mManager.get(id);
+    mManager.delete(mutableAwardInformation);
+    localCache.invalidate();
+    return Response.noContent().build();
   }
 
   @Override
   protected ContentManager<AwardInformation, MutableAwardInformation, Long> getContentManager() {
-    return mAwardInformationManager;
+    return mManager;
   }
 
   @Override
   protected Builder<AwardInformation, MutableAwardInformation> getBuilder() {
-    return mAwardInformationBuilder;
+    return mBuilder;
   }
 
   @Override

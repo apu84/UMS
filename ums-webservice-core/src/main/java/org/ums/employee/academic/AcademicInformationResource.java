@@ -1,5 +1,6 @@
 package org.ums.employee.academic;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.logs.GetLog;
 import org.ums.resource.Resource;
@@ -16,11 +17,14 @@ import javax.ws.rs.core.Request;
 @Consumes(Resource.MIME_TYPE_JSON)
 public class AcademicInformationResource extends MutableAcademicInformationResource {
 
+  @Autowired
+  private AcademicInformationResourceHelper mHelper;
+
   @GET
-  @Path("/get/employeeId/{employee-id}")
-  @GetLog(message = "Get employee information (academic data)")
-  public JsonObject getAcademicInformation(@Context HttpServletRequest pHttpServletRequest,
+  @Path("/{employee-id}")
+  @GetLog(message = "Get academic information list")
+  public JsonObject get(@Context HttpServletRequest pHttpServletRequest,
       final @PathParam("employee-id") String pEmployeeId, final @Context Request pRequest) throws Exception {
-    return mHelper.getAcademicInformation(pEmployeeId, mUriInfo);
+    return mHelper.get(pEmployeeId, mUriInfo);
   }
 }

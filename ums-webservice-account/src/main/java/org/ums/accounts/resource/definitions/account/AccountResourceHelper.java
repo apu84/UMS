@@ -7,14 +7,13 @@ import org.ums.accounts.resource.definitions.account.balance.AccountBalanceBuild
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.accounts.Account;
-import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
 import org.ums.domain.model.immutable.accounts.Group;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
-import org.ums.enums.accounts.definitions.account.balance.BalanceType;
-import org.ums.enums.accounts.definitions.financial.account.year.YearClosingFlagType;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
 import org.ums.enums.accounts.definitions.group.GroupType;
+import org.ums.enums.accounts.definitions.voucher.number.control.VoucherType;
+import org.ums.exceptions.ValidationException;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
@@ -22,6 +21,9 @@ import org.ums.persistent.model.accounts.PersistentAccount;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
 import org.ums.resource.ResourceHelper;
 import org.ums.service.AccountBalanceService;
+import org.ums.service.AccountService;
+import org.ums.service.AccountTransactionService;
+import org.ums.service.VoucherService;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
@@ -70,50 +72,61 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
   private SystemGroupMapManager mSystemGroupMapManager;
   @Autowired
   private CompanyManager mCompanyManager;
+  @Autowired
+  private AccountService mAccountService;
+  @Autowired
+  private AccountTransactionService mAccountTransactionService;
+  @Autowired
+  private VoucherService mVoucherService;
+  @Autowired
+  private VoucherManager mVoucherManager;
+  @Autowired
+  private VoucherNumberControlManager mVoucherNumberControlManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     return null;
   }
 
-  public JsonObject createAccount(final JsonObject pJsonObject, int pItemPerPage, int pItemNumber,
-      final UriInfo pUriInfo) {
-//    JsonArray entries = pJsonObject.getJsonArray("entries");
-    LocalCache cache = new LocalCache();
-    MutableAccount account = new PersistentAccount();
-//    JsonObject jsonObject = entries.getJsonObject(0);
-    getBuilder().build(account, pJsonObject, cache);
+  public List<Account> createAccount(PersistentAccount pAccount, PersistentAccountBalance pAccountBalance,
+      int pItemPerPage, int pItemNumber) throws Exception {
+    MutableAccount account = pAccount;
+    if(mVoucherNumberControlManager.getByVoucher(mVoucherManager.get(VoucherType.JOURNAL_VOUCHER.getId()),
+        mCompanyManager.getDefaultCompany()).getVoucherLimit() == null) {
+      throw new ValidationException("No limit for Journal Voucher, please set up the total limit.");
+    }
+    if(!mVoucherService.checkWhetherTheBalanceExceedsVoucherLimit(VoucherType.JOURNAL_VOUCHER,
+        pAccountBalance.getYearOpenBalance())) {
+      throw new ValidationException("Total limit exceeds for journal voucher");
+    }
+
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     account.setModifiedBy(user.getEmployeeId());
     account.setModifiedDate(new Date());
-    account.setAccountCode(account.getAccountCode() == null || account.getAccGroupCode().equals("") ? mIdGenerator.getNumericId() : account.getAccountCode());
+    account.setReserved(account.getReserved() == null ? false : account.getReserved());
+    account.setAccountCode(account.getAccountCode() == null || account.getAccountCode().equals("") ? mIdGenerator
+        .getNumericId() : account.getAccountCode());
     account.setCompanyId(mCompanyManager.getDefaultCompany().getId());
-    Long id = getContentManager().create(account);
-    account.setId(id);
-    MutableAccountBalance accountBalance = new PersistentAccountBalance();
-    mAccountBalanceBuilder.build(accountBalance, pJsonObject, cache);
-    if (accountBalance != null) {
-      FinancialAccountYear financialAccountYears = mFinancialAccountYearManager.getAll().stream().filter(f -> f.getYearClosingFlag().equals(YearClosingFlagType.OPEN)).collect(Collectors.toList()).get(0);
-      accountBalance.setId(mIdGenerator.getNumericId());
-      accountBalance.setYearOpenBalanceType(BalanceType.Dr);
-      accountBalance.setYearOpenBalance(accountBalance.getYearOpenBalance() == null ? new BigDecimal(0.00) : accountBalance.getYearOpenBalance());
-      accountBalance.setFinStartDate(financialAccountYears.getCurrentStartDate());
-      accountBalance.setFinEndDate(financialAccountYears.getCurrentEndDate());
-      accountBalance.setAccountCode(id);
-      accountBalance.setTotDebitTrans(accountBalance.getYearOpenBalance() == null ? new BigDecimal(0.00) : accountBalance.getYearOpenBalance());
-      accountBalance.setTotCreditTrans(new BigDecimal(0.000));
-      accountBalance.setModifiedBy(user.getEmployeeId());
-      accountBalance.setModifiedDate(new Date());
-      accountBalance = mAccountBalanceService.setMonthAccountBalance(accountBalance, account);
-      mAccountBalanceManager.insertFromAccount(accountBalance);
+    if(account.getId() == null) {
+      Long id = getContentManager().create(account);
+      account.setId(id);
+    }
+    else {
+      getContentManager().update(account);
+      return getAllPaginated(pItemPerPage, pItemNumber);
     }
 
-    return getAllPaginated(pItemPerPage, pItemNumber, pUriInfo);
+    MutableAccountBalance accountBalance = pAccountBalance;
+    accountBalance = mAccountBalanceService.createAccountBalance(account, user, accountBalance);
+
+    if(accountBalance.getYearOpenBalance().equals(new BigDecimal(0)) == false)
+      mAccountTransactionService.createOpeningBalanceJournalEntry(account, accountBalance);
+    return getAllPaginated(pItemPerPage, pItemNumber);
   }
 
-  public JsonObject getAll(final UriInfo pUriInfo) {
+  public List<Account> getAll() {
     List<Account> accounts = getContentManager().getAll();
-    return getJsonObject(pUriInfo, accounts);
+    return accounts;
   }
 
   public JsonObject getAccounts(final GroupFlag pGroupFlag, final UriInfo pUriInfo) {
@@ -121,57 +134,71 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     return getJsonObject(pUriInfo, accounts);
   }
 
-  public JsonObject getCustomerAndVendorAccounts(final UriInfo pUriInfo) {
+  public List<Account> getCustomerAndVendorAccounts(final UriInfo pUriInfo) {
     List<String> groupCodeList = new ArrayList<>();
-    // groupCodeList.add(GroupType.SUNDRY_CREDITOR.getValue());
-    groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_CREDITOR.getValue()).getGroup().getGroupCode());
+    if(mSystemGroupMapManager.exists(GroupType.SUNDRY_CREDITOR, mCompanyManager.getDefaultCompany()))
+      groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_CREDITOR, mCompanyManager.getDefaultCompany())
+          .getGroup().getGroupCode());
+    if(mSystemGroupMapManager.exists(GroupType.SUNDRY_DEBTOR, mCompanyManager.getDefaultCompany()))
+      groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_DEBTOR, mCompanyManager.getDefaultCompany())
+          .getGroup().getGroupCode());
+    return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
+  }
+
+  public List<Account> getVendorAccounts(final UriInfo pUriInfo) {
+    List<String> groupCodeList = new ArrayList<>();
+    if(mSystemGroupMapManager.exists(GroupType.SUNDRY_CREDITOR, mCompanyManager.getDefaultCompany()))
+      groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_CREDITOR, mCompanyManager.getDefaultCompany())
+          .getGroup().getGroupCode());
+    return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
+  }
+
+  public List<Account> getCustomerAccounts(final UriInfo pUriInfo) {
+    List<String> groupCodeList = new ArrayList<>();
     // groupCodeList.add(GroupType.SUNDRY_DEBTOR.getValue());
-    groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_DEBTOR.getValue()).getGroup().getGroupCode());
+
+    if(mSystemGroupMapManager.exists(GroupType.SUNDRY_DEBTOR, mCompanyManager.getDefaultCompany()))
+      groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_DEBTOR, mCompanyManager.getDefaultCompany())
+          .getGroup().getGroupCode());
     return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
   }
 
-  public JsonObject getVendorAccounts(final UriInfo pUriInfo) {
-    List<String> groupCodeList = new ArrayList<>();
-    // groupCodeList.add(GroupType.SUNDRY_CREDITOR.getValue());
-    groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_CREDITOR.getValue()).getGroup().getGroupCode());
-    return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
-  }
-
-  public JsonObject getCustomerAccounts(final UriInfo pUriInfo) {
-    List<String> groupCodeList = new ArrayList<>();
-    // groupCodeList.add(GroupType.SUNDRY_DEBTOR.getValue());
-    groupCodeList.add(mSystemGroupMapManager.get(GroupType.SUNDRY_DEBTOR.getValue()).getGroup().getGroupCode());
-    return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
-  }
-
-  private JsonObject getAccountsBasedOnGroupList(List<String> pGroupCodeList, UriInfo pUriInfo) {
+  private List<Account> getAccountsBasedOnGroupList(List<String> pGroupCodeList, UriInfo pUriInfo) {
     List<Group> groups = mGroupManager.getIncludingMainGroupList(pGroupCodeList);
-    List<Account> accounts = mAccountManager.getIncludingGroups(groups.stream().map(a -> a.getGroupCode()).collect(Collectors.toList()));
-    return getJsonObject(pUriInfo, accounts);
+    List<Account> accounts = new ArrayList<>();
+    if(groups!=null && groups.size()>0)
+    accounts = mAccountManager.getIncludingGroups(groups.stream().map(a -> a.getGroupCode()).collect(Collectors.toList()));
+    return accounts;
   }
 
-  private JsonObject getAccountExcludingGroupList(List<String> pGroupCodeList, UriInfo pUriInfo) {
+  private List<Account> getAccountExcludingGroupList(List<String> pGroupCodeList, UriInfo pUriInfo) {
     List<Group> groups = mGroupManager.getExcludingMainGroupList(pGroupCodeList);
-    List<Account> accounts = mAccountManager.getIncludingGroups(groups.stream().map(a -> a.getGroupCode()).collect(Collectors.toList()));
-    return getJsonObject(pUriInfo, accounts);
+    List<Account> accounts = new ArrayList<>();
+    if(groups!=null && groups.size()>0)
+    accounts = mAccountManager.getIncludingGroups(groups.stream().map(a -> a.getGroupCode()).collect(Collectors.toList()));
+    return accounts;
   }
 
-  public JsonObject getBankAndCostTypeAccounts(final UriInfo pUriInfo) {
+  public List<Account> getBankAndCostTypeAccounts(final UriInfo pUriInfo) {
     List<String> groupCodeList = new ArrayList<String>();
-    // groupCodeList.add(GroupType.BANK_ACCOUNTS.getValue());
-    groupCodeList.add(mSystemGroupMapManager.get(GroupType.BANK_ACCOUNTS.getValue()).getGroup().getGroupCode());
-    // groupCodeList.add(GroupType.CASH_IN_HAND.getValue());
-    groupCodeList.add(mSystemGroupMapManager.get(GroupType.CASH_IN_HAND.getValue()).getGroup().getGroupCode());
+    if(mSystemGroupMapManager.exists(GroupType.BANK_ACCOUNTS, mCompanyManager.getDefaultCompany()))
+      groupCodeList.add(mSystemGroupMapManager
+          .get(GroupType.SUNDRY_DEBTOR.BANK_ACCOUNTS, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode());
+    if(mSystemGroupMapManager.exists(GroupType.CASH_IN_HAND, mCompanyManager.getDefaultCompany()))
+      groupCodeList.add(mSystemGroupMapManager.get(GroupType.CASH_IN_HAND, mCompanyManager.getDefaultCompany())
+          .getGroup().getGroupCode());
     return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
 
   }
 
-  public JsonObject getExcludingBankAndCostTypeAccounts(final UriInfo pUriInfo) {
+  public List<Account> getExcludingBankAndCostTypeAccounts(final UriInfo pUriInfo) {
     List<String> groupCodeList = new ArrayList<String>();
-    // groupCodeList.add(GroupType.BANK_ACCOUNTS.getValue());
-    groupCodeList.add(mSystemGroupMapManager.get(GroupType.BANK_ACCOUNTS.getValue()).getGroup().getGroupCode());
-    // groupCodeList.add(GroupType.CASH_IN_HAND.getValue());
-    groupCodeList.add(mSystemGroupMapManager.get(GroupType.CASH_IN_HAND.getValue()).getGroup().getGroupCode());
+    if(mSystemGroupMapManager.exists(GroupType.BANK_ACCOUNTS, mCompanyManager.getDefaultCompany()))
+      groupCodeList.add(mSystemGroupMapManager.get(GroupType.BANK_ACCOUNTS, mCompanyManager.getDefaultCompany())
+          .getGroup().getGroupCode());
+    if(mSystemGroupMapManager.exists(GroupType.CASH_IN_HAND, mCompanyManager.getDefaultCompany()))
+      groupCodeList.add(mSystemGroupMapManager.get(GroupType.CASH_IN_HAND, mCompanyManager.getDefaultCompany())
+          .getGroup().getGroupCode());
     return getAccountExcludingGroupList(groupCodeList, pUriInfo);
   }
 
@@ -187,14 +214,14 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     return objectBuilder.build();
   }
 
-  public JsonObject getAllPaginated(final int pItemPerPage, final int pPageNumber, final UriInfo pUriInfo) {
+  public List<Account> getAllPaginated(final int pItemPerPage, final int pPageNumber) {
     List<Account> accounts = getContentManager().getAllPaginated(pItemPerPage, pPageNumber);
-    return getJsonObject(pUriInfo, accounts);
+    return accounts;
   }
 
-  public JsonObject getAccountsByAccountName(final String pAccountName, final UriInfo pUriInfo) {
+  public List<Account> getAccountsByAccountName(final String pAccountName) {
     List<Account> accounts = getContentManager().getAccounts(pAccountName);
-    return getJsonObject(pUriInfo, accounts);
+    return accounts;
   }
 
   private Integer generateSecureAccountId() {

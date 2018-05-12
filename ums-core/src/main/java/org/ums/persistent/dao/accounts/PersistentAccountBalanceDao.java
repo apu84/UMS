@@ -1,5 +1,7 @@
 package org.ums.persistent.dao.accounts;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -93,8 +95,13 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
   @Override
   public AccountBalance getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate, Account pAccount) {
     String query = "select * from MST_ACCOUNT_BALANCE where FIN_START_DATE=? and FIN_END_DATE=? and ACCOUNT_CODE=?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pFinancialStartDate, pFinancialEndDate, pAccount.getId()},
-        new AccountBalanceRowMapper());
+    try {
+      return mJdbcTemplate.queryForObject(query,
+          new Object[] {pFinancialStartDate, pFinancialEndDate, pAccount.getId()}, new AccountBalanceRowMapper());
+    } catch(EmptyResultDataAccessException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   @Override
@@ -131,6 +138,13 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
     String query = UPDATE_ONE;
     Map<String, Object>[] parameterObjects = getParameterObjects(pMutableList);
     return mNamedParameterJdbcTemplate.batchUpdate(query, parameterObjects).length;
+  }
+
+  @Override
+  public int update(MutableAccountBalance pMutable) {
+    String query = UPDATE_ONE;
+    Map parameterMap = getInsertParameters(pMutable);
+    return mNamedParameterJdbcTemplate.update(query, parameterMap);
   }
 
   private Map<String, Object>[] getParameterObjects(List<MutableAccountBalance> pMutableAccountBalances) {

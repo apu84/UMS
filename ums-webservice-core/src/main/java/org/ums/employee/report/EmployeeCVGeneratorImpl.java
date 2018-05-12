@@ -109,46 +109,46 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
 
     List<AcademicInformation> academicInformation = new ArrayList<>();
     try {
-      academicInformation = mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
+      academicInformation = mAcademicInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
 
     List<PublicationInformation> publicationInformation = new ArrayList<>();
     try {
-      publicationInformation = mPublicationInformationManager.getEmployeePublicationInformation(pEmployeeId);
+      publicationInformation = mPublicationInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
 
     List<TrainingInformation> trainingInformation = new ArrayList<>();
     try {
-      trainingInformation = mTrainingInformationManager.getEmployeeTrainingInformation(pEmployeeId);
+      trainingInformation = mTrainingInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
 
     List<AwardInformation> awardInformation = new ArrayList<>();
     try {
-      awardInformation = mAwardInformationManager.getEmployeeAwardInformation(pEmployeeId);
+      awardInformation = mAwardInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
     List<ExperienceInformation> experienceInformation = new ArrayList<>();
     try {
-      experienceInformation = mExperienceInformationManager.getEmployeeExperienceInformation(pEmployeeId);
+      experienceInformation = mExperienceInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
     AdditionalInformation additionalInformation = new PersistentAdditionalInformation();
     try {
-      additionalInformation = mAdditionalInformationManager.getAdditionalInformation(pEmployeeId);
+      additionalInformation = mAdditionalInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
     }
 
     List<AreaOfInterestInformation> areaOfInterestInformation = new ArrayList<>();
     try {
-      areaOfInterestInformation = mAreaOfInterestInformationManager.getAreaOfInterestInformation(pEmployeeId);
+      areaOfInterestInformation = mAreaOfInterestInformationManager.getAll(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }

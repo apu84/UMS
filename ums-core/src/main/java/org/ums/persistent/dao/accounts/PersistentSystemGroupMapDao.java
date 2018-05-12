@@ -1,5 +1,6 @@
 package org.ums.persistent.dao.accounts;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -51,11 +52,33 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
   }
 
   @Override
-  public SystemGroupMap get(String pId) {
-    String query = SELECT_ALL + " WHERE ID=:id";
+  public SystemGroupMap get(GroupType pGroupType, Company pCompany) {
+    String query = SELECT_ALL + " where group_type=:groupType and comp_id=:compId";
+    Map map = new HashMap();
+    map.put("groupType", pGroupType.getValue());
+    map.put("compId", pCompany.getId());
+    return mNamedParameterJdbcTemplate.queryForObject(query, map, new PersistentSystemGroupMapRowMapper());
+  }
+
+  @Override
+  public boolean exists(GroupType pGroupType, Company pCompany) {
+    String query = "select count(*) from system_group_map where group_type=:groupType and comp_id=:compId";
     Map parameterMap = new HashMap();
-    parameterMap.put("id", pId);
-    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentSystemGroupMapRowMapper());
+    parameterMap.put("groupType", pGroupType.getValue());
+    parameterMap.put("compId", pCompany.getId());
+    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, Integer.class) == 0 ? false : true;
+  }
+
+  @Override
+  public SystemGroupMap get(Long pId) {
+    String query = SELECT_ALL + " WHERE ID=:id";
+    try {
+      Map parameterMap = new HashMap();
+      parameterMap.put("id", pId);
+      return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentSystemGroupMapRowMapper());
+    } catch(EmptyResultDataAccessException e) {
+      return null;
+    }
   }
 
   @Override
@@ -90,7 +113,7 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
       return 0;
     String query = DELETE_ONE + " where id in(:id)";
     Map parameterMap = new HashMap();
-    List<String> idList = pMutableList.stream().map(p -> p.getId()).collect(Collectors.toList());
+    List<Long> idList = pMutableList.stream().map(p -> p.getId()).collect(Collectors.toList());
     parameterMap.put("id", idList);
     return mNamedParameterJdbcTemplate.update(query, parameterMap);
   }
@@ -106,14 +129,14 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
   }
 
   @Override
-  public String create(MutableSystemGroupMap pMutable) {
+  public Long create(MutableSystemGroupMap pMutable) {
     String query = INSERT_ONE;
     mNamedParameterJdbcTemplate.update(query, getInsertOrUpdateParameters(pMutable));
     return pMutable.getId();
   }
 
   @Override
-  public List<String> create(List<MutableSystemGroupMap> pMutableList) {
+  public List<Long> create(List<MutableSystemGroupMap> pMutableList) {
     String query = INSERT_ONE;
     Map<String, Object>[] parameters = getParameterObjects(pMutableList);
     mNamedParameterJdbcTemplate.batchUpdate(query, parameters);
@@ -121,7 +144,7 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
   }
 
   @Override
-  public boolean exists(String pId) {
+  public boolean exists(Long pId) {
     return get(pId) == null ? false : true;
   }
 
@@ -157,7 +180,7 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
 
   private Map getInsertOrUpdateParameters(MutableSystemGroupMap pMutableSystemGroupMap) {
     Map parameter = new HashMap();
-    parameter.put("id", pMutableSystemGroupMap.getGroupType().getValue());
+    parameter.put("id", pMutableSystemGroupMap.getId());
     parameter.put("groupType", pMutableSystemGroupMap.getGroupType().getValue());
     parameter.put("groupId", pMutableSystemGroupMap.getGroup().getId());
     parameter.put("companyId", pMutableSystemGroupMap.getCompany().getId());
@@ -170,7 +193,7 @@ public class PersistentSystemGroupMapDao extends SystemGroupMapDaoDecorator {
     @Override
     public SystemGroupMap mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableSystemGroupMap systemGroupMap = new PersistentSystemGroupMap();
-      systemGroupMap.setId(rs.getString("id"));
+      systemGroupMap.setId(rs.getLong("id"));
       systemGroupMap.setGroupType(GroupType.get(rs.getString("group_type")));
       systemGroupMap.setGroupId(rs.getLong("group_id"));
       systemGroupMap.setCompanyId(rs.getString("comp_id"));

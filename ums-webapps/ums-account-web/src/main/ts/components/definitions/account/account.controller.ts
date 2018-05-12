@@ -1,7 +1,9 @@
 module ums {
-  export class AccountController {
+  import IAccountBalance = ums.IAccountBalance;
 
-    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'employeeService'];
+    export class AccountController {
+
+    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'employeeService', 'AccountBalanceService'];
 
     private groups: IGroup[];
     private selectedGroup: IGroup;
@@ -21,7 +23,9 @@ module ums {
                 private notify: Notify,
                 private accountService: AccountService,
                 private groupService: GroupService,
-                private $timeout: ng.ITimeoutService, private employeeService: EmployeeService) {
+                private $timeout: ng.ITimeoutService,
+                private employeeService: EmployeeService,
+                private accountBalanceService: AccountBalanceService) {
 
       this.initialize();
 
@@ -48,7 +52,7 @@ module ums {
     public loadAllGroups() {
       this.groupService.getAllGroups().then((groups: IGroup[]) => {
         this.groups = [];
-        this.groups = groups.filter((g: IGroup) => g.mainGroup != "0");
+        this.groups = groups;
         this.groupMapWithGroupid = {};
         console.log("Groups");
         console.log(groups);
@@ -68,11 +72,14 @@ module ums {
       this.account = <IAccount>{};
       this.account.yearOpenBalanceType = BalanceType.Dr;
       this.account.yearOpenBalance=0;
-      /* this.employeeService.getAll().then((employees: Employee[]) => {
-         this.employeeNames = [];
-         employees.forEach((e: Employee) => this.employeeNames.push(e.employeeName));
-       });*/
+      this.setFocusOnTheModal();
     }
+
+   private setFocusOnTheModal(){
+       $("#addModal").on('shown.bs.modal', ()=>{
+           $("#accountName").focus();
+       });
+   }
 
     public showSearchSection() {
       console.log("In the show search section");
@@ -105,15 +112,31 @@ module ums {
 
     public add() {
       this.account.accGroupCode = this.selectedGroup.groupCode;
-      this.accountService.saveAccountPaginated(this.account, this.itemsPerPage, 1).then((accounts: IAccount[]) => {
-        if (accounts == undefined)
-          this.notify.error("Error in saving data");
-        else {
+      let accountBalance:IAccountBalance = <IAccountBalance>{};
+      accountBalance.yearOpenBalanceType = this.account.yearClosingBalanceType;
+      accountBalance.yearOpenBalance = this.account.yearOpenBalance;
+      accountBalance.yearOpenBalanceType = this.account.yearOpenBalanceType;
+      console.log("account balance");
+      console.log(accountBalance);
+      //todo configure account balance information
+      this.accountService.saveAccountPaginated(this.account, accountBalance, this.itemsPerPage, 1).then((accounts: IAccount[]) => {
+        if (accounts != undefined) {
           this.existingAccounts = [];
           accounts.forEach((a: IAccount) => a.accGroupName = this.groupMapWithGroupid[a.accGroupCode].groupName);
           this.existingAccounts = accounts;
           this.getTotalAccountSize();
         }
+      });
+    }
+
+    public edit(account:IAccount){
+      this.account = account;
+      this.selectedGroup = this.groupMapWithGroupid[this.account.accGroupCode];
+      this.account.yearOpenBalance=0;
+      this.account.yearOpenBalanceType = BalanceType.Dr;
+
+      this.accountBalanceService.getAccountBalance(this.account.id).then((balance:number)=>{
+        this.account.yearOpenBalance=balance;
       });
     }
 

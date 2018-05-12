@@ -4,6 +4,8 @@ import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.enums.registrar.TrainingCategory;
 
+import java.util.Date;
+
 public class PersistentTrainingInformation implements MutableTrainingInformation {
 
   private static TrainingInformationManager sTrainingInformationManager;
@@ -18,8 +20,8 @@ public class PersistentTrainingInformation implements MutableTrainingInformation
   private String mEmployeeId;
   private String mTrainingName;
   private String mTrainingInstitute;
-  private String mTrainingFromDate;
-  private String mTrainingToDate;
+  private Date mTrainingFromDate;
+  private Date mTrainingToDate;
   private int mTrainingDuration;
   private String mTrainingDurationString;
   private TrainingCategory mTrainingCategory;
@@ -95,12 +97,12 @@ public class PersistentTrainingInformation implements MutableTrainingInformation
   }
 
   @Override
-  public void setTrainingFromDate(String pTrainingFromDate) {
+  public void setTrainingFromDate(Date pTrainingFromDate) {
     mTrainingFromDate = pTrainingFromDate;
   }
 
   @Override
-  public void setTrainingToDate(String pTrainingToDate) {
+  public void setTrainingToDate(Date pTrainingToDate) {
     mTrainingToDate = pTrainingToDate;
   }
 
@@ -140,12 +142,12 @@ public class PersistentTrainingInformation implements MutableTrainingInformation
   }
 
   @Override
-  public String getTrainingFromDate() {
+  public Date getTrainingFromDate() {
     return mTrainingFromDate;
   }
 
   @Override
-  public String getTrainingToDate() {
+  public Date getTrainingToDate() {
     return mTrainingToDate;
   }
 

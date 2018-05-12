@@ -25,15 +25,19 @@ public class UmsLogTracerAspect {
   Logger mLogger = LoggerFactory.getLogger(UmsLogTracerAspect.class);
 
   // ******* POST *******//
-  @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest, pJsonArray,..)")
-  public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonArray pJsonArray, PostLog log) {
-    printLog(pHttpServletRequest, log.message(), pJsonArray.toString());
-  }
-
-  @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest, pJsonObject,..)")
-  public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonObject pJsonObject, PostLog log) {
-    printLog(pHttpServletRequest, log.message(), pJsonObject.toString());
-  }
+  /*
+   * @Before(
+   * "@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest, pJsonArray,..)")
+   * public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonArray
+   * pJsonArray, PostLog log) { printLog(pHttpServletRequest, log.message(), pJsonArray.toString());
+   * }
+   * 
+   * @Before(
+   * "@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest, pJsonObject,..)"
+   * ) public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonObject
+   * pJsonObject, PostLog log) { printLog(pHttpServletRequest, log.message(),
+   * pJsonObject.toString()); }
+   */
 
   @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pObject,..)")
   public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, Object pObject, PostLog log) {
@@ -41,18 +45,38 @@ public class UmsLogTracerAspect {
   }
 
   // ******* PUT *******//
-  @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pJsonObject,..)")
-  public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonObject pJsonObject, PutLog log) {
-    printLog(pHttpServletRequest, log.message(), pJsonObject.toString());
-  }
-
-  @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pJsonArray,..)")
-  public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonArray pJsonArray, PutLog log) {
-    printLog(pHttpServletRequest, log.message(), pJsonArray.toString());
-  }
+  // @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pJsonObject,..)")
+  // public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonObject
+  // pJsonObject, PutLog log) {
+  // printLog(pHttpServletRequest, log.message(), pJsonObject.toString());
+  // }
+  //
+  // @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pJsonArray,..)")
+  // public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonArray
+  // pJsonArray, PutLog log) {
+  // printLog(pHttpServletRequest, log.message(), pJsonArray.toString());
+  // }
 
   @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pObject,..)")
   public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, Object pObject, PutLog log) {
+    printLog(pHttpServletRequest, log.message(), pObject.toString());
+  }
+
+  // ******* DELETE *******//
+  // @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pJsonObject,..)")
+  // public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonObject
+  // pJsonObject, DeleteLog log) {
+  // printLog(pHttpServletRequest, log.message(), pJsonObject.toString());
+  // }
+  //
+  // @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pJsonArray,..)")
+  // public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, JsonArray
+  // pJsonArray, DeleteLog log) {
+  // printLog(pHttpServletRequest, log.message(), pJsonArray.toString());
+  // }
+
+  @Before("@annotation(log) && execution(* org.ums..*(..)) &&  args(pHttpServletRequest,pObject,..)")
+  public void callAt(JoinPoint pJoinPoint, HttpServletRequest pHttpServletRequest, Object pObject, DeleteLog log) {
     printLog(pHttpServletRequest, log.message(), pObject.toString());
   }
 

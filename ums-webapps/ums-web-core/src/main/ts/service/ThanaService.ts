@@ -6,12 +6,12 @@ module ums{
                     private $sce: ng.ISCEService, private $window: ng.IWindowService) {
         }
 
-        public getThanaList(): ng.IPromise<any> {
+        public getAll(): ng.IPromise<any> {
             let url = "thana/all";
             let defer = this.$q.defer();
             this.HttpClient.get(url, 'application/json',
                 (json: any, etag: string) => {
-                    defer.resolve(json);
+                    defer.resolve(json.entries);
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {
                     console.error(response);

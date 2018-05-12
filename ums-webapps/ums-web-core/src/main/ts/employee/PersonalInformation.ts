@@ -75,18 +75,18 @@ module ums {
         }
 
         private initialization() {
-            this.countryService.getCountryList().then((countries: any) => {
-                this.countries = countries.entries;
-                this.divisionService.getDivisionList().then((divisions: any) => {
-                    this.divisions = divisions.entries;
-                    this.districtService.getDistrictList().then((districts: any) => {
-                        this.presentAddressDistricts = districts.entries;
-                        this.permanentAddressDistricts = districts.entries;
-                        this.allDistricts = districts.entries;
-                        this.thanaService.getThanaList().then((thanas: any) => {
-                            this.presentAddressThanas = thanas.entries;
-                            this.permanentAddressThanas = thanas.entries;
-                            this.allThanas = thanas.entries;
+            this.countryService.getAll().then((countries: any) => {
+                this.countries = countries;
+                this.divisionService.getAll().then((divisions: any) => {
+                    this.divisions = divisions;
+                    this.districtService.getAll().then((districts: any) => {
+                        this.presentAddressDistricts = districts;
+                        this.permanentAddressDistricts = districts;
+                        this.allDistricts = districts;
+                        this.thanaService.getAll().then((thanas: any) => {
+                            this.presentAddressThanas = thanas;
+                            this.permanentAddressThanas = thanas;
+                            this.allThanas = thanas;
                             this.getPersonalInformation();
                         });
                     });

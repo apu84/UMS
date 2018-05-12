@@ -1,5 +1,7 @@
 package org.ums.persistent.dao.accounts;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.*;
@@ -45,6 +47,8 @@ public class PersistentGroupDao extends GroupDaoDecorator {
 
   @Override
   public List<Group> getExcludingMainGroupList(List<String> pMainGroupCodeList) {
+    if(pMainGroupCodeList.size() == 0)
+      return null;
     String query =
         "select * from MST_GROUP where GROUP_CODE in ( "
             + "select DISTINCT group_code from "
@@ -62,6 +66,8 @@ public class PersistentGroupDao extends GroupDaoDecorator {
 
   @Override
   public List<Group> getIncludingMainGroupList(List<String> pMainGroupCodeList) {
+    if(pMainGroupCodeList.size() == 0)
+      return null;
     String query =
         "select * from MST_GROUP where GROUP_CODE in ( "
             + "select DISTINCT group_code from "
@@ -86,8 +92,13 @@ public class PersistentGroupDao extends GroupDaoDecorator {
   @Override
   public Group get(Long pId) {
     String sql = "select * from mst_group where id= :id";
-    SqlParameterSource namedParameters = new MapSqlParameterSource("id", pId);
-    return this.mNamedParameterJdbcTemplate.queryForObject(sql, namedParameters, new PersistentGroupRowMapper());
+    try {
+      SqlParameterSource namedParameters = new MapSqlParameterSource("id", pId);
+      return this.mNamedParameterJdbcTemplate.queryForObject(sql, namedParameters, new PersistentGroupRowMapper());
+    } catch(EmptyResultDataAccessException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   @Override

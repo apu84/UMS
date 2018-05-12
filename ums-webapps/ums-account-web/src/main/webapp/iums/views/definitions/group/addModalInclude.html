@@ -12,8 +12,8 @@
                     <div class="form-group">
                         <label class="control-label col-sm-4" for="groupName">Group Name</label>
                         <div class="col-sm-6">
-                            <input type="text" ng-model="vm.addedGroup.groupName"
-                                   class="form-control" name="groupName" required/>
+                            <input type="text" id="groupName" ng-model="vm.addedGroup.groupName"
+                                   class="form-control" name="groupName" required  />
                             <span ng-show="addForm.groupName.$touched && addForm.groupName.$invalid ">Group name is required</span>
                         </div>
                     </div>
@@ -24,11 +24,11 @@
                                        data-ng-model="vm.addedGroup.mainGroupObject"
 
                             >
-                                <ui-select-match placeholder="Select Main Group">
+                                <ui-select-match allow-clear="true" placeholder="Select Main Group">
                                     {{vm.addedGroup.mainGroupObject.groupName}}
                                 </ui-select-match>
                                 <ui-select-choices class="ui-select"
-                                                   repeat="g in vm.groups|filter:$select.search" required
+                                                   repeat="g in vm.groupsForSearch|filter:$select.search" required
                                                    name="mainGroup" for="mainGroup">
                                     <small ng-bind-html="g.groupName | highlight:$select.search"></small>
                                 </ui-select-choices>

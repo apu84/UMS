@@ -185,8 +185,12 @@ module ums {
                         val: '04:20 PM'
                     },
                     {
-                        id: '05:00 PM',
-                        val: '05:00 PM'
+                        id: '05:10 PM',
+                        val: '05:10 PM'
+                    },
+                    {
+                        id: '06:00 PM',
+                        val: '06:00 PM'
                     }
                 ],
                 routineTime: [
@@ -238,6 +242,10 @@ module ums {
                     {
                         counter: '12',
                         id: '05.10 PM'
+                    },
+                    {
+                        counter: '13',
+                        id: '06.00 PM'
                     }
                 ],
                 weekDays: [
@@ -364,7 +372,15 @@ module ums {
                     '110707': ['BSc in IPE'],
                     '110708': ['BSc in ME']
                 },
-                theorySectionsGrid: ":None;A:A;B:B;C:C;D:D",
+                optionalCourseYearSemester: {
+                    '110200':[{'year':'4','semester':'1'},{'year':'4','semester':'2'}],
+                    '110400':[{'year':'4','semester':'2'}],
+                    '110500':[{'year':'4','semester':'1'},{'year':'4','semester':'2'}],
+                    '110600':[{'year':'4','semester':'1'},{'year':'4','semester':'2'}],
+                    '110707':[{'year':'4','semester':'1'},{'year':'4','semester':'2'}],
+                    '110708':[{'year':'4','semester':'1'},{'year':'4','semester':'2'}]
+                },
+          theorySectionsGrid: ":None;A:A;B:B;C:C;D:D",
                 theorySections: [
                     {id: "A", name: "A"},
                     {id: "B", name: "B"},
@@ -648,7 +664,8 @@ module ums {
               {id:"5", name:"Bank Accounts"},
               {id:"6", name:"Cash in hand"},
               {id:"7", name:"Sundry Debtor"},
-              {id:"8", name:"Sundry Creditor"}
+              {id:"8", name:"Sundry Creditor"},
+              {id:"9", name:"Current Liabilities"}
             ]
           }
         }

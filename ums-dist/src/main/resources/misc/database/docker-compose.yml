@@ -9,3 +9,4 @@ services:
     - "/home/munna/Music/ums_src/UMS/ums-dist/src/main/resources/misc/database/oradata:/u01/app/oracle"
     - "/home/munna/Pictures:/home"
 
+

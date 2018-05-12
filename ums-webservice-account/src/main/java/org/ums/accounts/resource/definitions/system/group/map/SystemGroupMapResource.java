@@ -3,6 +3,7 @@ package org.ums.accounts.resource.definitions.system.group.map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.accounts.SystemGroupMap;
+import org.ums.domain.model.mutable.accounts.MutableSystemGroupMap;
 import org.ums.logs.GetLog;
 import org.ums.logs.PostLog;
 import org.ums.logs.PutLog;
@@ -37,7 +38,7 @@ public class SystemGroupMapResource {
   @Path("/id/{id}")
   @GetLog(message = "Getting System Group Map Information by Id")
   public SystemGroupMap get(@Context HttpServletRequest httpServletRequest, @PathParam("id") String pId) {
-    return mHelper.get(pId);
+    return mHelper.get(Long.parseLong(pId));
   }
 
   @PUT
@@ -47,17 +48,17 @@ public class SystemGroupMapResource {
       PersistentSystemGroupMap pMutableSystemGroupMap) {
     mHelper.update(pMutableSystemGroupMap);
     return mResourceContext.getResource(SystemGroupMapResource.class).get(httpServletRequest,
-        pMutableSystemGroupMap.getId());
+        pMutableSystemGroupMap.getId().toString());
   }
 
   @POST
   @Path("/save")
-  @PostLog(message = "Creating a row in System Grou pMap")
+  @PostLog(message = "Creating a row in System Group Map")
   public SystemGroupMap save(@Context HttpServletRequest httpServletRequest,
       PersistentSystemGroupMap pMutableSystemGroupMap) throws Exception {
-    mHelper.save(pMutableSystemGroupMap);
+    MutableSystemGroupMap systemGroupMap = mHelper.save(pMutableSystemGroupMap);
     return mResourceContext.getResource(SystemGroupMapResource.class).get(httpServletRequest,
-        pMutableSystemGroupMap.getGroupType().getValue());
+        systemGroupMap.getId().toString());
   }
 
 }

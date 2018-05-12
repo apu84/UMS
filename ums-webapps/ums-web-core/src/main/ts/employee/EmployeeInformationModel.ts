@@ -62,7 +62,6 @@ module ums{
         institution: string;
         passingYear: number;
         result: string;
-        dbAction: string;
     }
 
     export interface IPublicationInformationModel{
@@ -84,7 +83,6 @@ module ums{
         appliedOn: string;
         actionTakenOn: string;
         rowNumber: number;
-        dbAction: string;
     }
 
     export interface ITrainingInformationModel{
@@ -97,7 +95,6 @@ module ums{
         trainingDuration: number;
         trainingDurationString: string;
         trainingCategory: ICommon;
-        dbAction: string;
     }
 
     export interface IAwardInformationModel{
@@ -107,7 +104,6 @@ module ums{
         awardInstitute: string;
         awardedYear: number;
         awardShortDescription: string;
-        dbAction: string;
     }
 
     export interface IExperienceInformationModel{
@@ -120,7 +116,6 @@ module ums{
         experienceDuration: number;
         experienceDurationString: string;
         experienceCategory: ICommon;
-        dbAction: string;
     }
 
     export interface IAdditionalInformationModel{
@@ -128,10 +123,10 @@ module ums{
         roomNo: string;
         extNo: string;
         academicInitial: string;
-        areaOfInterestInformation: Array<ICommon>;
     }
 
     export interface IAreaOfInterestInformationModel {
+        employeeId: string;
         areaOfInterest: ICommon;
         areaOfInterestId: number;
     }

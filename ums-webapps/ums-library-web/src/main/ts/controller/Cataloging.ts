@@ -835,7 +835,7 @@ module ums {
         }
 
         private loadCountries(): void {
-            this.countryService.getCountryList().then((response: any) => {
+            this.countryService.getAll().then((response: any) => {
                 // this.$scope.countryList = response.entries;
                 this.$scope.collectionList = Array<any>();
                 this.$scope.collectionList.push(response.entries);

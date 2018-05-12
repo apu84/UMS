@@ -313,7 +313,7 @@ module ums {
             .state('searchLibrary', {
                 url: "/searchLibrary",
                 controller: 'SearchLibrary',
-                templateUrl: 'views/search-library.html',
+                templateUrl: 'views/library-search.html',
                 resolve: {
                     loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                         return $ocLazyLoad.load({
