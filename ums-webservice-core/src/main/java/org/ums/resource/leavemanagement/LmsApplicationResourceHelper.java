@@ -11,6 +11,7 @@ import org.springframework.integration.ftp.session.FtpRemoteFileTemplate;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.context.AppContext;
@@ -104,6 +105,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     return null;
   }
 
+  @Transactional
   public JsonObject saveApplication(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     JsonArray entries = pJsonObject.getJsonArray("entries");
     LocalCache localCache = new LocalCache();
@@ -130,7 +132,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     return object.build();
   }
 
-  private String checkApplicationType(PersistentLmsApplication application) {
+  public  String checkApplicationType(PersistentLmsApplication application) {
     String outputMessage = "";
     if(application.getLmsType().getId() == LeaveCategories.STUDY_LEAVE_ON_WITHOUT_PAY.getId()) {
       LocalDate fromDate = application.getFromDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -183,7 +185,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     return builder.build();
   }
 
-  private Long inserIntoLeaveApplicationStatus(PersistentLmsApplication pApplication) {
+  public Long inserIntoLeaveApplicationStatus(PersistentLmsApplication pApplication) {
     Long pAppId = new Long(0);
     MutableLmsAppStatus lmsAppStatus = new PersistentLmsAppStatus();
     lmsAppStatus.setLmsApplicationId(pAppId);
@@ -223,7 +225,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     return getJsonObject(pUriInfo, applications);
   }
 
-  private JsonObject getJsonObject(UriInfo pUriInfo, List<LmsApplication> pApplications) {
+  public JsonObject getJsonObject(UriInfo pUriInfo, List<LmsApplication> pApplications) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
