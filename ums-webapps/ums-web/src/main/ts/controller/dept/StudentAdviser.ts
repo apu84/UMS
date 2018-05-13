@@ -1,6 +1,5 @@
 module ums{
   interface IStudentAdviser extends ng.IScope{
-
     selectedOptionTitle:string;
     showAdviser:boolean;
     enableSaveButton:Function;

@@ -2,6 +2,8 @@ package org.ums.resource.helper;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -20,6 +22,7 @@ import org.ums.persistent.model.PersistentStudent;
 import org.ums.persistent.model.PersistentStudentRecord;
 import org.ums.resource.ResourceHelper;
 import org.ums.resource.StudentResource;
+import org.ums.services.SectionAssignmentService;
 import org.ums.usermanagement.role.RoleManager;
 import org.ums.usermanagement.user.MutableUser;
 import org.ums.usermanagement.user.PersistentUser;
@@ -42,6 +45,7 @@ import java.util.stream.Collectors;
 @Component
 @Qualifier("StudentResourceHelper")
 public class StudentResourceHelper extends ResourceHelper<Student, MutableStudent, String> {
+  private static final Logger mLogger = LoggerFactory.getLogger(StudentResourceHelper.class);
   @Autowired
   RoleManager mRoleManager;
 
@@ -61,6 +65,12 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
   @Autowired
   @Qualifier("StudentBuilder")
   private StudentBuilder mBuilder;
+
+  @Autowired
+  StudentManager mStudentManager;
+
+  @Autowired
+  SectionAssignmentService mSectionAssignmentService;
 
   // TODO: Move this to service layer
   @Override
@@ -128,6 +138,7 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
   public JsonObject getActiveStudentsByDepartment(final UriInfo pUriInfo) {
     Employee employee = getLoggedEmployee();
     String deptId = employee.getDepartment().getId();
+
     List<Student> students = getContentManager().getActiveStudents().stream()
         .sorted(Comparator.comparing(Student::getId))
         .filter(s -> s.getDepartmentId().equals(deptId) && s.getCurrentEnrolledSemesterId() != null)
@@ -149,15 +160,43 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
     List<MutableStudent> students = new ArrayList<>();
+    getEntries(localCache, entries, students);
+
+    getContentManager().updateStudentsAdviser(students);
+
+    localCache.invalidate();
+    return Response.noContent().build();
+  }
+
+  public void getEntries(LocalCache localCache, JsonArray entries, List<MutableStudent> students) {
     for(int i = 0; i < entries.size(); i++) {
       JsonObject jsonObject = entries.getJsonObject(i);
       PersistentStudent student = new PersistentStudent();
       mBuilder.buildAdvisor(student, jsonObject, localCache);
       students.add(student);
     }
+  }
 
-    getContentManager().updateStudentsAdviser(students);
-
+  public Response modifyStudentSection(JsonObject pJsonObject) {
+    User user = getLoggedUser();
+    LocalCache localCache = new LocalCache();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    List<MutableStudent> students = new ArrayList<>();
+    for(int i = 0; i < entries.size(); i++) {
+      JsonObject jsonObject = entries.getJsonObject(i);
+      PersistentStudent student = new PersistentStudent();
+      mBuilder.buildSection(student, jsonObject, localCache);
+      students.add(student);
+    }
+    for(int j = 0; j < students.size(); j++) {
+      mSectionAssignmentService.setNotification(students.get(j).getId(), students.get(j).getTheorySection(), students
+          .get(j).getSessionalSection());
+    }
+   StringBuilder sb= new StringBuilder();
+    students.stream().forEach(s-> sb.append(s.getId()+"',"));
+    mLogger.debug(" [{}], Section changed Student List:  {}",
+        SecurityUtils.getSubject().getPrincipal().toString(), sb.toString());
+    getContentManager().updateStudentsSection(students);
     localCache.invalidate();
     return Response.noContent().build();
   }

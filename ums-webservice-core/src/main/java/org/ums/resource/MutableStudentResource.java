@@ -43,4 +43,11 @@ public class MutableStudentResource extends Resource {
   public Response updateStudentsAdviser(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject) {
     return mResourceHelper.modifyStudentAdviser(pJsonObject);
   }
+
+  @PUT
+  @Path("/section")
+  @GetLog(message = "Updated student(s) Section information")
+  public Response updateStudentsSection(final JsonObject pJsonObject) {
+    return mResourceHelper.modifyStudentSection(pJsonObject);
+  }
 }

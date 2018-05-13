@@ -22,6 +22,8 @@ public interface StudentManager extends ContentManager<Student, MutableStudent, 
 
   int updateStudentsAdviser(List<MutableStudent> pStudents);
 
+  int updateStudentsSection(List<MutableStudent> pStudents);
+
   int updateStudentsStatus(StudentStatus pStudentStatus, String pStudentId);
 
   List<Student> getActiveStudentsByAdviser(String pTeacherId);
