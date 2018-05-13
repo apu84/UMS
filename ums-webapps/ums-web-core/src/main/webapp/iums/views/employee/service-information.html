@@ -314,11 +314,13 @@
     </form>
 </div>
 
-<div class="row">
-    <div class="col-md-12">
-        <button title="Add New Row" type="button" class="btn btn-success btn-xs"
-                data-ng-click="vm.addNew('service'); vm.activeEditButton(vm.service.length - 1, true)"
-                style="cursor: pointer">Add new
-        </button>
+<div data-ng-show="vm.enableEditButton">
+    <div class="row">
+        <div class="col-md-12">
+            <button title="Add New Row" type="button" class="btn btn-success btn-xs"
+                    data-ng-click="vm.addNew('service'); vm.activeEditButton(vm.service.length - 1, true)"
+                    style="cursor: pointer">Add new
+            </button>
+        </div>
     </div>
 </div>
