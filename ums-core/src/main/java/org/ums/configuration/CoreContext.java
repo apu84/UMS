@@ -54,10 +54,7 @@ import org.ums.services.NotificationGenerator;
 import org.ums.services.NotificationGeneratorImpl;
 import org.ums.services.email.NewIUMSAccountInfoEmailService;
 import org.ums.solr.repository.transaction.EmployeeTransaction;
-import org.ums.statistics.DBLogger;
-import org.ums.statistics.JdbcTemplateFactory;
-import org.ums.statistics.QueryLogger;
-import org.ums.statistics.TextLogger;
+import org.ums.statistics.*;
 import org.ums.twofa.*;
 import org.ums.usermanagement.application.ApplicationCache;
 import org.ums.usermanagement.application.ApplicationDao;
@@ -87,6 +84,9 @@ public class CoreContext {
 
   @Autowired
   JdbcTemplateFactory mTemplateFactory;
+
+  @Autowired
+  NamedParameterJdbcTemplateFactory mNamedParameterJdbcTemplateFactory;
 
   @Autowired
   IdGenerator mIdGenerator;
@@ -311,7 +311,8 @@ public class CoreContext {
   @Bean
   LmsApplicationManager lmsApplicationManager() {
     LmsApplicationCache lmsApplicationCache = new LmsApplicationCache(mCacheFactory.getCacheManager());
-    lmsApplicationCache.setManager(new PersistentLmsApplicationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    lmsApplicationCache.setManager(new PersistentLmsApplicationDao(mTemplateFactory.getJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getNamedParameterJdbcTemplate(), mIdGenerator));
     return lmsApplicationCache;
   }
 

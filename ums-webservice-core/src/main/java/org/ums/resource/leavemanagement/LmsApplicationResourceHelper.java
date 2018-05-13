@@ -210,10 +210,9 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
 
       mLeaveManagementService.setNotification(rolePermissionsStream.get(0).getUserId(), message);
     }
-
+    pApplication.setTotalDays(UmsUtils.differenceBetweenTwoDayes(pApplication.getFromDate(), pApplication.getToDate()));
     pAppId = getContentManager().create(pApplication);
     lmsAppStatus.setLmsApplicationId(pAppId);
-
     mLmsAppStatusManager.create(lmsAppStatus);
     return pAppId;
   }
@@ -310,17 +309,18 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     int leavesTaken = 0;
     if(pApplicationMap.get(lmsType.getId()) != null)
       for(LmsApplication application : pApplicationMap.get(lmsType.getId())) {
-        if(UmsUtils.formatDate(application.getFromDate(), "dd-MM-yyyy").equals(
-            UmsUtils.formatDate(application.getToDate(), "dd-MM-yyyy"))) {
-          leavesTaken += 1;
-        }
-        else {
-          long diffInMillies =
-              Math.abs(UmsUtils.getDateWithoutTime(application.getToDate()).getTime()
-                  - UmsUtils.getDateWithoutTime(application.getFromDate()).getTime());
-          long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-          leavesTaken += (diff + 1);
-        }
+        // if(UmsUtils.formatDate(application.getFromDate(), "dd-MM-yyyy").equals(
+        // UmsUtils.formatDate(application.getToDate(), "dd-MM-yyyy"))) {
+        // leavesTaken += 1;
+        // }
+        // else {
+        // long diffInMillies =
+        // Math.abs(UmsUtils.getDateWithoutTime(application.getToDate()).getTime()
+        // - UmsUtils.getDateWithoutTime(application.getFromDate()).getTime());
+        // long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+        // leavesTaken += (diff + 1);
+        // }
+        leavesTaken += application.getTotalDays();
       }
     return leavesTaken;
   }
