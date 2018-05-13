@@ -15,7 +15,6 @@ import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.TaskStatus;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableTaskStatus;
-import org.ums.enums.CourseRegType;
 import org.ums.persistent.model.PersistentTaskStatus;
 import org.ums.services.academic.ProcessResult;
 import org.ums.services.academic.StudentCarryCourseService;
@@ -46,6 +45,19 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
     mLogger.debug("Course found: {}", resultList.size());
     Collections.sort(resultList, new ResultComparator());
     return resultsWithCarryCourses(resultList, pSemesterId);
+  }
+
+  @Override
+  public List<UGRegistrationResult> getResultUpToSemester(String pStudentId, Integer pSemesterId,
+      Integer pProgramTypeId) {
+    List<UGRegistrationResult> resultList = super.getResults(pStudentId, pSemesterId);
+    mLogger.debug("Course found: {}", resultList.size());
+    List<Semester> previousSemesters = mSemesterManager.getPreviousSemesters(pSemesterId, pProgramTypeId);
+    List<Integer> previousSemesterIds = previousSemesters.stream().map(Semester::getId).collect(Collectors.toList());
+    List<UGRegistrationResult> courseResults = resultList.stream()
+        .filter(pResult -> previousSemesterIds.contains(pResult.getSemesterId())).collect(Collectors.toList());
+    Collections.sort(courseResults, new ResultComparator());
+    return courseResults;
   }
 
   private List<UGRegistrationResult> aggregateResults(List<UGRegistrationResult> pResults) {
@@ -98,12 +110,10 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
         mLogger.debug("Processing grades for student: {}", studentId);
       }
       Collections.sort(studentCourseGradeMap.get(studentId), new ResultComparator());
-      List<UGRegistrationResult> filteredResults =
-          studentCourseGradeMap.get(studentId)
-              .stream()
-              .filter(pResult -> DateUtils.isSameDay(pResult.getSemester().getStartDate(), untilSemester.getStartDate())
-                  || pResult.getSemester().getStartDate().before(untilSemester.getStartDate()))
-              .collect(Collectors.toList());
+      List<UGRegistrationResult> filteredResults = studentCourseGradeMap.get(studentId).stream()
+          .filter(pResult -> DateUtils.isSameDay(pResult.getSemester().getStartDate(), untilSemester.getStartDate())
+              || pResult.getSemester().getStartDate().before(untilSemester.getStartDate()))
+          .collect(Collectors.toList());
       List<UGRegistrationResult> results = aggregateResults(filteredResults);
       studentCourseGradeMap.put(studentId, results);
 

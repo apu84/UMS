@@ -10,6 +10,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
@@ -26,13 +27,9 @@ import org.ums.util.UmsUtils;
 
 @Component
 public class GradeSheetBuilder implements Builder<GradesheetModel, MutableGradesheetModel> {
-
   private final Map<String, Double> GPA_MAP = UmsUtils.getGPAMap();
+  @Autowired
   private StudentRecordManager mStudentRecordManager;
-
-  public GradeSheetBuilder(StudentRecordManager pStudentRecordManager) {
-    mStudentRecordManager = pStudentRecordManager;
-  }
 
   @Override
   public void build(JsonObjectBuilder pBuilder, GradesheetModel pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {

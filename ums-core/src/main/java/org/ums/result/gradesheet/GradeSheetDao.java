@@ -44,7 +44,8 @@ public class GradeSheetDao extends GradeSheetDaoDecorator {
 
       @Override
       public List<UGRegistrationResult> getAllResults() {
-        return mUGRegistrationResultManager.getResults(pStudentId, pSemesterId);
+        return mUGRegistrationResultManager.getResultUpToSemester(pStudentId, pSemesterId, getStudent().getProgram()
+            .getProgramTypeId());
       }
 
       @Override
