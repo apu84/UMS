@@ -88,4 +88,9 @@ public class UGRegistrationResultCache extends
       Integer pYear, Integer pSemester) {
     return getManager().getResultForTabulation(pProgramId, pSemesterId, pYear, pSemester);
   }
+
+  @Override
+  public List<UGRegistrationResult> getSemesterResult(String pStudentId, Integer pSemesterId) {
+    return getManager().getSemesterResult(pStudentId, pSemesterId);
+  }
 }

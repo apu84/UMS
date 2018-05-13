@@ -1,5 +1,14 @@
 package org.ums.persistent.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.UGRegistrationResultDaoDecorator;
@@ -9,15 +18,6 @@ import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentUGRegistrationResult;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDecorator {
   String SELECT_ALL = "SELECT UG_REGISTRATION_RESULT.ID, UG_REGISTRATION_RESULT.STUDENT_ID, "
@@ -174,8 +174,7 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   public List<Long> create(List<MutableUGRegistrationResult> pMutableList) {
     List<Object[]> params = getInsertParamList(pMutableList);
     mJdbcTemplate.batchUpdate(INSERT_ALL, params);
-    return params.stream().map(param -> (Long) param[0])
-        .collect(Collectors.toCollection(ArrayList::new));
+    return params.stream().map(param -> (Long) param[0]).collect(Collectors.toCollection(ArrayList::new));
   }
 
   private List<Object[]> getInsertParamList(List<MutableUGRegistrationResult> pRegistrationResults) {
@@ -217,6 +216,13 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   public List<UGRegistrationResult> getResults(String pStudentId, Integer pSemesterId) {
     String query = SELECT_ALL + " WHERE STUDENT_ID = ?";
     return mJdbcTemplate.query(query, new Object[] {pStudentId}, new UGRegistrationResultRowMapperWithResult());
+  }
+
+  @Override
+  public List<UGRegistrationResult> getSemesterResult(String pStudentId, Integer pSemesterId) {
+    String query = SELECT_ALL + " WHERE STUDENT_ID = ? AND SEMESTER_ID = ?";
+    return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId},
+        new UGRegistrationResultRowMapperWithResult());
   }
 
   // this will only work with Carry, Clearance and Improvement applications.

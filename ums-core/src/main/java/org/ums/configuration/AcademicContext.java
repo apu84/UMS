@@ -38,6 +38,8 @@ import org.ums.punishment.penalty.PenaltyManager;
 import org.ums.punishment.penalty.PersistentPenaltyDao;
 import org.ums.readmission.ReadmissionApplicationDao;
 import org.ums.readmission.ReadmissionApplicationManager;
+import org.ums.result.gradesheet.GradeSheetDao;
+import org.ums.result.gradesheet.GradeSheetManager;
 import org.ums.result.legacy.LegacyTabulationDao;
 import org.ums.result.legacy.LegacyTabulationManager;
 import org.ums.services.academic.RemarksBuilder;
@@ -437,5 +439,11 @@ public class AcademicContext {
     PunishmentCache punishmentCache = new PunishmentCache(mCacheFactory.getCacheManager());
     punishmentCache.setManager(new PersistentPunishmentDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return punishmentCache;
+  }
+
+  @Bean
+  GradeSheetManager gradeSheetManager() {
+    return new GradeSheetDao(mCoreContext.studentManager(), studentRecordManager(), registrationResultManager(),
+        mIdGenerator);
   }
 }
