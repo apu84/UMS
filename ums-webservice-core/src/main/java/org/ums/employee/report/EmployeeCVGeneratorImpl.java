@@ -155,7 +155,7 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
 
     List<ServiceInformation> serviceInformation = new ArrayList<>();
     try {
-      serviceInformation = mServiceInformationManager.getServiceInformation(pEmployeeId);
+      serviceInformation = mServiceInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
@@ -877,8 +877,7 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
 
         List<ServiceInformationDetail> serviceInformationDetails = new ArrayList<>();
         try {
-          serviceInformationDetails =
-              mServiceInformationDetailsManager.getServiceInformationDetail(serviceInformation1.getId());
+          serviceInformationDetails = mServiceInformationDetailsManager.getServiceDetail(serviceInformation1.getId());
         } catch(EmptyResultDataAccessException e) {
         }
 

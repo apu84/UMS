@@ -1,4 +1,4 @@
-<style>
+<style xmlns:vertical-align="http://www.w3.org/1999/xhtml">
     #rcorners1 {
         border-radius: 15px;
         background: #eee;
@@ -53,12 +53,12 @@
 <div class="panel">
     <div class="panel-body shadowPanel" style="min-height: 490px;">
         <div class="container-fluid">
-            <form ng-submit="doSearch()">
+            <form ng-submit="doSearch()" autocomplete="off">
                 <div id="rcorners1" style="width: 727px;float: left">
             <span style="float: left;margin-top: 5px;">
                     <i class="fa fa-arrow-right fa-2x" aria-hidden="true" style="color: #0093d9;"></i>
             </span>
-                    <input id="searchBox" type="text" style="float: left;width: 410px;height: 33px;border: 1px solid #D7DBDD;padding-left: 10px;font-weight: bold;
+                    <input id="searchBox" name="searchBox" type="text" style="float: left;width: 410px;height: 33px;border: 1px solid #D7DBDD;padding-left: 10px;font-weight: bold;
             margin-left: 8px;background-color: #eee;border: none;color: #0093d9;font-size: 20px;"
                            data-ng-model="search.queryTerm"/>
 
@@ -228,17 +228,19 @@
                                 <table class="table table-bordered table-striped table-condensed cf">
                                     <thead class="cf">
                                     <tr>
-                                        <th width="4%">#</th>
+                                        <th width="3%">#</th>
                                         <th width="75%">Results</th>
+                                        <th width="3%">Total</th>
+                                        <th width="3%">Available</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr dir-paginate="rec in recordList | itemsPerPage: data.itemPerPage"
                                         current-page="pagination.currentPage" total-items="data.totalRecord"
                                         pagination-id="mainRecordPaginator">
-                                        <td><span style="font-size: 110%;">{{((pagination.currentPage-1)*data.itemPerPage) + ($index+1)}}. </span>
+                                        <td width="3%" style="vertical-align: bottom;">{{((pagination.currentPage-1)*data.itemPerPage) + ($index+1)}}.
                                         </td>
-                                        <td>
+                                        <td width="75%%">
 
                                             <div class="row">
                                                 <div class="col-md-12">
@@ -266,6 +268,8 @@
                                                 </div>
                                             </div>
                                         </td>
+                                        <td width="3%" align="center" style="vertical-align: bottom;">{{rec.totalItems}}</td>
+                                        <td width="3%" align="center" style="vertical-align: bottom;">{{rec.totalAvailable}}</td>
                                     </tr>
 
                                     </tbody>

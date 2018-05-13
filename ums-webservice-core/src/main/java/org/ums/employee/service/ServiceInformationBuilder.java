@@ -63,29 +63,18 @@ public class ServiceInformationBuilder implements Builder<ServiceInformation, Mu
     pBuilder.add("resignDate", pReadOnly.getResignDate() == null ? "" : mDateFormat.format(pReadOnly.getResignDate()));
     List<ServiceInformationDetail> serviceInformationDetails = new ArrayList<>();
     JsonArrayBuilder children = Json.createArrayBuilder();
-    serviceInformationDetails = mServiceInformationDetailManager.getServiceInformationDetail(pReadOnly.getId());
+    serviceInformationDetails = mServiceInformationDetailManager.getServiceDetail(pReadOnly.getId());
     for(ServiceInformationDetail serviceInformationDetail : serviceInformationDetails) {
       JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
       mServiceInformationDetailBuilder.build(jsonObjectBuilder, serviceInformationDetail, pUriInfo, pLocalCache);
       children.add(jsonObjectBuilder);
     }
     pBuilder.add("intervalDetails", children);
-
-    pBuilder.add("dbAction", "");
   }
 
   @Override
   public void build(MutableServiceInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    if(pJsonObject.containsKey("dbAction")) {
-      if(pJsonObject.getString("dbAction").equals("Update")) {
-        pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
-      }
-      else if(pJsonObject.getString("dbAction").equals("Create")) {
-      }
-      else if(pJsonObject.getString("dbAction").equals("Delete")) {
-        pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
-      }
-    }
+    pMutable.setId(!pJsonObject.getString("id").equals("") ? Long.parseLong(pJsonObject.getString("id")) : null);
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setDepartment(mDepartmentManager.get(pJsonObject.getJsonObject("department").getString("id")));
     pMutable.setDesignation(mDesignationManager.get(pJsonObject.getJsonObject("designation").getInt("id")));

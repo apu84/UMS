@@ -1,51 +1,21 @@
-<form data-validate="" data-onvalidate="submitServiceForm">
-    <div data-ng-repeat="service in vm.entry.serviceInfo track by $index">
+<div data-ng-repeat="service in vm.service track by $index">
+    <form name="nForm[$index]" ng-submit="submit($index)" novalidate>
         <div class="panel-group">
             <div class="panel panel-default">
-                <div class="panel-heading" style="font-size: 15px; padding-top: 0px; padding-bottom: 0px;">
+                <div class="panel-heading">
                     <div class="row">
-                        <div class="col-md-6">
-                            <div data-ng-show="vm.showServiceInputDiv">
-                                <label class="col-md-3">Department</label>
-                                <div class="col-md-9">
-                                    <select name="nDepartment{{$index}}"
-                                            id="iDepartment{{$index}}"
-                                            data-ng-model="service.department"
-                                            data-ng-options="department.longName for department in vm.departments track by department.id"
-                                            class="form-control" required>
-                                        <option value="">Select Department</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div data-ng-show="!vm.showServiceInputDiv">
-                                <div class="col-md-12">Department:
-                                    <span class="underlineBox">{{service.department.name}}</span>
-                                </div>
-                            </div>
+                        <div class="col-md-9">{{$index + 1}}. {{vm.service[$index].designation.name}}
                         </div>
-                        <div class="col-md-5">
-                            <div data-ng-show="vm.showServiceInputDiv">
-                                <label class="col-md-3">Designation</label>
-                                <div class="col-md-9">
-                                    <select name="nDesignation{{$index}}"
-                                            id="iDesignation{{$index}}"
-                                            data-ng-model="service.designation"
-                                            data-ng-options="designation.name for designation in vm.designations track by designation.id"
-                                            class="form-control" required>
-                                        <option value="">Select Designation</option>
-                                    </select>
+                        <div class="col-md-3">
+                            <div data-ng-show="vm.enableEditButton">
+                                <div data-ng-show="!vm.enableEdit[$index]">
+                                    <div align="right">
+                                        <a data-ng-click="vm.activeEditButton($index, true)"
+                                           style="cursor: pointer;">
+                                            <i style="color: blue;" class="fa fa-edit"></i>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div data-ng-show="!vm.showServiceInputDiv">
-                                <div class="col-md-12">Designation:
-                                    <span class="underlineBox">{{service.designation.name}}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-1">
-                            <div data-ng-show="vm.showServiceInputDiv">
-                                <i title="Remove Row {{$index + 1}}" data-ng-click="vm.deleteRow('serviceInfo', $index)"
-                                   class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i>
                             </div>
                         </div>
                     </div>
@@ -53,224 +23,302 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-4">
-                            <label class="col-md-4">Employment:</label>
-                            <div data-ng-show="vm.showServiceInputDiv">
-                                <div class="col-md-8">
-                                    <select name="nEmploymentType{{$index}}"
-                                            id="iEmploymentType{{$index}}"
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nForm[$index].nDepartment.$invalid && !nForm[$index].nDepartment.$pristine }">
+                                <label for="iDepartment" class="control-label">Department<span
+                                        data-ng-show="vm.enableEdit[$index]"
+                                        class='require'>*</span></label>
+
+                                <div data-ng-show="vm.enableEdit[$index]">
+                                    <select name="nDepartment"
+                                            id="iDepartment"
+                                            data-ng-model="service.department"
+                                            data-ng-options="department.longName for department in vm.departments track by department.id"
+                                            class="form-control" required>
+                                        <option value="">Select Department</option>
+                                    </select>
+                                    <label data-ng-show="nForm[$index].nAcademicDegree.$invalid && !nForm[$index].nAcademicDegree.$pristine"
+                                           class="help-block control-label">Please specify department.</label>
+                                </div>
+
+                                <div data-ng-show="!vm.enableEdit[$index]">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{service.department.name}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nForm[$index].nDesignation.$invalid && !nForm[$index].nDesignation.$pristine }">
+                                <label for="iDesignation" class="control-label">Designation<span
+                                        data-ng-show="vm.enableEdit[$index]"
+                                        class='require'>*</span></label>
+
+                                <div data-ng-show="vm.enableEdit[$index]">
+                                    <select name="nDesignation"
+                                            id="iDesignation"
+                                            data-ng-model="service.designation"
+                                            data-ng-options="designation.name for designation in vm.designations track by designation.id"
+                                            class="form-control" required>
+                                        <option value="">Select Designation</option>
+                                    </select>
+                                    <label data-ng-show="nForm[$index].nDesignation.$invalid && !nForm[$index].nDesignation.$pristine"
+                                           class="help-block control-label">Please specify a degree.</label>
+                                </div>
+
+                                <div data-ng-show="!vm.enableEdit[$index]">
+
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{service.designation.name}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nForm[$index].nEmploymentType.$invalid && !nForm[$index].nEmploymentType.$pristine }">
+                                <label for="iEmploymentType" class="control-label">Employment<span
+                                        data-ng-show="vm.enableEdit[$index]"
+                                        class='require'>*</span></label>
+                                <div data-ng-show="vm.enableEdit[$index]">
+
+                                    <select name="nEmploymentType"
+                                            id="iEmploymentType"
                                             data-ng-model="service.employmentType"
                                             data-ng-options="employmentType.name for employmentType in vm.employmentTypes track by employmentType.id"
                                             class="form-control" required>
                                         <option value="">Select Employment Type</option>
                                     </select>
+
+                                    <label data-ng-show="nForm[$index].nEmploymentType.$invalid && !nForm[$index].nEmploymentType.$pristine"
+                                           class="help-block control-label">Please specify a degree.</label>
                                 </div>
-                            </div>
-                            <div data-ng-show="!vm.showServiceInputDiv">
-                                <div class="col-md-8">
+                                <div data-ng-show="!vm.enableEdit[$index]">
+
                                     <div class="underlineBox">
                                         <label class="control-label">{{service.employmentType.name}}</label>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
+                    </div>
+
+
+                    <div class="row">
                         <div class="col-md-4">
-                            <label class="col-md-4">Joining Date:</label>
-                            <div data-ng-show="vm.showServiceInputDiv">
-                                <div class="col-md-8">
-                                    <input name="nJoiningDate{{$index}}"
-                                           id="iJoiningDate{{$index}}"
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nForm[$index].nJoiningDate.$invalid && !nForm[$index].nJoiningDate.$pristine }">
+                                <label for="iJoiningDate" class="control-label">Joining Date<span
+                                        data-ng-show="vm.enableEdit[$index]"
+                                        class='require'>*</span></label>
+                                <div data-ng-show="vm.enableEdit[$index]">
+                                    <input name="nJoiningDate"
+                                           id="iJoiningDate"
                                            data-ng-model="service.joiningDate"
                                            data-provide="datepicker"
                                            data-date-format="dd/mm/yyyy"
                                            placeholder="DD/MM/YYYY"
                                            autocomplete="off"
                                            class="datepicker-default form-control" required>
+                                    <label data-ng-show="nForm[$index].nJoiningDate.$invalid && !nForm[$index].nJoiningDate.$pristine"
+                                           class="help-block control-label">Please provide joining date.</label>
                                 </div>
-                            </div>
-                            <div data-ng-show="!vm.showServiceInputDiv">
-                                <div class="col-md-8">
+
+                                <div data-ng-show="!vm.enableEdit[$index]">
+
                                     <div class="underlineBox">
                                         <label class="control-label">{{service.joiningDate}}</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+
                         <div class="col-md-4">
-                            <label class="col-md-4">Resign Date:</label>
-                            <div data-ng-show="vm.showServiceInputDiv">
-                                <div class="col-md-8">
-                                    <input name="nResignDate{{$index}}"
-                                           id="iResignDate{{$index}}"
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nForm[$index].nResignDate.$invalid && !nForm[$index].nResignDate.$pristine }">
+                                <label for="iResignDate" class="control-label">Resign Date<span
+                                        data-ng-show="vm.enableEdit[$index]"
+                                        class='require'>*</span></label>
+                                <div data-ng-show="vm.enableEdit[$index]">
+
+                                    <input name="nResignDate"
+                                           id="iResignDate"
                                            data-ng-model="service.resignDate"
                                            data-provide="datepicker"
                                            data-date-format="dd/mm/yyyy"
                                            placeholder="DD/MM/YYYY"
                                            autocomplete="off"
                                            class="datepicker-default form-control">
+
+                                    <label data-ng-show="nForm[$index].nResignDate.$invalid && !nForm[$index].nResignDate.$pristine"
+                                           class="help-block control-label">Please provide resign date.</label>
                                 </div>
-                            </div>
-                            <div data-ng-show="!vm.showServiceInputDiv">
-                                <div class="col-md-8">
+
+                                <div data-ng-show="!vm.enableEdit[$index]">
                                     <div class="underlineBox">
                                         <label class="control-label">{{service.resignDate}}</label>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="col-md-12">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                        <tr>
-                                            <th width="5%">Sl.</th>
-                                            <th width="15%">Period</th>
-                                            <th width="15%">Start Date</th>
-                                            <th width="15%">End Date</th>
-                                            <th width="45%">Comment</th>
-                                            <th width="5%">Action</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody data-ng-repeat="interval in service.intervalDetails track by $index">
-                                        <tr>
-                                            <td width="5%">{{$index + 1}}</td>
-                                            <td width="15%">
-                                                <div data-ng-show="vm.showServiceInputDiv">
-                                                    <div data-ng-show="service.employmentType.name=='Regular'"><select
-                                                            name="nRegularPeriod{{$index}}"
-                                                            id="iRegularPeriod{{$index}}"
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Sl.</th>
+                                        <th>Period</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Comment</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody data-ng-repeat="interval in service.intervalDetails track by $index">
+                                    <tr>
+                                        <td>{{$index + 1}}</td>
+                                        <td>
+                                            <div data-ng-show="vm.enableEdit[$index]">
+                                                <div data-ng-show="service.employmentType.name=='Regular'">
+                                                    <select
+                                                            name="nRegularPeriod"
+                                                            id="iRegularPeriod"
                                                             data-ng-model="interval.interval"
                                                             data-ng-options="serviceInterval.name for serviceInterval in vm.serviceRegularIntervals track by serviceInterval.id"
                                                             class="form-control" required>
                                                         <option value="">Select Category</option>
                                                     </select></div>
-                                                    <div data-ng-show="service.employmentType.name!='Regular'"><select
-                                                            name="nContractPeriod{{$index}}"
-                                                            id="iContractPeriod{{$index}}"
+                                                <div data-ng-show="service.employmentType.name!='Regular'">
+                                                    <select
+                                                            name="nContractPeriod"
+                                                            id="iContractPeriod"
                                                             data-ng-model="interval.interval"
                                                             data-ng-options="serviceInterval.name for serviceInterval in vm.serviceContractIntervals track by serviceInterval.id"
                                                             class="form-control" required>
                                                         <option value="">Select Category</option>
                                                     </select></div>
-                                                </div>
-                                                <div data-ng-show="!vm.showServiceInputDiv">
-                                                    <label class="control-label">{{interval.interval.name}}</label>
-                                                </div>
-                                            </td>
-                                            <td width="15%">
-                                                <div data-ng-show="vm.showServiceInputDiv"><input type="text"
-                                                                                                  name="nStartDate{{$index}}"
-                                                                                                  id="iStartDate{{$index}}"
-                                                                                                  data-ng-model="interval.startDate"
-                                                                                                  data-provide="datepicker"
-                                                                                                  data-date-format="dd/mm/yyyy"
-                                                                                                  placeholder="DD/MM/YYYY"
-                                                                                                  autocomplete="off"
-                                                                                                  class="datepicker-default form-control"
-                                                                                                  required>
-                                                </div>
-                                                <div data-ng-show="!vm.showServiceInputDiv">
-                                                    <label class="control-label">{{interval.startDate}}</label>
-                                                </div>
-                                            </td>
-                                            <td width="15%">
-                                                <div data-ng-show="vm.showServiceInputDiv">
-                                                    <input type="text"
-                                                           name="nEndDate{{$index}}"
-                                                           id="iEndDate{{$index}}"
-                                                           data-ng-model="interval.endDate"
-                                                           data-provide="datepicker"
-                                                           data-date-format="dd/mm/yyyy"
-                                                           placeholder="DD/MM/YYYY"
-                                                           autocomplete="off"
-                                                           class="datepicker-default form-control">
-                                                </div>
-                                                <div data-ng-show="!vm.showServiceInputDiv">
-                                                    <label class="control-label">{{interval.endDate}}</label>
-                                                </div>
-                                            </td>
+                                            </div>
+                                            <div data-ng-show="!vm.enableEdit[$index]">
+                                                <label class="control-label">{{interval.interval.name}}</label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div data-ng-show="vm.enableEdit[$index]"><input type="text"
+                                                                                             name="nStartDate"
+                                                                                             id="iStartDate"
+                                                                                             data-ng-model="interval.startDate"
+                                                                                             data-provide="datepicker"
+                                                                                             data-date-format="dd/mm/yyyy"
+                                                                                             placeholder="DD/MM/YYYY"
+                                                                                             autocomplete="off"
+                                                                                             class="datepicker-default form-control"
+                                                                                             required>
+                                            </div>
+                                            <div data-ng-show="!vm.enableEdit[$index]">
+                                                <label class="control-label">{{interval.startDate}}</label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div data-ng-show="vm.enableEdit[$index]">
+                                                <input type="text"
+                                                       name="nEndDate"
+                                                       id="iEndDate"
+                                                       data-ng-model="interval.endDate"
+                                                       data-provide="datepicker"
+                                                       data-date-format="dd/mm/yyyy"
+                                                       placeholder="DD/MM/YYYY"
+                                                       autocomplete="off"
+                                                       class="datepicker-default form-control">
+                                            </div>
+                                            <div data-ng-show="!vm.enableEdit[$index]">
+                                                <label class="control-label">{{interval.endDate}}</label>
+                                            </div>
+                                        </td>
 
-                                            <td width="45%">
-                                                <div data-ng-show="vm.showServiceInputDiv"><input type="text"
-                                                                                                  name="nComment{{$index}}"
-                                                                                                  id="iComment{{$index}}"
-                                                                                                  data-ng-model="interval.comment"
-                                                                                                  maxlength="100"
-                                                                                                  class="form-control">
-                                                </div>
-                                                <div data-ng-show="!vm.showServiceInputDiv">
-                                                    <label class="control-label">{{interval.comment}}</label>
-                                                </div>
-                                            </td>
-                                            <td width="5%">
-                                                <div data-ng-show="vm.showServiceInputDiv">
-                                                    [ <i title="Remove Row {{$index + 1}}"
-                                                         data-ng-click="vm.deleteRow('serviceDetails', $index, $parent.$index)"
-                                                         class="fa fa-times fa-lg"
-                                                         style="color:red;cursor:pointer;"></i> ]
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                                        <td>
+                                            <div data-ng-show="vm.enableEdit[$index]"><input type="text"
+                                                                                             name="nComment"
+                                                                                             id="iComment"
+                                                                                             data-ng-model="interval.comment"
+                                                                                             maxlength="100"
+                                                                                             class="form-control">
+                                            </div>
+                                            <div data-ng-show="!vm.enableEdit[$index]">
+                                                <label class="control-label">{{interval.comment}}</label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div data-ng-show="vm.enableEdit[$index]">
+                                                <button type="button" class="btn btn-primary btn-xs"
+                                                        title="Remove Row {{$index + 1}}"
+                                                        data-ng-click="vm.delete('serviceDetails', $index, $parent.$index)"
+                                                        style="cursor:pointer;"><span
+                                                        data-ng-show="!service[$parent.$index].intervalDetails.id">Remove</span><span
+                                                        data-ng-show="service[$parent.$index].intervalDetails.id">Delete</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <button title="Add New Row" type="button" class="btn btn-success btn-xs"
+                                    data-ng-click="vm.addNew('serviceDetails', $index);"
+                                    style="cursor: pointer">Add new
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div data-ng-show="vm.enableEdit[$index]">
+                            <div class="col-md-4">
+                                <span data-ng-show="service.id">
+                                       <button type="button" class="btn btn-primary btn-xs"
+                                               data-ng-click="vm.activeEditButton($index, false)"
+                                               style="cursor:pointer;">Cancel
+                                    </button>
+                                </span>
+                            </div>
+                            <div class="col-md-8">
+                                <div align="right">
+                                    <button type="button" class="btn btn-primary btn-xs"
+                                            title="Remove Row {{$index + 1}}"
+                                            data-ng-click="vm.delete('service', $index)"
+                                            style="cursor:pointer;"><span data-ng-show="!service.id">Remove</span><span
+                                            data-ng-show="service.id">Delete</span>
+                                    </button>
+                                    <button type="submit" title="Submit" class="btn btn-success btn-xs"
+                                            data-ng-disabled="nForm[$index].$invalid"
+                                            style="cursor:pointer;"><span data-ng-show="!service.id">Save</span><span
+                                            data-ng-show="service.id">Update</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div data-ng-show="vm.showServiceInputDiv">
-                    <div class="text-center pal">
-                        [ <a title="Add New Row" data-ng-click="vm.addNewServiceRow('serviceDetails', $index)"><i
-                            class="fa fa-plus" aria-hidden="true" style="cursor: pointer;color: green;"></i></a> ]
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <div data-ng-show="vm.showServiceInputDiv">
-        <div class="row">
-            <div class="col-md-12">
-                <div align="center">
-                    [ <a title="Add New Row" data-ng-click="vm.addNewServiceRow('serviceInfo')"><i
-                        class="fa fa-plus"
-                        aria-hidden="true"
-                        style="cursor: pointer;color: green;"></i></a>
-                    ]
-                </div>
-                <div align="right">
-                    <button type="button" title="Cancel" class="btn"
-                            data-ng-click="vm.showServiceInputDiv=false; vm.showTab('service');">Cancel
-                    </button>
-                    <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit
-                    </button>
-                </div>
             </div>
         </div>
-    </div>
+    </form>
+</div>
 
-    <div data-ng-show="!vm.showServiceInputDiv">
-        <div data-ng-show="vm.showServiceEditButton">
-            <div class="row">
-                <div class="col-md-12">
-                    <div align="right">
-                        <button type="submit" title="Submit" data-ng-click="vm.showServiceInputDiv=true"
-                                class="btn btn-default"><i class="fa fa-edit"></i>&nbsp;Edit
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
-
-<div data-ng-show="!vm.showServiceEditButton">
-    <div class="row">
-        <div class="col-md-12">
-            <label style="color: darkred"><span><b>*** N.B.</b></span>&nbsp;This(<strong>Service</strong>) form will be
-                covered by registrar office.</label>
-        </div>
+<div class="row">
+    <div class="col-md-12">
+        <button title="Add New Row" type="button" class="btn btn-success btn-xs"
+                data-ng-click="vm.addNew('service'); vm.activeEditButton(vm.service.length - 1, true)"
+                style="cursor: pointer">Add new
+        </button>
     </div>
 </div>

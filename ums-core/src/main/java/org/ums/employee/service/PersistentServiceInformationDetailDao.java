@@ -6,7 +6,6 @@ import org.ums.generator.IdGenerator;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PersistentServiceInformationDetailDao extends ServiceInformationDetailDaoDecorator {
@@ -15,7 +14,7 @@ public class PersistentServiceInformationDetailDao extends ServiceInformationDet
       "INSERT INTO EMP_SERVICE_DETAIL (ID, EMPLOYMENT_PERIOD, START_DATE, END_DATE, COMMENTS, SERVICE_ID, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, ?, "
           + getLastModifiedSql() + ")";
 
-  static String GET_ONE =
+  static String GET_ALL =
       "SELECT ID, EMPLOYMENT_PERIOD, START_DATE, END_DATE, COMMENTS, SERVICE_ID FROM EMP_SERVICE_DETAIL ";
 
   static String UPDATE_ONE =
@@ -23,6 +22,8 @@ public class PersistentServiceInformationDetailDao extends ServiceInformationDet
           + getLastModifiedSql() + " ";
 
   static String DELETE_ONE = "DELETE FROM EMP_SERVICE_DETAIL ";
+
+  static String EXISTS_ONE = "SELECT COUNT(ID) FROM EMP_SERVICE_DETAIL ";
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
@@ -33,72 +34,45 @@ public class PersistentServiceInformationDetailDao extends ServiceInformationDet
   }
 
   @Override
-  public int saveServiceInformationDetail(MutableServiceInformationDetail pMutableServiceInformationDetail) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, mIdGenerator.getNumericId(), pMutableServiceInformationDetail
-        .getEmploymentPeriod().getId(), pMutableServiceInformationDetail.getStartDate(),
-        pMutableServiceInformationDetail.getEndDate(), pMutableServiceInformationDetail.getComment(),
-        pMutableServiceInformationDetail.getServiceId());
+  public Long create(MutableServiceInformationDetail pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getEmploymentPeriod().getId(), pMutable.getStartDate(),
+        pMutable.getEndDate(), pMutable.getComment(), pMutable.getServiceId());
+    return id;
   }
 
   @Override
-  public int saveServiceInformationDetail(List<MutableServiceInformationDetail> pMutableServiceInformationDetail) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.batchUpdate(query, getServiceInformationDetailInsertParams(pMutableServiceInformationDetail)).length;
-  }
-
-  private List<Object[]> getServiceInformationDetailInsertParams(
-      List<MutableServiceInformationDetail> pMutableServiceInformationDetail) {
-    List<Object[]> params = new ArrayList<>();
-    for(ServiceInformationDetail serviceInformationDetail : pMutableServiceInformationDetail) {
-      params.add(new Object[] {mIdGenerator.getNumericId(), serviceInformationDetail.getEmploymentPeriod().getId(),
-          serviceInformationDetail.getStartDate(), serviceInformationDetail.getEndDate(),
-          serviceInformationDetail.getComment(), serviceInformationDetail.getServiceId()});
-
-    }
-    return params;
+  public ServiceInformationDetail get(Long pServiceId) {
+    String query = GET_ALL + " WHERE SERVICE_ID = ? ORDER BY START_DATE DESC ";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pServiceId},
+        new PersistentServiceInformationDetailDao.RoleRowMapper());
   }
 
   @Override
-  public List<ServiceInformationDetail> getServiceInformationDetail(Long pServiceId) {
-    String query = GET_ONE + " WHERE SERVICE_ID = ? ORDER BY START_DATE DESC ";
+  public List<ServiceInformationDetail> getServiceDetail(Long pServiceId) {
+    String query = GET_ALL + " WHERE SERVICE_ID = ? ORDER BY START_DATE DESC ";
     return mJdbcTemplate.query(query, new Object[] {pServiceId},
         new PersistentServiceInformationDetailDao.RoleRowMapper());
   }
 
   @Override
-  public int updateServiceInformationDetail(List<MutableServiceInformationDetail> pMutableServiceInformationDetail) {
+  public int update(MutableServiceInformationDetail pMutable) {
     String query = UPDATE_ONE + " WHERE ID = ? AND SERVICE_ID = ?";
-    return mJdbcTemplate.batchUpdate(query, getServiceInformationDetailUpdateParams(pMutableServiceInformationDetail)).length;
-  }
-
-  private List<Object[]> getServiceInformationDetailUpdateParams(
-      List<MutableServiceInformationDetail> pMutableServiceInformationDetail) {
-    List<Object[]> params = new ArrayList<>();
-    for(ServiceInformationDetail serviceInformationDetail : pMutableServiceInformationDetail) {
-      params.add(new Object[] {serviceInformationDetail.getEmploymentPeriod().getId(),
-          serviceInformationDetail.getStartDate(), serviceInformationDetail.getEndDate(),
-          serviceInformationDetail.getComment(), serviceInformationDetail.getId(),
-          serviceInformationDetail.getServiceId()});
-
-    }
-    return params;
+    return mJdbcTemplate.update(query, pMutable.getEmploymentPeriod().getId(), pMutable.getStartDate(),
+        pMutable.getEndDate(), pMutable.getComment(), pMutable.getId(), pMutable.getServiceId());
   }
 
   @Override
-  public int deleteServiceInformationDetail(List<MutableServiceInformationDetail> pMutableServiceInformationDetail) {
+  public int delete(MutableServiceInformationDetail pMutable) {
     String query = DELETE_ONE + " WHERE ID = ? AND EMPLOYMENT_PERIOD = ? AND SERVICE_ID = ?";
-    return mJdbcTemplate.batchUpdate(query, getServiceInformationDetailDeleteParams(pMutableServiceInformationDetail)).length;
+    return mJdbcTemplate.update(query, pMutable.getId(), pMutable.getEmploymentPeriod().getId(),
+        pMutable.getServiceId());
   }
 
-  private List<Object[]> getServiceInformationDetailDeleteParams(
-      List<MutableServiceInformationDetail> pMutableServiceInformationDetail) {
-    List<Object[]> params = new ArrayList<>();
-    for(ServiceInformationDetail serviceInformationDetail : pMutableServiceInformationDetail) {
-      params.add(new Object[] {serviceInformationDetail.getId(),
-          serviceInformationDetail.getEmploymentPeriod().getId(), serviceInformationDetail.getServiceId()});
-    }
-    return params;
+  @Override
+  public boolean exists(Long pId) {
+    String query = EXISTS_ONE + " WHERE SERVICE_ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, Boolean.class);
   }
 
   class RoleRowMapper implements RowMapper<ServiceInformationDetail> {

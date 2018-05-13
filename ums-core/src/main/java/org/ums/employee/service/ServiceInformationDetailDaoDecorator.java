@@ -8,29 +8,13 @@ public class ServiceInformationDetailDaoDecorator
     extends
     ContentDaoDecorator<ServiceInformationDetail, MutableServiceInformationDetail, Long, ServiceInformationDetailManager>
     implements ServiceInformationDetailManager {
-
   @Override
-  public int saveServiceInformationDetail(List<MutableServiceInformationDetail> pMutableServiceInformationDetail) {
-    return getManager().saveServiceInformationDetail(pMutableServiceInformationDetail);
+  public List<ServiceInformationDetail> getServiceDetail(Long pId) {
+    return getManager().getServiceDetail(pId);
   }
 
   @Override
-  public int saveServiceInformationDetail(MutableServiceInformationDetail pMutableServiceInformationDetail) {
-    return getManager().saveServiceInformationDetail(pMutableServiceInformationDetail);
-  }
-
-  @Override
-  public List<ServiceInformationDetail> getServiceInformationDetail(Long pServiceId) {
-    return getManager().getServiceInformationDetail(pServiceId);
-  }
-
-  @Override
-  public int updateServiceInformationDetail(List<MutableServiceInformationDetail> pMutableServiceInformationDetail) {
-    return getManager().updateServiceInformationDetail(pMutableServiceInformationDetail);
-  }
-
-  @Override
-  public int deleteServiceInformationDetail(List<MutableServiceInformationDetail> pMutableServiceInformationDetail) {
-    return getManager().deleteServiceInformationDetail(pMutableServiceInformationDetail);
+  public boolean exists(String pEmployeeId) {
+    return getManager().exists(pEmployeeId);
   }
 }
