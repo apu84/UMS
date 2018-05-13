@@ -192,6 +192,7 @@
 /// <reference path='controller/admission/AdmissionDeadline.ts'/>
 /// <reference path='controller/admission/AdmissionCertificateVerification.ts'/>
 /// <reference path='controller/admission/AdmissionTotalSeatAssignment.ts'/>
+/// <reference path='controller/sectionAssign/sectionAssignment.ts'/>
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>

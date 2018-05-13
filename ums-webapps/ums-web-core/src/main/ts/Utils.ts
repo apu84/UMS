@@ -1,6 +1,5 @@
 module ums {
   export class Utils {
-
     static APPROVED: string = "#FFFFCC";
     static APPLICATION: string = "#CCFFCC";
     static APPROVED_APPLICATION: string = "#E0FFFF";
@@ -179,7 +178,13 @@ module ums {
      */
     static NUMBER_SELECT: number = 101101;
     static STRING_SELECT: string = "";
-
+  /**
+   * Theory Sections
+   */
+     static THEORY_SECTION_A:string="A";
+     static THEORY_SECTION_B:string="B";
+     static THEORY_SECTION_C:string="C";
+     static THEORY_SECTION_D:string="D";
 
     public static findIndex(source_arr: Array<any>, element_value: string): number {
       var targetIndex = -1;
@@ -213,6 +218,17 @@ module ums {
           return o.index;
         })) + 1;
       return val;
+    }
+    public static getSessionalSection(theorySectionName:string):any{
+      if(theorySectionName==this.THEORY_SECTION_A){
+          return Constants.Default().sessionalSectionsA;
+      }else if(theorySectionName==this.THEORY_SECTION_B){
+          return Constants.Default().sessionalSectionsB;
+      }else if(theorySectionName==this.THEORY_SECTION_C){
+          return Constants.Default().sessionalSectionsC;
+      }else {
+          return Constants.Default().sessionalSectionsD;
+      }
     }
 
     public static expandRightDiv() {

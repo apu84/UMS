@@ -81,6 +81,11 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     }
     if(pStudent.getTheorySection() != null) {
       pBuilder.add("section", pStudent.getTheorySection());
+      pBuilder.add("theorySection", pStudent.getTheorySection());
+    }
+
+    if(pStudent.getSessionalSection() != null) {
+      pBuilder.add("sessionalSection", pStudent.getSessionalSection());
     }
 
     pBuilder.add("status", pStudent.getStatus().getId());
@@ -135,6 +140,17 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
       teacher.setId(pJsonObject.getString("adviser"));
       pMutableStudent.setAdviser(teacher);
     }
+  }
+
+  public void buildSection(final MutableStudent pMutableStudent, final JsonObject pJsonObject,
+      final LocalCache pLocalCache) {
+    if(pJsonObject.containsKey("id"))
+      pMutableStudent.setId(pJsonObject.getString("id"));
+    if(pJsonObject.containsKey("theorySection"))
+      pMutableStudent.setTheorySection(pJsonObject.getString("theorySection"));
+    if(pJsonObject.containsKey("sessionalSection"))
+      pMutableStudent.setSessionalSection(pJsonObject.getString("sessionalSection"));
+
   }
 
 }
