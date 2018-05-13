@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -166,6 +167,11 @@ public class UmsUtils {
     calendar.setTime(pDate);
     calendar.add(Calendar.DATE, -decrementDate);
     return calendar.getTime();
+  }
+
+  public static Integer differenceBetweenTwoDayes(Date pFromDate, Date pToDate) {
+    long diffInMillies = Math.abs(pFromDate.getTime() - pToDate.getTime());
+    return Integer.parseInt(TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS) + "");
   }
 
   public static String getWhereClause(String pFilter) {

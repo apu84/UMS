@@ -37,6 +37,7 @@ public class PersistentLmsApplication implements MutableLmsApplication {
   private Date mFromDate;
   private Date mToDate;
   private String mReason;
+  private Integer mTotalDays;
   private LeaveApplicationApprovalStatus mLeaveApplicationStatus;
   private String mLastModified;
 
@@ -56,6 +57,16 @@ public class PersistentLmsApplication implements MutableLmsApplication {
     mReason = pPersistentLmsApplication.getReason();
     mLastModified = pPersistentLmsApplication.getLastModified();
     mLeaveApplicationStatus = pPersistentLmsApplication.getApplicationStatus();
+  }
+
+  @Override
+  public void setTotalDays(Integer pTotalDays) {
+    mTotalDays = pTotalDays;
+  }
+
+  @Override
+  public Integer getTotalDays() {
+    return mTotalDays;
   }
 
   @Override

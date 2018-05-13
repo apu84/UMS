@@ -26,6 +26,8 @@ public interface MutableLmsApplication extends LmsApplication, Editable<Long>, M
 
   void setReason(String pReason);
 
+  void setTotalDays(Integer pTotalDays);
+
   void setLeaveApplicationStatus(LeaveApplicationApprovalStatus pLeaveApplicationStatus);
 
 }
