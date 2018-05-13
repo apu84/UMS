@@ -204,7 +204,7 @@ public class PersistentStudentDao extends StudentDaoDecorator {
   @Override
   public int updateStudentsSection(List<MutableStudent> pStudents) {
     String query = "UPDATE  STUDENTS set THEORY_SECTION=?,SESSIONAL_SECTION=? WHERE  STUDENT_ID=?";
-    return mJdbcTemplate.batchUpdate(query, getUpdateParamArrayForSection(pStudents)).length;
+    return mJdbcTemplate.batchUpdate(query, getUpdatedParamArrayForSection(pStudents)).length;
   }
 
   private List<Object[]> getUpdateParamArrayForAdviser(List<MutableStudent> pStudents) {
@@ -218,7 +218,7 @@ public class PersistentStudentDao extends StudentDaoDecorator {
     return params;
   }
 
-  private List<Object[]> getUpdateParamArrayForSection(List<MutableStudent> pStudents) {
+  private List<Object[]> getUpdatedParamArrayForSection(List<MutableStudent> pStudents) {
     List<Object[]> params = new ArrayList<>();
     for(Student student : pStudents) {
       params.add(new Object[] {student.getTheorySection(), student.getSessionalSection(), student.getId()});

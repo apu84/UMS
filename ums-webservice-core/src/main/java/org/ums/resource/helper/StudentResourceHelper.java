@@ -192,8 +192,10 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
       mSectionAssignmentService.setNotification(students.get(j).getId(), students.get(j).getTheorySection(), students
           .get(j).getSessionalSection());
     }
-    mLogger.debug(" Actor: {}, Section changed Student List:  {}",
-        SecurityUtils.getSubject().getPrincipal().toString(), students.toString());
+   StringBuilder sb= new StringBuilder();
+    students.stream().forEach(s-> sb.append(s.getId()+"',"));
+    mLogger.debug(" [{}], Section changed Student List:  {}",
+        SecurityUtils.getSubject().getPrincipal().toString(), sb.toString());
     getContentManager().updateStudentsSection(students);
     localCache.invalidate();
     return Response.noContent().build();

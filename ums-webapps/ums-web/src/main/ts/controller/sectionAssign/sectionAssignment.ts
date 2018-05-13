@@ -80,6 +80,8 @@ module ums{
         bulkSessionalSection:IConstantsSection;
         selectedBulkSessionalSectionId:string;
         changeBulkSessionalSection:Function;
+        SINGLE_TYPE:number;
+        BULK_TYPE:number;
 
     }
     interface ICategorizedStudents{
@@ -96,7 +98,7 @@ module ums{
         name: string;
     }
 
-    class SectionAssign{
+    class SectionAssignment{
         private anchorPrefix=".btn.btn-xs.btn-default.";
 
         public static $inject = ['appConstants','HttpClient','$scope','$q','notify','semesterService','employeeService','studentService'];
@@ -115,6 +117,8 @@ module ums{
             $scope.shiftOptionSelected=false;
             $scope.changeOptionSelected=false;
             $scope.bulkAssignmentOptionSelected=false;
+            $scope.SINGLE_TYPE=1;
+            $scope.BULK_TYPE=2;
             $scope.showSingleStudentUI = this.showSingleStudentUI.bind(this);
             $scope.showBulkAssignmentUI = this.showBulkAssignmentUI.bind(this);
             $scope.getActiveTeachers = this.getActiveTeachers.bind(this);
@@ -148,8 +152,13 @@ module ums{
             this.$scope.bulkSessionalSectionList=[];
             this.$scope.bulkSessionalSectionList=this.appConstants.sessionalSectionsA;
             this.$scope.selectedBulkSessionalSectionId="null";
-            console.log("Bulk_Theory_Id: "+this.$scope.selectedBulkTheorySectionId+"" +
-                "\nBulk_Sessional_Id: "+this.$scope.selectedBulkSessionalSectionId);
+            this.$scope.theorySectionList=[];
+            this.$scope.theorySectionList=this.appConstants.theorySections;
+            this.$scope.theorySection=this.$scope.theorySectionList[0];
+            this.$scope.selectedTheorySectionId=this.$scope.theorySection.id;
+            this.$scope.selectedSessionalSectionId="null";
+            this.$scope.sessionalSectionList=[];
+            this.$scope.sessionalSectionList=Utils.getSessionalSection(this.$scope.selectedTheorySectionId);
 
 
             $('.selectpicker').selectpicker({
@@ -368,7 +377,6 @@ module ums{
                     this.$scope.bulkSelectedStudents[i].sessionalSection=this.$scope.selectedBulkSessionalSectionId;
                 }
                 this.convertToJson(this.$scope.bulkSelectedStudents).then((jsonData)=>{
-                    console.log(jsonData);
                     this.studentService.updateStudentsSection(jsonData).then((data)=>{
                         if(data=="success"){
                         }
@@ -501,10 +509,10 @@ module ums{
                 for(var i=0;i<students.length;i++){
                     students[i].backgroundColor=Utils.DEFAULT_COLOR;
 
-                    if(type==1){
+                    if(type==this.$scope.SINGLE_TYPE){
                         this.$scope.fromStudents.push(students[i]);
                         this.insertIntoFromStudentsWithYearSemester(students[i]);
-                    }else if(type==2){
+                    }else if(type==this.$scope.BULK_TYPE){
                         this.$scope.toStudents.push(students[i]);
                         this.insertIntoToStudentsWithYearSemester(students[i]);
                     }
@@ -558,87 +566,33 @@ module ums{
 
             });
         }
-        private changeTheorySection(value:IConstantsSection){
-            console.log("inside Theory : "+value);
-            this.$scope.selectedTheorySectionId=value.id;
-            console.log("Theory_Id: "+this.$scope.selectedTheorySectionId);
-            console.log("Sessional_Id: "+this.$scope.selectedSessionalSectionId);
+        private changeTheorySection(theorySection:IConstantsSection){
+            this.$scope.selectedTheorySectionId=theorySection.id;
             this.$scope.selectedSessionalSectionId="null";
-            if(value.name=="A"){
-                this.$scope.sessionalSectionList=[];
-                this.$scope.sessionalSectionList=this.appConstants.sessionalSectionsA;
-                console.log("inside timer-A Sessional_Id: "+this.$scope.selectedSessionalSectionId);
-            }else if(value.name=="B"){
-                this.$scope.sessionalSectionList=[];
-                this.$scope.sessionalSectionList=this.appConstants.sessionalSectionsB;
-                console.log("inside timer-B Sessional_Id: "+this.$scope.selectedSessionalSectionId);
-            }else if(value.name=="C"){
-                this.$scope.sessionalSectionList=[];
-                this.$scope.sessionalSectionList=this.appConstants.sessionalSectionsC;
-                console.log("inside timer-C Sessional_Id: "+this.$scope.selectedSessionalSectionId);
-            }else{
-                this.$scope.sessionalSectionList=[];
-                this.$scope.sessionalSectionList=this.appConstants.sessionalSectionsD;
-                console.log("inside timer-D Sessional_Id: "+this.$scope.selectedSessionalSectionId);
-            }
-
+            this.$scope.sessionalSectionList=[];
+            this.$scope.sessionalSectionList=Utils.getSessionalSection(theorySection.name);
         }
-        private changeBulkTheorySection(value:IConstantsSection){
-            this.$scope.selectedBulkTheorySectionId=value.id;
-            console.log("Bulk_Theory_Id: "+this.$scope.selectedBulkTheorySectionId);
-            console.log("Bulk_Sessional_Id: "+this.$scope.selectedBulkSessionalSectionId);
+        private changeBulkTheorySection(theorySection:IConstantsSection){
+            this.$scope.selectedBulkTheorySectionId=theorySection.id;
             this.$scope.selectedBulkSessionalSectionId="null";
-            if(value.name=="A"){
-                this.$scope.bulkSessionalSectionList=[];
-                this.$scope.bulkSessionalSectionList=this.appConstants.sessionalSectionsA;
-                console.log("Bulk_inside timer-A Sessional_Id: "+this.$scope.selectedBulkSessionalSectionId);
-            }else if(value.name=="B"){
-                this.$scope.bulkSessionalSectionList=[];
-                this.$scope.bulkSessionalSectionList=this.appConstants.sessionalSectionsB;
-                console.log("Bulk_inside timer-B Sessional_Id: "+this.$scope.selectedBulkSessionalSectionId);
-            }else if(value.name=="C"){
-                this.$scope.bulkSessionalSectionList=[];
-                this.$scope.bulkSessionalSectionList=this.appConstants.sessionalSectionsC;
-                console.log("Bulk_inside timer-C Sessional_Id: "+this.$scope.selectedBulkSessionalSectionId);
-            }else{
-                this.$scope.bulkSessionalSectionList=[];
-                this.$scope.bulkSessionalSectionList=this.appConstants.sessionalSectionsD;
-                console.log("Bulk_inside timer-D Sessional_Id: "+this.$scope.selectedBulkSessionalSectionId);
+            this.$scope.bulkSessionalSectionList=[];
+            this.$scope.bulkSessionalSectionList=Utils.getSessionalSection(theorySection.name);
+        }
+
+        private changeBulkSessionalSection(bulkSelectSessionalId:IConstantsSection){
+            if(bulkSelectSessionalId !=null) {
+                this.$scope.selectedBulkSessionalSectionId = bulkSelectSessionalId.id;
             }
         }
 
-        private changeBulkSessionalSection(value:IConstantsSection){
-            if(value !=null) {
-                console.log("inside Bulk changeSessionalSection if");
-                console.log(value);
-                this.$scope.selectedBulkSessionalSectionId = value.id;
-                console.log("Bulk_Sessional_Id: " + this.$scope.selectedBulkSessionalSectionId);
-            }
-        }
-
-        private changeSessionalSection(value:IConstantsSection){
-            console.log("inside changeSessionalSection : "+value);
-            if(value !=null) {
-                console.log("inside changeSessionalSection if");
-                console.log(value);
-                this.$scope.selectedSessionalSectionId = value.id;
-                console.log("Sessional_Id: " + this.$scope.selectedSessionalSectionId);
+        private changeSessionalSection(singleSelectSessionalId:IConstantsSection){
+            if(singleSelectSessionalId !=null) {
+                this.$scope.selectedSessionalSectionId = singleSelectSessionalId.id;
             }
         }
         
         private searchSingleStudent(){
-            this.$scope.theorySectionList=[];
-            this.$scope.theorySectionList=this.appConstants.theorySections;
-            this.$scope.theorySection=this.$scope.theorySectionList[0];
-            this.$scope.selectedTheorySectionId=this.$scope.theorySection.id;
-            this.$scope.sessionalSectionList=[];
-            this.$scope.sessionalSectionList=this.appConstants.sessionalSectionsA;
-            this.$scope.selectedSessionalSectionId="null";
-            console.log("Theory_Id: "+this.$scope.selectedTheorySectionId+"\nSessional_Id: "+this.$scope.selectedSessionalSectionId);
-            console.log("Student Id:"+this.$scope.singleStudentId);
             this.$scope.singleStudent=this.$scope.studentIdWithStudentMap[this.$scope.singleStudentId];
-            console.log("Single student info");
-            console.log(this.$scope.singleStudent);
         }
 
         private addAStudent(){
@@ -709,5 +663,5 @@ module ums{
             return defer.promise;
         }
     }
-    UMS.controller("SectionAssign",SectionAssign);
+    UMS.controller("SectionAssignment",SectionAssignment);
 }

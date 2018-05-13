@@ -276,9 +276,9 @@ module ums {
               });
             }]
           }
-        }).state('sectionAssign',{
-        url: "/sectionAssign",
-        controller: 'SectionAssign',
+        }).state('sectionAssignment',{
+        url: "/sectionAssignment",
+        controller: 'SectionAssignment',
         templateUrl: 'views/section-assign/section-assign.html',
         resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {

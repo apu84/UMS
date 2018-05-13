@@ -134,7 +134,7 @@
                                                     class="form-control required"
                                                     name="theorySection"
                                                     id="theory"
-                                                    data-ng-options="theory.name for theory in theorySectionList track by theory.id"
+                                                    data-ng-options="theory.name for theory in theorySectionList"
                                                     data-ng-model="theorySection"
                                                     data-ng-change="changeTheorySection(theorySection)"
                                             ></select>
@@ -146,7 +146,7 @@
                                                     class="form-control required"
                                                     name="sessionalSection"
                                                     id="sessional"
-                                                    data-ng-options="sessional.name for sessional in sessionalSectionList track by sessional.id"
+                                                    data-ng-options="sessional.name for sessional in sessionalSectionList track by sessional.id "
                                                     data-ng-model="sessionalSection"
                                                     data-ng-change="changeSessionalSection(sessionalSection)"
                                             >
