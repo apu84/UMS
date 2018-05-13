@@ -210,7 +210,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
 
       mLeaveManagementService.setNotification(rolePermissionsStream.get(0).getUserId(), message);
     }
-    pApplication.setTotalDays(UmsUtils.differenceBetweenTwoDayes(pApplication.getFromDate(), pApplication.getToDate()));
+    pApplication.setTotalDays(UmsUtils.differenceBetweenTwoDayes(pApplication.getFromDate(), pApplication.getToDate())+1);
     pAppId = getContentManager().create(pApplication);
     lmsAppStatus.setLmsApplicationId(pAppId);
     mLmsAppStatusManager.create(lmsAppStatus);

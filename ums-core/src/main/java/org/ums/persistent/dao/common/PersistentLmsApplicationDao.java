@@ -31,9 +31,9 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
   private String SELECT_ONE = "select * from lms_application ";
   private String DELETE_ONE = "delete from lms_application ";
   private String UPDATE_ONE =
-      "update lms_application set employee_id=:employeeId, type_id=:typeId, applied_on=:appliedOn, from_date=:fromDate, to_date=:toDate, reason=:reason,  app_status=:appStatus, last_modified=:lastModified";
+      "update lms_application set employee_id=:employeeId, type_id=:typeId, applied_on=:appliedOn, from_date=:fromDate, to_date=:toDate, reason=:reason,  app_status=:appStatus, total_days=:totalDays, last_modified=:lastModified";
   private String INSERT_ONE =
-      "INSERT INTO LMS_APPLICATION (ID,EMPLOYEE_ID, TYPE_ID, APPLIED_ON, FROM_DATE, TO_DATE, REASON,APP_STATUS, LAST_MODIFIED) VALUES (:id,:employeeId,:typeId,:appliedOn,:fromDate,:toDate,:reason,:appStatus,:lastModified)";
+      "INSERT INTO LMS_APPLICATION (ID,EMPLOYEE_ID, TYPE_ID, APPLIED_ON, FROM_DATE, TO_DATE, REASON,APP_STATUS, TOTAL_DAYS, LAST_MODIFIED) VALUES (:id,:employeeId,:typeId,:appliedOn,:fromDate,:toDate,:reason,:appStatus, :totalDays,:lastModified)";
 
   private JdbcTemplate mJdbcTemplate;
   private NamedParameterJdbcTemplate mNamedParameterJdbcTemplate;
@@ -64,11 +64,7 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
     parameter.put("fromDate", pMutableLmsApplication.getFromDate());
     parameter.put("toDate", pMutableLmsApplication.getToDate());
     parameter.put("reason", pMutableLmsApplication.getReason());
-    parameter.put(
-        "totalDays",
-        pMutableLmsApplication.getTotalDays() == null ? UmsUtils.differenceBetweenTwoDayes(
-            pMutableLmsApplication.getFromDate(), pMutableLmsApplication.getToDate()) : pMutableLmsApplication
-            .getTotalDays());
+    parameter.put("totalDays", pMutableLmsApplication.getTotalDays());
     parameter.put("appStatus", pMutableLmsApplication.getApplicationStatus().getId());
     parameter.put("lastModified", UmsUtils.formatDate(new java.util.Date(), "YYYYMMDDHHMMSS"));
     return parameter;

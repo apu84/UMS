@@ -21,7 +21,7 @@ public class GradeSheetResource extends Resource {
   @GET
   @Path("/semester" + PATH_PARAM_OBJECT_ID)
   public JsonObject getGradesheet(final @Context Request pRequest, final @PathParam("object-id") Integer pSemesterId) {
-//    String studentId = SecurityUtils.getSubject().getPrincipal().toString();
+    // String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     String studentId = "130108006";
     return mGradeSheetResourceHelper.getGradesheet(studentId, pSemesterId, mUriInfo);
   }
