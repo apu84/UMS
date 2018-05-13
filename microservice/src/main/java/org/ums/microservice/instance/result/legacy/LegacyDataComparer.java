@@ -21,6 +21,7 @@ import org.ums.result.legacy.LegacyTabulationManager;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import org.ums.result.legacy.MutableLegacyTabulation;
 
 public class LegacyDataComparer extends AbstractService {
   private static final Logger mLogger = LoggerFactory.getLogger(LegacyDataComparer.class);
@@ -225,6 +226,7 @@ public class LegacyDataComparer extends AbstractService {
 
       contentTable.setHeaderRows(1);
       int serial = 0;
+      List<MutableLegacyTabulation> legacyTabulations = new ArrayList<>();
       for(int i = 0; i < legacyTabulationList.size(); i++) {
         LegacyTabulation legacyTabulation = legacyTabulationList.get(i);
         if(Integer.parseInt(legacyTabulation.getStudentId().substring(0,2)) >= 13) {
@@ -269,6 +271,10 @@ public class LegacyDataComparer extends AbstractService {
                 if(!checkGpa(legacyTabulation.getCgpa(), studentRecord.getCGPA())) {
                   cgpaMatch = new Paragraph("No", infoFontBold);
                   addToReport = true;
+                  MutableLegacyTabulation mutableLegacyTabulation = legacyTabulation.edit();
+                  mutableLegacyTabulation.setCgpa(studentRecord.getCGPA());
+                  legacyTabulations.add(mutableLegacyTabulation);
+
                 }
                 else {
                   cgpaMatch = new Paragraph("Yes", infoFont);
@@ -608,6 +614,17 @@ public class LegacyDataComparer extends AbstractService {
             }
           }
         }
+      }
+
+      if(legacyTabulations.size() > 0) {
+//        mLegacyTabulationManager.update(legacyTabulations);
+        legacyTabulations.forEach((pLegacyTabulation -> {
+          System.out.println(
+              String.format("UPDATE DB_AUST_LEGACY.AUST_TABULATION SET CGPA = %s WHERE RL = %s AND SEMESTER_ID = %s;",
+                  pLegacyTabulation.getCgpa().toString(),
+                  pLegacyTabulation.getStudentId().toString(),
+                  pLegacyTabulation.getSemesterId().toString()));
+        }));
       }
 
       document.add(contentTable);
