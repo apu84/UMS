@@ -658,7 +658,7 @@ module ums {
           return {
             groupTypes:[
               {id:"1", name:"Assets"},
-              {id:"2", name:"Liabilities"},
+              {id:"2", name:"Fund & Liabilities"},
               {id:"3", name:"Income"},
               {id:"4", name:"Expenses"},
               {id:"5", name:"Bank Accounts"},
