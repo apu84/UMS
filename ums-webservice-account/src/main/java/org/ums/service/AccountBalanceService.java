@@ -222,8 +222,8 @@ public class AccountBalanceService {
       accountBalance.setTotDebitTrans(accountBalance.getYearOpenBalance() == null ? new BigDecimal(0.00) : accountBalance.getYearOpenBalance());
       accountBalance.setTotCreditTrans(new BigDecimal(0.000));
       accountBalance = setMonthAccountBalance(accountBalance, account);
-      accountBalance.setYearOpenBalance(openingBalance);
       accountBalanceManager.insertFromAccount(accountBalance);
+      accountBalance.setYearOpenBalance(openingBalance);
     }
     return accountBalance;
   }
