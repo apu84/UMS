@@ -126,6 +126,7 @@ module ums {
           this.existingAccounts = accounts;
           this.getTotalAccountSize();
         }
+        $("#addButton").focus();
       });
     }
 

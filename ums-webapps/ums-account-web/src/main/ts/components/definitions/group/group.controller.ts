@@ -26,8 +26,6 @@ module ums {
     }
 
     private addModalClicked() {
-      this.addedGroup = <IGroup>{};
-      this.addedGroup.mainGroup = "";
       this.initialize();
       this.setFocusOnTheModal();
     }
@@ -116,8 +114,9 @@ module ums {
       this.addedGroup.flag = this.addedGroup.flagBoolValue == true ? "Y" : "N";
       let addedGroupCopy = angular.copy(this.addedGroup);
       this.groups.push(this.addedGroup);
-      this.addedGroup=<IGroup>{};
+      //this.addedGroup=<IGroup>{};
     }
+
 
     private editButtonClicked(groupForEdit: IGroup) {
       this.addedGroup = <IGroup>{};
@@ -132,9 +131,12 @@ module ums {
       this.addedGroup.flag = this.addedGroup.flagBoolValue == true ? "Y" : "N";
       this.groupService.saveAGroup(this.addedGroup).then((groups) => {
         console.log("Fetched groups");
+        let tmpAddedGroup:IGroup = angular.copy(this.addedGroup);
         this.addedGroup = <IGroup>{};
+        this.addedGroup.mainGroupObject = tmpAddedGroup.mainGroupObject;
+        this.addedGroup.mainGroup = tmpAddedGroup.mainGroup;
         this.assignToGroupAndMap(groups);
-
+        $("#addButton").focus();
       });
     }
 
