@@ -55,10 +55,15 @@ module ums {
         this.groups = groups;
         this.groupMapWithGroupid = {};
         console.log("Groups");
-        console.log(groups);
         this.groups.forEach((g: IGroup) => this.groupMapWithGroupid[g.groupCode] = g);
         this.getPaginatedAccounts();
+        this.assignGroupObjectsToGroup();
       });
+    }
+
+    private assignGroupObjectsToGroup(){
+        this.groups.forEach((g:IGroup)=> g.mainGroupObject=this.groupMapWithGroupid[g.mainGroup]);
+        console.log(this.groups);
     }
 
     public getTotalAccountSize() {

@@ -93,9 +93,6 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   @Autowired
   private NewIUMSAccountInfoEmailService mNewIUMSAccountInfoEmailService;
 
-  @Autowired
-  private PasswordService mPasswordService;
-
   @Override
   @Transactional
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {

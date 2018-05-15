@@ -26,9 +26,9 @@
                 <ui-select id="groupName" theme="bootstrap"
                            data-ng-model="vm.selectedGroup"
                 >
-                    <ui-select-match placeholder="Select Main Group">{{vm.selectedGroup.groupName}}</ui-select-match>
+                    <ui-select-match placeholder="Select Main Group">{{vm.selectedGroup.groupName+' ['+vm.selectedGroup.mainGroupObject.groupName+']'}}</ui-select-match>
                     <ui-select-choices repeat="g in vm.groups|filter:$select.search">
-                        <small ng-bind-html="g.groupName | highlight:$select.search"></small>
+                        <small ng-bind-html="g.groupName+' ['+g.mainGroupObject.groupName+']' | highlight:$select.search"></small>
                     </ui-select-choices>
                 </ui-select>
             </div>
