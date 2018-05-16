@@ -12,7 +12,7 @@ public class PersistentDegreeTitle implements MutableDegreeTitle {
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sDegreeTitleManager = applicationContext.getBean("academicDegreeManager", DegreeTitleManager.class);
+    sDegreeTitleManager = applicationContext.getBean("degreeTitleManager", DegreeTitleManager.class);
   }
 
   private Integer mId;

@@ -405,7 +405,7 @@ public class CoreContext {
   @Bean
   DegreeTitleManager degreeTitleManager() {
     DegreeTitleCache degreeTitleCache = new DegreeTitleCache(mCacheFactory.getCacheManager());
-      degreeTitleCache.setManager(new PersistentDegreeTitleDao(mTemplateFactory.getJdbcTemplate()));
+    degreeTitleCache.setManager(new PersistentDegreeTitleDao(mTemplateFactory.getJdbcTemplate()));
     return degreeTitleCache;
   }
 
