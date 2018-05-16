@@ -100,40 +100,15 @@ module ums {
             this.enableEdit[index] = canEdit;
         }
 
-        public modifyDegreeTitleSelection(index: number): void{
-            this.filteredDegreeTitle = this.degreeTitle.filter((data) => {
-                return this.academic[index].degreeLevel.id == data.degreeLevelId;
-            });
-        }
-
-        public verifyDegreeTitle(index: number): void{
-            if(this.academic[index].degreeTitle) {
-                if (this.academic[index].degreeLevel.id !== this.academic[index].degreeTitle.degreeLevelId) {
-                    this.academic[index].degreeLevel = null;
-                    this.filteredDegreeTitle = [];
-                }
-            }
-        }
-
         public createNewDegreeTitle(): void{
             this.convertToJson(this.newDegreeTitle).then((json: any)=>{
                 this.employeeInformationService.saveNewDegreeTitle(json).then(() =>{
                     this.academicDegreeService.getAcademicDegreeList().then((degree: any) => {
                         this.degreeTitle = degree;
-                        this.modifyDegreeTitleSelection(this.getCurrentIndex());
                     });
                 });
             })
         }
-
-        private getCurrentIndex(): number{
-            return this.currentIndex;
-        }
-
-        public setCurrentIndex(index: number): void{
-            this.currentIndex = index;
-        }
-
 
         public addNew(): void {
             let academicEntry: IAcademicInformationModel;

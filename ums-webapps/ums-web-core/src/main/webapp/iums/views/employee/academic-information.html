@@ -19,12 +19,12 @@
                 </div>
             </div>
             <div class="panel-body">
-                <div data-ng-show="academic.degreeLevel.id=='100010' && academic.degreeTitle.id == 0 && vm.enableEdit[$index]">
+                <div data-ng-show="academic.degreeLevel.id=='100010' && !academic.degreeTitle && vm.enableEdit[$index]">
                     <div class="alert alert-danger alert-dismissable"
                          style="-moz-border-radius: 15px !important;border-radius: 15px !important;">
                         <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
-                        If you don't find <strong>Degree Title</strong> for <strong>PhD</strong>, please <a data-ng-click="vm.setCurrentIndex($index)"
-                                                                                                            data-toggle="modal" data-target="#addDegreeTitle" style="cursor: pointer;"><u><b>Click here</b></u></a>
+                        If you don't find <strong>Degree Title</strong> for <strong>PhD</strong>, please <a
+                            data-toggle="modal" data-target="#addDegreeTitle" style="cursor: pointer;"><u><b>Click here</b></u></a>
                         to add Degree Title.
                     </div>
                 </div>
