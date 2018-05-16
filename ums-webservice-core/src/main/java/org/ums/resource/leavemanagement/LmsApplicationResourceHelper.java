@@ -132,7 +132,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     return object.build();
   }
 
-  public  String checkApplicationType(PersistentLmsApplication application) {
+  public String checkApplicationType(PersistentLmsApplication application) {
     String outputMessage = "";
     if(application.getLmsType().getId() == LeaveCategories.STUDY_LEAVE_ON_WITHOUT_PAY.getId()) {
       LocalDate fromDate = application.getFromDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

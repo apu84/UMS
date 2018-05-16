@@ -16,6 +16,7 @@ module ums {
     statusFlag: string;
     modifiedDate: string;
     modifiedBy: string;
+    groupNameAndMainGroupName: string;
   }
 
   export enum GroupFlag{

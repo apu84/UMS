@@ -117,6 +117,7 @@ public class BalanceSheetReportGenerator {
         .filter(a -> !a.getGroupCode().equals(mSystemGroupMapManager.get(GroupType.ASSETS, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode()))
         .collect(Collectors.toList());
     CellAndTotalBalance assetCellAndTotalBalance = createGroupSection(
+            GroupType.ASSETS,
         pBalanceSheetFetchType,
         accountBalanceMapWithAccount,
         accountMapWithGroupCode,
@@ -138,7 +139,7 @@ public class BalanceSheetReportGenerator {
         .filter(a -> !a.getGroupCode().equals(mSystemGroupMapManager.get(GroupType.LIABILITIES, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode()))
         .collect(Collectors.toList());
 
-    CellAndTotalBalance liabilitiesCellAndTotalBalance = createGroupSection(
+    CellAndTotalBalance liabilitiesCellAndTotalBalance = createGroupSection(GroupType.LIABILITIES,
         pBalanceSheetFetchType,
         accountBalanceMapWithAccount,
         accountMapWithGroupCode,
@@ -157,7 +158,7 @@ public class BalanceSheetReportGenerator {
         .filter(a -> !a.getGroupCode().equals(mSystemGroupMapManager.get(GroupType.INCOME, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode()))
         .collect(Collectors.toList());
 
-    CellAndTotalBalance incomeCellAndTotalBalance = createGroupSection(
+    CellAndTotalBalance incomeCellAndTotalBalance = createGroupSection( GroupType.INCOME,
         pBalanceSheetFetchType,
         accountBalanceMapWithAccount,
         accountMapWithGroupCode,
@@ -176,7 +177,7 @@ public class BalanceSheetReportGenerator {
         .filter(a -> !a.getGroupCode().equals(mSystemGroupMapManager.get(GroupType.EXPENSES, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode()))
         .collect(Collectors.toList());
 
-    CellAndTotalBalance expenseCellAndTotalBalance = createGroupSection(
+    CellAndTotalBalance expenseCellAndTotalBalance = createGroupSection(GroupType.EXPENSES,
         pBalanceSheetFetchType,
         accountBalanceMapWithAccount,
         accountMapWithGroupCode,
@@ -202,7 +203,7 @@ public class BalanceSheetReportGenerator {
     cell.setBorder(Rectangle.NO_BORDER);
     totalAmountTable.addCell(cell);
     PdfPTable liabilitiesTotalAmountTable = new PdfPTable(2);
-    addTotalAmountOfTheSection(liabilitiesTotalAmountTable, (liabilitiesCellAndTotalBalance.getTotalBalance().add(incomeCellAndTotalBalance.getTotalBalance())).subtract(expenseCellAndTotalBalance.getTotalBalance()));
+    addTotalAmountOfTheSection(liabilitiesTotalAmountTable, (liabilitiesCellAndTotalBalance.getTotalBalance().add(incomeCellAndTotalBalance.getTotalBalance())).add(expenseCellAndTotalBalance.getTotalBalance()));
     cell = new PdfPCell();
     cell.addElement(liabilitiesTotalAmountTable);
     cell.setBorder(Rectangle.NO_BORDER);
@@ -213,7 +214,7 @@ public class BalanceSheetReportGenerator {
     baos.writeTo(pOutputStream);
   }
 
-  private CellAndTotalBalance createGroupSection(BalanceSheetFetchType pBalanceSheetFetchType,
+  private CellAndTotalBalance createGroupSection(GroupType pGroupTYpe, BalanceSheetFetchType pBalanceSheetFetchType,
       Map<Account, AccountBalance> pAccountBalanceMapWithAccount, Map<String, List<Account>> pAccountMapWithGroupCode,
       List<Group> pGroups) {
     PdfPCell cell;
@@ -222,8 +223,8 @@ public class BalanceSheetReportGenerator {
 
     BigDecimal sectionTotalBalance = new BigDecimal(0);
     sectionTotalBalance =
-        generateInternalGroupBody(pBalanceSheetFetchType, pAccountBalanceMapWithAccount, pAccountMapWithGroupCode,
-            assetTable, pGroups, sectionTotalBalance);
+        generateInternalGroupBody(pGroupTYpe, pBalanceSheetFetchType, pAccountBalanceMapWithAccount,
+            pAccountMapWithGroupCode, assetTable, pGroups, sectionTotalBalance);
 
     addTotalAmountOfTheSection(assetTable, sectionTotalBalance);
 
@@ -256,7 +257,7 @@ public class BalanceSheetReportGenerator {
   }
 
   @NotNull
-  private BigDecimal generateInternalGroupBody(BalanceSheetFetchType pBalanceSheetFetchType,
+  private BigDecimal generateInternalGroupBody(GroupType pGroupType, BalanceSheetFetchType pBalanceSheetFetchType,
       Map<Account, AccountBalance> pAccountBalanceMapWithAccount, Map<String, List<Account>> pAccountMapWithGroupCode,
       PdfPTable pAssetTable, List<Group> ppGroups, BigDecimal sectionTotalBalance) {
     PdfPCell cell;
@@ -270,8 +271,10 @@ public class BalanceSheetReportGenerator {
         paragraph = new Paragraph(group.getGroupName(), mLiteFont);
       paragraph.setAlignment(Element.ALIGN_LEFT);
       cell.addElement(paragraph);
+
       if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
         cell.setColspan(2);
+
       cell.setBorder(Rectangle.NO_BORDER);
       pAssetTable.addCell(cell);
       List<Account> groupAccountList = new ArrayList<>();
@@ -298,8 +301,8 @@ public class BalanceSheetReportGenerator {
         BigDecimal totalAccountBalance = new BigDecimal(0);
         BigDecimal groupTotalBalance = new BigDecimal(0);
         groupTotalBalance =
-            generateGroupBasedAccountSection(pBalanceSheetFetchType, pAccountBalanceMapWithAccount, pAssetTable,
-                groupAccountList, totalAccountBalance, groupTotalBalance);
+            generateGroupBasedAccountSection(pGroupType, pBalanceSheetFetchType, pAccountBalanceMapWithAccount,
+                pAssetTable, groupAccountList, totalAccountBalance, groupTotalBalance);
 
         cell = new PdfPCell();
         sectionTotalBalance = sectionTotalBalance.add(groupTotalBalance);
@@ -321,14 +324,16 @@ public class BalanceSheetReportGenerator {
 
   }
 
-  private BigDecimal generateGroupBasedAccountSection(BalanceSheetFetchType pBalanceSheetFetchType,
-      Map<Account, AccountBalance> pAccountBalanceMapWithAccount, PdfPTable pAssetTable,
-      List<Account> pGroupAccountList, BigDecimal pTotalAccountBalance, BigDecimal pGroupTotalBalance) {
+  private BigDecimal generateGroupBasedAccountSection(GroupType pGroupType,
+      BalanceSheetFetchType pBalanceSheetFetchType, Map<Account, AccountBalance> pAccountBalanceMapWithAccount,
+      PdfPTable pAssetTable, List<Account> pGroupAccountList, BigDecimal pTotalAccountBalance,
+      BigDecimal pGroupTotalBalance) {
     PdfPCell cell;
     Paragraph paragraph;
     for(Account account : pGroupAccountList) {
       AccountBalance accountBalance = pAccountBalanceMapWithAccount.get(account);
-      BigDecimal accountTotalBalance = accountBalance.getTotCreditTrans().subtract(accountBalance.getTotDebitTrans());
+      BigDecimal accountTotalBalance = calculateAccountTotalBalance(pGroupType, accountBalance);
+
       pTotalAccountBalance = pTotalAccountBalance.add(accountTotalBalance);
       pGroupTotalBalance = pGroupTotalBalance.add(accountTotalBalance);
       if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED)) {
@@ -347,6 +352,15 @@ public class BalanceSheetReportGenerator {
       }
     }
     return pGroupTotalBalance;
+  }
+
+  private BigDecimal calculateAccountTotalBalance(GroupType pGroupType, AccountBalance accountBalance) {
+    BigDecimal accountTotalBalance = new BigDecimal(0);
+    if(pGroupType.equals(GroupType.ASSETS))
+      accountTotalBalance = accountBalance.getTotDebitTrans().subtract(accountBalance.getTotCreditTrans());
+    else
+      accountTotalBalance = accountBalance.getTotCreditTrans().subtract(accountBalance.getTotDebitTrans());
+    return accountTotalBalance;
   }
 
   private void addTopAndBottomBorderedCell(Document pDocument, PdfPTable pTable, PdfPCell pCell, Paragraph pParagraph)

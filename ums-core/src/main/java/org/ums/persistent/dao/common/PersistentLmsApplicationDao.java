@@ -207,6 +207,7 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
       application.setToDate(rs.getDate("to_date"));
       application.setReason(rs.getString("reason"));
       application.setLastModified(rs.getString("last_modified"));
+      application.setTotalDays(rs.getInt("total_days"));
       if(rs.getInt("app_status") != 0)
         application.setLeaveApplicationStatus(LeaveApplicationApprovalStatus.get(rs.getInt("app_status")));
       return application;
