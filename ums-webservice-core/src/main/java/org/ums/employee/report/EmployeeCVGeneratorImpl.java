@@ -83,7 +83,7 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
   ThanaManager mThanaManager;
 
   @Autowired
-  AcademicDegreeManager mAcademicDegreeManager;
+  DegreeTitleManager mDegreeTitleManager;
 
   @Autowired
   AreaOfInterestInformationManager mAreaOfInterestInformationManager;
@@ -366,7 +366,7 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
     for(AcademicInformation academicInformation1 : academicInformation) {
       chunk = new Chunk();
       chunk.setFont(generalFont);
-      chunk.append(mAcademicDegreeManager.get(academicInformation1.getDegreeId()).getDegreeShortName());
+      /* chunk.append(mDegreeTitleManager.get(academicInformation1.getDegreeLevel()).getTitle()); */
 
       cell = new PdfPCell();
       cell.setBorder(PdfPCell.NO_BORDER);
