@@ -58,10 +58,13 @@ module ums{
     export interface IAcademicInformationModel{
         id: string;
         employeeId: string;
-        degree: IAcademicDegreeTypes;
+        degreeLevel: IDegreeLevel;
+        degreeTitle: IDegreeTitle;
         institution: string;
         passingYear: number;
         result: string;
+        major: string;
+        duration: number;
     }
 
     export interface IPublicationInformationModel{
@@ -161,12 +164,16 @@ module ums{
         foreign_id: number;
     }
 
-    export interface IAcademicDegreeTypes{
+    export interface IDegreeLevel{
         id: number;
-        type: number;
-        typeName: string;
         name: string;
-        shortName: string;
+    }
+
+    export interface IDegreeTitle {
+        id: number;
+        title: string;
+        degreeLevel: IDegreeLevel;
+        degreeLevelId: number;
     }
 
     export interface IDepartment {

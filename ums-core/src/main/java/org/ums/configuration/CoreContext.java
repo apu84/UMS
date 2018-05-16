@@ -14,7 +14,10 @@ import org.ums.bank.BankManager;
 import org.ums.bank.branch.BranchCache;
 import org.ums.bank.branch.BranchDao;
 import org.ums.bank.branch.BranchManager;
-import org.ums.bank.branch.user.*;
+import org.ums.bank.branch.user.BranchUserCache;
+import org.ums.bank.branch.user.BranchUserDao;
+import org.ums.bank.branch.user.BranchUserManager;
+import org.ums.bank.branch.user.BranchUserPostTransaction;
 import org.ums.bank.designation.BankDesignationCache;
 import org.ums.bank.designation.BankDesignationDao;
 import org.ums.bank.designation.BankDesignationManager;
@@ -73,7 +76,6 @@ import org.ums.usermanagement.userView.UserViewCache;
 import org.ums.usermanagement.userView.UserViewManager;
 import org.ums.util.Constants;
 
-import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -401,10 +403,10 @@ public class CoreContext {
   }
 
   @Bean
-  AcademicDegreeManager academicDegreeManager() {
-    AcademicDegreeCache academicDegreeCache = new AcademicDegreeCache(mCacheFactory.getCacheManager());
-    academicDegreeCache.setManager(new PersistentAcademicDegreeDao(mTemplateFactory.getJdbcTemplate()));
-    return academicDegreeCache;
+  DegreeTitleManager degreeTitleManager() {
+    DegreeTitleCache degreeTitleCache = new DegreeTitleCache(mCacheFactory.getCacheManager());
+      degreeTitleCache.setManager(new PersistentDegreeTitleDao(mTemplateFactory.getJdbcTemplate()));
+    return degreeTitleCache;
   }
 
   @Bean

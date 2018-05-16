@@ -11,14 +11,14 @@ import java.util.List;
 public class PersistentAcademicInformationDao extends AcademicInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_ACADEMIC_INFO (ID, EMPLOYEE_ID, DEGREE, INSTITUTE, PASSING_YEAR, RESULT, LAST_MODIFIED) VALUES (? ,? ,? ,?, ?, ?,"
+      "INSERT INTO EMP_ACADEMIC_INFO (ID, EMPLOYEE_ID, DEGREE_LEVEL_ID, DEGREE_TITLE_ID, INSTITUTE, PASSING_YEAR, RESULT, MAJOR, DURATION, LAST_MODIFIED) VALUES (?, ?, ?, ? ,? ,? ,?, ?, ?,"
           + getLastModifiedSql() + ")";
 
   static String GET_ALL =
-      "SELECT ID, EMPLOYEE_ID, DEGREE, INSTITUTE, PASSING_YEAR, RESULT, LAST_MODIFIED FROM EMP_ACADEMIC_INFO ";
+      "SELECT ID, EMPLOYEE_ID, DEGREE_LEVEL_ID, DEGREE_TITLE_ID, INSTITUTE, PASSING_YEAR, RESULT, MAJOR, DURATION, LAST_MODIFIED FROM EMP_ACADEMIC_INFO ";
 
   static String UPDATE_ONE =
-      "UPDATE EMP_ACADEMIC_INFO SET DEGREE = ?, INSTITUTE = ?, PASSING_YEAR = ?, RESULT = ?, LAST_MODIFIED ="
+      "UPDATE EMP_ACADEMIC_INFO SET DEGREE_LEVEL_ID = ?, DEGREE_TITLE_ID = ?, INSTITUTE = ?, PASSING_YEAR = ?, RESULT = ?, MAJOR = ?, DURATION = ?, LAST_MODIFIED ="
           + getLastModifiedSql() + " ";
 
   static String DELETE_ONE = "DELETE FROM EMP_ACADEMIC_INFO ";
@@ -36,8 +36,9 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
   @Override
   public Long create(MutableAcademicInformation pMutable) {
     Long id = mIdGenerator.getNumericId();
-    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getEmployeeId(), pMutable.getDegreeId(), pMutable.getInstitute(),
-        pMutable.getPassingYear(), pMutable.getResult());
+    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getEmployeeId(), pMutable.getDegreeLevelId(),
+        pMutable.getDegreeTitleId(), pMutable.getInstitute(), pMutable.getPassingYear(), pMutable.getResult(),
+        pMutable.getMajor(), pMutable.getDuration());
     return id;
   }
 
@@ -57,8 +58,9 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
   @Override
   public int update(MutableAcademicInformation pMutable) {
     String query = UPDATE_ONE + " WHERE ID = ? AND EMPLOYEE_ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getDegreeId(), pMutable.getInstitute(), pMutable.getPassingYear(),
-        pMutable.getResult(), pMutable.getId(), pMutable.getEmployeeId());
+    return mJdbcTemplate.update(query, pMutable.getDegreeLevelId(), pMutable.getDegreeTitleId(),
+        pMutable.getInstitute(), pMutable.getPassingYear(), pMutable.getResult(), pMutable.getMajor(),
+        pMutable.getDuration(), pMutable.getId(), pMutable.getEmployeeId());
   }
 
   @Override
@@ -79,10 +81,13 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
       PersistentAcademicInformation academicInformation = new PersistentAcademicInformation();
       academicInformation.setId(resultSet.getLong("ID"));
       academicInformation.setEmployeeId(resultSet.getString("EMPLOYEE_ID"));
-      academicInformation.setDegreeId(resultSet.getInt("DEGREE"));
+      academicInformation.setDegreeLevelId(resultSet.getInt("DEGREE_LEVEL_ID"));
+      academicInformation.setDegreeTitleId(resultSet.getInt("DEGREE_TITLE_ID"));
       academicInformation.setInstitute(resultSet.getString("INSTITUTE"));
       academicInformation.setPassingYear(resultSet.getInt("PASSING_YEAR"));
       academicInformation.setResult(resultSet.getString("RESULT"));
+      academicInformation.setMajor(resultSet.getString("MAJOR"));
+      academicInformation.setDuration(resultSet.getInt("DURATION"));
       academicInformation.setLastModified(resultSet.getString("LAST_MODIFIED"));
       return academicInformation;
     }

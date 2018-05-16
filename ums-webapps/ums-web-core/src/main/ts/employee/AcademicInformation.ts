@@ -12,7 +12,12 @@ module ums {
         ];
 
         private academic: IAcademicInformationModel[] = [];
-        private degreeNames: IAcademicDegreeTypes[] = [];
+        private degreeLevel: IDegreeLevel[] = [];
+        private degreeTitle: IDegreeTitle[] = [];
+        private filteredDegreeTitle: IDegreeTitle[] = [];
+        private year = [];
+        private currentIndex: number;
+        private newDegreeTitle: string = "";
         readonly userId: string = "";
         private stateParams: any;
         private enableEdit: boolean[] = [false];
@@ -26,11 +31,14 @@ module ums {
                     private $stateParams: any) {
 
             this.academic = [];
+            this.year = Utils.getYearRange();
+            this.degreeLevel = registrarConstants.degreeLevel;
             this.stateParams = $stateParams;
             this.userId = this.stateParams.id;
             this.enableEditButton = this.stateParams.edit;
             this.academicDegreeService.getAcademicDegreeList().then((degree: any) => {
-                this.degreeNames = degree;
+                this.degreeTitle = degree;
+                this.filteredDegreeTitle = degree;
                 this.get();
             });
         }
@@ -92,20 +100,58 @@ module ums {
             this.enableEdit[index] = canEdit;
         }
 
+        public modifyDegreeTitleSelection(index: number): void{
+            this.filteredDegreeTitle = this.degreeTitle.filter((data) => {
+                return this.academic[index].degreeLevel.id == data.degreeLevelId;
+            });
+        }
+
+        public verifyDegreeTitle(index: number): void{
+            if(this.academic[index].degreeTitle) {
+                if (this.academic[index].degreeLevel.id !== this.academic[index].degreeTitle.degreeLevelId) {
+                    this.academic[index].degreeLevel = null;
+                    this.filteredDegreeTitle = [];
+                }
+            }
+        }
+
+        public createNewDegreeTitle(): void{
+            this.convertToJson(this.newDegreeTitle).then((json: any)=>{
+                this.employeeInformationService.saveNewDegreeTitle(json).then(() =>{
+                    this.academicDegreeService.getAcademicDegreeList().then((degree: any) => {
+                        this.degreeTitle = degree;
+                        this.modifyDegreeTitleSelection(this.getCurrentIndex());
+                    });
+                });
+            })
+        }
+
+        private getCurrentIndex(): number{
+            return this.currentIndex;
+        }
+
+        public setCurrentIndex(index: number): void{
+            this.currentIndex = index;
+        }
+
+
         public addNew(): void {
             let academicEntry: IAcademicInformationModel;
             academicEntry = {
                 id: "",
                 employeeId: this.userId,
-                degree: null,
+                degreeLevel: null,
+                degreeTitle: null,
                 institution: "",
                 passingYear: null,
-                result: ""
+                result: "",
+                major: "",
+                duration: 0
             };
             this.academic.push(academicEntry);
         }
 
-        private convertToJson(object: IAcademicInformationModel): ng.IPromise<any> {
+        private convertToJson(object: any): ng.IPromise<any> {
             let defer = this.$q.defer();
             let JsonObject = {};
             JsonObject['entries'] = object;

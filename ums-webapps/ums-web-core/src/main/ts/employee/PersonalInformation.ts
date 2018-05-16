@@ -24,7 +24,6 @@ module ums {
         private maritalStatus: ICommon[] = [];
         private religions: ICommon[] = [];
         private nationalities: ICommon[] = [];
-        private degreeNames: IAcademicDegreeTypes[] = [];
         private bloodGroups: ICommon[] = [];
         private publicationTypes: ICommon[] = [];
         private relations: ICommon[] = [];

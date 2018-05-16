@@ -7,7 +7,7 @@ module ums{
         }
 
         public getAcademicDegreeList(): ng.IPromise<any> {
-            let url = "academicDegree/all";
+            let url = "degreeTitles";
             let defer = this.$q.defer();
             this.HttpClient.get(url, 'application/json',
                 (json: any, etag: string) => {

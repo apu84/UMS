@@ -289,5 +289,15 @@ module ums {
       return newDate;
     }
 
+    public static getYearRange(): any{
+      let yearArray = [];
+      let startingYear = 1900;
+      let currentYear = new Date().getFullYear();
+      for(let i = startingYear; i <= currentYear; i++){
+        yearArray.push(i);
+      }
+      return yearArray;
+    }
+
   }
 }

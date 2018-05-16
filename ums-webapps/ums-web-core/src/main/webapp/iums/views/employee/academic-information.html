@@ -3,7 +3,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-md-9">{{$index + 1}}. {{academic.degree.name}}</div>
+                    <div class="col-md-9">{{$index + 1}}. {{academic.degreeTitle.title}}</div>
                     <div class="col-md-3">
                         <div data-ng-show="vm.enableEditButton">
                             <div data-ng-show="!vm.enableEdit[$index]">
@@ -19,33 +19,97 @@
                 </div>
             </div>
             <div class="panel-body">
+                <div data-ng-show="academic.degreeLevel.id=='100010' && academic.degreeTitle.id == 0 && vm.enableEdit[$index]">
+                    <div class="alert alert-danger alert-dismissable"
+                         style="-moz-border-radius: 15px !important;border-radius: 15px !important;">
+                        <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
+                        If you don't find <strong>Degree Title</strong> for <strong>PhD</strong>, please <a data-ng-click="vm.setCurrentIndex($index)"
+                                                                                                            data-toggle="modal" data-target="#addDegreeTitle" style="cursor: pointer;"><u><b>Click here</b></u></a>
+                        to add Degree Title.
+                    </div>
+                </div>
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group"
-                             ng-class="{ 'has-error' : nForm[$index].nAcademicDegree.$invalid && !nForm[$index].nAcademicDegree.$pristine }">
-                            <label for="iAcademicDegree" class="control-label">Degree<span
+                             ng-class="{ 'has-error' : nForm[$index].nAcademicDegreeLevel.$invalid && !nForm[$index].nAcademicDegreeLevel.$pristine }">
+                            <label for="iAcademicDegreeLevel" class="control-label">Degree Level<span
                                     data-ng-show="vm.enableEdit[$index]"
                                     class='require'>*</span></label>
 
                             <div data-ng-show="vm.enableEdit[$index]">
-                                <select name="nAcademicDegree"
-                                        id="iAcademicDegree"
-                                        data-ng-model="academic.degree"
-                                        data-ng-options="degreeName.shortName group by degreeName.typeName for degreeName in vm.degreeNames track by degreeName.id"
+                                <select name="nAcademicDegreeLevel"
+                                        id="iAcademicDegreeLevel"
+                                        data-ng-model="academic.degreeLevel"
+                                        data-ng-options="degreeLevel.name for degreeLevel in vm.degreeLevel track by degreeLevel.id"
                                         class="form-control" required>
                                     <option value="">Select Degree</option>
                                 </select>
-                                <label data-ng-show="nForm[$index].nAcademicDegree.$invalid && !nForm[$index].nAcademicDegree.$pristine"
-                                       class="help-block control-label">Please specify a degree.</label>
+                                <label data-ng-show="nForm[$index].nAcademicDegreeLevel.$invalid && !nForm[$index].nAcademicDegreeLevel.$pristine"
+                                       class="help-block control-label">Please specify degree Level.</label>
 
                             </div>
                             <div data-ng-show="!vm.enableEdit[$index]">
-                                <label class="control-label">{{academic.degree.name}}</label>
+                                <div class="underlineBox">
+                                    <label class="control-label">{{academic.degreeLevel.name}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nAcademicDegreeTitle.$invalid && !nForm[$index].nAcademicDegreeTitle.$pristine }">
+                            <label for="iAcademicDegreeTitle" class="control-label">Degree Title<span
+                                    data-ng-show="vm.enableEdit[$index]"
+                                    class='require'>*</span></label>
+
+                            <div data-ng-show="vm.enableEdit[$index]">
+                                <select name="nAcademicDegreeTitle"
+                                        id="iAcademicDegreeTitle"
+                                        data-ng-model="academic.degreeTitle"
+                                        data-ng-options="degreeTitle.title for degreeTitle in (vm.degreeTitle | filter: {degreeLevel: academic.degreeLevel}) track by degreeTitle.id"
+
+                                        class="form-control" required>
+                                    <option value="">Select Degree Title</option>
+                                </select>
+                                <label data-ng-show="nForm[$index].nAcademicDegreeTitle.$invalid && !nForm[$index].nAcademicDegreeTitle.$pristine"
+                                       class="help-block control-label">Please specify degree Title.</label>
+
+                            </div>
+                            <div data-ng-show="!vm.enableEdit[$index]">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{academic.degreeTitle.title}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-4">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nAcademicMajor.$invalid && !nForm[$index].nAcademicMajor.$pristine }">
+                            <label for="iAcademicMajor" class="control-label">Major/Concentration<span
+                                    data-ng-show="vm.enableEdit[$index]"
+                                    class='require'>*</span></label>
+
+                            <div data-ng-show="vm.enableEdit[$index]">
+                                <input name="nAcademicMajor"
+                                       id="iAcademicMajor"
+                                       data-ng-model="academic.major"
+                                       class="form-control" required>
+                                <label data-ng-show="nForm[$index].nAcademicMajor.$invalid && !nForm[$index].nAcademicMajor.$pristine"
+                                       class="help-block control-label">Please specify Major.</label>
+
+                            </div>
+                            <div data-ng-show="!vm.enableEdit[$index]">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{academic.major}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
                         <div class="form-group"
                              ng-class="{ 'has-error' : nForm[$index].nAcademicInstitution.$invalid && !nForm[$index].nAcademicInstitution.$pristine }">
                             <label for="iAcademicInstitution" class="control-label">Institution<span
@@ -65,11 +129,15 @@
                                        class="help-block control-label">Please provide your institution.</label>
                             </div>
                             <div data-ng-show="!vm.enableEdit[$index]">
-                                <label class="control-label">{{academic.institution}}</label>
+                                <div class="underlineBox">
+                                    <label class="control-label">{{academic.institution}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
+                <div class="row">
                     <div class="col-md-3">
                         <div class="form-group"
                              ng-class="{ 'has-error' : nForm[$index].nPassingYear.$invalid && !nForm[$index].nPassingYear.$pristine }">
@@ -77,20 +145,24 @@
                                     data-ng-show="vm.enableEdit[$index]"
                                     class='require'>*</span></label>
                             <div data-ng-show="vm.enableEdit[$index]">
-                                <input type="number"
-                                       name="nPassingYear"
-                                       id="iPassingYear"
-                                       data-ng-model="academic.passingYear"
-                                       placeholder="YYYY"
-                                       autocomplete="off"
-                                       maxlength="4"
-                                       class="form-control" required>
+                                <select
+                                        name="nPassingYear"
+                                        id="iPassingYear"
+                                        data-ng-model="academic.passingYear"
+                                        data-ng-options="year for year in vm.year"
+                                        autocomplete="off"
+                                        class="form-control" required>
+                                    <option value="">Select Passing Year</option>
+                                </select>
                                 <label data-ng-show="nForm[$index].nPassingYear.$invalid && !nForm[$index].nPassingYear.$pristine"
                                        class="help-block control-label">Please provide your passing year.</label>
                             </div>
                             <div data-ng-show="!vm.enableEdit[$index]">
-                                <label class="control-label">{{academic.passingYear}}</label>
+                                <div class="underlineBox">
+                                    <label class="control-label">{{academic.passingYear}}</label>
+                                </div>
                             </div>
+
                         </div>
                     </div>
 
@@ -112,7 +184,33 @@
                                        class="help-block control-label">What was your result?</label>
                             </div>
                             <div data-ng-show="!vm.enableEdit[$index]">
-                                <label class="control-label">{{academic.result}}</label>
+                                <div class="underlineBox">
+                                    <label class="control-label">{{academic.result}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nDuration.$invalid && !nForm[$index].nDuration.$pristine }">
+                            <label for="iDuration" class="control-label">Duration</label>
+                            <div data-ng-show="vm.enableEdit[$index]">
+                                <input type="number"
+                                       name="nDuration"
+                                       id="iDuration"
+                                       data-ng-model="academic.duration"
+                                       autocomplete="off"
+                                       maxlength="25"
+                                       class="form-control">
+
+                                <label data-ng-show="nForm[$index].nDuration.$invalid && !nForm[$index].nDuration.$pristine"
+                                       class="help-block control-label">Please provide duration.</label>
+                            </div>
+                            <div data-ng-show="!vm.enableEdit[$index]">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{academic.duration}}</label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -156,5 +254,44 @@
                 data-ng-click="vm.addNew(); vm.activeEditButton(vm.academic.length - 1, true)"
                 style="cursor: pointer">Add new
         </button>
+    </div>
+</div>
+
+
+<div id="addDegreeTitle" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
+     aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true"
+                        class="close" style="opacity: 1;margin-top: 0px;">&times;
+                </button>
+                <h5 id="modal-default-label" class="modal-title">Add Degree Title (PhD)</h5></div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="iNewDegreeTitle" class="control-label">Degree Title:</label>
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text"
+                               name="nNewDegreeTitle"
+                               id="iNewDegreeTitle"
+                               data-ng-model="vm.newDegreeTitle"
+                               autocomplete="off"
+                               maxlength="25"
+                               class="form-control">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                <button type="button" data-dismiss="modal" class="btn btn-success"
+                        data-ng-click="vm.createNewDegreeTitle()">Save
+                </button>
+            </div>
+        </div>
     </div>
 </div>

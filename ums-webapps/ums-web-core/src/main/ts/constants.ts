@@ -788,12 +788,15 @@ module ums {
                     {id: 1, name: "Single"},
                     {id: 2, name: "Married"}
                 ],
-                degreeTypes: [
-                    {id: 1, name: "SSC/O-Level"},
-                    {id: 2, name: "HSC/A-Level"},
-                    {id: 3, name: "Bachelor"},
-                    {id: 4, name: "Master's"},
-                    {id: 5, name: "PhD"}
+                degreeLevel: [
+                    {id: 10, name: "PSC/5 Pass"},
+                    {id: 20, name: "JSC/JDC/8 Pass"},
+                    {id: 110, name: "Secondary"},
+                    {id: 120, name: "Higher Secondary"},
+                    {id: 1010, name: "Diploma"},
+                    {id: 1110, name: "Bachelor/Honors"},
+                    {id: 10010, name: "Masters"},
+                    {id: 100010, name: "PhD (Doctor of Philosophy)"}
                 ],
                 relationTypes: [
                     {id: 1, name: "Spouse"},

@@ -60,6 +60,20 @@ module ums{
 
 
         //AcademicInformationService//
+        public saveNewDegreeTitle(json: any): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.post("degreeTitles", json, 'application/json')
+                .success((data: any) => {
+                    this.notify.success("Successfully Saved");
+                    defer.resolve(data);
+                })
+                .error((data) => {
+                    this.notify.error("Error in Saving");
+                    defer.reject(data);
+                });
+            return defer.promise;
+        }
+
         public saveAcademicInformation(json: any): ng.IPromise<any> {
             let defer = this.$q.defer();
             this.httpClient.post(this.academicUrl, json, 'application/json')
