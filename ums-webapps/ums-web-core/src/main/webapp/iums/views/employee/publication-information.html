@@ -1,24 +1,37 @@
-<div data-ng-repeat="publication in vm.publication track by $index">
-    <form name="nForm[$index]" ng-submit="vm.submit($index)" novalidate>
-        <div class="panel panel-default">
-            <div class="panel-heading">
+<accordion close-others="true">
+    <div data-ng-repeat="publication in vm.publication track by $index">
+        <accordion-group is-open="isopen">
+            <form name="nForm[$index]" ng-submit="vm.submit($index)" novalidate>
+                <accordion-heading ng-click="isopen =! isopen">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <span style="cursor: pointer">{{$index + 1}}. {{publication.publicationTitle}}</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div align="right">
+                                <i style="cursor: pointer" class="pull-right glyphicon"
+                                   ng-class="{'glyphicon-chevron-down': isopen, 'glyphicon-chevron-right': !isopen}">
+                                </i>
+                            </div>
+                        </div>
+                    </div>
+                </accordion-heading>
+
                 <div class="row">
-                    <div class="col-md-9">{{$index + 1}}. {{publication.publicationTitle}}</div>
-                    <div class="col-md-3">
+                    <div class="col-md-12">
                         <div data-ng-show="vm.enableEditButton">
                             <div data-ng-show="!vm.enableEdit[$index]">
                                 <div align="right">
                                     <a data-ng-click="vm.activeEditButton($index, true)"
                                        style="cursor: pointer;">
-                                        <i style="color: blue;" class="fa fa-edit"></i>
+                                        <i style="color: blue;" class="fa fa-edit">&nbsp;Edit</i>
                                     </a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="panel-body">
+
                 <div class="row">
                     <div class="col-md-10">
                         <div class="form-group"
@@ -97,9 +110,10 @@
                     <div class="col-md-3">
                         <div class="form-group"
                              ng-class="{ 'has-error' : nForm[$index].nDateOfPublication.$invalid && !nForm[$index].nDateOfPublication.$pristine }">
-                            <label for="iDateOfPublication" class="control-label">Year of Publication<span
-                                    data-ng-show="vm.enableEdit[$index]"
-                                    class='require'>*</span></label>
+                            <label for="iDateOfPublication" class="control-label">Year of
+                                Publication<span
+                                        data-ng-show="vm.enableEdit[$index]"
+                                        class='require'>*</span></label>
                             <div data-ng-show="vm.enableEdit[$index]">
 
                                 <input type="number"
@@ -345,27 +359,30 @@
                                 <button type="button" class="btn btn-primary btn-xs"
                                         title="Remove Row {{$index + 1}}"
                                         data-ng-click="vm.delete($index)"
-                                        style="cursor:pointer;"><span data-ng-show="!publication.id">Remove</span><span
+                                        style="cursor:pointer;"><span
+                                        data-ng-show="!publication.id">Remove</span><span
                                         data-ng-show="publication.id">Delete</span>
                                 </button>
                                 <button type="submit" title="Submit" class="btn btn-success btn-xs"
                                         data-ng-disabled="nForm[$index].$invalid"
-                                        style="cursor:pointer;"><span data-ng-show="!publication.id">Save</span><span
+                                        style="cursor:pointer;"><span
+                                        data-ng-show="!publication.id">Save</span><span
                                         data-ng-show="publication.id">Update</span>
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </form>
-</div>
+            </form>
+        </accordion-group>
+    </div>
+</accordion>
+
 
 <div class="row">
     <div class="col-md-12">
         <button title="Add New Row" type="button" class="btn btn-success btn-xs"
-                data-ng-click="vm.addNew(); vm.activeEditButton(vm.publication.length - 1, true)"
+                data-ng-click="vm.addNew(); vm.activeEditButton(vm.publication.length - 1, true); isopen='true';"
                 style="cursor: pointer">Add new
         </button>
     </div>
