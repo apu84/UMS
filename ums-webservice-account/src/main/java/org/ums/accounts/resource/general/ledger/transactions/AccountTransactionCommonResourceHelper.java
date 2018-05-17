@@ -17,6 +17,7 @@ import org.ums.employee.personal.PersonalInformation;
 import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.voucher.number.control.ResetBasis;
+import org.ums.enums.accounts.definitions.voucher.number.control.TransactionType;
 import org.ums.enums.accounts.definitions.voucher.number.control.VoucherType;
 import org.ums.exceptions.ValidationException;
 import org.ums.generator.IdGenerator;
@@ -117,8 +118,9 @@ public class AccountTransactionCommonResourceHelper extends
     }
   }
 
+  @Transactional
   @NotNull
-  private TransactionResponse createVoucherNumber(Voucher pVoucher, TransactionResponse pTransactionResponse,
+  public TransactionResponse createVoucherNumber(Voucher pVoucher, TransactionResponse pTransactionResponse,
       VoucherNumberControl pVoucherNumberControl, Calendar pCalendar, Date pCurrentDate) throws Exception {
     if(pVoucherNumberControl.getResetBasis().equals(ResetBasis.YEARLY)) {
       Date firstDate = UmsUtils.convertToDate("01-01-" + pCalendar.get(Calendar.YEAR), "dd-MM-yyyy");
@@ -202,16 +204,24 @@ public class AccountTransactionCommonResourceHelper extends
     return new ArrayList<>(transactions);
   }
 
-  private void checkWithVoucherLimit(List<MutableAccountTransaction> pTransactions) throws ValidationException {
+  @Transactional
+  public void checkWithVoucherLimit(List<MutableAccountTransaction> pTransactions) throws ValidationException {
     if(pTransactions.size() == 0)
       return;
 
     VoucherNumberControl voucherNumberControl =
         mVoucherNumberControlManager.getByVoucher(pTransactions.get(0).getVoucher(), pTransactions.get(0).getCompany());
+    BigDecimal totalTransaction = new BigDecimal(0);
     for(MutableAccountTransaction t : pTransactions) {
-      if(t.getAmount() != null && t.getAmount().compareTo(voucherNumberControl.getVoucherLimit()) == 1) {
-        throw new ValidationException("Maximum limit exceeded");
-      }
+      if(t.getBalanceType().equals(BalanceType.Cr))
+        totalTransaction = totalTransaction.subtract(t.getAmount());
+      else
+        totalTransaction = totalTransaction.add(t.getAmount());
+
+    }
+
+    if(totalTransaction.compareTo(voucherNumberControl.getVoucherLimit()) == 1) {
+      throw new ValidationException("Maximum limit exceeded");
     }
   }
 

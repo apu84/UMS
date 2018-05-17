@@ -1,6 +1,6 @@
 module ums {
   export class ReceiptVoucherController {
-    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'ReceiptVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'AccountBalanceService', 'ChequeRegisterService', '$q', 'VoucherNumberControlService'];
+    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'ReceiptVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'AccountBalanceService', 'ChequeRegisterService', '$q', 'VoucherNumberControlService', 'SystemGroupMapService'];
     private showAddSection: boolean;
     private voucherNo: string;
     private voucherDate: string;
@@ -23,7 +23,7 @@ module ums {
     private mainVoucher: IReceiptVoucher;
     static PAYMENT_VOUCHER_GROUP_FLAG = GroupFlag.YES;
     private RECEIPT_VOUCHER_ID: string = '7';
-    private BANK_GROUP_CODE: string = '1002006';
+    private BANK_GROUP_CODE: string = '';
     private mainAccounts: IAccount[];
     private selectedPaymentAccount: IAccount;
     private selectedMainAccountCurrentBalance: number;
@@ -45,7 +45,10 @@ module ums {
                 private currencyService: CurrencyService,
                 private currencyConversionService: CurrencyConversionService,
                 private accountBalanceService: AccountBalanceService,
-                private chequeRegisterService: ChequeRegisterService, private $q: ng.IQService, private voucherNumberControlService: VoucherNumberControlService) {
+                private chequeRegisterService: ChequeRegisterService,
+                private $q: ng.IQService,
+                private voucherNumberControlService: VoucherNumberControlService,
+                private systemGroupMapService: SystemGroupMapService) {
       this.initialize();
     }
 
@@ -63,7 +66,16 @@ module ums {
       this.getAccounts();
       this.getCurrencies();
       this.getPaginatedVouchers();
+      this.assignBankGroupCode();
     }
+
+      private assignBankGroupCode(){
+          this.systemGroupMapService.getAll().then((systemGroupMapList: ISystemGroupMap[])=>{
+              let systemBankId:string = '5'; //see app constants
+              let bankSystemGroupMap: ISystemGroupMap = systemGroupMapList.filter((s:ISystemGroupMap)=>s.groupType==systemBankId)[0];
+              this.BANK_GROUP_CODE = bankSystemGroupMap.group.groupCode;
+          });
+      }
 
     public checkWhetherAnyAmountExceedTotalLimit(): ng.IPromise<boolean> {
       let defer: ng.IDeferred<boolean> = this.$q.defer();

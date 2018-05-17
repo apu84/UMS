@@ -6,7 +6,7 @@ module ums {
 
   export class JournalVoucherController {
 
-    public static $inject = ['$scope', '$q', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'JournalVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'VoucherNumberControlService'];
+    public static $inject = ['$scope', '$q', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'JournalVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'VoucherNumberControlService', 'SystemGroupMapService'];
 
 
     private voucherNo: string;
@@ -51,7 +51,8 @@ module ums {
                 private journalVoucherService: JournalVoucherService,
                 private voucherService: VoucherService,
                 private currencyService: CurrencyService,
-                private currencyConversionService: CurrencyConversionService, private voucherNumberControlService: VoucherNumberControlService) {
+                private currencyConversionService: CurrencyConversionService,
+                private voucherNumberControlService: VoucherNumberControlService, private systemGroupMapService: SystemGroupMapService) {
       this.initialize();
     }
 

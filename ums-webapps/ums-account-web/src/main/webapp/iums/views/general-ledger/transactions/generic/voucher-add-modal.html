@@ -113,6 +113,7 @@
                                    value="{{vm.currencyConversionMapWithCurrency[vm.selectedCurrency.id].baseConversionFactor * vm.voucherOfAddModal.amount}}">
                         </div>
                     </div>
+
                     <div ng-if="(vm.PAYMENT_VOUCHER_ID || vm.RECEIPT_VOUCHER_ID) && vm.BANK_GROUP_CODE==vm.mainVoucher.account.accGroupCode">
                         <div class="form-group">
                             <label class="control-label col-sm-4" for="narration">Cheque No:</label>

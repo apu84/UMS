@@ -82,7 +82,7 @@ public class BalanceSheetReportGenerator {
     document.newPage();
     generateInitialHeaderInfo(pDate, document);
 
-    float[] columnLengths = new float[]{4, 2, 4, 2};
+    float[] columnLengths = new float[]{5, 3, 5, 3};
     PdfPTable table = new PdfPTable(columnLengths);
     table.setWidthPercentage(100);
     PdfPCell cell = new PdfPCell();
@@ -194,9 +194,9 @@ public class BalanceSheetReportGenerator {
     rightSection.setBorder(Rectangle.NO_BORDER);
     table.addCell(rightSection);
     document.add(table);
-
+    float[] totalAmmountTableWidth={4,8};
     PdfPTable totalAmountTable = new PdfPTable(2);
-    PdfPTable assetTotalAmountTable = new PdfPTable(2);
+    PdfPTable assetTotalAmountTable = new PdfPTable(totalAmmountTableWidth);
     addTotalAmountOfTheSection(assetTotalAmountTable, assetCellAndTotalBalance.getTotalBalance());
     cell = new PdfPCell();
     cell.addElement(assetTotalAmountTable);
@@ -210,15 +210,15 @@ public class BalanceSheetReportGenerator {
     totalAmountTable.addCell(cell);
 
     document.add(totalAmountTable);
-    document.close();
-    baos.writeTo(pOutputStream);
+        document.close();
+        baos.writeTo(pOutputStream);
   }
 
   private CellAndTotalBalance createGroupSection(GroupType pGroupTYpe, BalanceSheetFetchType pBalanceSheetFetchType,
       Map<Account, AccountBalance> pAccountBalanceMapWithAccount, Map<String, List<Account>> pAccountMapWithGroupCode,
       List<Group> pGroups) {
     PdfPCell cell;
-    float[] innerTableCellWidth = new float[] {7, 3};
+    float[] innerTableCellWidth = new float[] {6, 6};
     PdfPTable assetTable = new PdfPTable(innerTableCellWidth);
 
     BigDecimal sectionTotalBalance = new BigDecimal(0);

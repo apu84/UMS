@@ -75,8 +75,8 @@ public class TransactionReportGeneratorTest {
     MockitoAnnotations.initMocks(this);
   }
 
-  @Test
-  public void createVoucherReportTest() throws Exception {
-    transactionReportGenerator.createVoucherReport(voucherNo, voucherDate, outputStream);
-  }
+  /*
+   * @Test public void createVoucherReportTest() throws Exception {
+   * transactionReportGenerator.createVoucherReport(voucherNo, voucherDate, outputStream); }
+   */
 }

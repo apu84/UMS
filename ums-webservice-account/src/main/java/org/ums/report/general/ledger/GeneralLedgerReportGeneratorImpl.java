@@ -272,11 +272,12 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
                 transaction.getAccount().getAccGroupCode().equals(mSystemGroupMapManager.get(GroupType.BANK_ACCOUNTS, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode())) {
           ChequeRegister chequeRegister = chequeRegisterMapWithTransactionId.get(transaction.getId());
 
-          cell = new PdfPCell(new Paragraph(chequeRegister.getChequeNo(), mLiteFont));
+
+          cell = new PdfPCell(new Paragraph(chequeRegister==null?" ":chequeRegister.getChequeNo(), mLiteFont));
           setNoBorderAndAddCell(table, cell);
 
 
-          cell = new PdfPCell(new Paragraph(UmsUtils.formatDate(chequeRegister.getChequeDate(), "dd-MM-yyyy"), mLiteFont));
+          cell = new PdfPCell(new Paragraph(chequeRegister==null? " ": UmsUtils.formatDate(chequeRegister.getChequeDate(), "dd-MM-yyyy"), mLiteFont));
           setNoBorderAndAddCell(table, cell);
 
 
