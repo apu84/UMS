@@ -264,6 +264,9 @@
 /// <reference path='fee/payment/payment.status.controller.ts'/>
 /// <reference path='fee/payment/payment.status.service.ts'/>
 
+/// <reference path='student/gradesheet/student.gradesheet.controller.ts'/>
+/// <reference path='student/gradesheet/student.gradesheet.service.ts'/>
+
 
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeProfile.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformation.ts'/>
