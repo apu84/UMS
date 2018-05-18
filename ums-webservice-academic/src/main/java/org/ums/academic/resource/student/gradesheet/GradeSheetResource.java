@@ -3,8 +3,10 @@ package org.ums.academic.resource.student.gradesheet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.Student;
+import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.domain.model.immutable.TaskStatus;
 import org.ums.manager.StudentManager;
+import org.ums.manager.StudentRecordManager;
 import org.ums.manager.TaskStatusManager;
 import org.ums.resource.Resource;
 import org.ums.services.academic.ProcessResult;
@@ -29,17 +31,21 @@ public class GradeSheetResource extends Resource {
   @Autowired
   private StudentManager mStudentManager;
 
+  @Autowired
+  private StudentRecordManager mStudentRecordManager;
+
   @GET
   @Path("/semester" + PATH_PARAM_OBJECT_ID)
   public Response getGradesheet(final @Context Request pRequest, final @PathParam("object-id") Integer pSemesterId) {
     // String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     String studentId = "130108006";
     Student student = mStudentManager.get(studentId);
+    StudentRecord studentRecord = mStudentRecordManager.getStudentRecord(studentId, pSemesterId);
     String taskSemesterId
         = mTaskStatusManager.buildTaskId(student.getProgramId(), pSemesterId, ProcessResult.PROCESS_GPA_CGPA_PROMOTION);
     String taskYearSemesterId
-        = mTaskStatusManager.buildTaskId(student.getProgramId(), pSemesterId, student.getCurrentYear(),
-        student.getCurrentAcademicSemester(), ProcessResult.PROCESS_GPA_CGPA_PROMOTION);
+        = mTaskStatusManager.buildTaskId(student.getProgramId(), pSemesterId, studentRecord.getYear(),
+        studentRecord.getAcademicSemester(), ProcessResult.PROCESS_GPA_CGPA_PROMOTION);
 
     TaskStatus taskStatus = null;
     if (mTaskStatusManager.exists(taskSemesterId)) {
