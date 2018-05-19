@@ -75,7 +75,7 @@ public class ChartOfAccountsReportGenerator {
     document.add(new Paragraph(" "));
     float[] tableColumnLength={3f, 2f, 7f};
       PdfPTable table = new PdfPTable(tableColumnLength);
-      table.setWidthPercentage(95);
+      table.setWidthPercentage(100);
       PdfPCell accountCategoryCell = new PdfPCell();
       accountCategoryCell.addElement(new Paragraph("Account Category", mBoldFont));
       table.addCell(accountCategoryCell);
@@ -89,7 +89,6 @@ public class ChartOfAccountsReportGenerator {
       table.addCell(accountTitleCell);
 
       table.setHeaderRows(1);
-
 
 
 
@@ -108,7 +107,7 @@ public class ChartOfAccountsReportGenerator {
 
     Group liabilityGroup = mSystemGroupMapManager.get(GroupType.LIABILITIES, mCompanyManager.getDefaultCompany()).getGroup();
     List<Group> liabilityRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(liabilityGroup.getGroupCode()));
-    chunk = new Chunk(liabilityGroup.getGroupName(), mLiteFontItalic);
+    chunk = new Chunk(liabilityGroup.getGroupName(), mBoldFontItalic);
     paragraph = new Paragraph(chunk);
       accountCategoryCell = new PdfPCell();
       accountCategoryCell.addElement(paragraph);
@@ -118,7 +117,7 @@ public class ChartOfAccountsReportGenerator {
 
     Group incomeGroup = mSystemGroupMapManager.get(GroupType.INCOME, mCompanyManager.getDefaultCompany()).getGroup();
     List<Group> incomeRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(incomeGroup.getGroupCode()));
-    chunk = new Chunk(incomeGroup.getGroupName(), mBoldFont);
+    chunk = new Chunk(incomeGroup.getGroupName(), mBoldFontItalic);
     paragraph = new Paragraph(chunk);
       accountCategoryCell = new PdfPCell();
       accountCategoryCell.addElement(paragraph);
@@ -128,7 +127,7 @@ public class ChartOfAccountsReportGenerator {
 
     Group expenseGroup = mSystemGroupMapManager.get(GroupType.EXPENSES, mCompanyManager.getDefaultCompany()).getGroup();
     List<Group> expenseRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(expenseGroup.getGroupCode()));
-    chunk = new Chunk(expenseGroup.getGroupName(), mBoldFont);
+    chunk = new Chunk(expenseGroup.getGroupName(), mBoldFontItalic);
     paragraph = new Paragraph(chunk);
       accountCategoryCell = new PdfPCell();
       accountCategoryCell.addElement(paragraph);
