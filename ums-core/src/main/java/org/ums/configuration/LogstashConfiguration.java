@@ -31,6 +31,9 @@ public class LogstashConfiguration {
   @Value("${application.logger.logstash.queueSize}")
   private int queueSize;
 
+  @Value("${fcm.config}")
+  private String config;
+
   @PostConstruct
   private void init() {
     if(enabled) {

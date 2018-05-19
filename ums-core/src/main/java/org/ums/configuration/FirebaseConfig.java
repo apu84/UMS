@@ -6,6 +6,7 @@ import com.google.firebase.FirebaseOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -15,7 +16,12 @@ public class FirebaseConfig {
   @Value("${fcm.config}")
   private String config;
 
-  public FirebaseConfig() throws IOException {
+  @PostConstruct
+  private void init() throws IOException {
+    config();
+  }
+
+  private void config() throws IOException {
     FileInputStream serviceAccount = new FileInputStream(config);
 
     FirebaseOptions options =
