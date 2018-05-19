@@ -42,9 +42,9 @@ public class PersistentServiceInformationDetailDao extends ServiceInformationDet
   }
 
   @Override
-  public ServiceInformationDetail get(Long pServiceId) {
-    String query = GET_ALL + " WHERE SERVICE_ID = ? ORDER BY START_DATE DESC ";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pServiceId},
+  public ServiceInformationDetail get(Long pId) {
+    String query = GET_ALL + " WHERE ID = ? ";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId},
         new PersistentServiceInformationDetailDao.RoleRowMapper());
   }
 
@@ -65,8 +65,7 @@ public class PersistentServiceInformationDetailDao extends ServiceInformationDet
   @Override
   public int delete(MutableServiceInformationDetail pMutable) {
     String query = DELETE_ONE + " WHERE ID = ? AND EMPLOYMENT_PERIOD = ? AND SERVICE_ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getId(), pMutable.getEmploymentPeriod().getId(),
-        pMutable.getServiceId());
+    return mJdbcTemplate.update(query, pMutable.getId(), pMutable.getEmploymentPeriodId(), pMutable.getServiceId());
   }
 
   @Override

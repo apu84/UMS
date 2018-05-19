@@ -93,7 +93,7 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
     pMutable.setDateOfPublication(pJsonObject.getInt("dateOfPublication"));
     pMutable.setTypeId(pJsonObject.getJsonObject("publicationType").getInt("id"));
     pMutable.setAppliedOn(mDateFormat.parse(mDate));
-    pMutable.setStatus("0");
+    pMutable.setStatus(pJsonObject.getString("status"));
     pMutable.setActionTakenOn(null);
   }
 }

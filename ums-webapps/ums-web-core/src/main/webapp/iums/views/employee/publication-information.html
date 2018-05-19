@@ -1,3 +1,12 @@
+<style type="text/css">
+    .panel-group .panel .panel-title .accordion-toggle {
+        padding: 2px 2px !important;
+    }
+
+    .panel-group .panel .panel-title {
+        font-size: 15px !important;
+    }
+</style>
 <accordion close-others="true">
     <div data-ng-repeat="publication in vm.publication track by $index">
         <accordion-group is-open="isopen">
@@ -24,7 +33,7 @@
                                 <div align="right">
                                     <a data-ng-click="vm.activeEditButton($index, true)"
                                        style="cursor: pointer;">
-                                        <i style="color: blue;" class="fa fa-edit">&nbsp;Edit</i>
+                                        <i style="color: blue;" class="fa fa-edit"></i>
                                     </a>
                                 </div>
                             </div>
@@ -262,11 +271,8 @@
                     </div>
 
                     <div class="col-md-3">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nForm[$index].nPublicationPage.$invalid && !nForm[$index].nPublicationPage.$pristine }">
-                            <label class="control-label" for="iPublicationPage">Pages<span
-                                    ng-show="publication.publicationType.id==1 || publication.publicationType.id==2"><span
-                                    class='require'>*</span></span></label>
+                        <div class="form-group">
+                            <label class="control-label" for="iPublicationPage">Pages</label>
                             <div data-ng-show="vm.enableEdit[$index]">
                                 <input type="text"
                                        name="nPublicationPage"
@@ -274,7 +280,6 @@
                                        data-ng-model="publication.publicationPages"
                                        placeholder="Page"
                                        maxlength="80"
-                                       ng-required="publication.publicationType.id==1 || publication.publicationType.id==2"
                                        class="form-control">
                             </div>
                             <div data-ng-show="!vm.enableEdit[$index]">
@@ -332,14 +337,17 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
-                            <span data-ng-show="publication.status=='9'"
-                                  style="float: right"></span>
-                        <span data-ng-show="publication.status=='0'"
-                              style="float: right"><b>Waiting for head's approval</b></span>
-                        <span data-ng-show="publication.status=='1'"></span>
-                        <span data-ng-show="publication.status=='2'"
-                              style="color: red; float: right;"><b>Rejected</b></span>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label></label>
+                            <div align="right">
+                            <!--<span data-ng-show="publication.status=='0'"
+                                  style="float: right"><b>Waiting for approval</b></span>
+                                <span data-ng-show="publication.status=='1'"></span>
+                                <span data-ng-show="publication.status=='2'"
+                                      style="color: red; float: right;"><b>Rejected</b></span>-->
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -381,9 +389,11 @@
 
 <div class="row">
     <div class="col-md-12">
-        <button title="Add New Row" type="button" class="btn btn-success btn-xs"
-                data-ng-click="vm.addNew(); vm.activeEditButton(vm.publication.length - 1, true); isopen='true';"
-                style="cursor: pointer">Add new
-        </button>
+        <div data-ng-show="vm.enableEditButton">
+            <button title="Add New Row" type="button" class="btn btn-success btn-xs"
+                    data-ng-click="vm.addNew(); vm.activeEditButton(vm.publication.length - 1, true); isopen='true';"
+                    style="cursor: pointer">Add new
+            </button>
+        </div>
     </div>
 </div>

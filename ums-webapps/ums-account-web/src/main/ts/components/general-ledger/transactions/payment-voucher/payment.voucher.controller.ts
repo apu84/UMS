@@ -102,6 +102,11 @@ module ums {
     }
 
 
+      public print(){
+          let voucher: IPaymentVoucher=this.detailVouchers[0];
+          this.paymentVoucherService.generateVoucherReport(voucher.voucherNo, voucher.voucherDate);
+      }
+
 
     public searchVoucher() {
       console.log("In the search voucher");
@@ -269,10 +274,10 @@ module ums {
       this.totalAmount = 0;
       this.voucherMapWithId = {};
       this.postStatus=vouchers[0].postDate!=null?true:false;
-      this.voucherDate=Utils.convertFromJacksonDate(vouchers[0].voucherDate);
+      this.voucherDate=vouchers[0].voucherDate;
       vouchers.forEach((v: IPaymentVoucher) =>{
         this.voucherMapWithId[v.id] = v;
-        v.voucherDate=Utils.convertFromJacksonDate(v.voucherDate);
+        v.voucherDate=v.voucherDate;
       });
       this.voucherDate = vouchers[0].voucherDate;
       this.extractMainAndDetailSectionFromVouchers(vouchers).then((updatedVouchers: IPaymentVoucher[]) => {

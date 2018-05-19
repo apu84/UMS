@@ -1,8 +1,5 @@
 module ums {
 
-    import IServiceDetailsModel = ums.IServiceDetailsModel;
-    import IServiceInformationModel = ums.IServiceInformationModel;
-
     class ServiceInformation {
         public static $inject = ['registrarConstants',
             '$q',
@@ -24,6 +21,7 @@ module ums {
         private serviceContractIntervals: ICommon[] = [];
         private departments: IDepartment[] = [];
         private enableEdit: boolean[] = [false];
+        private enableServiceDetailEdit: boolean[] = [false];
         private enableEditButton: boolean = false;
 
         constructor(private registrarConstants: any,
@@ -60,19 +58,96 @@ module ums {
             this.serviceContractIntervals.push(this.registrarConstants.servicePeriods[3]);
         }
 
-        public submit(index: number, type: string): void {
+        public submit(type: string, index: number, parentIndex?: number): void {
+            if (type === 'service') {
+                this.convertToJson(this.service[index]).then((json: any) => {
+                    if (!this.service[index].id) {
+                        this.create(type, json, index);
+                    }
+                    else {
+                        this.update(type, json, index);
+                    }
+                });
+            }
+            else if (type === 'serviceDetails') {
+                if (this.validateServiceDetailForm(index, parentIndex)) {
+                    this.notify.error("Missing period or start date");
+                }
+                else {
+                    this.convertToJson(this.service[parentIndex].intervalDetails[index]).then((json: any) => {
+                        if (!this.service[parentIndex].intervalDetails[index].id) {
+                            this.service[parentIndex].intervalDetails[index].serviceId = this.service[parentIndex].id;
+                            this.create(type, json, index, parentIndex);
+                        }
+                        else {
+                            this.update(type, json, index, parentIndex);
+                        }
+                    });
+                }
+            }
+        }
 
+        private validateServiceDetailForm(index: number, parentIndex: number): boolean {
+            return (!this.service[parentIndex].intervalDetails[index].interval || !this.service[parentIndex].intervalDetails[index].startDate);
+        }
+
+        private create(type: string, json: any, index: number, parentIndex?: number) {
+            if (type === 'service') {
+                this.employeeInformationService.saveServiceInformation(json).then((data: any) => {
+                    this.service[index] = data;
+                    this.enableEdit[index] = false;
+                }).catch((reason: any) => {
+                    this.enableEdit[index] = true;
+                });
+            }
+            else if (type === 'serviceDetails') {
+                this.employeeInformationService.saveServiceDetailInformation(json).then((data: any) => {
+                    this.service[parentIndex].intervalDetails[index] = data;
+                    this.enableServiceDetailEdit[index] = false;
+                }).catch((reason: any) => {
+                    this.enableServiceDetailEdit[index] = true;
+                });
+            }
+        }
+
+        private update(type: string, json: any, index: number, parentIndex?: number) {
+            if (type === 'service') {
+                this.employeeInformationService.updateServiceInformation(json).then((data: any) => {
+                    this.service[index] = data;
+                    this.enableEdit[index] = false;
+                }).catch((reason: any) => {
+                    this.enableEdit[index] = true;
+                });
+            }
+            else if (type === 'serviceDetails') {
+                this.employeeInformationService.updateServiceDetailInformation(json).then((data: any) => {
+                    this.service[parentIndex].intervalDetails[index] = data;
+                    this.enableServiceDetailEdit[index] = false;
+                }).catch((reason: any) => {
+                    this.enableServiceDetailEdit[index] = true;
+                });
+            }
         }
 
         private get(): void {
             this.service = [];
-            this.employeeInformationService.getServiceInformation(this.userId).then((data: any) => {
-                // this.service = data;
+            this.employeeInformationService.getServiceInformation(this.userId).then((serviceInformation: any) => {
+                if (serviceInformation) {
+                    this.service = serviceInformation;
+                }
+                else {
+                    this.service = [];
+                }
             });
         }
 
-        public activeEditButton(index: number, canEdit: boolean): void {
-            this.enableEdit[index] = canEdit;
+        public activeEditButton(type: string, index: number, canEdit: boolean): void {
+            if (type === 'service') {
+                this.enableEdit[index] = canEdit;
+            }
+            else if (type === 'serviceDetails') {
+                this.enableServiceDetailEdit[index] = canEdit;
+            }
         }
 
         private addNew(type: string, index?: number): void {
@@ -146,7 +221,7 @@ module ums {
             }
             else if (type === 'serviceDetails') {
                 if (this.service[parentIndex].intervalDetails[index].id) {
-                    this.employeeInformationService.deleteServiceInformation(this.service[parentIndex].intervalDetails[index].id).then((data: any) => {
+                    this.employeeInformationService.deleteServiceDetailInformation(this.service[parentIndex].intervalDetails[index].id).then((data: any) => {
                         this.service[parentIndex].intervalDetails.splice(index, 1);
                     });
                 }

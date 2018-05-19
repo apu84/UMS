@@ -74,6 +74,11 @@ module ums {
     }
 
 
+      public print(){
+          let voucher: IContraVoucher=this.detailVouchers[0];
+          this.contraVoucherService.generateVoucherReport(voucher.voucherNo, voucher.voucherDate);
+      }
+
     public getPaginatedJournalVouchers() {
       this.contraVoucherService.getAllVouchersPaginated(this.itemsPerPage, this.pageNumber, this.searchVoucherNo).then((paginatedVouchers: IPaginatedContraVoucher) => {
         this.existingVouchers = paginatedVouchers.vouchers;

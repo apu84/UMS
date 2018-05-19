@@ -11,11 +11,13 @@
             <div class="row">
                 <div class="col-md-9">General Information</div>
                 <div class="col-md-3">
-                    <div data-ng-if="vm.generalReadOnly==true">
-                        <div align="right">
-                            <a data-ng-click="vm.generalReadOnly=false" style="cursor: pointer;">
-                                <i style="color: blue;" class="fa fa-edit"></i>
-                            </a>
+                    <div data-ng-if="vm.enableEditButton">
+                        <div data-ng-if="vm.generalReadOnly==true">
+                            <div align="right">
+                                <a data-ng-click="vm.generalReadOnly=false" style="cursor: pointer;">
+                                    <i style="color: blue;" class="fa fa-edit"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -120,8 +122,8 @@
                             <label></label>
                         </div>
                         <div class="row">
-                            <div data-ng-show="vm.enableEdit">
-                                <div data-ng-show="vm.generalReadOnly">
+                            <div data-ng-show="vm.enableEditButton">
+                                <div data-ng-show="!vm.generalReadOnly">
                                     <div align="center" data-ng-if="vm.test==true">
                                         <img data-target="#modal-confirm" data-toggle="modal" class="img-square"
                                              style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0); cursor: pointer"
@@ -130,7 +132,7 @@
                                              data-profile-picture="">
                                     </div>
                                 </div>
-                                <div data-ng-show="!vm.generalReadOnly">
+                                <div data-ng-show="vm.generalReadOnly">
                                     <div align="center" data-ng-if="vm.test==true">
                                         <img class="img-square"
                                              style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0);"
@@ -140,7 +142,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div data-ng-show="!vm.enableEdit">
+                            <div data-ng-show="!vm.enableEditButton">
                                 <div align="center">
                                     <img class="img-square"
                                          style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0);"
@@ -431,14 +433,16 @@
                         <div class="col-md-1">
                             <button type="button"
                                     data-ng-click="vm.generalReadOnly=true; vm.getGeneralInformation();"
-                                    class="btn btn-red form-control">Cancel
+                                    class="btn btn-danger btn-xs">Cancel
                             </button>
                         </div>
                         <div class="col-md-10"></div>
                         <div class="col-md-1">
-                            <button type="submit" class="btn btn-success form-control"
-                                    data-ng-disabled="nGeneralForm.$invalid">Submit
-                            </button>
+                            <div align="right">
+                                <button type="submit" class="btn btn-success btn-xs"
+                                        data-ng-disabled="nGeneralForm.$invalid">Submit
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -451,11 +455,13 @@
             <div class="row">
                 <div class="col-md-9">Contact Information</div>
                 <div class="col-md-3">
-                    <div data-ng-if="vm.contactReadOnly==true">
-                        <div align="right">
-                            <a data-ng-click="vm.contactReadOnly=false" style="cursor: pointer;">
-                                <i style="color: blue;" class="fa fa-edit"></i>
-                            </a>
+                    <div data-ng-if="vm.enableEditButton">
+                        <div data-ng-if="vm.contactReadOnly==true">
+                            <div align="right">
+                                <a data-ng-click="vm.contactReadOnly=false" style="cursor: pointer;">
+                                    <i style="color: blue;" class="fa fa-edit"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -902,14 +908,16 @@
                     <div class="row">
                         <div class="col-md-1">
                             <button type="button" data-ng-click="vm.contactReadOnly=true; vm.getContactInformation();"
-                                    class="btn btn-red form-control">Cancel
+                                    class="btn btn-danger btn-xs">Cancel
                             </button>
                         </div>
                         <div class="col-md-10"></div>
                         <div class="col-md-1">
-                            <button type="submit" class="btn btn-success form-control"
-                                    data-ng-disabled="nContactForm.$invalid">Submit
-                            </button>
+                            <div align="right">
+                                <button type="submit" class="btn btn-success btn-xs"
+                                        data-ng-disabled="nContactForm.$invalid">Submit
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -922,11 +930,13 @@
             <div class="row">
                 <div class="col-md-9">Emergency Contact Information</div>
                 <div class="col-md-3">
-                    <div data-ng-if="vm.emergencyContactReadOnly==true">
-                        <div align="right">
-                            <a data-ng-click="vm.emergencyContactReadOnly=false" style="cursor: pointer;">
-                                <i style="color: blue;" class="fa fa-edit"></i>
-                            </a>
+                    <div data-ng-if="vm.enableEditButton">
+                        <div data-ng-if="vm.emergencyContactReadOnly==true">
+                            <div align="right">
+                                <a data-ng-click="vm.emergencyContactReadOnly=false" style="cursor: pointer;">
+                                    <i style="color: blue;" class="fa fa-edit"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1042,14 +1052,16 @@
                         <div class="col-md-1">
                             <button type="button"
                                     data-ng-click="vm.emergencyContactReadOnly=true; vm.getEmergencyContactInformation();"
-                                    class="btn btn-red form-control">Cancel
+                                    class="btn btn-danger btn-xs">Cancel
                             </button>
                         </div>
                         <div class="col-md-10"></div>
                         <div class="col-md-1">
-                            <button type="submit" class="btn btn-success form-control"
-                                    data-ng-disabled="nEmergencyContactForm.$invalid">Submit
-                            </button>
+                            <div align="right">
+                                <button type="submit" class="btn btn-success btn-xs"
+                                        data-ng-disabled="nEmergencyContactForm.$invalid">Submit
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1063,7 +1075,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                <div class="imageupload panel panel-default">f
+                <div class="imageupload panel panel-default">
                     <div class="panel-heading clearfix">
                         <h3 class="panel-title pull-left">Upload Image</h3>
                         <div class="btn-group pull-right">

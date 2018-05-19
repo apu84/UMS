@@ -41,6 +41,7 @@ module ums {
         private userId: string = "";
         private stateParams: any;
         private enableEdit: boolean;
+        private enableEditButton: boolean = false;
         private test: boolean = true;
 
         constructor(private registrarConstants: any,
@@ -62,6 +63,7 @@ module ums {
             };
 
             this.stateParams = $stateParams;
+            this.enableEditButton = this.stateParams.edit;
             this.genders = this.registrarConstants.genderTypes;
             this.publicationTypes = this.registrarConstants.publicationTypes;
             this.bloodGroups = this.registrarConstants.bloodGroupTypes;
