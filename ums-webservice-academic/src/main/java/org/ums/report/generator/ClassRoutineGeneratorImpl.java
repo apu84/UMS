@@ -354,11 +354,13 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
                   if(routines.get(routineIterator).getCourseId().equals(courseId)
                           && routines.get(routineIterator).getDay()==i &&
                           routines.get(0).getStartTime().equals(routines.get(routineIterator).getStartTime())
-                          && routines.get(0).getRoomId().equals(routines.get(routineIterator).getRoomId()) ){
+                          ){
                     if(sectionList.contains(routines.get(routineIterator).getSection())==false)
                     {
                       sections = sections+"+"+routines.get(routineIterator).getSection();
                       sectionList.add(routines.get(routineIterator).getSection());
+                      if(!routines.get(0).getRoomId().equals(routines.get(routineIterator).getRoomId()))
+                        roomNo = roomNo+", "+ mClassRoomManager.get(Long.parseLong(routines.get(routineIterator).getRoomId().toString())).getRoomNo();
                     }
                     routines.remove(0);
                   }else{
