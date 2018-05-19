@@ -1,3 +1,12 @@
+<style type="text/css">
+    .panel-group .panel .panel-title .accordion-toggle {
+        padding: 2px 15px !important;
+    }
+
+    .panel-group .panel .panel-title {
+        font-size: 15px !important;
+    }
+</style>
 <accordion close-others="true">
     <div data-ng-repeat="publication in vm.publication track by $index">
         <accordion-group is-open="isopen">
@@ -262,11 +271,8 @@
                     </div>
 
                     <div class="col-md-3">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nForm[$index].nPublicationPage.$invalid && !nForm[$index].nPublicationPage.$pristine }">
-                            <label class="control-label" for="iPublicationPage">Pages<span
-                                    ng-show="publication.publicationType.id==1 || publication.publicationType.id==2"><span
-                                    class='require'>*</span></span></label>
+                        <div class="form-group">
+                            <label class="control-label" for="iPublicationPage">Pages</label>
                             <div data-ng-show="vm.enableEdit[$index]">
                                 <input type="text"
                                        name="nPublicationPage"
@@ -274,7 +280,6 @@
                                        data-ng-model="publication.publicationPages"
                                        placeholder="Page"
                                        maxlength="80"
-                                       ng-required="publication.publicationType.id==1 || publication.publicationType.id==2"
                                        class="form-control">
                             </div>
                             <div data-ng-show="!vm.enableEdit[$index]">
