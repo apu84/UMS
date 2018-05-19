@@ -433,14 +433,16 @@
                         <div class="col-md-1">
                             <button type="button"
                                     data-ng-click="vm.generalReadOnly=true; vm.getGeneralInformation();"
-                                    class="btn btn-red form-control">Cancel
+                                    class="btn btn-danger btn-xs">Cancel
                             </button>
                         </div>
                         <div class="col-md-10"></div>
                         <div class="col-md-1">
-                            <button type="submit" class="btn btn-success form-control"
-                                    data-ng-disabled="nGeneralForm.$invalid">Submit
-                            </button>
+                            <div align="right">
+                                <button type="submit" class="btn btn-success btn-xs"
+                                        data-ng-disabled="nGeneralForm.$invalid">Submit
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -906,14 +908,16 @@
                     <div class="row">
                         <div class="col-md-1">
                             <button type="button" data-ng-click="vm.contactReadOnly=true; vm.getContactInformation();"
-                                    class="btn btn-red form-control">Cancel
+                                    class="btn btn-danger btn-xs">Cancel
                             </button>
                         </div>
                         <div class="col-md-10"></div>
                         <div class="col-md-1">
-                            <button type="submit" class="btn btn-success form-control"
-                                    data-ng-disabled="nContactForm.$invalid">Submit
-                            </button>
+                            <div align="right">
+                                <button type="submit" class="btn btn-success btn-xs"
+                                        data-ng-disabled="nContactForm.$invalid">Submit
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1048,14 +1052,16 @@
                         <div class="col-md-1">
                             <button type="button"
                                     data-ng-click="vm.emergencyContactReadOnly=true; vm.getEmergencyContactInformation();"
-                                    class="btn btn-red form-control">Cancel
+                                    class="btn btn-danger btn-xs">Cancel
                             </button>
                         </div>
                         <div class="col-md-10"></div>
                         <div class="col-md-1">
-                            <button type="submit" class="btn btn-success form-control"
-                                    data-ng-disabled="nEmergencyContactForm.$invalid">Submit
-                            </button>
+                            <div align="right">
+                                <button type="submit" class="btn btn-success btn-xs"
+                                        data-ng-disabled="nEmergencyContactForm.$invalid">Submit
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1069,7 +1075,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                <div class="imageupload panel panel-default">f
+                <div class="imageupload panel panel-default">
                     <div class="panel-heading clearfix">
                         <h3 class="panel-title pull-left">Upload Image</h3>
                         <div class="btn-group pull-right">
