@@ -110,7 +110,7 @@ module ums {
                 publicationVolume: "",
                 publicationJournalName: "",
                 publicationCountry: null,
-                status: "9",
+                status: "0",
                 publicationPages: "",
                 appliedOn: "",
                 actionTakenOn: "",
