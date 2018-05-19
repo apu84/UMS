@@ -536,4 +536,9 @@ public class CoreContext {
     branchUserCache.setManager(branchDao);
     return branchUserCache;
   }
+
+  @Bean
+  FCMTokenManager fcmTokenManager() {
+    return new PersistentFCMTokenDao(mTemplateFactory.getJdbcTemplate());
+  }
 }
