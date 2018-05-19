@@ -327,10 +327,12 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <button title="Add New Row" type="button" class="btn btn-success btn-xs"
-                                    data-ng-click="vm.addNew('serviceDetails', $index);"
-                                    style="cursor: pointer">Add new
-                            </button>
+                            <div data-ng-show="vm.enableEditButton">
+                                <button title="Add New Row" type="button" class="btn btn-success btn-xs"
+                                        data-ng-click="vm.addNew('serviceDetails', $index);"
+                                        style="cursor: pointer">Add new
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

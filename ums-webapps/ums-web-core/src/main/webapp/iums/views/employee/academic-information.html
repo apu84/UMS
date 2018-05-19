@@ -24,7 +24,8 @@
                          style="-moz-border-radius: 15px !important;border-radius: 15px !important;">
                         <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
                         If you don't find <strong>Degree Title</strong> for <strong>PhD</strong>, please <a
-                            data-toggle="modal" data-target="#addDegreeTitle" style="cursor: pointer;"><u><b>Click here</b></u></a>
+                            data-toggle="modal" data-target="#addDegreeTitle" style="cursor: pointer;"><u><b>Click
+                        here</b></u></a>
                         to add Degree Title.
                     </div>
                 </div>
@@ -250,10 +251,12 @@
 
 <div class="row">
     <div class="col-md-12">
-        <button title="Add New Row" type="button" class="btn btn-success btn-xs"
-                data-ng-click="vm.addNew(); vm.activeEditButton(vm.academic.length - 1, true)"
-                style="cursor: pointer">Add new
-        </button>
+        <div data-ng-show="vm.enableEditButton">
+            <button title="Add New Row" type="button" class="btn btn-success btn-xs"
+                    data-ng-click="vm.addNew(); vm.activeEditButton(vm.academic.length - 1, true)"
+                    style="cursor: pointer">Add new
+            </button>
+        </div>
     </div>
 </div>
 

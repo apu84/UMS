@@ -46,7 +46,6 @@ module ums{
         }
 
         public getPersonalInformation(employeeId: string): ng.IPromise<any> {
-            console.log("Employee Id: " + employeeId);
             let defer = this.$q.defer();
             this.httpClient.get(this.personalUrl + "/get/employeeId/" + employeeId, HttpClient.MIME_TYPE_JSON,
                 (json: any, etag: string) => {
