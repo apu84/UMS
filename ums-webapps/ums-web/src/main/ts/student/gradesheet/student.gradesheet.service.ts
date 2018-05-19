@@ -7,7 +7,7 @@ module ums {
   }
 
   export class StudentGradesheetService {
-    public static $inject = ['HttpClient', 'appConstants', 'Notify', '$q'];
+    public static $inject = ['HttpClient', 'appConstants', 'notify', '$q'];
 
     constructor(private httpClient: HttpClient,
                 private appConstants: any,
@@ -47,6 +47,7 @@ module ums {
           },
           (errorResponse: any) => {
             this.notify.error("No gradesheet found for desired semester");
+            defer.resolve(null);
           });
       return defer.promise;
     }

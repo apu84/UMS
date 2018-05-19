@@ -1,5 +1,6 @@
 package org.ums.academic.resource.student.gradesheet;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,6 +41,7 @@ public class GradeSheetBuilder implements Builder<GradesheetModel, MutableGrades
     pBuilder.add("department", student.getDepartment().getLongName());
     pBuilder.add("enrollmentSemester", student.getSemester().getName());
     StudentRecord studentRecord = pReadOnly.getStudentRecord();
+    pBuilder.add("semesterName", studentRecord.getSemester().getName());
     pBuilder.add("year", studentRecord.getYear());
     pBuilder.add("semester", studentRecord.getAcademicSemester());
     pBuilder.add("semesterCrHr", studentRecord.getCompletedCrHr());
@@ -90,6 +92,23 @@ public class GradeSheetBuilder implements Builder<GradesheetModel, MutableGrades
     });
 
     pBuilder.add("carry", carryBuilder.build());
+    JsonObjectBuilder remarksBuilder = Json.createObjectBuilder();
+    String remarks = studentRecord.getTabulationSheetRemarks();
+    String comment;
+    String[] carry = null;
+    if(remarks.contains("with")) {
+      comment = remarks.substring(0, remarks.indexOf("with")).trim();
+      carry = remarks.substring(remarks.indexOf("with")).replace("with carry over in", "").split(",");
+    } else {
+      comment = remarks.trim();
+    }
+    remarksBuilder.add("comment", comment);
+    if(carry != null && carry.length > 0) {
+      JsonArrayBuilder carryArray = Json.createArrayBuilder();
+      Arrays.stream(carry).forEach((course) -> carryArray.add(course.trim()));
+      remarksBuilder.add("carry", carryArray.build());
+    }
+    pBuilder.add("remarks", remarksBuilder.build());
   }
 
   private JsonObjectBuilder getJson(UGRegistrationResult regularCourse, List<UGRegistrationResult> clearanceCourses,
