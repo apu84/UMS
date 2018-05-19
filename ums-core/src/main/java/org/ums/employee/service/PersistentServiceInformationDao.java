@@ -43,7 +43,7 @@ public class PersistentServiceInformationDao extends ServiceInformationDaoDecora
 
   @Override
   public ServiceInformation get(Long pId) {
-    String query = GET_ALL + " WHERE EMPLOYEE_ID = ? ORDER BY JOINING_DATE DESC";
+    String query = GET_ALL + " WHERE ID = ? ";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentServiceInformationDao.RoleRowMapper());
   }
 

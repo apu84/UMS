@@ -18,16 +18,21 @@ module ums {
             this.state = $state;
             this.stateParams = $stateParams;
 
-            if(this.stateParams.id){
+            if(this.stateParams.id && this.state.current.name.includes('employeeInformation')){
 
                 // when registrar tries to access all employee profile
                 this.tab = 'employeeInformation.employeeProfile';
                 this.employeeId = this.stateParams.id;
+                this.initialRouting();
+            }
+            else if(!this.stateParams.id && this.state.current.name.includes('employeeInformation')){
+
+                // when registrar tries to access all employee profile
+                this.state.go('employeeInformation');
             }
             else if(!this.stateParams.id && this.state.current.name.includes('employeeProfile')){
                 userService.fetchCurrentUserInfo().then((user: any) => {
                     this.tab = 'employeeProfile';
-                    this.canEdit = true;
                     this.employeeId = user.employeeId;
                     this.initialRouting();
                 });
@@ -47,7 +52,30 @@ module ums {
         }
 
         public redirectTo(tab: string): void{
-            this.state.go(this.tab + '.' + tab, {id: this.employeeId, edit: (this.tab === 'employeeProfile' && tab === 'service') ? false : this.canEdit});
+            this.verifyEditPermission(tab).then((canEdit: boolean) => {
+                this.state.go(this.tab + '.' + tab, {id: this.employeeId, edit: canEdit});
+            }).catch((reason) =>{
+                this.notify.error(reason);
+            });
+        }
+
+        private verifyEditPermission(tab: string): ng.IPromise<any>{
+            let defer = this.$q.defer();
+            if(this.tab === 'employeeInformation.employeeProfile') {
+                defer.resolve(true);
+            }
+            else if(this.tab === 'employeeProfile'){
+                if(tab === 'service') {
+                    defer.resolve(false);
+                }
+                else{
+                    defer.resolve(true);
+                }
+            }
+            else{
+                defer.reject("Can't determine permission. Please contact to IUMS.");
+            }
+            return defer.promise;
         }
     }
 

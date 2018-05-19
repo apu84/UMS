@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.manager.ContentManager;
@@ -29,6 +30,7 @@ public class ServiceInformationDetailResourceHelper extends
   private ServiceInformationDetailBuilder mBuilder;
 
   @Override
+  @Transactional
   public Response post(JsonObject pJsonObject, final UriInfo pUriInfo) {
     LocalCache localCache = new LocalCache();
     MutableServiceInformationDetail mutableServiceInformationDetail = new PersistentServiceInformationDetail();

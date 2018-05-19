@@ -42,10 +42,13 @@ public class ServiceInformationDetailBuilder implements
 
   @Override
   public void build(MutableServiceInformationDetail pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
+
+    pMutable.setId(!pJsonObject.getString("id").equals("") ? Long.parseLong(pJsonObject.getString("id")) : null);
     pMutable.setEmploymentPeriod(mEmploymentPeriod.get(pJsonObject.getJsonObject("interval").getInt("id")));
     pMutable.setStartDate(mDateFormat.parse(pJsonObject.getString("startDate")));
     pMutable.setEndDate(pJsonObject.containsKey("endDate") ? pJsonObject.getString("endDate").isEmpty() ? null
         : mDateFormat.parse(pJsonObject.getString("endDate")) : null);
+    pMutable.setComment(pJsonObject.containsKey("comment") ? pJsonObject.getString("comment") : "");
     pMutable.setServiceId(Long.parseLong(pJsonObject.getString("serviceId")));
   }
 }
