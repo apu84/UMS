@@ -6,7 +6,7 @@
                 <button type="button" class="btn btn-sm btn-default btn-outlined">Replicate</button>
                 <button type="button" class="btn btn-sm btn-default btn-outlined">Recurrent</button>
                 <button type="button" class="btn btn-sm btn-default btn-outlined">Reverse</button>
-                <button type="button" class="btn btn-sm btn-default btn-outlined">Print</button>
+                <button type="button" class="btn btn-sm btn-default btn-outlined" ng-click="vm.print()">Print</button>
                 <button type="button" class="btn btn-sm btn-default btn-outlined" data-ng-disabled="vm.postStatus"
                         ng-click="vm.saveVoucher()">
                     Save
@@ -40,7 +40,7 @@
                     <div ng-if="!vm.postStatus" date-picker date-model="vm.voucherDate" date-format="DD-MM-YYYY"
                     ></div>
                     <div ng-if="vm.postStatus" ng-disabled="true" align="center" class="form-control">
-                        {{vm.changeDateFormat(vm.voucherDate)}}
+                        {{vm.voucherDate}}
                     </div>
                 </div>
             </div>

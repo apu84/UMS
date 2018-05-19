@@ -145,6 +145,19 @@ module ums {
           });
       return defer.promise;
     }
+
+      public generateVoucherReport(voucherNo: string, voucherDate: string): ng.IPromise<string> {
+          let defer: ng.IDeferred<string> = this.$q.defer();
+          var contentType: string = UmsUtil.getFileContentType("pdf");
+          this.httpClient.get(this.url + "/journalVoucherReport/voucherNo/"+voucherNo+"/voucherDate/"+voucherDate, undefined, (data: any, etag: string) => {
+                  UmsUtil.writeFileContent(data, contentType, 'Journal Voucher ('+voucherDate +').pdf');
+              },
+              (response: any) => {
+                  defer.resolve("success");
+                  console.error(response);
+              }, 'arraybuffer');
+          return defer.promise;
+      }
   }
 
   UMS.service("JournalVoucherService", JournalVoucherService);

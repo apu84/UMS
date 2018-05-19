@@ -75,7 +75,7 @@ public class ChartOfAccountsReportGenerator {
     document.add(new Paragraph(" "));
     float[] tableColumnLength={3f, 2f, 7f};
       PdfPTable table = new PdfPTable(tableColumnLength);
-
+      table.setWidthPercentage(95);
       PdfPCell accountCategoryCell = new PdfPCell();
       accountCategoryCell.addElement(new Paragraph("Account Category", mBoldFont));
       table.addCell(accountCategoryCell);
