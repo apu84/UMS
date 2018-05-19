@@ -46,8 +46,10 @@ public class GradeSheetBuilder implements Builder<GradesheetModel, MutableGrades
     pBuilder.add("semester", studentRecord.getAcademicSemester());
     pBuilder.add("semesterCrHr", studentRecord.getCompletedCrHr());
     pBuilder.add("cumulativeCrHr", studentRecord.getTotalCompletedCrHr());
-    pBuilder.add("gpa", studentRecord.getGPA());
-    pBuilder.add("cgpa", studentRecord.getCGPA());
+    pBuilder.add("gpa", studentRecord.getGPA().toString().length() > 5 ?
+        studentRecord.getGPA().toString().substring(0, 5) : studentRecord.getGPA().toString());
+    pBuilder.add("cgpa", studentRecord.getCGPA().toString().length() > 5 ?
+        studentRecord.getCGPA().toString().substring(0, 5) : studentRecord.getCGPA().toString());
 
     List<UGRegistrationResult> regularTheoryCourses =
         getCourses(pReadOnly.getSemesterResults(), CourseType.THEORY, CourseRegType.REGULAR);
