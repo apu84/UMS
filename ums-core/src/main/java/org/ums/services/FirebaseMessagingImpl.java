@@ -1,6 +1,8 @@
 package org.ums.services;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +18,15 @@ import java.util.concurrent.ExecutionException;
 @Component
 public class FirebaseMessagingImpl {
 
-  private Logger mLogger = LoggerFactory.getLogger(ApprovePublicationService.class);
+  private Logger mLogger = LoggerFactory.getLogger(FirebaseMessagingImpl.class);
 
   @Autowired
   FCMTokenManager mFCMTokenManager;
 
-  public void send(String consumerId, String messageKey, String messageValue) throws InterruptedException,
-      ExecutionException {
+  public void send(String receiverId, String title, String body) throws InterruptedException, ExecutionException {
 
-    if(mFCMTokenManager.exists(consumerId)) {
-      FCMToken fcmToken = mFCMTokenManager.get(consumerId);
+    if(mFCMTokenManager.exists(receiverId)) {
+      FCMToken fcmToken = mFCMTokenManager.get(receiverId);
 
       if(fcmToken.getToken() == null) {
         if(fcmToken.getDeleteOn() == null) {
@@ -33,13 +34,14 @@ public class FirebaseMessagingImpl {
         }
       }
       else {
-        Message message = Message.builder().putData(messageKey, messageValue).setToken(fcmToken.getToken()).build();
-        String response = com.google.firebase.messaging.FirebaseMessaging.getInstance().sendAsync(message).get();
+        Notification notification = new Notification(title, body);
+        Message message = Message.builder().setNotification(notification).setToken(fcmToken.getToken()).build();
+        String response = FirebaseMessaging.getInstance().sendAsync(message).get();
         mLogger.info("Sent message: " + response);
       }
     }
     else {
-      createConsumer(consumerId);
+      createConsumer(receiverId);
     }
   }
 

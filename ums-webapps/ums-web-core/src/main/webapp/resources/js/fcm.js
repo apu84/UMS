@@ -18,13 +18,17 @@ messaging.onTokenRefresh(function() {
         sendTokenToServer(refreshedToken);
     }).catch(function(err) {
         console.log('Unable to retrieve refreshed token ', err);
-        showToken('Unable to retrieve refreshed token ', err);
     });
 });
 
 messaging.onMessage(function(payload) {
+    var notificationTitle = payload.notification.title;
+    var notificationOptions = {
+        body: payload.notification.body,
+        icon: '../images/branding.jpg'
+    };
+    new Notification(notificationTitle, notificationOptions);
 });
-
 
 function generateToken() {
     messaging.getToken().then(function(currentToken) {
