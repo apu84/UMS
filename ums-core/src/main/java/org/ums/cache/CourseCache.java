@@ -30,7 +30,7 @@ public class CourseCache extends ContentCache<Course, MutableCourse, String, Cou
   }
 
   @Override
-  public List<Course> getByYearSemester(String pSemesterId, String pProgramId, int year, int semester) {
+  public List<Course> getByYearSemester(Integer pSemesterId, String pProgramId, int year, int semester) {
     return getManager().getByYearSemester(pSemesterId, pProgramId, year, semester);
   }
 

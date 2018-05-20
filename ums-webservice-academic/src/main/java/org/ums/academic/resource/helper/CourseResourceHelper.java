@@ -45,6 +45,9 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   @Autowired
   private CourseBuilder mBuilder;
 
+  @Autowired
+  private StudentRecordManager mStudentRecordManager;
+
   @Override
   public CourseManager getContentManager() {
     return mManager;
@@ -172,9 +175,13 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     return buildCourse(courses, pUriInfo);
   }
 
-  public JsonObject getByYearSemester(final String pSemesterId, final String pProgramId, final int year,
+  public JsonObject getByYearSemester(final Integer pSemesterId, final String pProgramId, final int year,
       final int semester, final Request pRequest, final UriInfo pUriInfo) {
-    List<Course> courses = getContentManager().getByYearSemester(pSemesterId, pProgramId, year, semester);
+    String studentId = SecurityUtils.getSubject().getPrincipal().toString();
+    List<Course> courses =
+        getContentManager().getByYearSemester(pSemesterId, pProgramId,
+            mStudentRecordManager.getStudentRecord(studentId, pSemesterId).getYear(),
+            mStudentRecordManager.getStudentRecord(studentId, pSemesterId).getAcademicSemester());
 
     return buildCourse(courses, pUriInfo);
   }

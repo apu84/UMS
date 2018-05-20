@@ -102,6 +102,8 @@ module ums {
 
     private getSelectedSemester(): string {
       var semesters = this.courseMaterialSearchParamModel.getSemesters();
+      console.log("-----------");
+      console.log(semesters);
       var semesterName = "";
       for (var i = 0; i < semesters.length; i++) {
         if (semesters[i].id == this.courseMaterialSearchParamModel.semesterId) {

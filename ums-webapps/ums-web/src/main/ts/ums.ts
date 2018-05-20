@@ -277,7 +277,7 @@ module ums {
             }]
           }
         }).state('sectionAssignment',{
-        url: "/sectionAss   ignment",
+        url: "/sectionAssignment",
         controller: 'SectionAssignment',
         templateUrl: 'views/section-assign/section-assign.html',
         resolve: {
