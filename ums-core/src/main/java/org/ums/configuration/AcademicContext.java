@@ -444,6 +444,6 @@ public class AcademicContext {
   @Bean
   GradeSheetManager gradeSheetManager() {
     return new GradeSheetDao(mCoreContext.studentManager(), studentRecordManager(), registrationResultManager(),
-        mIdGenerator);
+        mIdGenerator, mCoreContext.taskStatusManager(), marksSubmissionStatusManager());
   }
 }

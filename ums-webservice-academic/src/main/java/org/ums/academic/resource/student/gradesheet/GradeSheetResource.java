@@ -41,26 +41,8 @@ public class GradeSheetResource extends Resource {
     // String studentId = "130108006";
     Student student = mStudentManager.get(studentId);
     if(mStudentRecordManager.exists(studentId, pSemesterId)) {
-      StudentRecord studentRecord = mStudentRecordManager.getStudentRecord(studentId, pSemesterId);
-      String taskSemesterId =
-          mTaskStatusManager.buildTaskId(student.getProgramId(), pSemesterId, ProcessResult.PROCESS_GPA_CGPA_PROMOTION);
-      String taskYearSemesterId =
-          mTaskStatusManager.buildTaskId(student.getProgramId(), pSemesterId, studentRecord.getYear(),
-              studentRecord.getAcademicSemester(), ProcessResult.PROCESS_GPA_CGPA_PROMOTION);
-
-      TaskStatus taskStatus = null;
-      if(mTaskStatusManager.exists(taskSemesterId)) {
-        taskStatus = mTaskStatusManager.get(taskSemesterId);
-      }
-      else if(mTaskStatusManager.exists(taskYearSemesterId)) {
-        taskStatus = mTaskStatusManager.get(taskYearSemesterId);
-      }
-
-      if(taskStatus != null && taskStatus.getStatus() == TaskStatus.Status.COMPLETED) {
-        return Response.ok().entity(mGradeSheetResourceHelper.getGradesheet(studentId, pSemesterId, mUriInfo)).build();
-      }
+      return Response.ok().entity(mGradeSheetResourceHelper.getGradesheet(studentId, pSemesterId, mUriInfo)).build();
     }
-
     return Response.status(404).build();
   }
 }
