@@ -1,10 +1,10 @@
 var config = {
-    apiKey: "AIzaSyDmUDs-kXZyWQa52tmyJcA8rlMKPP-bgM0",
-    authDomain: "push-notification-demo-6b41d.firebaseapp.com",
-    databaseURL: "https://push-notification-demo-6b41d.firebaseio.com",
-    projectId: "push-notification-demo-6b41d",
-    storageBucket: "push-notification-demo-6b41d.appspot.com",
-    messagingSenderId: "75416653943"
+    apiKey: "AIzaSyArP6rXmkpIkUSF4qlnpUAIYTv8wpdjrGM",
+    authDomain: "fcm-integration-fac11.firebaseapp.com",
+    databaseURL: "https://fcm-integration-fac11.firebaseio.com",
+    projectId: "fcm-integration-fac11",
+    storageBucket: "fcm-integration-fac11.appspot.com",
+    messagingSenderId: "485026400295"
 };
 
 firebase.initializeApp(config);
