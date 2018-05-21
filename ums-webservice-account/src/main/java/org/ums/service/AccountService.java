@@ -28,6 +28,7 @@ import org.ums.persistent.model.accounts.PersistentAccountBalance;
 import org.ums.resource.helper.UserResourceHelper;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
+import org.ums.util.UmsAccountUtils;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -53,7 +54,7 @@ public class AccountService {
   @Transactional
   public Account getOpeningBalanceAdjustmentAccount() {
     Company company = mCompanyManager.getDefaultCompany();
-    Long openingBalanceAdjustmentAccountCode = AccountType.OPENING_BALANCE_ADJUSTMENT_ACCOUNT.getValue();
+    Long openingBalanceAdjustmentAccountCode = UmsAccountUtils.OPENING_BALANCE_ADJUSTMENT_ACCOUNT_CODE;
     Account account = new PersistentAccount();
     if(mAccountManager.exists(openingBalanceAdjustmentAccountCode, company))
       account = mAccountManager.getAccount(openingBalanceAdjustmentAccountCode, company);
@@ -79,6 +80,35 @@ public class AccountService {
       account = openingBalanceAdjustmentAccount;
     }
     return account;
+  }
+
+  @Transactional
+  public Account getRetailEarningsAccount() {
+
+    Company company = mCompanyManager.getDefaultCompany();
+
+    if(mAccountManager.exists(UmsAccountUtils.RETAIL_EARNINGS_ACCOUNT_CODE, company)) {
+      return mAccountManager.getAccount(UmsAccountUtils.RETAIL_EARNINGS_ACCOUNT_CODE, company);
+    }
+    else {
+
+      PersistentAccount mutableAccount = new PersistentAccount();
+      mutableAccount.setId(mIdGenerator.getNumericId());
+      mutableAccount.setAccountCode(UmsAccountUtils.RETAIL_EARNINGS_ACCOUNT_CODE);
+      if(!mSystemGroupManager.exists(GroupType.CURRENT_LIABILITIES, company))
+        new ValidationException("Current Liabilities is not assigned in the System Group Map");
+      mutableAccount.setAccGroupCode(mSystemGroupManager.get(GroupType.CURRENT_LIABILITIES, company).getGroup()
+          .getGroupCode());
+      mutableAccount.setCompanyId(company.getId());
+      mutableAccount.setAccountName("RETAIL EARNINGS");
+      mutableAccount.setModifiedBy(mUserResourceHelper.getLoggedUser().getEmployeeId());
+      mutableAccount.setReserved(true);
+      mutableAccount.setModifiedDate(new Date());
+      mAccountManager.create(mutableAccount);
+      PersistentAccountBalance accountBalance = AccountBalanceMapper.convertFromAccountToAccountBalance(mutableAccount);
+      mAccountBalanceService.createAccountBalance(mutableAccount, mUserResourceHelper.getLoggedUser(), accountBalance);
+      return mutableAccount;
+    }
   }
 
 }

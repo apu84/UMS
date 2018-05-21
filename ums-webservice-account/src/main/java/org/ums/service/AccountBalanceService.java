@@ -2,27 +2,29 @@ package org.ums.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.ums.domain.model.immutable.accounts.Account;
-import org.ums.domain.model.immutable.accounts.AccountBalance;
-import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
+import org.springframework.transaction.annotation.Transactional;
+import org.ums.domain.model.immutable.Company;
+import org.ums.domain.model.immutable.accounts.*;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.enums.accounts.definitions.MonthType;
 import org.ums.enums.accounts.definitions.account.balance.AccountType;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.financial.account.year.YearClosingFlagType;
+import org.ums.enums.accounts.definitions.group.GroupType;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.CompanyManager;
-import org.ums.manager.accounts.AccountBalanceManager;
-import org.ums.manager.accounts.CurrencyManager;
-import org.ums.manager.accounts.FinancialAccountYearManager;
+import org.ums.manager.accounts.*;
 import org.ums.persistent.model.accounts.PersistentAccount;
+import org.ums.persistent.model.accounts.PersistentGroup;
 import org.ums.usermanagement.user.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -37,11 +39,15 @@ public class AccountBalanceService {
   @Autowired
   private FinancialAccountYearManager mFinancialAccountYearManager;
   @Autowired
-  private CompanyManager companyManager;
+  private CompanyManager mCompanyManager;
   @Autowired
   private IdGenerator mIdGenerator;
   @Autowired
   private AccountService mAccountService;
+  @Autowired
+  private SystemGroupMapManager mSystemGroupMapManager;
+  @Autowired
+  private AccountManager mAccountManger;
 
   public BigDecimal getTillLastMonthBalance(final Account pAccount, final FinancialAccountYear pFinancialAccountYear,
       final Date pDate, final AccountBalance pAccountBalance) {
@@ -226,6 +232,32 @@ public class AccountBalanceService {
       accountBalance.setYearOpenBalance(openingBalance);
     }
     return accountBalance;
+  }
+
+  @Transactional
+  public void transferAccountBalanceToNewAcademicYear(FinancialAccountYear pNewFinancialAccountYear,
+      Account pRetailEarningsAccount) {
+
+    Company company = mCompanyManager.getDefaultCompany();
+    Group incomeGroup = new PersistentGroup();
+    Group expenditureGroup = new PersistentGroup();
+    Group assetGroup = new PersistentGroup();
+
+    List<SystemGroupMap> systemGroupMapList = mSystemGroupMapManager.getAllByCompany(company);
+    for(SystemGroupMap systemGroupMap : systemGroupMapList) {
+      if(systemGroupMap.getGroupType().equals(GroupType.INCOME))
+        incomeGroup = systemGroupMap.getGroup();
+      if(systemGroupMap.getGroupType().equals(GroupType.EXPENSES))
+        expenditureGroup = systemGroupMap.getGroup();
+      if(systemGroupMap.getGroupType().equals(GroupType.ASSETS))
+        assetGroup = systemGroupMap.getGroup();
+    }
+
+    List<Account> incomeRelatedAccountList =
+        mAccountManger.getIncludingGroups(Arrays.asList(incomeGroup.getGroupCode()));
+    List<Account> expenditureRelatedAccountList =
+        mAccountManger.getIncludingGroups(Arrays.asList(expenditureGroup.getGroupCode()));
+    List<Account> assetRelatedAccountList = mAccountManger.getIncludingGroups(Arrays.asList(assetGroup.getGroupCode()));
   }
 
   public MutableAccountBalance updateAccountBalance(MutableAccount account, User user,
