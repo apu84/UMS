@@ -11,4 +11,6 @@ public interface FinancialAccountYearManager extends
     ContentManager<FinancialAccountYear, MutableFinancialAccountYear, Long> {
 
   FinancialAccountYear getOpenedFinancialAccountYear();
+
+  void deleteAll();
 }

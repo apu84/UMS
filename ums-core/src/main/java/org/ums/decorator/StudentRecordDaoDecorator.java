@@ -1,10 +1,10 @@
 package org.ums.decorator;
 
+import java.util.List;
+
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.domain.model.mutable.MutableStudentRecord;
 import org.ums.manager.StudentRecordManager;
-
-import java.util.List;
 
 public class StudentRecordDaoDecorator extends
     ContentDaoDecorator<StudentRecord, MutableStudentRecord, Long, StudentRecordManager> implements
@@ -45,5 +45,10 @@ public class StudentRecordDaoDecorator extends
   @Override
   public List<StudentRecord> getStudentRecord(String pStudentId) {
     return getManager().getStudentRecord(pStudentId);
+  }
+
+  @Override
+  public boolean exists(String pStudentId, int pSemesterId) {
+    return getManager().exists(pStudentId, pSemesterId);
   }
 }

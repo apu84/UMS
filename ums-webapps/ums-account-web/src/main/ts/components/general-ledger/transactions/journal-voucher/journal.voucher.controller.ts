@@ -77,6 +77,8 @@ module ums {
     }
 
 
+
+
     public getPaginatedJournalVouchers() {
       this.journalVoucherService.getAllVouchersPaginated(this.itemsPerPage, this.pageNumber, this.searchVoucherNo).then((paginatedVouchers: IPaginatedVouchers) => {
         this.existingVouchers = paginatedVouchers.vouchers;
@@ -203,6 +205,12 @@ module ums {
       this.showAddSection = false;
       this.getPaginatedJournalVouchers();
 
+    }
+
+
+    public print(){
+        let voucher: IJournalVoucher=this.detailVouchers[0];
+        this.journalVoucherService.generateVoucherReport(voucher.voucherNo, voucher.voucherDate);
     }
 
     public fetchDetails(journalVoucher: IJournalVoucher) {

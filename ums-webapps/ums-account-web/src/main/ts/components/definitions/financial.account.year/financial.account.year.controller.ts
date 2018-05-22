@@ -4,7 +4,7 @@ module ums {
   import IFinancialAccountYear = ums.IFinancialAccountYear;
 
   export class FinancialAccountYearController {
-    public static $inject = ['$scope', 'notify', 'FinancialAccountYearService', '$q']
+    public static $inject = ['$scope', 'notify', 'FinancialAccountYearService', '$q', '$state']
 
     private financialAccountYears: IFinancialAccountYear[];
     private currentFinancialAccountYear: IFinancialAccountYear;
@@ -17,7 +17,11 @@ module ums {
     private addButtonName: string;
     private dateMap: any;
 
-    constructor(private $scope: ng.IScope, private notify: Notify, private financialAccountYearService: FinancialAccountYearService, private $q: ng.IQService) {
+    constructor(private $scope: ng.IScope,
+                private notify: Notify,
+                private financialAccountYearService: FinancialAccountYearService,
+                private $q: ng.IQService,
+                private $state:any) {
 
       this.initialize();
     }
@@ -65,6 +69,7 @@ module ums {
     }
 
     private addModalClicked() {
+      this.$state.go('financialAccountYear.financialAccountYearClosing');
       this.addButtonName = this.currentFinancialAccountYear == null ? "Add" : "Save Edit";
     }
 
@@ -86,6 +91,8 @@ module ums {
       console.log("Date");
       console.log(Utils.getDateObject(this.startDate));
     }
+
+
   }
 
   UMS.controller("FinancialAccountYearController", FinancialAccountYearController);

@@ -82,6 +82,12 @@ public class PersistentFinancialAccountYearDao extends FinancialAccountYearDaoDe
   }
 
   @Override
+  public void deleteAll() {
+    String query = "delete from FIN_ACCOUNT_YEAR";
+    mJdbcTemplate.update(query);
+  }
+
+  @Override
   public Long create(MutableFinancialAccountYear pMutable) {
     String query =
         "insert into FIN_ACCOUNT_YEAR(id, CURRENT_START_DATE, CURRENT_END_DATE, PREVIOUS_START_DATE, PREVIOUS_END_DATE,BOOK_CLOSING_FLAG, YEAR_CLOSING_FLAG, MODIFIED_DATE, MODIFIED_BY) "
@@ -104,7 +110,7 @@ public class PersistentFinancialAccountYearDao extends FinancialAccountYearDaoDe
 
   class FinancialAccountYearRowMapper implements RowMapper<FinancialAccountYear> {
     @Override
-    public FinancialAccountYear mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public MutableFinancialAccountYear mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableFinancialAccountYear financialAccountYear = new PersistentFinancialAccountYear();
       financialAccountYear.setStringId(rs.getLong("id"));
       financialAccountYear.setCurrentStartDate(rs.getDate("current_start_date"));

@@ -1,5 +1,11 @@
 package org.ums.academic.resource.student.gradesheet;
 
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
+
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.Student;
@@ -10,12 +16,6 @@ import org.ums.manager.StudentRecordManager;
 import org.ums.manager.TaskStatusManager;
 import org.ums.resource.Resource;
 import org.ums.services.academic.ProcessResult;
-
-import javax.json.JsonObject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.Response;
 
 @Component
 @Path("/academic/gradesheet")
@@ -37,28 +37,12 @@ public class GradeSheetResource extends Resource {
   @GET
   @Path("/semester" + PATH_PARAM_OBJECT_ID)
   public Response getGradesheet(final @Context Request pRequest, final @PathParam("object-id") Integer pSemesterId) {
-    // String studentId = SecurityUtils.getSubject().getPrincipal().toString();
-    String studentId = "130108006";
+    String studentId = SecurityUtils.getSubject().getPrincipal().toString();
+    // String studentId = "130108006";
     Student student = mStudentManager.get(studentId);
-    StudentRecord studentRecord = mStudentRecordManager.getStudentRecord(studentId, pSemesterId);
-    String taskSemesterId =
-        mTaskStatusManager.buildTaskId(student.getProgramId(), pSemesterId, ProcessResult.PROCESS_GPA_CGPA_PROMOTION);
-    String taskYearSemesterId =
-        mTaskStatusManager.buildTaskId(student.getProgramId(), pSemesterId, studentRecord.getYear(),
-            studentRecord.getAcademicSemester(), ProcessResult.PROCESS_GPA_CGPA_PROMOTION);
-
-    TaskStatus taskStatus = null;
-    if(mTaskStatusManager.exists(taskSemesterId)) {
-      taskStatus = mTaskStatusManager.get(taskSemesterId);
-    }
-    else if(mTaskStatusManager.exists(taskYearSemesterId)) {
-      taskStatus = mTaskStatusManager.get(taskYearSemesterId);
-    }
-
-    if(taskStatus != null && taskStatus.getStatus() == TaskStatus.Status.COMPLETED) {
+    if(mStudentRecordManager.exists(studentId, pSemesterId)) {
       return Response.ok().entity(mGradeSheetResourceHelper.getGradesheet(studentId, pSemesterId, mUriInfo)).build();
     }
-
     return Response.status(404).build();
   }
 }

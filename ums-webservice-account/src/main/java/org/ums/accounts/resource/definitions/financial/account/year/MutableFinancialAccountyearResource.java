@@ -6,10 +6,7 @@ import org.ums.domain.model.mutable.accounts.MutableFinancialAccountYear;
 import org.ums.manager.accounts.FinancialAccountYearManager;
 import org.ums.persistent.model.accounts.PersistentFinancialAccountYear;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -30,5 +27,13 @@ public class MutableFinancialAccountyearResource {
       PersistentFinancialAccountYear pPersistentFinancialAccountYear) {
     MutableFinancialAccountYear year = pPersistentFinancialAccountYear;
     return mHelper.updateFinancialAccountYear(year);
+  }
+
+  @PUT
+  @Path("/closeType/{closeType}/startDate/{startDate}/endDate/{endDate}/transferType/{transferType}")
+  public List<FinancialAccountYear> closeCurrentYearAndCreateNewFinancialAccountYear(
+      @PathParam("closeType") String pCloseType, @PathParam("startDate") String pStartDate,
+      @PathParam("endDate") String pEndDate, @PathParam("transferType") Integer pTransferType) {
+    return null;
   }
 }

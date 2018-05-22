@@ -1224,6 +1224,11 @@ module ums {
                 }]
             }
         })
-
+        .state('gradesheet', {
+          url: "/gradesheet",
+          controller: 'StudentGradesheetController',
+          controllerAs: 'vm',
+          templateUrl: 'views/student/grade-sheet.html'
+        })
   });
 }

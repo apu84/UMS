@@ -17,18 +17,24 @@
         <div class="panel-body pan">
             <form action="" class="form-horizontal">
                 <div class="form-body pal">
-                    <div data-program-selector="" data-model="gradeSheetSelector.programSelector"></div>
+                    <div data-program-selector="" data-model="vm.programSelectorModel"></div>
                 </div>
                 <div class="form-actions text-right pal">
-                    <button type="button" class="btn btn-success" data-ng-click="fetchGradeSheet()">Submit</button>
+                    <button type="button" class="btn btn-success" data-ng-click="vm.getGradesheet()">Submit</button>
                 </div>
             </form>
         </div>
     </div>
 
     <div id="rightDiv">
-        <div class="panel">
-            <div class="panel-heading">Grade Sheet</div>
+        <div class="spinner" ng-show="vm.loadingVisibility">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+        <div class="panel" data-ng-if="vm.gradesheetModel">
+            <div class="panel-heading">GRADE SHEET OF SEMESTER FINAL EXAMINATION : {{vm.gradesheetModel.semesterName}} {{!vm.gradesheetModel.resultProcessed ? ' (Unprocessed) ': ''}}
+            </div>
             <div class="panel-body">
                 <div class="spinner" ng-show="loadingVisibility">
                     <div class="bounce1"></div>
@@ -36,61 +42,166 @@
                     <div class="bounce3"></div>
                 </div>
                 <div>
-                    <table class="table table-hover table-bordered table-advanced">
-                        <thead>
-                        <tr role="row" class="heading">
-                            <th width="10%" class="sorting">CourseNo</th>
-                            <th width="30%" class="sorting">Course Title</th>
-                            <th width="10%" class="sorting">CrHr</th>
-                            <th width="25%" class="sorting"><p>Letter Grade</p><p>Regular Examination</p></th>
-                            <th width="25%" class="sorting"><p>Letter Grade</p><p>Clearence/ Improvement Examination</p></th>
-                        </tr>
-                        </thead>
+                    <table class="table table-hover table-striped table-bordered">
                         <tbody>
-                        <tr data-ng-repeat="course in gradeSheet.courses" data-ng-if="!course.carryOver">
-                            <td>{{::course.courseNo}}</td>
-                            <td>{{::course.courseTitle}}</td>
-                            <td class="center-aligned">{{::course.crhr}}</td>
-                            <td class="center-aligned"><b>{{::course.grade}}</b></td>
-                            <td class="center-aligned"><b>{{::course.clearenceImprovementCourse.grade}}</b></td>
+                        <tr>
+                            <td width="25%">Student Name</td>
+                            <td width="75%">{{vm.gradesheetModel.name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Registration Number</td>
+                            <td>{{vm.gradesheetModel.id}}</td>
+                        </tr>
+                        <tr>
+                            <td>Program</td>
+                            <td>{{vm.gradesheetModel.program}}</td>
+                        </tr>
+                        <tr>
+                            <td>Department/School</td>
+                            <td>{{vm.gradesheetModel.department}}</td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="row">
-                    <div class="col-md-9">
-                        <table class="table table-hover table-bordered table-advanced">
-                            <thead>
-                            <tr role="row" class="heading">
-                                <th width="10%" class="sorting">CourseNo</th>
-                                <th width="60%" class="sorting">Course Title</th>
-                                <th width="10%" class="sorting">CrHr</th>
-                                <th width="20%">Letter Grade</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr data-ng-repeat="course in gradeSheet.courses" data-ng-if="course.carryOver">
-                                <td>{{::course.courseNo}}</td>
-                                <td>{{::course.courseTitle}}</td>
-                                <td class="center-aligned">{{::course.crhr}}</td>
-                                <td class="center-aligned"><b>{{::course.grade}}</b></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-md-3">
-                        <p>Remark: </p>
-                        <p><b>{{gradeSheet.remarks}}</b></p>
-                    </div>
+                <div>
+                    <table class="table table-hover table-striped table-bordered">
+                        <tbody>
+                        <tr>
+                            <td width="25%">Year</td>
+                            <td width="25%">{{vm.gradesheetModel.year}}</td>
+                            <td width="25%">Semester Credit Completed</td>
+                            <td width="25%">{{vm.gradesheetModel.semesterCrHr}}</td>
+                        </tr>
+                        <tr>
+                            <td>Semester</td>
+                            <td>{{vm.gradesheetModel.semester}}</td>
+                            <td>Grade Point Average (GPA)</td>
+                            <td>{{vm.gradesheetModel.gpa}}</td>
+                        </tr>
+                        <tr>
+                            <td>Entrollment Semester</td>
+                            <td>{{vm.gradesheetModel.enrollmentSemester}}</td>
+                            <td>Cumulative Credit Completed</td>
+                            <td>{{vm.gradesheetModel.cumulativeCrHr}}</td>
+                        </tr>
+                        <tr>
+                            <td>Medium of Instruction</td>
+                            <td>English</td>
+                            <td>Cumulative Grade Point Average (CGPA)</td>
+                            <td>{{vm.gradesheetModel.cgpa}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <table class="table table-hover table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <td colspan="7"><b>RESULT OF SEMESTER FINAL/IMPROVEMENT/CLEARANCE EXAMINATIONS</b></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td width="10%">Course Number</td>
+                            <td width="25%">Course Title</td>
+                            <td width="5%">Course Credit</td>
+                            <td width="30%" style="padding: 0" colspan="2">
+                                <table class="table table-bordered" style="margin: 0">
+                                    <tr>
+                                        <td colspan="2">Final</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="50%">Letter Grade</td>
+                                        <td width="50%">Grade Point</td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td width="30%" style="padding: 0" colspan="2">
+                                <table class="table table-bordered" style="margin: 0">
+                                    <tr>
+                                        <td colspan="2">Improvement/Clearance</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="50%">Letter Grade</td>
+                                        <td width="50%">Grade Point</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr data-ng-repeat="course in vm.gradesheetModel.regular">
+                            <td width="10%">{{course.no}}</td>
+                            <td width="25%">{{course.title}}</td>
+                            <td width="5%">{{course.crhr}}</td>
+                            <td width="15%">{{course.letterGrade}}</td>
+                            <td width="15%">{{course.gradePoint}}</td>
+                            <td width="15%">
+                                <span data-ng-if="course.clearance">
+                                    {{course.clearance.letterGrade}}
+                                </span>
+                            </td>
+                            <td width="15%">
+                                <span data-ng-if="course.clearance">
+                                    {{course.clearance.gradePoint}}
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
 
+                <div data-ng-if="vm.gradesheetModel.carry && vm.gradesheetModel.carry.length > 0">
+                    <table class="table table-hover table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <td colspan="7"><b>RESULT OF CARRYOVER EXAMINATIONS</b></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td width="10%">Course Number</td>
+                            <td width="25%">Course Title</td>
+                            <td width="5%">Course Credit</td>
+                            <td width="15%">Course Year</td>
+                            <td width="15%">Course Semester</td>
+                            <td width="15%">Letter Grade</td>
+                            <td width="15%">Grade Point</td>
+                        </tr>
+                        <tr data-ng-repeat="course in vm.gradesheetModel.carry">
+                            <td width="10%">{{course.no}}</td>
+                            <td width="25%">{{course.title}}</td>
+                            <td width="5%">{{course.crhr}}</td>
+                            <td width="15%">{{course.regularYear}}</td>
+                            <td width="15%">{{course.regularSemester}}</td>
+                            <td width="15%">{{course.letterGrade}}</td>
+                            <td width="15%">{{course.gradePoint}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <table class="table table-hover table-striped table-bordered">
+                        <tr>
+                            <td width="20%" rowspan="2" style="vertical-align: middle">REMARKS</td>
+                            <td width="80"
+                                colspan="5"
+                                rowspan="{{vm.gradesheetModel.remarks.carry && vm.gradesheetModel.remarks.carry.length > 0 ? 1 : 2}}">
+                                <b>{{vm.gradesheetModel.remarks.comment}}</b>
+                            </td>
+                        </tr>
+                        <tr data-ng-if="vm.gradesheetModel.remarks.carry && vm.gradesheetModel.remarks.carry.length > 0">
+                            <td width="15%">Carry Courses :</td>
+                            <td data-ng-repeat="carry in vm.gradesheetModel.remarks.carry">
+                                {{carry}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
-    console.log("test");
     function resetTopBottomDivs() {
         $("#topArrowDiv").hide(10);
         $("#courseSelectionDiv").show(200);

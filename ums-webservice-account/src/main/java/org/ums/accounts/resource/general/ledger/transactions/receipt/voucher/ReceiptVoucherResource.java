@@ -1,12 +1,21 @@
 package org.ums.accounts.resource.general.ledger.transactions.receipt.voucher;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.accounts.resource.general.ledger.transactions.helper.PaginatedVouchers;
 import org.ums.accounts.resource.general.ledger.transactions.helper.TransactionResponse;
 import org.ums.domain.model.immutable.accounts.AccountTransaction;
+import org.ums.logs.GetLog;
+import org.ums.report.transaction.TransactionReportGenerator;
 import org.ums.resource.Resource;
+import org.ums.util.UmsUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.StreamingOutput;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -17,6 +26,10 @@ import java.util.List;
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class ReceiptVoucherResource extends MutableReceiptVoucherResource {
+
+  @Autowired
+  private TransactionReportGenerator mTransactionReportGenerator;
+
   @GET
   @Path("/voucher-number")
   public TransactionResponse getVoucherNo() throws Exception {
@@ -37,5 +50,24 @@ public class ReceiptVoucherResource extends MutableReceiptVoucherResource {
       @PathParam("date") String pDate) throws Exception {
     List<AccountTransaction> accountTransactions = mHelper.getByVoucherNoAndDate(pVoucherNo, pDate);
     return accountTransactions;
+  }
+
+  @GET
+  @Produces("application/pdf")
+  @Path("/receiptVoucherReport/voucherNo/{voucherNo}/voucherDate/{voucherDate}")
+  @GetLog(message = "Requested for receipt voucher report")
+  public StreamingOutput createReceiptVoucherReport(final @Context HttpServletResponse pHttpServletResponse,
+      @PathParam("voucherNo") String pVoucherNO, @PathParam("voucherDate") String pVoucherDate) throws Exception {
+    return new StreamingOutput() {
+      @Override
+      public void write(OutputStream output) throws IOException, WebApplicationException {
+        try {
+          mTransactionReportGenerator.createVoucherReport(pVoucherNO,
+              UmsUtils.convertToDate(pVoucherDate, "dd-MM-yyyy"), output);
+        } catch(Exception e) {
+          throw new WebApplicationException(e);
+        }
+      }
+    };
   }
 }

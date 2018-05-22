@@ -16,4 +16,9 @@ public class FinancialAccountYearDaoDecorator extends
   public FinancialAccountYear getOpenedFinancialAccountYear() {
     return getManager().getOpenedFinancialAccountYear();
   }
+
+  @Override
+  public void deleteAll() {
+    getManager().deleteAll();
+  }
 }

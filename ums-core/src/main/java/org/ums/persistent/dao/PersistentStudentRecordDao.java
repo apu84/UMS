@@ -32,6 +32,7 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
       + ", GRADESHEET_REMARKS = ?, TABULATIONSHEET_REMARKS = ?, COMPLETED_CRHR = ?, COMPLETED_GRADE_POINTS = ?,"
       + "TOTAL_COMPLETED_CRHR = ?, TOTAL_COMPLETED_GRADE_POINTS = ? ";
   String DELETE_ALL = "DELETE FROM STUDENT_RECORD_CURR ";
+  String EXISTS = "SELECT COUNT(STUDENT_ID) EXIST FROM STUDENT_RECORD ";
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
@@ -138,6 +139,13 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
     Collections.sort(studentRecords, (StudentRecord o1, StudentRecord o2) -> o1.getSemester().getStartDate()
         .compareTo(o2.getSemester().getStartDate()));
     return studentRecords;
+  }
+
+  @Override
+  public boolean exists(String pStudentId, int pSemesterId) {
+    String query = SELECT_ALL + "WHERE STUDENT_ID = ? AND SEMESTER_ID = ?";
+    return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId}, new StudentRecordRowMapper()).size() > 0 ? true
+        : false;
   }
 
   private List<Object[]> getUpdateParamList(List<MutableStudentRecord> pStudentRecords) {

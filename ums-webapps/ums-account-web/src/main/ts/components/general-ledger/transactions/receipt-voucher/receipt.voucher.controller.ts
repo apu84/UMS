@@ -77,6 +77,12 @@ module ums {
           });
       }
 
+
+      public print(){
+          let voucher: IReceiptVoucher=this.detailVouchers[0];
+          this.receiptVoucherService.generateVoucherReport(voucher.voucherNo, voucher.voucherDate);
+      }
+
     public checkWhetherAnyAmountExceedTotalLimit(): ng.IPromise<boolean> {
       let defer: ng.IDeferred<boolean> = this.$q.defer();
       let allow: boolean = true;
@@ -252,10 +258,10 @@ module ums {
       this.totalAmount = 0;
       this.voucherMapWithId = {};
       this.postStatus=vouchers[0].postDate!=null?true:false;
-      this.voucherDate=Utils.convertFromJacksonDate(vouchers[0].voucherDate);
+      this.voucherDate=vouchers[0].voucherDate;
       vouchers.forEach((v: IReceiptVoucher) => {
         this.voucherMapWithId[v.id] = v;
-        v.voucherDate=Utils.convertFromJacksonDate(v.voucherDate);
+        v.voucherDate=v.voucherDate;
       });
       this.voucherDate = vouchers[0].voucherDate;
       this.extractMainAndDetailSectionFromVouchers(vouchers).then((updatedVouchers: IReceiptVoucher[]) => {

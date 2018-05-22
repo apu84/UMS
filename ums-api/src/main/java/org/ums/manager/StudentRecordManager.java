@@ -23,4 +23,6 @@ public interface StudentRecordManager extends ContentManager<StudentRecord, Muta
   StudentRecord getStudentRecord(final String pStudentId, final Integer pSemesterId);
 
   List<StudentRecord> getStudentRecord(final String pStudentId);
+
+  boolean exists(final String pStudentId, final int pSemesterId);
 }
