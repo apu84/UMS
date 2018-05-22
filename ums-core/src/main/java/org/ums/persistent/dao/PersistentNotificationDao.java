@@ -1,12 +1,5 @@
 package org.ums.persistent.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.NotificationDaoDecorator;
@@ -14,6 +7,14 @@ import org.ums.domain.model.immutable.Notification;
 import org.ums.domain.model.mutable.MutableNotification;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentNotification;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class PersistentNotificationDao extends NotificationDaoDecorator {
   String SELECT_ALL =
@@ -77,12 +78,12 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
   }
 
   @Override
-  public List<Long> create(List<MutableNotification> pMutableList) {
-    List<Object[]> params = getInsertParamArray(pMutableList);
-    mJdbcTemplate.batchUpdate(INSERT_ALL, params);
-    return params.stream().map(param -> (Long) param[0])
-        .collect(Collectors.toCollection(ArrayList::new));
-  }
+    public List<Long> create(List<MutableNotification> pMutableList) {
+        List<Object[]> params = getInsertParamArray(pMutableList);
+        mJdbcTemplate.batchUpdate(INSERT_ALL, params);
+        return params.stream().map(param -> (Long) param[0])
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
 
   @Override
   public Notification get(Long pId) {
@@ -94,6 +95,13 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
   public List<Notification> getNotifications(String pConsumerId, String pNotificationType) {
     String query = SELECT_ALL + " WHERE CONSUMER_ID = ? AND NOTIFICATION_TYPE = ? ORDER BY PRODUCED_ON DESC";
     return mJdbcTemplate.query(query, new Object[] {pConsumerId, pNotificationType}, new NotificationRowMapper());
+  }
+
+  @Override
+  public List<Notification> getNotifications(String consumerId, Date pProducedOn) {
+    String query =
+        SELECT_ALL + " WHERE CONSUMER_ID = ? AND PRODUCED_ON >= ? AND CONSUMED_ON IS NULL ORDER BY PRODUCED_ON DESC";
+    return mJdbcTemplate.query(query, new Object[] {consumerId, pProducedOn}, new NotificationRowMapper());
   }
 
   @Override
