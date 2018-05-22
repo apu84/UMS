@@ -16,15 +16,14 @@ import org.ums.generator.IdGenerator;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
 import org.ums.persistent.model.accounts.PersistentAccount;
+import org.ums.persistent.model.accounts.PersistentAccountBalance;
 import org.ums.persistent.model.accounts.PersistentGroup;
 import org.ums.usermanagement.user.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -33,7 +32,7 @@ import java.util.stream.Collectors;
 @Service
 public class AccountBalanceService {
   @Autowired
-  private AccountBalanceManager accountBalanceManager;
+  private AccountBalanceManager mAccountBalanceManager;
   @Autowired
   private CurrencyManager currencyManager;
   @Autowired
@@ -228,7 +227,7 @@ public class AccountBalanceService {
       accountBalance.setTotDebitTrans(accountBalance.getYearOpenBalance() == null ? new BigDecimal(0.00) : accountBalance.getYearOpenBalance());
       accountBalance.setTotCreditTrans(new BigDecimal(0.000));
       accountBalance = setMonthAccountBalance(accountBalance, account);
-      accountBalanceManager.insertFromAccount(accountBalance);
+      mAccountBalanceManager.insertFromAccount(accountBalance);
       accountBalance.setYearOpenBalance(openingBalance);
     }
     return accountBalance;
@@ -257,7 +256,136 @@ public class AccountBalanceService {
         mAccountManger.getIncludingGroups(Arrays.asList(incomeGroup.getGroupCode()));
     List<Account> expenditureRelatedAccountList =
         mAccountManger.getIncludingGroups(Arrays.asList(expenditureGroup.getGroupCode()));
-    List<Account> assetRelatedAccountList = mAccountManger.getIncludingGroups(Arrays.asList(assetGroup.getGroupCode()));
+    List<Account> assetRelatedAccountList =
+            mAccountManger.getIncludingGroups(Arrays.asList(assetGroup.getGroupCode()));
+
+    List<Account> combinedAccountList = new ArrayList<>();
+    combinedAccountList.addAll(incomeRelatedAccountList);
+    combinedAccountList.addAll(expenditureRelatedAccountList);
+    combinedAccountList.addAll(assetRelatedAccountList);
+
+    List<MutableAccountBalance> accountBalanceList = mAccountBalanceManager.getAccountBalance(pNewFinancialAccountYear.getPreviousStartDate(), pNewFinancialAccountYear.getPreviousEndDate(), combinedAccountList);
+    Map<Long, MutableAccountBalance> accountBalanceMapWithAccountId =
+            accountBalanceList
+            .parallelStream()
+            .collect(Collectors.toMap(a->a.getAccountCode(), a->a));
+
+    List<MutableAccountBalance> transferredAssetAccountBalanceList = transferAssetRelatedAccountsToNewYearBasedAccountBalance(assetRelatedAccountList, accountBalanceMapWithAccountId, pNewFinancialAccountYear);
+    List<MutableAccountBalance> transferredIncomeAndExpenditureAccountBalanceList = transferIncomeAndExpenditureAccountBalance(incomeRelatedAccountList, expenditureRelatedAccountList, accountBalanceMapWithAccountId, pNewFinancialAccountYear);
+    transferredAssetAccountBalanceList.addAll(transferredAssetAccountBalanceList);
+
+    mAccountBalanceManager.create(transferredAssetAccountBalanceList);
+  }
+
+  private List<MutableAccountBalance> transferAssetRelatedAccountsToNewYearBasedAccountBalance(
+      List<Account> assetRelatedAccountList, Map<Long, MutableAccountBalance> accountBalanceMapWithAccountId,
+      FinancialAccountYear financialAccountYear) {
+    List<MutableAccountBalance> newTransferredAssetAccountBalanceList = new ArrayList<>();
+    for(Account account : assetRelatedAccountList) {
+      MutableAccountBalance previousAccountBalance = accountBalanceMapWithAccountId.get(account.getId());
+      MutableAccountBalance newAccountBalance = previousAccountBalance;
+      newAccountBalance.setFinStartDate(financialAccountYear.getCurrentStartDate());
+      newAccountBalance.setFinEndDate(financialAccountYear.getCurrentEndDate());
+      newAccountBalance.setId(mIdGenerator.getNumericId());
+      newTransferredAssetAccountBalanceList.add(newAccountBalance);
+    }
+    return newTransferredAssetAccountBalanceList;
+  }
+
+  private List<MutableAccountBalance> transferIncomeAndExpenditureAccountBalance(
+      List<Account> incomeRelatedAccountList, List<Account> expenditureRelatedAccountList,
+      Map<Long, MutableAccountBalance> accountBalanceMapWithId, FinancialAccountYear financialAccountYear) {
+    List<MutableAccountBalance> newTransferredIncomeAccountBalance = new ArrayList<>();
+    List<MutableAccountBalance> newTransferredExpenditureAccountBalance = new ArrayList<>();
+
+    BigDecimal incomeTotalDebit = new BigDecimal(0);
+    BigDecimal incomeTotalCredit = new BigDecimal(0);
+    BigDecimal expenditureTotalDebit = new BigDecimal(0);
+    BigDecimal expenditureTotalCredit = new BigDecimal(0);
+
+    for(Account account : incomeRelatedAccountList) {
+      MutableAccountBalance previousIncomeAccountBalance = accountBalanceMapWithId.get(account.getId());
+      incomeTotalDebit = incomeTotalDebit.add(previousIncomeAccountBalance.getTotDebitTrans());
+      incomeTotalCredit = incomeTotalCredit.add(previousIncomeAccountBalance.getTotCreditTrans());
+      MutableAccountBalance newAccountBalance =
+          initializeNewAccountBalance(previousIncomeAccountBalance, financialAccountYear);
+      newTransferredIncomeAccountBalance.add(newAccountBalance);
+    }
+
+    for(Account account : expenditureRelatedAccountList) {
+      MutableAccountBalance previousExpenditureAccountBalance = accountBalanceMapWithId.get(account.getId());
+      expenditureTotalDebit = expenditureTotalDebit.add(previousExpenditureAccountBalance.getTotDebitTrans());
+      expenditureTotalCredit = expenditureTotalCredit.add(previousExpenditureAccountBalance.getTotCreditTrans());
+      MutableAccountBalance newAccountBalance =
+          initializeNewAccountBalance(previousExpenditureAccountBalance, financialAccountYear);
+      newTransferredExpenditureAccountBalance.add(newAccountBalance);
+    }
+
+    BigDecimal totalIncome = incomeTotalDebit.subtract(incomeTotalCredit);
+    BigDecimal totalExpense = expenditureTotalDebit.subtract(expenditureTotalCredit);
+
+    MutableAccountBalance retailEarningsAccountBalance =
+        configureRetailEarningForNewFinancialAccountYear(totalIncome, totalExpense, financialAccountYear);
+
+    newTransferredExpenditureAccountBalance.add(retailEarningsAccountBalance);
+    newTransferredExpenditureAccountBalance.addAll(newTransferredIncomeAccountBalance);
+
+    return newTransferredExpenditureAccountBalance;
+  }
+
+  private MutableAccountBalance configureRetailEarningForNewFinancialAccountYear(BigDecimal totalIncome,
+      BigDecimal totalExpense, FinancialAccountYear financialAccountYear) {
+    Account retailEarningsAccount = mAccountService.getRetailEarningsAccount();
+    MutableAccountBalance accountBalance =
+        mAccountBalanceManager.getAccountBalance(financialAccountYear.getPreviousStartDate(),
+            financialAccountYear.getPreviousEndDate(), retailEarningsAccount);
+    accountBalance.setFinStartDate(financialAccountYear.getCurrentStartDate());
+    accountBalance.setFinEndDate(financialAccountYear.getCurrentEndDate());
+    BigDecimal yearOpenBalance = totalIncome.subtract(totalExpense);
+    accountBalance.setYearOpenBalance(yearOpenBalance.abs());
+    accountBalance.setYearOpenBalanceType(yearOpenBalance.compareTo(new BigDecimal(0)) < 0 ? BalanceType.Cr
+        : BalanceType.Dr);
+    if(accountBalance.getYearOpenBalanceType().equals(BalanceType.Dr))
+      accountBalance.setTotDebitTrans(accountBalance.getTotDebitTrans().add(yearOpenBalance));
+    else
+      accountBalance.setTotCreditTrans(accountBalance.getTotCreditTrans().add(yearOpenBalance));
+    return accountBalance;
+  }
+
+  private MutableAccountBalance initializeNewAccountBalance(MutableAccountBalance mutableAccountBalance,
+      FinancialAccountYear financialAccountYear) {
+    mutableAccountBalance.setId(mIdGenerator.getNumericId());
+    mutableAccountBalance.setFinStartDate(financialAccountYear.getCurrentStartDate());
+    mutableAccountBalance.setFinEndDate(financialAccountYear.getCurrentEndDate());
+    mutableAccountBalance.setYearOpenBalance(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthDbBal01(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthDbBal02(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthDbBal03(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthDbBal04(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthDbBal05(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthDbBal06(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthDbBal07(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthDbBal08(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthDbBal09(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthDbBal10(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthDbBal11(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthDbBal12(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthCrBal01(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthCrBal02(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthCrBal03(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthCrBal04(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthCrBal05(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthCrBal06(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthCrBal07(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthCrBal08(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthCrBal09(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthCrBal10(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthCrBal11(new BigDecimal(0));
+    mutableAccountBalance.setTotMonthCrBal12(new BigDecimal(0));
+    mutableAccountBalance.setTotDebitTrans(new BigDecimal(0));
+    mutableAccountBalance.setTotCreditTrans(new BigDecimal(0));
+
+    return mutableAccountBalance;
   }
 
   public MutableAccountBalance updateAccountBalance(MutableAccount account, User user,

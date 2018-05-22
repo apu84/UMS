@@ -224,7 +224,7 @@ module ums {
       var foundOccurance:boolean=false;
       for(var i=0;i<this.$scope.tmpRoutineArr.length;i++){
         if(this.$scope.tmpRoutineArr[i].day==routine.day){
-          if(this.$scope.tmpRoutineArr[i].startTime==startTime && this.$scope.tmpRoutineArr[i].section==routine.section && this.$scope.tmpRoutineArr[i].roomNo==routine.roomNo){
+          if(this.$scope.tmpRoutineArr[i].startTime==startTime  && this.$scope.tmpRoutineArr[i].roomNo==routine.roomNo){
             foundOccurance=true;
             break;
           }

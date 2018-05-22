@@ -1,13 +1,11 @@
 package org.ums.persistent.dao.accounts;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.accounts.AccountBalanceDaoDecorator;
 import org.ums.domain.model.immutable.accounts.Account;
-import org.ums.domain.model.immutable.accounts.AccountBalance;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.generator.IdGenerator;
@@ -93,7 +91,7 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
   }
 
   @Override
-  public AccountBalance getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate, Account pAccount) {
+  public MutableAccountBalance getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate, Account pAccount) {
     String query = "select * from MST_ACCOUNT_BALANCE where FIN_START_DATE=? and FIN_END_DATE=? and ACCOUNT_CODE=?";
     try {
       return mJdbcTemplate.queryForObject(query,
@@ -117,7 +115,7 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
   }
 
   @Override
-  public List<AccountBalance> getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate) {
+  public List<MutableAccountBalance> getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate) {
     String query = "select * from MST_ACCOUNT_BALANCE where FIN_START_DATE=:finStartDate and FIN_END_DATE=:finEndDate";
     Map parameterMap = new HashMap();
     parameterMap.put("finStartDate", pFinancialStartDate);
@@ -146,6 +144,17 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
     Map parameterMap = getInsertParameters(pMutable);
     return mNamedParameterJdbcTemplate.update(query, parameterMap);
   }
+
+  @Override
+    public List<Long> create(List<MutableAccountBalance> pMutableList) {
+      String query=INSERT_ONE;
+      Map<String, Object>[] parameters = getParameterObjects(pMutableList);
+      mNamedParameterJdbcTemplate.batchUpdate(query, parameters);
+      return pMutableList
+              .stream()
+              .map(i->i.getId())
+              .collect(Collectors.toList());
+    }
 
   private Map<String, Object>[] getParameterObjects(List<MutableAccountBalance> pMutableAccountBalances) {
     Map<String, Object>[] parameterMaps = new HashMap[pMutableAccountBalances.size()];
