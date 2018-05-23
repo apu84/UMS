@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import java.util.concurrent.ExecutionException;
 
 public class MutableAcademicInformationResource extends Resource {
 
@@ -26,7 +25,7 @@ public class MutableAcademicInformationResource extends Resource {
 
   @PUT
   @PutLog(message = "Updated an academic information")
-  public Response update(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject) throws ExecutionException, InterruptedException {
+  public Response update(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject) {
     return mHelper.update(pJsonObject, mUriInfo);
   }
 
