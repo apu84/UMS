@@ -10,6 +10,8 @@ import org.ums.domain.model.immutable.accounts.Group;
 import org.ums.enums.accounts.definitions.group.GroupType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
+import org.ums.report.itext.UmsCell;
+import org.ums.report.itext.UmsParagraph;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -64,28 +66,28 @@ public class ChartOfAccountsReportGenerator {
     document.newPage();
 
 
-    Paragraph paragraph = new Paragraph(company.getName(), mHeaderFont);
+    UmsParagraph paragraph = new UmsParagraph(company.getName(), mHeaderFont);
     paragraph.setAlignment(Element.ALIGN_CENTER);
     document.add(paragraph);
 
-    paragraph = new Paragraph("Chart of Accounts", mHeaderFont);
+    paragraph = new UmsParagraph("Chart of Accounts", mHeaderFont);
     paragraph.setAlignment(Element.ALIGN_CENTER);
     document.add(paragraph);
-    document.add(new Paragraph(""));
-    document.add(new Paragraph(" "));
+    document.add(new UmsParagraph(""));
+    document.add(new UmsParagraph(" "));
     float[] tableColumnLength={3f, 2f, 7f};
       PdfPTable table = new PdfPTable(tableColumnLength);
       table.setWidthPercentage(100);
-      PdfPCell accountCategoryCell = new PdfPCell();
-      accountCategoryCell.addElement(new Paragraph("Account Category", mBoldFont));
+      UmsCell accountCategoryCell = new UmsCell();
+      accountCategoryCell.addElement(new UmsParagraph("Account Category", mBoldFont));
       table.addCell(accountCategoryCell);
 
-      PdfPCell accountCodeCell = new PdfPCell();
-      accountCodeCell.addElement(new Paragraph("Account Code", mBoldFont));
+      UmsCell accountCodeCell = new UmsCell();
+      accountCodeCell.addElement(new UmsParagraph("Account Code", mBoldFont));
       table.addCell(accountCodeCell);
 
-      PdfPCell accountTitleCell = new PdfPCell();
-      accountTitleCell.addElement(new Paragraph("Account Title", mBoldFont));
+      UmsCell accountTitleCell = new UmsCell();
+      accountTitleCell.addElement(new UmsParagraph("Account Title", mBoldFont));
       table.addCell(accountTitleCell);
 
       table.setHeaderRows(1);
@@ -95,9 +97,9 @@ public class ChartOfAccountsReportGenerator {
     Group assetGroup = mSystemGroupMapManager.get(GroupType.ASSETS, mCompanyManager.getDefaultCompany()).getGroup();
     List<Group> assetRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(assetGroup.getGroupCode()));
     Chunk chunk = new Chunk(assetGroup.getGroupName(), mBoldFontItalic);
-    paragraph = new Paragraph(chunk);
+    paragraph = new UmsParagraph(chunk);
     //document.add(paragraph);
-      accountCategoryCell = new PdfPCell();
+      accountCategoryCell = new UmsCell();
       accountCategoryCell.addElement(paragraph);
       accountCategoryCell.setColspan(3);
       table.addCell(accountCategoryCell);
@@ -108,8 +110,8 @@ public class ChartOfAccountsReportGenerator {
     Group liabilityGroup = mSystemGroupMapManager.get(GroupType.LIABILITIES, mCompanyManager.getDefaultCompany()).getGroup();
     List<Group> liabilityRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(liabilityGroup.getGroupCode()));
     chunk = new Chunk(liabilityGroup.getGroupName(), mBoldFontItalic);
-    paragraph = new Paragraph(chunk);
-      accountCategoryCell = new PdfPCell();
+    paragraph = new UmsParagraph(chunk);
+      accountCategoryCell = new UmsCell();
       accountCategoryCell.addElement(paragraph);
       accountCategoryCell.setColspan(3);
       table.addCell(accountCategoryCell);
@@ -118,8 +120,8 @@ public class ChartOfAccountsReportGenerator {
     Group incomeGroup = mSystemGroupMapManager.get(GroupType.INCOME, mCompanyManager.getDefaultCompany()).getGroup();
     List<Group> incomeRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(incomeGroup.getGroupCode()));
     chunk = new Chunk(incomeGroup.getGroupName(), mBoldFontItalic);
-    paragraph = new Paragraph(chunk);
-      accountCategoryCell = new PdfPCell();
+    paragraph = new UmsParagraph(chunk);
+      accountCategoryCell = new UmsCell();
       accountCategoryCell.addElement(paragraph);
       accountCategoryCell.setColspan(3);
       table.addCell(accountCategoryCell);
@@ -128,8 +130,8 @@ public class ChartOfAccountsReportGenerator {
     Group expenseGroup = mSystemGroupMapManager.get(GroupType.EXPENSES, mCompanyManager.getDefaultCompany()).getGroup();
     List<Group> expenseRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(expenseGroup.getGroupCode()));
     chunk = new Chunk(expenseGroup.getGroupName(), mBoldFontItalic);
-    paragraph = new Paragraph(chunk);
-      accountCategoryCell = new PdfPCell();
+    paragraph = new UmsParagraph(chunk);
+      accountCategoryCell = new UmsCell();
       accountCategoryCell.addElement(paragraph);
       accountCategoryCell.setColspan(3);
       table.addCell(accountCategoryCell);
@@ -143,14 +145,14 @@ public class ChartOfAccountsReportGenerator {
   private PdfPTable createGroupBasedAccountReport(PdfPTable pTable, List<Group> pGroupList,
       Map<String, List<Account>> pGroupWithAccountMap) throws Exception {
 
-    PdfPCell accountCategoryCell = new PdfPCell();
-    PdfPCell accountCodeCell = new PdfPCell();
-    PdfPCell accountTitleCell = new PdfPCell();
+    UmsCell accountCategoryCell = new UmsCell();
+    UmsCell accountCodeCell = new UmsCell();
+    UmsCell accountTitleCell = new UmsCell();
 
     for(Group group : pGroupList) {
       if(pGroupWithAccountMap.containsKey(group.getGroupCode())) {
-        Paragraph paragraph = new Paragraph(group.getGroupName(), mLiteFontItalic);
-        accountCategoryCell = new PdfPCell();
+        UmsParagraph paragraph = new UmsParagraph(group.getGroupName(), mLiteFontItalic);
+        accountCategoryCell = new UmsCell();
         accountCategoryCell.addElement(paragraph);
         accountCategoryCell.setColspan(3);
         pTable.addCell(accountCategoryCell);
@@ -158,9 +160,9 @@ public class ChartOfAccountsReportGenerator {
         List<Account> groupDependentAccountList = pGroupWithAccountMap.get(group.getGroupCode());
 
         for(Account account : groupDependentAccountList) {
-          pTable.addCell(new PdfPCell());
-          pTable.addCell(new Paragraph(account.getAccountCode() + "", mLiteFont));
-          pTable.addCell(new Paragraph(account.getAccountName(), mLiteFont));
+          pTable.addCell(new UmsCell());
+          pTable.addCell(new UmsParagraph(account.getAccountCode() + "", mLiteFont));
+          pTable.addCell(new UmsParagraph(account.getAccountName(), mLiteFont));
         }
 
       }
@@ -175,7 +177,7 @@ public class ChartOfAccountsReportGenerator {
     public void onEndPage(PdfWriter writer, Document pDocument) {
       PdfContentByte cb = writer.getDirectContent();
       String text = String.format("Page %s", writer.getCurrentPageNumber());
-      Paragraph paragraph = new Paragraph(text, mBoldFont);
+      UmsParagraph paragraph = new UmsParagraph(text, mBoldFont);
       ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, new Phrase(paragraph),
           (pDocument.right() - pDocument.left()) / 2 + pDocument.leftMargin(), pDocument.bottom() - 10, 0);
     }

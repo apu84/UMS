@@ -47,6 +47,8 @@ public class AccountBalanceService {
   private SystemGroupMapManager mSystemGroupMapManager;
   @Autowired
   private AccountManager mAccountManger;
+  @Autowired
+  private GroupManager mGrouopManager;
 
   public BigDecimal getTillLastMonthBalance(final Account pAccount, final FinancialAccountYear pFinancialAccountYear,
       final Date pDate, final AccountBalance pAccountBalance) {
@@ -234,8 +236,7 @@ public class AccountBalanceService {
   }
 
   @Transactional
-  public void transferAccountBalanceToNewAcademicYear(FinancialAccountYear pNewFinancialAccountYear,
-      Account pRetailEarningsAccount) {
+  public List<MutableAccountBalance> transferAccountBalanceToNewAcademicYear(FinancialAccountYear pNewFinancialAccountYear) {
 
     Company company = mCompanyManager.getDefaultCompany();
     Group incomeGroup = new PersistentGroup();
@@ -252,12 +253,16 @@ public class AccountBalanceService {
         assetGroup = systemGroupMap.getGroup();
     }
 
+    List<Group> incomeGroupList =mGrouopManager.getIncludingMainGroupList(Arrays.asList(incomeGroup.getGroupCode())) ;
+    List<Group> expenditureGroupList = mGrouopManager.getIncludingMainGroupList(Arrays.asList(expenditureGroup.getGroupCode()));
+    List<Group> assetGroupList = mGrouopManager.getIncludingMainGroupList(Arrays.asList(assetGroup.getGroupCode()));
+
     List<Account> incomeRelatedAccountList =
-        mAccountManger.getIncludingGroups(Arrays.asList(incomeGroup.getGroupCode()));
+        mAccountManger.getIncludingGroups(incomeGroupList.stream().map(g->g.getGroupCode()).collect(Collectors.toList()));
     List<Account> expenditureRelatedAccountList =
-        mAccountManger.getIncludingGroups(Arrays.asList(expenditureGroup.getGroupCode()));
+        mAccountManger.getIncludingGroups(expenditureGroupList.stream().map(g->g.getGroupCode()).collect(Collectors.toList()));
     List<Account> assetRelatedAccountList =
-            mAccountManger.getIncludingGroups(Arrays.asList(assetGroup.getGroupCode()));
+            mAccountManger.getIncludingGroups(assetGroupList.stream().map(g->g.getGroupCode()).collect(Collectors.toList()));
 
     List<Account> combinedAccountList = new ArrayList<>();
     combinedAccountList.addAll(incomeRelatedAccountList);
@@ -272,9 +277,9 @@ public class AccountBalanceService {
 
     List<MutableAccountBalance> transferredAssetAccountBalanceList = transferAssetRelatedAccountsToNewYearBasedAccountBalance(assetRelatedAccountList, accountBalanceMapWithAccountId, pNewFinancialAccountYear);
     List<MutableAccountBalance> transferredIncomeAndExpenditureAccountBalanceList = transferIncomeAndExpenditureAccountBalance(incomeRelatedAccountList, expenditureRelatedAccountList, accountBalanceMapWithAccountId, pNewFinancialAccountYear);
-    transferredAssetAccountBalanceList.addAll(transferredAssetAccountBalanceList);
+    transferredAssetAccountBalanceList.addAll(transferredIncomeAndExpenditureAccountBalanceList);
 
-    mAccountBalanceManager.create(transferredAssetAccountBalanceList);
+    return transferredAssetAccountBalanceList;
   }
 
   private List<MutableAccountBalance> transferAssetRelatedAccountsToNewYearBasedAccountBalance(
