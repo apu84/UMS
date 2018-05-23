@@ -63,7 +63,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-concurrent");
     grunt.loadNpmTasks('grunt-este-watch');
     grunt.loadNpmTasks('grunt-sync');
-
+    grunt.loadNpmTasks('grunt-clearcache');
 
     grunt.registerTask("default", ["sync", "ts", "concurrent"]);
 };

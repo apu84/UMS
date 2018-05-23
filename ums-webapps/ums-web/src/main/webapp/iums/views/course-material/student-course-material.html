@@ -11,12 +11,26 @@
             class="fa fa-angle-double-right fa-cx"></i></i> </div>
     <div class="panel panel-green"  id="leftDiv">
         <div class="panel-heading">
-            <h3 class="panel-title">Select </h3>
+            <h3 class="panel-title">Select To </h3>
         </div>
         <div class="panel-body pan">
             <form action="" class="form-horizontal">
                 <div class="form-body pal">
-                    <div data-program-selector="" data-model="courseMaterialSearchParamModel"></div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Semester</label>
+                    <div class="col-md-8">
+                        <select
+                                class="form-control required"
+                                name="enrolledSemester"
+                                id="enrolledSemester"
+                                data-ng-options="enrolledSemester.name for enrolledSemester in enrolledSemesterList track by enrolledSemester.id"
+                                data-ng-model="enrolledSemester"
+                                data-ng-change="semesterChanged(enrolledSemester)"
+                        >
+
+                        </select>
+                    </div>
+                </div>
                 </div>
                 <div class="form-actions text-right pal">
                     <button type="button" class="btn btn-success" data-ng-click="fetchCourseInfo()">Submit</button>

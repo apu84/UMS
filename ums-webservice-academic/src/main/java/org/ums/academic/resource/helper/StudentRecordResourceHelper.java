@@ -86,7 +86,6 @@ public class StudentRecordResourceHelper extends ResourceHelper<StudentRecord, M
     for(StudentRecord studentRecord : studentRecords) {
       children.add(toJson(studentRecord, pUriInfo, localCache));
     }
-
     object.add("entries", children);
     localCache.invalidate();
     return object.build();

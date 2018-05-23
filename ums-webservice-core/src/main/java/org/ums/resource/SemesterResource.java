@@ -30,6 +30,12 @@ public class SemesterResource extends MutableSemesterResource {
   }
 
   @GET
+  @Path("/enrolledSemesters")
+  public JsonObject getStudentRecord(final @Context Request pRequest) {
+    return mResourceHelper.getStudentEnrolledSemesters(pRequest, mUriInfo);
+  }
+
+  @GET
   @Path("/program-type/{program-type}/limit/{list-limit}/status/{status}")
   public JsonObject getSemesterList(final @Context Request pRequest, final @PathParam("program-type") int pProgramType,
       final @PathParam("list-limit") int pListLimit, final @PathParam("status") int pSemesterStatus) {

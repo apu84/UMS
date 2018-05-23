@@ -9,7 +9,7 @@ grant all privileges to DB_IUMS_ACCOUNT;
 Ifti
 -----
 exp DB_IUMS/ig100@XE  STATISTICS=NONE FILE='F:\IUMS-Source\UMS\ums-dist\src\main\resources\misc\database\DB_IUMS.dmp' log=F:\backuplog.txt
-imp  DB_IUMS/ig100@XE   STATISTICS=NONE FILE='F:\IUMS-Source\UMS\ums-dist\src\main\resources\misc\database\DB_IUMS.dmp' log=F:\backuplog.txt 
+
 
 
 Apu

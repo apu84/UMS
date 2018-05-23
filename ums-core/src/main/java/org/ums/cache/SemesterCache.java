@@ -11,6 +11,11 @@ import org.ums.manager.SemesterManager;
 
 public class SemesterCache extends ContentCache<Semester, MutableSemester, Integer, SemesterManager> implements
     SemesterManager {
+  @Override
+  public List<Semester> getEnrolledSemesters(String pStudentId) {
+    return getManager().getEnrolledSemesters(pStudentId);
+  }
+
   private CacheManager<Semester, Integer> mCacheManager;
 
   public SemesterCache(final CacheManager<Semester, Integer> pCacheManager) {

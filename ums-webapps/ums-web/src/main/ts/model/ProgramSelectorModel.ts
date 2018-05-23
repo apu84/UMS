@@ -220,7 +220,7 @@ module ums {
             HttpClient.MIME_TYPE_JSON,
             (json: any, etag: string) => {
               this.setSemesters(json.entries);
-              if (this.isSemesterEnabled() && json.entries.length > 0) {
+              if (this.isSemesterEnabled() && json.entries.length > 0){
                 this.semesterId = (this.getSemesters()[0]).id + '';
               }
             },

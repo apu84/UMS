@@ -10,19 +10,25 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.Identifier;
+import org.ums.domain.model.immutable.Semester;
 import org.ums.filter.ListFilter;
 import org.ums.filter.ListFilterImpl;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.ContentManager;
+import org.ums.manager.SemesterManager;
 import org.ums.resource.filter.FilterItem;
 
 public abstract class ResourceHelper<R extends EditType<M> & Identifier, M extends Editable & Identifier, I> {
+  @Autowired
+  SemesterManager mManager;
 
   public R load(final I pObjectId) {
     return getContentManager().get(pObjectId);

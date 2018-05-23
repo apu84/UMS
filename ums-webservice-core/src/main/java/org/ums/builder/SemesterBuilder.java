@@ -27,7 +27,9 @@ public class SemesterBuilder implements Builder<Semester, MutableSemester> {
       final UriInfo pUriInfo, final LocalCache pLocalCache) {
     pBuilder.add("id", pSemester.getId());
     pBuilder.add("name", pSemester.getName());
-    pBuilder.add("startDate", mDateFormat.format(pSemester.getStartDate()));
+    if(pSemester.getStartDate() !=null) {
+      pBuilder.add("startDate", mDateFormat.format(pSemester.getStartDate()));
+    }
     if(pSemester.getEndDate() != null) {
       pBuilder.add("endDate", mDateFormat.format(pSemester.getEndDate()));
     }
