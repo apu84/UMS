@@ -2,6 +2,7 @@ package org.ums.report.definition;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ums.domain.model.immutable.Company;
@@ -75,22 +76,8 @@ public class ChartOfAccountsReportGenerator {
     document.add(paragraph);
     document.add(new UmsParagraph(""));
     document.add(new UmsParagraph(" "));
-    float[] tableColumnLength={3f, 2f, 7f};
-      PdfPTable table = new PdfPTable(tableColumnLength);
-      table.setWidthPercentage(100);
-      UmsCell accountCategoryCell = new UmsCell();
-      accountCategoryCell.addElement(new UmsParagraph("Account Category", mBoldFont));
-      table.addCell(accountCategoryCell);
-
-      UmsCell accountCodeCell = new UmsCell();
-      accountCodeCell.addElement(new UmsParagraph("Account Code", mBoldFont));
-      table.addCell(accountCodeCell);
-
-      UmsCell accountTitleCell = new UmsCell();
-      accountTitleCell.addElement(new UmsParagraph("Account Title", mBoldFont));
-      table.addCell(accountTitleCell);
-
-      table.setHeaderRows(1);
+    PdfPTable table = setHeader();
+    UmsCell accountCategoryCell;
 
 
 
@@ -106,7 +93,11 @@ public class ChartOfAccountsReportGenerator {
 
     table = createGroupBasedAccountReport(table, assetRelatedGroupList, groupMapWithAccounts);
 
+    document.add(table);
+    document.add(new UmsParagraph(" "));
+    document.add(new UmsParagraph(" "));
 
+    table = setHeader();
     Group liabilityGroup = mSystemGroupMapManager.get(GroupType.LIABILITIES, mCompanyManager.getDefaultCompany()).getGroup();
     List<Group> liabilityRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(liabilityGroup.getGroupCode()));
     chunk = new Chunk(liabilityGroup.getGroupName(), mBoldFontItalic);
@@ -116,7 +107,12 @@ public class ChartOfAccountsReportGenerator {
       accountCategoryCell.setColspan(3);
       table.addCell(accountCategoryCell);
     table = createGroupBasedAccountReport(table, liabilityRelatedGroupList, groupMapWithAccounts);
+    document.add(table);
+    document.add(new UmsParagraph(" "));
+    document.add(new UmsParagraph(" "));
 
+
+    table = setHeader();
     Group incomeGroup = mSystemGroupMapManager.get(GroupType.INCOME, mCompanyManager.getDefaultCompany()).getGroup();
     List<Group> incomeRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(incomeGroup.getGroupCode()));
     chunk = new Chunk(incomeGroup.getGroupName(), mBoldFontItalic);
@@ -126,7 +122,12 @@ public class ChartOfAccountsReportGenerator {
       accountCategoryCell.setColspan(3);
       table.addCell(accountCategoryCell);
     table = createGroupBasedAccountReport(table, incomeRelatedGroupList, groupMapWithAccounts);
+    document.add(table);
+    document.add(new UmsParagraph(" "));
+    document.add(new UmsParagraph(" "));
 
+
+    table = setHeader();
     Group expenseGroup = mSystemGroupMapManager.get(GroupType.EXPENSES, mCompanyManager.getDefaultCompany()).getGroup();
     List<Group> expenseRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(expenseGroup.getGroupCode()));
     chunk = new Chunk(expenseGroup.getGroupName(), mBoldFontItalic);
@@ -140,6 +141,27 @@ public class ChartOfAccountsReportGenerator {
     document.add(table);
     document.close();
     baos.writeTo(pOutputStream);
+  }
+
+  @NotNull
+  private PdfPTable setHeader() {
+    float[] tableColumnLength = {3f, 2f, 7f};
+    PdfPTable table = new PdfPTable(tableColumnLength);
+    table.setWidthPercentage(100);
+    UmsCell accountCategoryCell = new UmsCell();
+    accountCategoryCell.addElement(new UmsParagraph("Account Category", mBoldFont));
+    table.addCell(accountCategoryCell);
+
+    UmsCell accountCodeCell = new UmsCell();
+    accountCodeCell.addElement(new UmsParagraph("Account Code", mBoldFont));
+    table.addCell(accountCodeCell);
+
+    UmsCell accountTitleCell = new UmsCell();
+    accountTitleCell.addElement(new UmsParagraph("Account Title", mBoldFont));
+    table.addCell(accountTitleCell);
+
+    table.setHeaderRows(1);
+    return table;
   }
 
   private PdfPTable createGroupBasedAccountReport(PdfPTable pTable, List<Group> pGroupList,
