@@ -2,7 +2,6 @@ package org.ums.report.transaction;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
-import javafx.scene.layout.Border;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ums.domain.model.immutable.Company;
@@ -11,19 +10,14 @@ import org.ums.domain.model.immutable.accounts.ChequeRegister;
 import org.ums.domain.model.immutable.accounts.Voucher;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.domain.model.mutable.accounts.MutableChequeRegister;
-import org.ums.domain.model.mutable.accounts.MutableReceipt;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.AccountTransactionManager;
 import org.ums.manager.accounts.ChequeRegisterManager;
-import org.ums.manager.accounts.ReceiptManager;
-import org.ums.manager.accounts.VoucherManager;
-import org.ums.report.balance.sheet.BalanceSheetReportGenerator;
 import org.ums.report.itext.UmsCell;
 import org.ums.report.itext.UmsParagraph;
 import org.ums.util.UmsAccountUtils;
 import org.ums.util.UmsUtils;
-import sun.util.resources.cldr.ml.CalendarData_ml_IN;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;

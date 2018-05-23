@@ -1,11 +1,11 @@
 package org.ums.accounts.resource.debtor.ledger;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.accounts.DebtorLedger;
 import org.ums.domain.model.mutable.accounts.MutableDebtorLedger;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;

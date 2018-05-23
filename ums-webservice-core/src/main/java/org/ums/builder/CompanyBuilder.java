@@ -1,10 +1,10 @@
 package org.ums.builder;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.mutable.MutableCompany;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
