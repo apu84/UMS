@@ -136,7 +136,7 @@ public class TransactionReportGenerator {
   private PdfPTable createHeader(List<MutableAccountTransaction> pAccountTransactionList) {
     float[] tableWidth = new float[] {4, 4, 2, 2};
     PdfPTable table = new PdfPTable(tableWidth);
-    table.setWidthPercentage(90);
+    table.setWidthPercentage(100);
     UmsCell cell = new UmsCell();
 
     String voucherNo = pAccountTransactionList.get(0).getVoucherNo().substring(2);
@@ -156,10 +156,10 @@ public class TransactionReportGenerator {
     table.addCell(cell);
 
     cell = new UmsCell();
-    paragraph = new UmsParagraph("Voucher Date : ", mLiteFont);
+    paragraph = new UmsParagraph(" ", mLiteFont);
     paragraph.setAlignment(Element.ALIGN_RIGHT);
     cell.addElement(paragraph);
-    paragraph = new UmsParagraph("Post Date : ", mLiteFont);
+    paragraph = new UmsParagraph(" ", mLiteFont);
     paragraph.setAlignment(Element.ALIGN_RIGHT);
     cell.addElement(paragraph);
     cell.setBorder(Rectangle.NO_BORDER);
@@ -170,9 +170,11 @@ public class TransactionReportGenerator {
     String postDateStr =
         pAccountTransactionList.get(0).getPostDate() == null ? "Not Posted" : UmsUtils.formatDate(
             pAccountTransactionList.get(0).getPostDate(), "dd-MM-yyyy");
-    paragraph = new UmsParagraph(voucherDateStr, mLiteFont);
+    paragraph = new UmsParagraph("Voucher Date : " + voucherDateStr, mLiteFont);
+    paragraph.setAlignment(Element.ALIGN_RIGHT);
     cell.addElement(paragraph);
-    paragraph = new UmsParagraph(postDateStr, mLiteFont);
+    paragraph = new UmsParagraph("Post Date : " + postDateStr, mLiteFont);
+    paragraph.setAlignment(Element.ALIGN_RIGHT);
     cell.addElement(paragraph);
     cell.setBorder(Rectangle.NO_BORDER);
     table.addCell(cell);

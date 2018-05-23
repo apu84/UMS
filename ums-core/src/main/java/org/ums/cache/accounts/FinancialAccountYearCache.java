@@ -6,6 +6,8 @@ import org.ums.domain.model.mutable.accounts.MutableFinancialAccountYear;
 import org.ums.manager.CacheManager;
 import org.ums.manager.accounts.FinancialAccountYearManager;
 
+import java.util.Date;
+
 /**
  * Created by Monjur-E-Morshed on 08-Jan-18.
  */
@@ -25,12 +27,17 @@ public class FinancialAccountYearCache extends
   }
 
   @Override
-  public FinancialAccountYear getOpenedFinancialAccountYear() {
+  public MutableFinancialAccountYear getOpenedFinancialAccountYear() {
     return getManager().getOpenedFinancialAccountYear();
   }
 
   @Override
   public void deleteAll() {
     getManager().deleteAll();
+  }
+
+  @Override
+  public boolean exists(Date pStartDate, Date pEndDate) {
+    return getManager().exists(pStartDate, pEndDate);
   }
 }

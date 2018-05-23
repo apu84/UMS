@@ -16,5 +16,16 @@
                      ng-disabled="!vm.enableEdit" date-changed="vm.dateChanged()"></div>
             </div>
         </div>
+        <div class="form-group">
+            <label for="transferType" class="col-md-3 control-label">Transfer Type</label>
+            <div class="col-md-9">
+               <select
+                   class="form-control required"
+                   name="transferType"
+                   id="transferType"
+                   ng-options="transferType.name for transferType in vm.transferTypeList track by transferType.id"
+                   ng-model="vm.transferType"/>
+            </div>
+        </div>
     </div>
 </form>

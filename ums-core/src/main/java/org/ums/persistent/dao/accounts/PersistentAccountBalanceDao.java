@@ -104,6 +104,8 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
 
   @Override
   public List<MutableAccountBalance> getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate, List<Account> pAccounts) {
+      if(pAccounts.size()==0)
+          return null;
    List<Long> accountCode= new ArrayList<>();
    accountCode = pAccounts.stream().map(a->a.getId()).collect(Collectors.toList());
     String query = "select * from MST_ACCOUNT_BALANCE where FIN_START_DATE=:finStartDate and FIN_END_DATE=:finEndDate and ACCOUNT_CODE in (:accountCodeList)";

@@ -12,16 +12,19 @@ public class UmsParagraph extends Paragraph {
 
   public UmsParagraph(String string) {
     super(string);
-    this.spacingBefore = 4f;
+    super.spacingBefore = 4f;
+    super.setExtraParagraphSpace(4f);
   }
 
   public UmsParagraph(String string, Font font) {
     super(string, font);
-    this.spacingBefore = 25F;
+    super.spacingBefore = 4f;
+    super.setExtraParagraphSpace(4f);
   }
 
   public UmsParagraph(Chunk chunk) {
     super(chunk);
-    this.spacingBefore = 4f;
+    super.spacingBefore = 4f;
+    super.setExtraParagraphSpace(4f);
   }
 }
