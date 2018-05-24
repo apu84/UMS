@@ -1,14 +1,10 @@
 module ums {
-  interface IEnrolledStudentSemester{
-    id:number;
-    name:string;
-  }
   export class StudentCourseMaterial {
     public static $inject = ['$scope', '$stateParams', 'appConstants', 'HttpClient', 'fileManagerConfig','semesterService'];
       public enrolledSemesterList:Array<Semester>;
       public enrolledSemester:Semester;
       public selectedSemesterId:number;
-      public selectedSemesterName:number;
+      public selectedSemesterName:string;
     private currentUser: Student;
     private courseMaterialSearchParamModel: ProgramSelectorModel;
 
@@ -31,18 +27,17 @@ module ums {
 
       this.$scope.fetchCourseInfo = this.fetchCourseInfo.bind(this);
       this.$scope.initFileManager = this.initFileManager.bind(this);
-      this.$scope.getEnrolledSemester=this.getEnrolledSemester.bind(this);
+      this.$scope.getEnrolledSemester=this.getEnrolledSemesters.bind(this);
       this.$scope.semesterChanged=this.semesterChanged.bind(this);
-      this.getEnrolledSemester();
+      this.getEnrolledSemesters();
 
       //this.initFileManager("Fall,2015", "EEE 1101");
     }
       private semesterChanged(val:any){
           this.$scope.selectedSemesterId=val.id;
           this.$scope.selectedSemesterName=val.name;
-          // this.getStudentSubmitDeadLine();
       }
-    private getEnrolledSemester(){
+    private getEnrolledSemesters(){
                     this.$scope.enrolledSemesterList=[];
                     this.httpClient.get('/ums-webservice-academic/academic/semester/enrolledSemesters', 'application/json',
                           (json: any, etag: string) => {
