@@ -11,6 +11,8 @@ import org.ums.academic.tabulation.service.TabulationServiceImpl;
 import org.ums.cache.*;
 import org.ums.cache.applications.AppConfigCache;
 import org.ums.cache.applications.AppRulesCache;
+import org.ums.cache.routine.RoutineCache;
+import org.ums.cache.routine.RoutineConfigCache;
 import org.ums.fee.semesterfee.SemesterAdmissionCache;
 import org.ums.fee.semesterfee.SemesterAdmissionDao;
 import org.ums.fee.semesterfee.SemesterAdmissionStatusManager;
@@ -20,10 +22,14 @@ import org.ums.generator.XlsGenerator;
 import org.ums.manager.*;
 import org.ums.manager.applications.AppConfigManager;
 import org.ums.manager.applications.AppRulesManager;
+import org.ums.manager.routine.RoutineConfigManager;
+import org.ums.manager.routine.RoutineManager;
 import org.ums.message.MessageResource;
 import org.ums.persistent.dao.*;
 import org.ums.persistent.dao.applications.PersistentAppConfigDao;
 import org.ums.persistent.dao.applications.PersistentAppRulesDao;
+import org.ums.persistent.dao.routine.PersistentRoutineConfigDao;
+import org.ums.persistent.dao.routine.PersistentRoutineDao;
 import org.ums.punishment.PersistentPunishmentDao;
 import org.ums.punishment.PunishmentCache;
 import org.ums.punishment.PunishmentManager;
@@ -162,6 +168,22 @@ public class AcademicContext {
   }
 
   @Bean
+  RoutineConfigManager routineConfigManager() {
+    RoutineConfigCache routineConfigCache = new RoutineConfigCache(mCacheFactory.getCacheManager());
+    routineConfigCache.setManager(new PersistentRoutineConfigDao(mTemplateFactory.getJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getNamedParameterJdbcTemplate(), mIdGenerator));
+    return routineConfigCache;
+  }
+
+  @Bean
+  RoutineManager routineManager() {
+    RoutineCache routineCache = new RoutineCache(mCacheFactory.getCacheManager());
+    routineCache.setManager(new PersistentRoutineDao(mTemplateFactory.getJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getNamedParameterJdbcTemplate(), mIdGenerator));
+    return routineCache;
+  }
+
+  @Bean
   ClassRoomManager classRoomManager() {
     ClassRoomCache classRoomCache = new ClassRoomCache(mCacheFactory.getCacheManager());
     classRoomCache.setManager(new PersistentClassRoomDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
@@ -275,12 +297,6 @@ public class AcademicContext {
   @Bean
   PersistentSemesterWiseCrHrDao persistentSemesterWiseCrHrDao() {
     return new PersistentSemesterWiseCrHrDao(mTemplateFactory.getJdbcTemplate());
-  }
-
-  @Bean
-  RoutineManager routineManager() {
-    return new PersistentRoutineDao(mTemplateFactory.getJdbcTemplate(),
-        mNamedParameterJdbcTemplateFactory.getNamedParameterJdbcTemplate(), mIdGenerator);
   }
 
   @Bean

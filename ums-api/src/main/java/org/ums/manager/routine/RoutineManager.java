@@ -1,8 +1,9 @@
-package org.ums.manager;
+package org.ums.manager.routine;
 
 import org.ums.domain.model.immutable.Student;
-import org.ums.domain.model.mutable.MutableRoutine;
-import org.ums.domain.model.immutable.Routine;
+import org.ums.domain.model.mutable.routine.MutableRoutine;
+import org.ums.domain.model.immutable.routine.Routine;
+import org.ums.manager.ContentManager;
 
 import java.util.List;
 

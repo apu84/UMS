@@ -1,6 +1,6 @@
 {
   "model": {
-    "name": "SystemGroupMap",
+    "name": "RoutineConfig",
     "package": "org.ums.domain.model.immutable",
     "fields": [
       {
@@ -10,23 +10,54 @@
         }
       },
       {
-        "groupType": "GroupType"
-      },
-      {
-        "Group": {
+        "Program": {
           "type": "Ref",
           "reference": {
-            "name": "Group",
-            "package": "org.ums.domain.model.immutable.accounts",
+            "name": "Program",
+            "package": "org.ums.domain.model.immutable",
             "id": {
-              "type": "Long"
+              "type": "Integer"
             },
             "manager": {
-              "name": "GroupManager",
-              "package": "org.ums.manager.accounts"
+              "name": "ProgramManager",
+              "package": "org.ums.manager"
             }
           }
         }
+      },
+      {
+        "Semester": {
+          "type": "Ref",
+          "reference": {
+            "name": "Semester",
+            "package": "org.ums.domain.model.immutable",
+            "id": {
+              "type": "Integer"
+            },
+            "manager": {
+              "name": "SemesterManager",
+              "package": "org.ums.manager"
+            }
+          }
+        }
+      },
+      {
+        "day_from": "Integer"
+      },
+      {
+        "day_to": "Integer"
+      },
+      {
+        "start_time": "LocalTime"
+      },
+      {
+        "end_time":"LocalTime"
+      },
+      {
+        "duration":"Integer"
+      },
+      {
+        "last_modified":"String"
       }
     ]
   }

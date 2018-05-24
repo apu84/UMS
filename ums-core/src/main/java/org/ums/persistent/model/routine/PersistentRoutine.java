@@ -1,4 +1,4 @@
-package org.ums.persistent.model;
+package org.ums.persistent.model.routine;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -6,20 +6,18 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.NumberDeserializers;
-import org.joda.time.Minutes;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.ClassRoom;
 import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
-import org.ums.domain.model.mutable.MutableRoutine;
+import org.ums.domain.model.mutable.routine.MutableRoutine;
 import org.ums.manager.*;
+import org.ums.manager.routine.RoutineManager;
 import org.ums.serializer.UmsTimeDeserializer;
 import org.ums.serializer.UmsTimeSerializer;
 
-import java.time.Duration;
 import java.time.LocalTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)

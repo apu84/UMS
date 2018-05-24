@@ -1,4 +1,4 @@
-package org.ums.persistent.dao;
+package org.ums.persistent.dao.routine;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,12 +9,12 @@ import java.util.stream.Collectors;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.ums.decorator.RoutineDaoDecorator;
-import org.ums.domain.model.immutable.Routine;
+import org.ums.decorator.routine.RoutineDaoDecorator;
+import org.ums.domain.model.immutable.routine.Routine;
 import org.ums.domain.model.immutable.Student;
-import org.ums.domain.model.mutable.MutableRoutine;
+import org.ums.domain.model.mutable.routine.MutableRoutine;
 import org.ums.generator.IdGenerator;
-import org.ums.persistent.model.PersistentRoutine;
+import org.ums.persistent.model.routine.PersistentRoutine;
 
 public class PersistentRoutineDao extends RoutineDaoDecorator {
   static String SELECT_ALL =

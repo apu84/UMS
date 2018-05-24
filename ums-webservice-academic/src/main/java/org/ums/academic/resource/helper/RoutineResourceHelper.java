@@ -5,28 +5,27 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.ums.academic.resource.RoutineResource;
 import org.ums.builder.Builder;
 import org.ums.builder.RoutineBuilder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.routine.Routine;
 import org.ums.generator.IdGenerator;
-import org.ums.report.generator.ClassRoutineGenerator;
 import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableProgram;
-import org.ums.domain.model.mutable.MutableRoutine;
+import org.ums.domain.model.mutable.routine.MutableRoutine;
 import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.manager.*;
+import org.ums.manager.routine.RoutineManager;
 import org.ums.persistent.model.PersistentProgram;
-import org.ums.persistent.model.PersistentRoutine;
+import org.ums.persistent.model.routine.PersistentRoutine;
 import org.ums.persistent.model.PersistentSemester;
 import org.ums.resource.ResourceHelper;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
 import javax.json.*;
-import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
@@ -60,8 +59,8 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
   @Autowired
   private RoutineBuilder mBuilder;
 
-  @Autowired
-  private ClassRoutineGenerator mRoutineGenerator;
+  // @Autowired
+  // private ClassRoutineGenerator mRoutineGenerator;
   @Autowired
   private IdGenerator mIdGenerator;
 
@@ -182,11 +181,11 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
 
   public void getRoomBasedRoutineReport(final OutputStream pOutputStream, final int pSemesterId, final int pRoomId)
       throws DocumentException, IOException {
-    mRoutineGenerator.createRoomBasedClassRoutineReport(pOutputStream, pSemesterId, pRoomId);
+    // mRoutineGenerator.createRoomBasedClassRoutineReport(pOutputStream, pSemesterId, pRoomId);
   }
 
   public void getRoutineReportForTeacher(final OutputStream pOutputStream) throws DocumentException, IOException {
-    mRoutineGenerator.createClassRoutineTeacherReport(pOutputStream);
+    // mRoutineGenerator.createClassRoutineTeacherReport(pOutputStream);
   }
 
   public JsonObject getRoutineForStudent() {
