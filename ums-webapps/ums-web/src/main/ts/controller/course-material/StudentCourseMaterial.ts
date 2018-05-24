@@ -93,7 +93,7 @@ module ums {
       this.fileManagerConfig.languageSelection = false;
 
       this.fileManagerConfig.additionalParams = {
-        semesterId: semesterId,
+        semesterId: semesterId + "",
         courseId: courseId
       };
 
