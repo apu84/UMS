@@ -131,6 +131,7 @@
 /// <reference path='service/ClassRoomService.ts'/>
 /// <reference path='service/AttachmentService.ts'/>
 /// <reference path='service/ProgramService.ts'/>
+/// <reference path='service/ProgramTypeService.ts'/>
 /// <reference path='service/AdmissionTotalSeatService.ts'/>
 /// <reference path='service/DepartmentSelectionDeadlineService.ts'/>
 /// <reference path='service/CourseServices.ts'/>

@@ -1,5 +1,30 @@
 module ums{
 
+    interface IClassRoutine{
+        id:number;
+        semesterId:number;
+        section:string;
+        courseId:string;
+        courseNo:string;
+        programId:number;
+        day:string;
+        academicYear:number;
+        academicSemester:number;
+        startTime:string;
+        endTime:string;
+        duration:string;
+        roomNo:string;
+        roomId:number;
+        updated:boolean;
+        editRoutine:boolean;
+        showEditButton:boolean;
+        showAddButton:boolean;
+        showCancelButton:boolean;
+        courseType:string;
+        status:string;
+        backgroundColor:string;
+    }
+
   export class ClassRoutineService{
 
     private routineUrl:string='/ums-webservice-academic/academic/routine';

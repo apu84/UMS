@@ -46,6 +46,7 @@ import org.ums.services.academic.RemarksBuilder;
 import org.ums.services.academic.RemarksBuilderImpl;
 import org.ums.services.academic.StudentCarryCourseService;
 import org.ums.statistics.JdbcTemplateFactory;
+import org.ums.statistics.NamedParameterJdbcTemplateFactory;
 
 @Configuration("academicConfig")
 public class AcademicContext {
@@ -71,6 +72,9 @@ public class AcademicContext {
 
   @Autowired
   MessageResource mMessageResource;
+
+  @Autowired
+  NamedParameterJdbcTemplateFactory mNamedParameterJdbcTemplateFactory;
 
   @Autowired
   @Qualifier("fileContentManager")
@@ -275,7 +279,8 @@ public class AcademicContext {
 
   @Bean
   RoutineManager routineManager() {
-    return new PersistentRoutineDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+    return new PersistentRoutineDao(mTemplateFactory.getJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getNamedParameterJdbcTemplate(), mIdGenerator);
   }
 
   @Bean

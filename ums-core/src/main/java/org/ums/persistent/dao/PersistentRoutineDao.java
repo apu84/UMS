@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.RoutineDaoDecorator;
 import org.ums.domain.model.immutable.Routine;
 import org.ums.domain.model.immutable.Student;
@@ -50,10 +51,13 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   static String SELECT_ALL_FOR_EMPLOYEE =
       "SELECT ROUTINE_ID,SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_ID,LAST_MODIFIED FROM CLASS_ROUTINE WHERE SEMESTER_ID=? and PROGRAM_ID=? and YEAR=? and SEMESTER=? ";
   private JdbcTemplate mJdbcTemplate;
+  private NamedParameterJdbcTemplate mNamedParameterJdbcTemplate;
   private IdGenerator mIdGenerator;
 
-  public PersistentRoutineDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
+  public PersistentRoutineDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate,
+      IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
   }
 
@@ -196,9 +200,9 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
       persistentRoutine.setSection(pResultSet.getString("SECTION"));
       persistentRoutine.setAcademicYear(pResultSet.getInt("YEAR"));
       persistentRoutine.setAcademicSemester(pResultSet.getInt("SEMESTER"));
-      persistentRoutine.setStartTime(pResultSet.getString("START_TIME"));
-      persistentRoutine.setEndTime(pResultSet.getString("END_TIME"));
-      persistentRoutine.setRoomId(pResultSet.getInt("ROOM_ID"));
+      persistentRoutine.setStartTime(pResultSet.getTime("START_TIME").toLocalTime());
+      persistentRoutine.setEndTime(pResultSet.getTime("END_TIME").toLocalTime());
+      persistentRoutine.setRoomId(pResultSet.getLong("ROOM_ID"));
       persistentRoutine.setLastModified(pResultSet.getString("LAST_MODIFIED"));
       return persistentRoutine;
     }
@@ -218,13 +222,12 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
       persistentRoutine.setSection(pResultSet.getString("SECTION"));
       persistentRoutine.setAcademicYear(pResultSet.getInt("YEAR"));
       persistentRoutine.setAcademicSemester(pResultSet.getInt("SEMESTER"));
-      persistentRoutine.setStartTime(pResultSet.getString("START_TIME"));
-      persistentRoutine.setEndTime(pResultSet.getString("END_TIME"));
+      persistentRoutine.setStartTime(pResultSet.getTime("START_TIME").toLocalTime());
+      persistentRoutine.setEndTime(pResultSet.getTime("END_TIME").toLocalTime());
       persistentRoutine.setDuration(pResultSet.getInt("duration"));
-      persistentRoutine.setRoomId(pResultSet.getInt("ROOM_ID"));
+      persistentRoutine.setRoomId(pResultSet.getLong("ROOM_ID"));
       persistentRoutine.setDay(pResultSet.getInt("DAY"));
       persistentRoutine.setProgramId(pResultSet.getInt("PROGRAM_ID"));
-      persistentRoutine.setCourseNo(pResultSet.getString("course_no"));
       return persistentRoutine;
     }
   }

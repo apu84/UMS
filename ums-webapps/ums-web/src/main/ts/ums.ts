@@ -577,15 +577,7 @@ module ums {
           url: "/classRoutine",
           controller: 'ClassRoutine',
           templateUrl: 'views/dept/class-routine.html',
-          resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: ['vendors/jquery-file-upload/css/jquery.fileupload.css',
-                  'vendors/jquery-file-upload/css/jquery.fileupload-ui.css',
-                  'vendors/jquery-file-upload/css/blueimp-gallery.min.css']
-              });
-            }]
-          }
+          controllerAs: 'vm'
         })
         .state('uploadMeritList', {
           url: "/uploadMeritList",

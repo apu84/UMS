@@ -1,45 +1,69 @@
 package org.ums.persistent.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.deser.std.NumberDeserializers;
+import org.joda.time.Minutes;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
+import org.ums.domain.model.immutable.ClassRoom;
+import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableRoutine;
-import org.ums.manager.ProgramManager;
-import org.ums.manager.RoutineManager;
-import org.ums.manager.SemesterManager;
+import org.ums.manager.*;
+import org.ums.serializer.UmsTimeDeserializer;
+import org.ums.serializer.UmsTimeSerializer;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.Duration;
+import java.time.LocalTime;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PersistentRoutine implements MutableRoutine {
+  @JsonIgnore
   private static SemesterManager sSemesterManager;
+  @JsonIgnore
   private static ProgramManager sProgramManager;
+  @JsonIgnore
   private static RoutineManager sRoutineManager;
+  @JsonIgnore
+  private static CourseManager sCourseManager;
+  @JsonIgnore
+  private static ClassRoomManager sClassRoomManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
+    sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
+    sClassRoomManager = applicationContext.getBean("classRoomManager", ClassRoomManager.class);
     sRoutineManager = applicationContext.getBean("routineManager", RoutineManager.class);
   }
 
   private Long mId;
+  @JsonIgnore
   private Semester mSemester;
+  private Integer mSemesterId;
+  @JsonIgnore
   private Program mProgram;
+  private Integer mProgramId;
   private String mSection;
   private int mAcademicYear;
   private int mAcademicSemester;
-  private String mStartTime;
-  private String mEndTime;
+  private LocalTime mStartTime;
+  private LocalTime mEndTime;
   private String mLastModified;
-  private Integer mSemesterId;
   private String mCourseId;
-  private String mCourseNo;
+  @JsonIgnore
+  private Course mCourse;
   private int mDuration;
-  private Integer mRoomId;
-  private int mProgramId;
+  private Long mRoomId;
+  @JsonIgnore
+  private ClassRoom mClassRoom;
   private int mDay;
   private String mStatus;
 
@@ -60,7 +84,6 @@ public class PersistentRoutine implements MutableRoutine {
     mLastModified = pPersistentRoutine.getLastModified();
     mSemesterId = pPersistentRoutine.getSemesterId();
     mCourseId = pPersistentRoutine.getCourseId();
-    mCourseNo = pPersistentRoutine.getCourseNo();
     mDuration = pPersistentRoutine.getDuration();
     mRoomId = pPersistentRoutine.getRoomId();
     mDay = pPersistentRoutine.getDay();
@@ -69,28 +92,36 @@ public class PersistentRoutine implements MutableRoutine {
 
   @Override
   public int getDuration() {
-    char[] startTimeArray = mStartTime.toCharArray();
-    startTimeArray[2] = ':';
-    String startTimeString = String.valueOf(startTimeArray);
-    char[] endTimeArray = mEndTime.toCharArray();
-    endTimeArray[2] = ':';
-    String endTimeString = String.valueOf(endTimeArray);
-    SimpleDateFormat format = new SimpleDateFormat("h:mm a");
-    Date date1 = null;
-    Date date2 = null;
-    try {
-      date1 = format.parse(startTimeString);
-      date2 = format.parse(endTimeString);
-    } catch(ParseException pe) {
-      throw new RuntimeException(pe);
-    }
-    long difference = date2.getTime() - date1.getTime();
-    long diffMinutes = (difference / 60000) / 50;
-    String duration = String.valueOf(diffMinutes);
-    char[] durationArray = duration.toCharArray();
-
-    mDuration = Integer.valueOf(duration);
     return mDuration;
+  }
+
+  @Override
+  public void setProgramId(Integer pProgramId) {
+    mProgramId = pProgramId;
+  }
+
+  @Override
+  @JsonIgnore
+  public void setCourse(Course pCourse) {
+    mCourse = pCourse;
+  }
+
+  @Override
+  @JsonIgnore
+  public void setRoom(ClassRoom pClassRoom) {
+    mClassRoom = pClassRoom;
+  }
+
+  @Override
+  @JsonProperty
+  public Course getCourse() {
+    return mCourse == null ? sCourseManager.get(mCourseId) : mCourse;
+  }
+
+  @Override
+  @JsonProperty
+  public ClassRoom getRoom() {
+    return mClassRoom == null ? sClassRoomManager.get(mRoomId) : mClassRoom;
   }
 
   @Override
@@ -105,17 +136,7 @@ public class PersistentRoutine implements MutableRoutine {
 
   @Override
   public void setDuration(int pDuration) {
-    mDuration = pDuration;
-  }
-
-  @Override
-  public void setCourseNo(String pCourseNo) {
-    mCourseNo = pCourseNo;
-  }
-
-  @Override
-  public String getCourseNo() {
-    return mCourseNo;
+    mDuration = 0;
   }
 
   @Override
@@ -128,7 +149,7 @@ public class PersistentRoutine implements MutableRoutine {
     mDay = pDay;
   }
 
-  public int getProgramId() {
+  public Integer getProgramId() {
     return mProgramId;
   }
 
@@ -137,23 +158,27 @@ public class PersistentRoutine implements MutableRoutine {
   }
 
   @Override
+  @JsonIgnore
   public void setProgram(Program pProgram) {
     mProgram = pProgram;
   }
 
   @Override
+  @JsonProperty
   public Program getProgram() {
     return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
 
   }
 
   @Override
-  public Integer getRoomId() {
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
+  public Long getRoomId() {
     return mRoomId;
   }
 
   @Override
-  public void setRoomId(Integer pRoomId) {
+  @JsonDeserialize(as = Long.class)
+  public void setRoomId(Long pRoomId) {
     mRoomId = pRoomId;
   }
 
@@ -194,12 +219,14 @@ public class PersistentRoutine implements MutableRoutine {
   }
 
   @Override
-  public void setStartTime(String pStartTime) {
+  @JsonDeserialize(using = UmsTimeDeserializer.class)
+  public void setStartTime(LocalTime pStartTime) {
     mStartTime = pStartTime;
   }
 
   @Override
-  public void setEndTime(String pEndTime) {
+  @JsonDeserialize(using = UmsTimeDeserializer.class)
+  public void setEndTime(LocalTime pEndTime) {
     mEndTime = pEndTime;
   }
 
@@ -219,6 +246,7 @@ public class PersistentRoutine implements MutableRoutine {
   }
 
   @Override
+  @JsonDeserialize(as = Long.class)
   public void setId(Long pId) {
     mId = pId;
   }
@@ -249,12 +277,14 @@ public class PersistentRoutine implements MutableRoutine {
   }
 
   @Override
-  public String getStartTime() {
+  @JsonSerialize(using = UmsTimeSerializer.class)
+  public LocalTime getStartTime() {
     return mStartTime;
   }
 
   @Override
-  public String getEndTime() {
+  @JsonSerialize(using = UmsTimeSerializer.class)
+  public LocalTime getEndTime() {
     return mEndTime;
   }
 

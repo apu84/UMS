@@ -11,6 +11,7 @@ import org.ums.academic.resource.RoutineResource;
 import org.ums.builder.Builder;
 import org.ums.builder.RoutineBuilder;
 import org.ums.cache.LocalCache;
+import org.ums.generator.IdGenerator;
 import org.ums.report.generator.ClassRoutineGenerator;
 import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableProgram;
@@ -61,6 +62,8 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
 
   @Autowired
   private ClassRoutineGenerator mRoutineGenerator;
+  @Autowired
+  private IdGenerator mIdGenerator;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
@@ -211,50 +214,40 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return object.build();
   }
 
-  public JsonObject getRoutineForEmployee(final int semesterId,
-                                          final int academicYear,
-                                          final int academicSemester,
-                                          final String section,
-                                          final UriInfo pUriInfo) {
-    List<Routine> routines = new ArrayList<>();
-    String userId = SecurityUtils.getSubject().getPrincipal().toString();
-    User user = mUserManager.get(userId);
-    String employeeId = user.getEmployeeId();
-    Employee employee = mEmployeeManager.get(employeeId);
-    String deptId = employee.getDepartment().getId();
-    List<Program> programLIst = mProgramManager
-        .getAll()
-        .stream()
-        .filter(pProgram -> pProgram.getDepartmentId().equals(deptId))
-        .collect(Collectors.toList());
-    //DateFormat timeFormat = new SimpleDateFormat("hh:mm a");
-
-
-
-    try{
-
-      routines = getContentManager().
-          getEmployeeRoutine(semesterId, programLIst.get(0).getId(), academicYear, academicSemester).stream()
-          .filter(routine-> routine.getSection().charAt(0)== section.charAt(0))
-          .sorted(Comparator.comparing(Routine::getDay).thenComparing( r->r.getStartTime().substring(Math.max(r.getStartTime().length()-2,0))).thenComparing(Routine::getStartTime))
-          .collect(Collectors.toList());
-
-    }catch (EmptyResultDataAccessException e){
-
-      //// TODO: 17-Sep-16 : check for catching proper exception
-
-      mLogger.error(e.getMessage());
-    }
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-
-    for (Routine routine : routines) {
-      children.add(toJson(routine, pUriInfo, localCache));
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-    return object.build();
+  public JsonObject getRoutineForEmployee(final int semesterId, final int academicYear, final int academicSemester,
+      final String section, final UriInfo pUriInfo) {
+    /*
+     * List<Routine> routines = new ArrayList<>(); String userId =
+     * SecurityUtils.getSubject().getPrincipal().toString(); User user = mUserManager.get(userId);
+     * String employeeId = user.getEmployeeId(); Employee employee =
+     * mEmployeeManager.get(employeeId); String deptId = employee.getDepartment().getId();
+     * List<Program> programLIst = mProgramManager .getAll() .stream() .filter(pProgram ->
+     * pProgram.getDepartmentId().equals(deptId)) .collect(Collectors.toList()); //DateFormat
+     * timeFormat = new SimpleDateFormat("hh:mm a");
+     * 
+     * 
+     * 
+     * try{
+     * 
+     * routines = getContentManager(). getEmployeeRoutine(semesterId, programLIst.get(0).getId(),
+     * academicYear, academicSemester).stream() .filter(routine-> routine.getSection().charAt(0)==
+     * section.charAt(0)) .sorted(Comparator.comparing(Routine::getDay).thenComparing(
+     * r->r.getStartTime
+     * ().substring(Math.max(r.getStartTime().length()-2,0))).thenComparing(Routine::getStartTime))
+     * .collect(Collectors.toList());
+     * 
+     * }catch (EmptyResultDataAccessException e){
+     * 
+     * //// TODO: 17-Sep-16 : check for catching proper exception
+     * 
+     * mLogger.error(e.getMessage()); } JsonObjectBuilder object = Json.createObjectBuilder();
+     * JsonArrayBuilder children = Json.createArrayBuilder(); LocalCache localCache = new
+     * LocalCache();
+     * 
+     * for (Routine routine : routines) { children.add(toJson(routine, pUriInfo, localCache)); }
+     * object.add("entries", children); localCache.invalidate(); return object.build();
+     */
+    return null;
   }
 
   @Override
