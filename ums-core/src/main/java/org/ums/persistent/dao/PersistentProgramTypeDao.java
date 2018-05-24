@@ -26,6 +26,7 @@ public class PersistentProgramTypeDao extends ProgramTypeDaoDecorator {
 
   public ProgramType get(final Integer pId) {
     String query = SELECT_ALL + "WHERE TYPE_ID = ?";
+    System.out.println(query);
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new ProgramTypeRowMapper());
   }
 

@@ -1,5 +1,6 @@
 package org.ums.resource.helper;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.resource.SemesterResource;
@@ -15,9 +16,11 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -52,6 +55,12 @@ public class SemesterResourceHelper extends ResourceHelper<Semester, MutableSeme
     builder.status(Response.Status.CREATED);
 
     return builder.build();
+  }
+
+  public JsonObject getStudentEnrolledSemesters(final Request pRequest, final UriInfo pUriInfo) {
+    String studentId = SecurityUtils.getSubject().getPrincipal().toString();
+    List<Semester> enrolledSemesters = getContentManager().getEnrolledSemesters(studentId);
+    return buildSemesters(enrolledSemesters, pUriInfo);
   }
 
   @Override

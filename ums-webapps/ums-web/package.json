@@ -15,5 +15,8 @@
   },
   "engines": {
     "node": ">=0.8.0"
+  },
+  "dependencies": {
+    "grunt-clearcache": "0.0.4"
   }
 }

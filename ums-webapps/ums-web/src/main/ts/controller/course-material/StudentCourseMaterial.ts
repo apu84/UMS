@@ -1,6 +1,10 @@
 module ums {
   export class StudentCourseMaterial {
-    public static $inject = ['$scope', '$stateParams', 'appConstants', 'HttpClient', 'fileManagerConfig'];
+    public static $inject = ['$scope', '$stateParams', 'appConstants', 'HttpClient', 'fileManagerConfig','semesterService'];
+      public enrolledSemesterList:Array<Semester>;
+      public enrolledSemester:Semester;
+      public selectedSemesterId:number;
+      public selectedSemesterName:string;
     private currentUser: Student;
     private courseMaterialSearchParamModel: ProgramSelectorModel;
 
@@ -23,8 +27,28 @@ module ums {
 
       this.$scope.fetchCourseInfo = this.fetchCourseInfo.bind(this);
       this.$scope.initFileManager = this.initFileManager.bind(this);
+      this.$scope.getEnrolledSemester=this.getEnrolledSemesters.bind(this);
+      this.$scope.semesterChanged=this.semesterChanged.bind(this);
+      this.getEnrolledSemesters();
 
       //this.initFileManager("Fall,2015", "EEE 1101");
+    }
+      private semesterChanged(val:any){
+          this.$scope.selectedSemesterId=val.id;
+          this.$scope.selectedSemesterName=val.name;
+      }
+    private getEnrolledSemesters(){
+                    this.$scope.enrolledSemesterList=[];
+                    this.httpClient.get('/ums-webservice-academic/academic/semester/enrolledSemesters', 'application/json',
+                          (json: any, etag: string) => {
+                             this.$scope.enrolledSemesterList=json.entries;
+                             this.$scope.enrolledSemester=this.$scope.enrolledSemesterList[0];
+                              this.$scope.selectedSemesterId=this.$scope.enrolledSemester.id;
+                              this.$scope.selectedSemesterName=this.$scope.enrolledSemester.name;
+                       },
+                        (response: ng.IHttpPromiseCallbackArg<any>) => {
+                               console.error(response);
+                        });
     }
 
     private fetchCourseInfo(courseNo: string): void {
@@ -34,7 +58,7 @@ module ums {
       this.$scope.loadingVisibility = true;
       this.$scope.contentVisibility = false;
       this.$scope.selectedCourseNo = '';
-      this.httpClient.get("academic/course/semester/" + this.courseMaterialSearchParamModel.semesterId + "/program/"
+      this.httpClient.get("academic/course/semester/" + this.$scope.selectedSemesterId + "/program/"
           + this.courseMaterialSearchParamModel.programId + "/year/"
           + this.currentUser.year + "/academicSemester/" + this.currentUser.academicSemester, HttpClient.MIME_TYPE_JSON,
           (response: {entries: Course[]}) => {
@@ -48,7 +72,7 @@ module ums {
     private initFileManager(courseNo: string,
                             semesterId: string,
                             courseId: string): void {
-      var semesterName = this.getSelectedSemester();
+      var semesterName = this.$scope.selectedSemesterName;
       var baseUri: string = '/ums-webservice-academic/academic/student/courseMaterial/semester/' + semesterName + "/course/" + courseNo;
       var downloadBaseUri: string = '/ums-webservice-academic/academic/student/courseMaterial/download/semester/' + semesterName + "/course/" + courseNo;
 
@@ -94,23 +118,15 @@ module ums {
         var msg = 'Picked %s "%s" for external use'
             .replace('%s', item.type)
             .replace('%s', item.fullPath());
+        console.log("Test");
+        console.log("Another test");
+        console.log("Yo YO");
         window.alert(msg);
       };
 
       this.$scope.reloadOn = courseNo;
     }
 
-    private getSelectedSemester(): string {
-      var semesters = this.courseMaterialSearchParamModel.getSemesters();
-      var semesterName = "";
-      for (var i = 0; i < semesters.length; i++) {
-        if (semesters[i].id == this.courseMaterialSearchParamModel.semesterId) {
-          semesterName = semesters[i].name;
-        }
-      }
-
-      return semesterName;
-    }
   }
 
   UMS.controller("StudentCourseMaterial", StudentCourseMaterial);

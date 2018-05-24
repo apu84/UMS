@@ -12,7 +12,7 @@ public interface CourseManager extends ContentManager<Course, MutableCourse, Str
 
   List<Course> getBySemesterProgram(final String pSemesterId, final String pProgramId);
 
-  List<Course> getByYearSemester(final String pSemesterId, final String pProgramId, final int year, final int semester);
+  List<Course> getByYearSemester(final Integer pSemesterId, final String pProgramId, final int year, final int semester);
 
   List<Course> getOptionalCourseList(final String pSyllabusId, final Integer pYear, final Integer pSemester);
 

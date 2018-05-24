@@ -29,4 +29,5 @@ public class StudentRecordResource extends MutableStudentRecordResource {
       final @PathParam("semester") Integer pSemester) {
     return mHelper.getStudentRecord(pStudentId, pSemesterId, pYear, pSemester, pRequest, mUriInfo);
   }
+
 }

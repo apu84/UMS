@@ -14,6 +14,11 @@ import org.ums.manager.SemesterManager;
 public class SemesterDaoDecorator extends ContentDaoDecorator<Semester, MutableSemester, Integer, SemesterManager>
     implements SemesterManager {
   @Override
+  public List<Semester> getEnrolledSemesters(String pStudentId) {
+    return getManager().getEnrolledSemesters(pStudentId);
+  }
+
+  @Override
   public List<Semester> getSemesters(Integer pProgramType, Integer pLimit) {
     return getManager().getSemesters(pProgramType, pLimit);
   }

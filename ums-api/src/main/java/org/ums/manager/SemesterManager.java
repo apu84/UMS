@@ -27,5 +27,7 @@ public interface SemesterManager extends ContentManager<Semester, MutableSemeste
 
   List<Semester> semestersAfter(final Integer pStartSemester, final Integer pProgramTypeId);
 
+  List<Semester> getEnrolledSemesters(final String pStudentId);
+
   Semester closestSemester(final Integer pCheckSemester, final List<Integer> pCheckAgainstSemesters);
 }
