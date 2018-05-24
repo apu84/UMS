@@ -1,5 +1,6 @@
 package org.ums.persistent.model.accounts;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.context.ApplicationContext;
@@ -8,6 +9,7 @@ import org.ums.domain.model.mutable.accounts.MutableFinancialAccountYear;
 import org.ums.enums.accounts.definitions.financial.account.year.BookClosingFlagType;
 import org.ums.enums.accounts.definitions.financial.account.year.YearClosingFlagType;
 import org.ums.manager.accounts.FinancialAccountYearManager;
+import org.ums.serializer.UmsDateSerializer;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -58,9 +60,9 @@ public class PersistentFinancialAccountYear implements MutableFinancialAccountYe
   }
 
   @Override
-  @JsonSerialize(using = ToStringSerializer.class)
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
   public Long getId() {
-    return Long.parseLong(getStringId());
+    return mId;
   }
 
   @Override
@@ -69,6 +71,7 @@ public class PersistentFinancialAccountYear implements MutableFinancialAccountYe
   }
 
   @Override
+  @JsonSerialize(using = UmsDateSerializer.class)
   public Date getCurrentStartDate() {
     return mCurrentStartDate;
   }
@@ -79,6 +82,7 @@ public class PersistentFinancialAccountYear implements MutableFinancialAccountYe
   }
 
   @Override
+  @JsonSerialize(using = UmsDateSerializer.class)
   public Date getCurrentEndDate() {
     return mCurrentEndDate;
   }
@@ -89,6 +93,7 @@ public class PersistentFinancialAccountYear implements MutableFinancialAccountYe
   }
 
   @Override
+  @JsonSerialize(using = UmsDateSerializer.class)
   public Date getPreviousStartDate() {
     return mPreviousStartDate;
   }
@@ -99,6 +104,7 @@ public class PersistentFinancialAccountYear implements MutableFinancialAccountYe
   }
 
   @Override
+  @JsonSerialize(using = UmsDateSerializer.class)
   public Date getPreviousEndDate() {
     return mPreviousEndDate;
   }
@@ -205,7 +211,7 @@ public class PersistentFinancialAccountYear implements MutableFinancialAccountYe
 
   @Override
   public String getStringId() {
-    return mStringId;
+    return mId.toString();
   }
 
   @Override

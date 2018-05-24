@@ -15,7 +15,11 @@ import org.ums.persistent.model.accounts.PersistentFinancialAccountYear;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by Monjur-E-Morshed on 28-Dec-17.
@@ -34,12 +38,15 @@ public class PersistentFinancialAccountYearDao extends FinancialAccountYearDaoDe
 
   @Override
   public List<FinancialAccountYear> getAll() {
-    String query = "SELECT * FROM FIN_ACCOUNT_YEAR";
-    return mJdbcTemplate.query(query, new FinancialAccountYearRowMapper());
+    String query = "SELECT * FROM FIN_ACCOUNT_YEAR order by current_start_date desc";
+    return mJdbcTemplate.query(query, new FinancialAccountYearRowMapper())
+            .stream()
+            .map(f->(FinancialAccountYear) f)
+            .collect(Collectors.toList());
   }
 
   @Override
-  public FinancialAccountYear getOpenedFinancialAccountYear() {
+  public MutableFinancialAccountYear getOpenedFinancialAccountYear() {
     String query = "SELECT * FROM FIN_ACCOUNT_YEAR WHERE YEAR_CLOSING_FLAG='O'";
     return mJdbcTemplate.queryForObject(query, new FinancialAccountYearRowMapper());
   }
@@ -58,12 +65,19 @@ public class PersistentFinancialAccountYearDao extends FinancialAccountYearDaoDe
   @Override
   public int update(MutableFinancialAccountYear pMutable) {
     String query =
-        "update FIN_ACCOUNT_YEAR set CURRENT_START_DATE=? ,CURRENT_END_DATE=?, "
-            + "  PREVIOUS_START_DATE=? , PREVIOUS_END_DATE=? , MODIFIED_BY=? , MODIFIED_DATE=? , BOOK_CLOSING_FLAG=? , YEAR_CLOSING_FLAG=? where id=?";
-    return mJdbcTemplate.update(query, pMutable.getCurrentStartDate(), pMutable.getCurrentEndDate(),
-        pMutable.getPreviousStartDate(), pMutable.getPreviousEndDate(), pMutable.getModifiedBy(),
-        pMutable.getModifiedDate(), pMutable.getBookClosingFlag().getValue(), pMutable.getYearClosingFlag().getValue(),
-        pMutable.getId());
+        "update FIN_ACCOUNT_YEAR set CURRENT_START_DATE=:currStartDate ,CURRENT_END_DATE=:currEndDate, "
+            + "  PREVIOUS_START_DATE=:previousStartDate , PREVIOUS_END_DATE=:previousEndDate , MODIFIED_BY=:modifiedBy , MODIFIED_DATE=:modifiedDate , BOOK_CLOSING_FLAG=:bookClosingFlag , YEAR_CLOSING_FLAG=:yearClosingFlag where id=:id";
+    Map parameterMap = new HashMap();
+    parameterMap.put("currStartDate", pMutable.getCurrentStartDate());
+    parameterMap.put("currEndDate", pMutable.getCurrentEndDate());
+    parameterMap.put("previousStartDate", pMutable.getPreviousStartDate());
+    parameterMap.put("previousEndDate", pMutable.getPreviousEndDate());
+    parameterMap.put("modifiedBy", pMutable.getModifiedBy());
+    parameterMap.put("modifiedDate", pMutable.getModifiedDate());
+    parameterMap.put("bookClosingFlag", pMutable.getBookClosingFlag().getValue());
+    parameterMap.put("yearClosingFlag", pMutable.getYearClosingFlag().getValue());
+    parameterMap.put("id", pMutable.getId());
+    return mNamedParameterJdbcTemplate.update(query, parameterMap);
   }
 
   @Override
@@ -79,6 +93,12 @@ public class PersistentFinancialAccountYearDao extends FinancialAccountYearDaoDe
   @Override
   public int delete(List<MutableFinancialAccountYear> pMutableList) {
     return super.delete(pMutableList);
+  }
+
+  @Override
+  public void deleteAll() {
+    String query = "delete from FIN_ACCOUNT_YEAR";
+    mJdbcTemplate.update(query);
   }
 
   @Override
@@ -102,11 +122,24 @@ public class PersistentFinancialAccountYearDao extends FinancialAccountYearDaoDe
     return super.exists(pId);
   }
 
-  class FinancialAccountYearRowMapper implements RowMapper<FinancialAccountYear> {
+  @Override
+  public boolean exists(Date pStartDate, Date pEndDate) {
+    String query =
+        "select count(*) from FIN_ACCOUNT_YEAR where (CURRENT_START_DATE>=:startDate and CURRENT_END_DATE<=:startDate) or "
+            + "                                     (CURRENT_START_DATE>=:endDate and CURRENT_END_DATE<=:endDate)";
+    Map parameterMap = new HashMap();
+    parameterMap.put("startDate", pStartDate);
+    parameterMap.put("endDate", pEndDate);
+    int count = mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, Integer.class);
+    return count == 0 ? false : true;
+  }
+
+  class FinancialAccountYearRowMapper implements RowMapper<MutableFinancialAccountYear> {
     @Override
-    public FinancialAccountYear mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public MutableFinancialAccountYear mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableFinancialAccountYear financialAccountYear = new PersistentFinancialAccountYear();
       financialAccountYear.setStringId(rs.getLong("id"));
+      financialAccountYear.setId(rs.getLong("id"));
       financialAccountYear.setCurrentStartDate(rs.getDate("current_start_date"));
       financialAccountYear.setCurrentEndDate(rs.getDate("current_end_date"));
       financialAccountYear.setPreviousStartDate(rs.getDate("previous_start_date"));

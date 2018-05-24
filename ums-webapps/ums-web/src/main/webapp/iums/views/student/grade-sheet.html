@@ -33,7 +33,7 @@
             <div class="bounce3"></div>
         </div>
         <div class="panel" data-ng-if="vm.gradesheetModel">
-            <div class="panel-heading">GRADE SHEET OF SEMESTER FINAL EXAMINATION : {{vm.gradesheetModel.semesterName}}
+            <div class="panel-heading">GRADE SHEET OF SEMESTER FINAL EXAMINATION : {{vm.gradesheetModel.semesterName}} {{!vm.gradesheetModel.resultProcessed ? ' (Unprocessed) ': ''}}
             </div>
             <div class="panel-body">
                 <div class="spinner" ng-show="loadingVisibility">

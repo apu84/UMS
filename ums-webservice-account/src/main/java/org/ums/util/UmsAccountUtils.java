@@ -14,6 +14,10 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 24-Mar-18.
  */
 public class UmsAccountUtils {
+
+  public static Long RETAIL_EARNINGS_ACCOUNT_CODE = 1111188888L;
+  public static Long OPENING_BALANCE_ADJUSTMENT_ACCOUNT_CODE = 1111199999L;
+
   public static String getBalanceInDebitOrCredit(BigDecimal pBalance) {
     String balanceType = pBalance.compareTo(new BigDecimal(0)) >= 0 ? " Dr" : " Cr";
     String balanceFormat = NumberFormat.getCurrencyInstance().format(pBalance.abs());

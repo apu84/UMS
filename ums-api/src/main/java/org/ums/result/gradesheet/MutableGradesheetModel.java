@@ -9,11 +9,5 @@ import org.ums.domain.model.immutable.UGRegistrationResult;
 import java.util.List;
 
 public interface MutableGradesheetModel extends GradesheetModel, Editable<Long>, MutableIdentifier<Long> {
-  void setStudent(Student pStudent);
 
-  void setStudentRecord(StudentRecord pStudentRecord);
-
-  void setSemesterResults(List<UGRegistrationResult> pCourseResults);
-
-  void setAllResults(List<UGRegistrationResult> pAllResults);
 }

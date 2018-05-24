@@ -9,6 +9,7 @@ import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.immutable.accounts.AccountBalance;
 import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
 import org.ums.domain.model.immutable.accounts.Group;
+import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.enums.accounts.definitions.group.GroupType;
 import org.ums.enums.accounts.general.ledger.reports.BalanceSheetFetchType;
 import org.ums.manager.CompanyManager;
@@ -55,7 +56,7 @@ public class BalanceSheetReportGenerator {
 
 
     FinancialAccountYear financialAccountYear = mFinancialAccountYearManager.getOpenedFinancialAccountYear();
-    List<AccountBalance> accountBalanceList = mAccountBalanceManager.getAccountBalance(financialAccountYear.getCurrentStartDate(), financialAccountYear.getCurrentEndDate());
+    List<MutableAccountBalance> accountBalanceList = mAccountBalanceManager.getAccountBalance(financialAccountYear.getCurrentStartDate(), financialAccountYear.getCurrentEndDate());
     Map<Account, AccountBalance> accountBalanceMapWithAccount = accountBalanceList
         .stream()
         .collect(Collectors.toMap(a -> mAccountManager.get(a.getAccountCode()), a -> a));

@@ -1,12 +1,12 @@
 package org.ums.accounts.resource.cheque.register;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.accounts.ChequeRegister;
 import org.ums.domain.model.mutable.accounts.MutableChequeRegister;
 import org.ums.util.UmsUtils;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;

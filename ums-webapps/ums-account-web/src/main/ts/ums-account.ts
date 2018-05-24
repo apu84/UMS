@@ -142,6 +142,24 @@
             }]
           }
         })
+        .state('financialAccountYear.financialAccountYearClosing', {
+            url: "/financialAccountYearClosing",
+            controller: 'FinancialAccountYearClosingController',
+            controllerAs: 'vm',
+            templateUrl: 'views/definitions/financial.account.year/financial.account.year.closing.html',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        files: [
+                            'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                            'vendors/bootstrap-datepicker/css/datepicker.css',
+                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                        ]
+                    });
+                }]
+            }
+        })
         .state('journalVoucher', {
           url: "/journalVoucher",
           controller: 'JournalVoucherController',

@@ -222,9 +222,10 @@ module ums {
     private checkIfTheTimeIsAlreadyAssigned(startTime:string,routine:IClassRoutine):ng.IPromise<any>{
       var defer = this.$q.defer();
       var foundOccurance:boolean=false;
+
       for(var i=0;i<this.$scope.tmpRoutineArr.length;i++){
         if(this.$scope.tmpRoutineArr[i].day==routine.day){
-          if(this.$scope.tmpRoutineArr[i].startTime==startTime && this.$scope.tmpRoutineArr[i].section==routine.section && this.$scope.tmpRoutineArr[i].roomNo==routine.roomNo){
+          if(this.$scope.tmpRoutineArr[i].startTime==startTime  && this.$scope.tmpRoutineArr[i].roomNo==routine.roomNo){
             foundOccurance=true;
             break;
           }
@@ -402,7 +403,8 @@ module ums {
         if(this.$scope.tmpRoutineArr[i].day==routine.day){
           if(Number(this.$scope.timeWithTimeIdMap[routine.startTime])>= Number(this.$scope.timeWithTimeIdMap[this.$scope.tmpRoutineArr[i].startTime]) &&
               Number(this.$scope.timeWithTimeIdMap[routine.endTime])<=Number(this.$scope.timeWithTimeIdMap[this.$scope.tmpRoutineArr[i].endTime]) &&
-              this.$scope.tmpRoutineArr[i].roomNo== routine.roomNo){
+              this.$scope.tmpRoutineArr[i].roomNo== routine.roomNo
+            && this.$scope.tmpRoutineArr[i].section==routine.section){
             foundOccurrence=true;
             this.colorOverlappedRoutine(this.$scope.tmpRoutineArr[i]);
             break;

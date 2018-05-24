@@ -666,6 +666,11 @@ module ums {
               {id:"7", name:"Sundry Debtor"},
               {id:"8", name:"Sundry Creditor"},
               {id:"9", name:"Current Liabilities"}
+            ],
+            financialYearCloseTransferType:[
+                {id:1, name:'All accounts closing'},
+                {id:2, name:'Bank & Cash Closing'},
+                {id:3, name:'Transfer without closing'}
             ]
           }
         }
