@@ -73,7 +73,6 @@ module ums {
                             semesterId: string,
                             courseId: string): void {
       var semesterName = this.$scope.selectedSemesterName;
-        console.log("CourseNo: "+courseNo+"\nSem: "+semesterId+"\ncourseId: "+courseId+"\nName: "+semesterName);
       var baseUri: string = '/ums-webservice-academic/academic/student/courseMaterial/semester/' + semesterName + "/course/" + courseNo;
       var downloadBaseUri: string = '/ums-webservice-academic/academic/student/courseMaterial/download/semester/' + semesterName + "/course/" + courseNo;
 

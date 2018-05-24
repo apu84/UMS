@@ -43,6 +43,8 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
       String... pRootPath) {
     Map<String, Object> folder = super.createFolder(pNewPath, pAdditionalParams, pDomain, pRootPath);
     Notifier notifier = new Notifier() {
+      String producer = SecurityUtils.getSubject().getPrincipal().toString();
+
       @Override
       public List<String> consumers() {
         List<String> users = new ArrayList<>();
@@ -65,7 +67,7 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
 
       @Override
       public String producer() {
-        return SecurityUtils.getSubject().getPrincipal().toString();
+        return producer;
       }
 
       @Override
@@ -76,7 +78,7 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
 
       @Override
       public String payload() {
-        User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
+        User user = mUserManager.get(producer);
         return mMessageResource.getMessage("course.material.uploaded", user.getName(), pNewPath, pRootPath[1]);
       }
     };
