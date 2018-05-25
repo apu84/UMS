@@ -5,6 +5,9 @@ module ums {
     lastName: string;
     roleId: number;
     employeeId: string;
+    departmentId: string;
+    name: string;
+    id: string;
   }
 
   export interface UserView{

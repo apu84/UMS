@@ -35,6 +35,7 @@ public class HolidaysResource extends MutableHolidaysResource {
    * @GET
    * 
    * @Path("/saveOrUpdate") public Response saveOrUpdateHolidays(final JsonObject pJsonObject, final
+   * 
    * @Context Request pRequest) throws Exception { return mHelper.saveOrUpdate(pJsonObject,
    * mUriInfo); }
    */

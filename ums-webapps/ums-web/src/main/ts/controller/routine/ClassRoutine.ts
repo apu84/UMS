@@ -1,6 +1,14 @@
 module ums {
-    
-  export class ClassRoutine  {
+
+  export interface DeptProgram {
+      deptId: string;
+      program: Program[];
+  }
+
+
+  import IParameter = ums.IParameter;
+
+    export class ClassRoutine  {
 
     private selectedSemester: Semester;
     private semesterList: Semester[];
@@ -13,12 +21,29 @@ module ums {
     private studentsSemester: string;
     private selectedTheorySection:IParameter;
     private theorySectionList:IParameter[];
+    private deptList:IParameter[];
+    private selectedDept: IParameter;
+    private deptMapWithId: any;
+    private programList:IParameter[];
+    private programMapWithId:any;
+    private selectedProgram: IParameter;
+    private deptProgramList: DeptProgram[];
+    private selectedDeptProgram: DeptProgram;
+    private deptProgramMapWithDept:any;
 
-    public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window','semesterService','courseService','classRoomService','classRoutineService','$timeout'];
-    constructor(private appConstants: any, private httpClient: HttpClient, 
-                private $q:ng.IQService, private notify: Notify,
-                private $sce:ng.ISCEService,private $window:ng.IWindowService, private semesterService:SemesterService,
-                private courseService:CourseService, private classRoomService:ClassRoomService, private classRoutineService:ClassRoutineService,private $timeout : ng.ITimeoutService) {
+    public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window','semesterService','courseService','classRoomService','classRoutineService','$timeout','userService'];
+    constructor(private appConstants: any,
+                private httpClient: HttpClient,
+                private $q:ng.IQService,
+                private notify: Notify,
+                private $sce:ng.ISCEService,
+                private $window:ng.IWindowService,
+                private semesterService:SemesterService,
+                private courseService:CourseService,
+                private classRoomService:ClassRoomService,
+                private classRoutineService:ClassRoutineService,
+                private $timeout : ng.ITimeoutService,
+                private userService: UserService) {
 
         this.init();
     }
@@ -27,7 +52,27 @@ module ums {
         this.programType = this.UNDERGRADUATE;
         this.theorySectionList = this.appConstants.theorySections;
         this.selectedTheorySection = this.theorySectionList[0];
+        this.studentsYear='1';
+        this.studentsSemester='1';
+        this.deptList = this.appConstants.deptShort;
+        this.deptMapWithId={};
+        this.deptList.forEach((d:IParameter)=> this.deptMapWithId[d.id]=d);
+        this.deptProgramList = this.appConstants.ugPrograms;
+        this.deptProgramList.forEach((d:DeptProgram)=>this.deptProgramMapWithDept[d.deptId]=d);
+        this.programList = this.appConstants.
         this.fetchSemesters();
+        this.fetchCurrentUser();
+    }
+
+    public fetchCurrentUser(){
+        this.userService.fetchCurrentUserInfo().then((user:User)=>{
+            this.selectedDept = this.deptMapWithId[user.departmentId];
+            this.deptSelected();
+        });
+    }
+
+    public deptSelected(){
+        this.selectedDeptProgram = this.deptProgramMapWithDept[this.selectedDept.id];
     }
 
     public fetchSemesters(){
@@ -41,6 +86,10 @@ module ums {
             }
             console.log(this.semesterList);
         });
+    }
+
+    public searchForRoutineData(){
+        Utils.expandRightDiv();
     }
 
   }

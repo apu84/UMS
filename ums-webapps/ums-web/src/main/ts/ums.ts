@@ -576,7 +576,7 @@ module ums {
         .state('classRoutine', {
           url: "/classRoutine",
           controller: 'ClassRoutine',
-          templateUrl: 'views/dept/class-routine.html',
+          templateUrl: 'views/routine/class-routine.html',
           controllerAs: 'vm'
         })
         .state('uploadMeritList', {

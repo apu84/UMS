@@ -126,7 +126,9 @@
 /// <reference path='service/SeatPlanService.ts'/>
 /// <reference path='service/CommonService.ts'/>
 /// <reference path='service/FacultyService.ts'/>
-/// <reference path='service/ClassRoutineService.ts'/>
+/// <reference path='controller/routine/ClassRoutineService.ts'/>
+/// <reference path='controller/routine/RoutineConfigController.ts'/>
+/// <reference path='controller/routine/RoutineConfigService.ts'/>
 /// <reference path='service/ExamGradeService.ts'/>
 /// <reference path='service/ClassRoomService.ts'/>
 /// <reference path='service/AttachmentService.ts'/>
