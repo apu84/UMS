@@ -4,8 +4,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.routine.RoutineConfigDaoDecorator;
-import org.ums.domain.model.immutable.Program;
-import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.routine.RoutineConfig;
 import org.ums.domain.model.mutable.routine.MutableRoutineConfig;
 import org.ums.enums.routine.DayType;
@@ -17,7 +15,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class PersistentRoutineConfigDao extends RoutineConfigDaoDecorator {
@@ -49,11 +46,11 @@ public class PersistentRoutineConfigDao extends RoutineConfigDaoDecorator {
   }
 
   @Override
-  public RoutineConfig get(Semester pSemester, Program pProgram) {
+  public RoutineConfig get(Integer pSemesterId, Integer pProgramId) {
     String query = " where semester_id=:semesterId and program_id=:programId";
     Map parameterMap = new HashMap();
-    parameterMap.put("semesterId", pSemester.getId());
-    parameterMap.put("programId", pProgram.getId());
+    parameterMap.put("semesterId", pSemesterId);
+    parameterMap.put("programId", pProgramId);
     return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentRoutineConfigRowMapper());
   }
 

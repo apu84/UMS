@@ -1,4 +1,4 @@
-package org.ums.academic.resource;
+package org.ums.academic.resource.routine;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

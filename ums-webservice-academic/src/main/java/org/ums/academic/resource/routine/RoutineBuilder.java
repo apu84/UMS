@@ -1,8 +1,12 @@
-package org.ums.builder;
+package org.ums.academic.resource.routine;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
+import org.ums.builder.CourseBuilder;
+import org.ums.builder.ProgramBuilder;
+import org.ums.builder.SemesterBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Program;

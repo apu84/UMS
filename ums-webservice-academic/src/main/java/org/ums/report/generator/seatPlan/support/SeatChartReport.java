@@ -170,7 +170,9 @@ public class SeatChartReport {
 
     if(noSeatPlanInfo) {
       Chunk c =
-          new Chunk("No SubGroup and No Seat Plan Information in the database, create one and then come back again!", f);
+          new Chunk(
+              "No SubGroup and No Seat Plan Information in the database, createOrUpdate one and then come back again!",
+              f);
       c.setBackground(BaseColor.WHITE);
       Paragraph p = new Paragraph(c);
       p.setAlignment(Element.ALIGN_CENTER);

@@ -14,25 +14,30 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Program Type</label>
                         <div class="col-md-8">
-                            <select name="programType" class="form-control required" data-ng-model="programTypeId" data-convert-to-number>
-                                <option data-ng-repeat="programType in data.programTypeOptions" value="{{programType.id}}">{{programType.name}}</option>
+                            <select name="programType" class="form-control required" data-ng-model="vm.programType" ng-change="vm.fetchSemesters()" >
+                                <option value="">Select Program Type</option>
+                                <option value="11">Undergraduate</option>
+                                <option value="22">PostGraduate</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label">Semester</label>
                         <div class="col-md-8">
-                            <select name="academicSemester" class="form-control required" data-ng-model="semesterId" data-convert-to-number>
-                                <option value="">Selected a Semester</option>
-                                <option data-ng-repeat="s in semesterArr" value="{{s.id}}">{{s.name}}</option>
-                            </select>
+                            <select
+                                    class="form-control required"
+                                name="semester"
+                                id="semester"
+                                ng-options="semester.name for semester in vm.semesterList track by semester.id"
+                                ng-model="vm.selectedSemester"></select>
+
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-md-4 control-label">Year</label>
                         <div class="col-md-8">
-                            <select name="year" class="form-control required" data-ng-model="studentsYear">
+                            <select name="year" class="form-control required" data-ng-model="vm.studentsYear">
                                 <option value="">Select Year</option>
                                 <option value="1">1st year</option>
                                 <option value="2">2nd year</option>
@@ -56,12 +61,11 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Theory Section</label>
                         <div class="col-md-8">
-                            <select name="section" class="form-control required" data-ng-model="section">
-                                <option value="">Select Student Theory Section</option>
-                                <option value="A">A</option>
-                                <option value="B">B</option>
-                                <option value="C">C</option>
-                                <option value="D">D</option>
+                            <select class="form-control required"
+                                    name="theorySection"
+                                    id="theorySection"
+                                    ng-options="theorySection.name for theorySection in vm.theorySectionList"
+                            ng-model="vm.selectedTheorySection">
                             </select>
                         </div>
                     </div>
@@ -79,8 +83,7 @@
 
         <div class="panel" style="min-height: 490px;">
             <div class="panel-heading" style="font-size: 14px;">
-                <b>Program Type:</b> {{programTypeName}}<span style="margin-left: 15px;"></span>
-                <b>Academic Semester:</b> {{semesterName}}<span style="margin-left: 15px;"></span>
+                <b>Academic Semester:</b> {{vm.selectedSemester.name}}<span style="margin-left: 15px;"></span>
                 <b>Year:</b> {{studentsYear}}<span style="margin-left: 15px;"></span>
                 <b>Semester:</b> {{studentsSemester}}<span style="margin-left: 15px;"></span>
                 <b>Section:</b>{{section}}

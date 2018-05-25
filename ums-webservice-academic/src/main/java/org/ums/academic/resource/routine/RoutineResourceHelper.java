@@ -1,4 +1,4 @@
-package org.ums.academic.resource.helper;
+package org.ums.academic.resource.routine;
 
 import com.itextpdf.text.DocumentException;
 import org.apache.shiro.SecurityUtils;
@@ -6,9 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.academic.resource.RoutineResource;
 import org.ums.builder.Builder;
-import org.ums.builder.RoutineBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.routine.Routine;
 import org.ums.generator.IdGenerator;

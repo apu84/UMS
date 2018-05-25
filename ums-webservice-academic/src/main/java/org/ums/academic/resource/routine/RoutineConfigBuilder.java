@@ -1,7 +1,10 @@
-package org.ums.builder;
+package org.ums.academic.resource.routine;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
+import org.ums.builder.ProgramBuilder;
+import org.ums.builder.SemesterBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.routine.RoutineConfig;
 import org.ums.domain.model.mutable.routine.MutableRoutineConfig;
@@ -37,7 +40,7 @@ public class RoutineConfigBuilder implements Builder<RoutineConfig, MutableRouti
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm a");
     pBuilder.add("startTime", formatter.format(pReadOnly.getStartTime()));
     pBuilder.add("endTime", formatter.format(pReadOnly.getEndTime()));
-    pBuilder.add("duraton", pReadOnly.getDuration());
+    pBuilder.add("duration", pReadOnly.getDuration());
 
   }
 

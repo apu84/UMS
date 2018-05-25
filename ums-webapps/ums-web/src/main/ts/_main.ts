@@ -171,7 +171,7 @@
 /// <reference path='controller/dept/AdvisingStudents.ts'/>
 /// <reference path='controller/dept/OptionalCoursesOffer.ts'/>
 /// <reference path='controller/semester/SemesterSettingParameter.ts'/>
-/// <reference path='controller/dept/ClassRoutine.ts'/>
+/// <reference path='controller/routine/ClassRoutine.ts'/>
 /// <reference path='controller/dept/ClassAttendance.ts'/>
 /// <reference path='controller/logger/LoggerGrid.ts'/>
 /// <reference path='controller/course-material/CourseMaterial.ts'/>

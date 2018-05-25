@@ -122,7 +122,7 @@ public class SeatPlanGroupResourceHelper extends ResourceHelper<SeatPlanGroup, M
           * mSeatPlanGroup.setTotalStudentNumber(group.getTotalStudentNumber());
           * mutableSeatPlanGroups.add(mSeatPlanGroup); }
           * 
-          * mSeatPlanGroupManager.create(mutableSeatPlanGroups);
+          * mSeatPlanGroupManager.createOrUpdate(mutableSeatPlanGroups);
           */
 
       mSeatPlanGroupManager.createSeatPlanGroup(pSemesterId, type);

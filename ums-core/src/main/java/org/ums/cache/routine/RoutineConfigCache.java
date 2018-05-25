@@ -1,8 +1,6 @@
 package org.ums.cache.routine;
 
 import org.ums.cache.ContentCache;
-import org.ums.domain.model.immutable.Program;
-import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.routine.RoutineConfig;
 import org.ums.domain.model.mutable.routine.MutableRoutineConfig;
 import org.ums.manager.CacheManager;
@@ -22,7 +20,7 @@ public class RoutineConfigCache extends ContentCache<RoutineConfig, MutableRouti
   }
 
   @Override
-  public RoutineConfig get(Semester pSemester, Program pProgram) {
-    return getManager().get(pSemester, pProgram);
+  public RoutineConfig get(Integer pSemesterId, Integer pProgramId) {
+    return getManager().get(pSemesterId, pProgramId);
   }
 }
