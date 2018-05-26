@@ -698,9 +698,9 @@ module ums {
                     {id: 1, name: 'Hard Bound'},
                     {id: 2, name: 'Soft Cover'},
                     {id: 3, name: 'Paperback'},
-                    {id: 4, name: 'Clip binding'},
-                    {id: 5, name: 'Gum paste binding'},
-                    {id: 6, name: 'Cloth binding'}
+                    {id: 4, name: 'Clip Binding'},
+                    {id: 5, name: 'Gum Paste Binding'},
+                    {id: 6, name: 'Cloth Binding'}
                 ],
                 acquisitionTypes: [
                     {id: 101101, name: 'Select Acquisition Type'},

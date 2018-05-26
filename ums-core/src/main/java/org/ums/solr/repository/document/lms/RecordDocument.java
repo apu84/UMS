@@ -108,9 +108,6 @@ public class RecordDocument implements SearchDocument<String> {
     callNo = Lists.newArrayList(pRecord.getCallNo());
     // publisher = mPublisherManager.get(pRecord.getPublisherId()).getName();
     status = Lists.newArrayList(pRecord.getRecordStatus().getLabel());
-    bindingType =
-        Lists.newArrayList(pRecord.getBookBindingType() == null ? null : pRecord.getBookBindingType().getLabel());
-
     keywords = Lists.newArrayList(pRecord.getKeyWords());
 
     subjects = UmsUtils.convertJsonStringToStringArray(pRecord.getSubjectJsonString(), "subject");

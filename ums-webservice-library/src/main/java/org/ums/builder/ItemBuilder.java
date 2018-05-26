@@ -6,6 +6,7 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.library.Item;
 import org.ums.domain.model.mutable.library.MutableItem;
 import org.ums.enums.library.AcquisitionType;
+import org.ums.enums.library.BookBindingType;
 import org.ums.enums.library.ItemStatus;
 import org.ums.manager.accounts.CurrencyManager;
 import org.ums.manager.library.ItemManager;
@@ -66,6 +67,12 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
     pBuilder.add("currencyName", pReadOnly.getCurrencyId() == 0 ? "" : mCurrencyManager.get(pReadOnly.getCurrencyId())
         .getNotation());
 
+    pBuilder.add("bindingType", pReadOnly.getBookBindingType() == null ? 101101 : pReadOnly.getBookBindingType()
+        .getId());
+
+    pBuilder.add("bindingTypeName", pReadOnly.getBookBindingType() == null ? "" : pReadOnly.getBookBindingType()
+        .getLabel());
+
   }
 
   @Override
@@ -111,6 +118,9 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
 
     pMutable.setAcquisitionType(pJsonObject.getInt("acqType") == 101101 ? null : AcquisitionType.get(pJsonObject
         .getInt("acqType")));
+
+    pMutable.setBookBindingType(pJsonObject.getInt("bindingType") == 101101 ? null : BookBindingType.get(pJsonObject
+        .getInt("bindingType")));
   }
 
 }

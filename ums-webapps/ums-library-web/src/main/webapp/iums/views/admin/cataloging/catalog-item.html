@@ -31,6 +31,7 @@
                     <th style="text-align: center">Copy No</th>
                     <th class="numeric">Accession No</th>
                     <th class="numeric">Accession Date</th>
+                    <th class="numeric">Binding Type</th>
                     <th class="numeric">Acqui. Type</th>
                     <th class="numeric">Currency</th>
                     <th class="numeric" style="text-align: center">Purchase Price</th>
@@ -45,6 +46,7 @@
                     <td data-title="Copy No" style="text-align: center">{{item.copyNumber}}</td>
                     <td data-title="Accession No" class="numeric">{{item.accessionNumber}}</td>
                     <td data-title="Accession Date" class="numeric">{{item.accessionDate}}</td>
+                    <td data-title="bindingType" class="numeric">{{item.bindingTypeName}}</td>
                     <td data-title="acqType" class="numeric">{{item.acqTypeName}}</td>
                     <td data-title="Currency" class="numeric">{{item.currencyName}}</td>
                     <td data-title="Purchase Price" class="numeric" style="text-align: right">{{item.price}}</td>
@@ -199,7 +201,7 @@
             </div>
 
             <label class="col-md-1 control-label" for="itemStatus">Status</label>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <select style="width: 98%" class="required" data-ng-model="item.status" id="itemStatus"
                         name="itemStatus" ng-disabled="data.itemReadOnlyMode"
                         ng-class="{'disabledElement': data.itemReadOnlyMode}" data-convert-to-number>
@@ -207,8 +209,19 @@
                 </select>
             </div>
 
-        </div>
+            <label class="col-md-1 control-label" for="bindingType">Binding Type</label>
+            <div class="col-md-2">
+                <select style="width: 98%"
+                        data-ng-model="item.bindingType"
+                        id="bindingType"
+                        name="bindingType"
+                        data-convert-to-number>
+                    <option data-ng-repeat="binding in data.bindingTypeOptions" value="{{binding.id}}">{{binding.name}}
+                    </option>
+                </select>
+            </div>
 
+        </div>
     </div>
 
     <div class="row" data-ng-show="data.showItemMainButtonPanel">

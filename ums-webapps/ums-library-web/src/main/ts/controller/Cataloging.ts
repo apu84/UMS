@@ -169,7 +169,6 @@ module ums {
             $scope.record.materialType = 1;
             this.setMaterialTypeName(1);
             $scope.record.status = 0;
-            $scope.record.bindingType = Utils.NUMBER_SELECT;
 
 
             $scope.item = <IItem> {};
@@ -177,6 +176,7 @@ module ums {
             $scope.supplier = <ISupplier> {};
             $scope.item.status = 2;
             $scope.item.currency = 1;
+            $scope.item.bindingType = Utils.NUMBER_SELECT;
             $scope.bulk = {
                 config: {}
             };
@@ -853,7 +853,6 @@ module ums {
             this.$scope.record.mfnNo = undefined;
             this.$scope.record.language = 1;
             this.$scope.record.status = 0;
-            this.$scope.record.bindingType = 1;
             this.$scope.record.language = 1;
             let offSet = (new Date).getMilliseconds();
             this.$scope.record.title = "Material Title " + offSet;

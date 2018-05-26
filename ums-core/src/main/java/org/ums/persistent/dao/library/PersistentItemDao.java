@@ -6,6 +6,7 @@ import org.ums.decorator.library.ItemDaoDecorator;
 import org.ums.domain.model.immutable.library.Item;
 import org.ums.domain.model.mutable.library.MutableItem;
 import org.ums.enums.library.AcquisitionType;
+import org.ums.enums.library.BookBindingType;
 import org.ums.enums.library.ItemStatus;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.library.PersistentItem;
@@ -23,17 +24,18 @@ public class PersistentItemDao extends ItemDaoDecorator {
   static String SELECT_ALL =
       "Select ID, MFN, COPY_NUMBER,  ACCESSION_NUMBER, TO_CHAR(ACCESSION_DATE,'DD-MM-YYYY') ACCESSION_DATE, BARCODE, CURRENCY, ACQUISITION_TYPE, "
           + "PRICE, SUPPLIER, INTERNAL_NOTE,  STATUS, INSERTED_BY, INSERTED_ON, "
-          + "   LAST_UPDATED_BY, LAST_UPDATED_ON, CIRCULATION_STATUS, LAST_MODIFIED FROM ITEMS ";
+          + "   LAST_UPDATED_BY, LAST_UPDATED_ON, CIRCULATION_STATUS, BINDING_TYPE, LAST_MODIFIED FROM ITEMS ";
 
   static String UPDATE_ONE =
-      "UPDATE ITEMS SET COPY_NUMBER = ?, ACCESSION_NUMBER=?,  ACCESSION_DATE=to_date(?, 'DD-MM-YYYY'), BARCODE=?, CURRENCY = ?,  ACQUISITION_TYPE=?,  PRICE=?, SUPPLIER=?, INTERNAL_NOTE=?, STATUS=?, CIRCULATION_STATUS = ?, LAST_UPDATED_BY=?, "
+      "UPDATE ITEMS SET COPY_NUMBER = ?, ACCESSION_NUMBER=?,  ACCESSION_DATE=to_date(?, 'DD-MM-YYYY'), BARCODE=?, CURRENCY = ?,  ACQUISITION_TYPE=?,  "
+          + " PRICE=?, SUPPLIER=?, INTERNAL_NOTE=?, STATUS=?, CIRCULATION_STATUS = ?,  BINDING_TYPE=?, LAST_UPDATED_BY=?, "
           + "   LAST_UPDATED_ON=?, LAST_MODIFIED=" + getLastModifiedSql();
 
   static String INSERT_ONE =
       "INSERT INTO ITEMS(ID, MFN, COPY_NUMBER, ACCESSION_NUMBER, ACCESSION_DATE, BARCODE, CURRENCY, ACQUISITION_TYPE, PRICE, SUPPLIER, INTERNAL_NOTE, "
-          + "   STATUS, INSERTED_BY, INSERTED_ON, LAST_UPDATED_BY, LAST_UPDATED_ON, CIRCULATION_STATUS, LAST_MODIFIED)  " // 15
+          + "   STATUS, INSERTED_BY, INSERTED_ON, LAST_UPDATED_BY, LAST_UPDATED_ON, CIRCULATION_STATUS, BINDING_TYPE, LAST_MODIFIED)  " // 15
           // Fields
-          + "  VALUES(?, ?, ?, ?, TO_DATE(?,'DD-MM-YYYY'), ?, ?, ?, ?, ?, ?, ?, ?, sysdate, ?, sysdate, ?, "
+          + "  VALUES(?, ?, ?, ?, TO_DATE(?,'DD-MM-YYYY'), ?, ?, ?, ?, ?, ?, ?, ?, sysdate, ?, sysdate, ?, ?, "
           + getLastModifiedSql() + ")";
 
   static String DELETE_ONE = "DELETE FROM ITEMS ";
@@ -69,7 +71,8 @@ public class PersistentItemDao extends ItemDaoDecorator {
     return mJdbcTemplate.update(query, pItem.getCopyNumber(), pItem.getAccessionNumber(), pItem.getAccessionDate(),
         pItem.getBarcode(), pItem.getCurrencyId(), pItem.getAcquisitionType() == null ? null : pItem
             .getAcquisitionType().getId(), pItem.getPrice(), pItem.getSupplierId(), pItem.getInternalNote(), pItem
-            .getStatus().getId(), pItem.getCirculationStatus(), "", "", pItem.getId());
+            .getStatus().getId(), pItem.getCirculationStatus(), pItem.getBookBindingType() == null ? null : pItem
+            .getBookBindingType().getId(), "", "", pItem.getId());
   }
 
   @Override
@@ -79,7 +82,7 @@ public class PersistentItemDao extends ItemDaoDecorator {
     mJdbcTemplate.update(INSERT_ONE, pItem.getId(), pItem.getMfn(), pItem.getCopyNumber(), pItem.getAccessionNumber(),
         pItem.getAccessionDate(), pItem.getBarcode(), pItem.getCurrencyId(), pItem.getAcquisitionType() == null ? null
             : pItem.getAcquisitionType().getId(), pItem.getPrice(), pItem.getSupplierId(), pItem.getInternalNote(),
-        pItem.getStatus().getId(), "insert", "update", 0);
+        pItem.getStatus().getId(), "insert", "update", 0, pItem.getBookBindingType().getId());
 
     return id;
   }
@@ -165,6 +168,7 @@ public class PersistentItemDao extends ItemDaoDecorator {
       item.setLastUpdatedOn(resultSet.getString("LAST_UPDATED_ON"));
       item.setCirculationStatus(resultSet.getInt("CIRCULATION_STATUS"));
       item.setAcquisitionType(AcquisitionType.get(resultSet.getInt("ACQUISITION_TYPE")));
+      item.setBookBindingType(BookBindingType.get(resultSet.getInt("BINDING_TYPE")));
       item.setLastModified(resultSet.getString("LAST_MODIFIED"));
 
       AtomicReference<Item> atomicReference = new AtomicReference<>(item);
