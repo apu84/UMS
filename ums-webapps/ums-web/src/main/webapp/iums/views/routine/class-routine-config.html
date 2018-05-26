@@ -1,0 +1,43 @@
+<form action="" class="form-horizontal" data-validate="" data-onvalidate="vm.save">
+    <div class="form-body pal">
+        <div class="form-group">
+            <label class="col-md-4 control-label">Day From</label>
+            <div class="col-md-8">
+                <select name="dayFrom" class="form-control required" ng-model="vm.dayFrom">
+                    <option value="">Select a day</option>
+                    <option ng-repeat="d in vm.weekDays" value="{{d.id}}">{{d.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label">Day To</label>
+            <div class="col-md-8">
+                <select name="dayTo" class="form-control required" ng-model="vm.dayTo">
+                    <option value="">Select a day</option>
+                    <option ng-repeat="d in vm.weekDays" value="{{d.id}}">{{d.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label">Start Time (HH:mm AM/PM)</label>
+            <div class="col-md-8">
+                <input type="text" class="form-control required" ng-model="vm.startTime"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label">End Time (HH:mm AM/PM)</label>
+            <div class="col-md-8">
+                <input type="text" class="form-control required" ng-model="vm.endTime"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label">Duration</label>
+            <div class="col-md-8">
+                <input type="text" class="form-control required" ng-model="vm.duration"/>
+            </div>
+        </div>
+    </div>
+    <div class="well" align="right">
+        <button type="submit" class="btn btn-primary">Save/Update</button>
+    </div>
+</form>

@@ -24,7 +24,7 @@ module ums{
     }
 
     export class RoutineConfigService{
-        private routineUrl:string='/academic/routine-config';
+        private routineUrl:string='academic/routine-config';
         public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
         constructor(private appConstants: any, private httpClient: HttpClient,
                     private $q:ng.IQService, private notify: Notify,
@@ -47,5 +47,5 @@ module ums{
         }
     }
 
-    UMS.service("RoutineConfigService", RoutineConfigService);
+    UMS.service("routineConfigService", RoutineConfigService);
 }

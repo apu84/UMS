@@ -579,6 +579,18 @@ module ums {
           templateUrl: 'views/routine/class-routine.html',
           controllerAs: 'vm'
         })
+        .state('classRoutine.classRoutineConfig', {
+            url: "/classRoutineConfig",
+            controller: 'RoutineConfigCongroller',
+            templateUrl: 'views/routine/class-routine-config.html',
+            controllerAs: 'vm',
+            params:{
+                'semester':null,
+                'user':null,
+                'department':null,
+                'program':null
+            }
+        })
         .state('uploadMeritList', {
           url: "/uploadMeritList",
           templateUrl: 'views/admission/merit-list-upload.html',

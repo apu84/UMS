@@ -1,6 +1,7 @@
 package org.ums.academic.resource.routine;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
@@ -53,9 +54,18 @@ public class RoutineConfigResourceHelper extends ResourceHelper<RoutineConfig, M
   }
 
   public JsonObject get(final Integer pSemesterId, final Integer pProgramId, final UriInfo pUriInfo) {
-    RoutineConfig routineConfig = getContentManager().get(pSemesterId, pProgramId);
-    LocalCache localCache = new LocalCache();
-    return toJson(routineConfig, pUriInfo, localCache);
+    RoutineConfig routineConfig = new PersistentRoutineConfig();
+      LocalCache localCache = new LocalCache();
+      try {
+        routineConfig = getContentManager().get(pSemesterId, pProgramId);
+          return toJson(routineConfig, pUriInfo, localCache);
+
+    } catch(EmptyResultDataAccessException e) {
+        e.printStackTrace();
+          return null;
+
+      }
+
   }
 
   @Override

@@ -15,7 +15,7 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
 @Component
-@Path("academic/routine")
+@Path("academic/routine-config")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class RoutineConfigResource extends Resource {

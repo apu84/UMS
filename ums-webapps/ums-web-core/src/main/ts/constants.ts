@@ -250,28 +250,32 @@ module ums {
                 ],
                 weekDays: [
                     {
-                        id: '01',
-                        day: 'Saturday'
+                        id: '1',
+                        name: 'Saturday'
                     },
                     {
-                        id: '02',
-                        day: 'Sunday'
+                        id: '2',
+                        name: 'Sunday'
                     },
                     {
-                        id: '03',
-                        day: 'Monday'
+                        id: '3',
+                        name: 'Monday'
                     },
                     {
-                        id: '04',
-                        day: 'Tuesday'
+                        id: '4',
+                        name: 'Tuesday'
                     },
                     {
-                        id: '05',
-                        day: 'Wednesday'
+                        id: '5',
+                        name: 'Wednesday'
                     },
                     {
-                        id: '06',
-                        day: 'Thursday'
+                        id: '6',
+                        name: 'Thursday'
+                    },
+                    {
+                        id:'7',
+                        name:'Friday'
                     }
                 ],
                 ugPrograms: [

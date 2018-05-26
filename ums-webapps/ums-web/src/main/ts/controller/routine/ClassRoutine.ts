@@ -2,7 +2,7 @@ module ums {
 
   export interface DeptProgram {
       deptId: string;
-      program: Program[];
+      programs: Program[];
   }
 
 
@@ -24,14 +24,16 @@ module ums {
     private deptList:IParameter[];
     private selectedDept: IParameter;
     private deptMapWithId: any;
-    private programList:IParameter[];
-    private programMapWithId:any;
-    private selectedProgram: IParameter;
+    private programList:Program[];
+    private selectedProgram:Program;
     private deptProgramList: DeptProgram[];
     private selectedDeptProgram: DeptProgram;
     private deptProgramMapWithDept:any;
+    private routineConfig:RoutineConfig;
+    private showRoutineSection:boolean;
+    private loggedUser: User;
 
-    public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window','semesterService','courseService','classRoomService','classRoutineService','$timeout','userService'];
+    public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window','semesterService','courseService','classRoomService','classRoutineService','$timeout','userService','routineConfigService','$state'];
     constructor(private appConstants: any,
                 private httpClient: HttpClient,
                 private $q:ng.IQService,
@@ -43,12 +45,15 @@ module ums {
                 private classRoomService:ClassRoomService,
                 private classRoutineService:ClassRoutineService,
                 private $timeout : ng.ITimeoutService,
-                private userService: UserService) {
+                private userService: UserService,
+                private routineConfigService: RoutineConfigService,
+                private $state:any) {
 
         this.init();
     }
 
     private init(){
+        this.showRoutineSection=false;
         this.programType = this.UNDERGRADUATE;
         this.theorySectionList = this.appConstants.theorySections;
         this.selectedTheorySection = this.theorySectionList[0];
@@ -58,22 +63,27 @@ module ums {
         this.deptMapWithId={};
         this.deptList.forEach((d:IParameter)=> this.deptMapWithId[d.id]=d);
         this.deptProgramList = this.appConstants.ugPrograms;
+        this.deptProgramMapWithDept={};
         this.deptProgramList.forEach((d:DeptProgram)=>this.deptProgramMapWithDept[d.deptId]=d);
-        this.programList = this.appConstants.
         this.fetchSemesters();
         this.fetchCurrentUser();
     }
 
     public fetchCurrentUser(){
         this.userService.fetchCurrentUserInfo().then((user:User)=>{
+            this.loggedUser=<User>{};
+            this.loggedUser=user;
+            this.selectedDeptProgram = <DeptProgram>{};
+            this.selectedDeptProgram = this.deptProgramMapWithDept[user.departmentId];
+            this.selectedDept=<IParameter>{};
             this.selectedDept = this.deptMapWithId[user.departmentId];
-            this.deptSelected();
+            this.selectedProgram = this.selectedDeptProgram.programs[0];
+            console.log("Selected program");
+            console.log(this.selectedDeptProgram.programs);
+            this.programList = this.selectedDeptProgram.programs;
         });
     }
 
-    public deptSelected(){
-        this.selectedDeptProgram = this.deptProgramMapWithDept[this.selectedDept.id];
-    }
 
     public fetchSemesters(){
         this.semesterService.fetchSemesters(+this.programType).then((semesterList: Semester[])=>{
@@ -88,9 +98,30 @@ module ums {
         });
     }
 
+    public fetchRoutineConfig(){
+        this.showRoutineSection=true;
+
+        console.log("In the routine config");
+        this.routineConfigService.getBySemesterAndProgram(this.selectedSemester.id, +this.selectedProgram.id).then((routineConfig:RoutineConfig)=>{
+            if(routineConfig==undefined){
+                this.notify.error("Routine configuration is not set");
+                console.log("logged user");
+                console.log(this.loggedUser);
+                $("#routineConfigModal").modal('toggle');
+                this.$state.go('classRoutine.classRoutineConfig',{semester:this.selectedSemester, user:this.loggedUser,department:this.selectedDept, program:this.selectedProgram});
+            }
+            else
+                this.routineConfig = routineConfig;
+        });
+    }
+
+
+
     public searchForRoutineData(){
         Utils.expandRightDiv();
     }
+
+
 
   }
 
