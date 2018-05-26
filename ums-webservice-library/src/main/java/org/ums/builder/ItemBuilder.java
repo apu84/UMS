@@ -119,7 +119,7 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
     pMutable.setAcquisitionType(pJsonObject.getInt("acqType") == 101101 ? null : AcquisitionType.get(pJsonObject
         .getInt("acqType")));
 
-    pMutable.setBookBindingType(pJsonObject.getInt("bindingType") == 101101 ? null : BookBindingType.get(pJsonObject
+    pMutable.setBookBindingType(pJsonObject.getInt("bindingType") == 101101 ? BookBindingType.get(101101) : BookBindingType.get(pJsonObject
         .getInt("bindingType")));
   }
 

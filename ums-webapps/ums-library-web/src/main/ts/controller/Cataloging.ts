@@ -184,6 +184,7 @@ module ums {
             $scope.bulk.config.currency = 1;
             $scope.bulk.config.status = 2;
             $scope.bulk.config.acqType = Utils.NUMBER_SELECT;
+            $scope.bulk.config.bindingType = Utils.NUMBER_SELECT;
 
 
             $scope.record.contributorList = Array<IContributor>();

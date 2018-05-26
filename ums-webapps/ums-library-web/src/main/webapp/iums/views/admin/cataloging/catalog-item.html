@@ -248,6 +248,7 @@
                 <th align="center" width="8%" style="text-align: center;">Accession #</th>
                 <th align="center" width="8%" style="text-align: center;">Accession Date</th>
                 <th align="center" width="10%" style="text-align: center;">Barcode</th>
+                <th align="center" width="12%" style="text-align: center;">Binding Type</th>
                 <th align="center" width="12%" style="text-align: center;">Acqui. Type</th>
                 <th align="center" width="8%" style="text-align: center;">Currency</th>
                 <th align="center" width="8%" style="text-align: center;">Price</th>
@@ -269,6 +270,14 @@
                 </td>
                 <td align="center"><input type='text' style='width:150px;border: 1px solid grey;'
                                           data-ng-model="item.barcode" readonly="readonly"/></td>
+                <td align="center"><select style="width: 98%"
+                                        data-ng-model="item.bindingType"
+                                        data-convert-to-number>
+                    <option data-ng-repeat="bindingType in data.bindingTypeOptions" value="{{bindingType.id}}">
+                        {{acqType.name}}
+                    </option>
+                </select></td>
+
                 <td align="center">
                     <select style="width: 98%"
                             data-ng-model="item.acqType"
@@ -384,8 +393,14 @@
                 <td width="10%">Note :</td>
                 <td width="23%"><input type="text" value="" style="text-align:center;border:1px solid grey;"
                                        ng-model="bulk.config.internalNote"/></td>
-                <td></td>
-                <td></td>
+                <td width="10%">Binding Type: </td>
+                <td><select style="width: 98%"
+                            data-ng-model="bulk.config.bindingType"
+                            data-convert-to-number>
+                    <option data-ng-repeat="bindingtype in data.bindingTypeOptions" value="{{bindingtype.id}}">
+                        {{bindingtype.name}}
+                    </option>
+                </select></td>
                 <td></td>
                 <td><input type="button" value="Set Values" ng-click="setBulkItemsValue()"></td>
             </tr>
