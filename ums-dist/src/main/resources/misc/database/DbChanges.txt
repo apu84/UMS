@@ -1563,3 +1563,18 @@ CREATE TABLE DB_IUMS.FCM_TOKEN
 );
 
 --------------------------------------------------------------------------------------------------
+
+
+------------------------------------ Library Moved Binding Type  -------------------------------------------
+
+ALTER TABLE ITEMS
+    ADD BINDING_TYPE NUMBER;
+
+
+UPDATE ITEMS ITEM SET BINDING_TYPE = (SELECT BINDING_TYPE FROM RECORDS REC WHERE REC.MFN = ITEM.MFN);
+
+
+ALTER TABLE RECORDS
+    DROP COLUMN BINDING_TYPE;
+
+-----------------------------------------------------------------------------------------------------------
