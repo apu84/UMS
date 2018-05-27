@@ -1,7 +1,6 @@
-package org.ums.common;
+package org.ums.builder;
 
 import org.springframework.stereotype.Component;
-import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.DeptDesignationMap;
 import org.ums.domain.model.mutable.MutableDeptDesignationMap;

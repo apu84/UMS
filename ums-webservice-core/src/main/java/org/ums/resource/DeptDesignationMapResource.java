@@ -1,8 +1,8 @@
-package org.ums.common;
+package org.ums.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.resource.Resource;
+import org.ums.resource.helper.DeptDesignationMapResourceHelper;
 
 import javax.json.JsonObject;
 import javax.ws.rs.GET;

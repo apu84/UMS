@@ -1,8 +1,9 @@
-package org.ums.common;
+package org.ums.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
+import org.ums.builder.DeptDesignationMapBuilder;
 import org.ums.domain.model.immutable.DeptDesignationMap;
 import org.ums.domain.model.mutable.MutableDeptDesignationMap;
 import org.ums.manager.ContentManager;
