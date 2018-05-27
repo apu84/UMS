@@ -1578,3 +1578,25 @@ ALTER TABLE RECORDS
     DROP COLUMN BINDING_TYPE;
 
 -----------------------------------------------------------------------------------------------------------
+
+----------------------------------- Library Moving Paper Quality -------------------------------------------
+
+alter table items
+ add PAPER_QUALITY VARCHAR2(100 BYTE);
+
+update items item set PAPER_QUALITY = ( select substr(
+physical_desc,
+INSTR(physical_desc,'paperQuality')+15,
+length(physical_desc)-
+(INSTR(physical_desc,'paperQuality')+16)
+) as paper_quality from records rec where physical_desc is not null and REC.MFN = ITEM.MFN)
+
+
+Update records set physical_desc=replace(physical_desc,',"paperQuality":"'||substr(
+physical_desc,
+INSTR(physical_desc,'paperQuality')+15,
+length(physical_desc)-
+(INSTR(physical_desc,'paperQuality')+16)
+)||'"') where physical_desc is not null;
+
+------------------------------------------------------------------------------------------------------------
