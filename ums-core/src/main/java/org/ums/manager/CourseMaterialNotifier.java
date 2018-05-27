@@ -9,10 +9,13 @@ import java.util.Map;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.ums.configuration.UMSConfiguration;
 import org.ums.domain.model.immutable.Notification;
 import org.ums.domain.model.immutable.UGRegistrationResult;
+import org.ums.services.FirebaseMessagingImpl;
 import org.ums.usermanagement.user.User;
 import org.ums.enums.CourseRegType;
 import org.ums.message.MessageResource;
@@ -21,6 +24,7 @@ import org.ums.services.Notifier;
 import org.ums.usermanagement.user.UserManager;
 
 public class CourseMaterialNotifier extends AbstractSectionPermission {
+
   private Logger mLogger = LoggerFactory.getLogger(CourseMaterialNotifier.class);
   private NotificationGenerator mNotificationGenerator;
   private UGRegistrationResultManager mUGRegistrationResultManager;
@@ -82,7 +86,10 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
         return mMessageResource.getMessage("course.material.uploaded", user.getName(), pNewPath, pRootPath[1]);
       }
     };
+    System.out.println("Before firebase");
+
     mNotificationGenerator.notify(notifier);
+
     return folder;
   }
 
@@ -95,6 +102,7 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
     final String semesterIdString = getUserDefinedProperty(SEMESTER_ID, targetDirectory);
     final String courseId = getUserDefinedProperty(COURSE_ID, targetDirectory);
     final String owner = getUserDefinedProperty(OWNER, targetDirectory);
+    String producer = SecurityUtils.getSubject().getPrincipal().toString();
 
     Notifier notifier = new Notifier() {
       @Override
@@ -120,7 +128,7 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
 
       @Override
       public String producer() {
-        return SecurityUtils.getSubject().getPrincipal().toString();
+        return producer;
       }
 
       @Override
@@ -132,7 +140,7 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
       @Override
       public String payload() {
         try {
-          User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
+          User user = mUserManager.get(producer);
           return mMessageResource.getMessage("assignment.directory.created", user.getName(), pNewPath, pRootPath[1],
               getUserDefinedProperty(START_DATE, targetDirectory), getUserDefinedProperty(END_DATE, targetDirectory));
         } catch(Exception e) {
