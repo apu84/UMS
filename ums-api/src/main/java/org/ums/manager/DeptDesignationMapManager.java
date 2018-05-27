@@ -9,4 +9,6 @@ public interface DeptDesignationMapManager extends
     ContentManager<DeptDesignationMap, MutableDeptDesignationMap, Integer> {
 
   List<DeptDesignationMap> getDeptDesignationMap(final String departmentId, final int pEmployeeTypeId);
+
+  List<DeptDesignationMap> getDeptDesignationMap(final String departmentId);
 }

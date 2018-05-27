@@ -2,10 +2,7 @@ package org.ums.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.domain.model.immutable.DeptDesignationMap;
-import org.ums.domain.model.mutable.MutableDeptDesignationMap;
 import org.ums.resource.Resource;
-import org.ums.resource.ResourceHelper;
 
 import javax.json.JsonObject;
 import javax.ws.rs.GET;
@@ -32,5 +29,12 @@ public class DeptDesignationMapResource extends Resource {
   public JsonObject getDeptDesignationMap(final @Context Request pRequest, final @PathParam("dept-id") String pDeptId,
       final @PathParam("employee-type") int pEmployeeTypeId) throws Exception {
     return mHelper.getDeptDesignationMap(pDeptId, pEmployeeTypeId, mUriInfo);
+  }
+
+  @GET
+  @Path("/dept/{dept-id}")
+  public JsonObject getDeptDesignationMap(final @Context Request pRequest, final @PathParam("dept-id") String pDeptId)
+      throws Exception {
+    return mHelper.getDeptDesignationMap(pDeptId, mUriInfo);
   }
 }
