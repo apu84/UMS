@@ -54,4 +54,5 @@ public interface Item extends Serializable, EditType<MutableItem>, LastModifier,
 
   BookBindingType getBookBindingType();
 
+  String getPaperQuality();
 }

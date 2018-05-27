@@ -73,6 +73,7 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
     pBuilder.add("bindingTypeName", pReadOnly.getBookBindingType() == null ? "" : pReadOnly.getBookBindingType()
         .getLabel());
 
+    pBuilder.add("paperQuality", pReadOnly.getPaperQuality() == null ? "" : pReadOnly.getPaperQuality());
   }
 
   @Override
@@ -121,6 +122,8 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
 
     pMutable.setBookBindingType(pJsonObject.getInt("bindingType") == 101101 ? BookBindingType.get(101101)
         : BookBindingType.get(pJsonObject.getInt("bindingType")));
+
+    pMutable.setPaperQuality(pJsonObject.containsKey("paperQuality") ? pJsonObject.getString("paperQuality") == null ? "" : pJsonObject.getString("paperQuality") : "");
   }
 
 }

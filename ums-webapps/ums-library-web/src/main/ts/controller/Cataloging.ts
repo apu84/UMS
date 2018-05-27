@@ -311,8 +311,7 @@ module ums {
                         pagination: jsonObj.pagination,
                         illustrations: jsonObj.illustrations,
                         accompanyingMaterials: jsonObj.accompanyingMaterials,
-                        dimensions: jsonObj.dimensions,
-                        paperQuality: jsonObj.paperQuality
+                        dimensions: jsonObj.dimensions
                     };
                     this.$scope.record.physicalDescription = physicalDescription;
                 }
@@ -908,7 +907,6 @@ module ums {
             this.$scope.record.physicalDescription.illustrations = "Illustrations " + offSet;
             this.$scope.record.physicalDescription.accompanyingMaterials = "Materials " + offSet;
             this.$scope.record.physicalDescription.dimensions = "Dimensions " + offSet;
-            this.$scope.record.physicalDescription.paperQuality = "Paper Quality " + offSet;
 
             this.$scope.record.noteList[0].note = "Note 0";
             this.$scope.record.subjectList[0].subject = "Subject 0";

@@ -37,7 +37,6 @@ module ums {
         illustrations: string;
         accompanyingMaterials: string;
         dimensions: string;
-        paperQuality: string;
     }
 
     export interface IRecord {
@@ -107,6 +106,7 @@ module ums {
         circulationStatus: number;
         bindingType: number;
         bindingTypeName: string;
+        paperQuality: string;
     }
 
     export interface ISupplier {
