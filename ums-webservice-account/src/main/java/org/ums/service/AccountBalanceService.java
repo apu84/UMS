@@ -242,6 +242,7 @@ public class AccountBalanceService {
     Group incomeGroup = new PersistentGroup();
     Group expenditureGroup = new PersistentGroup();
     Group assetGroup = new PersistentGroup();
+    Group liabilitiesGroup = new PersistentGroup();
 
     List<SystemGroupMap> systemGroupMapList = mSystemGroupMapManager.getAllByCompany(company);
     for(SystemGroupMap systemGroupMap : systemGroupMapList) {
@@ -251,11 +252,14 @@ public class AccountBalanceService {
         expenditureGroup = systemGroupMap.getGroup();
       if(systemGroupMap.getGroupType().equals(GroupType.ASSETS))
         assetGroup = systemGroupMap.getGroup();
+      if(systemGroupMap.getGroupType().equals(GroupType.LIABILITIES))
+        liabilitiesGroup = systemGroupMap.getGroup();
     }
 
     List<Group> incomeGroupList =mGrouopManager.getIncludingMainGroupList(Arrays.asList(incomeGroup.getGroupCode())) ;
     List<Group> expenditureGroupList = mGrouopManager.getIncludingMainGroupList(Arrays.asList(expenditureGroup.getGroupCode()));
     List<Group> assetGroupList = mGrouopManager.getIncludingMainGroupList(Arrays.asList(assetGroup.getGroupCode()));
+    List<Group> liabilitiesGroupList = mGrouopManager.getIncludingMainGroupList(Arrays.asList(liabilitiesGroup.getGroupCode()));
 
     List<Account> incomeRelatedAccountList =
         mAccountManger.getIncludingGroups(incomeGroupList.stream().map(g->g.getGroupCode()).collect(Collectors.toList()));
@@ -263,11 +267,14 @@ public class AccountBalanceService {
         mAccountManger.getIncludingGroups(expenditureGroupList.stream().map(g->g.getGroupCode()).collect(Collectors.toList()));
     List<Account> assetRelatedAccountList =
             mAccountManger.getIncludingGroups(assetGroupList.stream().map(g->g.getGroupCode()).collect(Collectors.toList()));
+    List<Account> liabilitiesRelatedAccountList =
+        mAccountManger.getIncludingGroups(liabilitiesGroupList.stream().map(g->g.getGroupCode()).collect(Collectors.toList()));
 
     List<Account> combinedAccountList = new ArrayList<>();
     combinedAccountList.addAll(incomeRelatedAccountList);
     combinedAccountList.addAll(expenditureRelatedAccountList);
     combinedAccountList.addAll(assetRelatedAccountList);
+    combinedAccountList.addAll(liabilitiesRelatedAccountList);
 
     List<MutableAccountBalance> accountBalanceList = mAccountBalanceManager.getAccountBalance(pNewFinancialAccountYear.getPreviousStartDate(), pNewFinancialAccountYear.getPreviousEndDate(), combinedAccountList);
     Map<Long, MutableAccountBalance> accountBalanceMapWithAccountId =
@@ -275,26 +282,28 @@ public class AccountBalanceService {
             .parallelStream()
             .collect(Collectors.toMap(a->a.getAccountCode(), a->a));
 
-    List<MutableAccountBalance> transferredAssetAccountBalanceList = transferAssetRelatedAccountsToNewYearBasedAccountBalance(assetRelatedAccountList, accountBalanceMapWithAccountId, pNewFinancialAccountYear);
+    List<MutableAccountBalance> transferredAssetAndLiabilitiesAccountBalanceList = transferAssetRelatedAccountsToNewYearBasedAccountBalance(assetRelatedAccountList, liabilitiesRelatedAccountList, accountBalanceMapWithAccountId, pNewFinancialAccountYear);
     List<MutableAccountBalance> transferredIncomeAndExpenditureAccountBalanceList = transferIncomeAndExpenditureAccountBalance(incomeRelatedAccountList, expenditureRelatedAccountList, accountBalanceMapWithAccountId, pNewFinancialAccountYear);
-    transferredAssetAccountBalanceList.addAll(transferredIncomeAndExpenditureAccountBalanceList);
+    transferredAssetAndLiabilitiesAccountBalanceList.addAll(transferredIncomeAndExpenditureAccountBalanceList);
 
-    return transferredAssetAccountBalanceList;
+    return transferredAssetAndLiabilitiesAccountBalanceList;
   }
 
   private List<MutableAccountBalance> transferAssetRelatedAccountsToNewYearBasedAccountBalance(
-      List<Account> assetRelatedAccountList, Map<Long, MutableAccountBalance> accountBalanceMapWithAccountId,
-      FinancialAccountYear financialAccountYear) {
-    List<MutableAccountBalance> newTransferredAssetAccountBalanceList = new ArrayList<>();
+      List<Account> assetRelatedAccountList, List<Account> liabilitiesRelatedAccountList,
+      Map<Long, MutableAccountBalance> accountBalanceMapWithAccountId, FinancialAccountYear financialAccountYear) {
+
+    assetRelatedAccountList.addAll(liabilitiesRelatedAccountList);
+    List<MutableAccountBalance> newTransferredAssetAndLiabilitiesAccountBalanceList = new ArrayList<>();
     for(Account account : assetRelatedAccountList) {
       MutableAccountBalance previousAccountBalance = accountBalanceMapWithAccountId.get(account.getId());
       MutableAccountBalance newAccountBalance = previousAccountBalance;
       newAccountBalance.setFinStartDate(financialAccountYear.getCurrentStartDate());
       newAccountBalance.setFinEndDate(financialAccountYear.getCurrentEndDate());
       newAccountBalance.setId(mIdGenerator.getNumericId());
-      newTransferredAssetAccountBalanceList.add(newAccountBalance);
+      newTransferredAssetAndLiabilitiesAccountBalanceList.add(newAccountBalance);
     }
-    return newTransferredAssetAccountBalanceList;
+    return newTransferredAssetAndLiabilitiesAccountBalanceList;
   }
 
   private List<MutableAccountBalance> transferIncomeAndExpenditureAccountBalance(
