@@ -62,18 +62,18 @@ module ums {
             if (type === 'additional') {
                 this.convertToJson(this.additional).then((json: any) => {
                     this.employeeInformationService.saveAdditionalInformation(json).then((data: any) => {
-                        this.enableEdit[type] = false;
+                        this.enableEdit = false;
                     }).catch((reason: any) => {
-                        this.enableEdit[type] = true;
+                        this.enableEdit = true;
                     });
                 });
             }
-            else {
+            else if(type === 'aoi') {
                 this.convertToJson(this.aoi).then((json: any) => {
                     this.employeeInformationService.saveAoiInformation(json).then((data: any) => {
-                        this.enableEdit[type] = false;
+                        this.enableAoiEdit = false;
                     }).catch((reason: any) => {
-                        this.enableEdit[type] = true;
+                        this.enableAoiEdit = true;
                     });
                 });
             }
