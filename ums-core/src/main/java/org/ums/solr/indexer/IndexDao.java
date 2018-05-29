@@ -37,7 +37,7 @@ public class IndexDao extends IndexDaoDecorator {
 
   @Override
   public List<Index> after(Date pDate) {
-    String query = SELECT_ALL + "WHERE MODIFIED > ? ORDER BY MODIFIED DESC ";
+    String query = SELECT_ALL + "WHERE MODIFIED > ? ORDER BY MODIFIED ASC ";
     return mJdbcTemplate.query(query, new Object[] {pDate}, new IndexerRowMapper());
   }
 
