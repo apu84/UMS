@@ -47,7 +47,7 @@ public class PersistentRoutineConfigDao extends RoutineConfigDaoDecorator {
 
   @Override
   public RoutineConfig get(Integer pSemesterId, Integer pProgramId) {
-    String query = SELECT_ONE+ " where semester_id=:semesterId and program_id=:programId";
+    String query = SELECT_ONE + " where semester_id=:semesterId and program_id=:programId";
     Map parameterMap = new HashMap();
     parameterMap.put("semesterId", pSemesterId);
     parameterMap.put("programId", pProgramId);

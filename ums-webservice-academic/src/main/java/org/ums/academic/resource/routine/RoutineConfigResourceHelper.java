@@ -55,16 +55,16 @@ public class RoutineConfigResourceHelper extends ResourceHelper<RoutineConfig, M
 
   public JsonObject get(final Integer pSemesterId, final Integer pProgramId, final UriInfo pUriInfo) {
     RoutineConfig routineConfig = new PersistentRoutineConfig();
-      LocalCache localCache = new LocalCache();
-      try {
-        routineConfig = getContentManager().get(pSemesterId, pProgramId);
-          return toJson(routineConfig, pUriInfo, localCache);
+    LocalCache localCache = new LocalCache();
+    try {
+      routineConfig = getContentManager().get(pSemesterId, pProgramId);
+      return toJson(routineConfig, pUriInfo, localCache);
 
     } catch(EmptyResultDataAccessException e) {
-        e.printStackTrace();
-          return null;
+      e.printStackTrace();
+      return null;
 
-      }
+    }
 
   }
 
