@@ -12,6 +12,7 @@ import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
+import org.ums.enums.common.AscendingOrDescendingType;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.accounts.PersistentAccount;
 import org.ums.util.UmsUtils;
@@ -88,11 +89,15 @@ public class PersistentAccountDao extends AccountDaoDecorator {
   }
 
   @Override
-  public List<Account> getAllPaginated(int itemPerPage, int pageNumber) {
+  public List<Account> getAllPaginated(int itemPerPage, int pageNumber,
+      AscendingOrDescendingType pAscendingOrDescendingType) {
     int startIndex = (itemPerPage * (pageNumber - 1)) + 1;
     int endIndex = startIndex + itemPerPage - 1;
+    String ascendingOrDecendingType =
+        pAscendingOrDescendingType.getValue().equals(AscendingOrDescendingType.ASCENDING) ? "ASC" : "DESC";
     String query =
-        "select * from (select ROWNUM row_num,mst_account.* from mst_account)tmp where row_num>=? and row_num<=? ";
+        "select * from (select ROWNUM row_num,mst_account.* from mst_account order by LAST_MODIFIED "
+            + ascendingOrDecendingType + " )tmp where row_num>=? and row_num<=? ";
     return mJdbcTemplate.query(query, new Object[] {startIndex, endIndex}, new PersistentAccountRowMapper());
   }
 

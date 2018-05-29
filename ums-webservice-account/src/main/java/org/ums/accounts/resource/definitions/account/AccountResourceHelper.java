@@ -13,6 +13,7 @@ import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
 import org.ums.enums.accounts.definitions.group.GroupType;
 import org.ums.enums.accounts.definitions.voucher.number.control.VoucherType;
+import org.ums.enums.common.AscendingOrDescendingType;
 import org.ums.exceptions.ValidationException;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.CompanyManager;
@@ -89,7 +90,7 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
   }
 
   public List<Account> createAccount(PersistentAccount pAccount, PersistentAccountBalance pAccountBalance,
-      int pItemPerPage, int pItemNumber) throws Exception {
+      int pItemPerPage, int pItemNumber, AscendingOrDescendingType pAscendingOrDescendingType) throws Exception {
     MutableAccount account = pAccount;
     if(mVoucherNumberControlManager.getByVoucher(mVoucherManager.get(VoucherType.JOURNAL_VOUCHER.getId()),
         mCompanyManager.getDefaultCompany()).getVoucherLimit() == null) {
@@ -113,7 +114,7 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     }
     else {
       getContentManager().update(account);
-      return getAllPaginated(pItemPerPage, pItemNumber);
+      return getAllPaginated(pItemPerPage, pItemNumber, pAscendingOrDescendingType);
     }
 
     MutableAccountBalance accountBalance = pAccountBalance;
@@ -121,7 +122,7 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
 
     if(accountBalance.getYearOpenBalance().equals(new BigDecimal(0)) == false)
       mAccountTransactionService.createOpeningBalanceJournalEntry(account, accountBalance);
-    return getAllPaginated(pItemPerPage, pItemNumber);
+    return getAllPaginated(pItemPerPage, pItemNumber, pAscendingOrDescendingType);
   }
 
   public List<Account> getAll() {
@@ -214,8 +215,9 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     return objectBuilder.build();
   }
 
-  public List<Account> getAllPaginated(final int pItemPerPage, final int pPageNumber) {
-    List<Account> accounts = getContentManager().getAllPaginated(pItemPerPage, pPageNumber);
+  public List<Account> getAllPaginated(final int pItemPerPage, final int pPageNumber,
+      final AscendingOrDescendingType ascendingOrDescendingType) {
+    List<Account> accounts = getContentManager().getAllPaginated(pItemPerPage, pPageNumber, ascendingOrDescendingType);
     return accounts;
   }
 

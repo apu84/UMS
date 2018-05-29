@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
+import org.ums.enums.common.AscendingOrDescendingType;
 import org.ums.logs.GetLog;
 import org.ums.report.definition.ChartOfAccountsReportGenerator;
 import org.ums.resource.Resource;
@@ -48,11 +49,11 @@ public class AccountResource extends MutableAccountResource {
   }
 
   @GET
-  @Path("/paginated/item-per-page/{item-per-page}/page-number/{page-number}")
+  @Path("/paginated/item-per-page/{item-per-page}/page-number/{page-number}/type/{type}")
   @GetLog(message = "Requested for paginated  account list")
   public List<Account> getAllPaginated(@PathParam("item-per-page") int pItemPerPage,
-      @PathParam("page-number") int pPageNumber) {
-    return mHelper.getAllPaginated(pItemPerPage, pPageNumber);
+      @PathParam("page-number") int pPageNumber, @PathParam("type") int pType) {
+    return mHelper.getAllPaginated(pItemPerPage, pPageNumber, AscendingOrDescendingType.get(pType));
   }
 
   @GET
