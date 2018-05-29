@@ -58,6 +58,8 @@ public class ConsumeIndexJobImpl extends AbstractService implements ConsumeIndex
       // MutableLock lock = new PersistentLock();
       // lock.setId("indexLock");
       // mLockManager.create(lock);
+      mLogger.debug("Index consumer scheduler started....{}",new Date());
+
       String host = "microservice";
       String port = "8000";
       MutableIndexConsumer consumer;
@@ -70,10 +72,8 @@ public class ConsumeIndexJobImpl extends AbstractService implements ConsumeIndex
       if(indexList.size() > 0) {
         // SOLR index
         for(Index index : indexList) {
-          if(mLogger.isDebugEnabled()) {
             mLogger.debug("Indexing doc: {}, type {}", index.getEntityId(), index.getEntityType());
-          }
-          mEntityResolverFactory.resolve(index);
+            mEntityResolverFactory.resolve(index);
         }
         consumer.setHead(indexList.get(indexList.size() - 1).getModified());
       }
