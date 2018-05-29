@@ -58,7 +58,7 @@ public class ConsumeIndexJobImpl extends AbstractService implements ConsumeIndex
       // MutableLock lock = new PersistentLock();
       // lock.setId("indexLock");
       // mLockManager.create(lock);
-      mLogger.debug("Index consumer scheduler started....{}",new Date());
+      //mLogger.debug("Index consumer scheduler started....{}",new Date());
 
       String host = "microservice";
       String port = "8000";
@@ -68,7 +68,7 @@ public class ConsumeIndexJobImpl extends AbstractService implements ConsumeIndex
       }
       IndexConsumer indexConsumer = mIndexConsumerManager.get(host, port);
       consumer = indexConsumer.edit();
-      mLogger.debug("Head : {}",consumer.getHead());
+      //mLogger.debug("Head : {}",consumer.getHead());
       List<Index> indexList = mIndexManager.after(consumer.getHead());
       if(indexList.size() > 0) {
         mLogger.info("Index Size: {}", indexList.size());
