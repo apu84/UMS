@@ -20,10 +20,7 @@ public class UMSJdbcTemplate extends JdbcTemplate {
     long currentTime = System.currentTimeMillis();
     List<T> returned = super.query(sql, args, rowMapper);
     long afterTime = System.currentTimeMillis();
-    String userName =
-        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils.getSubject().getPrincipal()
-            .toString();
-    mQueryLoggerFactory.getQueryLogger().log(sql, args, userName, (afterTime - currentTime));
+    mQueryLoggerFactory.getQueryLogger().log(sql, args, getUserName(), (afterTime - currentTime));
     return returned;
   }
 
@@ -32,10 +29,7 @@ public class UMSJdbcTemplate extends JdbcTemplate {
     long currentTime = System.currentTimeMillis();
     List<T> returned = super.query(sql, rowMapper);
     long afterTime = System.currentTimeMillis();
-    String userName =
-        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils.getSubject().getPrincipal()
-            .toString();
-    mQueryLoggerFactory.getQueryLogger().log(sql, userName, (afterTime - currentTime));
+    mQueryLoggerFactory.getQueryLogger().log(sql, getUserName(), (afterTime - currentTime));
     return returned;
   }
 
@@ -44,10 +38,7 @@ public class UMSJdbcTemplate extends JdbcTemplate {
     long currentTime = System.currentTimeMillis();
     T returned = super.queryForObject(sql, args, rowMapper);
     long afterTime = System.currentTimeMillis();
-    String userName =
-        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils.getSubject().getPrincipal()
-            .toString();
-    mQueryLoggerFactory.getQueryLogger().log(sql, args, userName, (afterTime - currentTime));
+    mQueryLoggerFactory.getQueryLogger().log(sql, args, getUserName(), (afterTime - currentTime));
     return returned;
   }
 
@@ -56,10 +47,7 @@ public class UMSJdbcTemplate extends JdbcTemplate {
     long currentTime = System.currentTimeMillis();
     T returned = super.queryForObject(sql, rowMapper);
     long afterTime = System.currentTimeMillis();
-    String userName =
-        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils.getSubject().getPrincipal()
-            .toString();
-    mQueryLoggerFactory.getQueryLogger().log(sql, userName, (afterTime - currentTime));
+    mQueryLoggerFactory.getQueryLogger().log(sql, getUserName(), (afterTime - currentTime));
     return returned;
   }
 
@@ -68,10 +56,7 @@ public class UMSJdbcTemplate extends JdbcTemplate {
     long currentTime = System.currentTimeMillis();
     int updated = super.update(sql, args);
     long afterTime = System.currentTimeMillis();
-    String userName =
-        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils.getSubject().getPrincipal()
-            .toString();
-    mQueryLoggerFactory.getQueryLogger().log(sql, args, userName, (afterTime - currentTime));
+    mQueryLoggerFactory.getQueryLogger().log(sql, args, getUserName(), (afterTime - currentTime));
     return updated;
   }
 
@@ -80,10 +65,7 @@ public class UMSJdbcTemplate extends JdbcTemplate {
     long currentTime = System.currentTimeMillis();
     int updated = super.update(sql);
     long afterTime = System.currentTimeMillis();
-    String userName =
-        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils.getSubject().getPrincipal()
-            .toString();
-    mQueryLoggerFactory.getQueryLogger().log(sql, userName, (afterTime - currentTime));
+    mQueryLoggerFactory.getQueryLogger().log(sql, getUserName(), (afterTime - currentTime));
     return updated;
   }
 
@@ -92,10 +74,27 @@ public class UMSJdbcTemplate extends JdbcTemplate {
     long currentTime = System.currentTimeMillis();
     int[] updated = super.batchUpdate(sql, batchArgs);
     long afterTime = System.currentTimeMillis();
-    String userName =
-        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils.getSubject().getPrincipal()
-            .toString();
-    mQueryLoggerFactory.getQueryLogger().log(sql, batchArgs, userName, (afterTime - currentTime));
+    mQueryLoggerFactory.getQueryLogger().log(sql, batchArgs, getUserName(), (afterTime - currentTime));
     return updated;
+  }
+
+  private String getUserName() {
+    String userName="";
+    if(SecurityUtils.getSubject() == null ) {
+          /*org.apache.shiro.session.ExpiredSessionException: Session with id [e87d6b35-19c6-4636-b713-39af3ae09f55] has expired. Last access time: 5/29/18 10:46 PM.  Current time: 5/29/18 11:19 PM.
+     Session timeout is set to 1800 seconds (30 minutes)
+     -----------------------------------------------------------------------------------------------------------------------------------------
+      In such a case if we try to access SecurityUtils.getSubject() .getPrincipal(), there happens a ExpiredSessionException Occurred.
+      Example: If we try to reindex all library records ( which takes more than 30 minutes or micro service is up more than 30 minutes),
+      At the end of the update INDEX_CONSUMER head, we get this exception
+      */
+      userName = "Unknown(But Shiro session timeout occurred)";
+    }
+    else if(SecurityUtils.getSubject().getPrincipal() == null)
+        userName = "Login Request";
+    else
+        userName = SecurityUtils.getSubject().getPrincipal().toString();
+
+    return userName;
   }
 }
