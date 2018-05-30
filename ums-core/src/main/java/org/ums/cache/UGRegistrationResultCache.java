@@ -63,6 +63,11 @@ public class UGRegistrationResultCache extends
   }
 
   @Override
+  public List<UGRegistrationResult> getRegisteredTheoryCourseByStudent(String pStudentId, int pSemesterId, int pExamType) {
+    return getManager().getRegisteredTheoryCourseByStudent(pStudentId, pSemesterId, pExamType);
+  }
+
+  @Override
   public List<UGRegistrationResult> getResults(String pStudentId, Integer pSemesterId) {
     String cacheKey = getCacheKey(UGRegistrationResult.class.toString(), pStudentId, pSemesterId);
     return cachedList(cacheKey, () -> getManager().getResults(pStudentId, pSemesterId));

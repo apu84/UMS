@@ -40,6 +40,12 @@ public class ExamRoutineDaoDecorator extends
   }
 
   @Override
+  public List<ExamRoutineDto> getExamDatesBySemesterAndTypeAndCourseId(String pCourseId, Integer pSemesterId,
+      Integer pExamType) {
+    return getManager().getExamDatesBySemesterAndTypeAndCourseId(pCourseId, pSemesterId, pExamType);
+  }
+
+  @Override
   public List<ExamRoutineDto> getExamRoutineBySemesterAndExamTypeOrderByExamDateAndProgramIdAndCourseId(
       Integer pSemesterId, Integer pExamType) {
     return getManager().getExamRoutineBySemesterAndExamTypeOrderByExamDateAndProgramIdAndCourseId(pSemesterId,

@@ -51,6 +51,11 @@ public class UGRegistrationResultDaoDecorator extends
   }
 
   @Override
+  public List<UGRegistrationResult> getRegisteredTheoryCourseByStudent(String pStudentId, int pSemesterId, int pExamType) {
+    return getManager().getRegisteredTheoryCourseByStudent(pStudentId, pSemesterId, pExamType);
+  }
+
+  @Override
   public List<UGRegistrationResult> getResults(String pStudentId, Integer pSemesterId) {
     return getManager().getResults(pStudentId, pSemesterId);
   }

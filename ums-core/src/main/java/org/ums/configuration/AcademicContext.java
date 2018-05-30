@@ -215,6 +215,14 @@ public class AcademicContext {
   }
 
   @Bean
+  ExpelledInformationManager expelledInformationManager() {
+    ExpelledInformationCache expelledInformationCache = new ExpelledInformationCache(mCacheFactory.getCacheManager());
+    expelledInformationCache.setManager(new PersistentExpelledInformationDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
+    return expelledInformationCache;
+  }
+
+  @Bean
   CourseTeacherManager courseTeacherManager() {
     CourseTeacherCache courseTeacherCache = new CourseTeacherCache(mCacheFactory.getCacheManager());
     courseTeacherCache.setManager(new PersistentCourseTeacherDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));

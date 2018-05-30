@@ -75,6 +75,7 @@
         '/admissionStudentId': {title: 'Admitted Student Id', 'breadcrumb': ['Admitted Student Information']},
         '/leaveApplication': {title: 'Leave Application', 'breadcrumb': ['Leave Application ']},
         '/leaveApproval': {title: 'Leave Application Approval', 'breadcrumb': ['Leave Application Approval']},
+        '/expelledInformation': {title: 'Expelled Students Information', 'breadcrumb': ['Expelled Students Information']},
         '/publicHolidays': {title: 'Public Holidays', 'breadcrumb': ['Public Holidays  ']},
         '/search': {title: 'Library:Search', 'breadcrumb': ['Search']},
         '/employeeProfile': {title: 'Profile', 'breadcrumb': ['Profile']},

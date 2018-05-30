@@ -83,12 +83,29 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
           + "WHERE MST_COURSE.COURSE_ID = CCI.COURSE_ID AND cci.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 and EXAM_ROUTINE.SEMESTER=? "
           + "ORDER BY Type, COURSE_NO, EXAM_ROUTINE.EXAM_DATE";
 
+  String REGISTERED_THEORY_COURSES =
+      "SELECT UG_REGISTRATION_RESULT.ID,UG_REGISTRATION_RESULT.STUDENT_ID,UG_REGISTRATION_RESULT.COURSE_ID,UG_REGISTRATION_RESULT.EXAM_TYPE, "
+          + "UG_REGISTRATION_RESULT.REG_TYPE,UG_REGISTRATION_RESULT.SEMESTER_ID,UG_REGISTRATION_RESULT.LAST_MODIFIED "
+          + "FROM UG_REGISTRATION_RESULT, MST_COURSE "
+          + "WHERE STUDENT_ID = ? AND SEMESTER_ID = ? AND EXAM_TYPE = ? AND UG_REGISTRATION_RESULT.COURSE_ID IN ( "
+          + "  SELECT DISTINCT (COURSE_ID) "
+          + "  FROM COURSE_TEACHER "
+          + "  WHERE SEMESTER_ID = ?) AND MST_COURSE.COURSE_ID = UG_REGISTRATION_RESULT.COURSE_ID AND "
+          + "      MST_COURSE.COURSE_TYPE = 1";
+
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
 
   public PersistentUGRegistrationResultDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mIdGenerator = pIdGenerator;
+  }
+
+  @Override
+  public List<UGRegistrationResult> getRegisteredTheoryCourseByStudent(String pStudentId, int pSemesterId, int pExamType) {
+    return mJdbcTemplate.query(REGISTERED_THEORY_COURSES,
+        new Object[] {pStudentId, pSemesterId, pExamType, pSemesterId},
+        new UGRegistrationResultRowMapperWithoutResult());
   }
 
   @Override

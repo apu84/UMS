@@ -199,6 +199,8 @@
 /// <reference path='controller/syllabus/GridSyllabus.ts'/>
 /// <reference path='controller/semester/SemesterEnrollment.ts'/>
 /// <reference path='controller/student/StudentProfile.ts'/>
+/// <reference path='controller/expelled-information/ExpelledInformation.ts'/>
+/// <reference path='controller/expelled-information/ExpelledInformationService.ts'/>
 
 /// <reference path='dummy/DummyController.ts'/>
 /// <reference path='twofatest/two.fa.test.controller.ts'/>

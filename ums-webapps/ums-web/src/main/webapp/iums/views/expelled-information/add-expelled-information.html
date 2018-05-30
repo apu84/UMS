@@ -1,0 +1,160 @@
+<style>
+    textarea {
+        resize: none;
+    }
+
+</style>
+<div class="row" >
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
+    </div>
+    <div class="panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select </h3>
+        </div>
+        <div class="panel-body pan">
+            <form action="" class="form-horizontal">
+                <div class="form-body pal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Student ID</label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   class="form-control required"
+                                   id="resultsPerPage"
+                                   placeholder="Enter Student ID"
+                                   data-ng-model="vm.studentId"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Exam Type</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="meritType"
+                                    id="meritType"
+                                    data-ng-options="examType.name for examType in vm.examTypeList track by examType.id"
+                                    data-ng-model="vm.examType"
+                                    data-ng-change="vm.changeExamType(vm.examType)"
+                            >
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" data-ng-click="vm.searchCourses()" class="btn btn-success">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="rightDiv">
+        <div class="panel">
+            <div class="panel-heading">Course List of Exam Type: <b>{{vm.selectedExamTypeName}}</b></div>
+            <div class="panel-body">
+                <form>
+                    <table class="table table-hover table-bordered table-advanced">
+                        <thead>
+                        <tr role="row" class="heading">
+                            <th width="10%" class="sorting">CourseNo</th>
+                            <th width="40%" class="sorting_asc">Course Title</th>
+                            <th width="20%" class="sorting">Exam Date</th>
+                            <th width="20%" class="sorting">Expelled Status</th>
+                            <th width="20%" class="sorting">Action</th>
+                        </tr>
+                        </thead>
+                        <thead>
+                        <tr data-ng-repeat="app in vm.courseList | orderBy:'examDate'">
+                            <td>{{app.courseNo}}</td>
+                            <td>{{app.courseTitle}}</td>
+                            <td>{{app.examDate}}</td>
+                            <td>
+                                <span data-ng-if="app.status==1" class="label label-danger badge-danger">Expelled</span>
+                                <span data-ng-if="app.status!=1" class="label label-success badge-success">Not Expelled</span>
+                            </td>
+                            <td><input
+                                    data-ng-hide="app.status==1"
+                                    type="checkbox"
+                                    data-ng-model="app.apply"
+                                    data-ng-click="vm.selectAction(app.courseId)">
+                            </td>
+                        </tr>
+                        </thead>
+                    </table>
+                <div class="row">
+                    <div class="col-sm-6">
+                    <p style="font-size: 12px"><b>Reason u of Expel: </b></p>
+                    <textarea
+                            rows="4"
+                            cols="50"
+                            style="background-color:#f9f9f9"
+                            name="comment"
+                            data-ng-model="vm.reasonOfExpel"
+                            >
+                      </textarea>
+                    </div>
+                </div>
+                <div align="right">
+                    <div class="form-actions text-right pal">
+                        <button type="button"
+                                data-toggle="modal"
+                                data-target="#myModal"
+                                class="btn btn-success">Add Records</button>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" role="dialog"  >
+    <!--   <div class="modal-backdrop"> -->
+    <div class="modal-dialog  modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" >
+                <button type="button"  class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Expelled Information</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <td width="30%"><b>{{'Student Id'}}</b></td>
+                            <td>{{vm.studentId}}</td>
+                        </tr>
+                        <tr>
+                            <td width="30%"><b>{{'Course Title'}}</b></td>
+                            <td>{{vm.selectedCourseTitle}}</td>
+                        </tr>
+                        <tr>
+                            <td width="30%"><b>{{'Exam Type'}}</b></td>
+                            <td>{{vm.selectedExamTypeName}}</td>
+                        </tr>
+                        <tr>
+                            <td width="30%"><b>{{'Expel reason'}}</b></td>
+                            <td>{{vm.reasonOfExpel}}</td>
+                        </tr>
+                        <tr>
+                            <td width="30%"><b>{{'Exam Date'}}</b></td>
+                            <td >{{vm.examDate}}</td>
+                        </tr>
+                        </thead>
+                    </table>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success"  data-ng-click="vm.addRecords()"  data-dismiss="modal">Confirm</button>
+                <button type="button" class="btn btn-info"   data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>

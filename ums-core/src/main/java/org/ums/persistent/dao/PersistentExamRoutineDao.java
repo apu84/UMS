@@ -26,6 +26,9 @@ public class PersistentExamRoutineDao extends ExamRoutineDaoDecorator {
     mJdbcTemplate = pJdbcTemplate;
   }
 
+  String EXAM_ROUTINE_DATE_BY_COURSE_ID =
+      "SELECT  to_char(EXAM_DATE,'DD-MM-YYYY') EXAM_DATE,EXAM_TIME,PROGRAM_ID,APPLICATION_DEADLINE from EXAM_ROUTINE WHERE COURSE_ID=? AND SEMESTER=? AND EXAM_TYPE=?";
+
   @Override
   public List<ExamRoutineDto> getExamRoutine(int semesterId, int examTypeId) {
     String SELECT_ALL =
@@ -45,6 +48,13 @@ public class PersistentExamRoutineDao extends ExamRoutineDaoDecorator {
             + "Order By to_date(EXAM_DATE,'DD/MM/YYYY') desc,Exam_Time,Program_Id,Year,Semester,Course_No  ";
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new Object[] {semesterId, examTypeId}, new ExamRoutineRowMapper());
+  }
+
+  @Override
+  public List<ExamRoutineDto> getExamDatesBySemesterAndTypeAndCourseId(String pCourseId, Integer pSemesterId,
+      Integer pExamType) {
+    return mJdbcTemplate.query(EXAM_ROUTINE_DATE_BY_COURSE_ID, new Object[] {pCourseId, pSemesterId, pExamType},
+        new ExamRoutineRowMapperOfDbTableModified());
   }
 
   @Override
@@ -219,6 +229,18 @@ public class PersistentExamRoutineDao extends ExamRoutineDaoDecorator {
     public ExamRoutineDto mapRow(ResultSet resultSet, int pI) throws SQLException {
       ExamRoutineDto routine = new ExamRoutineDto();
       routine.setExamDate(resultSet.getString("exam_date"));
+      return routine;
+    }
+  }
+
+  class ExamRoutineRowMapperOfDbTableModified implements RowMapper<ExamRoutineDto> {
+    @Override
+    public ExamRoutineDto mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      ExamRoutineDto routine = new ExamRoutineDto();
+      routine.setExamDate(pResultSet.getString("exam_date"));
+      routine.setExamTime(pResultSet.getString("exam_time"));
+      routine.setProgramId(pResultSet.getInt("program_id"));
+      routine.setAppDeadLine(pResultSet.getDate("APPLICATION_DEADLINE"));
       return routine;
     }
   }

@@ -452,6 +452,10 @@ module ums {
                     {id: "2", name: "Approved"},
                     {id: "3", name: "Rejected"}
                 ],
+                examType: [
+                    {id: 1, name: "Regular"},
+                    {id: 2, name: "Carry/Clearance/Improvement"}
+                ],
                 responseTypes: {
                     'ERROR': 'ERROR',
                     'SUCCESS': 'SUCCESS',

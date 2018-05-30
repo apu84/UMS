@@ -277,7 +277,7 @@ module ums {
             }]
           }
         }).state('sectionAssignment',{
-        url: "/sectionAss   ignment",
+        url: "/sectionAssignment",
         controller: 'SectionAssignment',
         templateUrl: 'views/section-assign/section-assign.html',
         resolve: {
@@ -919,8 +919,27 @@ module ums {
               });
             }]
           }
-        })
-        .state('leaveApproval', {
+        }).state('expelledInformation', {
+        url: "/expelledInformation",
+        controller: 'ExpelledInformation',
+        controllerAs: 'vm',
+        templateUrl: 'views/expelled-information/add-expelled-information.html',
+        resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+
+                return $ocLazyLoad.load({
+                    files: [
+
+                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                        'vendors/bootstrap-datepicker/css/datepicker.css',
+                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                        'vendors/bootstrap-daterangepicker/daterangepicker.js'
+                    ]
+                });
+            }]
+        }
+    }).state('leaveApproval', {
           url: "/leaveApproval",
           controller: 'LeaveApplicationApproval',
           controllerAs: 'vm',
