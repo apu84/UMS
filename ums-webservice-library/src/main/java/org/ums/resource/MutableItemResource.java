@@ -1,13 +1,13 @@
 package org.ums.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.ums.domain.model.immutable.library.Item;
-import org.ums.domain.model.immutable.library.Record;
-import org.ums.domain.model.mutable.library.MutableItem;
-import org.ums.domain.model.mutable.library.MutableRecord;
+import org.ums.logs.DeleteLog;
+import org.ums.logs.PostLog;
+import org.ums.logs.PutLog;
 import org.ums.resource.helper.ItemResourceHelper;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -22,28 +22,32 @@ public class MutableItemResource extends Resource {
 
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response updateItem(final @PathParam("object-id") Long pObjectId, final @Context Request pRequest,
-      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) throws Exception {
+  @PutLog(message = "Updated an item")
+  public Response updateItem(@Context HttpServletRequest pHttpServletRequest, final @PathParam("object-id") Long pObjectId, final @Context Request pRequest,
+                             final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) throws Exception {
     /* return mResourceHelper.put(pObjectId, pRequest, pIfMatchHeader, pJsonObject); */
 
     return mResourceHelper.updateItem(pJsonObject, mUriInfo);
   }
 
   @POST
-  public Response createItem(final JsonObject pJsonObject) throws Exception {
+  @PostLog(message = "Created an item")
+  public Response createItem(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject) throws Exception {
     return mResourceHelper.post(pJsonObject, mUriInfo);
   }
 
   @POST
   @Path("/batch")
-  public Response createItems(final JsonObject pJsonObject) throws Exception {
+  @PostLog(message = "Batch create items")
+  public Response createItems(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject) throws Exception {
 
     return mResourceHelper.batchPost(pJsonObject, mUriInfo);
   }
 
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response deleteItem(final @PathParam("object-id") String pItemNo) throws Exception {
+  @DeleteLog(message = "Deleted an item")
+  public Response deleteItem(@Context HttpServletRequest pHttpServletRequest, final @PathParam("object-id") String pItemNo) throws Exception {
     return mResourceHelper.deleteItem(pItemNo);
   }
 
