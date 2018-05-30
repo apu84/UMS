@@ -94,10 +94,10 @@ public class PersistentAccountDao extends AccountDaoDecorator {
     int startIndex = (itemPerPage * (pageNumber - 1)) + 1;
     int endIndex = startIndex + itemPerPage - 1;
     String ascendingOrDecendingType =
-        pAscendingOrDescendingType.getValue().equals(AscendingOrDescendingType.ASCENDING) ? "ASC" : "DESC";
+        pAscendingOrDescendingType.equals(AscendingOrDescendingType.ASCENDING) ? "ASC" : "DESC";
     String query =
-        "select * from (select ROWNUM row_num,mst_account.* from mst_account order by LAST_MODIFIED "
-            + ascendingOrDecendingType + " )tmp where row_num>=? and row_num<=? ";
+        "select * from (select ROWNUM row_num, tmp_account.* from (select mst_account.* from mst_account order by MODIFIED_DATE "
+            + ascendingOrDecendingType + ") tmp_account)tmp where row_num>=? and row_num<=?";
     return mJdbcTemplate.query(query, new Object[] {startIndex, endIndex}, new PersistentAccountRowMapper());
   }
 

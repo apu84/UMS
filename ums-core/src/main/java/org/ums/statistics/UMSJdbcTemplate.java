@@ -79,21 +79,26 @@ public class UMSJdbcTemplate extends JdbcTemplate {
   }
 
   private String getUserName() {
-    String userName="";
-    if(SecurityUtils.getSubject() == null ) {
-          /*org.apache.shiro.session.ExpiredSessionException: Session with id [e87d6b35-19c6-4636-b713-39af3ae09f55] has expired. Last access time: 5/29/18 10:46 PM.  Current time: 5/29/18 11:19 PM.
-     Session timeout is set to 1800 seconds (30 minutes)
-     -----------------------------------------------------------------------------------------------------------------------------------------
-      In such a case if we try to access SecurityUtils.getSubject() .getPrincipal(), there happens a ExpiredSessionException Occurred.
-      Example: If we try to reindex all library records ( which takes more than 30 minutes or micro service is up more than 30 minutes),
-      At the end of the update INDEX_CONSUMER head, we get this exception
-      */
+    String userName = "";
+    if(SecurityUtils.getSubject() == null) {
+      /*
+       * org.apache.shiro.session.ExpiredSessionException: Session with id
+       * [e87d6b35-19c6-4636-b713-39af3ae09f55] has expired. Last access time: 5/29/18 10:46 PM.
+       * Current time: 5/29/18 11:19 PM. Session timeout is set to 1800 seconds (30 minutes)
+       * --------
+       * ------------------------------------------------------------------------------------
+       * --------------------------------------------- In such a case if we try to access
+       * SecurityUtils.getSubject() .getPrincipal(), there happens a ExpiredSessionException
+       * Occurred. Example: If we try to reindex all library records ( which takes more than 30
+       * minutes or micro service is up more than 30 minutes), At the end of the update
+       * INDEX_CONSUMER head, we get this exception
+       */
       userName = "Unknown(But Shiro session timeout occurred)";
     }
     else if(SecurityUtils.getSubject().getPrincipal() == null)
-        userName = "Login Request";
+      userName = "Login Request";
     else
-        userName = SecurityUtils.getSubject().getPrincipal().toString();
+      userName = SecurityUtils.getSubject().getPrincipal().toString();
 
     return userName;
   }

@@ -160,13 +160,13 @@ module ums {
     }
 
     public getPaginatedAccounts() {
+        console.log("Getting all paginated accounts");
+        console.log(this.ascendingOrDescendingType);
       this.accountService.getAllPaginated(this.itemsPerPage>0?this.itemsPerPage: 15, this.pageNumber, this.ascendingOrDescendingType).then((accounts: IAccount[]) => {
         if (accounts == undefined)
           this.notify.error("Error in fetching data");
         else {
           this.existingAccounts = [];
-          console.log("Accounts");
-          console.log(accounts);
           accounts.forEach((a: IAccount) => a.accGroupName = this.groupMapWithGroupid[a.accGroupCode].groupName);
           this.existingAccounts = accounts;
         }
