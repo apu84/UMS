@@ -67,10 +67,10 @@
                     <td>{{vm.certificatesStatus[payment.transactionId].processedOn ?
                         vm.certificatesStatus[payment.transactionId].processedOn : 'N/A'}}
                     </td>
-                    <td>
+                    <td >
                         <img src="images/pdf_square.png" class="download_tooltip ng-scope"
                              style="position: relative;cursor: pointer;margin-bottom: 10px;"
-                             data-ng-click="vm.receipt(payment.transactionId)">
+                             data-ng-click="vm.receipt(payment.transactionId)" ng-if="payment.amount!='0'">
                     </td>
                 </tr>
                 </tbody>

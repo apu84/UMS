@@ -75,15 +75,16 @@ public class EmployeeResource extends MutableEmployeeResource {
   @GET
   @Path("/employeeById/departmentId/{department-id}")
   @GetLog(message = "Get employees by department")
-  public JsonObject getEmployees(@Context HttpServletRequest httpServletRequest, final @Context Request pRequest, final @PathParam("department-id") String pDepartmentId) {
+  public JsonObject getEmployees(@Context HttpServletRequest httpServletRequest, final @Context Request pRequest,
+      final @PathParam("department-id") String pDepartmentId) {
     return mEmployeeResourceHelper.getEmployees(pDepartmentId, mUriInfo);
   }
 
   @GET
   @Path("/newId/deptId/{dept-id}/employeeType/{employee-type}")
   @GetLog(message = "Get new employee id")
-  public JsonObject getNewEmployeeId(@Context HttpServletRequest httpServletRequest, final @Context Request pRequest, final @PathParam("dept-id") String pDeptId,
-      final @PathParam("employee-type") int pEmployeeType) {
+  public JsonObject getNewEmployeeId(@Context HttpServletRequest httpServletRequest, final @Context Request pRequest,
+      final @PathParam("dept-id") String pDeptId, final @PathParam("employee-type") int pEmployeeType) {
     return mEmployeeResourceHelper.getCurrentMaxEmployeeId(pDeptId, pEmployeeType);
   }
 
