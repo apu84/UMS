@@ -209,7 +209,7 @@
             <div class="col-md-6">
                 <div class="text-right">
                     <dir-pagination-controls boundary-links="true" pagination-id="mainRecordPaginator"
-                                             on-page-change="pageChanged(newPageNumber)"
+                                             on-page-change="pageChanged(newPageNumber, 1)"
                                              template-url="views\admin\patron\dirPagination.tpl.html"></dir-pagination-controls>
                 </div>
             </div>
@@ -438,7 +438,7 @@
                 </ul>
                 -->
                 <dir-pagination-controls boundary-links="true" pagination-id="mainRecordPaginator"
-                                         on-page-change="pageChanged(newPageNumber)"
+                                         on-page-change="pageChanged(newPageNumber, 2)"
                                          template-url="views\admin\patron\dirPagination.tpl.html"></dir-pagination-controls>
             </div>
     </div>
