@@ -1,14 +1,16 @@
 package org.ums.resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.ums.logs.GetLog;
+import org.ums.manager.EmployeeManager;
+
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.ums.manager.EmployeeManager;
 
 @Component
 @Path("academic/employee")
@@ -20,7 +22,8 @@ public class EmployeeResource extends MutableEmployeeResource {
 
   @GET
   @Path("/all")
-  public JsonObject getAll() throws Exception {
+  @GetLog(message = "Get all employees")
+  public JsonObject getAll(@Context HttpServletRequest httpServletRequest) throws Exception {
     return mEmployeeResourceHelper.getAll(mUriInfo);
   }
 
@@ -71,13 +74,15 @@ public class EmployeeResource extends MutableEmployeeResource {
 
   @GET
   @Path("/employeeById/departmentId/{department-id}")
-  public JsonObject getEmployees(final @Context Request pRequest, final @PathParam("department-id") String pDepartmentId) {
+  @GetLog(message = "Get employees by department")
+  public JsonObject getEmployees(@Context HttpServletRequest httpServletRequest, final @Context Request pRequest, final @PathParam("department-id") String pDepartmentId) {
     return mEmployeeResourceHelper.getEmployees(pDepartmentId, mUriInfo);
   }
 
   @GET
   @Path("/newId/deptId/{dept-id}/employeeType/{employee-type}")
-  public JsonObject getNewEmployeeId(final @Context Request pRequest, final @PathParam("dept-id") String pDeptId,
+  @GetLog(message = "Get new employee id")
+  public JsonObject getNewEmployeeId(@Context HttpServletRequest httpServletRequest, final @Context Request pRequest, final @PathParam("dept-id") String pDeptId,
       final @PathParam("employee-type") int pEmployeeType) {
     return mEmployeeResourceHelper.getCurrentMaxEmployeeId(pDeptId, pEmployeeType);
   }
