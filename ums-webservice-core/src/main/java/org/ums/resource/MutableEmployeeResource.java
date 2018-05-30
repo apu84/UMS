@@ -27,9 +27,9 @@ public class MutableEmployeeResource extends Resource {
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
   @PutLog(message = "Updated an employee")
-  public Response updateEmployeeInformation(@Context HttpServletRequest httpServletRequest, final @PathParam("object-id") String pObjectId,
-      final @Context Request pRequest, final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
-      final JsonObject pJsonObject) throws Exception {
+  public Response updateEmployeeInformation(@Context HttpServletRequest httpServletRequest,
+      final @PathParam("object-id") String pObjectId, final @Context Request pRequest,
+      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) throws Exception {
 
     return mEmployeeResourceHelper.put(pObjectId, pRequest, pIfMatchHeader, pJsonObject);
   }
@@ -37,7 +37,8 @@ public class MutableEmployeeResource extends Resource {
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
   @DeleteLog(message = "Deleted an employee")
-  public Response deleteAnEmployee(@Context HttpServletRequest httpServletRequest, final @PathParam("object-id") String objectId) throws Exception {
+  public Response deleteAnEmployee(@Context HttpServletRequest httpServletRequest,
+      final @PathParam("object-id") String objectId) throws Exception {
     return mEmployeeResourceHelper.delete(objectId);
   }
 }

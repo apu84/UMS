@@ -23,8 +23,9 @@ public class MutableItemResource extends Resource {
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
   @PutLog(message = "Updated an item")
-  public Response updateItem(@Context HttpServletRequest pHttpServletRequest, final @PathParam("object-id") Long pObjectId, final @Context Request pRequest,
-                             final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) throws Exception {
+  public Response updateItem(@Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("object-id") Long pObjectId, final @Context Request pRequest,
+      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) throws Exception {
     /* return mResourceHelper.put(pObjectId, pRequest, pIfMatchHeader, pJsonObject); */
 
     return mResourceHelper.updateItem(pJsonObject, mUriInfo);
@@ -32,14 +33,16 @@ public class MutableItemResource extends Resource {
 
   @POST
   @PostLog(message = "Created an item")
-  public Response createItem(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject) throws Exception {
+  public Response createItem(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject)
+      throws Exception {
     return mResourceHelper.post(pJsonObject, mUriInfo);
   }
 
   @POST
   @Path("/batch")
   @PostLog(message = "Batch create items")
-  public Response createItems(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject) throws Exception {
+  public Response createItems(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject)
+      throws Exception {
 
     return mResourceHelper.batchPost(pJsonObject, mUriInfo);
   }
@@ -47,7 +50,8 @@ public class MutableItemResource extends Resource {
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
   @DeleteLog(message = "Deleted an item")
-  public Response deleteItem(@Context HttpServletRequest pHttpServletRequest, final @PathParam("object-id") String pItemNo) throws Exception {
+  public Response deleteItem(@Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("object-id") String pItemNo) throws Exception {
     return mResourceHelper.deleteItem(pItemNo);
   }
 
