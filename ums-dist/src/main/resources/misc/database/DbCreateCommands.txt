@@ -31,6 +31,8 @@ imp  DB_IUMS_PRIVATE/ig100@XE  STATISTICS=NONE FILE='/home/DB_IUMS_PRIVATE.dmp'
 imp  DB_IUMS/ig100@XE  STATISTICS=NONE FILE='/home/DB_IUMS.dmp'
 imp  DB_IUMS_ACCOUNT/ig100@XE  STATISTICS=NONE FILE='/home/DB_IUMS_ACCOUNT.dmp'
 
+alter database datafile 'C:/oraclexe/app/oracle/oradata/XE/system.dbf' autoextend on next 128m maxsize 8192m;
+
 
 
 
