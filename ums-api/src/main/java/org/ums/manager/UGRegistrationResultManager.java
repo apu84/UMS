@@ -28,7 +28,11 @@ public interface UGRegistrationResultManager extends
   List<UGRegistrationResult> getRegisteredCourseByStudent(int pSemesterId, String pStudentId,
       CourseRegType pCourseRegType);
 
-  List<UGRegistrationResult> getRegisteredTheoryCourseByStudent(String pStudentId, int pSemesterId, int pExamType);
+  List<UGRegistrationResult> getRegisteredTheoryCourseByStudent(String pStudentId, int pSemesterId, int pExamType,
+      int pRegType);
+
+  List<UGRegistrationResult> getRegisteredCoursesBySemesterAndExamTypeAndRegTpe(int pSemesterId, int pExamType,
+      int pRegType);
 
   List<UGRegistrationResult> getResults(String pStudentId, Integer pSemesterId);
 

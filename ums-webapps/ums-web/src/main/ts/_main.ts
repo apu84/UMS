@@ -201,6 +201,7 @@
 /// <reference path='controller/student/StudentProfile.ts'/>
 /// <reference path='controller/expelled-information/ExpelledInformation.ts'/>
 /// <reference path='controller/expelled-information/ExpelledInformationService.ts'/>
+/// <reference path='controller/expelled-information/ViewExpelledInformation.ts'/>
 
 /// <reference path='dummy/DummyController.ts'/>
 /// <reference path='twofatest/two.fa.test.controller.ts'/>

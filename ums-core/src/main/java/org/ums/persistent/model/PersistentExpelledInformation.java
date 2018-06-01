@@ -2,6 +2,7 @@ package org.ums.persistent.model;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
+import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.mutable.MutableExpelledInformation;
 import org.ums.manager.CourseManager;
 import org.ums.manager.ExpelledInformationManager;
@@ -27,15 +28,23 @@ public class PersistentExpelledInformation implements MutableExpelledInformation
   }
   private Long mId;
   private Integer mSemesterId;
+  private String mSemesterName;
   private String mStudentId;
+  private String mStudentName;
   private String mCourseId;
   private String mCourseNo;
   private String mCourseTitle;
   private Integer mExamType;
+  private String mExamTypeName;
+  private String mProgramName;
+  private Department mDepartment;
   private String mExpelledReason;
   private String mInsertionDate;
   private Integer mStatus;
   private String mExamDate;
+  private String mDeptId;
+  private String mDeptName;
+  private Integer mRegType;
 
   public PersistentExpelledInformation() {
 
@@ -44,21 +53,34 @@ public class PersistentExpelledInformation implements MutableExpelledInformation
   public PersistentExpelledInformation(final PersistentExpelledInformation pPersistentExpelledInformation) {
     mId = pPersistentExpelledInformation.getId();
     mStudentId = pPersistentExpelledInformation.getStudentId();
+    mStudentName = pPersistentExpelledInformation.getStudentName();
     mSemesterId = pPersistentExpelledInformation.getSemesterId();
+    mSemesterName = pPersistentExpelledInformation.getSemesterName();
+    mProgramName = pPersistentExpelledInformation.getProgramName();
     mCourseId = pPersistentExpelledInformation.getCourseId();
     mCourseNo = pPersistentExpelledInformation.getCourseNo();
     mCourseTitle = pPersistentExpelledInformation.getCourseTitle();
     mExamType = pPersistentExpelledInformation.getExamType();
+    mExamTypeName = pPersistentExpelledInformation.getExamTypeName();
+    mDepartment = pPersistentExpelledInformation.getDepartment();
     mExpelledReason = pPersistentExpelledInformation.getExpelledReason();
     mStatus = pPersistentExpelledInformation.getStatus();
     mInsertionDate = pPersistentExpelledInformation.getInsertionDate();
     mExamDate = pPersistentExpelledInformation.getExamDate();
+    mDeptId = pPersistentExpelledInformation.getDeptId();
+    mDeptName = pPersistentExpelledInformation.getDeptName();
+    mRegType = pPersistentExpelledInformation.getRegType();
   }
 
   @Override
   public void setStudentId(String pStudentId) {
     mStudentId = pStudentId;
 
+  }
+
+  @Override
+  public void setStudentName(String pStudentName) {
+    mStudentName = pStudentName;
   }
 
   @Override
@@ -83,8 +105,33 @@ public class PersistentExpelledInformation implements MutableExpelledInformation
   }
 
   @Override
+  public void setSemesterName(String pSemesterName) {
+    mSemesterName = pSemesterName;
+  }
+
+  @Override
   public void setExamType(Integer pExamType) {
     mExamType = pExamType;
+  }
+
+  @Override
+  public void setRegType(Integer pRegType) {
+    mRegType = pRegType;
+  }
+
+  @Override
+  public void setExamTypeName(String pExamTypeName) {
+    mExamTypeName = pExamTypeName;
+  }
+
+  @Override
+  public void setDepartment(Department pDepartment) {
+    mDepartment = pDepartment;
+  }
+
+  @Override
+  public void setProgramName(String pProgramName) {
+    mProgramName = pProgramName;
   }
 
   @Override
@@ -108,13 +155,33 @@ public class PersistentExpelledInformation implements MutableExpelledInformation
   }
 
   @Override
+  public void setDeptId(String pDeptId) {
+    mDeptId = pDeptId;
+  }
+
+  @Override
+  public void setDeptName(String pDeptName) {
+    mDeptName = pDeptName;
+  }
+
+  @Override
   public String getStudentId() {
     return mStudentId;
   }
 
   @Override
+  public String getStudentName() {
+    return mStudentName;
+  }
+
+  @Override
   public Integer getSemesterId() {
     return mSemesterId;
+  }
+
+  @Override
+  public String getSemesterName() {
+    return mSemesterName;
   }
 
   @Override
@@ -138,6 +205,26 @@ public class PersistentExpelledInformation implements MutableExpelledInformation
   }
 
   @Override
+  public Integer getRegType() {
+    return mRegType;
+  }
+
+  @Override
+  public String getExamTypeName() {
+    return mExamTypeName;
+  }
+
+  @Override
+  public Department getDepartment() {
+    return mDepartment;
+  }
+
+  @Override
+  public String getProgramName() {
+    return mProgramName;
+  }
+
+  @Override
   public String getExpelledReason() {
     return mExpelledReason;
   }
@@ -155,6 +242,16 @@ public class PersistentExpelledInformation implements MutableExpelledInformation
   @Override
   public String getExamDate() {
     return mExamDate;
+  }
+
+  @Override
+  public String getDeptId() {
+    return mDeptId;
+  }
+
+  @Override
+  public String getDeptName() {
+    return mDeptName;
   }
 
   @Override

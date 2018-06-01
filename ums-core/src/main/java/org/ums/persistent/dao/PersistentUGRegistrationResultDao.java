@@ -87,11 +87,13 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
       "SELECT UG_REGISTRATION_RESULT.ID,UG_REGISTRATION_RESULT.STUDENT_ID,UG_REGISTRATION_RESULT.COURSE_ID,UG_REGISTRATION_RESULT.EXAM_TYPE, "
           + "UG_REGISTRATION_RESULT.REG_TYPE,UG_REGISTRATION_RESULT.SEMESTER_ID,UG_REGISTRATION_RESULT.LAST_MODIFIED "
           + "FROM UG_REGISTRATION_RESULT, MST_COURSE "
-          + "WHERE STUDENT_ID = ? AND SEMESTER_ID = ? AND EXAM_TYPE = ? AND UG_REGISTRATION_RESULT.COURSE_ID IN ( "
+          + "WHERE STUDENT_ID = ? AND SEMESTER_ID = ? AND EXAM_TYPE = ? AND REG_TYPE=? AND UG_REGISTRATION_RESULT.COURSE_ID IN ( "
           + "  SELECT DISTINCT (COURSE_ID) "
           + "  FROM COURSE_TEACHER "
           + "  WHERE SEMESTER_ID = ?) AND MST_COURSE.COURSE_ID = UG_REGISTRATION_RESULT.COURSE_ID AND "
           + "      MST_COURSE.COURSE_TYPE = 1";
+  String REG_COURSE_BY_SEM_EXAM_REG =
+      "SELECT ID,STUDENT_ID,COURSE_ID,EXAM_TYPE,REG_TYPE,SEMESTER_ID,LAST_MODIFIED FROM UG_REGISTRATION_RESULT WHERE SEMESTER_ID=? AND EXAM_TYPE=? AND REG_TYPE=?";
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
@@ -102,10 +104,17 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   }
 
   @Override
-  public List<UGRegistrationResult> getRegisteredTheoryCourseByStudent(String pStudentId, int pSemesterId, int pExamType) {
-    return mJdbcTemplate.query(REGISTERED_THEORY_COURSES,
-        new Object[] {pStudentId, pSemesterId, pExamType, pSemesterId},
+  public List<UGRegistrationResult> getRegisteredCoursesBySemesterAndExamTypeAndRegTpe(int pSemesterId, int pExamType,
+      int pRegType) {
+    return mJdbcTemplate.query(REG_COURSE_BY_SEM_EXAM_REG, new Object[] {pSemesterId, pExamType, pRegType},
         new UGRegistrationResultRowMapperWithoutResult());
+  }
+
+  @Override
+  public List<UGRegistrationResult> getRegisteredTheoryCourseByStudent(String pStudentId, int pSemesterId,
+      int pExamType, int pRegType) {
+    return mJdbcTemplate.query(REGISTERED_THEORY_COURSES, new Object[] {pStudentId, pSemesterId, pExamType, pRegType,
+        pSemesterId}, new UGRegistrationResultRowMapperWithoutResult());
   }
 
   @Override

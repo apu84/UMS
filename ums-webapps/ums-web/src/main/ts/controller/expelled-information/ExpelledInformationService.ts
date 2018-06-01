@@ -8,13 +8,22 @@ module ums{
        }
        public getCourses(studentId:string,examType:number):ng.IPromise<any>{
            var defer = this.$q.defer();
-           this.httpClient.get('academic/expelledInformation/getCourseList/studentId/'+studentId+'/examType/'+examType,HttpClient.MIME_TYPE_JSON,
+           this.httpClient.get('academic/expelledInformation/getCourseList/studentId/'+studentId+'/regType/'+examType,HttpClient.MIME_TYPE_JSON,
                (response: any) => {
                    defer.resolve(response);
                });
            return defer.promise;
 
        }
+       public getExpelledInfo(semesterId:number,examType:number):ng.IPromise<any>{
+           var defer = this.$q.defer();
+           this.httpClient.get('academic/expelledInformation/getExpelInfoList/semesterId/'+semesterId+'/regType/'+examType,HttpClient.MIME_TYPE_JSON,
+               (response: any) => {
+                   defer.resolve(response);
+               });
+           return defer.promise;
+       }
+
        public addExpelledStudentsRecord(json:any):ng.IPromise<any>{
            var defer = this.$q.defer();
            var that=this;

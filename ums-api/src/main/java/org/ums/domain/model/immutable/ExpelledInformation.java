@@ -14,7 +14,11 @@ public interface ExpelledInformation extends Serializable, LastModifier, EditTyp
     Identifier<Long> {
   String getStudentId();
 
+  String getStudentName();
+
   Integer getSemesterId();
+
+  String getSemesterName();
 
   String getCourseId();
 
@@ -24,6 +28,14 @@ public interface ExpelledInformation extends Serializable, LastModifier, EditTyp
 
   Integer getExamType();
 
+  Integer getRegType();
+
+  String getExamTypeName();
+
+  Department getDepartment();
+
+  String getProgramName();
+
   String getExpelledReason();
 
   String getInsertionDate();
@@ -31,5 +43,9 @@ public interface ExpelledInformation extends Serializable, LastModifier, EditTyp
   Integer getStatus();
 
   String getExamDate();
+
+  String getDeptId();
+
+  String getDeptName();
 
 }

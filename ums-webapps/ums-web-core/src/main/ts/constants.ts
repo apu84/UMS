@@ -454,7 +454,10 @@ module ums {
                 ],
                 examType: [
                     {id: 1, name: "Regular"},
-                    {id: 2, name: "Carry/Clearance/Improvement"}
+                    {id: 2, name: "Clearance"},
+                    {id: 3, name: "Carry"},
+                    {id: 4, name: "Special Carry"},
+                    {id: 5, name: "Improvement"}
                 ],
                 responseTypes: {
                     'ERROR': 'ERROR',

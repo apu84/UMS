@@ -8,6 +8,7 @@ module ums{
         courseNo:string;
         courseTitle:string;
         examDate:string;
+        regType:number;
         status:number;
         apply:boolean;
     }
@@ -18,10 +19,14 @@ module ums{
         selectedExamTypeName:string;
         examDate:string;
         selectedCourseId:string;
+        selectedRegType:number;
         selectedCourseTitle:string;
         studentId:string;
         reasonOfExpel:string;
         courseList:Array<ICourseList>;
+        enableAddButton:boolean;
+        showExpelReasonBox:boolean;
+        showModal:boolean;
 
         public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService','ExpelledInformationService'];
 
@@ -37,29 +42,59 @@ module ums{
                     private expelledInformationService:ExpelledInformationService){
             this.examTypeList=[];
             this.studentId="";
+            this.reasonOfExpel="";
             this.examTypeList=this.appConstants.examType;
             this.examType=this.examTypeList[0];
             this.selectedExamTypeId=this.examType.id;
             this.selectedExamTypeName=this.examType.name;
+            this.enableAddButton=false;
+            this.showExpelReasonBox=false;
+            this.showModal=false;
 
         }
         private changeExamType(value:any){
-            console.log(value.id+"  "+value.name);
             this.selectedExamTypeId=value.id;
             this.selectedExamTypeName=value.name;
+            this.courseList=[];
+            this.showExpelReasonBox=false;
+
 
         }
 
         private searchCourses(){
-            Utils.expandRightDiv();
-            var res: Array<ICourseList> = [];
-            this.expelledInformationService.getCourses(this.studentId,this.selectedExamTypeId).then((data)=>{
-                console.log("****Course/List*****");
-                res=data.entries;
-                this.courseList=res;
-                console.log(this.courseList);
-            })
+            if(this.studentId.length>8){
+                Utils.expandRightDiv();
+                this.enableAddButton=false;
+                this.showExpelReasonBox=true;
+                var res: Array<ICourseList> = [];
+                this.expelledInformationService.getCourses(this.studentId, this.selectedExamTypeId).then((data) => {
+                    console.log("Course/List");
+                    res = data.entries;
+                    this.courseList = res;
+                    console.log(this.courseList);
+                })
+            }else {
+                this.notify.warn("Invalid Student Id");
+            }
 
+        }
+        private checkExpelReason(){
+            console.log("i am in")
+            if(this.reasonOfExpel.length >=5 && this.reasonOfExpel.length <200){
+                console.log("Length: "+this.reasonOfExpel.length);
+                this.showModal=true;
+            }else{
+                this.notify.warn("Reason of Expulsion Must be between 5 to 200 Characters");
+                this.showModal=false;
+            }
+        }
+        private reset(){
+            console.log("reset");
+            this.reasonOfExpel="";
+            for(let i=0;i<this.courseList.length;i++){
+                this.courseList[i].apply=false;
+            }
+            this.enableAddButton=false;
         }
 
         private addRecords(){
@@ -71,18 +106,21 @@ module ums{
                 console.log(data);
                 this.searchCourses();
                 this.reasonOfExpel="";
+                this.enableAddButton=false;
 
             })
 
 
         }
         private selectAction(List:any){
+            this.enableAddButton=true;
             for(let i=0;i<this.courseList.length;i++){
                 if(this.courseList[i].courseId==List){
                     this.courseList[i].apply=true;
                     this.selectedCourseId=this.courseList[i].courseId;
                     this.selectedCourseTitle=this.courseList[i].courseTitle+"("+this.courseList[i].courseNo+")";
                     this.examDate=this.courseList[i].examDate;
+                    this.selectedRegType=this.courseList[i].regType;
                 }else{
                     this.courseList[i].apply=false;
                 }
@@ -96,7 +134,8 @@ module ums{
                 var item = {};
                     item["studentId"] = this.studentId
                     item["courseId"] = this.selectedCourseId;
-                    item["examType"] = this.selectedExamTypeId;
+                    item["examType"] = this.selectedExamTypeId !=ExamType.REGULAR ? ExamType.CARRY_CLEARANCE_IMPROVEMENT:ExamType.REGULAR;
+                    item["regType"] = this.selectedRegType;
                     item["expelReason"] = this.reasonOfExpel;
                     jsonObj.push(item);
             completeJson["entries"] = jsonObj;
@@ -106,4 +145,9 @@ module ums{
 
     }
     UMS.controller("ExpelledInformation",ExpelledInformation)
+}
+
+enum ExamType{
+    REGULAR=1,
+    CARRY_CLEARANCE_IMPROVEMENT=2,
 }

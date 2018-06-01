@@ -58,8 +58,8 @@
                         <tr role="row" class="heading">
                             <th width="10%" class="sorting">CourseNo</th>
                             <th width="40%" class="sorting_asc">Course Title</th>
-                            <th width="20%" class="sorting">Exam Date</th>
-                            <th width="20%" class="sorting">Expelled Status</th>
+                            <th width="20%" class="sorting">Date of Exam</th>
+                            <th width="20%" class="sorting">Expel Status</th>
                             <th width="20%" class="sorting">Action</th>
                         </tr>
                         </thead>
@@ -83,78 +83,80 @@
                     </table>
                 <div class="row">
                     <div class="col-sm-6">
-                    <p style="font-size: 12px"><b>Reason u of Expel: </b></p>
                     <textarea
                             rows="4"
                             cols="50"
                             style="background-color:#f9f9f9"
+                            data-ng-show="vm.showExpelReasonBox"
                             name="comment"
+                            placeholder="Reason of Expulsion..."
                             data-ng-model="vm.reasonOfExpel"
                             >
                       </textarea>
                     </div>
                 </div>
                 <div align="right">
-                    <div class="form-actions text-right pal">
                         <button type="button"
+                                data-ng-show="vm.enableAddButton"
+                                data-ng-click="vm.checkExpelReason()"
                                 data-toggle="modal"
                                 data-target="#myModal"
-                                class="btn btn-success">Add Records</button>
+                                class="btn btn-success btn-sm">
+                            <span class="glyphicon glyphicon-plus-sign"></span>&nbspExpel
+                        </button>
                     </div>
-                </div>
                 </form>
             </div>
         </div>
         </div>
     </div>
 </div>
+<div data-ng-if="vm.showModal==true">
+    <div class="modal fade" id="myModal" role="dialog">
+        <!--   <div class="modal-backdrop"> -->
+        <div class="modal-dialog  modal-lg">
 
-<div class="modal fade" id="myModal" role="dialog"  >
-    <!--   <div class="modal-backdrop"> -->
-    <div class="modal-dialog  modal-lg">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header" >
-                <button type="button"  class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Expelled Information</h4>
-            </div>
-            <div class="modal-body">
-                <div>
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <td width="30%"><b>{{'Student Id'}}</b></td>
-                            <td>{{vm.studentId}}</td>
-                        </tr>
-                        <tr>
-                            <td width="30%"><b>{{'Course Title'}}</b></td>
-                            <td>{{vm.selectedCourseTitle}}</td>
-                        </tr>
-                        <tr>
-                            <td width="30%"><b>{{'Exam Type'}}</b></td>
-                            <td>{{vm.selectedExamTypeName}}</td>
-                        </tr>
-                        <tr>
-                            <td width="30%"><b>{{'Expel reason'}}</b></td>
-                            <td>{{vm.reasonOfExpel}}</td>
-                        </tr>
-                        <tr>
-                            <td width="30%"><b>{{'Exam Date'}}</b></td>
-                            <td >{{vm.examDate}}</td>
-                        </tr>
-                        </thead>
-                    </table>
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" >
+                    <button type="button"  data-ng-click="vm.reset()" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Expelled Information</h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <td width="30%"><b>{{'Student Id'}}</b></td>
+                                <td>{{vm.studentId}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Course Title'}}</b></td>
+                                <td>{{vm.selectedCourseTitle}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Exam Type'}}</b></td>
+                                <td>{{vm.selectedExamTypeName}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Expel reason'}}</b></td>
+                                <td>{{vm.reasonOfExpel}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Date of Expulsion'}}</b></td>
+                                <td >{{vm.examDate}}</td>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-ng-click="vm.reset()"  data-dismiss="modal">Close & Reset</button>
+                    <button type="button" class="btn btn-success"  data-ng-click="vm.addRecords()"  data-dismiss="modal">Confirm</button>
 
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success"  data-ng-click="vm.addRecords()"  data-dismiss="modal">Confirm</button>
-                <button type="button" class="btn btn-info"   data-dismiss="modal">Close</button>
-
-            </div>
         </div>
     </div>
-</div>
-</div>
+
 </div>

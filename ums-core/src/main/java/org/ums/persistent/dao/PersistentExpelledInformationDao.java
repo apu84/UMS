@@ -26,10 +26,10 @@ public class PersistentExpelledInformationDao extends ExpelledInformationDaoDeco
   }
 
   String INSERT_ALL =
-      "Insert into EXPELLED_INFORMATION (ID,STUDENT_ID,SEMESTER_ID,COURSE_ID,EXAM_TYPE,EXPEL_REASON,INSERTED_ON) values (?,?,?,?,?,?,sysdate)";
+      "Insert into EXPELLED_INFORMATION (ID,STUDENT_ID,SEMESTER_ID,COURSE_ID,EXAM_TYPE,REG_TYPE,EXPEL_REASON,INSERTED_ON) values (?,?,?,?,?,?,?,sysdate)";
 
   String SELECT_ALL =
-      "SELECT STUDENT_ID,SEMESTER_ID,COURSE_ID,EXAM_TYPE,EXPEL_REASON,INSERTED_ON FROM EXPELLED_INFORMATION";
+      "SELECT STUDENT_ID,SEMESTER_ID,COURSE_ID,EXAM_TYPE,REG_TYPE,EXPEL_REASON,INSERTED_ON FROM EXPELLED_INFORMATION";
 
   @Override
   public List<ExpelledInformation> getAll() {
@@ -40,7 +40,7 @@ public class PersistentExpelledInformationDao extends ExpelledInformationDaoDeco
   public Long create(MutableExpelledInformation pMutable) {
     Long id = mIdGenerator.getNumericId();
     mJdbcTemplate.update(INSERT_ALL, id, pMutable.getStudentId(), pMutable.getSemesterId(), pMutable.getCourseId(),
-        pMutable.getExamType(), pMutable.getExpelledReason());
+        pMutable.getExamType(), pMutable.getRegType(), pMutable.getExpelledReason());
     return id;
   }
 
@@ -52,6 +52,7 @@ public class PersistentExpelledInformationDao extends ExpelledInformationDaoDeco
       application.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
       application.setCourseId(pResultSet.getString("COURSE_ID"));
       application.setExamType(pResultSet.getInt("EXAM_TYPE"));
+      application.setRegType(pResultSet.getInt("REG_TYPE"));
       application.setExpelledReason(pResultSet.getString("EXPEL_REASON"));
       application.setInsertionDate(pResultSet.getString("INSERTED_ON"));
       return application;

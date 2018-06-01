@@ -18,9 +18,16 @@ import javax.ws.rs.core.Request;
 @Consumes(Resource.MIME_TYPE_JSON)
 public class ExpelledInformationResource extends MutableExpelledInformationResource {
   @GET
-  @Path("/getCourseList/studentId/{student-id}/examType/{exam-type}")
-  public JsonObject getApplicationCCIForStudent(@Context Request pRequest, @PathParam("student-id") String pStudentId,
-      @PathParam("exam-type") Integer pExamType) {
-    return mHelper.getCourseList(pStudentId, pExamType, pRequest, mUriInfo);
+  @Path("/getCourseList/studentId/{student-id}/regType/{reg-type}")
+  public JsonObject getCourseList(@Context Request pRequest, @PathParam("student-id") String pStudentId,
+      @PathParam("reg-type") Integer pRegType) {
+    return mHelper.getCourseList(pStudentId, pRegType, pRequest, mUriInfo);
+  }
+
+  @GET
+  @Path("/getExpelInfoList/semesterId/{Semester-id}/regType/{reg-type}")
+  public JsonObject getExpelInfoList(@Context Request pRequest, @PathParam("Semester-id") Integer pSemesterId,
+      @PathParam("reg-type") Integer pRegType) {
+    return mHelper.getExpelInfoList(pSemesterId, pRegType, pRequest, mUriInfo);
   }
 }
