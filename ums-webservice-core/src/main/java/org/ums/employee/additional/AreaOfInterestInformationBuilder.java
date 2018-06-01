@@ -20,14 +20,13 @@ public class AreaOfInterestInformationBuilder implements
   @Override
   public void build(JsonObjectBuilder pBuilder, AreaOfInterestInformation pReadOnly, UriInfo pUriInfo,
       LocalCache pLocalCache) {
-    pBuilder.add("id", pReadOnly.getAreaOfInterestId());
     pBuilder.add("employeeId", pReadOnly.getId());
-    pBuilder.add("name", mAreaOfInterestManager.get(pReadOnly.getAreaOfInterestId()).getAreaOfInterest());
+    pBuilder.add("areaOfInterest", pReadOnly.getAreaOfInterest() == null ? "" : pReadOnly.getAreaOfInterest());
   }
 
   @Override
   public void build(MutableAreaOfInterestInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setId(pJsonObject.getString("employeeId"));
-    pMutable.setAreaOfInterest(mAreaOfInterestManager.get(pJsonObject.getInt("id")));
+    pMutable.setAreaOfInterest((pJsonObject.getString("areaOfInterest")));
   }
 }

@@ -119,8 +119,10 @@ module ums {
 
 
         // common
-        private pageChanged(pageNumber) {
-            this.fetchRecords(pageNumber);
+        private pageChanged(pageNumber, randomValue) {
+            if(randomValue == 1) {
+                this.fetchRecords(pageNumber);
+            }
         }
 
         private fetchRecords(pageNumber: number): void {

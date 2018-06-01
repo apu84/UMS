@@ -123,7 +123,9 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
     pMutable.setBookBindingType(pJsonObject.getInt("bindingType") == 101101 ? BookBindingType.get(101101)
         : BookBindingType.get(pJsonObject.getInt("bindingType")));
 
-    pMutable.setPaperQuality(pJsonObject.containsKey("paperQuality") ? pJsonObject.getString("paperQuality") == null ? "" : pJsonObject.getString("paperQuality") : "");
+    pMutable
+        .setPaperQuality(pJsonObject.containsKey("paperQuality") ? pJsonObject.getString("paperQuality") == null ? ""
+            : pJsonObject.getString("paperQuality") : "");
   }
 
 }

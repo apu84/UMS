@@ -1600,3 +1600,57 @@ length(physical_desc)-
 )||'"') where physical_desc is not null;
 
 ------------------------------------------------------------------------------------------------------------
+
+
+----------------------------------------- AOI Table Altered -------------------------------------------
+
+ALTER TABLE EMP_AOI_INFO
+    ADD AOI VARCHAR2(50 BYTE);
+
+
+ALTER TABLE EMP_AOI_INFO
+    DROP COLUMN AOI_ID;
+
+-------------------------------------------------------------------------------------------------------------
+
+
+----------------------------------------------------------------------------------------------------------
+
+
+SELECT MFN,COUNT(MFN) FROM RECORDS GROUP BY MFN HAVING COUNT(MFN)>1
+
+UPDATE RECORDS SET NEW_MFN=MFN;
+
+UPDATE RECORDS SET MFN=NEW_MFN;
+
+SELECT * FROM RECORDS ORDER BY MFN_ORG DESC;
+
+
+
+
+
+CREATE SEQUENCE SQN_RECORD
+  START WITH 1
+  MAXVALUE 9999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+
+declare
+  type ridlist is table of NUMBER index by pls_integer;
+      l_rowid ridlist;
+    begin
+      select MFN_ORG
+      bulk collect into l_rowid
+      from RECORDS
+      order by TITLE;
+
+     forall i in 1 .. l_rowid.count
+       update RECORDS set NEW_MFN = SQN_RECORD.nextval
+       where MFN_ORG = l_rowid(i);
+   end;
+   /
+
+ ------------------------------------------------------------------------------------------------

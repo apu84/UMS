@@ -54,6 +54,8 @@ public class PersistentRecordDao extends RecordDaoDecorator {
 
   static String DELETE_ONE = "DELETE FROM RECORDS ";
 
+  static String GET_MFN = "SELECT SQN_RECORD.NEXTVAL FROM DUAL";
+
   private JdbcTemplate mJdbcTemplate;
   public IdGenerator mIdGenerator;
 
@@ -88,13 +90,16 @@ public class PersistentRecordDao extends RecordDaoDecorator {
         pRecord.getTotalCheckedOut(), pRecord.getTotalOnHold(), pRecord.getLastUpdatedBy(), pRecord.getMfn());
   }
 
+  private Long getMfn() {
+    return mJdbcTemplate.queryForObject(GET_MFN, Long.class);
+  }
+
   @Override
   public Long create(final MutableRecord pRecord) {
-    Long id = mIdGenerator.getNumericId();
-    pRecord.setMfn(id);
-    mJdbcTemplate.update(INSERT_ONE, pRecord.getMfn(), pRecord.getLanguage().getId(), pRecord.getTitle(), pRecord
-        .getSubTitle(), pRecord.getGmd(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord.getVolumeTitle(),
-        pRecord.getSerialIssueNo(), pRecord.getSerialNumber(), pRecord.getSerialSpecial(), pRecord.getLibraryLacks(),
+    pRecord.setId(getMfn());
+    mJdbcTemplate.update(INSERT_ONE, pRecord.getId(), pRecord.getLanguage().getId(), pRecord.getTitle(), pRecord.getSubTitle(),
+        pRecord.getGmd(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord.getVolumeTitle(), pRecord
+            .getSerialIssueNo(), pRecord.getSerialNumber(), pRecord.getSerialSpecial(), pRecord.getLibraryLacks(),
         pRecord.getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord.getCorpAuthorMain(), pRecord
             .getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord.getTranslateTitleEdition(),
         pRecord.getFrequency() == null ? Types.NULL : pRecord.getFrequency().getId(), pRecord.getCallNo(), pRecord
@@ -106,7 +111,7 @@ public class PersistentRecordDao extends RecordDaoDecorator {
             .getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord.getPhysicalDescriptionString(),
         pRecord.getNoteJsonString(), pRecord.getLastUpdatedBy());
 
-    return id;
+    return pRecord.getId();
   }
 
   @Override

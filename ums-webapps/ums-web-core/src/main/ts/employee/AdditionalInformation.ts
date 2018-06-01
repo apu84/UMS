@@ -6,15 +6,14 @@ module ums {
             '$q',
             'notify',
             'employeeInformationService',
-            'areaOfInterestService',
             '$stateParams'];
 
 
         private additional: IAdditionalInformationModel = null;
-        private aoi: IAreaOfInterestInformationModel = null;
-        private arrayOfAreaOfInterest: ICommon[] = [];
+        private aoi: IAreaOfInterestInformationModel[] = [];
         readonly userId: string = "";
-        private enableEdit: boolean[] = [false];
+        private enableEdit: boolean = false;
+        private enableAoiEdit: boolean = false;
         private enableEditButton: boolean = false;
         private stateParams: any;
 
@@ -22,19 +21,15 @@ module ums {
                     private $q: ng.IQService,
                     private notify: Notify,
                     private employeeInformationService: EmployeeInformationService,
-                    private areaOfInterestService: AreaOfInterestService,
                     private $stateParams: any) {
 
             this.additional = <IAdditionalInformationModel>{};
-            this.aoi = <IAreaOfInterestInformationModel>{};
+            this.aoi = [];
             this.stateParams = $stateParams;
             this.userId = this.stateParams.id;
             this.enableEditButton = this.stateParams.edit;
-            this.areaOfInterestService.getAll().then((aois: any) => {
-                this.arrayOfAreaOfInterest = aois;
-                this.get('additional');
-                this.get('aoi');
-            });
+            this.get('additional');
+            this.get('aoi');
         }
 
         public get(type: string): void {
@@ -56,7 +51,7 @@ module ums {
                         this.aoi = aoiInformation;
                     }
                     else {
-                        this.aoi = <IAreaOfInterestInformationModel>{};
+                        this.aoi = [];
                     }
                 });
             }
@@ -64,28 +59,47 @@ module ums {
 
 
         private submit(type: string): void {
-            if(type === 'additional') {
+            if (type === 'additional') {
                 this.convertToJson(this.additional).then((json: any) => {
                     this.employeeInformationService.saveAdditionalInformation(json).then((data: any) => {
-                        this.enableEdit[type] = false;
+                        this.enableEdit = false;
                     }).catch((reason: any) => {
-                        this.enableEdit[type] = true;
+                        this.enableEdit = true;
                     });
                 });
             }
-            else{
+            else if(type === 'aoi') {
                 this.convertToJson(this.aoi).then((json: any) => {
                     this.employeeInformationService.saveAoiInformation(json).then((data: any) => {
-                        this.enableEdit[type] = false;
+                        this.enableAoiEdit = false;
                     }).catch((reason: any) => {
-                        this.enableEdit[type] = true;
+                        this.enableAoiEdit = true;
                     });
                 });
             }
         }
 
         public activeEditButton(canEdit: boolean, type: string): void {
-            this.enableEdit[type] = canEdit;
+            console.log(canEdit + " " + type);
+            if(type === 'additional'){
+                this.enableEdit = canEdit;
+            }
+            else if(type === 'aoi'){
+                this.enableAoiEdit = canEdit;
+            }
+        }
+
+        public delete(index: number): void{
+            this.aoi.splice(index, 1);
+        }
+
+        public addNew(): void{
+            let aoiEntry: IAreaOfInterestInformationModel;
+            aoiEntry = {
+                employeeId: this.userId,
+                areaOfInterest: ""
+            };
+            this.aoi.push(aoiEntry);
         }
 
         private convertToJson(object: any): ng.IPromise<any> {

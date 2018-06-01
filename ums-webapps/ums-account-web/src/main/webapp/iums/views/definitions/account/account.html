@@ -106,8 +106,12 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12" align="right">
+                <div class="col-md-10" align="right">
                     <button class="btn btn-success" ng-click="vm.getChartOfAccountsReport()">Chart of Account</button>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-danger"><i class="fa fa-sort-amount-asc" aria-hidden="true" ng-click="vm.fetchAccountsInAscendingOrder()"></i></button>
+                    <button class="btn btn-danger"><i class="fa fa-sort-amount-desc" aria-hidden="true" ng-click="vm.fetchAccountsInDescendingOrder()"></i></button>
                 </div>
             </div>
 

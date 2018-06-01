@@ -496,8 +496,7 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
     for(AreaOfInterestInformation areaOfInterestInformation1 : areaOfInterestInformation) {
       chunk = new Chunk();
       chunk.setFont(generalFont);
-      chunk.append(mAreaOfInterestManager.get(areaOfInterestInformation1.getAreaOfInterestId()).getAreaOfInterest()
-          + "");
+      chunk.append(areaOfInterestInformation1.getAreaOfInterest());
       listItem = new ListItem(chunk);
       list.add(listItem);
     }

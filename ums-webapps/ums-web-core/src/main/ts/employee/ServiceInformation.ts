@@ -165,7 +165,6 @@ module ums {
 
         private setInitialDesignation() {
             for (let i = 0; i < this.service.length; i++) {
-                console.log("changing it");
                 this.filterDesignationSelection(i);
             }
         }
