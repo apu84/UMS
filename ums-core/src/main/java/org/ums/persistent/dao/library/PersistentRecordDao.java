@@ -97,9 +97,9 @@ public class PersistentRecordDao extends RecordDaoDecorator {
   @Override
   public Long create(final MutableRecord pRecord) {
     pRecord.setId(getMfn());
-    mJdbcTemplate.update(INSERT_ONE, pRecord.getId(), pRecord.getLanguage().getId(), pRecord.getTitle(), pRecord.getSubTitle(),
-        pRecord.getGmd(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord.getVolumeTitle(), pRecord
-            .getSerialIssueNo(), pRecord.getSerialNumber(), pRecord.getSerialSpecial(), pRecord.getLibraryLacks(),
+    mJdbcTemplate.update(INSERT_ONE, pRecord.getId(), pRecord.getLanguage().getId(), pRecord.getTitle(), pRecord
+        .getSubTitle(), pRecord.getGmd(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord.getVolumeTitle(),
+        pRecord.getSerialIssueNo(), pRecord.getSerialNumber(), pRecord.getSerialSpecial(), pRecord.getLibraryLacks(),
         pRecord.getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord.getCorpAuthorMain(), pRecord
             .getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord.getTranslateTitleEdition(),
         pRecord.getFrequency() == null ? Types.NULL : pRecord.getFrequency().getId(), pRecord.getCallNo(), pRecord

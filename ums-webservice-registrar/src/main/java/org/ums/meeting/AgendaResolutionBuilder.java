@@ -18,7 +18,7 @@ public class AgendaResolutionBuilder implements Builder<AgendaResolution, Mutabl
     pBuilder.add("agendaNo", pReadOnly.getAgendaNo());
     pBuilder.add("agenda", pReadOnly.getAgenda());
     pBuilder.add("agendaEditor", pReadOnly.getAgendaEditor());
-    pBuilder.add("resolution", pReadOnly.getResolution() == null? "" : pReadOnly.getResolution());
+    pBuilder.add("resolution", pReadOnly.getResolution() == null ? "" : pReadOnly.getResolution());
     pBuilder.add("resolutionEditor", pReadOnly.getResolutionEditor());
     pBuilder.add("scheduleId", pReadOnly.getScheduleId().toString());
     pBuilder.add("showExpandButton", true);
