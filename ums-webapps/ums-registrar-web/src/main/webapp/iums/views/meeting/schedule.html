@@ -20,7 +20,7 @@
                                             name="nType"
                                             data-ng-model="vm.meetingSchedule.type"
                                             data-ng-options="meetingType.name for meetingType in vm.meetingTypes track by meetingType.id"
-                                            data-ng-change="vm.getMeetingNoAndMembers()"
+                                            data-ng-change="vm.getNextMeetingNo()"
                                             class="form-control" required>
                                         <option value="">Select Meeting Type</option>
                                     </select>

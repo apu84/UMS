@@ -10,7 +10,7 @@
       '/profile': {title: 'Profile', 'breadcrumb': ['Profile']},
       '/employeeInformation': {title: 'Employee Information', 'breadcrumb': ['Employee Information']},
       '/employeePublication': {title: 'Publication Approval', 'breadcrumb': ['Publication Approval']},
-      '/meetingSchedule': {title: 'Meeting Management', 'breadcrumb': ['Meeting Schedule & Invite Members']},
+      '/schedule': {title: 'Schedule', 'breadcrumb': ['Schedule']},
       '/agendaAndResolution': {title: 'Meeting Management', 'breadcrumb': ['Prepare Agenda & Resolution']},
       '/meetingSearch': {title: 'Meeting Management', 'breadcrumb': ['Search']},
       '/newEmployee': {title: 'Create Employee', 'breadcrumb': ['Create Employee']},

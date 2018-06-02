@@ -14,7 +14,7 @@ module ums{
         //Meeting Schedule
         public saveMeetingSchedule(json: any): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.post(this.scheduleUrl + "/save", json, 'application/json')
+            this.httpClient.post(this.scheduleUrl, json, 'application/json')
                 .success(() => {
                     this.notify.success("Successfully Saved");
                     defer.resolve("Saved");
@@ -28,7 +28,7 @@ module ums{
 
         public updateMeetingSchedule(json: any): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.put(this.scheduleUrl + "/update", json, HttpClient.MIME_TYPE_JSON)
+            this.httpClient.put(this.scheduleUrl, json, HttpClient.MIME_TYPE_JSON)
                 .success(() => {
                     this.notify.success("Update Successful");
                     defer.resolve();
@@ -39,9 +39,9 @@ module ums{
             return defer.promise;
         }
 
-        public getMeetingSchedule(meetingType: number, meetingNo: number): ng.IPromise<any> {
+        public getMeetingSchedule(): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.scheduleUrl+"/get/meetingType/"+ meetingType + "/meetingNo/" + meetingNo, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.scheduleUrl, HttpClient.MIME_TYPE_JSON,
                 (json: any, etag: string) => {
                     defer.resolve(json.entries);
                 },
@@ -65,7 +65,7 @@ module ums{
 
         public getNextMeetingNo(meetingType: number): ng.IPromise<any>{
             let defer = this.$q.defer();
-            this.httpClient.get(this.scheduleUrl+"/get/meetingType/"+ meetingType, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.scheduleUrl+"/meetingType/"+ meetingType, HttpClient.MIME_TYPE_JSON,
                 (json: any, etag: string) => {
                     defer.resolve(json);
                 },

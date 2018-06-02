@@ -44,6 +44,7 @@ public class ScheduleBuilder implements Builder<Schedule, MutableSchedule> {
       e.printStackTrace();
     }
     long time = date.getTime();
+    pMutable.setId(pJsonObject.containsKey("id") ? Long.parseLong(pJsonObject.getString("id")) : null);
     pMutable.setMeetingTypeId(pJsonObject.getJsonObject("type").getInt("id"));
     pMutable.setMeetingNo(pJsonObject.getInt("meetingNo"));
     pMutable.setMeetingRefNo(pJsonObject.getString("refNo"));

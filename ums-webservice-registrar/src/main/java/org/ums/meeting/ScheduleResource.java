@@ -1,8 +1,11 @@
 package org.ums.meeting;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.logs.GetLog;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -13,24 +16,20 @@ import javax.ws.rs.core.Request;
 @Path("meeting/schedule")
 public class ScheduleResource extends MutableScheduleResource {
 
+  @Autowired
+  private ScheduleResourceHelper mHelper;
+
   @GET
-  @Path("/get/meetingType/{meetingType}/meetingNo/{meetingNo}")
-  public JsonObject getMeetingSchedule(final @PathParam("meetingType") int pMeetingTypeId,
-      final @PathParam("meetingNo") int pMeetingNo, final @Context Request pRequest) throws Exception {
-    return mHelper.getScheduleInformation(pMeetingTypeId, pMeetingNo, mUriInfo);
+  @GetLog(message = "Get all meeting schedule list")
+  public JsonObject get(@Context HttpServletRequest pHttpServletRequest, final @Context Request pRequest)
+      throws Exception {
+    return mHelper.getAll(mUriInfo);
   }
 
   @GET
-  @Path("/get/meetingType/{meetingType}")
+  @Path("/meetingType/{meetingType}")
   public JsonObject getNextMeetingNo(final @PathParam("meetingType") int pMeetingTypeId, final @Context Request pRequest)
       throws Exception {
     return mHelper.getNextMeetingNo(pMeetingTypeId, mUriInfo);
-  }
-
-  @GET
-  @Path("/getAll/meetingType/{meetingType}")
-  public JsonObject getAllMeetingSchedule(final @PathParam("meetingType") int pMeetingTypeId,
-      final @Context Request pRequest) throws Exception {
-    return mHelper.getAllScheduleInformation(pMeetingTypeId, mUriInfo);
   }
 }

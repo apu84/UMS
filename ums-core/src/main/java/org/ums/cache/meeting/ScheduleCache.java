@@ -3,7 +3,6 @@ package org.ums.cache.meeting;
 import org.ums.cache.ContentCache;
 import org.ums.domain.model.immutable.meeting.Schedule;
 import org.ums.domain.model.mutable.meeting.MutableSchedule;
-import org.ums.enums.meeting.MeetingType;
 import org.ums.manager.CacheManager;
 import org.ums.manager.meeting.ScheduleManager;
 
@@ -24,27 +23,17 @@ public class ScheduleCache extends ContentCache<Schedule, MutableSchedule, Long,
   }
 
   @Override
-  public int saveMeetingSchedule(MutableSchedule pMeetingSchedule) {
-    return getManager().saveMeetingSchedule(pMeetingSchedule);
-  }
-
-  @Override
-  public Schedule getMeetingSchedule(int pMeetingType, int meetingNo) {
-    return getManager().getMeetingSchedule(pMeetingType, meetingNo);
-  }
-
-  @Override
-  public List<Schedule> getAllMeetingSchedule(int pMeetingTypeId) {
-    return getManager().getAllMeetingSchedule(pMeetingTypeId);
-  }
-
-  @Override
-  public int updateMeetingSchedule(MutableSchedule pMeetingSchedule) {
-    return getManager().updateMeetingSchedule(pMeetingSchedule);
+  public Schedule get(int pMeetingType, int meetingNo) {
+    return getManager().get(pMeetingType, meetingNo);
   }
 
   @Override
   public int getNextMeetingNo(int pMeetingTypeId) {
     return getManager().getNextMeetingNo(pMeetingTypeId);
+  }
+
+  @Override
+  public List<Schedule> get(int pMeetingTypeId) {
+    return getManager().get(pMeetingTypeId);
   }
 }

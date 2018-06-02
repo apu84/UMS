@@ -6,6 +6,7 @@ module ums{
         refNo: string;
         datetime: string;
         room: string;
+        edit: boolean;
     }
     interface IConstants{
         id: number;
@@ -15,8 +16,13 @@ module ums{
     class Schedule{
         public static $inject = ['registrarConstants', '$q', 'notify', '$scope', 'meetingService'];
         private meetingSchedule: IMeetingScheduleModel;
+        private meetingScheduleList: IMeetingScheduleModel[] = [];
+        private filteredMeetingScheduleList: IMeetingScheduleModel[] = [];
         private meetingTypes: IConstants[] = [];
+        private meetingType: IConstants;
+        private scheduleToEdit: IMeetingScheduleModel;
         private showPreviousMeetingList: boolean = false;
+        private showFilterFields: boolean = false;
 
         constructor(private registrarConstants: any, private $q: ng.IQService, private notify: Notify,
                     private $scope: ng.IScope, private meetingService: MeetingService) {
@@ -26,44 +32,78 @@ module ums{
             this.addDate();
         }
 
-        private getMeetingNoAndMembers(): void{
-            this.getNextMeetingNo();
-        }
-
-        private getNextMeetingNo(): void{
-            this.meetingService.getNextMeetingNo(this.meetingSchedule.type.id).then((nextMeetingNo: any) =>{
-                this.meetingSchedule.meetingNo = nextMeetingNo.nextMeetingNumber;
-            });
+        private getNextMeetingNo(): void {
+            if (this.meetingSchedule.type) {
+                this.meetingService.getNextMeetingNo(this.meetingSchedule.type.id).then((nextMeetingNo: any) => {
+                    this.meetingSchedule.meetingNo = nextMeetingNo.nextMeetingNumber;
+                });
+            }
         }
 
         private save(): void {
-            this.convertToJson().then((json: any) => {
+            this.convertToJson(this.meetingSchedule).then((json: any) => {
                 this.meetingService.saveMeetingSchedule(json).then(()=>{
                 })
             });
         }
 
-        private getSchedule(): void{
-            this.meetingSchedule = <IMeetingScheduleModel>{};
-            this.meetingService.getMeetingSchedule(10, 1).then((response: any) =>{
-                this.meetingSchedule = response[0];
-            })
+        private update(): void {
+            this.convertToJson(this.scheduleToEdit).then((json: any) => {
+                this.meetingService.updateMeetingSchedule(json).then(()=>{
+                })
+            });
         }
 
-        private convertToJson(): ng.IPromise<any>{
+        private getSchedule(): void{
+            this.meetingScheduleList = [];
+            this.filteredMeetingScheduleList = [];
+            this.meetingService.getMeetingSchedule().then((response: any) =>{
+                this.meetingScheduleList = response;
+                this.filteredMeetingScheduleList = response;
+            });
+        }
+
+        private convertToJson(obj: any): ng.IPromise<any>{
             let defer = this.$q.defer();
             let JsonObject = {};
-            JsonObject['entries'] = this.meetingSchedule;
+            JsonObject['entries'] = obj;
             defer.resolve(JsonObject);
             return defer.promise;
         }
 
         public showPreviousMeetings(): void{
             this.showPreviousMeetingList = true;
+            this.getSchedule();
         }
 
         public hidePreviousMeetings(): void{
             this.showPreviousMeetingList = false;
+        }
+
+        public selectedScheduleToEdit(schedule: IMeetingScheduleModel): void{
+            this.scheduleToEdit = <IMeetingScheduleModel> {};
+            this.scheduleToEdit = schedule;
+        }
+
+        public modifyFilterFields(val: boolean): void{
+            this.showFilterFields = val;
+        }
+
+        public undoFilter(): void{
+            this.filteredMeetingScheduleList = [];
+            this.filteredMeetingScheduleList = this.meetingScheduleList;
+        }
+
+        public doFilter(): void{
+            if(this.meetingType) {
+                this.filteredMeetingScheduleList = [];
+                this.filteredMeetingScheduleList = this.meetingScheduleList.filter((val, index, arr) => {
+                    return arr[index].type.id === this.meetingType.id;
+                });
+            }
+            else{
+                this.notify.error("Please select a meeting type");
+            }
         }
 
         private addDate(): void {
@@ -71,8 +111,8 @@ module ums{
             setTimeout(function () {
                 $('#datetimepicker-default').datetimepicker();
                 $('#datetimepicker-default').blur(function (e) {
-                    internalThis.prepareMeetingModel.meetingSchedule.datetime = $(this).val();
-                    console.log(internalThis.prepareMeetingModel.meetingSchedule.datetime);
+                    internalThis.meetingSchedule.datetime = $(this).val();
+                    console.log(internalThis.meetingSchedule.datetime);
                 });
             }, 10);
         }
