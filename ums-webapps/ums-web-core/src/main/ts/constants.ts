@@ -665,7 +665,8 @@ module ums {
               {id:"6", name:"Cash in hand"},
               {id:"7", name:"Sundry Debtor"},
               {id:"8", name:"Sundry Creditor"},
-              {id:"9", name:"Current Liabilities"}
+              {id: "9", name: "Current Liabilities"},
+              {id: "10", name: "Tution Fees & Other Student Fees"}
             ],
             financialYearCloseTransferType:[
                 {id:1, name:'All accounts closing'},

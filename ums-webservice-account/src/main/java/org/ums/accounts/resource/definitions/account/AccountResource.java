@@ -16,7 +16,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.StreamingOutput;
-import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -97,6 +96,12 @@ public class AccountResource extends MutableAccountResource {
   @Path("/customer-accounts")
   public List<Account> getCustomerAccounts(final @Context HttpServletRequest pHttpServletRequest) throws Exception {
     return mHelper.getCustomerAccounts(mUriInfo);
+  }
+
+  @GET
+  @Path("/student-accounts")
+  public List<Account> getStudentAccounts(final @Context HttpServletRequest pHttpServletRequest) throws Exception {
+    return mHelper.getStudentAccounts(mUriInfo);
   }
 
   @GET

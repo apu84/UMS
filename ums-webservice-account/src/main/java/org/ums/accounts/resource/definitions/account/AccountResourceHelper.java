@@ -164,6 +164,15 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
   }
 
+  public List<Account> getStudentAccounts(final UriInfo pUriInfo) {
+    List<String> groupCodeList = new ArrayList<>();
+    if(mSystemGroupMapManager.exists(GroupType.TUTION_FEES_AND_OTHER_STUDENT_FEES, mCompanyManager.getDefaultCompany()))
+      groupCodeList.add(mSystemGroupMapManager
+          .get(GroupType.TUTION_FEES_AND_OTHER_STUDENT_FEES, mCompanyManager.getDefaultCompany()).getGroup()
+          .getGroupCode());
+    return getAccountsBasedOnGroupList(groupCodeList, pUriInfo);
+  }
+
   private List<Account> getAccountsBasedOnGroupList(List<String> pGroupCodeList, UriInfo pUriInfo) {
     List<Group> groups = mGroupManager.getIncludingMainGroupList(pGroupCodeList);
     List<Account> accounts = new ArrayList<>();
