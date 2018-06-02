@@ -10,6 +10,7 @@ import org.ums.persistent.model.PersistentExpelledInformation;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +31,22 @@ public class PersistentExpelledInformationDao extends ExpelledInformationDaoDeco
 
   String SELECT_ALL =
       "SELECT STUDENT_ID,SEMESTER_ID,COURSE_ID,EXAM_TYPE,REG_TYPE,EXPEL_REASON,INSERTED_ON FROM EXPELLED_INFORMATION";
+  String DELETE_ALL = "DELETE FROM EXPELLED_INFORMATION";
+
+  @Override
+  public int delete(List<MutableExpelledInformation> pMutableList) {
+    String query = DELETE_ALL + " WHERE STUDENT_ID=? AND SEMESTER_ID=? AND COURSE_ID=? AND EXAM_TYPE=?";
+    List<Object[]> parameters = deleteParamList(pMutableList);
+    return mJdbcTemplate.batchUpdate(query, parameters).length;
+  }
+
+  private List<Object[]> deleteParamList(List<MutableExpelledInformation> pMutableApplicationTES) {
+    List<Object[]> params = new ArrayList<>();
+    for(ExpelledInformation app : pMutableApplicationTES) {
+      params.add(new Object[] {app.getStudentId(), app.getSemesterId(), app.getCourseId(), app.getExamType()});
+    }
+    return params;
+  }
 
   @Override
   public List<ExpelledInformation> getAll() {

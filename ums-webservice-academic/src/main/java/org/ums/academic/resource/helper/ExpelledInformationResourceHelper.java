@@ -22,7 +22,12 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -63,6 +68,24 @@ public class ExpelledInformationResourceHelper extends
     getBuilder().build(application, jsonObject, localCache);
 
     mManager.create(application);
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+  }
+
+  public Response deleteExpelStudents(JsonObject pJsonObject, UriInfo pUriInfo) {
+    List<MutableExpelledInformation> applications = new ArrayList<>();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    for(int i = 0; i < entries.size(); i++) {
+      LocalCache localCache = new LocalCache();
+      JsonObject jsonObject = entries.getJsonObject(i);
+      PersistentExpelledInformation application = new PersistentExpelledInformation();
+      getBuilder().build(application, jsonObject, localCache);
+      applications.add(application);
+    }
+    mManager.delete(applications);
+
     URI contextURI = null;
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
@@ -113,6 +136,7 @@ public class ExpelledInformationResourceHelper extends
       hideDeleteOption=1;
     }
     List<ExamRoutineDto> examRoutineList = mExamRoutineManager.getExamRoutine(11012017, examType);
+
     Map<String, String> examRoutineMapWithCourseId = examRoutineList
             .stream()
             .collect(Collectors.toMap(e->e.getCourseId(), e->e.getExamDate()));

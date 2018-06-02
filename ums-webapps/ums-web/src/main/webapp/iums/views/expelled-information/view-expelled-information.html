@@ -76,17 +76,9 @@
             </div>
             <div class="col-md-4">
                 <div>
-
-                    <select
-                            class="form-control required"
-                            name="sessionalSection"
-                            id="sessionalBulk"
-                            data-ng-options="sessional.name for sessional in bulkSessionalSectionList track by sessional.id"
-                            data-ng-model="bulkSessionalSection"
-                            data-ng-change="changeBulkSessionalSection(bulkSessionalSection)"
-                    >
-
-                        <option value="">Select Exam Date</option>
+                    <select class="form-control" name="examDate"  data-ng-model="vm.examDate" data-ng-change="vm.ExamDateChange(vm.examDate)">
+                        <option value="">Select an Exam Date</option>
+                        <option data-ng-repeat="examRoutine in vm.examRoutineArr">{{examRoutine.examDate}}</option>
                     </select>
                 </div>
 
@@ -112,7 +104,7 @@
                     </tr>
                     </thead>
                     <thead>
-                    <tr data-ng-repeat="app in vm.expelInfo | orderBy:'examDate'| filter:{studentId:vm.studentId,deptId:vm.selectedDepartmentId} ">
+                    <tr data-ng-repeat="app in vm.expelInfo | orderBy:'examDate'| filter:{studentId:vm.studentId,deptId:vm.selectedDepartmentId,examDate:vm.examDate} ">
                         <td>{{$index+1}}</td>
                         <td>{{app.studentName}}</td>
                         <td>{{app.studentId}}</td>

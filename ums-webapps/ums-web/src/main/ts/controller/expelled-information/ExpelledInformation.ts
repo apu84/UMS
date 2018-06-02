@@ -146,8 +146,7 @@ module ums{
     }
     UMS.controller("ExpelledInformation",ExpelledInformation)
 }
-
-enum ExamType{
+ enum ExamType{
     REGULAR=1,
     CARRY_CLEARANCE_IMPROVEMENT=2,
 }

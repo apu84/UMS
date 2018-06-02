@@ -38,7 +38,9 @@ module ums{
          checkBoxCounter:number;
          showFilterOptions:boolean;
          studentId:string;
-        public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService','ExpelledInformationService'];
+         examDate: string;
+         examRoutineArr:any;
+        public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService','ExpelledInformationService','examRoutineService'];
 
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -49,7 +51,8 @@ module ums{
                     private semesterService: SemesterService,
                     private facultyService: FacultyService,
                     private programService: ProgramService,
-                    private expelledInformationService:ExpelledInformationService){
+                    private expelledInformationService:ExpelledInformationService,
+                    private examRoutineService: ExamRoutineService){
             this.examTypeList=[];
             this.examTypeList=this.appConstants.examType;
             this.examType=this.examTypeList[0];
@@ -65,6 +68,7 @@ module ums{
             this.deptList =this.deptList.slice(0);
             this.deptName=this.deptList[0];
             this.getSemesters();
+            this.getExamDates();
         }
          private deptChanged(deptId:any){
              this.selectedDepartmentId=deptId.id;
@@ -88,11 +92,13 @@ module ums{
          private semesterChanged(val:any){
              console.log("Name: "+val.name+"\nsemesterId: "+val.id);
              this.selectedSemesterId=val.id;
+             this.getExamDates();
          }
          private changeExamType(value:any){
              console.log(value.id+"  "+value.name);
              this.selectedExamTypeId=value.id;
              this.selectedExamTypeName=value.name;
+             this.getExamDates();
 
          }
         private doSomething(){
@@ -105,19 +111,17 @@ module ums{
                 this.expelInfo=res;
                 console.log(this.expelInfo);
                 for(let i=0;i<this.expelInfo.length;i++){
+                    this.expelInfo[i].examDate = this.expelInfo[i].examDate.replace("/","-");
+                    this.expelInfo[i].examDate = this.expelInfo[i].examDate.replace("/","-");
                     if(this.expelInfo[i].status==1){
                         this.showDeleteColumn=true;
-                        console.log("working: "+this.showDeleteColumn);
-                        break;
                     }else{
                         this.showDeleteColumn=false;
-                        break;
                     }
                 }
             })
         }
          private checkMoreThanOneSelectionSubmit(result:IExpelledInfo) {
-              console.log("inside checkBox")
              if(result.apply){
                  this.checkBoxCounter++;
                  this.enableOrDisableSubmitButton();
@@ -140,11 +144,29 @@ module ums{
          }
 
         private deleteExpelInfo(){
-            this.convertToJson(this.expelInfo);
+           var json= this.convertToJson(this.expelInfo);
+           this.expelledInformationService.deleteExpelInfo(json).then((data)=>{
+              console.log(data);
+           });
             this.doSomething();
             this.checkBoxCounter=0;
             this.submit_Button_Disable=true;
             console.log("Rumi");
+        }
+        private ExamDateChange(value:any){
+            console.log(value);
+
+        }
+        private getExamDates(){
+            let examTypeId=this.selectedExamTypeId == ExamType.REGULAR ? ExamType.REGULAR:ExamType.CARRY_CLEARANCE_IMPROVEMENT;
+            console.log("examTypeId: "+examTypeId);
+            this.examRoutineService.getExamRoutineDates(this.selectedSemesterId,examTypeId).then((examDateArr: any) =>{
+                this.examRoutineArr={};
+                console.log("****Exam Dates***");
+                this.examRoutineArr=examDateArr;
+                console.log(this.examRoutineArr);
+            })
+
         }
          private convertToJson(result: Array<IExpelledInfo>): any {
              var completeJson = {};

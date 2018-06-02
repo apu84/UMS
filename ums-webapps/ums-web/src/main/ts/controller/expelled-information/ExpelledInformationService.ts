@@ -41,6 +41,24 @@ module ums{
                });
            return defer.promise;
        }
+       public deleteExpelInfo(json:Array<any>):ng.IPromise<any>{
+           var defer = this.$q.defer();
+           var that=this;
+           console.log("Delete")
+           console.log(json);
+           this.httpClient.put("academic/expelledInformation/deleteExpelStudents",json,'application/json')
+               .success(()=>{
+                   this.notify.success("Successfully Saved");
+                   defer.resolve('success')
+               })
+               .error((data)=>{
+                   console.log(data);
+                   this.notify.error("Problem in saving data");
+                   defer.resolve('failure');
+               });
+           return defer.promise;
+
+       }
 
     }
     UMS.service("ExpelledInformationService",ExpelledInformationService);

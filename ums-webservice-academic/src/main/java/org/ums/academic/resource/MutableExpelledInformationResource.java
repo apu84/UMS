@@ -5,10 +5,7 @@ import org.ums.academic.resource.helper.ExpelledInformationResourceHelper;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
@@ -27,5 +24,12 @@ public class MutableExpelledInformationResource extends Resource {
   @Produces({MediaType.APPLICATION_JSON})
   public Response createApplicationCCI(final JsonObject pJsonObject) throws Exception {
     return mHelper.post(pJsonObject, mUriInfo);
+  }
+
+  @PUT
+  @Path("/deleteExpelStudents")
+  @Produces({MediaType.APPLICATION_JSON})
+  public Response deleteQuestion(final JsonObject pJsonObject) {
+    return mHelper.deleteExpelStudents(pJsonObject, mUriInfo);
   }
 }
