@@ -135,6 +135,13 @@ module ums{
       return defer.promise;
     }
 
+    public getStudentAccounts(): ng.IPromise<IAccount[]> {
+      let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
+      this.httpClient.get(this.accountServiceURL + "/student-accounts", HttpClient.MIME_TYPE_JSON,
+          ((response: IAccount[]) => defer.resolve(response)));
+      return defer.promise;
+    }
+
 
     public generateChartOfAccountsReport(): ng.IPromise<string> {
       let defer: ng.IDeferred<string> = this.$q.defer();

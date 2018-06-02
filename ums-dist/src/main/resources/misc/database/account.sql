@@ -1,3 +1,12 @@
+/*Date 02-06-2018*/
+alter table DT_TRANSACTION
+add  paid_amount NUMBER;
+
+
+
+/*End of date 02-06-2018*/
+
+
 create table system_group_map
 (
   id NUMBER,
