@@ -1,6 +1,5 @@
 package org.ums.persistent.dao.accounts;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -102,10 +101,11 @@ public class PersistentGroupDao extends GroupDaoDecorator {
   }
 
   @Override
-  public List<Group> getGroups(Group pGroup) {
-    String query = "select * from mst_group where main_group=:mainGroup";
-    SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(pGroup);
-    return this.mNamedParameterJdbcTemplate.query(query, namedParameters, new PersistentGroupRowMapper());
+  public List<Group> getByMainGroup(Group pGroup) {
+    String query = "select * from mst_group where main_group=:mainGroup order by to_number(group_code)";
+    Map parameterMap = new HashMap();
+    parameterMap.put("mainGroup", pGroup.getMainGroup());
+    return this.mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentGroupRowMapper());
   }
 
   @Override
@@ -157,6 +157,25 @@ public class PersistentGroupDao extends GroupDaoDecorator {
   @Override
   public boolean exists(Long pId) {
     return super.exists(pId);
+  }
+
+  Map createOrUpdateParameter(MutableGroup pMutableGroup) {
+    Map parameterMap = new HashMap();
+    parameterMap.put("id", pMutableGroup.getId());
+    parameterMap.put("groupCode", pMutableGroup.getGroupCode());
+    parameterMap.put("groupName", pMutableGroup.getGroupName());
+    parameterMap.put("mainGroup", pMutableGroup.getMainGroup());
+    parameterMap.put("reservedFlag", pMutableGroup.getReservedFlag());
+    parameterMap.put("flag", pMutableGroup.getFlag());
+    parameterMap.put("taxLimit", pMutableGroup.getTaxLimit());
+    parameterMap.put("tdsPercent", pMutableGroup.getTdsPercent());
+    parameterMap.put("defaultComp", pMutableGroup.getCompCode());
+    parameterMap.put("statFlag", pMutableGroup.getStatFlag());
+    parameterMap.put("statUpFlag", pMutableGroup.getStatUpFlag());
+    parameterMap.put("modifiedDate", pMutableGroup.getModifiedDate());
+    parameterMap.put("modifiedBy", pMutableGroup.getModifiedBy());
+    parameterMap.put("displayCode", pMutableGroup.getDisplayCode());
+    return parameterMap;
   }
 
   class PersistentGroupRowMapper implements RowMapper<Group> {

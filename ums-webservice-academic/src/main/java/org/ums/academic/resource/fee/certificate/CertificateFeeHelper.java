@@ -1,16 +1,12 @@
 package org.ums.academic.resource.fee.certificate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.StudentRecord;
-import org.ums.domain.model.immutable.accounts.SystemGroupMap;
-import org.ums.domain.model.immutable.accounts.Voucher;
-import org.ums.domain.model.immutable.accounts.VoucherNumberControl;
 import org.ums.domain.model.immutable.applications.AppRules;
 import org.ums.fee.*;
 import org.ums.fee.certificate.*;
@@ -21,8 +17,8 @@ import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.manager.StudentManager;
 import org.ums.manager.StudentRecordManager;
 import org.ums.manager.applications.AppRulesManager;
+import org.ums.persistent.model.accounts.PersistentAccountTransaction;
 import org.ums.persistent.model.accounts.PersistentSystemGroupMap;
-import org.ums.persistent.model.accounts.PersistentVoucher;
 import org.ums.twofa.HttpClient;
 import org.ums.util.UmsUtils;
 
@@ -31,12 +27,10 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -127,11 +121,20 @@ public class CertificateFeeHelper {
 
           ObjectMapper mapper = new ObjectMapper();
           List<PersistentSystemGroupMap> vouchers  = Arrays.asList(mapper.readValue(response, PersistentSystemGroupMap[].class));
+
+
           int xxx=0;
         }
 
       }
     }
+
+  }
+
+
+  private void postIntoJournalVoucher(StudentPayment pStudentPayment) throws Exception {
+    List<PersistentAccountTransaction> accountTransactionList = new ArrayList<>();
+    PersistentAccountTransaction accountTransaction = new PersistentAccountTransaction();
 
   }
 

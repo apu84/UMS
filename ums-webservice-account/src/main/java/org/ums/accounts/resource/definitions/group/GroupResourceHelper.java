@@ -62,12 +62,18 @@ public class GroupResourceHelper extends ResourceHelper<Group, MutableGroup, Lon
   }
 
   public List<Group> saveAndReturnUpdatedGroups(MutableGroup pGroup) {
-    int savedGroupSize = getContentManager().getGroups(pGroup).size();
+    List<Group> groupList = getContentManager().getByMainGroup(pGroup);
+    int savedGroupSize = groupList.size();
     String newGroupId = "";
-    if(String.valueOf(savedGroupSize).length() == 1 && savedGroupSize != 9)
-      newGroupId = pGroup.getMainGroup() + "00" + (savedGroupSize + 1);
-    else
-      newGroupId = pGroup.getMainGroup() + "0" + (savedGroupSize + 1);
+    newGroupId = getNewGroupCodeSequence(groupList, savedGroupSize, newGroupId);
+    if(newGroupId.length() == 1 && savedGroupSize != 9)
+      newGroupId = pGroup.getMainGroup() + "00" + newGroupId;
+    else if(newGroupId.length() == 2) {
+      newGroupId = pGroup.getMainGroup() + "0" + newGroupId;
+    }
+    else {
+      newGroupId = pGroup.getMainGroup() + newGroupId;
+    }
     pGroup.setGroupCode(newGroupId);
     pGroup.setDefaultComp("01");
     pGroup.setCompCode(mCompanyManager.getDefaultCompany().getId());
@@ -81,6 +87,19 @@ public class GroupResourceHelper extends ResourceHelper<Group, MutableGroup, Lon
       getContentManager().update(pGroup);
     }
     return getContentManager().getAll();
+  }
+
+  private String getNewGroupCodeSequence(List<Group> pGroupList, int pSavedGroupSize, String pNewGroupId) {
+    if(pSavedGroupSize > 0) {
+      Group lastGroup = pGroupList.get(pGroupList.size() - 1);
+      String groupCodeOfTheLastGroup = lastGroup.getGroupCode();
+      groupCodeOfTheLastGroup = groupCodeOfTheLastGroup.substring(lastGroup.getMainGroup().length());
+      pNewGroupId = (Integer.parseInt(groupCodeOfTheLastGroup) + 1) + "";
+    }
+    else {
+      pNewGroupId = "1";
+    }
+    return pNewGroupId;
   }
 
   public List<Group> deleteAndReturnUpdatedGroups(MutableGroup pGroup) {

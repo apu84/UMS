@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 20-Dec-17.
  */
 public interface GroupManager extends ContentManager<Group, MutableGroup, Long> {
-  List<Group> getGroups(Group pGroup);
+  List<Group> getByMainGroup(Group pGroup);
 
   List<Group> getExcludingMainGroupList(List<String> pMainGroupCodeList);
 
