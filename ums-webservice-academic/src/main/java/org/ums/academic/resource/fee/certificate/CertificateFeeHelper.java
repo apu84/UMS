@@ -131,7 +131,6 @@ public class CertificateFeeHelper {
 
   }
 
-
   private void postIntoJournalVoucher(StudentPayment pStudentPayment) throws Exception {
     List<PersistentAccountTransaction> accountTransactionList = new ArrayList<>();
     PersistentAccountTransaction accountTransaction = new PersistentAccountTransaction();

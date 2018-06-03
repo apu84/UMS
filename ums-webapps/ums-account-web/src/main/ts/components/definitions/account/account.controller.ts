@@ -167,7 +167,10 @@ module ums {
           this.notify.error("Error in fetching data");
         else {
           this.existingAccounts = [];
-          accounts.forEach((a: IAccount) => a.accGroupName = this.groupMapWithGroupid[a.accGroupCode].groupName);
+          accounts.forEach((a: IAccount) => {
+            console.log(a.accGroupCode);
+            a.accGroupName = this.groupMapWithGroupid[a.accGroupCode].groupName
+          });
           this.existingAccounts = accounts;
         }
       })
