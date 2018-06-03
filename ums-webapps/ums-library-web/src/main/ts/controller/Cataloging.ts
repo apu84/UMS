@@ -72,13 +72,14 @@ module ums {
     }
 
     export class Cataloging {
-        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'supplierService', 'publisherService', 'contributorService', 'catalogingService', 'countryService', '$state', '$stateParams', 'HttpClient'];
+        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'supplierService', 'publisherService', 'contributorService', 'catalogingService',
+            'countryService', '$state', '$stateParams', 'HttpClient', 'contributor', 'publisher', 'supplier'];
 
         constructor(private $scope: ICatalogingScope,
                     private $q: ng.IQService, private notify: Notify, private libConstants: any,
                     private supplierService: SupplierService, private publisherService: PublisherService, private contributorService: ContributorService,
-                    private catalogingService: CatalogingService, private countryService: CountryService, private $state: any, private $stateParams: any, private httpClient: HttpClient) {
-
+                    private catalogingService: CatalogingService, private countryService: CountryService, private $state: any, private $stateParams: any, private httpClient: HttpClient,
+                    private contributor: any, private publisher: any, private supplier: any) {
 
             $scope.state = $state;
 
@@ -216,14 +217,14 @@ module ums {
             // this.initializeDatePickers();
             this.setRecordHeaderTitle();
 
-            this.getAllSuppliers();
-            this.getAllContributors();
-            this.getAllPublishers();
+            this.$scope.contributorList = contributor;
+            this.$scope.supplierList = supplier;
+            this.$scope.publisherList = publisher;
             this.loadCountries();
             this.getAllCurrencies();
-            $scope.showSupplierSelect2 = false;
-            $scope.showPublisherSelect2 = false;
-            $scope.showContributorSelect2 = false;
+            $scope.showSupplierSelect2 = true;
+            $scope.showPublisherSelect2 = true;
+            $scope.showContributorSelect2 = true;
 
         }
 
