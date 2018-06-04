@@ -7,7 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum AccountType {
-  OPENING_BALANCE_ADJUSTMENT_ACCOUNT(1111199999L);
+  OPENING_BALANCE_ADJUSTMENT_ACCOUNT(1111199999L),
+  ENGINEERING_PROGRAM_ACCOUNT(1L),
+  BUSINESS_PROGRAM_ACCOUNT(2L),
+  CONVOCATION_ACCOUNT(3L),
+  PROVIDENT_FUND_ACCOUNT(4L),
+  STUDENT_WELFARE_FUND_ACCOUNT(5L);
+
   private static final Map<Long, AccountType> Lookup = new HashMap<>();
 
   static {

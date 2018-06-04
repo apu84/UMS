@@ -1,3 +1,18 @@
+/*Date 04-06-2018*/
+
+create table system_account_map(
+  id NUMBER,
+  account_type NUMBER,
+  account_id NUMBER,
+  comp_code VARCHAR2(2),
+  modified_by VARCHAR2(15),
+  modified_date DATE,
+  last_modified VARCHAR2(18)
+);
+
+/*End of date 04-06-2018*/
+
+
 /*Date 02-06-2018*/
 alter table DT_TRANSACTION
 add  paid_amount NUMBER;

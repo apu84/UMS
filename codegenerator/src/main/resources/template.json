@@ -1,6 +1,6 @@
 {
   "model": {
-    "name": "SystemGroupMap",
+    "name": "SystemAccountMap",
     "package": "org.ums.domain.model.immutable",
     "fields": [
       {
@@ -10,23 +10,32 @@
         }
       },
       {
-        "groupType": "GroupType"
+        "groupType": "AccountType"
       },
       {
-        "Group": {
+        "Account": {
           "type": "Ref",
           "reference": {
-            "name": "Group",
+            "name": "Account",
             "package": "org.ums.domain.model.immutable.accounts",
             "id": {
               "type": "Long"
             },
             "manager": {
-              "name": "GroupManager",
+              "name": "AccountManager",
               "package": "org.ums.manager.accounts"
             }
           }
         }
+      },
+      {
+        "modifiedBy": "String"
+      },
+      {
+        "modifierName": "String"
+      },
+      {
+        "modifiedDate": "Date"
       }
     ]
   }

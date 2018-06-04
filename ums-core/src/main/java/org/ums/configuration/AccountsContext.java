@@ -53,6 +53,14 @@ public class AccountsContext {
   }
 
   @Bean
+  SystemAccountMapManager systemAccountMapManager() {
+    SystemAccountMapCache systemAccountMapCache = new SystemAccountMapCache(mCacheFactory.getCacheManager());
+    systemAccountMapCache.setManager(new PersistentSystemAccountMapDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator));
+    return systemAccountMapCache;
+  }
+
+  @Bean
   MonthManager monthManager() {
     MonthCache monthCache = new MonthCache(mCacheFactory.getCacheManager());
     monthCache.setManager(new PersistentMonthDao(mTemplateFactory.getAccountsJdbcTemplate(),
