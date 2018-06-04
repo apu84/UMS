@@ -134,17 +134,19 @@ module ums {
       accountBalance.yearOpenBalanceType = this.account.yearClosingBalanceType;
       accountBalance.yearOpenBalance = this.account.yearOpenBalance;
       accountBalance.yearOpenBalanceType = this.account.yearOpenBalanceType;
-      console.log("account balance");
-      console.log(accountBalance);
+      if (this.account.id == null)
+        $("#addButton").focus();
+      console.log("Page number");
+      console.log(this.pageNumber);
       //todo configure account balance information
-      this.accountService.saveAccountPaginated(this.account, accountBalance, this.itemsPerPage, 1, this.ascendingOrDescendingType).then((accounts: IAccount[]) => {
+      this.accountService.saveAccountPaginated(this.account, accountBalance, this.itemsPerPage, this.pageNumber, this.ascendingOrDescendingType).then((accounts: IAccount[]) => {
         if (accounts != undefined) {
           this.existingAccounts = [];
           accounts.forEach((a: IAccount) => a.accGroupName = this.groupMapWithGroupid[a.accGroupCode].groupName);
           this.existingAccounts = accounts;
           this.getTotalAccountSize();
         }
-        $("#addButton").focus();
+
       });
     }
 
