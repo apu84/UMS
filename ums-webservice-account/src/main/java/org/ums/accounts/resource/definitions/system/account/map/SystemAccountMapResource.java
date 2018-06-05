@@ -6,10 +6,7 @@ import org.ums.domain.model.immutable.accounts.SystemAccountMap;
 import org.ums.persistent.model.accounts.PersistentSystemAccountMap;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -18,7 +15,7 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 04-Jun-18.
  */
 @Component
-@Path("/account/definition/system-group-map")
+@Path("/account/definition/system-account-map")
 public class SystemAccountMapResource {
 
   @Autowired
@@ -27,6 +24,12 @@ public class SystemAccountMapResource {
   @GET
   public List<SystemAccountMap> getAll(@Context HttpServletRequest pHttpServletRequest) {
     return mHelper.getAll();
+  }
+
+  @GET
+  @Path("id/{id}")
+  public SystemAccountMap get(@Context HttpServletRequest pHttpServletRequest, @PathParam("id") String pId) {
+    return mHelper.getById(Long.parseLong(pId));
   }
 
   @PUT

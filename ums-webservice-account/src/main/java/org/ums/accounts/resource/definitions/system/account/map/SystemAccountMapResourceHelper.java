@@ -1,6 +1,7 @@
 package org.ums.accounts.resource.definitions.system.account.map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.domain.model.immutable.accounts.SystemAccountMap;
@@ -28,8 +29,17 @@ public class SystemAccountMapResourceHelper {
   @Autowired
   private CompanyManager mCompanyManager;
 
-  List<SystemAccountMap> getAll() {
-    return mSystemAccountMapManager.getAll();
+  public List<SystemAccountMap> getAll() {
+    try {
+      return mSystemAccountMapManager.getAll(mCompanyManager.getDefaultCompany());
+    } catch(EmptyResultDataAccessException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  public SystemAccountMap getById(Long pId) {
+    return mSystemAccountMapManager.get(pId);
   }
 
   @Transactional

@@ -669,11 +669,11 @@ module ums {
               {id: "10", name: "Tution Fees & Other Student Fees"}
             ],
             accountTypes: [
-              {id: "1", name: "Engineering Program Account"},
-              {id: "2", name: "Business Program Account"},
-              {id: "3", name: "Convocation Program Account"},
-              {id: "4", name: "Provident Fund Account"},
-              {id: "5", name: "Student Welfare Fund Account"}
+              {id: 1, name: "Engineering Program Account"},
+              {id: 2, name: "Business Program Account"},
+              {id: 3, name: "Convocation Program Account"},
+              {id: 4, name: "Provident Fund Account"},
+              {id: 5, name: "Student Welfare Fund Account"}
             ],
             financialYearCloseTransferType:[
                 {id:1, name:'All accounts closing'},

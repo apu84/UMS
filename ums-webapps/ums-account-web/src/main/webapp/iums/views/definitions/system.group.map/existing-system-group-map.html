@@ -51,13 +51,13 @@
     }
 </style>
 
-<table st-table="displayed" class="table table-stripped">
+<table st-table="displayed" class="table table-stripped" st-safe-src="vm.systemGroupMapList" st-sort-default="true">
     <thead align="center">
     <tr class="header">
-        <th>Group Type</th>
-        <th>Group</th>
-        <th>Modified By</th>
-        <th>Last Modification Date</th>
+        <th st-sort="groupTypeName">Group Type</th>
+        <th st-sort="group.groupName">Group</th>
+        <th st-sort="modifierName">Modified By</th>
+        <th st-sort="modifiedDate">Last Modification Date</th>
         <th>Action</th>
     </tr>
     </thead>

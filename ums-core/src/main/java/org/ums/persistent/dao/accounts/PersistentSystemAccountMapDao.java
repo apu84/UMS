@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.accounts.SystemAccountMapDaoDecorator;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.SystemAccountMap;
 import org.ums.domain.model.mutable.accounts.MutableSystemAccountMap;
 import org.ums.enums.accounts.definitions.account.balance.AccountType;
@@ -44,6 +45,12 @@ public class PersistentSystemAccountMapDao extends SystemAccountMapDaoDecorator 
   public List<SystemAccountMap> getAll() {
     String query = SELECT_ALL;
     return mNamedParameterJdbcTemplate.query(query, new PersistentSystemAccountMapRowMapper());
+  }
+
+  @Override
+  public List<SystemAccountMap> getAll(Company pCompany) {
+    String query = SELECT_ALL + " where comp_code=?";
+    return mJdbcTemplate.query(query, new Object[] {pCompany.getId()}, new PersistentSystemAccountMapRowMapper());
   }
 
   @Override
