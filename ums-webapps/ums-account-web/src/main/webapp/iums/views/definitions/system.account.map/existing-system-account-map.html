@@ -1,10 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<style>
+    table {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        height: 700px; /* this can vary */
+    }
 
-</body>
-</html>
+    table * {
+        box-sizing: inherit;
+        -moz-box-sizing: inherit;
+    }
+
+    thead {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    tbody {
+        overflow-y: scroll;
+        display: inline-block;
+    }
+
+    thead > tr, tbody > tr, tfoot > tr {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+
+    thead, tfoot {
+        flex-shrink: 0;
+    }
+
+    th, tbody td {
+        width: 100%; /* this can vary */
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+    }
+
+    tfoot {
+        display: inline-block;
+    }
+
+    tfoot td {
+        width: 100%;
+        display: inline-block;
+    }
+
+    .st-sort-ascent:before {
+        content: '\25B2';
+    }
+
+    .st-sort-descent:before {
+        content: '\25BC';
+    }
+</style>
+
+<table st-table="vm.systemAccountMapList" class="table table-stripped" st-safe-src="vm.systemAccountMapListDisplay">
+    <thead align="center">
+    <tr>
+        <th st-sort="accountTypeName">Account Type</th>
+        <th st-sort="account.accountName">Account</th>
+        <th st-sort="modifierName">Modified By</th>
+        <th st-sort="modifiedDate">Last Modification Date</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="g in vm.systemAccountMapList">
+        <td>{{g.accountTypeName}}</td>
+        <td>{{g.account.accountName}}</td>
+        <td>{{g.modifierName}}</td>
+        <td>{{g.modifiedDate}}</td>
+        <th>
+            <button class="btn btn-success" ng-click="vm.edit(g)" data-toggle="modal" data-target="#editModal">Edit
+            </button>
+        </th>
+    </tr>
+    </tbody>
+</table>
+
+
+<div class="col-md-12"
+     data-ng-include="'views/definitions/system.account.map/edit-form.html'"></div>
