@@ -3,6 +3,7 @@ module ums {
   export interface ISystemAccountMap {
     id: string;
     accountType: AccountType;
+    accountTypeName: string;
     accountId: string;
     account: IAccount;
     companyId: string;
@@ -21,6 +22,10 @@ module ums {
   }
 
   export class SystemAccountMapService {
+
+    public static $inject = ['$q', 'HttpClient'];
+
+
     private url = "account/definition/system-account-map";
 
     constructor(private $q: ng.IQService, private httpClient: HttpClient) {
@@ -48,7 +53,7 @@ module ums {
 
     public createOrUpdate(systemAccountMap: ISystemAccountMap): ng.IPromise<ISystemAccountMap> {
       let defer: ng.IDeferred<ISystemAccountMap> = this.$q.defer();
-      this.httpClient.post(this.url + "/create-or-update", systemAccountMap, HttpClient.MIME_TYPE_JSON)
+      this.httpClient.put(this.url + "/create-or-update", systemAccountMap, HttpClient.MIME_TYPE_JSON)
           .success((response: ISystemAccountMap) => defer.resolve(response))
           .error((response) => {
             console.error(response);

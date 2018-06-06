@@ -22,17 +22,19 @@ public class SystemAccountMapResource {
   private SystemAccountMapResourceHelper mHelper;
 
   @GET
+  @Path("/all")
   public List<SystemAccountMap> getAll(@Context HttpServletRequest pHttpServletRequest) {
     return mHelper.getAll();
   }
 
   @GET
-  @Path("id/{id}")
+  @Path("/id/{id}")
   public SystemAccountMap get(@Context HttpServletRequest pHttpServletRequest, @PathParam("id") String pId) {
     return mHelper.getById(Long.parseLong(pId));
   }
 
   @PUT
+  @Path("/create-or-update")
   public SystemAccountMap createOrUpdate(@Context HttpServletRequest pHttpServletRequest,
       PersistentSystemAccountMap pPersistentSystemAccountMap) {
     return mHelper.create(pPersistentSystemAccountMap);

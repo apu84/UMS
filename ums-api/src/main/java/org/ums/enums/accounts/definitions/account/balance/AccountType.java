@@ -1,5 +1,6 @@
 package org.ums.enums.accounts.definitions.account.balance;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.EnumSet;
@@ -23,15 +24,16 @@ public enum AccountType {
 
   private Long typeValue;
 
+  @JsonCreator
   AccountType(Long pTypeValue) {
     typeValue = pTypeValue;
   }
 
-  @JsonValue
   public static AccountType get(final Long pTypeValue) {
     return Lookup.get(pTypeValue);
   }
 
+  @JsonValue
   public Long getValue() {
     return this.typeValue;
   }

@@ -7,10 +7,11 @@ module ums {
   }
 
   export class SystemAccountMapController {
-    public static $inject = ['$scope', '$modal', '$timeout', 'SystemAccountMapService', 'accountConstants', '$q', 'AccountService'];
+    public static $inject = ['$scope', '$modal', '$timeout', 'systemAccountMapService', 'accountConstants', '$q', 'AccountService'];
 
     private accountTypeList: IConstant[];
     private systemAccountMapList: ISystemAccountMap[];
+    private systemAccountMapListDisplay: ISystemAccountMap[];
     private systemAccountMapWithAccountType: any;
     private systemAccountMap: ISystemAccountMap;
     private accountTypeMapWithId: any;
@@ -24,12 +25,15 @@ module ums {
                 private $q: ng.IQService,
                 private accountService: AccountService) {
 
+      this.initialize();
     }
 
     public initialize() {
       this.accountTypeList = this.accountConstants.accountTypes;
       this.systemAccountMapService.getAll().then((systemAccountMapList: ISystemAccountMap[]) => {
-        if (systemAccountMapList == undefined)
+        console.log("Existing data");
+        console.log(systemAccountMapList);
+        if (systemAccountMapList == undefined || systemAccountMapList.length == 0)
           this.initializeEmptySystemAccountMapList();
         else {
           this.initializeExistingSystemAccountMapList(systemAccountMapList);
@@ -41,29 +45,37 @@ module ums {
 
 
     private initializeExistingSystemAccountMapList(systemAccountMapList: ISystemAccountMap[]) {
-      systemAccountMapList.forEach((a: ISystemAccountMap) => this.systemAccountMapWithAccountType[a.accountType] = a);
       this.systemAccountMapList = [];
+      this.systemAccountMapListDisplay = [];
+      systemAccountMapList.forEach((a: ISystemAccountMap) => this.systemAccountMapWithAccountType[a.accountType] = a);
       this.accountTypeList.forEach((a: IConstant) => {
         let systemAccountMap: ISystemAccountMap = <ISystemAccountMap>{};
-        if (this.systemAccountMapWithAccountType[a.id]) {
+        systemAccountMap.accountTypeName = a.name;
+        if (this.systemAccountMapWithAccountType[a.id] != undefined) {
           systemAccountMap = this.systemAccountMapWithAccountType[a.id];
         } else {
           this.initialzeSystemAccountMap(a);
         }
       });
+      this.systemAccountMapListDisplay = this.systemAccountMapList;
     }
 
 
     private initializeEmptySystemAccountMapList() {
       this.systemAccountMapList = [];
+      this.systemAccountMapListDisplay = [];
+      this.accountTypeMapWithId = {};
       this.accountTypeList.forEach((a: IConstant) => {
         this.initialzeSystemAccountMap(a);
       });
+
+      this.systemAccountMapListDisplay = angular.copy(this.systemAccountMapList);
     }
 
     private initialzeSystemAccountMap(a: IConstant) {
       let systemAccountMap: ISystemAccountMap = <ISystemAccountMap>{};
       systemAccountMap.accountType = a.id;
+      systemAccountMap.accountTypeName = a.name;
       this.systemAccountMapList.push(systemAccountMap);
       this.accountTypeMapWithId[a.id] = a;
     }
@@ -74,6 +86,8 @@ module ums {
 
     public save(systemAccountMap: ISystemAccountMap) {
       systemAccountMap.accountId = systemAccountMap.account.id;
+      console.log("System account map in save");
+      console.log(this.systemAccountMap);
       this.systemAccountMapService.createOrUpdate(systemAccountMap).then((s: ISystemAccountMap) => {
         this.map(s, systemAccountMap);
       });
