@@ -49,15 +49,23 @@
         width: 100%;
         display: inline-block;
     }
+
+    .st-sort-ascent:before {
+        content: '\25B2';
+    }
+
+    .st-sort-descent:before {
+        content: '\25BC';
+    }
 </style>
 
-<table st-table="displayed" class="table table-stripped">
+<table st-table="vm.systemGroupMapList" class="table table-stripped" st-safe-src="vm.systemGroupMapListDisplay">
     <thead align="center">
-    <tr class="header">
-        <th>Group Type</th>
-        <th>Group</th>
-        <th>Modified By</th>
-        <th>Last Modification Date</th>
+    <tr>
+        <th st-sort="g.groupTypeName">Group Type</th>
+        <th st-sort="g.group.groupName">Group</th>
+        <th st-sort="g.modifierName">Modified By</th>
+        <th st-sort="g.modifiedDate">Last Modification Date</th>
         <th>Action</th>
     </tr>
     </thead>
