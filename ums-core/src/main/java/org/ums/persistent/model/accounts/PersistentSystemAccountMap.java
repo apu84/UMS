@@ -29,7 +29,7 @@ public class PersistentSystemAccountMap implements MutableSystemAccountMap {
   private static SystemAccountMapManager sSystemAccountMapManager;
 
   private Long mId;
-  @JsonProperty("accountType")
+  @JsonIgnore
   private AccountType mAccountType;
   @JsonIgnore
   private Account mAccount;
@@ -76,11 +76,13 @@ public class PersistentSystemAccountMap implements MutableSystemAccountMap {
   }
 
   @Override
+  @JsonProperty("accountType")
   public AccountType getAccountType() {
     return mAccountType;
   }
 
   @Override
+  @JsonProperty("accountType")
   public void setAccountType(AccountType pAccountType) {
     this.mAccountType = pAccountType;
   }
