@@ -17,12 +17,15 @@ module ums{
         public static $inject = ['registrarConstants', '$q', 'notify', '$scope', 'meetingService'];
         private meetingSchedule: IMeetingScheduleModel;
         private meetingScheduleList: IMeetingScheduleModel[] = [];
-        private filteredMeetingScheduleList: IMeetingScheduleModel[] = [];
+        private upcomingMeetingScheduleList: IMeetingScheduleModel[] = [];
+        private previousMeetingScheduleList: IMeetingScheduleModel[] = [];
         private meetingTypes: IConstants[] = [];
-        private meetingType: IConstants;
+        private upcomingMeetingType: IConstants;
+        private previousMeetingType: IConstants;
         private scheduleToEdit: IMeetingScheduleModel;
-        private showPreviousMeetingList: boolean = false;
-        private showFilterFields: boolean = false;
+        private showMeetingList: boolean = false;
+        private showUpcomingFilterFields: boolean = false;
+        private showPreviousFilterFields: boolean = false;
 
         constructor(private registrarConstants: any, private $q: ng.IQService, private notify: Notify,
                     private $scope: ng.IScope, private meetingService: MeetingService) {
@@ -52,35 +55,42 @@ module ums{
             this.convertToJson(this.scheduleToEdit).then((json: any) => {
                 this.meetingService.updateMeetingSchedule(json).then(()=>{
                     this.scheduleToEdit = <IMeetingScheduleModel>{};
+                    this.getSchedule();
                 })
             });
         }
 
         private getSchedule(): void{
             this.meetingScheduleList = [];
-            this.filteredMeetingScheduleList = [];
             this.meetingService.getMeetingSchedule().then((response: any) =>{
                 this.meetingScheduleList = response;
-                this.filteredMeetingScheduleList = response;
+                this.findUpcomingMeetingScheduleList();
+                this.findPreviousMeetingScheduleList();
             });
         }
 
-        private convertToJson(obj: any): ng.IPromise<any>{
-            let defer = this.$q.defer();
-            let JsonObject = {};
-            JsonObject['entries'] = obj;
-            defer.resolve(JsonObject);
-            return defer.promise;
+        private findUpcomingMeetingScheduleList(): void{
+            this.upcomingMeetingScheduleList = [];
+            this.upcomingMeetingScheduleList = this.meetingScheduleList.filter((val, index, arr) =>{
+               return arr[index].edit == true;
+            });
+        }
+
+        private findPreviousMeetingScheduleList(): void{
+            this.previousMeetingScheduleList = [];
+            this.previousMeetingScheduleList = this.meetingScheduleList.filter((val, index, arr) =>{
+                return arr[index].edit == false;
+            });
         }
 
         public showPreviousMeetings(): void{
-            this.showPreviousMeetingList = true;
+            this.showMeetingList = true;
             this.getSchedule();
             this.addDate('');
         }
 
         public hidePreviousMeetings(): void{
-            this.showPreviousMeetingList = false;
+            this.showMeetingList = false;
             this.addDate('default');
         }
 
@@ -89,25 +99,55 @@ module ums{
             this.scheduleToEdit = schedule;
         }
 
-        public modifyFilterFields(val: boolean): void{
-            this.showFilterFields = val;
+        public modifyFilterFields(type: string, val: boolean): void{
+           if(type == "upcoming"){
+               this.showUpcomingFilterFields = val;
+           }
+           else if(type == "previous"){
+               this.showPreviousFilterFields = val;
+           }
         }
 
-        public undoFilter(): void{
-            this.filteredMeetingScheduleList = [];
-            this.filteredMeetingScheduleList = this.meetingScheduleList;
+        public undoFilter(type: string): void{
+            if(type == 'upcoming'){
+                this.findUpcomingMeetingScheduleList();
+            }
+            else if(type == "previous"){
+                this.findPreviousMeetingScheduleList();
+            }
         }
 
-        public doFilter(): void{
-            if(this.meetingType) {
-                this.filteredMeetingScheduleList = [];
-                this.filteredMeetingScheduleList = this.meetingScheduleList.filter((val, index, arr) => {
-                    return arr[index].type.id === this.meetingType.id;
-                });
+        public doFilter(type: string): void{
+            if(type == 'upcoming') {
+                if (this.upcomingMeetingType) {
+                    this.upcomingMeetingScheduleList = [];
+                    this.upcomingMeetingScheduleList = this.meetingScheduleList.filter((val, index, arr) => {
+                        return (arr[index].edit == true && arr[index].type.id === this.upcomingMeetingType.id);
+                    });
+                }
+                else {
+                    this.notify.error("Please select a meeting type");
+                }
             }
-            else{
-                this.notify.error("Please select a meeting type");
+            else if(type == 'previous'){
+                if (this.previousMeetingType) {
+                    this.previousMeetingScheduleList = [];
+                    this.previousMeetingScheduleList = this.meetingScheduleList.filter((val, index, arr) => {
+                        return (arr[index].edit == false && arr[index].type.id === this.previousMeetingType.id);
+                    });
+                }
+                else {
+                    this.notify.error("Please select a meeting type");
+                }
             }
+        }
+
+        private convertToJson(obj: any): ng.IPromise<any>{
+            let defer = this.$q.defer();
+            let JsonObject = {};
+            JsonObject['entries'] = obj;
+            defer.resolve(JsonObject);
+            return defer.promise;
         }
 
         private addDate(type: string): void {

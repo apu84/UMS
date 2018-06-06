@@ -32,10 +32,10 @@ public class ScheduleBuilder implements Builder<Schedule, MutableSchedule> {
     String outputString = outputFormat.format(pReadOnly.getMeetingDateTime());
     pBuilder.add("datetime", outputString);
     pBuilder.add("room", pReadOnly.getMeetingRoomNo());
-    if(pReadOnly.getMeetingDateTime().before(new Date())){
+    if(pReadOnly.getMeetingDateTime().before(new Date())) {
       pBuilder.add("edit", false);
     }
-    else{
+    else {
       pBuilder.add("edit", true);
     }
   }

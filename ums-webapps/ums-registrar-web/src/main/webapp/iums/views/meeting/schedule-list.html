@@ -1,83 +1,150 @@
-<div class="panel">
-    <div class="panel-body shadowPanel" style="min-height: 490px;">
-        <div class="container-fluid">
-            <fieldset>
-                <legend><i style="cursor: pointer" title="Go Back" class="fa fa-arrow-circle-left fa-lg"
-                           data-ng-click="vm.hidePreviousMeetings()"></i></legend>
-            </fieldset>
-            <div class="row">
-                <div class="col-md-3">
-                    <div data-ng-show="vm.showFilterFields">
-                        <select id="iFilterType"
-                                name="nFilterType"
-                                data-ng-model="vm.meetingType"
-                                data-ng-options="meetingType.name for meetingType in vm.meetingTypes track by meetingType.id"
-                                class="form-control">
-                            <option value="">Select Meeting Type</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-1">
-                    <div data-ng-show="vm.showFilterFields">
-                        <button data-ng-click="vm.doFilter()" class="btn btn-default">
-                            <i style="cursor: pointer" title="Go Back" class="fa fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                </div>
-                <div class="col-md-5">
-                    <div align="right" data-ng-show="!vm.showFilterFields">
-                        <button data-ng-click="vm.modifyFilterFields(true)" class="btn btn-blue">
-                            <i style="cursor: pointer" title="Go Back" class="fa fa-filter"></i>
-                        </button>
-                    </div>
-                    <div align="right" data-ng-show="vm.showFilterFields">
-                        <button data-ng-click="vm.undoFilter()" class="btn btn-info">
-                            <i style="cursor: pointer" title="Undo Filter" class="fa fa-undo"></i>
-                        </button>
-                        <button data-ng-click="vm.modifyFilterFields(false)" class="btn btn-danger">
-                            <i style="cursor: pointer" title="Close" class="fa fa-close"></i>
-                        </button>
-                    </div>
+<fieldset>
+    <legend><i style="cursor: pointer" title="Go Back" class="fa fa-arrow-circle-left fa-lg"
+               data-ng-click="vm.hidePreviousMeetings()"></i></legend>
+</fieldset>
 
-                </div>
-            </div>
-
-            <hr/>
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Meeting Type</th>
-                    <th>Meeting No.</th>
-                    <th>Ref No.</th>
-                    <th>Date & Time</th>
-                    <th>Room / Place</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody data-ng-repeat="(k, v) in vm.filteredMeetingScheduleList">
-                <tr>
-                    <td>{{k + 1}}</td>
-                    <td>{{v.type.name}}</td>
-                    <td>{{v.meetingNo}}</td>
-                    <td>{{v.refNo}}</td>
-                    <td>{{v.datetime}}</td>
-                    <td>{{v.room}}</td>
-                    <td><span data-ng-show="v.edit"><a data-toggle="modal" data-target="#editSchedule"
-                                                       data-ng-click="vm.selectedScheduleToEdit(v)"
-                                                       style="cursor: pointer;"><i
-                            class="fa fa-edit" style="cursor: pointer; color: blue;"></i>
-                    </a>
-                    </span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+<div class="row">
+    <div class="col-md-12">
+        <h4>Upcoming Meetings ...</h4>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div data-ng-show="vm.showUpcomingFilterFields">
+            <select id="iUpcomingFilterType"
+                    name="nUpcomingFilterType"
+                    data-ng-model="vm.upcomingMeetingType"
+                    data-ng-options="meetingType.name for meetingType in vm.meetingTypes track by meetingType.id"
+                    class="form-control">
+                <option value="">Select Meeting Type</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-1">
+        <div data-ng-show="vm.showUpcomingFilterFields">
+            <button data-ng-click="vm.doFilter('upcoming')" class="btn btn-default">
+                <i style="cursor: pointer" title="Go Back" class="fa fa-search"></i>
+            </button>
+        </div>
+    </div>
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-5">
+        <div align="right" data-ng-show="!vm.showUpcomingFilterFields">
+            <button data-ng-click="vm.modifyFilterFields('upcoming', true)" class="btn btn-blue">
+                <i style="cursor: pointer" title="Filter" class="fa fa-filter"></i>
+            </button>
+        </div>
+        <div align="right" data-ng-show="vm.showUpcomingFilterFields">
+            <button data-ng-click="vm.undoFilter('upcoming')" class="btn btn-info">
+                <i style="cursor: pointer" title="Undo Filter" class="fa fa-undo"></i>
+            </button>
+            <button data-ng-click="vm.modifyFilterFields('upcoming', false)" class="btn btn-danger">
+                <i style="cursor: pointer" title="Close" class="fa fa-close"></i>
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Meeting Type</th>
+        <th>Meeting No.</th>
+        <th>Ref No.</th>
+        <th>Date & Time</th>
+        <th>Room / Place</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody data-ng-repeat="(k, v) in vm.upcomingMeetingScheduleList">
+    <tr>
+        <td>{{k + 1}}</td>
+        <td>{{v.type.name}}</td>
+        <td>{{v.meetingNo}}</td>
+        <td>{{v.refNo}}</td>
+        <td>{{v.datetime}}</td>
+        <td>{{v.room}}</td>
+        <td><a data-toggle="modal" data-target="#editSchedule"
+               data-ng-click="vm.selectedScheduleToEdit(v)"
+               style="cursor: pointer;"><i
+                class="fa fa-edit" style="cursor: pointer; color: blue;"></i>
+        </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="row">
+    <div class="col-md-12">
+        <h4>Previous Meetings ...</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div data-ng-show="vm.showPreviousFilterFields">
+            <select id="iFilterType"
+                    name="nFilterType"
+                    data-ng-model="vm.previousMeetingType"
+                    data-ng-options="meetingType.name for meetingType in vm.meetingTypes track by meetingType.id"
+                    class="form-control">
+                <option value="">Select Meeting Type</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-1">
+        <div data-ng-show="vm.showPreviousFilterFields">
+            <button data-ng-click="vm.doFilter('previous')" class="btn btn-default">
+                <i style="cursor: pointer" title="Go Back" class="fa fa-search"></i>
+            </button>
+        </div>
+    </div>
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-5">
+        <div align="right" data-ng-show="!vm.showPreviousFilterFields">
+            <button data-ng-click="vm.modifyFilterFields('previous', true)" class="btn btn-blue">
+                <i style="cursor: pointer" title="Filter" class="fa fa-filter"></i>
+            </button>
+        </div>
+        <div align="right" data-ng-show="vm.showPreviousFilterFields">
+            <button data-ng-click="vm.undoFilter('previous')" class="btn btn-info">
+                <i style="cursor: pointer" title="Undo Filter" class="fa fa-undo"></i>
+            </button>
+            <button data-ng-click="vm.modifyFilterFields('previous', false)" class="btn btn-danger">
+                <i style="cursor: pointer" title="Close" class="fa fa-close"></i>
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Meeting Type</th>
+        <th>Meeting No.</th>
+        <th>Ref No.</th>
+        <th>Date & Time</th>
+        <th>Room / Place</th>
+    </tr>
+    </thead>
+    <tbody data-ng-repeat="(k, v) in vm.previousMeetingScheduleList">
+    <tr>
+        <td>{{k + 1}}</td>
+        <td>{{v.type.name}}</td>
+        <td>{{v.meetingNo}}</td>
+        <td>{{v.refNo}}</td>
+        <td>{{v.datetime}}</td>
+        <td>{{v.room}}</td>
+    </tr>
+    </tbody>
+</table>
 
 
 <div id="editSchedule" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"

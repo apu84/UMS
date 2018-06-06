@@ -1,4 +1,4 @@
-<div data-ng-if="!vm.showPreviousMeetingList">
+<div data-ng-if="!vm.showMeetingList">
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
@@ -102,6 +102,6 @@
     </div>
 </div>
 
-<div data-ng-if="vm.showPreviousMeetingList">
+<div data-ng-if="vm.showMeetingList">
     <div data-ng-include="src='views/meeting/schedule-list.html'"></div>
 </div>
