@@ -28,15 +28,21 @@ public class ScheduleBuilder implements Builder<Schedule, MutableSchedule> {
     pBuilder.add("type", meetingBuilder);
     pBuilder.add("meetingNo", pReadOnly.getMeetingNo());
     pBuilder.add("refNo", pReadOnly.getMeetingRefNo());
-    DateFormat outputFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aaa");
+    DateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm aaa");
     String outputString = outputFormat.format(pReadOnly.getMeetingDateTime());
     pBuilder.add("datetime", outputString);
     pBuilder.add("room", pReadOnly.getMeetingRoomNo());
+    if(pReadOnly.getMeetingDateTime().before(new Date())){
+      pBuilder.add("edit", false);
+    }
+    else{
+      pBuilder.add("edit", true);
+    }
   }
 
   @Override
   public void build(MutableSchedule pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aaa");
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm aaa");
     Date date = null;
     try {
       date = dateFormat.parse(pJsonObject.getString("datetime"));

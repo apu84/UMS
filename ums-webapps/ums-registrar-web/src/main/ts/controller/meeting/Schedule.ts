@@ -29,7 +29,7 @@ module ums{
 
             this.meetingTypes = registrarConstants.meetingTypes;
             this.meetingSchedule = <IMeetingScheduleModel>{};
-            this.addDate();
+            this.addDate('default');
         }
 
         private getNextMeetingNo(): void {
@@ -43,6 +43,7 @@ module ums{
         private save(): void {
             this.convertToJson(this.meetingSchedule).then((json: any) => {
                 this.meetingService.saveMeetingSchedule(json).then(()=>{
+                    this.meetingSchedule = <IMeetingScheduleModel>{};
                 })
             });
         }
@@ -50,6 +51,7 @@ module ums{
         private update(): void {
             this.convertToJson(this.scheduleToEdit).then((json: any) => {
                 this.meetingService.updateMeetingSchedule(json).then(()=>{
+                    this.scheduleToEdit = <IMeetingScheduleModel>{};
                 })
             });
         }
@@ -74,10 +76,12 @@ module ums{
         public showPreviousMeetings(): void{
             this.showPreviousMeetingList = true;
             this.getSchedule();
+            this.addDate('');
         }
 
         public hidePreviousMeetings(): void{
             this.showPreviousMeetingList = false;
+            this.addDate('default');
         }
 
         public selectedScheduleToEdit(schedule: IMeetingScheduleModel): void{
@@ -106,15 +110,25 @@ module ums{
             }
         }
 
-        private addDate(): void {
-            let internalThis:any = this;
-            setTimeout(function () {
-                $('#datetimepicker-default').datetimepicker();
-                $('#datetimepicker-default').blur(function (e) {
-                    internalThis.meetingSchedule.datetime = $(this).val();
-                    console.log(internalThis.meetingSchedule.datetime);
-                });
-            }, 10);
+        private addDate(type: string): void {
+            if(type == "default") {
+                let internalThis: any = this;
+                setTimeout(function () {
+                    $('#datetimepicker-default').datetimepicker();
+                    $('#datetimepicker-default').blur(function (e) {
+                        internalThis.meetingSchedule.datetime = $(this).val();
+                    });
+                }, 10);
+            }
+            else{
+                let internalThat: any = this;
+                setTimeout(function () {
+                    $('#datetimepicker-default1').datetimepicker();
+                    $('#datetimepicker-default1').blur(function (e) {
+                        internalThat.scheduleToEdit.datetime = $(this).val();
+                    });
+                }, 10);
+            }
         }
     }
 

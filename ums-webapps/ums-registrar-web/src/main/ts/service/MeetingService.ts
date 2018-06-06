@@ -21,7 +21,7 @@ module ums{
                 })
                 .error((data) => {
                     this.notify.error("Error in Saving");
-                    defer.resolve("Error");
+                    defer.reject("Error");
                 });
             return defer.promise;
         }
@@ -35,6 +35,7 @@ module ums{
                 })
                 .error((data) => {
                     this.notify.error("Error in Updating");
+                    defer.reject("Error");
                 });
             return defer.promise;
         }
