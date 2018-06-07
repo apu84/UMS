@@ -13,5 +13,7 @@ module ums {
     'ngHandsontableApp',
     "dirPaginationApp",
     'ui.select'
-  ]);
+  ]).run(function(ExpireToken){
+
+  });
 }

@@ -1,9 +1,11 @@
 package org.ums.cache.accounts;
 
 import org.ums.cache.ContentCache;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
+import org.ums.enums.common.AscendingOrDescendingType;
 import org.ums.manager.CacheManager;
 import org.ums.manager.accounts.AccountManager;
 
@@ -31,8 +33,19 @@ public class AccountCache extends ContentCache<Account, MutableAccount, Long, Ac
   }
 
   @Override
-  public List<Account> getAllPaginated(int itemPerPage, int pageNumber) {
-    return getManager().getAllPaginated(itemPerPage, pageNumber);
+  public Account getAccount(Long pAccountCode, Company pCompany) {
+    return getManager().getAccount(pAccountCode, pCompany);
+  }
+
+  @Override
+  public boolean exists(Long pAccountCode, Company pCompany) {
+    return getManager().exists(pAccountCode, pCompany);
+  }
+
+  @Override
+  public List<Account> getAllPaginated(int itemPerPage, int pageNumber,
+      AscendingOrDescendingType ascendingOrDescendingType) {
+    return getManager().getAllPaginated(itemPerPage, pageNumber, ascendingOrDescendingType);
   }
 
   @Override
@@ -53,5 +66,10 @@ public class AccountCache extends ContentCache<Account, MutableAccount, Long, Ac
   @Override
   public List<Account> getIncludingGroups(List<String> groupCodeList) {
     return getManager().getIncludingGroups(groupCodeList);
+  }
+
+  @Override
+  public List<Account> getAccounts(Company pCompany) {
+    return getManager().getAccounts(pCompany);
   }
 }

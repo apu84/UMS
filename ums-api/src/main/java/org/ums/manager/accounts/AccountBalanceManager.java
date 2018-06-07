@@ -13,9 +13,9 @@ import java.util.List;
  */
 public interface AccountBalanceManager extends ContentManager<AccountBalance, MutableAccountBalance, Long> {
 
-  AccountBalance getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate, Account pAccount);
+  MutableAccountBalance getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate, Account pAccount);
 
-  List<AccountBalance> getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate);
+  List<MutableAccountBalance> getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate);
 
   List<MutableAccountBalance> getAccountBalance(Date pFinancialStartDate, Date pFinancialEndDate,
       List<Account> pAccounts);

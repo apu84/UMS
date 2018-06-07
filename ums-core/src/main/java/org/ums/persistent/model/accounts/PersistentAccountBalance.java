@@ -1,5 +1,9 @@
 package org.ums.persistent.model.accounts;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
@@ -12,7 +16,9 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 31-Dec-17.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PersistentAccountBalance implements MutableAccountBalance {
+  @JsonIgnore
   private static AccountBalanceManager sAccountBalanceManager;
 
   static {
@@ -21,41 +27,74 @@ public class PersistentAccountBalance implements MutableAccountBalance {
   }
 
   private Long mId;
+  @JsonIgnore
   private Date mFinStartDate;
+  @JsonIgnore
   private Date mFinEndDate;
   private Long mAccountCode;
   private BigDecimal mYearOpenBalance;
   private BalanceType mYearOpenBalanceType;
+  @JsonIgnore
   private BigDecimal mTotMonthDbBal01;
+  @JsonIgnore
   private BigDecimal mTotMonthDbBal02;
+  @JsonIgnore
   private BigDecimal mTotMonthDbBal03;
+  @JsonIgnore
   private BigDecimal mTotMonthDbBal04;
+  @JsonIgnore
   private BigDecimal mTotMonthDbBal05;
+  @JsonIgnore
   private BigDecimal mTotMonthDbBal06;
+  @JsonIgnore
   private BigDecimal mTotMonthDbBal07;
+  @JsonIgnore
   private BigDecimal mTotMonthDbBal08;
+  @JsonIgnore
   private BigDecimal mTotMonthDbBal09;
+  @JsonIgnore
   private BigDecimal mTotMonthDbBal10;
+  @JsonIgnore
   private BigDecimal mTotMonthDbBal11;
+  @JsonIgnore
   private BigDecimal mTotMonthDbBal12;
+  @JsonIgnore
   private BigDecimal mTotMonthCrBal01;
+  @JsonIgnore
   private BigDecimal mTotMonthCrBal02;
+  @JsonIgnore
   private BigDecimal mTotMonthCrBal03;
+  @JsonIgnore
   private BigDecimal mTotMonthCrBal04;
+  @JsonIgnore
   private BigDecimal mTotMonthCrBal05;
+  @JsonIgnore
   private BigDecimal mTotMonthCrBal06;
+  @JsonIgnore
   private BigDecimal mTotMonthCrBal07;
+  @JsonIgnore
   private BigDecimal mTotMonthCrBal08;
+  @JsonIgnore
   private BigDecimal mTotMonthCrBal09;
+  @JsonIgnore
   private BigDecimal mTotMonthCrBal10;
+  @JsonIgnore
   private BigDecimal mTotMonthCrBal11;
+  @JsonIgnore
   private BigDecimal mTotMonthCrBal12;
+  @JsonIgnore
   private BigDecimal mTotCreditTrans;
+  @JsonIgnore
   private BigDecimal mTotDebitTrans;
+  @JsonIgnore
   private String mStatFlag;
+  @JsonIgnore
   private String mStatUpFlag;
+  @JsonIgnore
   private Date mModifiedDate;
+  @JsonIgnore
   private String mModifiedBy;
+  @JsonIgnore
   private String mLastModified;
 
   public PersistentAccountBalance() {}
@@ -81,11 +120,13 @@ public class PersistentAccountBalance implements MutableAccountBalance {
   }
 
   @Override
+  @JsonSerialize(as = String.class)
   public Long getId() {
     return mId;
   }
 
   @Override
+  @JsonDeserialize(as = Long.class)
   public void setId(Long pId) {
     mId = pId;
   }
@@ -109,21 +150,25 @@ public class PersistentAccountBalance implements MutableAccountBalance {
   }
 
   @Override
+  @JsonSerialize(as = String.class)
   public Long getAccountCode() {
     return mAccountCode;
   }
 
   @Override
+  @JsonDeserialize(as = Long.class)
   public void setAccountCode(Long pAccountCode) {
     mAccountCode = pAccountCode;
   }
 
   @Override
+  @JsonSerialize(as = Number.class)
   public BigDecimal getYearOpenBalance() {
     return mYearOpenBalance;
   }
 
   @Override
+  @JsonDeserialize(as = BigDecimal.class)
   public void setYearOpenBalance(BigDecimal pYearOpenBalance) {
     mYearOpenBalance = pYearOpenBalance;
   }

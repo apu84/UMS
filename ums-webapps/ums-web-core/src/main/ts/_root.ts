@@ -7,6 +7,7 @@
 /// <reference path='lib/jquery.notific8.d.ts'/>
 /// <reference path='lib/jquery.notify.d.ts'/>
 /// <reference path='lib/select2.d.ts'/>
+/// <reference path='lib/ui-grid.d.ts'/>
 /// <reference path='lib/bootstrap.selectpicker.d.ts'/>
 /// <reference path='lib/zabuto_calendar.d.ts'/>
 /// <reference path='lib/bootstrap-switch.d.ts'/>
@@ -30,7 +31,6 @@
 /// <reference path='root.ts'/>
 /// <reference path='constants.ts'/>
 /// <reference path='Utils.ts'/>
-
 
 /// <reference path='service/BaseUri.ts'/>
 /// <reference path='service/Notify.ts'/>
@@ -106,7 +106,6 @@
 /// <reference path='util/UmsUtil.ts'/>
 /// <reference path='util/UriUtil.ts'/>
 
-
 /// <reference path='employee/EmployeeProfile.ts'/>
 /// <reference path='employee/ApprovePublicationService.ts'/>
 /// <reference path='employee/EmployeeInformation.ts'/>
@@ -115,3 +114,13 @@
 /// <reference path='employee/EmployeePublication.ts'/>
 /// <reference path='employee/PagerService.ts'/>
 /// <reference path='employee/CRUDDetectionService.ts'/>
+/// <reference path='employee/PersonalInformation.ts'/>
+/// <reference path='employee/AcademicInformation.ts'/>
+/// <reference path='employee/PublicationInformation.ts'/>
+/// <reference path='employee/TrainingInformation.ts'/>
+/// <reference path='employee/AwardInformation.ts'/>
+/// <reference path='employee/ExperienceInformation.ts'/>
+/// <reference path='employee/AdditionalInformation.ts'/>
+/// <reference path='employee/ServiceInformation.ts'/>
+
+/// <reference path='library/LibrarySearch.ts'/>

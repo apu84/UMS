@@ -2,14 +2,14 @@ package org.ums.employee.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.logs.UmsLogMessage;
+import org.ums.logs.GetLog;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
-import javax.ws.rs.core.UriInfo;
 
 @Component
 @Path("employee/service")
@@ -21,10 +21,10 @@ public class ServiceInformationResource extends MutableServiceInformationResourc
   private ServiceInformationResourceHelper mHelper;
 
   @GET
-  @Path("/get/employeeId/{employee-id}")
-  @UmsLogMessage(message = "Get employee information (service data)")
-  public JsonObject getEmployeeAcademicInformation(final @Context Request pRequest,
-      final @PathParam("employee-id") String pEmployeeId, final UriInfo pUriInfo) {
-    return mHelper.getServiceInformation(pEmployeeId, pUriInfo);
+  @Path("/{employee-id}")
+  @GetLog(message = "Get service information list")
+  public JsonObject get(@Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("employee-id") String pEmployeeId, final @Context Request pRequest) throws Exception {
+    return mHelper.get(pEmployeeId, mUriInfo);
   }
 }

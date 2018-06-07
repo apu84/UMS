@@ -1,5 +1,8 @@
 package org.ums.bank.branch.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.apache.commons.lang.Validate;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
@@ -23,6 +26,7 @@ public class PersistentBranchUser implements MutableBranchUser {
   private String mLastModified;
 
   @Override
+  @JsonSerialize(using = ToStringSerializer.class)
   public Long getId() {
     return mId;
   }
@@ -48,11 +52,13 @@ public class PersistentBranchUser implements MutableBranchUser {
   }
 
   @Override
+  @JsonIgnore
   public void setBranch(Branch pBranch) {
     this.mBranch = pBranch;
   }
 
   @Override
+  @JsonSerialize(using = ToStringSerializer.class)
   public Long getBranchId() {
     return mBranchId;
   }
@@ -79,11 +85,13 @@ public class PersistentBranchUser implements MutableBranchUser {
   }
 
   @Override
+  @JsonIgnore
   public void setBankDesignation(BankDesignation pBankDesignation) {
     this.mBankDesignation = pBankDesignation;
   }
 
   @Override
+  @JsonSerialize(using = ToStringSerializer.class)
   public Long getBankDesignationId() {
     return mBankDesignationId;
   }

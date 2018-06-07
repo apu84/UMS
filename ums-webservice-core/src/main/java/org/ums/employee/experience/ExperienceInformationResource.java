@@ -1,10 +1,12 @@
 package org.ums.employee.experience;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.logs.UmsLogMessage;
+import org.ums.logs.GetLog;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -15,11 +17,14 @@ import javax.ws.rs.core.Request;
 @Consumes(Resource.MIME_TYPE_JSON)
 public class ExperienceInformationResource extends MutableExperienceInformationResource {
 
+  @Autowired
+  private ExperienceInformationResourceHelper mHelper;
+
   @GET
-  @Path("/get/employeeId/{employee-id}")
-  @UmsLogMessage(message = "Get employee information (experience data)")
-  public JsonObject getExperienceInformation(final @PathParam("employee-id") String pEmployeeId,
-      final @Context Request pRequest) throws Exception {
-    return mExperienceInformationResourceHelper.getExperienceInformation(pEmployeeId, mUriInfo);
+  @Path("/{employee-id}")
+  @GetLog(message = "Get experience information list")
+  public JsonObject get(@Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("employee-id") String pEmployeeId, final @Context Request pRequest) throws Exception {
+    return mHelper.get(pEmployeeId, mUriInfo);
   }
 }

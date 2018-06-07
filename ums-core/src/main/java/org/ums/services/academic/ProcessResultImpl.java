@@ -39,10 +39,10 @@ public class ProcessResultImpl implements ProcessResult {
   @Autowired
   SemesterManager mSemesterManager;
 
-  private final static String PROCESS_GRADES = "process_grades";
-  private final static String PROCESS_GPA_CGPA_PROMOTION = "process_gpa_cgpa_promotion";
-  private final static String PUBLISH_RESULT = "publish_result";
-  private final static Integer UPDATE_NOTIFICATION_AFTER = 20;
+  public final static String PROCESS_GRADES = "process_grades";
+  public final static String PROCESS_GPA_CGPA_PROMOTION = "process_gpa_cgpa_promotion";
+  public final static String PUBLISH_RESULT = "publish_result";
+  public final static Integer UPDATE_NOTIFICATION_AFTER = 20;
 
   private Map<String, Double> GPA_MAP = null;
   private final List<String> EXCLUDE_GRADES = new ArrayList<>();

@@ -1,4 +1,6 @@
 module ums {
+  import IAccount = ums.IAccount;
+
   enum SubmissionType {
     save = "Save",
     post = "Post"
@@ -6,7 +8,7 @@ module ums {
 
   export class JournalVoucherController {
 
-    public static $inject = ['$scope', '$q', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'JournalVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'VoucherNumberControlService'];
+    public static $inject = ['$scope', '$q', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'JournalVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'VoucherNumberControlService', 'SystemGroupMapService'];
 
 
     private voucherNo: string;
@@ -25,6 +27,7 @@ module ums {
     private customerAccounts: IAccount[];
     private vendorAccounts: IAccount[];
     private customerAccountMapWithId: any;
+    private studentAccountMapWithId: any;
     private vendorAccountMapWithId: any;
     private totalDebit: number;
     private totalCredit: number;
@@ -51,7 +54,8 @@ module ums {
                 private journalVoucherService: JournalVoucherService,
                 private voucherService: VoucherService,
                 private currencyService: CurrencyService,
-                private currencyConversionService: CurrencyConversionService, private voucherNumberControlService: VoucherNumberControlService) {
+                private currencyConversionService: CurrencyConversionService,
+                private voucherNumberControlService: VoucherNumberControlService, private systemGroupMapService: SystemGroupMapService) {
       this.initialize();
     }
 
@@ -74,6 +78,8 @@ module ums {
       this.getCurrencies();
       this.getPaginatedJournalVouchers();
     }
+
+
 
 
     public getPaginatedJournalVouchers() {
@@ -204,9 +210,17 @@ module ums {
 
     }
 
+
+    public print(){
+        let voucher: IJournalVoucher=this.detailVouchers[0];
+        this.journalVoucherService.generateVoucherReport(voucher.voucherNo, voucher.voucherDate);
+    }
+
     public fetchDetails(journalVoucher: IJournalVoucher) {
       console.log("Selected currency");
       console.log(this.selectedCurrency);
+      console.log("Fetch details journal voucher");
+      console.log(journalVoucher);
       this.journalVoucherService.getVouchersByVoucherNoAndDate(journalVoucher.voucherNo, journalVoucher.postDate == null ? journalVoucher.modifiedDate : journalVoucher.postDate).then((vouchers: IJournalVoucher[]) => {
         console.log("Fetch vouchers");
         console.log(vouchers);
@@ -264,12 +278,23 @@ module ums {
         this.vendorAccounts = accountListForAddModal;
         this.vendorAccounts.forEach((v: IAccount) => this.vendorAccountMapWithId[v.id] = v);
       });
+      this.customerAccounts = [];
+      this.customerAccountMapWithId = {};
 
       this.accountService.getCustomerAccounts().then((accountListForAddModal: IAccount[]) => {
-        this.customerAccounts = [];
-        this.customerAccountMapWithId = {};
-        this.customerAccounts = accountListForAddModal;
-        this.customerAccounts.forEach((v: IAccount) => this.customerAccountMapWithId[v.id] = v);
+        accountListForAddModal.forEach((a: IAccount) => {
+          this.customerAccounts.push(a);
+          this.customerAccountMapWithId[a.id] = a;
+        });
+      });
+
+      this.accountService.getStudentAccounts().then((accountListForAddModal: IAccount[]) => {
+        this.studentAccountMapWithId = {};
+        accountListForAddModal.forEach((a: IAccount) => {
+          this.customerAccounts.push(a);
+          this.customerAccountMapWithId[a.id] = a;
+          this.studentAccountMapWithId[a.id] = a;
+        });
       });
     }
 

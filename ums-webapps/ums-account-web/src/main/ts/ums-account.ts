@@ -1,4 +1,4 @@
-module ums {
+  module ums {
   export var UMS = angular.module('UMS', [
     'ngRoute',
     'ngAnimate',
@@ -19,14 +19,16 @@ module ums {
     'angularAccounting',
     'ngHandsontable'
 
-  ]);
+  ]).run(function(ExpireToken){
+
+  });
 
 
   UMS.config(['BaseUriProvider', (baseUriProvider: BaseUriProvider) => {
     baseUriProvider.setServicePath('/ums-webservice-account/');
   }]);
 
-  UMS.constant("accountConstants", Constants.RegistrarConstant());
+    UMS.constant("accountConstants", Constants.AccountConstant());
 
   UMS.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
     $urlRouterProvider.otherwise("/userHome");
@@ -74,6 +76,18 @@ module ums {
           controller: 'GroupController',
           controllerAs: 'vm',
           templateUrl: 'views/definitions/group/account.group.html'
+        })
+        .state('systemGroupMap', {
+          url: "/systemGroupMap",
+          controller: 'SystemGroupMapController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/system.group.map/system-group-map.html'
+        })
+        .state('systemAccountMap', {
+          url: "/systemAccountMap",
+          controller: 'SystemAccountMapController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/system.account.map/system-account-map.html'
         })
         .state('account', {
           url: "/account",
@@ -133,6 +147,24 @@ module ums {
               });
             }]
           }
+        })
+        .state('financialAccountYear.financialAccountYearClosing', {
+            url: "/financialAccountYearClosing",
+            controller: 'FinancialAccountYearClosingController',
+            controllerAs: 'vm',
+            templateUrl: 'views/definitions/financial.account.year/financial.account.year.closing.html',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        files: [
+                            'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                            'vendors/bootstrap-datepicker/css/datepicker.css',
+                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                        ]
+                    });
+                }]
+            }
         })
         .state('journalVoucher', {
           url: "/journalVoucher",

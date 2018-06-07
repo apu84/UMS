@@ -3,8 +3,10 @@ package org.ums.accounts.resource.general.ledger.transactions.journal.voucher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.domain.model.immutable.accounts.AccountTransaction;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
-import org.ums.logs.UmsLogMessage;
+import org.ums.logs.GetLog;
+import org.ums.logs.PostLog;
 import org.ums.manager.accounts.AccountTransactionManager;
+import org.ums.persistent.model.accounts.PersistentAccountTransaction;
 
 import javax.json.JsonArray;
 import javax.servlet.http.HttpServletRequest;
@@ -14,9 +16,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-/**
- * Created by Monjur-E-Morshed on 31-Jan-18.
- */
 public class MutableJournalVoucherResource {
   @Autowired
   protected JournalVoucherResourceHelper mJournalVoucherResourceHelper;
@@ -25,8 +24,10 @@ public class MutableJournalVoucherResource {
 
   @POST
   @Path("/save")
-  public List<AccountTransaction> save(JsonArray pJsonArray) throws Exception {
-    return mJournalVoucherResourceHelper.save(pJsonArray);
+  @PostLog(message = "Saving Journal Voucher")
+  public List<AccountTransaction> save(@Context HttpServletRequest httpServletRequest,
+      List<PersistentAccountTransaction> persistentAccountTransactionList) throws Exception {
+    return mJournalVoucherResourceHelper.save(persistentAccountTransactionList);
   }
 
   @PUT
@@ -40,10 +41,10 @@ public class MutableJournalVoucherResource {
   @Path("/post")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  @UmsLogMessage(message = "Posting")
-  public List<AccountTransaction> post(@Context HttpServletRequest pHttpServletRequest, JsonArray pJsonArray)
-      throws Exception {
-    return mJournalVoucherResourceHelper.postTransactions(pJsonArray);
+  @GetLog(message = "Posting")
+  public List<AccountTransaction> post(@Context HttpServletRequest pHttpServletRequest,
+      List<PersistentAccountTransaction> accountTransactionList) throws Exception {
+    return mJournalVoucherResourceHelper.postTransactions(accountTransactionList);
   }
 
 }

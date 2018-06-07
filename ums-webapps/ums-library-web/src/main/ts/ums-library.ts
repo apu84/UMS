@@ -12,7 +12,9 @@ module ums {
         'ui.sortable',
         'ngHandsontable',
         "angularUtils.directives.dirPagination"
-    ]);
+    ]).run(function(ExpireToken){
+
+    });
 //https://localhost//ums-webservice-academic/academic/course/all/ipp/5/page/1
 
     UMS.config(['BaseUriProvider', (baseUriProvider: BaseUriProvider) => {
@@ -85,7 +87,24 @@ module ums {
             })
             .state('cataloging', {
                 url: "/cataloging",
-                templateUrl: 'views/admin/cataloging/catalog-home.html'
+                templateUrl: 'views/admin/cataloging/catalog-home.html',
+                resolve: {
+                    contributor: ['contributorService', function(contributorService){
+                        return contributorService.fetchAllContributors().then((contributors) =>{
+                            return contributors.entries;
+                        });
+                    }],
+                    publisher: ['publisherService', function(publisherService){
+                        return publisherService.fetchAllPublishers().then((publishers) =>{
+                            return publishers.entries;
+                        });
+                    }],
+                    supplier: ['supplierService', function(supplierService){
+                        return supplierService.fetchAllSuppliers().then((suppliers) =>{
+                            return suppliers.entries;
+                        });
+                    }]
+                }
             })
             .state('cataloging.thesis', {
                 url: "/thesis",
@@ -201,8 +220,8 @@ module ums {
                 controller: 'CirculationHistory',
                 controllerAs: 'vm'
             })
-            .state('profile', {
-                url: "/profile",
+            .state('employeeProfile', {
+                url: "/employeeProfile",
                 templateUrl: 'views/employee/employee-profile.html',
                 controller: 'EmployeeProfile',
                 controllerAs: 'vm',
@@ -227,6 +246,78 @@ module ums {
                     }]
                 }
             })
+            .state('employeeProfile.personal', {
+                url: "/personal",
+                params : {
+                    'id1': null
+                },
+                templateUrl: 'views/employee/personal-information.html',
+                controller: 'PersonalInformation',
+                controllerAs: 'vm'
+            })
+            .state('employeeProfile.academic', {
+                url: "/academic",
+                params : {
+                    'id2': null
+                },
+                templateUrl: 'views/employee/academic-information.html',
+                controller: 'EducationInformation',
+                controllerAs: 'vm'
+            })
+            .state('employeeProfile.publication', {
+                url: "/publication",
+                params : {
+                    'id3': null
+                },
+                templateUrl: 'views/employee/publication-information.html',
+                controller: 'PublicationInformation',
+                controllerAs: 'vm'
+            })
+            .state('employeeProfile.training', {
+                url: "/training",
+                params : {
+                    'id4': null
+                },
+                templateUrl: 'views/employee/training-information.html',
+                controller: 'TrainingInformation',
+                controllerAs: 'vm'
+            })
+            .state('employeeProfile.award', {
+                url: "/award",
+                params : {
+                    'id5': null
+                },
+                templateUrl: 'views/employee/award-information.html',
+                controller: 'AwardInformation',
+                controllerAs: 'vm'
+            })
+            .state('employeeProfile.experience', {
+                url: "/experience",
+                params : {
+                    'id6': null
+                },
+                templateUrl: 'views/employee/experience-information.html',
+                controller: 'ExperienceInformation',
+                controllerAs: 'vm'
+            })
+            .state('employeeProfile.additional', {
+                url: "/additional",
+                params : {
+                    'id7': null
+                },
+                templateUrl: 'views/employee/additional-information.html',
+                controller: 'AdditionalInformation',
+                controllerAs: 'vm'
+            })
+            .state('employeeProfile.service', {
+                url: "/service",
+                params : {
+                    'id8': null
+                },
+                templateUrl: 'views/employee/service-information.html',
+                controller: 'ServiceInformation',
+                controllerAs: 'vm'
+            })
             .state('changePassword', {
                 url: "/changePassword",
                 controller: 'ChangePassword',
@@ -239,7 +330,7 @@ module ums {
             .state('searchLibrary', {
                 url: "/searchLibrary",
                 controller: 'SearchLibrary',
-                templateUrl: 'views/search-library.html',
+                templateUrl: 'views/library-search.html',
                 resolve: {
                     loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                         return $ocLazyLoad.load({

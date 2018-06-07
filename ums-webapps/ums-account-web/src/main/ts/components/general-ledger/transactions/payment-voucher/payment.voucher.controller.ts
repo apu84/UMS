@@ -3,9 +3,10 @@ module ums {
 
 
   import IPaymentVoucher = ums.IPaymentVoucher;
+  import ISystemGroupMap = ums.ISystemGroupMap;
 
   export class PaymentVoucherController {
-    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'PaymentVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'AccountBalanceService', 'ChequeRegisterService', '$q', 'VoucherNumberControlService'];
+    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'PaymentVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'AccountBalanceService', 'ChequeRegisterService', '$q', 'VoucherNumberControlService', 'SystemGroupMapService'];
     private showAddSection: boolean;
     private voucherNo: string;
     private voucherDate: string;
@@ -38,6 +39,11 @@ module ums {
     private dateFormat: string;
     private searchVoucherNo: string;
     private maximumTransaferableAmount: number;
+    private customerAccounts: IAccount[];
+    private vendorAccounts: IAccount[];
+    private customerAccountMapWithId: any;
+    private vendorAccountMapWithId: any;
+    private studentAccountMapWithId: any;
 
 
     constructor($scope: ng.IScope,
@@ -51,8 +57,9 @@ module ums {
                 private currencyService: CurrencyService,
                 private currencyConversionService: CurrencyConversionService,
                 private accountBalanceService: AccountBalanceService,
-                private chequeRegisterService: ChequeRegisterService, private $q: ng.IQService,
-                private voucherNumberControlService: VoucherNumberControlService) {
+                private chequeRegisterService: ChequeRegisterService,
+                private $q: ng.IQService,
+                private voucherNumberControlService: VoucherNumberControlService, private systemGroupMapService: SystemGroupMapService) {
       this.initialize();
     }
 
@@ -71,6 +78,17 @@ module ums {
       this.getAccounts();
       this.getCurrencies();
       this.getPaginatedVouchers();
+      this.assignBankGroupCode();
+    }
+
+    private assignBankGroupCode(){
+        this.systemGroupMapService.getAll().then((systemGroupMapList: ISystemGroupMap[])=>{
+           let systemBankId:string = '5'; //see app constants
+           let bankSystemGroupMap: ISystemGroupMap = systemGroupMapList.filter((s:ISystemGroupMap)=>s.groupType==systemBankId)[0];
+           this.BANK_GROUP_CODE = bankSystemGroupMap.group.groupCode;
+           console.log("Bank group code");
+           console.log(this.BANK_GROUP_CODE);
+        });
     }
 
 
@@ -88,6 +106,11 @@ module ums {
       return defer.promise;
     }
 
+
+      public print(){
+          let voucher: IPaymentVoucher=this.detailVouchers[0];
+          this.paymentVoucherService.generateVoucherReport(voucher.voucherNo, voucher.voucherDate);
+      }
 
 
     public searchVoucher() {
@@ -115,6 +138,8 @@ module ums {
     private getAccounts() {
       this.accountService.getBankAndCostTypeAccounts().then((accounts: IAccount[]) => {
         this.mainAccounts = accounts;
+        console.log("Main account");
+        console.log(this.mainAccounts);
       });
       this.accountService.getExcludingBankAndCostTypeAccounts().then((accounts: IAccount[]) => {
         this.accountListForAddModal = accounts;
@@ -123,6 +148,8 @@ module ums {
 
     public getAccountBalance() {
       this.mainVoucher.balanceType = BalanceType.Cr;
+      console.log("***************");
+      console.log(this.mainVoucher);
       this.accountBalanceService.getAccountBalance(this.mainVoucher.account.id).then((currentBalance: number) => {
         this.selectedMainAccountCurrentBalance = currentBalance;
         console.log("Current Balance");
@@ -216,7 +243,7 @@ module ums {
             this.mainVoucher = this.addNecessaryAttributesToVoucher(this.mainVoucher);
             console.log("payment voucher after adding necessary fields");
             console.log(this.mainVoucher);
-            //this.mainVoucher.amount = this.selectedMainAccountCurrentBalance + this.totalAmount;
+            this.mainVoucher.amount = this.selectedMainAccountCurrentBalance + this.totalAmount;
             this.detailVouchers.push(this.mainVoucher);
             this.paymentVoucherService.saveVoucher(this.detailVouchers).then((vouchers: IPaymentVoucher[]) => {
               this.configureVouchers(vouchers);
@@ -252,10 +279,10 @@ module ums {
       this.totalAmount = 0;
       this.voucherMapWithId = {};
       this.postStatus=vouchers[0].postDate!=null?true:false;
-      this.voucherDate=Utils.convertFromJacksonDate(vouchers[0].voucherDate);
+      this.voucherDate=vouchers[0].voucherDate;
       vouchers.forEach((v: IPaymentVoucher) =>{
         this.voucherMapWithId[v.id] = v;
-        v.voucherDate=Utils.convertFromJacksonDate(v.voucherDate);
+        v.voucherDate=v.voucherDate;
       });
       this.voucherDate = vouchers[0].voucherDate;
       this.extractMainAndDetailSectionFromVouchers(vouchers).then((updatedVouchers: IPaymentVoucher[]) => {
@@ -264,6 +291,34 @@ module ums {
         this.assignChequeNumberToVouchers(vouchers);
       });
       this.voucherNo = vouchers[0].voucherNo;
+    }
+
+
+    private getVendorAndCustomerAccounts() {
+      this.accountService.getVendorAccounts().then((accountListForAddModal: IAccount[]) => {
+        this.vendorAccounts = [];
+        this.vendorAccountMapWithId = {};
+        this.vendorAccounts = accountListForAddModal;
+        this.vendorAccounts.forEach((v: IAccount) => this.vendorAccountMapWithId[v.id] = v);
+      });
+      this.customerAccounts = [];
+      this.customerAccountMapWithId = {};
+
+      this.accountService.getCustomerAccounts().then((accountListForAddModal: IAccount[]) => {
+        accountListForAddModal.forEach((a: IAccount) => {
+          this.customerAccounts.push(a);
+          this.customerAccountMapWithId[a.id] = a;
+        });
+      });
+
+      this.accountService.getStudentAccounts().then((accountListForAddModal: IAccount[]) => {
+        this.studentAccountMapWithId = {};
+        accountListForAddModal.forEach((a: IAccount) => {
+          this.customerAccounts.push(a);
+          this.customerAccountMapWithId[a.id] = a;
+          this.studentAccountMapWithId[a.id] = a;
+        });
+      });
     }
 
 
@@ -286,6 +341,8 @@ module ums {
         this.voucherMapWithId[v.id] = v;
         if (v.balanceType == BalanceType.Cr) {
           this.mainVoucher = v;
+          console.log("Main voucher");
+          console.log(this.mainVoucher);
           this.getAccountBalance();
         }
         else {

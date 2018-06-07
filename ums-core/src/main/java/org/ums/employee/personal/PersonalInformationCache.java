@@ -24,17 +24,4 @@ public class PersonalInformationCache extends
   public Optional<PersonalInformation> getByEmail(String pEmail) {
     return getManager().getByEmail(pEmail);
   }
-  /*
-   * @Override public int savePersonalInformation(MutablePersonalInformation
-   * pMutablePersonalInformation) { return 0; }
-   * 
-   * @Override public PersonalInformation getPersonalInformation(String pEmployeeId) { return null;
-   * }
-   * 
-   * @Override public int updatePersonalInformation(MutablePersonalInformation
-   * pMutablePersonalInformation) { return 0; }
-   * 
-   * @Override public int deletePersonalInformation(MutablePersonalInformation
-   * pMutablePersonalInformation) { return 0; }
-   */
 }

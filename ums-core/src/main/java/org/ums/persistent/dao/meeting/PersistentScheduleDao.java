@@ -1,13 +1,10 @@
 package org.ums.persistent.dao.meeting;
 
-import org.apache.http.annotation.Obsolete;
-import org.springframework.data.annotation.Persistent;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.meeting.ScheduleDaoDecorator;
 import org.ums.domain.model.immutable.meeting.Schedule;
 import org.ums.domain.model.mutable.meeting.MutableSchedule;
-import org.ums.enums.meeting.MeetingType;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.meeting.PersistentSchedule;
 
@@ -27,6 +24,8 @@ public class PersistentScheduleDao extends ScheduleDaoDecorator {
       "UPDATE MEETING_SCHEDULE SET MEETING_REF_NO = ?, DATE_TIME = ?, ROOM = ?, LAST_MODIFIED = "
           + getLastModifiedSql() + " ";
 
+  static String DELETE_ONE = "DELETE FROM MEETING_SCHEDULE ";
+
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
 
@@ -36,30 +35,43 @@ public class PersistentScheduleDao extends ScheduleDaoDecorator {
   }
 
   @Override
-  public int saveMeetingSchedule(final MutableSchedule pMutableSchedule) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, mIdGenerator.getNumericId(), pMutableSchedule.getMeetingTypeId(),
-        pMutableSchedule.getMeetingNo(), pMutableSchedule.getMeetingRefNo(), pMutableSchedule.getMeetingDateTime(),
-        pMutableSchedule.getMeetingRoomNo());
+  public Long create(final MutableSchedule pMutableSchedule) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ONE, id, pMutableSchedule.getMeetingTypeId(), pMutableSchedule.getMeetingNo(),
+        pMutableSchedule.getMeetingRefNo(), pMutableSchedule.getMeetingDateTime(), pMutableSchedule.getMeetingRoomNo());
+    return id;
   }
 
   @Override
-  public Schedule getMeetingSchedule(final int pMeetingTypeId, final int pMeetingNo) {
+  public Schedule get(final int pMeetingTypeId, final int pMeetingNo) {
     String query = GET_ONE + " WHERE MEETING_TYPE = ? AND MEETING_NO = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pMeetingTypeId, pMeetingNo},
         new PersistentScheduleDao.RoleRowMapper());
   }
 
   @Override
-  public List<Schedule> getAllMeetingSchedule(final int pMeetingType) {
-    String query = GET_ONE + " WHERE MEETING_TYPE = ?";
-    return mJdbcTemplate.query(query, new Object[] {pMeetingType}, new PersistentScheduleDao.RoleRowMapper());
+  public Schedule get(final Long pId) {
+    String query = GET_ONE + " WHERE ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentScheduleDao.RoleRowMapper());
   }
 
   @Override
-  public int updateMeetingSchedule(final MutableSchedule pMeetingSchedule) {
-    String query = UPDATE_ONE + " WHERE ID = ?, MEETING_TYPE = ?, MEETING_NO = ?";
-    return mJdbcTemplate.update(query, pMeetingSchedule.getId(), pMeetingSchedule.getMeetingType().getId(),
+  public List<Schedule> get(final int pMeetingTypeId) {
+    String query = GET_ONE + " WHERE MEETING_TYPE = ?";
+    return mJdbcTemplate.query(query, new Object[] {pMeetingTypeId}, new PersistentScheduleDao.RoleRowMapper());
+  }
+
+  @Override
+  public List<Schedule> getAll() {
+    String query = GET_ONE + " ORDER BY MEETING_TYPE, DATE_TIME DESC";
+    return mJdbcTemplate.query(query, new PersistentScheduleDao.RoleRowMapper());
+  }
+
+  @Override
+  public int update(final MutableSchedule pMeetingSchedule) {
+    String query = UPDATE_ONE + " WHERE ID = ? AND MEETING_TYPE = ? AND MEETING_NO = ?";
+    return mJdbcTemplate.update(query, pMeetingSchedule.getMeetingRefNo(), pMeetingSchedule.getMeetingDateTime(),
+        pMeetingSchedule.getMeetingRoomNo(), pMeetingSchedule.getId(), pMeetingSchedule.getMeetingTypeId(),
         pMeetingSchedule.getMeetingNo());
   }
 
@@ -67,6 +79,12 @@ public class PersistentScheduleDao extends ScheduleDaoDecorator {
   public int getNextMeetingNo(final int pMeetingTypeId) {
     String query = "SELECT COUNT(*) FROM MEETING_SCHEDULE WHERE MEETING_TYPE = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pMeetingTypeId}, Integer.class);
+  }
+
+  @Override
+  public int delete(MutableSchedule pMutable) {
+    String query = DELETE_ONE + " WHERE ID = ?";
+    return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   class RoleRowMapper implements RowMapper<Schedule> {

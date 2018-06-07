@@ -11,6 +11,7 @@ import org.springframework.integration.ftp.session.FtpRemoteFileTemplate;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.context.AppContext;
@@ -35,6 +36,7 @@ import org.ums.usermanagement.permission.AdditionalRolePermissions;
 import org.ums.usermanagement.permission.AdditionalRolePermissionsManager;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
+import org.ums.util.UmsUtils;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;
@@ -52,6 +54,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -102,6 +105,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     return null;
   }
 
+  @Transactional
   public JsonObject saveApplication(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     JsonArray entries = pJsonObject.getJsonArray("entries");
     LocalCache localCache = new LocalCache();
@@ -128,7 +132,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     return object.build();
   }
 
-  private String checkApplicationType(PersistentLmsApplication application) {
+  public String checkApplicationType(PersistentLmsApplication application) {
     String outputMessage = "";
     if(application.getLmsType().getId() == LeaveCategories.STUDY_LEAVE_ON_WITHOUT_PAY.getId()) {
       LocalDate fromDate = application.getFromDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -181,7 +185,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     return builder.build();
   }
 
-  private Long inserIntoLeaveApplicationStatus(PersistentLmsApplication pApplication) {
+  public Long inserIntoLeaveApplicationStatus(PersistentLmsApplication pApplication) {
     Long pAppId = new Long(0);
     MutableLmsAppStatus lmsAppStatus = new PersistentLmsAppStatus();
     lmsAppStatus.setLmsApplicationId(pAppId);
@@ -193,9 +197,9 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     List<AdditionalRolePermissions> rolePermissionsStream = mAdditionalRolePermissionsManager.getAdditionalRole(employee.getDepartment().getId()).stream().filter(r -> r.getRoleId() == RoleType.DEPT_HEAD.getId()).collect(Collectors.toList());
 
     // todo add more roles, currently mst_role table in db is not complete.
-    String message = "Leave Application from employee: " + employee.getPersonalInformation().getFullName() + " of department: "
+    String message = "Leave Application from employee: " + employee.getPersonalInformation().getName() + " of department: "
         + employee.getDepartment().getShortName() + " is waiting for your approval.";
-    if (rolePermissionsStream.get(0).getUserId().equals(user.getId())
+    if ((rolePermissionsStream.size() > 0 ? rolePermissionsStream.get(0).getUserId().equals(user.getId()) : false)
         || user.getPrimaryRole().getId() == RoleType.COE.getId()
         || user.getPrimaryRole().getId() == RoleType.REGISTRAR.getId()
         || user.getPrimaryRole().getId() == RoleType.LIBRARIAN.getId()) {
@@ -208,10 +212,9 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
 
       mLeaveManagementService.setNotification(rolePermissionsStream.get(0).getUserId(), message);
     }
-
+    pApplication.setTotalDays(UmsUtils.differenceBetweenTwoDayes(pApplication.getFromDate(), pApplication.getToDate())+1);
     pAppId = getContentManager().create(pApplication);
     lmsAppStatus.setLmsApplicationId(pAppId);
-
     mLmsAppStatusManager.create(lmsAppStatus);
     return pAppId;
   }
@@ -222,7 +225,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     return getJsonObject(pUriInfo, applications);
   }
 
-  private JsonObject getJsonObject(UriInfo pUriInfo, List<LmsApplication> pApplications) {
+  public JsonObject getJsonObject(UriInfo pUriInfo, List<LmsApplication> pApplications) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -236,17 +239,17 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     return object.build();
   }
 
-  public JsonObject getRemainingLeaves() {
+  public JsonObject getRemainingLeaves() throws Exception {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     String employeeId = mUserManager.get(userId).getEmployeeId();
     return getRemainingLeavesJsonObject(employeeId);
   }
 
-  public JsonObject getRemainingLeaves(String pEmployeeId) {
+  public JsonObject getRemainingLeaves(String pEmployeeId) throws Exception {
     return getRemainingLeavesJsonObject(pEmployeeId);
   }
 
-  private JsonObject getRemainingLeavesJsonObject(String pEmployeeId) {
+  private JsonObject getRemainingLeavesJsonObject(String pEmployeeId) throws Exception {
     List<LmsType> lmsTypes = getLeaveTypes();
     int year = Calendar.getInstance().get(Calendar.YEAR);
     List<LmsApplication> applications = getContentManager()
@@ -266,8 +269,14 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
       jsonObject.add("leaveName", lmsType.getName());
       int leavesTaken = getLeavesTaken(applicationMap, lmsType);
 
-      jsonObject.add("daysLeft", applicationMap.get(lmsType.getId()) != null ? getDateOutputModifiedFormat(lmsType.getMaxDuration() - leavesTaken) : getDateOutputModifiedFormat(lmsType.getMaxDuration()) + "");
-      jsonObject.add("daysLeftNumber", applicationMap.get(lmsType.getId()) != null ? lmsType.getMaxDuration() - leavesTaken : lmsType.getMaxDuration());
+      jsonObject.add("daysLeft",
+          applicationMap.get(lmsType.getId()) != null ?
+              getDateOutputModifiedFormat(lmsType.getMaxDuration() - leavesTaken)
+              : getDateOutputModifiedFormat(lmsType.getMaxDuration()) + "");
+      jsonObject.add("daysLeftNumber",
+          applicationMap.get(lmsType.getId()) != null ?
+              lmsType.getMaxDuration() - leavesTaken
+              : lmsType.getMaxDuration());
 
       children.add(jsonObject);
     }
@@ -298,12 +307,22 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     return days;
   }
 
-  private int getLeavesTaken(Map<Integer, List<LmsApplication>> pApplicationMap, LmsType lmsType) {
+  private int getLeavesTaken(Map<Integer, List<LmsApplication>> pApplicationMap, LmsType lmsType) throws Exception {
     int leavesTaken = 0;
     if(pApplicationMap.get(lmsType.getId()) != null)
       for(LmsApplication application : pApplicationMap.get(lmsType.getId())) {
-        leavesTaken +=
-            (application.getToDate().getTime() - application.getFromDate().getTime()) / (1000 * 60 * 60 * 24);
+        // if(UmsUtils.formatDate(application.getFromDate(), "dd-MM-yyyy").equals(
+        // UmsUtils.formatDate(application.getToDate(), "dd-MM-yyyy"))) {
+        // leavesTaken += 1;
+        // }
+        // else {
+        // long diffInMillies =
+        // Math.abs(UmsUtils.getDateWithoutTime(application.getToDate()).getTime()
+        // - UmsUtils.getDateWithoutTime(application.getFromDate()).getTime());
+        // long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+        // leavesTaken += (diff + 1);
+        // }
+        leavesTaken += application.getTotalDays();
       }
     return leavesTaken;
   }

@@ -9,7 +9,9 @@ import org.ums.domain.model.immutable.library.Note;
 import org.ums.domain.model.immutable.library.Subject;
 import org.ums.domain.model.mutable.library.MutableRecord;
 import org.ums.enums.common.Language;
-import org.ums.enums.library.*;
+import org.ums.enums.library.JournalFrequency;
+import org.ums.enums.library.MaterialType;
+import org.ums.enums.library.RecordStatus;
 import org.ums.manager.library.PublisherManager;
 import org.ums.manager.library.RecordManager;
 
@@ -57,8 +59,6 @@ public class PersistentRecord implements MutableRecord {
   private PhysicalDescriptionDto mPhysicalDescription;
   private MaterialType mMaterialType;
   private RecordStatus mRecordStatus;
-  private BookBindingType mBookBindingType;
-  private AcquisitionType mAcquisitionType;
   private String mKeywords;
   private List<Subject> mSubjectList;
   private List<Note> mNoteList;
@@ -121,8 +121,6 @@ public class PersistentRecord implements MutableRecord {
     mPhysicalDescription = pPersistentRecord.getPhysicalDescription();
     mMaterialType = pPersistentRecord.getMaterialType();
     mRecordStatus = pPersistentRecord.getRecordStatus();
-    mBookBindingType = pPersistentRecord.getBookBindingType();
-    mAcquisitionType = pPersistentRecord.getAcquisitionType();
     mKeywords = pPersistentRecord.getKeyWords();
     mSubjectList = pPersistentRecord.getSubjectList();
     mNoteList = pPersistentRecord.getNoteList();
@@ -457,11 +455,6 @@ public class PersistentRecord implements MutableRecord {
   }
 
   @Override
-  public BookBindingType getBookBindingType() {
-    return mBookBindingType;
-  }
-
-  @Override
   public void setCallDate(String pCallDate) {
     mCallDate = pCallDate;
   }
@@ -474,11 +467,6 @@ public class PersistentRecord implements MutableRecord {
   @Override
   public void setCallVolume(String pCallVolume) {
     mCallVolume = pCallVolume;
-  }
-
-  @Override
-  public AcquisitionType getAcquisitionType() {
-    return mAcquisitionType;
   }
 
   @Override
@@ -524,16 +512,6 @@ public class PersistentRecord implements MutableRecord {
   @Override
   public void setRecordStatus(RecordStatus pRecordStatus) {
     mRecordStatus = pRecordStatus;
-  }
-
-  @Override
-  public void setBookBindingType(BookBindingType pBookBindingType) {
-    mBookBindingType = pBookBindingType;
-  }
-
-  @Override
-  public void setAcquisitionType(AcquisitionType pAcquisitionType) {
-    mAcquisitionType = pAcquisitionType;
   }
 
   @Override

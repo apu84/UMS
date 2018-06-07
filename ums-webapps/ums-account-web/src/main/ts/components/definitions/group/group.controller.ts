@@ -1,9 +1,12 @@
 module ums {
 
+
   export class GroupController {
     public static $inject = ['$scope', '$modal', 'notify', 'GroupService'];
 
     public groups: IGroup[];
+    public groupsDisplay: IGroup[];
+    public groupsForSearch: IGroup[];
     public tempGroup: IGroup[];
     public addedGroup: IGroup;
     public removedGroup: IGroup;
@@ -11,7 +14,7 @@ module ums {
     public gridOptions: any;
     public handsOnTableFeature: any;
 
-    constructor($scope: ng.IScope, private $modal: any, private notify: Notify, private groupService: GroupService) {
+    constructor(private $scope: ng.IScope, private $modal: any, private notify: Notify, private groupService: GroupService) {
 
       this.groupMapWithId = {};
       this.gridOptions = <GridOptions>{};
@@ -24,20 +27,33 @@ module ums {
     }
 
     private addModalClicked() {
-      this.addedGroup = <IGroup>{};
-      this.addedGroup.mainGroup = "";
+      this.initialize();
+      this.setFocusOnTheModal();
+    }
+
+
+    private setFocusOnTheModal(){
+        $("#addModal").on('shown.bs.modal', ()=>{
+            $("#groupName").focus();
+        });
     }
 
     private removeButtonClicked(group: IGroup) {
       this.removedGroup = group;
+      this.removedGroup.mainGroupObject = this.groupMapWithId[this.removedGroup.mainGroup];
       console.log("Removed group");
       console.log(this.removedGroup);
     }
 
     private initialize() {
+      this.groupsDisplay = [];
       this.groupService.getAllGroups().then((groups: IGroup[]) => {
+          this.groupsForSearch=[];
+          for(var i=(groups.length-1); i>=0; i--){
+              this.groupsForSearch.push(groups[i]);
+            this.groupsDisplay.push(angular.copy(groups[i]));
+          }
         this.assignToGroupAndMap(groups);
-
       });
 
 
@@ -99,22 +115,37 @@ module ums {
     private add() {
       this.addedGroup.mainGroup = this.addedGroup.mainGroupObject.groupCode;
       this.addedGroup.flag = this.addedGroup.flagBoolValue == true ? "Y" : "N";
+      let addedGroupCopy = angular.copy(this.addedGroup);
       this.groups.push(this.addedGroup);
+      //this.addedGroup=<IGroup>{};
+    }
+
+
+    private editButtonClicked(groupForEdit: IGroup) {
+      this.addedGroup = <IGroup>{};
+      this.addedGroup = groupForEdit;
+      this.addedGroup.mainGroupObject = this.groupMapWithId[this.addedGroup.mainGroup];
+      console.log(this.addedGroup);
+
     }
 
     private saveOne() {
       this.addedGroup.mainGroup = this.addedGroup.mainGroupObject.groupCode;
       this.addedGroup.flag = this.addedGroup.flagBoolValue == true ? "Y" : "N";
       this.groupService.saveAGroup(this.addedGroup).then((groups) => {
+        console.log("Fetched groups");
+        let tmpAddedGroup:IGroup = angular.copy(this.addedGroup);
         this.addedGroup = <IGroup>{};
+        this.addedGroup.mainGroupObject = tmpAddedGroup.mainGroupObject;
+        this.addedGroup.mainGroup = tmpAddedGroup.mainGroup;
         this.assignToGroupAndMap(groups);
-
+        $("#addButton").focus();
       });
     }
 
     private saveAll() {
       let newlyAddedGroups: IGroup[] = [];
-      newlyAddedGroups = this.groups.filter((g: IGroup) => g.stringId == null);
+      newlyAddedGroups = this.groups.filter((g: IGroup) => g.id == null);
       this.groupService.saveAllGroup(newlyAddedGroups).then((groups) => {
         this.assignToGroupAndMap(groups);
       });

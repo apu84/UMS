@@ -9,60 +9,12 @@ public class PublicationInformationDaoDecorator extends
     implements PublicationInformationManager {
 
   @Override
-  public int savePublicationInformation(List<MutablePublicationInformation> pMutablePublicationInformation) {
-    return getManager().savePublicationInformation(pMutablePublicationInformation);
+  public List<PublicationInformation> get(String pEmployeeId) {
+    return getManager().get(pEmployeeId);
   }
 
   @Override
-  public List<PublicationInformation> getEmployeePublicationInformation(String pEmployeeId) {
-    return getManager().getEmployeePublicationInformation(pEmployeeId);
-  }
-
-  @Override
-  public List<PublicationInformation> getPublicationInformationWithPagination(String pEmployeeId,
-      String pPublicationStatus, int pPageNumber, int pItemPerPage) {
-    return getManager().getPublicationInformationWithPagination(pEmployeeId, pPublicationStatus, pPageNumber,
-        pItemPerPage);
-  }
-
-  @Override
-  public List<PublicationInformation> getPublicationInformationWithPagination(String pEmployeeId, int pPageNumber,
-      int pItemPerPage) {
-    return getManager().getPublicationInformationWithPagination(pEmployeeId, pPageNumber, pItemPerPage);
-  }
-
-  @Override
-  public List<PublicationInformation> getEmployeePublicationInformation(String pEmployeeId, String pStatus) {
-    return getManager().getEmployeePublicationInformation(pEmployeeId, pStatus);
-  }
-
-  @Override
-  public List<PublicationInformation> getPublicationInformation(String pPublicationStatus) {
-    return getManager().getPublicationInformation(pPublicationStatus);
-  }
-
-  @Override
-  public int updatePublicationStatus(MutablePublicationInformation pMutablePublicationInformation) {
-    return getManager().updatePublicationStatus(pMutablePublicationInformation);
-  }
-
-  @Override
-  public int deletePublicationInformation(String pEmployeeId) {
-    return getManager().deletePublicationInformation(pEmployeeId);
-  }
-
-  @Override
-  public int deletePublicationInformation(List<MutablePublicationInformation> pMutablePublicationInformation) {
-    return getManager().deletePublicationInformation(pMutablePublicationInformation);
-  }
-
-  @Override
-  public int updatePublicationInformation(List<MutablePublicationInformation> pMutablePublicationInformation) {
-    return getManager().updatePublicationInformation(pMutablePublicationInformation);
-  }
-
-  @Override
-  public int getLengthOfPublicationList(String pEmployeeId, String pPublicationStatus) {
-    return getManager().getLengthOfPublicationList(pEmployeeId, pPublicationStatus);
+  public boolean exists(String pEmployeeId) {
+    return getManager().exists(pEmployeeId);
   }
 }

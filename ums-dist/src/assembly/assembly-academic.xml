@@ -77,6 +77,8 @@
                 <include>org.mapdb:mapdb</include>
                 <include>com.fasterxml.jackson.core:jackson-databind</include>
                 <include>org.apache.commons:commons-text</include>
+                <include>org.jgrapht:jgrapht-core</include>
+                <include>com.google.firebase:firebase-admin</include>
             </includes>
             <outputDirectory>lib</outputDirectory>
             <useTransitiveDependencies>true</useTransitiveDependencies>

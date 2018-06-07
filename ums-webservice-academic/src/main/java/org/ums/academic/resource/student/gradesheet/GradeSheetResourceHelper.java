@@ -1,9 +1,6 @@
 package org.ums.academic.resource.student.gradesheet;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.json.*;
+import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
@@ -11,28 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.StudentRecord;
-import org.ums.domain.model.immutable.UGRegistrationResult;
-import org.ums.domain.model.mutable.MutableUGRegistrationResult;
-import org.ums.enums.CourseRegType;
-import org.ums.manager.StudentRecordManager;
-import org.ums.manager.UGRegistrationResultManager;
 import org.ums.resource.ResourceHelper;
-import org.ums.services.academic.RemarksBuilder;
+import org.ums.result.gradesheet.GradeSheetManager;
+import org.ums.result.gradesheet.GradesheetModel;
+import org.ums.result.gradesheet.MutableGradesheetModel;
 
 @Component
-public class GradeSheetResourceHelper extends ResourceHelper<UGRegistrationResult, MutableUGRegistrationResult, Long> {
+public class GradeSheetResourceHelper extends ResourceHelper<GradesheetModel, MutableGradesheetModel, Long> {
   @Autowired
-  UGRegistrationResultManager mUGRegistrationResultManager;
+  GradeSheetManager mGradeSheetManager;
 
   @Autowired
   GradeSheetBuilder mGradeSheetBuilder;
-
-  @Autowired
-  StudentRecordManager mStudentRecordManager;
-
-  @Autowired
-  RemarksBuilder mRemarksBuilder;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -40,47 +27,25 @@ public class GradeSheetResourceHelper extends ResourceHelper<UGRegistrationResul
   }
 
   @Override
-  protected UGRegistrationResultManager getContentManager() {
-    return mUGRegistrationResultManager;
+  protected GradeSheetManager getContentManager() {
+    return mGradeSheetManager;
   }
 
   @Override
-  protected Builder<UGRegistrationResult, MutableUGRegistrationResult> getBuilder() {
+  protected Builder<GradesheetModel, MutableGradesheetModel> getBuilder() {
     return mGradeSheetBuilder;
   }
 
   @Override
-  protected String getETag(UGRegistrationResult pReadonly) {
-    return pReadonly.getLastModified();
+  protected String getETag(GradesheetModel pReadonly) {
+    return null;
   }
 
-  JsonObject getResults(final String pStudentId, final Integer pSemesterId, final UriInfo pUriInfo) {
-    List<UGRegistrationResult> results = getContentManager().getResults(pStudentId, pSemesterId);
-
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
+  JsonObject getGradesheet(final String pStudentId, final Integer pSemesterId, final UriInfo pUriInfo) {
+    GradesheetModel gradesheetModel = getContentManager().get(pStudentId, pSemesterId);
     LocalCache localCache = new LocalCache();
-    for(UGRegistrationResult result : results) {
-      JsonObject jsonObject = toJson(result, pUriInfo, localCache);
-      if(result.getSemesterId().intValue() != pSemesterId || (result.getType() == CourseRegType.CARRY)) {
-        jsonObject = jsonObjectToBuilder(jsonObject).add("carryOver", true).build();
-      }
-      children.add(jsonObject);
-    }
-    object.add("courses", children);
+    JsonObject object = toJson(gradesheetModel, pUriInfo, localCache);
     localCache.invalidate();
-    StudentRecord studentRecord = mStudentRecordManager.getStudentRecord(pStudentId, pSemesterId);
-    object.add("gpa", studentRecord.getGPA());
-    object.add("cgpa", studentRecord.getCGPA());
-    object.add("remarks", mRemarksBuilder.getGradeSheetRemarks(results, studentRecord.getStatus(), pSemesterId));
-    return object.build();
-  }
-
-  private JsonObjectBuilder jsonObjectToBuilder(JsonObject jo) {
-    JsonObjectBuilder job = Json.createObjectBuilder();
-    for(Map.Entry<String, JsonValue> entry : jo.entrySet()) {
-      job.add(entry.getKey(), entry.getValue());
-    }
-    return job;
+    return object;
   }
 }

@@ -85,4 +85,9 @@ public class StudentRecordCache extends ContentCache<StudentRecord, MutableStude
   public List<StudentRecord> getStudentRecord(String pStudentId) {
     return getManager().getStudentRecord(pStudentId);
   }
+
+  @Override
+  public boolean exists(String pStudentId, int pSemesterId) {
+    return getManager().exists(pStudentId, pSemesterId);
+  }
 }

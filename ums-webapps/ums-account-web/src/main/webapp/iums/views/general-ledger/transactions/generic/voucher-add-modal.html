@@ -61,8 +61,8 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-if="vm.customerAccountMapWithId[vm.voucherOfAddModal.account.id]">
-                        <div class="form-group">
+                    <div ng-if="vm.customerAccountMapWithId[vm.voucherOfAddModal.account.id] ">
+                        <div class="form-group" ng-if="!vm.studentAccountMapWithId[vm.voucherOfAddModal.account.id]">
                             <label class="control-label col-sm-4" for="customerAccount">Customer Id:</label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" id="customerAccount" name="customerId"
@@ -113,6 +113,7 @@
                                    value="{{vm.currencyConversionMapWithCurrency[vm.selectedCurrency.id].baseConversionFactor * vm.voucherOfAddModal.amount}}">
                         </div>
                     </div>
+
                     <div ng-if="(vm.PAYMENT_VOUCHER_ID || vm.RECEIPT_VOUCHER_ID) && vm.BANK_GROUP_CODE==vm.mainVoucher.account.accGroupCode">
                         <div class="form-group">
                             <label class="control-label col-sm-4" for="narration">Cheque No:</label>

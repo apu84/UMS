@@ -345,17 +345,22 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
               String courseId= routines.get(0).getCourseId();
               sectionList.add(routines.get(0).getSection());
               String sections= routines.get(0).getSection();
-              String roomNo = roomsMap.get(routines.get(0).getRoomId()).get(0).getRoomNo() ;
+              String roomNo = roomsMap.get(routines.get(0).getRoomId().longValue()).get(0).getRoomNo() ;
               int duration  = routines.get(0).getDuration();
 
               int routineIterator=1;
               while(true){
                 if(routines.size()>1){
-                  if(routines.get(routineIterator).getCourseId().equals(courseId) && routines.get(routineIterator).getDay()==i){
+                  if(routines.get(routineIterator).getCourseId().equals(courseId)
+                          && routines.get(routineIterator).getDay()==i &&
+                          routines.get(0).getStartTime().equals(routines.get(routineIterator).getStartTime())
+                          ){
                     if(sectionList.contains(routines.get(routineIterator).getSection())==false)
                     {
                       sections = sections+"+"+routines.get(routineIterator).getSection();
                       sectionList.add(routines.get(routineIterator).getSection());
+                      if(!routines.get(0).getRoomId().equals(routines.get(routineIterator).getRoomId()))
+                        roomNo = roomNo+", "+ mClassRoomManager.get(Long.parseLong(routines.get(routineIterator).getRoomId().toString())).getRoomNo();
                     }
                     routines.remove(0);
                   }else{

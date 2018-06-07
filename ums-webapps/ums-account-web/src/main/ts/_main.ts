@@ -8,6 +8,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/jquery.notific8.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/jquery.notify.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/select2.d.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/lib/ui-grid.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap.selectpicker.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/zabuto_calendar.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap-switch.d.ts'/>
@@ -109,17 +110,22 @@
 /// <reference path='components/definitions/currency/currency.service.ts'/>
 /// <reference path='components/definitions/currency/currency.conversion.service.ts'/>
 /// <reference path='components/definitions/financial.account.year/financial.account.year.controller.ts'/>
+/// <reference path='components/definitions/financial.account.year/financial.account.year.closing.controller.ts'/>
 /// <reference path='components/definitions/financial.account.year/financial.account.year.service.ts'/>
 /// <reference path='components/definitions/budget-allocation/budget.allocation.controller.ts'/>
 /// <reference path='components/definitions/budget-allocation/budget.allocation.service.ts'/>
 /// <reference path='components/definitions/period-close/period.close.controller.ts'/>
 /// <reference path='components/definitions/period-close/period.close.service.ts'/>
 /// <reference path='components/definitions/period-close/month.service.ts'/>
+/// <reference path='components/definitions/system.account.map/system.account.map.controller.ts'/>
+/// <reference path='components/definitions/system.account.map/system.account.map.service.ts'/>
 /// <reference path='components/definitions/voucher/voucher.service.ts'/>
 /// <reference path='components/definitions/voucher/voucher.number.control.controller.ts'/>
 /// <reference path='components/definitions/voucher/voucher.number.control.service.ts'/>
 /// <reference path='components/definitions/narration/narration.controller.ts'/>
 /// <reference path='components/definitions/narration/narration.service.ts'/>
+/// <reference path='components/definitions/system.group.map/system.group.map.service.ts'/>
+/// <reference path='components/definitions/system.group.map/system.group.map.controller.ts'/>
 
 /// <reference path='components/common/receipt/receipt.service.ts'/>
 

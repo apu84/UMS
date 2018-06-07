@@ -493,7 +493,9 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
       commaSeparatedStudents = "'"+commaSeparatedStudents+"'";
       int totalStudents= getContentManager().getRegistrationResultCount(commaSeparatedStudents, requestedStatusDTO.getSemesterId(), requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
       getContentManager().updateRegistrationResultLetterGrade(approveList, requestedStatusDTO.getSemesterId(), requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
+      mLogger.info("[{}] Total students: {}, Total approved grades: {}", SecurityUtils.getSubject().getPrincipal().toString(), totalStudents, approveList.size());
       if(totalStudents !=approveList.size()) {
+        mLogger.debug("[{}] Mismatch found between registration and approved grades",SecurityUtils.getSubject().getPrincipal().toString());
         throw new ValidationException("Mismatch found between registration and approved grades. Please contact with IUMS Support.");
       }
 

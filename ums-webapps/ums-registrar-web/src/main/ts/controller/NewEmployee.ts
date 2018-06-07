@@ -125,10 +125,12 @@ module ums {
         public findSimilarUsers(): void {
             this.similarUsers = [];
             this.showSimilarUsersPortion = false;
-            if (this.newEmployee.firstName != undefined && this.newEmployee.lastName != undefined) {
-                this.employeeService.getSimilarUsers(this.newEmployee.firstName, this.newEmployee.lastName).then((data: any) => {
+            if (this.newEmployee.name != undefined) {
+                this.employeeService.getSimilarUsers(this.newEmployee.name,).then((data: any) => {
                     this.similarUsers = data;
-                    this.showSimilarUsersPortion = true;
+                    if(data.length > 0) {
+                        this.showSimilarUsersPortion = true;
+                    }
                 });
             }
         }

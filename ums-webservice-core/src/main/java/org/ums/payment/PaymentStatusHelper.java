@@ -1,10 +1,21 @@
 package org.ums.payment;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.json.*;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
+
 import org.apache.commons.lang.NotImplementedException;
+import org.apache.shiro.SecurityUtils;
 import org.glassfish.jersey.uri.internal.JerseyUriBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.ums.bank.branch.Branch;
+import org.ums.bank.branch.user.BranchUserManager;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.fee.accounts.MutablePaymentStatus;
@@ -14,13 +25,6 @@ import org.ums.formatter.DateFormat;
 import org.ums.manager.ContentManager;
 import org.ums.resource.ResourceHelper;
 import org.ums.resource.filter.FilterItem;
-
-import javax.json.*;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component("PaymentStatusHelper")
 public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePaymentStatus, Long> {
@@ -32,6 +36,8 @@ public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePa
   @Autowired
   @Qualifier("PaymentStatusBuilder")
   private PaymentStatusBuilder mPaymentStatusBuilder;
+  @Autowired
+  private BranchUserManager mBranchUserManager;
 
   private List<FilterItem> mFilterItems;
 
@@ -56,18 +62,25 @@ public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePa
   }
 
   JsonObject getReceivedPayments(int pItemsPerPage, int pPageNumber, UriInfo pUriInfo) {
-    List<PaymentStatus> paymentStatusList = mPaymentStatusManager.paginatedList(pItemsPerPage, pPageNumber);
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    Branch branch = mBranchUserManager.getByUserId(userId).getBranch();
+
+    List<PaymentStatus> paymentStatusList =
+        mPaymentStatusManager.paginatedList(pItemsPerPage, pPageNumber, branch.getId());
     return buildList(paymentStatusList, pItemsPerPage, pPageNumber, pUriInfo);
   }
 
   JsonObject getReceivedPayments(int pItemsPerPage, int pPageNumber, JsonObject pFilter, UriInfo pUriInfo) {
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    Branch branch = mBranchUserManager.getByUserId(userId).getBranch();
+
     List<PaymentStatus> paymentStatusList =
-        mPaymentStatusManager.paginatedList(pItemsPerPage, pPageNumber, buildFilterQuery(pFilter));
+        mPaymentStatusManager.paginatedList(pItemsPerPage, pPageNumber, buildFilterQuery(pFilter), branch.getId());
     return buildList(paymentStatusList, pItemsPerPage, pPageNumber, pUriInfo);
   }
 
   private JsonObject buildList(List<PaymentStatus> paymentStatusList, int pItemsPerPage, int pPageNumber,
-                               UriInfo pUriInfo) {
+      UriInfo pUriInfo) {
     LocalCache cache = new LocalCache();
     JsonArrayBuilder array = Json.createArrayBuilder();
     paymentStatusList.forEach((pPaymentStatus) -> {
@@ -75,10 +88,10 @@ public class PaymentStatusHelper extends ResourceHelper<PaymentStatus, MutablePa
     });
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     jsonObjectBuilder.add("entries", array);
-    if (paymentStatusList.size() > 0) {
+    if(paymentStatusList.size() > 0) {
       addLink("next", pPageNumber, pItemsPerPage, pUriInfo, jsonObjectBuilder);
     }
-    if (pPageNumber > 1) {
+    if(pPageNumber > 1) {
       addLink("previous", pPageNumber, pItemsPerPage, pUriInfo, jsonObjectBuilder);
     }
     return jsonObjectBuilder.build();

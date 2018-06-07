@@ -1,5 +1,7 @@
 package org.ums.persistent.dao.accounts;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -38,7 +40,12 @@ public class PersistentReceiptDao extends ReceiptDaoDecorator {
   @Override
   public Receipt get(Long pId) {
     String query = "Select * from mst_receipt where id=?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentReceiptRowMapper());
+    try {
+      return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentReceiptRowMapper());
+    } catch(EmptyResultDataAccessException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   @Override

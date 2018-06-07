@@ -12,11 +12,6 @@ import java.util.Date;
 public class PersistentPersonalInformation implements MutablePersonalInformation {
 
   private static PersonalInformationManager sPersonalInformationManager;
-  // private static BloodGroupManager sBloodGroupManager;
-  // private static NationalityManager sNationalityManager;
-  // private static ReligionManager sReligionManager;
-  // private static MaritalStatusManager sMaritalStatusManager;
-  // private static RelationTypeManager sRelationTypeManager;
   private static CountryManager sCountryManager;
   private static DivisionManager sDivisionManager;
   private static DistrictManager sDistrictManager;
@@ -26,15 +21,6 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sPersonalInformationManager =
         applicationContext.getBean("personalInformationManager", PersonalInformationManager.class);
-    // sBloodGroupManager = applicationContext.getBean("bloodGroupManager",
-    // BloodGroupManager.class);
-    // sNationalityManager = applicationContext.getBean("nationalityManager",
-    // NationalityManager.class);
-    // sReligionManager = applicationContext.getBean("religionManager", ReligionManager.class);
-    // sMaritalStatusManager = applicationContext.getBean("maritalStatusManager",
-    // MaritalStatusManager.class);
-    // sRelationTypeManager = applicationContext.getBean("relationTypeManager",
-    // RelationTypeManager.class);
     sCountryManager = applicationContext.getBean("countryManager", CountryManager.class);
     sDivisionManager = applicationContext.getBean("divisionManager", DivisionManager.class);
     sDistrictManager = applicationContext.getBean("districtManager", DistrictManager.class);
@@ -42,8 +28,7 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   private String mId;
-  private String mFirstName;
-  private String mLastName;
+  private String mName;
   private String mGender;
   private BloodGroupType mBloodGroup;
   private Integer mBloodGroupId;
@@ -91,15 +76,13 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   private Integer mEmergencyContactRelationId;
   private String mEmergencyContactPhone;
   private String mEmergencyContactAddress;
-  private String mFullName;
   private String mLastModified;
 
   public PersistentPersonalInformation() {}
 
   public PersistentPersonalInformation(PersistentPersonalInformation pPersistentPersonalInformation) {
     mId = pPersistentPersonalInformation.getId();
-    mFirstName = pPersistentPersonalInformation.getFirstName();
-    mLastName = pPersistentPersonalInformation.getLastName();
+    mName = pPersistentPersonalInformation.getName();
     mGender = pPersistentPersonalInformation.getGender();
     mBloodGroup = pPersistentPersonalInformation.getBloodGroup();
     mBloodGroupId = pPersistentPersonalInformation.getBloodGroupId();
@@ -147,7 +130,6 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
     mEmergencyContactRelationId = pPersistentPersonalInformation.getEmergencyContactRelationId();
     mEmergencyContactPhone = pPersistentPersonalInformation.getEmergencyContactPhone();
     mEmergencyContactAddress = pPersistentPersonalInformation.getEmergencyContactAddress();
-    mFullName = pPersistentPersonalInformation.getFullName();
     mLastModified = pPersistentPersonalInformation.getLastModified();
   }
 
@@ -192,13 +174,8 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setFirstName(String pFirstName) {
-    mFirstName = pFirstName;
-  }
-
-  @Override
-  public void setLastName(String pLastName) {
-    mLastName = pLastName;
+  public void setName(String pName) {
+    mName = pName;
   }
 
   @Override
@@ -372,18 +349,8 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
-  public void setFullName(String pFullName) {
-    mFullName = pFullName;
-  }
-
-  @Override
-  public String getFirstName() {
-    return mFirstName;
-  }
-
-  @Override
-  public String getLastName() {
-    return mLastName;
+  public String getName() {
+    return mName;
   }
 
   @Override
@@ -554,11 +521,6 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   @Override
   public String getEmergencyContactAddress() {
     return mEmergencyContactAddress;
-  }
-
-  @Override
-  public String getFullName() {
-    return mFirstName.trim().concat(mLastName == null ? "" : (" " + mLastName.trim()));
   }
 
   @Override

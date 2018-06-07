@@ -5,6 +5,8 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.mutable.MutableLastModifier;
 import org.ums.enums.registrar.ExperienceCategory;
 
+import java.util.Date;
+
 public interface MutableExperienceInformation extends ExperienceInformation, Editable<Long>, MutableIdentifier<Long>,
     MutableLastModifier {
 
@@ -14,9 +16,9 @@ public interface MutableExperienceInformation extends ExperienceInformation, Edi
 
   void setDesignation(final String pDesignation);
 
-  void setExperienceFromDate(final String pExperienceFromDate);
+  void setExperienceFromDate(final Date pExperienceFromDate);
 
-  void setExperienceToDate(final String pExperienceToDate);
+  void setExperienceToDate(final Date pExperienceToDate);
 
   void setExperienceDuration(final int pExperienceDuration);
 

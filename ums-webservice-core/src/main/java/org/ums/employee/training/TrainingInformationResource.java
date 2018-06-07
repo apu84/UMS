@@ -1,11 +1,14 @@
 package org.ums.employee.training;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.employee.academic.AcademicInformationResourceHelper;
 import org.ums.employee.training.MutableTrainingInformationResource;
-import org.ums.logs.UmsLogMessage;
+import org.ums.logs.GetLog;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -15,11 +18,15 @@ import javax.ws.rs.core.Request;
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class TrainingInformationResource extends MutableTrainingInformationResource {
+
+  @Autowired
+  private TrainingInformationResourceHelper mHelper;
+
   @GET
-  @Path("/get/employeeId/{employee-id}")
-  @UmsLogMessage(message = "Get employee information (training data)")
-  public JsonObject getTrainingInformation(final @PathParam("employee-id") String pEmployeeId,
-      final @Context Request pRequest) throws Exception {
-    return mTrainingInformationResourceHelper.getTrainingInformation(pEmployeeId, mUriInfo);
+  @Path("/{employee-id}")
+  @GetLog(message = "Get training information list")
+  public JsonObject get(@Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("employee-id") String pEmployeeId, final @Context Request pRequest) throws Exception {
+    return mHelper.get(pEmployeeId, mUriInfo);
   }
 }

@@ -6,13 +6,7 @@ module ums{
         refNo: string;
         datetime: string;
         room: string;
-    }
-    interface IMeetingMemberModel{
-        name: string;
-        designation: string;
-        email: string;
-        contactNo: string;
-        memberOf: number;
+        edit: boolean;
     }
     interface IConstants{
         id: number;
@@ -21,153 +15,164 @@ module ums{
 
     class Schedule{
         public static $inject = ['registrarConstants', '$q', 'notify', '$scope', 'meetingService'];
-        private prepareMeetingModel: { meetingSchedule: IMeetingScheduleModel; meetingMember: IMeetingMemberModel[]; };
-        private meetingTypes: Array<IConstants> = [];
-        private meetingMembers: Array<IMeetingMemberModel> = [];
-        private selectedMembers: Array<IMeetingMemberModel> = [];
-        private datetimeValue: string = "";
+        private meetingSchedule: IMeetingScheduleModel;
+        private meetingScheduleList: IMeetingScheduleModel[] = [];
+        private upcomingMeetingScheduleList: IMeetingScheduleModel[] = [];
+        private previousMeetingScheduleList: IMeetingScheduleModel[] = [];
+        private meetingTypes: IConstants[] = [];
+        private upcomingMeetingType: IConstants;
+        private previousMeetingType: IConstants;
+        private scheduleToEdit: IMeetingScheduleModel;
+        private showMeetingList: boolean = false;
+        private showUpcomingFilterFields: boolean = false;
+        private showPreviousFilterFields: boolean = false;
 
         constructor(private registrarConstants: any, private $q: ng.IQService, private notify: Notify,
                     private $scope: ng.IScope, private meetingService: MeetingService) {
 
             this.meetingTypes = registrarConstants.meetingTypes;
-            this.prepareMeetingModel = {
-                meetingSchedule: <IMeetingScheduleModel>{},
-                meetingMember: Array<IMeetingMemberModel>()
-            };
-
-            // this.prepareMeetingModel.meetingSchedule.type = null;
-            // this.prepareMeetingModel.meetingSchedule.meetingNo = null;
-            // this.prepareMeetingModel.meetingSchedule.refNo = "";
-            // this.prepareMeetingModel.meetingSchedule.datetime = "";
-            // this.prepareMeetingModel.meetingSchedule.room = "";
-            this.addDate();
-
-            // $scope.$watch(() => this.dateValue, (newValue, oldValue) => {
-            //     console.log(newValue, oldValue);
-            // });
+            this.meetingSchedule = <IMeetingScheduleModel>{};
+            this.addDate('default');
         }
 
-        private getMeetingNoAndMembers(): void{
-            this.getNextMeetingNo();
-            this.getMeetingMembers();
+        public getNextMeetingNo(): void {
+            if (this.meetingSchedule.type) {
+                this.meetingService.getNextMeetingNo(this.meetingSchedule.type.id).then((nextMeetingNo: any) => {
+                    this.meetingSchedule.meetingNo = nextMeetingNo.nextMeetingNumber;
+                });
+            }
         }
 
-        private getNextMeetingNo(): void{
-            this.meetingService.getNextMeetingNo(this.prepareMeetingModel.meetingSchedule.type.id).then((nextMeetingNo: any) =>{
-                this.prepareMeetingModel.meetingSchedule.meetingNo = nextMeetingNo.nextMeetingNumber;
+        public save(form: ng.IFormController): void {
+            this.convertToJson(this.meetingSchedule).then((json: any) => {
+                this.meetingService.saveMeetingSchedule(json).then(()=>{
+                    this.resetForm(form);
+                })
             });
         }
 
-        private getMeetingMembers(): void{
-            if(this.prepareMeetingModel.meetingSchedule.type.id == 10){
-                this.meetingMembers = this.getBoardOfTrusteeMembers();
-            }
-            else if(this.prepareMeetingModel.meetingSchedule.type.id == 20){
-                this.meetingMembers = this.getSyndicateMembers();
-            }
-            else if(this.prepareMeetingModel.meetingSchedule.type.id == 30){
-                this.meetingMembers = this.getFinanceCommitteeMembers();
-            }
-            else if(this.prepareMeetingModel.meetingSchedule.type.id == 40){
-                this.meetingMembers = this.getAcademicCouncilMembers();
-            }
-            else if(this.prepareMeetingModel.meetingSchedule.type.id == 50){
-                this.meetingMembers = this.getHeadsMeetingMembers();
-            }
-            else{
-                this.meetingMembers = [];
-                this.notify.error("Please Select A Meeting Type");
-            }
-        }
-
-        private getBoardOfTrusteeMembers(): Array<IMeetingMemberModel>{
-            return [{name: "kawsur", designation: "Chairman", email: "kawsur.iums@aust.edu", contactNo: "01672494863", memberOf: 10},
-                {name: "BOT 1", designation: "Member", email: "ABC@aust.edu", contactNo: "", memberOf: 10},
-                {name: "BOT 2", designation: "Member", email: "DEF@aust.edu", contactNo: "", memberOf: 10}];
-        }
-
-        private getSyndicateMembers(): Array<IMeetingMemberModel>{
-            return [{name: "kawsur", designation: "ABC", email: "kawsur.iums@aust.edu", contactNo: "01672494863", memberOf: 20},
-                {name: "Syndicate 1", designation: "Member", email: "ABC@aust.edu", contactNo: "", memberOf: 20}];
-        }
-
-        private getFinanceCommitteeMembers(): Array<IMeetingMemberModel>{
-            return [{name: "kawsur", designation: "Chairman", email: "kawsur.iums@aust.edu", contactNo: "01672494863", memberOf: 30},
-                {name: "Finance Member 1", designation: "Member", email: "ABC@aust.edu", contactNo: "", memberOf: 30}];
-        }
-
-        private getAcademicCouncilMembers(): Array<IMeetingMemberModel>{
-            return [{name: "kawsur", designation: "Chairman", email: "kawsur.iums@aust.edu", contactNo: "01672494863", memberOf: 40}];
-        }
-
-        private getHeadsMeetingMembers(): Array<IMeetingMemberModel>{
-            return [{name: "kawsur", designation: "Chairman", email: "kawsur.iums@aust.edu", contactNo: "01672494863", memberOf: 50}];
-        }
-
-        private sendInvitationWithoutAgenda(): void{
-
-        }
-
-        private save(): void {
-            this.convertToJson().then((json: any) => {
-                this.meetingService.saveMeetingSchedule(json).then(()=>{
+        public update(): void {
+            this.convertToJson(this.scheduleToEdit).then((json: any) => {
+                this.meetingService.updateMeetingSchedule(json).then(()=>{
+                    this.getSchedule();
                 })
             });
         }
 
         private getSchedule(): void{
-            this.prepareMeetingModel.meetingSchedule = <IMeetingScheduleModel>{};
-            this.meetingService.getMeetingSchedule(10, 1).then((response: any) =>{
-                console.log(this.prepareMeetingModel.meetingSchedule);
-                this.prepareMeetingModel.meetingSchedule = response[0];
-                console.log(this.prepareMeetingModel.meetingSchedule);
-            })
+            this.meetingScheduleList = [];
+            this.meetingService.getMeetingSchedule().then((response: any) =>{
+                this.meetingScheduleList = response;
+                this.findUpcomingMeetingScheduleList();
+                this.findPreviousMeetingScheduleList();
+            });
         }
 
-        private toggleAll(): void{
-            if (this.selectedMembers.length === this.meetingMembers.length) {
-                this.selectedMembers = [];
-            } else if (this.selectedMembers.length === 0 || this.selectedMembers.length > 0) {
-                this.selectedMembers = this.meetingMembers.slice(0);
+        private findUpcomingMeetingScheduleList(): void{
+            this.upcomingMeetingScheduleList = [];
+            this.upcomingMeetingScheduleList = this.meetingScheduleList.filter((val, index, arr) =>{
+               return arr[index].edit == true;
+            });
+        }
+
+        private findPreviousMeetingScheduleList(): void{
+            this.previousMeetingScheduleList = [];
+            this.previousMeetingScheduleList = this.meetingScheduleList.filter((val, index, arr) =>{
+                return arr[index].edit == false;
+            });
+        }
+
+        public showPreviousMeetings(): void{
+            this.showMeetingList = true;
+            this.getSchedule();
+            this.addDate('');
+        }
+
+        public hidePreviousMeetings(): void{
+            this.showMeetingList = false;
+            this.addDate('default');
+        }
+
+        public selectedScheduleToEdit(schedule: IMeetingScheduleModel): void{
+            this.scheduleToEdit = <IMeetingScheduleModel> {};
+            this.scheduleToEdit = schedule;
+        }
+
+        public modifyFilterFields(type: string, val: boolean): void{
+           if(type == "upcoming"){
+               this.showUpcomingFilterFields = val;
+           }
+           else if(type == "previous"){
+               this.showPreviousFilterFields = val;
+           }
+        }
+
+        public undoFilter(type: string): void{
+            if(type == 'upcoming'){
+                this.findUpcomingMeetingScheduleList();
+            }
+            else if(type == "previous"){
+                this.findPreviousMeetingScheduleList();
             }
         }
 
-        private isChecked(): number{
-            return this.selectedMembers.length = this.meetingMembers.length;
-        }
-
-        private exists(item): boolean{
-            return this.selectedMembers.indexOf(item) > -1;
-        }
-
-        private toggleSelection(item): void{
-            let idx = this.selectedMembers.indexOf(item);
-            if (idx > -1) {
-                this.selectedMembers.splice(idx, 1);
+        public doFilter(type: string): void{
+            if(type == 'upcoming') {
+                if (this.upcomingMeetingType) {
+                    this.upcomingMeetingScheduleList = [];
+                    this.upcomingMeetingScheduleList = this.meetingScheduleList.filter((val, index, arr) => {
+                        return (arr[index].edit == true && arr[index].type.id === this.upcomingMeetingType.id);
+                    });
+                }
+                else {
+                    this.notify.error("Please select a meeting type");
+                }
             }
-            else {
-                this.selectedMembers.push(item);
+            else if(type == 'previous'){
+                if (this.previousMeetingType) {
+                    this.previousMeetingScheduleList = [];
+                    this.previousMeetingScheduleList = this.meetingScheduleList.filter((val, index, arr) => {
+                        return (arr[index].edit == false && arr[index].type.id === this.previousMeetingType.id);
+                    });
+                }
+                else {
+                    this.notify.error("Please select a meeting type");
+                }
             }
         }
 
-        private convertToJson(): ng.IPromise<any>{
+        private resetForm(form: ng.IFormController) {
+            this.meetingSchedule = <IMeetingScheduleModel>{};
+            form.$setPristine();
+        }
+
+        private convertToJson(obj: any): ng.IPromise<any>{
             let defer = this.$q.defer();
             let JsonObject = {};
-            JsonObject['entries'] = this.prepareMeetingModel.meetingSchedule;
+            JsonObject['entries'] = obj;
             defer.resolve(JsonObject);
             return defer.promise;
         }
 
-        private addDate(): void {
-            let internalThis:any = this;
-            setTimeout(function () {
-                $('#datetimepicker-default').datetimepicker();
-                $('#datetimepicker-default').blur(function (e) {
-                    internalThis.prepareMeetingModel.meetingSchedule.datetime = $(this).val();
-                    console.log(internalThis.prepareMeetingModel.meetingSchedule.datetime);
-                });
-            }, 10);
+        private addDate(type: string): void {
+            if(type == "default") {
+                let internalThis: any = this;
+                setTimeout(function () {
+                    $('#datetimepicker-default').datetimepicker();
+                    $('#datetimepicker-default').blur(function (e) {
+                        internalThis.meetingSchedule.datetime = $(this).val();
+                    });
+                }, 10);
+            }
+            else{
+                let internalThat: any = this;
+                setTimeout(function () {
+                    $('#datetimepicker-default1').datetimepicker();
+                    $('#datetimepicker-default1').blur(function (e) {
+                        internalThat.scheduleToEdit.datetime = $(this).val();
+                    });
+                }, 10);
+            }
         }
     }
 

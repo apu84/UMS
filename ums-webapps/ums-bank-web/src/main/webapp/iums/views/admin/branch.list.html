@@ -1,0 +1,75 @@
+<div class="panel">
+    <div class="panel-heading">Branches</div>
+    <div class="panel-body">
+        <table class="table table-hover table-bordered table-advanced table-striped" style="margin-top: 10px;">
+            <thead>
+            <tr>
+                <th width="50%">Bank code</th>
+                <th width="50%">Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    {{::vm.bank.code}}
+                </td>
+                <td>
+                    {{::vm.bank.name}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-hover table-bordered table-advanced table-striped" style="margin-top: 10px;">
+            <thead>
+            <tr>
+                <th width="10%">Branch code</th>
+                <th width="25%">Name</th>
+                <th width="20%">Contact No.</th>
+                <th width="25%">Location</th>
+                <th width="10%"></th>
+                <th width="10%"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="branch in vm.branches">
+                <td>
+                    <a href='javascript:void(0);'
+                       data-ui-sref="users({id: branch.id})"
+                       ui-sref-opts="{reload: true, notify: true}">
+                        {{::branch.code}}
+                    </a>
+                </td>
+                <td>
+                    {{::branch.name}}
+                </td>
+                <td>
+                    {{::branch.contactNo}}
+                </td>
+                <td>
+                    {{::branch.location}}
+                </td>
+                <td>
+                    <button class="btn btn-xs btn-success filter-submit" data-ng-click="vm.editBranch(branch)">
+                        <i class="fa fa-plus-square-o"></i>
+                        Edit
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-xs btn-success filter-submit" data-ng-click="vm.deleteBranch(branch)">
+                        <i class="fa fa-plus-square-o"></i>
+                        Delete
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-md-6">
+                <a href="javascript:void(0);" data-ng-click="vm.editBranch()" class="btn btn-grey"><i
+                        class="fa fa-plus-square"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+

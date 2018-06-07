@@ -6,7 +6,6 @@ import org.ums.generator.IdGenerator;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PersistentAwardInformationDao extends AwardInformationDaoDecorator {
@@ -15,14 +14,16 @@ public class PersistentAwardInformationDao extends AwardInformationDaoDecorator 
       "INSERT INTO EMP_AWARD_INFO (ID, EMPLOYEE_ID, AWARD_NAME, INSTITUTION, AWARDED_YEAR, AWARD_SHORT_DESCRIPTION, LAST_MODIFIED) VALUES (?, ? ,? ,?, ?, ?,"
           + getLastModifiedSql() + ")";
 
-  static String GET_ONE =
-      "Select ID, EMPLOYEE_ID, AWARD_NAME, INSTITUTION, AWARDED_YEAR, AWARD_SHORT_DESCRIPTION, LAST_MODIFIED From EMP_AWARD_INFO";
+  static String GET_ALL =
+      "SELECT ID, EMPLOYEE_ID, AWARD_NAME, INSTITUTION, AWARDED_YEAR, AWARD_SHORT_DESCRIPTION, LAST_MODIFIED FROM EMP_AWARD_INFO";
 
-  static String DELETE_ALL = "DELETE FROM EMP_AWARD_INFO ";
+  static String DELETE_ONE = "DELETE FROM EMP_AWARD_INFO ";
 
-  static String UPDATE_ALL =
+  static String UPDATE_ONE =
       "UPDATE EMP_AWARD_INFO SET AWARD_NAME=?, INSTITUTION=?, AWARDED_YEAR=?, AWARD_SHORT_DESCRIPTION=?, LAST_MODIFIED="
           + getLastModifiedSql() + " ";
+
+  static String EXISTS_ONE = "SELECT COUNT(EMPLOYEE_ID) FROM EMP_AWARD_INFO ";
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
@@ -33,75 +34,55 @@ public class PersistentAwardInformationDao extends AwardInformationDaoDecorator 
   }
 
   @Override
-  public int saveAwardInformation(List<MutableAwardInformation> pMutableAwardInformation) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.batchUpdate(query, getEmployeeAwardInformationParams(pMutableAwardInformation)).length;
+  public Long create(MutableAwardInformation pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getEmployeeId(), pMutable.getAwardName(),
+        pMutable.getAwardInstitute(), pMutable.getAwardedYear(), pMutable.getAwardShortDescription());
+    return id;
   }
 
   @Override
-  public int deleteAwardInformation(String pEmployeeId) {
-    String query = DELETE_ALL + " WHERE EMPLOYEE_ID = ?";
-    return mJdbcTemplate.update(query, pEmployeeId);
-  }
-
-  private List<Object[]> getEmployeeAwardInformationParams(List<MutableAwardInformation> pMutableAwardInformation) {
-    List<Object[]> params = new ArrayList<>();
-    for(AwardInformation awardInformation : pMutableAwardInformation) {
-      params.add(new Object[] {mIdGenerator.getNumericId(), awardInformation.getEmployeeId(),
-          awardInformation.getAwardName(), awardInformation.getAwardInstitute(), awardInformation.getAwardedYear(),
-          awardInformation.getAwardShortDescription()});
-
-    }
-    return params;
+  public AwardInformation get(final Long pId) {
+    String query = GET_ALL + " WHERE ID = ? ";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentAwardInformationDao.RoleRowMapper());
   }
 
   @Override
-  public List<AwardInformation> getEmployeeAwardInformation(final String employeeId) {
-    String query = GET_ONE + " Where EMPLOYEE_ID = ? ORDER BY AWARDED_YEAR DESC";
-    return mJdbcTemplate.query(query, new Object[] {employeeId}, new PersistentAwardInformationDao.RoleRowMapper());
+  public List<AwardInformation> get(final String pEmployeeId) {
+    String query = GET_ALL + " WHERE EMPLOYEE_ID = ? ORDER BY AWARDED_YEAR DESC ";
+    return mJdbcTemplate.query(query, new Object[] {pEmployeeId}, new PersistentAwardInformationDao.RoleRowMapper());
   }
 
   @Override
-  public int updateAwardInformation(List<MutableAwardInformation> pMutableAwardInformation) {
-    String query = UPDATE_ALL + "WHERE EMPLOYEE_ID = ? and ID = ? ";
-    return mJdbcTemplate.batchUpdate(query, getUpdateParams(pMutableAwardInformation)).length;
-  }
-
-  private List<Object[]> getUpdateParams(List<MutableAwardInformation> pMutableAwardInformation) {
-    List<Object[]> params = new ArrayList<>();
-    for(AwardInformation pAwardInformation : pMutableAwardInformation) {
-      params.add(new Object[] {pAwardInformation.getAwardName(), pAwardInformation.getAwardInstitute(),
-          pAwardInformation.getAwardedYear(), pAwardInformation.getAwardShortDescription(),
-          pAwardInformation.getEmployeeId(), pAwardInformation.getId()});
-    }
-    return params;
+  public int update(MutableAwardInformation pMutable) {
+    String query = UPDATE_ONE + " WHERE ID = ? AND EMPLOYEE_ID = ?";
+    return mJdbcTemplate.update(query, pMutable.getAwardName(), pMutable.getAwardInstitute(),
+        pMutable.getAwardedYear(), pMutable.getAwardShortDescription(), pMutable.getId(), pMutable.getEmployeeId());
   }
 
   @Override
-  public int deleteAwardInformation(List<MutableAwardInformation> pMutableAwardInformation) {
-    String query = DELETE_ALL + "WHERE ID=? AND EMPLOYEE_ID=?";
-    return mJdbcTemplate.batchUpdate(query, getDeleteParams(pMutableAwardInformation)).length;
+  public int delete(MutableAwardInformation pMutable) {
+    String query = DELETE_ONE + " WHERE ID = ? AND EMPLOYEE_ID = ? ";
+    return mJdbcTemplate.update(query, pMutable.getId(), pMutable.getEmployeeId());
   }
 
-  private List<Object[]> getDeleteParams(List<MutableAwardInformation> pMutableAwardInformation) {
-    List<Object[]> params = new ArrayList<>();
-    for(AwardInformation pAwardInformation : pMutableAwardInformation) {
-      params.add(new Object[] {pAwardInformation.getId(), pAwardInformation.getEmployeeId()});
-    }
-    return params;
+  @Override
+  public boolean exists(String pEmployeeId) {
+    String query = EXISTS_ONE + " WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pEmployeeId}, Boolean.class);
   }
 
   class RoleRowMapper implements RowMapper<AwardInformation> {
     @Override
     public AwardInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentAwardInformation awardInformation = new PersistentAwardInformation();
-      awardInformation.setId(resultSet.getLong("id"));
-      awardInformation.setEmployeeId(resultSet.getString("employee_id"));
-      awardInformation.setAwardName(resultSet.getString("award_name"));
-      awardInformation.setAwardInstitute(resultSet.getString("institution"));
-      awardInformation.setAwardedYear(resultSet.getInt("awarded_year"));
-      awardInformation.setAwardShortDescription(resultSet.getString("award_short_description"));
-      awardInformation.setLastModified(resultSet.getString("last_modified"));
+      awardInformation.setId(resultSet.getLong("ID"));
+      awardInformation.setEmployeeId(resultSet.getString("EMPLOYEE_ID"));
+      awardInformation.setAwardName(resultSet.getString("AWARD_NAME"));
+      awardInformation.setAwardInstitute(resultSet.getString("INSTITUTION"));
+      awardInformation.setAwardedYear(resultSet.getInt("AWARDED_YEAR"));
+      awardInformation.setAwardShortDescription(resultSet.getString("AWARD_SHORT_DESCRIPTION"));
+      awardInformation.setLastModified(resultSet.getString("LAST_MODIFIED"));
       return awardInformation;
     }
   }

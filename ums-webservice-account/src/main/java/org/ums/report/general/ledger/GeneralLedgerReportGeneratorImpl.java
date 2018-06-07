@@ -11,10 +11,12 @@ import org.ums.domain.model.immutable.accounts.Currency;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.domain.model.mutable.accounts.MutableChequeRegister;
+import org.ums.enums.accounts.definitions.account.balance.AccountType;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.currency.CurrencyFlag;
 import org.ums.enums.accounts.definitions.group.GroupType;
 import org.ums.enums.accounts.general.ledger.reports.FetchType;
+import org.ums.enums.accounts.general.ledger.vouchers.AccountTransactionType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
@@ -26,6 +28,7 @@ import org.ums.util.UmsUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -62,6 +65,8 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
   private CurrencyManager mCurrencyManager;
   @Autowired
   private ChequeRegisterManager mChequeRegisterManager;
+  @Autowired
+  private SystemGroupMapManager mSystemGroupMapManager;
 
   private Date mFromDate;
   private Date mToDate;
@@ -263,14 +268,16 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
         setNoBorderAndAddCell(table, cell);
 
 
-        if (transaction.getAccount().getAccGroupCode().equals(GroupType.BANK_ACCOUNTS)) {
+        if (mSystemGroupMapManager.exists(GroupType.BANK_ACCOUNTS, mCompanyManager.getDefaultCompany()) &&
+                transaction.getAccount().getAccGroupCode().equals(mSystemGroupMapManager.get(GroupType.BANK_ACCOUNTS, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode())) {
           ChequeRegister chequeRegister = chequeRegisterMapWithTransactionId.get(transaction.getId());
 
-          cell = new PdfPCell(new Paragraph(chequeRegister.getChequeNo(), mLiteFont));
+
+          cell = new PdfPCell(new Paragraph(chequeRegister==null?" ":chequeRegister.getChequeNo(), mLiteFont));
           setNoBorderAndAddCell(table, cell);
 
 
-          cell = new PdfPCell(new Paragraph(UmsUtils.formatDate(chequeRegister.getChequeDate(), "dd-MM-yyyy"), mLiteFont));
+          cell = new PdfPCell(new Paragraph(chequeRegister==null? " ": UmsUtils.formatDate(chequeRegister.getChequeDate(), "dd-MM-yyyy"), mLiteFont));
           setNoBorderAndAddCell(table, cell);
 
 
@@ -291,10 +298,13 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
         setNoBorderAndAddCell(table, cell);
 
 
-        if (transaction.getBalanceType().equals(BalanceType.Dr))
-          totalOpeningBalance = totalOpeningBalance.add(transaction.getAmount());
-        else
+        if (transaction.getBalanceType().equals(BalanceType.Dr)){
+          totalOpeningBalance =totalOpeningBalance.add(transaction.getAmount());
+        }
+        else{
           totalOpeningBalance = totalOpeningBalance.subtract(transaction.getAmount());
+        }
+
 
         cell = new PdfPCell(new Paragraph(UmsAccountUtils.getBalanceInDebitOrCredit(totalOpeningBalance), mLiteFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);

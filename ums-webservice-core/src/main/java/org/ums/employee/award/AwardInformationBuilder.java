@@ -3,8 +3,6 @@ package org.ums.employee.award;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.employee.award.AwardInformation;
-import org.ums.employee.award.MutableAwardInformation;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -22,14 +20,12 @@ public class AwardInformationBuilder implements Builder<AwardInformation, Mutabl
     pBuilder.add("awardedYear", pReadOnly.getAwardedYear());
     pBuilder.add("awardShortDescription",
         pReadOnly.getAwardShortDescription() == null ? "" : pReadOnly.getAwardShortDescription());
-    pBuilder.add("dbAction", "");
   }
 
   @Override
   public void build(MutableAwardInformation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable
-        .setId(pJsonObject.containsKey("dbAction") ? (pJsonObject.getString("dbAction").equals("Update") || pJsonObject
-            .getString("dbAction").equals("Delete")) ? Long.parseLong(pJsonObject.getString("id")) : 0 : 0);
+
+    pMutable.setId(!pJsonObject.getString("id").equals("") ? Long.parseLong(pJsonObject.getString("id")) : null);
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setAwardName(pJsonObject.getString("awardName"));
     pMutable

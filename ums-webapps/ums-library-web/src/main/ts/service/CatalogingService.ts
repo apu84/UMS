@@ -131,6 +131,8 @@ module ums {
                     item.internalNote = config.internalNote;
                 }
                 item.status = config.status;
+                item.bindingType = config.bindingType;
+                item.acqType = config.acqType;
                 item.currency = config.currency;
                 item.price = Number(config.price);
                 item.accessionDate = config.accessionDate;

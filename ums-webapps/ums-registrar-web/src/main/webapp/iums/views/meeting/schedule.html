@@ -1,158 +1,111 @@
-<style>
-    .row{
-        padding-top: 5px;
-        padding-bottom: 5px;
-    }
-    legend {
-        font-size: medium;
-    }
-</style>
-<div class="panel">
-    <div class="panel-body shadowPanel" style="min-height: 490px;">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-4">
-                    <fieldset>
-                        <legend>Schedule</legend>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label class="control-label">Meeting Type</label>
+<div data-ng-if="!vm.showMeetingList">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="panel panel-blue">
+                <div class="panel-heading">Create Schedule
+                    <span style='float:right;'><a class="btn btn-white btn-sm"
+                                                  data-ng-click="vm.showPreviousMeetings()"><i
+                            class="fa fa-history"></i></a>&nbsp;
+                </span>
+                </div>
+                <div class="panel-body pan">
+                    <form name="nScheduleForm" class="form-horizontal" ng-submit="vm.save(nScheduleForm)" novalidate>
+                        <div class="form-body pal">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nScheduleForm.nType.$invalid && !nScheduleForm.nType.$pristine }">
+                                <label class="col-md-3 control-label">Meeting Type</label>
+                                <div class="col-md-9">
+                                    <select id="iType"
+                                            name="nType"
+                                            data-ng-model="vm.meetingSchedule.type"
+                                            data-ng-options="meetingType.name for meetingType in vm.meetingTypes track by meetingType.id"
+                                            data-ng-change="vm.getNextMeetingNo()"
+                                            class="form-control" required>
+                                        <option value="">Select Meeting Type</option>
+                                    </select>
+
+                                    <label data-ng-show="nScheduleForm.nType.$invalid && !nScheduleForm.nType.$pristine"
+                                           class="help-block control-label">Please specify meeting type.</label>
+                                </div>
                             </div>
-                            <div class="col-md-8">
-                                <select data-ng-model="vm.prepareMeetingModel.meetingSchedule.type"
-                                        data-ng-options="meetingType.name for meetingType in vm.meetingTypes track by meetingType.id"
-                                        data-ng-change="vm.getMeetingNoAndMembers()"
-                                        class="form-control" required>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label class="control-label">Meeting No.</label>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="number"
-                                       data-ng-model="vm.prepareMeetingModel.meetingSchedule.meetingNo"
-                                       class="form-control"
-                                       placeholder="Meeting No."
-                                       readonly/>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label class="control-label">Ref No.</label>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text"
-                                       data-ng-model="vm.prepareMeetingModel.meetingSchedule.refNo"
-                                       class="form-control"
-                                       placeholder="Ref No."/>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label class="control-label">Date & Time</label>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="input-icon right" >
-                                    <i class="fa fa-calendar"></i>
-                                    <input type="text"
-                                           id="datetimepicker-default"
-                                           data-ng-model="vm.prepareMeetingModel.meetingSchedule.datetime"
-                                           data-datetime-format="mm/dd/yyyy h:mm a"
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Meeting No.</label>
+                                <div class="col-md-9">
+                                    <input type="number"
+                                           data-ng-model="vm.meetingSchedule.meetingNo"
                                            class="form-control"
-                                           autocomplete="off">
+                                           placeholder="Meeting No."
+                                           readonly/>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nScheduleForm.nRefNo.$invalid && !nScheduleForm.nRefNo.$pristine }">
+                                <label class="col-md-3 control-label">Ref No.</label>
+                                <div class="col-md-9">
+                                    <input id="iRefNo"
+                                           name="nRefNo"
+                                           type="text"
+                                           data-ng-model="vm.meetingSchedule.refNo"
+                                           class="form-control"
+                                           placeholder="Ref No." required>
+
+                                    <label data-ng-show="nScheduleForm.nRefNo.$invalid && !nScheduleForm.nRefNo.$pristine"
+                                           class="help-block control-label">Please specify ref no.</label>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nScheduleForm.nDateTime.$invalid && !nScheduleForm.nDateTime.$pristine }">
+                                <label class="col-md-3 control-label">Date & Time</label>
+                                <div class="col-md-9">
+                                    <div class="input-icon right">
+                                        <i class="fa fa-calendar"></i>
+                                        <input name="nDateTime"
+                                               type="text"
+                                               id="datetimepicker-default"
+                                               data-ng-model="vm.meetingSchedule.datetime"
+                                               data-datetime-format="dd/MM/yyyy hh:mm aaa"
+                                               class="form-control"
+                                               autocomplete="off" required>
+
+                                        <label data-ng-show="nScheduleForm.nDateTime.$invalid && !nScheduleForm.nDateTime.$pristine"
+                                               class="help-block control-label">Please specify date & time.</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nScheduleForm.nRoom.$invalid && !nScheduleForm.nRoom.$pristine }">
+                                <label class="col-md-3 control-label">Room / Place</label>
+                                <div class="col-md-9">
+                                    <input id="iRoom"
+                                           name="nRoom"
+                                           type="text"
+                                           data-ng-model="vm.meetingSchedule.room"
+                                           class="form-control"
+                                           placeholder="Meeting Room" required>
+
+                                    <label data-ng-show="nScheduleForm.nRoom.$invalid && !nScheduleForm.nRoom.$pristine"
+                                           class="help-block control-label">Please specify a room or place.</label>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label class="control-label">Room / Place</label>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text"
-                                       data-ng-model="vm.prepareMeetingModel.meetingSchedule.room"
-                                       class="form-control"
-                                       placeholder="Meeting Room"/>
-                            </div>
+                        <div class="form-actions text-right pal">
+                            <button type="submit" data-ng-disabled="nScheduleForm.$invalid" class="btn btn-success">
+                                Create Schedule
+                            </button>
                         </div>
-                    </fieldset>
-                </div>
-                <div class="col-md-1"></div>
-                <div class="col-md-7">
-                    <fieldset>
-                        <legend>Member Invitation</legend>
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered">
-                                <thead class="well">
-                                <th>Sl.</th>
-                                <th>Member Name</th>
-                                <th>Designation</th>
-                                <th>Email</th>
-                                <th>Contact</th>
-                                <th><input type="checkbox" data-ng-checked="vm.isChecked()"
-                                           data-ng-click="vm.toggleAll()"/></th>
-                                </thead>
-                                <tbody data-ng-repeat="meetingMember in vm.meetingMembers track by $index">
-                                <tr>
-                                    <td>{{$index + 1}}</td>
-                                    <td>{{meetingMember.name}}</td>
-                                    <td>{{meetingMember.designation}}</td>
-                                    <td>{{meetingMember.email}}</td>
-                                    <td>{{meetingMember.contactNo}}</td>
-                                    <td><input type="checkbox" data-ng-checked="vm.exists(meetingMember)"
-                                               data-ng-click="vm.toggleSelection(meetingMember)"/></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </fieldset>
-                    <!--<button type="button" data-target="#modal-add-member"-->
-                    <!--data-toggle="modal" class="btn btn-default"><i class="fa fa-search"></i>&nbsp;&nbsp;Search Member</button>-->
-                </div>
-            </div>
-            <br /><br /><br />
-            <div class="row">
-                <div align="right">
-                    <button type="button" class="btn btn-danger" data-ng-click="vm.getSchedule()">Dummy Get</button>
-                    <button type="button" class="btn btn-default" data-ng-click="vm.sendInvitationWithoutAgenda()">Send Invitation Without Agenda</button>
-                    <button type="button" class="btn btn-success" data-ng-click="vm.save()">Save</button>
+                    </form>
                 </div>
             </div>
         </div>
+        <div class="col-md-3"></div>
     </div>
 </div>
 
-
-<!--<div id="modal-add-member" tabindex="-1" role="dialog" aria-labelledby="modal-responsive-label"-->
-<!--aria-hidden="true" class="modal fade">-->
-<!--<div class="modal-dialog">-->
-<!--<div class="modal-content">-->
-<!--<div class="modal-header">-->
-<!--<button type="button" data-dismiss="modal" aria-hidden="true"-->
-<!--class="close">&times;</button>-->
-<!--<h4 id="modal-responsive-label" class="modal-title">Add or Search</h4></div>-->
-<!--<div class="modal-body">-->
-<!--<div class="row">-->
-<!--<div class="col-md-2">-->
-<!--<label>Search By</label>-->
-<!--</div>-->
-<!--<div class="col-md-4">-->
-<!--<input type="text"-->
-<!--data-ng-model="searchText"-->
-<!--class="form-control input-sm">-->
-<!--</div>-->
-<!--<div class="col-md-6">-->
-<!--<div align="right">-->
-<!--<button type="button" class="btn btn-default btn-sm" data-ng-click="addNewMember()"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New</button>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--<div class="modal-footer">-->
-<!--<button type="button" data-dismiss="modal" class="btn btn-default">Close</button>-->
-<!--<button type="button" class="btn btn-primary">Save changes</button>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
+<div data-ng-if="vm.showMeetingList">
+    <div class="panel">
+        <div class="panel panel-body">
+            <div data-ng-include="src='views/meeting/schedule-list.html'"></div>
+        </div>
+    </div>
+</div>

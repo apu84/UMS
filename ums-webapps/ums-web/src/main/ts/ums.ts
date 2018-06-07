@@ -55,6 +55,7 @@ module ums {
 
   UMS.constant("appConstants", Constants.Default());
   UMS.constant("registrarConstants", Constants.RegistrarConstant());
+  UMS.constant("libConstants", Constants.LibConstant());
 
   UMS.filter('$split', function () {
     return function (input) {
@@ -257,7 +258,7 @@ module ums {
           controller: 'RoomBasedRoutine',
           templateUrl: 'views/dept/room-based-routine.html'
         })
-        .state('studentAdviser', {
+        .state('studentAdviser',{
           url: "/studentAdviser",
           controller: 'StudentAdviser',
           templateUrl: 'views/dept/student-adviser.html',
@@ -275,8 +276,25 @@ module ums {
               });
             }]
           }
-        })
-        .state('publishSeatPlan', {
+        }).state('sectionAssignment',{
+        url: "/sectionAss   ignment",
+        controller: 'SectionAssignment',
+        templateUrl: 'views/section-assign/section-assign.html',
+        resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                return $ocLazyLoad.load({
+                    files: [
+                        'vendors/select2/select2-madmin.css',
+                        'vendors/bootstrap-select/bootstrap-select.min.css',
+                        'vendors/multi-select/css/multi-select-madmin.css',
+                        'vendors/select2/select2.min.js',
+                        'vendors/bootstrap-select/bootstrap-select.min.js',
+                        'vendors/multi-select/js/jquery.multi-select.js'
+                    ]
+                });
+            }]
+        }
+    }).state('publishSeatPlan', {
           url: "/publishSeatPlan",
           controller: 'PublishSeatPlan',
           templateUrl: 'views/semester/publish-seat-plan.html',
@@ -1353,8 +1371,16 @@ module ums {
           templateUrl: 'views/dummy/dummy.html'
         })
 
-        .state('profile', {
-            url: "/profile",
+        .state('twoFATest', {
+          url: "/twoFATest",
+          controller: 'TwoFATestController',
+          controllerAs: 'vm',
+          templateUrl: 'views/twofatest/two.fa.test.html'
+        })
+
+
+        .state('employeeProfile', {
+            url: "/employeeProfile",
             templateUrl: 'views/employee/employee-profile.html',
             controller: 'EmployeeProfile',
             controllerAs: 'vm',
@@ -1379,12 +1405,106 @@ module ums {
                 }]
             }
         })
-        .state('twoFATest', {
-          url: "/twoFATest",
-          controller: 'TwoFATestController',
-          controllerAs: 'vm',
-          templateUrl: 'views/twofatest/two.fa.test.html'
+        .state('employeeProfile.personal', {
+            url: "/personal",
+            params : {
+                'id': null,
+                'edit': null
+            },
+            templateUrl: 'views/employee/personal-information.html',
+            controller: 'PersonalInformation',
+            controllerAs: 'vm'
         })
-
+        .state('employeeProfile.academic', {
+            url: "/academic",
+            params : {
+                'id': null,
+                'edit': null
+            },
+            templateUrl: 'views/employee/academic-information.html',
+            controller: 'AcademicInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.publication', {
+            url: "/publication",
+            params : {
+                'id': null,
+                'edit': null
+            },
+            templateUrl: 'views/employee/publication-information.html',
+            controller: 'PublicationInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.training', {
+            url: "/training",
+            params : {
+                'id': null,
+                'edit': null
+            },
+            templateUrl: 'views/employee/training-information.html',
+            controller: 'TrainingInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.award', {
+            url: "/award",
+            params : {
+                'id': null,
+                'edit': null
+            },
+            templateUrl: 'views/employee/award-information.html',
+            controller: 'AwardInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.experience', {
+            url: "/experience",
+            params : {
+                'id': null,
+                'edit': null
+            },
+            templateUrl: 'views/employee/experience-information.html',
+            controller: 'ExperienceInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.additional', {
+            url: "/additional",
+            params : {
+                'id': null,
+                'edit': null
+            },
+            templateUrl: 'views/employee/additional-information.html',
+            controller: 'AdditionalInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.service', {
+            url: "/service",
+            params : {
+                'id': null,
+                'edit': null
+            },
+            templateUrl: 'views/employee/service-information.html',
+            controller: 'ServiceInformation',
+            controllerAs: 'vm'
+        })
+        .state('search', {
+            url: "/search",
+            controller: 'LibrarySearch',
+            templateUrl: 'views/library/library-search.html',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        files: [
+                            'vendors/bootstrap-select/bootstrap-select.min.js',
+                            'vendors/bootstrap-select/bootstrap-select.css'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('gradesheet', {
+          url: "/gradesheet",
+          controller: 'StudentGradesheetController',
+          controllerAs: 'vm',
+          templateUrl: 'views/student/grade-sheet.html'
+        })
   });
 }

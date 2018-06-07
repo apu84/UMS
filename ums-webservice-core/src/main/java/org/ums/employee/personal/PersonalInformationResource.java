@@ -1,11 +1,14 @@
 package org.ums.employee.personal;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.employee.personal.MutablePersonalInformationResource;
-import org.ums.logs.UmsLogMessage;
+import org.ums.logs.GetLog;
 
 import javax.json.JsonObject;
-import javax.ws.rs.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 
@@ -13,18 +16,22 @@ import javax.ws.rs.core.Request;
 @Path("employee/personal")
 public class PersonalInformationResource extends MutablePersonalInformationResource {
 
+  @Autowired
+  private PersonalInformationResourceHelper mHelper;
+
   @GET
   @Path("/get/employeeId/{employee-id}")
-  @UmsLogMessage(message = "Get employee information (personal data)")
-  public JsonObject getPersonalInformation(final @PathParam("employee-id") String pEmployeeId,
-      final @Context Request pRequest) {
-    return mHelper.getPersonalInformation(pEmployeeId, mUriInfo);
+  @GetLog(message = "Get employee information (personal data)")
+  public JsonObject getPersonalInformation(@Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("employee-id") String pEmployeeId, final @Context Request pRequest) {
+    return mHelper.get(pEmployeeId, mUriInfo);
   }
 
   @GET
-  @Path("/firstName/{first-name}/lastName/{last-name}")
-  public JsonObject getSimilarUsers(final @Context Request pRequest, final @PathParam("first-name") String pFirstName,
-      final @PathParam("last-name") String pLastName) {
-    return mHelper.getSimilarUsers(pFirstName, pLastName, mUriInfo);
+  @Path("/firstName/name/{employee-name}")
+  @GetLog(message = "Get employee information (get Similar Users)")
+  public JsonObject getSimilarUsers(@Context HttpServletRequest pHttpServletRequest, final @Context Request pRequest,
+      final @PathParam("employee-name") String pName) {
+    return mHelper.getSimilarUsers(pName, mUriInfo);
   }
 }

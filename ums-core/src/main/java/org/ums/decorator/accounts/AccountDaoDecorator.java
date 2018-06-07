@@ -1,9 +1,11 @@
 package org.ums.decorator.accounts;
 
 import org.ums.decorator.ContentDaoDecorator;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
+import org.ums.enums.common.AscendingOrDescendingType;
 import org.ums.manager.accounts.AccountManager;
 
 import java.util.List;
@@ -20,8 +22,19 @@ public class AccountDaoDecorator extends ContentDaoDecorator<Account, MutableAcc
   }
 
   @Override
-  public List<Account> getAllPaginated(int itemPerPage, int pageNumber) {
-    return getManager().getAllPaginated(itemPerPage, pageNumber);
+  public Account getAccount(Long pAccountCode, Company pCompany) {
+    return getManager().getAccount(pAccountCode, pCompany);
+  }
+
+  @Override
+  public boolean exists(Long pAccountCode, Company pCompany) {
+    return getManager().exists(pAccountCode, pCompany);
+  }
+
+  @Override
+  public List<Account> getAllPaginated(int itemPerPage, int pageNumber,
+      AscendingOrDescendingType ascendingOrDescendingType) {
+    return getManager().getAllPaginated(itemPerPage, pageNumber, ascendingOrDescendingType);
   }
 
   @Override
@@ -42,5 +55,10 @@ public class AccountDaoDecorator extends ContentDaoDecorator<Account, MutableAcc
   @Override
   public List<Account> getIncludingGroups(List<String> groupCodeList) {
     return getManager().getIncludingGroups(groupCodeList);
+  }
+
+  @Override
+  public List<Account> getAccounts(Company pCompany) {
+    return getManager().getAccounts(pCompany);
   }
 }

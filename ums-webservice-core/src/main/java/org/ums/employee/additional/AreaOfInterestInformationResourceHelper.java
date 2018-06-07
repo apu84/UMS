@@ -1,7 +1,6 @@
 package org.ums.employee.additional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
@@ -9,7 +8,7 @@ import org.ums.cache.LocalCache;
 import org.ums.manager.ContentManager;
 import org.ums.resource.ResourceHelper;
 
-import javax.json.*;
+import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
@@ -25,51 +24,32 @@ public class AreaOfInterestInformationResourceHelper extends
   @Autowired
   AreaOfInterestInformationBuilder mBuilder;
 
-  public JsonObject getAreaOfInterestInformation(final String pEmployeeId, final UriInfo pUriInfo) {
-    List<AreaOfInterestInformation> pAreaOfInterestInformation = new ArrayList<>();
-    try {
-      pAreaOfInterestInformation = mManager.getAreaOfInterestInformation(pEmployeeId);
-    } catch(EmptyResultDataAccessException e) {
-    }
-    return toJson(pAreaOfInterestInformation, pUriInfo);
-  }
-
-  @Transactional
-  public Response saveAreaOfInterestInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
-    LocalCache localCache = new LocalCache();
-    JsonArray entries = pJsonObject.getJsonArray("entries");
-    JsonArray areaOfInterestJsonArray = entries.getJsonObject(0).getJsonArray("areaOfInterest");
-    int sizeOfAreaOfInterestJsonArray = areaOfInterestJsonArray.size();
-    List<MutableAreaOfInterestInformation> pMutableAreaOfInterestInformation = new ArrayList<>();
-    for(int i = 0; i < sizeOfAreaOfInterestJsonArray; i++) {
-      MutableAreaOfInterestInformation mutableAreaOfInterestInformation = new PersistentAreaOfInterestInformation();
-      mBuilder.build(mutableAreaOfInterestInformation, areaOfInterestJsonArray.getJsonObject(i), localCache);
-      pMutableAreaOfInterestInformation.add(mutableAreaOfInterestInformation);
-    }
-    mManager.saveAreaOfInterestInformation(pMutableAreaOfInterestInformation);
-    Response.ResponseBuilder builder = Response.created(null);
-    builder.status(Response.Status.CREATED);
-    return builder.build();
-  }
-
-  private JsonObject toJson(List<AreaOfInterestInformation> pAreaOfInterestInformation, UriInfo pUriInfo) {
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-
-    for(AreaOfInterestInformation areaOfInterestInformation : pAreaOfInterestInformation) {
-      JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-      getBuilder().build(jsonObject, areaOfInterestInformation, pUriInfo, localCache);
-      children.add(jsonObject);
-    }
-
-    object.add("entries", children);
-    localCache.invalidate();
-    return object.build();
-  }
-
   @Override
+  @Transactional
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+    LocalCache localCache = new LocalCache();
+    List<MutableAreaOfInterestInformation> mutableAreaOfInterestInformationList = new ArrayList<>();
+    if(pJsonObject.getJsonArray("entries").size() > 0) {
+      List<AreaOfInterestInformation> areaOfInterestInformations =
+          mManager.getAll(pJsonObject.getJsonArray("entries").getJsonObject(0).getString("employeeId"));
+      mManager.delete((MutableAreaOfInterestInformation) areaOfInterestInformations.get(0));
+      for(int i = 0; i < pJsonObject.getJsonArray("entries").size(); i++) {
+        MutableAreaOfInterestInformation mutableAreaOfInterestInformation = new PersistentAreaOfInterestInformation();
+        mBuilder.build(mutableAreaOfInterestInformation, pJsonObject.getJsonArray("entries").getJsonObject(i),
+            localCache);
+        mutableAreaOfInterestInformationList.add(mutableAreaOfInterestInformation);
+      }
+      mManager.create(mutableAreaOfInterestInformationList);
+    }
+    localCache.invalidate();
+    return Response.ok().build();
+  }
+
+  public JsonObject get(final String pEmployeeId, final UriInfo pUriInfo) {
+    if(mManager.exists(pEmployeeId)) {
+      List<AreaOfInterestInformation> areaOfInterestInformationList = mManager.getAll(pEmployeeId);
+      return buildJsonResponse(areaOfInterestInformationList, pUriInfo);
+    }
     return null;
   }
 

@@ -45,35 +45,66 @@
         box-shadow: 0 0 20px rgba(0, 0, 0, .2);
         background: rgba(0, 0, 0, .5);
     }
+    ul.nav.nav-tabs.ul-edit li.active a {
+        background: #488C6C !important;
+    }
+    ul.nav.nav-tabs.ul-edit {
+        border-bottom: 5px solid #488C6C !important;
+    }
 </style>
 <div id="page-user-profile" class="row">
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-3">
 
-                <div class="panel panel-default " style="border: none;">
-                    <div class="panel-heading portlet-pink"
-                         style="background: #bf3773 none repeat scroll 0 0;border: 1px solid #bf3773;color: white;">
-                        <h3 class="panel-title">Instructions</h3>
+                <div class="panel panel-green">
+                    <div class="panel-heading portlet-pink">
+                        <h3 class="panel-title">Select</h3>
                     </div>
-                    <div class="panel-body shadowPanel">
-                        <select style="width: 90%" data-ng-model="optional.program" >
-                            <option value="110500">BSC in EEE</option>
-                        </select><br/>
-                        <select style="width: 90%;margin-top: 10px;"  data-ng-model="optional.semesterId" data-ng-init="11022016">
-                            <option value="11022016">Fall, 2016</option>
-                        </select><br/>
-                        <select style="width: 90%;margin-top: 10px;"  data-ng-model="optional.year" data-ng-init="">
-                            <option value="4">4th Year</option>
-                        </select><br/>
-                        <select style="width: 90%;margin-top: 10px;"  data-ng-model="optional.semester" data-ng-init="">
-                            <option value="1">1st Semester</option>
-                        </select><br/>
-                        <a href="javascript:;" class="btn btn-xs btn-default"
-                           data-ng-click="showCourses()" style="margin-top: 20px;">
-                            &nbsp;&nbsp;Go Next &nbsp;
-                            <i class="fa fa-forward" style="color: green;"></i>
-                        </a>
+                    <div class="panel-body pan">
+                        <form action="" class="form-horizontal" >
+                            <div class="form-body pal">
+                                <div class="form-group" data-ng-show="false">
+                                    <label class="col-md-4 control-label">Dept./School</label>
+
+                                    <div class="col-md-8">
+                                        <select class="form-control" id="deptId" data-ng-model="optional.deptId" data-ng-change="loadPrograms()" data-convert-to-number>
+                                            <option data-ng-repeat="department in optional.depts" value="{{department.id}}">{{department.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Program</label>
+                                    <div class="col-md-8">
+                                        <select class="form-control" id="programId" data-ng-model="optional.programId" data-convert-to-number>
+                                            <option data-ng-repeat="program in optional.programs" value="{{program.id}}">{{program.shortName}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Semester</label>
+                                    <div class="col-md-8">
+                                        <select  class="form-control required" name="semester" data-ng-model="optional.semesterId" data-convert-to-number >
+                                            <option data-ng-repeat="semester in optional.semesters" value="{{semester.id}}">{{semester.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Y-S</label>
+                                    <div class="col-md-8">
+                                        <select  class="form-control required" name="yearSemester" data-ng-model="optional.yearSemester" >
+                                            <option data-ng-repeat="semester in optional.yearSemesters" value="{{semester.id}}">{{semester.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="form-actions text-right pal">
+                            <button type="button" class="btn btn-success"  data-ng-click="showCourses()">Search</button>
+                        </div>
+                        </form>
                     </div>
 
                 </div>
@@ -106,9 +137,8 @@
                     </div>
                 </div>
 
-                <div class="panel panel-default " style="border: none;">
-                    <div class="panel-heading portlet-blue"
-                         style="background: #0a819c none repeat scroll 0 0;border: 1px solid #bf3773;color: white;">
+                <div class="panel panel-default ">
+                    <div class="panel-heading">
                         <h3 class="panel-title">Application Statistics</h3>
                     </div>
                     <div class="panel-body shadowPanel">

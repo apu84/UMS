@@ -6,7 +6,6 @@ import org.ums.generator.IdGenerator;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PersistentTrainingInformationDao extends TrainingInformationDaoDecorator {
@@ -16,14 +15,16 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
           + "TRAINING_DURATION, TRAINING_DURATION_STRING, CATEGORY, LAST_MODIFIED) VALUES (?, ?, ? ,? ,?, ?, ?, ?, ?,"
           + getLastModifiedSql() + ")";
 
-  static String GET_ONE =
-      "Select ID, EMPLOYEE_ID, TRAINING_NAME, TRAINING_INSTITUTE, TRAINING_FROM, TRAINING_TO, TRAINING_DURATION, TRAINING_DURATION_STRING, CATEGORY, LAST_MODIFIED From EMP_TRAINING_INFO";
+  static String GET_ALL =
+      "SELECT ID, EMPLOYEE_ID, TRAINING_NAME, TRAINING_INSTITUTE, TRAINING_FROM, TRAINING_TO, TRAINING_DURATION, TRAINING_DURATION_STRING, CATEGORY, LAST_MODIFIED FROM EMP_TRAINING_INFO";
 
-  static String DELETE_ALL = "DELETE FROM EMP_TRAINING_INFO";
+  static String DELETE_ONE = "DELETE FROM EMP_TRAINING_INFO ";
 
-  static String UPDATE_ALL =
+  static String UPDATE_ONE =
       "UPDATE EMP_TRAINING_INFO SET TRAINING_NAME=?, TRAINING_INSTITUTE=?, TRAINING_FROM=?, TRAINING_TO=?, TRAINING_DURATION = ?, TRAINING_DURATION_STRING = ?, CATEGORY = ?, LAST_MODIFIED="
           + getLastModifiedSql() + " ";
+
+  static String EXISTS_ONE = "SELECT COUNT(EMPLOYEE_ID) FROM EMP_TRAINING_INFO ";
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
@@ -34,67 +35,46 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
   }
 
   @Override
-  public int saveTrainingInformation(List<MutableTrainingInformation> pMutableTrainingInformation) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.batchUpdate(query, getEmployeeTrainingInformationParams(pMutableTrainingInformation)).length;
+  public Long create(MutableTrainingInformation pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getEmployeeId(), pMutable.getTrainingName(),
+        pMutable.getTrainingInstitute(), pMutable.getTrainingFromDate(), pMutable.getTrainingToDate(),
+        pMutable.getTrainingDuration(), pMutable.getTrainingDurationString(), pMutable.getTrainingCategoryId());
+    return id;
   }
 
   @Override
-  public int deleteTrainingInformation(String pEmployeeId) {
-    String query = DELETE_ALL + " WHERE EMPLOYEE_ID = ?";
-    return mJdbcTemplate.update(query, pEmployeeId);
-  }
-
-  private List<Object[]> getEmployeeTrainingInformationParams(
-      List<MutableTrainingInformation> pMutableTrainingInformation) {
-    List<Object[]> params = new ArrayList<>();
-    for(TrainingInformation trainingInformation : pMutableTrainingInformation) {
-      params.add(new Object[] {mIdGenerator.getNumericId(), trainingInformation.getEmployeeId(),
-          trainingInformation.getTrainingName(), trainingInformation.getTrainingInstitute(),
-          trainingInformation.getTrainingFromDate(), trainingInformation.getTrainingToDate(),
-          trainingInformation.getTrainingDuration(), trainingInformation.getTrainingDurationString(),
-          trainingInformation.getTrainingCategoryId()});
-
-    }
-    return params;
+  public TrainingInformation get(final Long pId) {
+    String query = GET_ALL + " WHERE ID = ? ";
+    return mJdbcTemplate
+        .queryForObject(query, new Object[] {pId}, new PersistentTrainingInformationDao.RoleRowMapper());
   }
 
   @Override
-  public List<TrainingInformation> getEmployeeTrainingInformation(final String employeeId) {
-    String query = GET_ONE + " Where EMPLOYEE_ID = ? ORDER BY TRAINING_FROM DESC";
-    return mJdbcTemplate.query(query, new Object[] {employeeId}, new PersistentTrainingInformationDao.RoleRowMapper());
+  public List<TrainingInformation> get(final String pEmployeeId) {
+    String query = GET_ALL + " WHERE EMPLOYEE_ID = ? ORDER BY TRAINING_TO DESC ";
+    return mJdbcTemplate.query(query, new Object[] {pEmployeeId}, new PersistentTrainingInformationDao.RoleRowMapper());
   }
 
   @Override
-  public int updateTrainingInformation(List<MutableTrainingInformation> pMutableTrainingInformation) {
-    String query = UPDATE_ALL + " WHERE EMPLOYEE_ID = ? AND ID = ? ";
-    return mJdbcTemplate.batchUpdate(query, getUpdateParams(pMutableTrainingInformation)).length;
-  }
-
-  private List<Object[]> getUpdateParams(List<MutableTrainingInformation> pMutableTrainingInformation) {
-    List<Object[]> params = new ArrayList<>();
-    for(TrainingInformation pTrainingInformation : pMutableTrainingInformation) {
-      params.add(new Object[] {pTrainingInformation.getTrainingName(), pTrainingInformation.getTrainingInstitute(),
-          pTrainingInformation.getTrainingFromDate(), pTrainingInformation.getTrainingToDate(),
-          pTrainingInformation.getTrainingDuration(), pTrainingInformation.getTrainingDurationString(),
-          pTrainingInformation.getTrainingCategoryId(), pTrainingInformation.getEmployeeId(),
-          pTrainingInformation.getId()});
-    }
-    return params;
+  public int update(MutableTrainingInformation pMutable) {
+    String query = UPDATE_ONE + " WHERE ID = ? AND EMPLOYEE_ID = ?";
+    return mJdbcTemplate.update(query, pMutable.getTrainingName(), pMutable.getTrainingInstitute(),
+        pMutable.getTrainingFromDate(), pMutable.getTrainingToDate(), pMutable.getTrainingDuration(),
+        pMutable.getTrainingDurationString(), pMutable.getTrainingCategoryId(), pMutable.getId(),
+        pMutable.getEmployeeId());
   }
 
   @Override
-  public int deleteTrainingInformation(List<MutableTrainingInformation> pMutableTrainingInformation) {
-    String query = DELETE_ALL + " WHERE ID = ? AND EMPLOYEE_ID = ? ";
-    return mJdbcTemplate.batchUpdate(query, getDeleteParams(pMutableTrainingInformation)).length;
+  public int delete(MutableTrainingInformation pMutable) {
+    String query = DELETE_ONE + " WHERE ID = ? AND EMPLOYEE_ID = ? ";
+    return mJdbcTemplate.update(query, pMutable.getId(), pMutable.getEmployeeId());
   }
 
-  private List<Object[]> getDeleteParams(List<MutableTrainingInformation> pMutableTrainingInformation) {
-    List<Object[]> params = new ArrayList<>();
-    for(TrainingInformation pTrainingInformation : pMutableTrainingInformation) {
-      params.add(new Object[] {pTrainingInformation.getId(), pTrainingInformation.getEmployeeId()});
-    }
-    return params;
+  @Override
+  public boolean exists(String pEmployeeId) {
+    String query = EXISTS_ONE + " WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pEmployeeId}, Boolean.class);
   }
 
   class RoleRowMapper implements RowMapper<TrainingInformation> {
@@ -103,14 +83,14 @@ public class PersistentTrainingInformationDao extends TrainingInformationDaoDeco
     public TrainingInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentTrainingInformation trainingInformation = new PersistentTrainingInformation();
       trainingInformation.setId(resultSet.getLong("id"));
-      trainingInformation.setEmployeeId(resultSet.getString("employee_id"));
-      trainingInformation.setTrainingName(resultSet.getString("training_name"));
-      trainingInformation.setTrainingInstitute(resultSet.getString("training_institute"));
-      trainingInformation.setTrainingFromDate(resultSet.getString("training_from"));
-      trainingInformation.setTrainingToDate(resultSet.getString("training_to"));
-      trainingInformation.setTrainingDuration(resultSet.getInt("training_duration"));
-      trainingInformation.setTrainingDurationString(resultSet.getString("training_duration_string"));
-      trainingInformation.setTrainingCategoryId(resultSet.getInt("category"));
+      trainingInformation.setEmployeeId(resultSet.getString("EMPLOYEE_ID"));
+      trainingInformation.setTrainingName(resultSet.getString("TRAINING_NAME"));
+      trainingInformation.setTrainingInstitute(resultSet.getString("TRAINING_INSTITUTE"));
+      trainingInformation.setTrainingFromDate(resultSet.getDate("TRAINING_FROM"));
+      trainingInformation.setTrainingToDate(resultSet.getDate("TRAINING_TO"));
+      trainingInformation.setTrainingDuration(resultSet.getInt("TRAINING_DURATION"));
+      trainingInformation.setTrainingDurationString(resultSet.getString("TRAINING_DURATION_STRING"));
+      trainingInformation.setTrainingCategoryId(resultSet.getInt("CATEGORY"));
       return trainingInformation;
     }
   }

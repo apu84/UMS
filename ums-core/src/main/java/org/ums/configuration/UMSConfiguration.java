@@ -56,6 +56,13 @@ public class UMSConfiguration {
   @Value("${accounts.jdbc.password}")
   private String mAccountJdbcPassword;
 
+  @Value("${fcm.service-config}")
+  private String mFirebaseConfigPath;
+
+  public String getFirebaseConfigPath() {
+    return mFirebaseConfigPath;
+  }
+
   public boolean isOwnerOnlyModification() {
     return mOwnerOnlyModification;
   }

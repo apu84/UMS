@@ -1432,3 +1432,225 @@ ALTER TABLE MST_DESIGNATION RENAME COLUMN OLD_EMPLOYEE_TYPE to EMPLOYEE_TYPE;
 
 
 -----------------------------------------------------------------------------------------
+
+
+----------------------------- Update in EMP_PERSONAL_INFO Information ------------------------------
+
+UPDATE EMP_PERSONAL_INFO per1
+   SET FIRST_NAME =
+          (SELECT CONCAT (CONCAT (per2.FIRST_NAME, ' '), per2.LAST_NAME)
+                     AS NAME
+             FROM EMP_PERSONAL_INFO per2
+            WHERE PER2.EMPLOYEE_ID = per1.EMPLOYEE_ID);
+
+ALTER TABLE EMP_PERSONAL_INFO
+            DROP COLUMN LAST_NAME;
+
+ALTER TABLE EMP_PERSONAL_INFO
+    RENAME COLUMN FIRST_NAME TO NAME;
+
+
+CREATE OR REPLACE FORCE VIEW DB_IUMS.MVIEW_USERS
+(
+   USER_ID,
+   USER_NAME,
+   GENDER,
+   DATE_OF_BIRTH,
+   BLOOD_GROUP,
+   FATHER_NAME,
+   MOTHER_NAME,
+   MOBILE_NUMBER,
+   EMAIL_ADDRESS,
+   DEPARTMENT,
+   DESIGNATION,
+   ROLE_ID,
+   STATUS,
+   LOGIN_ID
+)
+AS
+   SELECT employee.EMPLOYEE_ID AS USER_ID,
+          EPI.NAME AS USER_NAME,
+          epi.GENDER AS GENDER,
+          epi.DATE_OF_BIRTH AS DATE_OF_BIRTH,
+          CASE
+             WHEN epi.BLOOD_GROUP = 1 THEN 'A+'
+             WHEN epi.BLOOD_GROUP = 2 THEN 'A-'
+             WHEN epi.BLOOD_GROUP = 3 THEN 'B+'
+             WHEN epi.BLOOD_GROUP = 4 THEN 'B-'
+             WHEN epi.BLOOD_GROUP = 5 THEN 'AB+'
+             WHEN epi.BLOOD_GROUP = 6 THEN 'AB-'
+             WHEN epi.BLOOD_GROUP = 7 THEN 'O+'
+             WHEN epi.BLOOD_GROUP = 8 THEN 'O-'
+             WHEN epi.BLOOD_GROUP = 0 THEN ' '
+          END
+             AS BLOOD_GROUP,
+          epi.FATHER_NAME AS FATHER_NAME,
+          epi.MOTHER_NAME AS MOTHER_NAME,
+          epi.MOBILE AS MOBILE_NUMBER,
+          epi.PERSONAL_EMAIL AS EMAIL_ADDRESS,
+          employee.DEPT_OFFICE AS DEPARTMENT,
+          employee.DESIGNATION AS DESIGNATION,
+          a_user.ROLE_ID AS ROLE_ID,
+          employee.status,
+          A_USER.USER_ID
+     FROM EMPLOYEES employee, USERS a_user, emp_personal_info epi
+    WHERE     a_user.EMPLOYEE_ID = employee.EMPLOYEE_ID
+          AND epi.employee_id = employee.employee_id
+   UNION
+   SELECT stud.STUDENT_ID AS USER_ID,
+          stud.FULL_NAME AS USER_NAME,
+          stud.GENDER AS GENDER,
+          stud.BIRTH_DATE AS DATE_OF_BIRTH,
+          stud.BLOOD_GROUP AS BLOOD_GROUP,
+          stud.FATHER_NAME AS FATHER_NAME,
+          stud.MOTHER_NAME AS MOTHER_NAME,
+          stud.MOBILE_NUMBER AS MOBILE_NUMBER,
+          stud.EMAIL_ADDRESS AS EMAIL_ADDRESS,
+          stud.DEPT_ID AS DEPARTMENT,
+          NULL,
+          11,
+          stud.status,
+          stud.STUDENT_ID
+     FROM STUDENTS stud;
+
+
+
+
+CREATE OR REPLACE FORCE VIEW DB_IUMS.MVIEW_TEACHERS
+(
+   TEACHER_ID,
+   TEACHER_NAME,
+   DESIGNATION_ID,
+   DESIGNATION_NAME,
+   DEPT_ID,
+   DEPT_NAME,
+   STATUS,
+   SHORT_NAME
+)
+AS
+   SELECT emp.EMPLOYEE_ID TEACHER_ID,
+          epi.name TEACHER_NAME,
+          DESIGNATION DESIGNATION_ID,
+          DESIGNATION_NAME,
+          DEPT.DEPT_ID,
+          DEPT.SHORT_NAME DEPT_NAME,
+          STATUS,
+          emp.SHORT_NAME
+     FROM EMPLOYEES emp,
+          emp_personal_info epi,
+          MST_DESIGNATION designation,
+          MST_EMPLOYEE_TYPE empType,
+          MST_DEPT_OFFICE dept
+    WHERE     TYPE_ID = 1
+          AND epi.employee_id = emp.employee_id
+          AND emp.DESIGNATION = designation.DESIGNATION_ID
+          AND DESIGNATION.EMPLOYEE_TYPE = EMPTYPE.TYPE_ID
+          AND DEPT.DEPT_ID = EMP.DEPT_OFFICE;
+
+---------------------------------------------------------------------------------------------------
+
+
+-------------------------------------FCM Token ---------------------------------------------------
+
+
+CREATE TABLE DB_IUMS.FCM_TOKEN
+(
+  ID             VARCHAR2(25 BYTE),
+  TOKEN          VARCHAR2(255 BYTE),
+  REFRESHED_ON   DATE,
+  DELETED_ON     DATE,
+  LAST_MODIFIED  VARCHAR2(18 BYTE)
+);
+
+--------------------------------------------------------------------------------------------------
+
+
+------------------------------------ Library Moved Binding Type  -------------------------------------------
+
+ALTER TABLE ITEMS
+    ADD BINDING_TYPE NUMBER;
+
+
+UPDATE ITEMS ITEM SET BINDING_TYPE = (SELECT BINDING_TYPE FROM RECORDS REC WHERE REC.MFN = ITEM.MFN);
+
+
+ALTER TABLE RECORDS
+    DROP COLUMN BINDING_TYPE;
+
+-----------------------------------------------------------------------------------------------------------
+
+----------------------------------- Library Moving Paper Quality -------------------------------------------
+
+alter table items
+ add PAPER_QUALITY VARCHAR2(100 BYTE);
+
+update items item set PAPER_QUALITY = ( select substr(
+physical_desc,
+INSTR(physical_desc,'paperQuality')+15,
+length(physical_desc)-
+(INSTR(physical_desc,'paperQuality')+16)
+) as paper_quality from records rec where physical_desc is not null and REC.MFN = ITEM.MFN)
+
+
+Update records set physical_desc=replace(physical_desc,',"paperQuality":"'||substr(
+physical_desc,
+INSTR(physical_desc,'paperQuality')+15,
+length(physical_desc)-
+(INSTR(physical_desc,'paperQuality')+16)
+)||'"') where physical_desc is not null;
+
+------------------------------------------------------------------------------------------------------------
+
+
+----------------------------------------- AOI Table Altered -------------------------------------------
+
+ALTER TABLE EMP_AOI_INFO
+    ADD AOI VARCHAR2(50 BYTE);
+
+
+ALTER TABLE EMP_AOI_INFO
+    DROP COLUMN AOI_ID;
+
+-------------------------------------------------------------------------------------------------------------
+
+
+----------------------------------------------------------------------------------------------------------
+
+
+SELECT MFN,COUNT(MFN) FROM RECORDS GROUP BY MFN HAVING COUNT(MFN)>1
+
+UPDATE RECORDS SET NEW_MFN=MFN;
+
+UPDATE RECORDS SET MFN=NEW_MFN;
+
+SELECT * FROM RECORDS ORDER BY MFN_ORG DESC;
+
+
+
+
+
+CREATE SEQUENCE SQN_RECORD
+  START WITH 1
+  MAXVALUE 9999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+
+declare
+  type ridlist is table of NUMBER index by pls_integer;
+      l_rowid ridlist;
+    begin
+      select MFN_ORG
+      bulk collect into l_rowid
+      from RECORDS
+      order by TITLE;
+
+     forall i in 1 .. l_rowid.count
+       update RECORDS set NEW_MFN = SQN_RECORD.nextval
+       where MFN_ORG = l_rowid(i);
+   end;
+   /
+
+ ------------------------------------------------------------------------------------------------

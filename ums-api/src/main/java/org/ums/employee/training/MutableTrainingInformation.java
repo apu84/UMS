@@ -5,6 +5,8 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.mutable.MutableLastModifier;
 import org.ums.enums.registrar.TrainingCategory;
 
+import java.util.Date;
+
 public interface MutableTrainingInformation extends TrainingInformation, Editable<Long>, MutableIdentifier<Long>,
     MutableLastModifier {
 
@@ -14,9 +16,9 @@ public interface MutableTrainingInformation extends TrainingInformation, Editabl
 
   void setTrainingInstitute(final String pTrainingInstitute);
 
-  void setTrainingFromDate(final String pTrainingFromDate);
+  void setTrainingFromDate(final Date pTrainingFromDate);
 
-  void setTrainingToDate(final String pTrainingToDate);
+  void setTrainingToDate(final Date pTrainingToDate);
 
   void setTrainingDuration(final int pTrainingDuration);
 

@@ -91,4 +91,8 @@ public interface AccountTransaction extends Serializable, EditType<MutableAccoun
   String getModifierName();
 
   String getMessage();
+
+  String getChequeNo();
+
+  Date getChequeDate();
 }

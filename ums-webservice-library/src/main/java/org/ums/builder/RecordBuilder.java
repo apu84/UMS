@@ -1,30 +1,22 @@
 package org.ums.builder;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jdk.nashorn.internal.parser.JSONParser;
-import org.apache.solr.client.solrj.beans.Field;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.dto.library.ImprintDto;
-import org.ums.domain.model.immutable.library.Contributor;
 import org.ums.domain.model.immutable.library.Record;
 import org.ums.domain.model.mutable.library.MutableRecord;
 import org.ums.enums.common.Language;
-import org.ums.enums.library.*;
+import org.ums.enums.library.JournalFrequency;
+import org.ums.enums.library.MaterialType;
+import org.ums.enums.library.RecordStatus;
 import org.ums.manager.library.PublisherManager;
 import org.ums.manager.library.RecordManager;
-import org.ums.persistent.model.library.PersistentPublisher;
-import org.ums.persistent.model.library.PersistentRecord;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
-import javax.sound.midi.Soundbank;
 import javax.ws.rs.core.UriInfo;
-import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by Ifti on 19-Feb-17.
@@ -47,9 +39,6 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     pBuilder.add("materialTypeName", pReadOnly.getMaterialType() == null ? "Unknown" : pReadOnly.getMaterialType()
         .getLabel());
     pBuilder.add("status", pReadOnly.getRecordStatus() == null ? 101101 : pReadOnly.getRecordStatus().getId());
-    pBuilder.add("bindingType", pReadOnly.getBookBindingType() == null ? 101101 : pReadOnly.getBookBindingType()
-        .getId());
-    pBuilder.add("acqType", pReadOnly.getAcquisitionType() == null ? 101101 : pReadOnly.getAcquisitionType().getId());
     pBuilder.add("title", pReadOnly.getTitle());
     pBuilder.add("subTitle", pReadOnly.getSubTitle() == null ? "" : pReadOnly.getSubTitle());
     pBuilder.add("gmd", pReadOnly.getGmd() == null ? "" : pReadOnly.getGmd());
@@ -117,10 +106,6 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
 
     try {
 
-      pMutable.setBookBindingType(pJsonObject.getInt("bindingType") == 101101 ? null : BookBindingType.get(pJsonObject
-          .getInt("bindingType")));
-      pMutable.setAcquisitionType(pJsonObject.getInt("acqType") == 101101 ? null : AcquisitionType.get(pJsonObject
-          .getInt("acqType")));
       if(pJsonObject.containsKey("frequency"))
         pMutable.setFrequency(pJsonObject.getInt("frequency") == 101101 ? null : JournalFrequency.get(pJsonObject
             .getInt("frequency")));

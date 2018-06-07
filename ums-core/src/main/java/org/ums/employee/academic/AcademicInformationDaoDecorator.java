@@ -7,28 +7,14 @@ import java.util.List;
 public class AcademicInformationDaoDecorator extends
     ContentDaoDecorator<AcademicInformation, MutableAcademicInformation, Long, AcademicInformationManager> implements
     AcademicInformationManager {
+
   @Override
-  public int saveAcademicInformation(List<MutableAcademicInformation> pMutableAcademicInformation) {
-    return getManager().saveAcademicInformation(pMutableAcademicInformation);
+  public List<AcademicInformation> get(String pEmployeeId) {
+    return getManager().get(pEmployeeId);
   }
 
   @Override
-  public List<AcademicInformation> getEmployeeAcademicInformation(String pEmployeeId) {
-    return getManager().getEmployeeAcademicInformation(pEmployeeId);
-  }
-
-  @Override
-  public int deleteAcademicInformation(String pEmployeeId) {
-    return getManager().deleteAcademicInformation(pEmployeeId);
-  }
-
-  @Override
-  public int updateAcademicInformation(List<MutableAcademicInformation> pMutableAcademicInformation) {
-    return getManager().updateAcademicInformation(pMutableAcademicInformation);
-  }
-
-  @Override
-  public int deleteAcademicInformation(List<MutableAcademicInformation> pMutableAcademicInformation) {
-    return getManager().deleteAcademicInformation(pMutableAcademicInformation);
+  public boolean exists(String pEmployeeId) {
+    return getManager().exists(pEmployeeId);
   }
 }

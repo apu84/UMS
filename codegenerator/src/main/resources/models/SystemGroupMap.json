@@ -1,0 +1,33 @@
+{
+  "model": {
+    "name": "SystemGroupMap",
+    "package": "org.ums.domain.model.immutable",
+    "fields": [
+      {
+        "id": {
+          "type": "Long",
+          "idType": true
+        }
+      },
+      {
+        "groupType": "GroupType"
+      },
+      {
+        "Group": {
+          "type": "Ref",
+          "reference": {
+            "name": "Group",
+            "package": "org.ums.domain.model.immutable.accounts",
+            "id": {
+              "type": "Long"
+            },
+            "manager": {
+              "name": "GroupManager",
+              "package": "org.ums.manager.accounts"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

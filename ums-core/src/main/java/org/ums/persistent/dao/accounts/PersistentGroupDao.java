@@ -1,5 +1,6 @@
 package org.ums.persistent.dao.accounts;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.*;
@@ -28,10 +29,13 @@ public class PersistentGroupDao extends GroupDaoDecorator {
 
   private String INSERT_ONE =
       "insert into mst_group (id,  group_code, group_name, main_group, reserved_flag,"
-          + " flag, tax_limit, tds_percent, default_comp, stat_flag, stat_up_flag, modified_date, modified_by, last_modified)"
+          + " flag, tax_limit, tds_percent, default_comp, stat_flag, stat_up_flag, modified_date, modified_by, display_code, last_modified)"
           + " values (:id, :groupCode, :groupName, :mainGroup, :reservedFlag, "
-          + ":flag, :taxLimit, :tdsPercent, :defaultComp, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy,"
+          + ":flag, :taxLimit, :tdsPercent, :defaultComp, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy, :displayCode,"
           + getLastModifiedSql() + ")";
+  private String UPDATE_ONE =
+      "update MST_GROUP set GROUP_CODE=:groupCode, GROUP_NAME=:groupName, MAIN_GROUP=:mainGroup, DISPLAY_CODE=:displayCode, LAST_MODIFIED="
+          + getLastModifiedSql() + " where id=:id";
 
   public PersistentGroupDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate,
       IdGenerator pIdGenerator) {
@@ -42,6 +46,8 @@ public class PersistentGroupDao extends GroupDaoDecorator {
 
   @Override
   public List<Group> getExcludingMainGroupList(List<String> pMainGroupCodeList) {
+    if(pMainGroupCodeList.size() == 0)
+      return null;
     String query =
         "select * from MST_GROUP where GROUP_CODE in ( "
             + "select DISTINCT group_code from "
@@ -59,6 +65,8 @@ public class PersistentGroupDao extends GroupDaoDecorator {
 
   @Override
   public List<Group> getIncludingMainGroupList(List<String> pMainGroupCodeList) {
+    if(pMainGroupCodeList.size() == 0)
+      return null;
     String query =
         "select * from MST_GROUP where GROUP_CODE in ( "
             + "select DISTINCT group_code from "
@@ -83,15 +91,21 @@ public class PersistentGroupDao extends GroupDaoDecorator {
   @Override
   public Group get(Long pId) {
     String sql = "select * from mst_group where id= :id";
-    SqlParameterSource namedParameters = new MapSqlParameterSource("id", pId);
-    return this.mNamedParameterJdbcTemplate.queryForObject(sql, namedParameters, new PersistentGroupRowMapper());
+    try {
+      SqlParameterSource namedParameters = new MapSqlParameterSource("id", pId);
+      return this.mNamedParameterJdbcTemplate.queryForObject(sql, namedParameters, new PersistentGroupRowMapper());
+    } catch(EmptyResultDataAccessException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   @Override
-  public List<Group> getGroups(Group pGroup) {
-    String query = "select * from mst_group where main_group=:mainGroup";
-    SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(pGroup);
-    return this.mNamedParameterJdbcTemplate.query(query, namedParameters, new PersistentGroupRowMapper());
+  public List<Group> getByMainGroup(Group pGroup) {
+    String query = "select * from mst_group where main_group=:mainGroup order by to_number(group_code)";
+    Map parameterMap = new HashMap();
+    parameterMap.put("mainGroup", pGroup.getMainGroup());
+    return this.mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentGroupRowMapper());
   }
 
   @Override
@@ -101,7 +115,9 @@ public class PersistentGroupDao extends GroupDaoDecorator {
 
   @Override
   public int update(MutableGroup pMutable) {
-    return super.update(pMutable);
+    String query = UPDATE_ONE;
+    SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(pMutable);
+    return this.mNamedParameterJdbcTemplate.update(query, namedParameters);
   }
 
   @Override
@@ -126,8 +142,6 @@ public class PersistentGroupDao extends GroupDaoDecorator {
   public Long create(MutableGroup pMutable) {
     String query = INSERT_ONE;
     // Map<String, Object> namedParameters = convertObjectToParamMap(pMutable);
-    Long id = mIdGenerator.getNumericId();
-    pMutable.setStringId(id);
     SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(pMutable);
     return new Long(mNamedParameterJdbcTemplate.update(query, namedParameters));
   }
@@ -145,11 +159,30 @@ public class PersistentGroupDao extends GroupDaoDecorator {
     return super.exists(pId);
   }
 
+  Map createOrUpdateParameter(MutableGroup pMutableGroup) {
+    Map parameterMap = new HashMap();
+    parameterMap.put("id", pMutableGroup.getId());
+    parameterMap.put("groupCode", pMutableGroup.getGroupCode());
+    parameterMap.put("groupName", pMutableGroup.getGroupName());
+    parameterMap.put("mainGroup", pMutableGroup.getMainGroup());
+    parameterMap.put("reservedFlag", pMutableGroup.getReservedFlag());
+    parameterMap.put("flag", pMutableGroup.getFlag());
+    parameterMap.put("taxLimit", pMutableGroup.getTaxLimit());
+    parameterMap.put("tdsPercent", pMutableGroup.getTdsPercent());
+    parameterMap.put("defaultComp", pMutableGroup.getCompCode());
+    parameterMap.put("statFlag", pMutableGroup.getStatFlag());
+    parameterMap.put("statUpFlag", pMutableGroup.getStatUpFlag());
+    parameterMap.put("modifiedDate", pMutableGroup.getModifiedDate());
+    parameterMap.put("modifiedBy", pMutableGroup.getModifiedBy());
+    parameterMap.put("displayCode", pMutableGroup.getDisplayCode());
+    return parameterMap;
+  }
+
   class PersistentGroupRowMapper implements RowMapper<Group> {
     @Override
     public Group mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableGroup group = new PersistentGroup();
-      group.setStringId(rs.getLong("id"));
+      group.setId(rs.getLong("id"));
       group.setCompCode(rs.getString("comp_code"));
       group.setGroupCode(rs.getString("group_code"));
       group.setGroupName(rs.getString("group_name"));
@@ -163,6 +196,7 @@ public class PersistentGroupDao extends GroupDaoDecorator {
       group.setStatUpFlag(rs.getString("stat_up_flag"));
       group.setModifiedDate(rs.getDate("modified_date"));
       group.setModifiedBy(rs.getString("modified_by"));
+      group.setDisplayCode(rs.getString("display_code"));
       group.setLastModified(rs.getString("last_modified"));
       return group;
     }

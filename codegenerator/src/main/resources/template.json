@@ -1,48 +1,41 @@
 {
   "model": {
-    "name": "BranchUser",
-    "package": "org.ums.bank",
+    "name": "SystemAccountMap",
+    "package": "org.ums.domain.model.immutable",
     "fields": [
       {
         "id": {
-          "type": "String",
+          "type": "Long",
           "idType": true
         }
       },
       {
-        "branch": {
-          "type": "Ref",
-          "reference": {
-            "name": "Branch",
-            "package": "org.ums.bank",
-            "id": {
-              "type": "String"
-            },
-            "manager": {
-              "name": "BranchManager",
-              "package": "org.ums.bank"
-            }
-          }
-        }
+        "groupType": "AccountType"
       },
       {
-        "name": "String"
-      },
-      {
-        "designation": {
+        "Account": {
           "type": "Ref",
           "reference": {
-            "name": "BankDesignation",
-            "package": "org.ums.bank",
+            "name": "Account",
+            "package": "org.ums.domain.model.immutable.accounts",
             "id": {
               "type": "Long"
             },
             "manager": {
-              "name": "BankDesignationManager",
-              "package": "org.ums.bank"
+              "name": "AccountManager",
+              "package": "org.ums.manager.accounts"
             }
           }
         }
+      },
+      {
+        "modifiedBy": "String"
+      },
+      {
+        "modifierName": "String"
+      },
+      {
+        "modifiedDate": "Date"
       }
     ]
   }

@@ -45,6 +45,22 @@ public class AccountsContext {
   }
 
   @Bean
+  SystemGroupMapManager systemGroupMapManager() {
+    SystemGroupMapCache systemGroupMapCache = new SystemGroupMapCache(mCacheFactory.getCacheManager());
+    systemGroupMapCache.setManager(new PersistentSystemGroupMapDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator));
+    return systemGroupMapCache;
+  }
+
+  @Bean
+  SystemAccountMapManager systemAccountMapManager() {
+    SystemAccountMapCache systemAccountMapCache = new SystemAccountMapCache(mCacheFactory.getCacheManager());
+    systemAccountMapCache.setManager(new PersistentSystemAccountMapDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator));
+    return systemAccountMapCache;
+  }
+
+  @Bean
   MonthManager monthManager() {
     MonthCache monthCache = new MonthCache(mCacheFactory.getCacheManager());
     monthCache.setManager(new PersistentMonthDao(mTemplateFactory.getAccountsJdbcTemplate(),

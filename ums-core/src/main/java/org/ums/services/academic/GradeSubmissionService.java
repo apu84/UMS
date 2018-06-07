@@ -129,7 +129,10 @@ public class GradeSubmissionService {
             recheckStatus == null ? pLastDateForPreparer : getOverriddenDeadline(recheckStatus,
                 pLastDateForScrutinizer, pLastDateForHead, pLastDateForCoE);
         if(overriddenDeadline != null && currentDate.after(overriddenDeadline)) {
-          throw new ValidationException("Grade Submission Deadline is Over.");
+          String courseInfo =
+              String.format("SemesterId: %d; Course Id: %s; ExamType: %s; Role: %s; Date: %s", pSemesterId, pCourseId,
+                  pExamType.getLabel(), pRole, overriddenDeadline.toString());
+          throw new ValidationException("Grade Submission Deadline is Over. " + courseInfo);
         }
         break;
       case Constants.GRADE_SCRUTINIZER:
@@ -142,7 +145,10 @@ public class GradeSubmissionService {
             recheckStatus == null ? pLastDateForScrutinizer : getOverriddenDeadline(recheckStatus,
                 pLastDateForScrutinizer, pLastDateForHead, pLastDateForCoE);
         if(overriddenDeadline != null && currentDate.after(overriddenDeadline)) {
-          throw new ValidationException("Grade Submission Deadline is Over.");
+          String courseInfo =
+              String.format("SemesterId: %d; Course Id: %s; ExamType: %s; Role: %s; Date: %s", pSemesterId, pCourseId,
+                  pExamType.getLabel(), pRole, overriddenDeadline.toString());
+          throw new ValidationException("Grade Submission Deadline is Over. " + courseInfo);
         }
         break;
       case Constants.HEAD:
@@ -155,7 +161,10 @@ public class GradeSubmissionService {
             recheckStatus == null ? pLastDateForHead : getOverriddenDeadline(recheckStatus, pLastDateForScrutinizer,
                 pLastDateForHead, pLastDateForCoE);
         if(overriddenDeadline != null && currentDate.after(overriddenDeadline)) {
-          throw new ValidationException("Grade Submission Deadline is Over.");
+          String courseInfo =
+              String.format("SemesterId: %d; Course Id: %s; ExamType: %s; Role: %s; Date: %s", pSemesterId, pCourseId,
+                  pExamType.getLabel(), pRole, overriddenDeadline.toString());
+          throw new ValidationException("Grade Submission Deadline is Over. " + courseInfo);
         }
         break;
     }
@@ -181,8 +190,12 @@ public class GradeSubmissionService {
     // Checking the role, requested from client side is valid for the user who is trying to do some
     // operation on grades
     // Role Validation
+    mLogger.debug("[{}] Course current status: {}", SecurityUtils.getSubject().getPrincipal().toString(), actualStatus
+        .getStatus().getLabel());
     String actualActingRole = getActingRoleForCourse(actualStatus.getStatus());
     if(!actingRoleForCurrentUser.equalsIgnoreCase(actualActingRole)) {
+      mLogger.debug("[{}] Current user's role: {}, Role should be: {}", SecurityUtils.getSubject().getPrincipal()
+          .toString(), actingRoleForCurrentUser, actualActingRole);
       throw new ValidationException("Sorry, you are not allowed for this operation.");
     }
     // Deadline && Part Info Validation

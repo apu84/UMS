@@ -6,6 +6,7 @@ import org.ums.domain.model.common.LastModifier;
 import org.ums.enums.registrar.TrainingCategory;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public interface TrainingInformation extends Serializable, EditType<MutableTrainingInformation>, Identifier<Long>,
     LastModifier {
@@ -16,9 +17,9 @@ public interface TrainingInformation extends Serializable, EditType<MutableTrain
 
   String getTrainingInstitute();
 
-  String getTrainingFromDate();
+  Date getTrainingFromDate();
 
-  String getTrainingToDate();
+  Date getTrainingToDate();
 
   int getTrainingDuration();
 

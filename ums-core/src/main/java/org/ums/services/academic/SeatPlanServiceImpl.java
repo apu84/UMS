@@ -439,11 +439,11 @@ public class SeatPlanServiceImpl implements SeatPlanService {
         if(examRoutineDto.getExamDate().equals(dateIndicatorForIteration)) {
           Map<Integer, List<SeatPlanGroup>> secondaryGroupAndProgramMap = groupWithProgramAndCourse;
           Course course = mCourseManager.get(examRoutineDto.getCourseId());
-          Syllabus syllabus = mSyllabusManager.get(course.getSyllabusId());
           boolean foundOccurrenceWithSameDateTwice = false;
 
           for(SeatPlanGroup iterate : secondaryGroupAndProgramMap.get(group)) {
-            if(iterate.getProgram().getId() == syllabus.getProgramId() && iterate.getAcademicYear() == course.getYear()
+            if(iterate.getProgram().getId() == course.getOfferedToProgramId()
+                && iterate.getAcademicYear() == course.getYear()
                 && iterate.getAcademicSemester() == course.getSemester()) {
               foundOccurrenceWithSameDateTwice = true;
               break;
@@ -465,8 +465,6 @@ public class SeatPlanServiceImpl implements SeatPlanService {
         else {
 
           Course course = mCourseManager.get(examRoutineDto.getCourseId());
-          Syllabus syllabus = mSyllabusManager.get(course.getSyllabusId());
-
           boolean foundMatch = false;
           for(int groupIteration = 1; groupIteration <= groupWithProgramAndCourse.size(); groupIteration++) {
             List<SeatPlanGroup> seatPlanGroupListForFindingIfTheGroupIsPresent =
@@ -474,7 +472,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
             for(SeatPlanGroup seatPlanGroupForIterationForFinding : seatPlanGroupListForFindingIfTheGroupIsPresent) {
 
-              if(seatPlanGroupForIterationForFinding.getProgram().getId() == syllabus.getProgramId()
+              if(seatPlanGroupForIterationForFinding.getProgram().getId() == course.getOfferedToProgramId()
                   && seatPlanGroupForIterationForFinding.getAcademicYear() == course.getYear()
                   && seatPlanGroupForIterationForFinding.getAcademicSemester() == course.getSemester()) {
 

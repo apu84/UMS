@@ -14,7 +14,10 @@ import org.ums.bank.BankManager;
 import org.ums.bank.branch.BranchCache;
 import org.ums.bank.branch.BranchDao;
 import org.ums.bank.branch.BranchManager;
-import org.ums.bank.branch.user.*;
+import org.ums.bank.branch.user.BranchUserCache;
+import org.ums.bank.branch.user.BranchUserDao;
+import org.ums.bank.branch.user.BranchUserManager;
+import org.ums.bank.branch.user.BranchUserPostTransaction;
 import org.ums.bank.designation.BankDesignationCache;
 import org.ums.bank.designation.BankDesignationDao;
 import org.ums.bank.designation.BankDesignationManager;
@@ -54,10 +57,7 @@ import org.ums.services.NotificationGenerator;
 import org.ums.services.NotificationGeneratorImpl;
 import org.ums.services.email.NewIUMSAccountInfoEmailService;
 import org.ums.solr.repository.transaction.EmployeeTransaction;
-import org.ums.statistics.DBLogger;
-import org.ums.statistics.JdbcTemplateFactory;
-import org.ums.statistics.QueryLogger;
-import org.ums.statistics.TextLogger;
+import org.ums.statistics.*;
 import org.ums.twofa.*;
 import org.ums.usermanagement.application.ApplicationCache;
 import org.ums.usermanagement.application.ApplicationDao;
@@ -76,7 +76,6 @@ import org.ums.usermanagement.userView.UserViewCache;
 import org.ums.usermanagement.userView.UserViewManager;
 import org.ums.util.Constants;
 
-import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,6 +86,9 @@ public class CoreContext {
 
   @Autowired
   JdbcTemplateFactory mTemplateFactory;
+
+  @Autowired
+  NamedParameterJdbcTemplateFactory mNamedParameterJdbcTemplateFactory;
 
   @Autowired
   IdGenerator mIdGenerator;
@@ -311,7 +313,8 @@ public class CoreContext {
   @Bean
   LmsApplicationManager lmsApplicationManager() {
     LmsApplicationCache lmsApplicationCache = new LmsApplicationCache(mCacheFactory.getCacheManager());
-    lmsApplicationCache.setManager(new PersistentLmsApplicationDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    lmsApplicationCache.setManager(new PersistentLmsApplicationDao(mTemplateFactory.getJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getNamedParameterJdbcTemplate(), mIdGenerator));
     return lmsApplicationCache;
   }
 
@@ -400,10 +403,10 @@ public class CoreContext {
   }
 
   @Bean
-  AcademicDegreeManager academicDegreeManager() {
-    AcademicDegreeCache academicDegreeCache = new AcademicDegreeCache(mCacheFactory.getCacheManager());
-    academicDegreeCache.setManager(new PersistentAcademicDegreeDao(mTemplateFactory.getJdbcTemplate()));
-    return academicDegreeCache;
+  DegreeTitleManager degreeTitleManager() {
+    DegreeTitleCache degreeTitleCache = new DegreeTitleCache(mCacheFactory.getCacheManager());
+    degreeTitleCache.setManager(new PersistentDegreeTitleDao(mTemplateFactory.getJdbcTemplate()));
+    return degreeTitleCache;
   }
 
   @Bean
@@ -532,5 +535,10 @@ public class CoreContext {
     BranchUserCache branchUserCache = new BranchUserCache(mCacheFactory.getCacheManager());
     branchUserCache.setManager(branchDao);
     return branchUserCache;
+  }
+
+  @Bean
+  FCMTokenManager fcmTokenManager() {
+    return new PersistentFCMTokenDao(mTemplateFactory.getJdbcTemplate());
   }
 }

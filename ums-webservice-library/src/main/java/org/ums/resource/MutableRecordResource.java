@@ -1,13 +1,15 @@
 package org.ums.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.ums.domain.model.immutable.library.Publisher;
 import org.ums.domain.model.immutable.library.Record;
-import org.ums.domain.model.mutable.library.MutablePublisher;
 import org.ums.domain.model.mutable.library.MutableRecord;
+import org.ums.logs.DeleteLog;
+import org.ums.logs.PostLog;
+import org.ums.logs.PutLog;
 import org.ums.resource.helper.RecordResourceHelper;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -25,19 +27,25 @@ public class MutableRecordResource extends Resource {
 
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response updateRecord(final @PathParam("object-id") Long pObjectId, final @Context Request pRequest,
+  @PutLog(message = "Updated a library record")
+  public Response updateRecord(@Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("object-id") Long pObjectId, final @Context Request pRequest,
       final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) throws Exception {
     return mResourceHelper.put(pObjectId, pRequest, pIfMatchHeader, pJsonObject);
   }
 
   @POST
-  public Response createRecord(final JsonObject pJsonObject) throws Exception {
+  @PostLog(message = "Created a library record")
+  public Response createRecord(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject)
+      throws Exception {
     return mResourceHelper.post(pJsonObject, mUriInfo);
   }
 
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response deleteRecord(final @PathParam("object-id") String pMfnNo) throws Exception {
+  @DeleteLog(message = "Delete a library record")
+  public Response deleteRecord(@Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("object-id") String pMfnNo) throws Exception {
     return mHelper.deleteRecord(pMfnNo);
   }
 }

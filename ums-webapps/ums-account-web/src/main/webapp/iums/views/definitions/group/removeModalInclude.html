@@ -8,27 +8,48 @@
                 <h4 class="modal-title">Remove Group?</h4>
             </div>
             <div class="modal-body">
-                <div class="col-md-12">
-                    <table class="table table-bordered">
-                        <thead>
-                        <th>Group Name</th>
-                        <th>Main Group Of</th>
-                        <th>Sub Ledger</th>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>{{vm.removedGroup.groupName}}</td>
-                            <td>
-                                {{vm.removedGroup.mainGroupObject.groupName}}
-                            </td>
-                            <td>
-                                <label><input type="checkbox" ng-disabled="true"
-                                              ng-model="vm.removedGroup.flagBoolValue"></label>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <form class="form-horizontal" name="addForm">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="groupName">Group Name</label>
+                        <div class="col-sm-6">
+                            <input ng-disabled="true" type="text" ng-model="vm.removedGroup.groupName"
+                                   class="form-control" name="groupName" required/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4">Main Group</label>
+                        <div class="col-sm-6">
+                            <ui-select theme="bootstrap"
+                                       data-ng-model="vm.removedGroup.mainGroupObject" ng-disabled="true"
+
+                            >
+                                <ui-select-match placeholder="Select Main Group" ng-disabled="true">
+                                    {{vm.removedGroup.mainGroupObject.groupName}}
+                                </ui-select-match>
+                                <ui-select-choices ng-disabled="true" class="ui-select"
+                                                   repeat="g in vm.groups|filter:$select.search" required
+                                                   name="mainGroup" for="mainGroup">
+                                    <small ng-bind-html="g.groupName | highlight:$select.search"></small>
+                                </ui-select-choices>
+                                <!-- <option ng-repeat="g in vm.groups"
+                                         value="{{g.groupCode}}">{{g.groupName}}
+                                 </option>-->
+                            </ui-select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="displayCode">Display Code</label>
+                        <div class="col-sm-6">
+                            <input ng-disabled="true" type="text" ng-model="vm.removedGroup.displayCode"
+                                   class="form-control" name="displayCode" required/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="subLedger">Sub ledger</label>
+                        <label class="control-label col-sm-6"><input ng-disabled="true" type="checkbox"
+                                                                     ng-model="vm.removedGroup.flagBoolValue"></label>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" ng-click="vm.remove()" data-dismiss="modal">

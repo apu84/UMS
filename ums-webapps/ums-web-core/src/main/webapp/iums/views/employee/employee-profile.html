@@ -1,9 +1,4 @@
 <style>
-    .row {
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-
     .require {
         content: "*";
         color: red;
@@ -12,47 +7,30 @@
     .form-control {
         border-radius: 5px !important;
     }
+    .btn{
+        border-radius: 5px !important;
+    }
     .underlineBox{
         border-bottom: 1px dashed #808080a3;
     }
+    .panel > .panel-heading {
+        font-size: 15px;
+
+    }
 </style>
-<div data-ng-show="vm.tabs">
+<div>
     <ul id="iTab" class="nav nav-tabs nav-justified">
-        <li class="active"><a href="javascript:void(0)" data-ng-click="vm.showTab('personal')" data-toggle="tab">Personal</a></li>
-        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('academic')" data-toggle="tab">Academic</a></li>
-        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('publication')" data-toggle="tab">Publication</a></li>
-        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('training')" data-toggle="tab">Training</a></li>
-        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('award')" data-toggle="tab">Award/Honor</a></li>
-        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('experience')" data-toggle="tab">Experience</a></li>
-        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('additional')" data-toggle="tab">Additional</a></li>
-        <li><a href="javascript:void(0)" data-ng-click="vm.showTab('service')" data-toggle="tab">Service</a></li>
+        <li ng-class="{active: vm.state.current.url === '/personal'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('personal')" data-toggle="tab">Personal</a></li>
+        <li ng-class="{active: vm.state.current.url === '/academic'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('academic')" data-toggle="tab">Education</a></li>
+        <li ng-class="{active: vm.state.current.url === '/publication'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('publication')" data-toggle="tab">Publication</a></li>
+        <li ng-class="{active: vm.state.current.url === '/training'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('training')" data-toggle="tab">Training</a></li>
+        <li ng-class="{active: vm.state.current.url === '/award'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('award')" data-toggle="tab">Award/Honor</a></li>
+        <li ng-class="{active: vm.state.current.url === '/experience'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('experience')" data-toggle="tab">Experience</a></li>
+        <li ng-class="{active: vm.state.current.url === '/additional'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('additional')" data-toggle="tab">Additional</a></li>
+        <li ng-class="{active: vm.state.current.url === '/service'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('service')" data-toggle="tab">Service</a></li>
     </ul>
 </div>
 
-<div id="iTabContent" class="tab-content responsive">
-    <div id="personal" data-ng-show="vm.personal" style="min-height: 490px;">
-        <div data-ng-include="src='views/employee/personal-information.html'"></div>
-    </div>
-    <div id="academic" data-ng-show="vm.academic" style="min-height: 490px;">
-        <div data-ng-include="src='views/employee/academic-information.html'"></div>
-    </div>
-    <div id="publication" data-ng-show="vm.publication" style="min-height: 490px;">
-        <div data-ng-include="src='views/employee/publication-information.html'"></div>
-    </div>
-    <div id="training" data-ng-show="vm.training" style="min-height: 490px;">
-        <div data-ng-include="src='views/employee/training-information.html'"></div>
-    </div>
-    <div id="award" data-ng-show="vm.award" style="min-height: 490px;">
-        <div data-ng-include="src='views/employee/award-information.html'"></div>
-    </div>
-    <div id="experience" data-ng-show="vm.experience" style="min-height: 490px;">
-        <div data-ng-include="src='views/employee/experience-information.html'"></div>
-    </div>
-    <div id="additional" data-ng-show="vm.additional" style="min-height: 490px;">
-        <div data-ng-include="src='views/employee/additional-information.html'"></div>
-    </div>
-    <div id="service" data-ng-show="vm.service" style="min-height: 490px;">
-        <div data-ng-include="src='views/employee/service-information.html'"></div>
-    </div>
+<div class="tab-content responsive">
+    <div ui-view></div>
 </div>
-

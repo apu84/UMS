@@ -25,8 +25,8 @@ public class GroupCache extends ContentCache<Group, MutableGroup, Long, GroupMan
   }
 
   @Override
-  public List<Group> getGroups(Group pGroup) {
-    return getManager().getGroups(pGroup);
+  public List<Group> getByMainGroup(Group pGroup) {
+    return getManager().getByMainGroup(pGroup);
   }
 
   @Override

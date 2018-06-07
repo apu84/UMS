@@ -13,22 +13,13 @@ public class MarksSubmissionStatusAggregator extends MarksSubmissionStatusDaoDec
   @Override
   public List<MarksSubmissionStatus> get(Integer pProgramId, Integer pSemesterId) {
     List<MarksSubmissionStatus> marksSubmissionStatuses = super.get(pProgramId, pSemesterId);
-    List<MarksSubmissionStatus> filteredList = marksSubmissionStatuses.stream()
-        .filter(pResult -> pResult.getCourse().getSyllabus().getProgramId() == pProgramId)
-        .collect(Collectors.toList());
-
-    return removeDuplicates(filteredList);
+    return removeDuplicates(marksSubmissionStatuses);
   }
 
   @Override
   public List<MarksSubmissionStatus> getByProgramType(Integer pProgramTypeId, Integer pSemesterId) {
-    // Don't need to pass programTypeId, as it is not processed by persistent layer anyway
-    List<MarksSubmissionStatus> marksSubmissionStatuses = super.get(-1, pSemesterId);
-    List<MarksSubmissionStatus> filteredList =
-        marksSubmissionStatuses.stream().filter(pResult -> pResult.getCourse().getSyllabus()
-            .getProgram().getProgramTypeId() == pProgramTypeId).collect(Collectors.toList());
-
-    return removeDuplicates(filteredList);
+    List<MarksSubmissionStatus> marksSubmissionStatuses = super.getByProgramType(pProgramTypeId, pSemesterId);
+    return removeDuplicates(marksSubmissionStatuses);
   }
 
   private List<MarksSubmissionStatus> removeDuplicates(List<MarksSubmissionStatus> pList) {

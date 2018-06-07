@@ -1,9 +1,10 @@
 module ums {
   export interface IGroup {
-    id: number;
+    id: string;
     stringId: string;
     compCode: string;
     groupCode: string;
+    displayCode: string;
     groupName: string;
     mainGroup: string;
     mainGroupObject: IGroup;
@@ -15,6 +16,7 @@ module ums {
     statusFlag: string;
     modifiedDate: string;
     modifiedBy: string;
+    groupNameAndMainGroupName: string;
   }
 
   export enum GroupFlag{

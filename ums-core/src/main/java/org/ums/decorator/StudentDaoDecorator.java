@@ -11,6 +11,11 @@ import java.util.Optional;
 public class StudentDaoDecorator extends ContentDaoDecorator<Student, MutableStudent, String, StudentManager> implements
     StudentManager {
   @Override
+  public int updateStudentsSection(List<MutableStudent> pStudents) {
+    return getManager().updateStudentsSection(pStudents);
+  }
+
+  @Override
   public List<Student> getStudentListFromStudentsString(String pStudents) {
     return getManager().getStudentListFromStudentsString(pStudents);
   }

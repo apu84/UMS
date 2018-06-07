@@ -83,7 +83,7 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
   ThanaManager mThanaManager;
 
   @Autowired
-  AcademicDegreeManager mAcademicDegreeManager;
+  DegreeTitleManager mDegreeTitleManager;
 
   @Autowired
   AreaOfInterestInformationManager mAreaOfInterestInformationManager;
@@ -109,53 +109,53 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
 
     List<AcademicInformation> academicInformation = new ArrayList<>();
     try {
-      academicInformation = mAcademicInformationManager.getEmployeeAcademicInformation(pEmployeeId);
+      academicInformation = mAcademicInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
 
     List<PublicationInformation> publicationInformation = new ArrayList<>();
     try {
-      publicationInformation = mPublicationInformationManager.getEmployeePublicationInformation(pEmployeeId);
+      publicationInformation = mPublicationInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
 
     List<TrainingInformation> trainingInformation = new ArrayList<>();
     try {
-      trainingInformation = mTrainingInformationManager.getEmployeeTrainingInformation(pEmployeeId);
+      trainingInformation = mTrainingInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
 
     List<AwardInformation> awardInformation = new ArrayList<>();
     try {
-      awardInformation = mAwardInformationManager.getEmployeeAwardInformation(pEmployeeId);
+      awardInformation = mAwardInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
     List<ExperienceInformation> experienceInformation = new ArrayList<>();
     try {
-      experienceInformation = mExperienceInformationManager.getEmployeeExperienceInformation(pEmployeeId);
+      experienceInformation = mExperienceInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
     AdditionalInformation additionalInformation = new PersistentAdditionalInformation();
     try {
-      additionalInformation = mAdditionalInformationManager.getAdditionalInformation(pEmployeeId);
+      additionalInformation = mAdditionalInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
     }
 
     List<AreaOfInterestInformation> areaOfInterestInformation = new ArrayList<>();
     try {
-      areaOfInterestInformation = mAreaOfInterestInformationManager.getAreaOfInterestInformation(pEmployeeId);
+      areaOfInterestInformation = mAreaOfInterestInformationManager.getAll(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
 
     List<ServiceInformation> serviceInformation = new ArrayList<>();
     try {
-      serviceInformation = mServiceInformationManager.getServiceInformation(pEmployeeId);
+      serviceInformation = mServiceInformationManager.get(pEmployeeId);
     } catch(EmptyResultDataAccessException e) {
 
     }
@@ -209,10 +209,9 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
     innerTable.setWidthPercentage(100);
     innerTable.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 
-    String fName = personalInformation.getFirstName() == null ? "" : personalInformation.getFirstName();
-    String lName = personalInformation.getLastName() == null ? "" : personalInformation.getLastName();
+    String name = personalInformation.getName();
     innerTable.addCell(prepareCell(new Chunk(), new PdfPCell(), "Name:", generalFont));
-    innerTable.addCell(prepareCell(new Chunk(), new PdfPCell(), fName + " " + lName, generalFont));
+    innerTable.addCell(prepareCell(new Chunk(), new PdfPCell(), name, generalFont));
     innerTable.addCell(prepareCell(new Chunk(), new PdfPCell(), "Email: ", generalFont));
     String personalEmail = personalInformation.getPersonalEmail() == null ? "" : personalInformation.getPersonalEmail();
     String orgEmail =
@@ -367,7 +366,7 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
     for(AcademicInformation academicInformation1 : academicInformation) {
       chunk = new Chunk();
       chunk.setFont(generalFont);
-      chunk.append(mAcademicDegreeManager.get(academicInformation1.getDegreeId()).getDegreeShortName());
+      /* chunk.append(mDegreeTitleManager.get(academicInformation1.getDegreeLevel()).getTitle()); */
 
       cell = new PdfPCell();
       cell.setBorder(PdfPCell.NO_BORDER);
@@ -497,8 +496,7 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
     for(AreaOfInterestInformation areaOfInterestInformation1 : areaOfInterestInformation) {
       chunk = new Chunk();
       chunk.setFont(generalFont);
-      chunk.append(mAreaOfInterestManager.get(areaOfInterestInformation1.getAreaOfInterestId()).getAreaOfInterest()
-          + "");
+      chunk.append(areaOfInterestInformation1.getAreaOfInterest());
       listItem = new ListItem(chunk);
       list.add(listItem);
     }
@@ -878,8 +876,7 @@ public class EmployeeCVGeneratorImpl implements EmployeeCVGenerator {
 
         List<ServiceInformationDetail> serviceInformationDetails = new ArrayList<>();
         try {
-          serviceInformationDetails =
-              mServiceInformationDetailsManager.getServiceInformationDetail(serviceInformation1.getId());
+          serviceInformationDetails = mServiceInformationDetailsManager.getServiceDetail(serviceInformation1.getId());
         } catch(EmptyResultDataAccessException e) {
         }
 

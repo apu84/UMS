@@ -1,18 +1,17 @@
 package org.ums.employee.experience;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.manager.ContentManager;
 import org.ums.resource.ResourceHelper;
 
-import javax.json.*;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -20,96 +19,58 @@ public class ExperienceInformationResourceHelper extends
     ResourceHelper<ExperienceInformation, MutableExperienceInformation, Long> {
 
   @Autowired
-  ExperienceInformationManager mExperienceInformationManager;
+  ExperienceInformationManager mManager;
 
   @Autowired
-  ExperienceInformationBuilder mExperienceInformationBuilder;
-
-  public JsonObject getExperienceInformation(final String pEmployeeId, final UriInfo pUriInfo) {
-    List<ExperienceInformation> pExperienceInformation = new ArrayList<>();
-    try {
-      pExperienceInformation = mExperienceInformationManager.getEmployeeExperienceInformation(pEmployeeId);
-    } catch(EmptyResultDataAccessException e) {
-
-    }
-    return toJson(pExperienceInformation, pUriInfo);
-  }
-
-  @Transactional
-  public Response saveExperienceInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
-    LocalCache localCache = new LocalCache();
-    JsonArray entries = pJsonObject.getJsonArray("entries");
-    JsonArray experienceJsonArray = entries.getJsonObject(0).getJsonArray("experience");
-    int sizeOfExperienceJsonArray = experienceJsonArray.size();
-
-    List<MutableExperienceInformation> createMutableExperienceInformation = new ArrayList<>();
-    List<MutableExperienceInformation> updateMutableExperienceInformation = new ArrayList<>();
-    List<MutableExperienceInformation> deleteMutableExperienceInformation = new ArrayList<>();
-
-    for(int i = 0; i < sizeOfExperienceJsonArray; i++) {
-      MutableExperienceInformation experienceInformation = new PersistentExperienceInformation();
-      mExperienceInformationBuilder.build(experienceInformation, experienceJsonArray.getJsonObject(i), localCache);
-      if(experienceJsonArray.getJsonObject(i).containsKey("dbAction")) {
-        if(experienceJsonArray.getJsonObject(i).getString("dbAction").equals("Create")) {
-          createMutableExperienceInformation.add(experienceInformation);
-        }
-        else if(experienceJsonArray.getJsonObject(i).getString("dbAction").equals("Update")) {
-          updateMutableExperienceInformation.add(experienceInformation);
-        }
-        else if(experienceJsonArray.getJsonObject(i).getString("dbAction").equals("Delete")) {
-          deleteMutableExperienceInformation.add(experienceInformation);
-        }
-      }
-      else {
-        Response.ResponseBuilder builder = Response.created(null);
-        builder.status(Response.Status.NOT_MODIFIED);
-        return builder.build();
-      }
-    }
-
-    if(createMutableExperienceInformation.size() != 0) {
-      mExperienceInformationManager.saveExperienceInformation(createMutableExperienceInformation);
-    }
-    if(updateMutableExperienceInformation.size() != 0) {
-      mExperienceInformationManager.updateExperienceInformation(updateMutableExperienceInformation);
-    }
-    if(deleteMutableExperienceInformation.size() != 0) {
-      mExperienceInformationManager.deleteExperienceInformation(deleteMutableExperienceInformation);
-    }
-    Response.ResponseBuilder builder = Response.created(null);
-    builder.status(Response.Status.CREATED);
-    return builder.build();
-  }
-
-  private JsonObject toJson(List<ExperienceInformation> pExperienceInformation, UriInfo pUriInfo) {
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-
-    for(ExperienceInformation experienceInformation : pExperienceInformation) {
-      JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-      getBuilder().build(jsonObject, experienceInformation, pUriInfo, localCache);
-      children.add(jsonObject);
-    }
-
-    object.add("entries", children);
-    localCache.invalidate();
-    return object.build();
-  }
+  ExperienceInformationBuilder mBuilder;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, final UriInfo pUriInfo) {
+    LocalCache localCache = new LocalCache();
+    MutableExperienceInformation mutableExperienceInformation = new PersistentExperienceInformation();
+    mBuilder.build(mutableExperienceInformation, pJsonObject.getJsonObject("entries"), localCache);
+    Long id = mManager.create(mutableExperienceInformation);
+    JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+    mBuilder.build(objectBuilder, mManager.get(id), pUriInfo, localCache);
+    localCache.invalidate();
+    return Response.ok(objectBuilder.build()).build();
+  }
+
+  public JsonObject get(final String pEmployeeId, final UriInfo pUriInfo) {
+    if(mManager.exists(pEmployeeId)) {
+      List<ExperienceInformation> experienceInformationList = mManager.get(pEmployeeId);
+      return buildJsonResponse(experienceInformationList, pUriInfo);
+    }
     return null;
+  }
+
+  public Response update(JsonObject pJsonObject, final UriInfo pUriInfo) {
+    LocalCache localCache = new LocalCache();
+    MutableExperienceInformation mutableExperienceInformation = new PersistentExperienceInformation();
+    mBuilder.build(mutableExperienceInformation, pJsonObject.getJsonObject("entries"), localCache);
+    mManager.update(mutableExperienceInformation);
+    JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+    mBuilder.build(objectBuilder, mManager.get(mutableExperienceInformation.getId()), pUriInfo, localCache);
+    localCache.invalidate();
+    return Response.ok(objectBuilder.build()).build();
+  }
+
+  public Response delete(Long id, UriInfo pUriInfo) {
+    LocalCache localCache = new LocalCache();
+    MutableExperienceInformation mutableExperienceInformation = (MutableExperienceInformation) mManager.get(id);
+    mManager.delete(mutableExperienceInformation);
+    localCache.invalidate();
+    return Response.noContent().build();
   }
 
   @Override
   protected ContentManager<ExperienceInformation, MutableExperienceInformation, Long> getContentManager() {
-    return mExperienceInformationManager;
+    return mManager;
   }
 
   @Override
   protected Builder<ExperienceInformation, MutableExperienceInformation> getBuilder() {
-    return mExperienceInformationBuilder;
+    return mBuilder;
   }
 
   @Override

@@ -1,5 +1,7 @@
 package org.ums.bank.designation;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 
@@ -12,6 +14,7 @@ public class PersistentBankDesignation implements MutableBankDesignation {
   private String mLastModified;
 
   @Override
+  @JsonSerialize(using = ToStringSerializer.class)
   public Long getId() {
     return mId;
   }

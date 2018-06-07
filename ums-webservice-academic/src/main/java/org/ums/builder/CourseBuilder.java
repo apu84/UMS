@@ -57,15 +57,9 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
       }
     }
 
-    Syllabus syllabus = (Syllabus) pLocalCache.cache(() -> pReadOnly.getSyllabus(),
-        pReadOnly.getSyllabusId(), Syllabus.class);
-    pBuilder.add("syllabus", pUriInfo.getBaseUriBuilder().path("academic").path("syllabus")
-        .path(String.valueOf(syllabus.getId())).build().toString());
-
-
     if (pReadOnly.getCourseGroupId() > 0) {
-      CourseGroup courseGroup = (CourseGroup) pLocalCache.cache(() -> pReadOnly.getCourseGroup(syllabus.getId()),
-          (syllabus.getId() + pReadOnly.getCourseGroupId()), CourseGroup.class);
+      CourseGroup courseGroup = (CourseGroup) pLocalCache.cache(() -> pReadOnly.getCourseGroup(pReadOnly.getCourseGroupId()),
+          (pReadOnly.getCourseGroupId()), CourseGroup.class);
       if (courseGroup != null) {
         pBuilder.add("group", pUriInfo.getBaseUriBuilder().path("academic")
             .path("courseGroup").path(String.valueOf(courseGroup.getId())).build().toString());
@@ -100,12 +94,8 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
     PersistentDepartment persistentDepartment = new PersistentDepartment();
     persistentDepartment.setId(pJsonObject.getString("offerByDeptId"));
     pMutable.setOfferedBy(persistentDepartment);
+    pMutable.setOfferedToProgramId(pJsonObject.getInt("offerToDeptId"));
 
-    persistentDepartment = new PersistentDepartment();
-    persistentDepartment.setId(pJsonObject.getString("offerToDeptId"));
-    pMutable.setOfferedTo(persistentDepartment);
-
-    pMutable.setSyllabusId(pJsonObject.getString("syllabusId"));
     pMutable.setViewOrder(Integer.parseInt(pJsonObject.getString("viewOrder")));
     Integer groupId =
         StringUtils.isEmpty(pJsonObject.getString("optionalGroupId")) ? Types.NULL : Integer.parseInt(pJsonObject

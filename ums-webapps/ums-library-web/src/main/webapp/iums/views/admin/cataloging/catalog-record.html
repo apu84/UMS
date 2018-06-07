@@ -63,43 +63,6 @@
             </select>
         </div>
 
-        <label class="col-md-1 control-label" for="bindingType">Binding Type</label>
-        <div class="col-md-3">
-            <select style="width: 98%"
-                    data-ng-model="record.bindingType"
-                    id="bindingType"
-                    name="bindingType"
-                    cRequired=" "
-                    ng-disabled="data.readOnlyMode"
-                    ng-class="{'disabledElement': data.readOnlyMode}"
-                    data-convert-to-number>
-                <option data-ng-repeat="binding in data.bindingTypeOptions" value="{{binding.id}}">{{binding.name}}
-                </option>
-            </select>
-        </div>
-        <label class="col-md-1 control-label" for="acqType">Acqui. Type
-            <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png"
-                 height="16" width="16"
-                 style="float: right;cursor: pointer;margin-left: 5px;"
-                 data-toggle="tooltip"
-                 data-placement="top"
-                 title="Acquisition Type"/>
-        </label>
-
-        <div class="col-md-3">
-            <select style="width: 98%"
-                    data-ng-model="record.acqType"
-                    id="acqType"
-                    name="acqType"
-                    cRequired=" "
-                    ng-disabled="data.readOnlyMode"
-                    ng-class="{'disabledElement': data.readOnlyMode}"
-                    data-convert-to-number>
-                <option data-ng-repeat="acqType in data.acquisitionTypeOptions" value="{{acqType.id}}">
-                    {{acqType.name}}
-                </option>
-            </select>
-        </div>
     </div>
     <div class="form-group">
         <label class="col-md-1 control-label" for="title">Title</label>
@@ -644,12 +607,6 @@
                        data-ng-model="record.physicalDescription.dimensions" name="dimensions" id="dimensions"
                        ng-readonly="data.readOnlyMode"/>
 
-            </div>
-            <label class="col-md-1 control-label" for="paperQuality">Paper Quality</label>
-            <div class="col-md-3">
-                <input type="text" placeholder="" class="form-control dottedInput"
-                       data-ng-model="record.physicalDescription.paperQuality" name="paperQuality" id="paperQuality"
-                       ng-readonly="data.readOnlyMode"/>
             </div>
         </div>
     </fieldset>

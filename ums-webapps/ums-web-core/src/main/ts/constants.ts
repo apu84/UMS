@@ -185,8 +185,12 @@ module ums {
                         val: '04:20 PM'
                     },
                     {
-                        id: '05:00 PM',
-                        val: '05:00 PM'
+                        id: '05:10 PM',
+                        val: '05:10 PM'
+                    },
+                    {
+                        id: '06:00 PM',
+                        val: '06:00 PM'
                     }
                 ],
                 routineTime: [
@@ -238,6 +242,10 @@ module ums {
                     {
                         counter: '12',
                         id: '05.10 PM'
+                    },
+                    {
+                        counter: '13',
+                        id: '06.00 PM'
                     }
                 ],
                 weekDays: [
@@ -364,7 +372,15 @@ module ums {
                     '110707': ['BSc in IPE'],
                     '110708': ['BSc in ME']
                 },
-                theorySectionsGrid: ":None;A:A;B:B;C:C;D:D",
+                optionalCourseYearSemester: {
+                    '110200':[{'year':'4','semester':'1'},{'year':'4','semester':'2'}],
+                    '110400':[{'year':'4','semester':'2'}],
+                    '110500':[{'year':'4','semester':'1'},{'year':'4','semester':'2'}],
+                    '110600':[{'year':'4','semester':'1'},{'year':'4','semester':'2'}],
+                    '110707':[{'year':'4','semester':'1'},{'year':'4','semester':'2'}],
+                    '110708':[{'year':'4','semester':'1'},{'year':'4','semester':'2'}]
+                },
+          theorySectionsGrid: ":None;A:A;B:B;C:C;D:D",
                 theorySections: [
                     {id: "A", name: "A"},
                     {id: "B", name: "B"},
@@ -697,6 +713,35 @@ module ums {
             }
         }
 
+        static AccountConstant():any{
+          return {
+            groupTypes:[
+              {id:"1", name:"Assets"},
+              {id:"2", name:"Fund & Liabilities"},
+              {id:"3", name:"Income"},
+              {id:"4", name:"Expenses"},
+              {id:"5", name:"Bank Accounts"},
+              {id:"6", name:"Cash in hand"},
+              {id:"7", name:"Sundry Debtor"},
+              {id:"8", name:"Sundry Creditor"},
+              {id: "9", name: "Current Liabilities"},
+              {id: "10", name: "Tution Fees & Other Student Fees"}
+            ],
+            accountTypes: [
+              {id: 1, name: "Engineering Program Account"},
+              {id: 2, name: "Business Program Account"},
+              {id: 3, name: "Convocation Program Account"},
+              {id: 4, name: "Provident Fund Account"},
+              {id: 5, name: "Student Welfare Fund Account"}
+            ],
+            financialYearCloseTransferType:[
+                {id:1, name:'All accounts closing'},
+                {id:2, name:'Bank & Cash Closing'},
+                {id:3, name:'Transfer without closing'}
+            ]
+          }
+        }
+
         static LibConstant(): any {
             return {
                 languages: [
@@ -720,9 +765,9 @@ module ums {
                     {id: 1, name: 'Hard Bound'},
                     {id: 2, name: 'Soft Cover'},
                     {id: 3, name: 'Paperback'},
-                    {id: 4, name: 'Clip binding'},
-                    {id: 5, name: 'Gum paste binding'},
-                    {id: 6, name: 'Cloth binding'}
+                    {id: 4, name: 'Clip Binding'},
+                    {id: 5, name: 'Gum Paste Binding'},
+                    {id: 6, name: 'Cloth Binding'}
                 ],
                 acquisitionTypes: [
                     {id: 101101, name: 'Select Acquisition Type'},
@@ -815,12 +860,15 @@ module ums {
                     {id: 1, name: "Single"},
                     {id: 2, name: "Married"}
                 ],
-                degreeTypes: [
-                    {id: 1, name: "SSC/O-Level"},
-                    {id: 2, name: "HSC/A-Level"},
-                    {id: 3, name: "Bachelor"},
-                    {id: 4, name: "Master's"},
-                    {id: 5, name: "PhD"}
+                degreeLevel: [
+                    {id: 10, name: "PSC/5 Pass"},
+                    {id: 20, name: "JSC/JDC/8 Pass"},
+                    {id: 110, name: "Secondary"},
+                    {id: 120, name: "Higher Secondary"},
+                    {id: 1010, name: "Diploma"},
+                    {id: 1110, name: "Bachelor/Honors"},
+                    {id: 10010, name: "Masters"},
+                    {id: 100010, name: "PhD (Doctor of Philosophy)"}
                 ],
                 relationTypes: [
                     {id: 1, name: "Spouse"},

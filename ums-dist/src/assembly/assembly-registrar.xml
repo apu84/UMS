@@ -76,6 +76,7 @@
                 <include>io.jsonwebtoken:jjwt</include>
                 <include>org.mapdb:mapdb</include>
                 <include>org.apache.commons:commons-text</include>
+                <include>com.google.firebase:firebase-admin</include>
             </includes>
             <outputDirectory>lib</outputDirectory>
             <useTransitiveDependencies>true</useTransitiveDependencies>

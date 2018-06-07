@@ -13,4 +13,9 @@ public class DeptDesignationMapDaoDecorator extends
   public List<DeptDesignationMap> getDeptDesignationMap(String departmentId, int pEmployeeId) {
     return getManager().getDeptDesignationMap(departmentId, pEmployeeId);
   }
+
+  @Override
+  public List<DeptDesignationMap> getDeptDesignationMap(String departmentId) {
+    return getManager().getDeptDesignationMap(departmentId);
+  }
 }

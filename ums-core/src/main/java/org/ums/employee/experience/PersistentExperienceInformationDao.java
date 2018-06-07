@@ -6,7 +6,6 @@ import org.ums.generator.IdGenerator;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PersistentExperienceInformationDao extends ExperienceInformationDaoDecorator {
@@ -16,16 +15,18 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
           + "EXPERIENCE_FROM, EXPERIENCE_TO, EXPERIENCE_DURATION, EXPERIENCE_DURATION_STRING, CATEGORY, LAST_MODIFIED) VALUES (?,?,?,?,?,?,?,?,?,"
           + getLastModifiedSql() + ")";
 
-  static String GET_ONE =
-      "Select ID, EMPLOYEE_ID, EXPERIENCE_INSTITUTE, EXPERIENCE_DESIGNATION, EXPERIENCE_FROM, "
-          + "EXPERIENCE_TO, EXPERIENCE_DURATION, EXPERIENCE_DURATION_STRING, CATEGORY, LAST_MODIFIED From EMP_EXPERIENCE_INFO";
+  static String GET_ALL =
+      "SELECT ID, EMPLOYEE_ID, EXPERIENCE_INSTITUTE, EXPERIENCE_DESIGNATION, EXPERIENCE_FROM, "
+          + "EXPERIENCE_TO, EXPERIENCE_DURATION, EXPERIENCE_DURATION_STRING, CATEGORY, LAST_MODIFIED FROM EMP_EXPERIENCE_INFO";
 
-  static String DELETE_ALL = "DELETE FROM EMP_EXPERIENCE_INFO";
+  static String DELETE_ONE = "DELETE FROM EMP_EXPERIENCE_INFO";
 
-  static String UPDATE_ALL =
+  static String UPDATE_ONE =
       "UPDATE EMP_EXPERIENCE_INFO SET EXPERIENCE_INSTITUTE=?, EXPERIENCE_DESIGNATION=?, EXPERIENCE_FROM=?, "
           + "EXPERIENCE_TO=?, EXPERIENCE_DURATION = ?, EXPERIENCE_DURATION_STRING = ?, CATEGORY = ?, LAST_MODIFIED="
           + getLastModifiedSql() + " ";
+
+  static String EXISTS_ONE = "SELECT COUNT(EMPLOYEE_ID) FROM EMP_EXPERIENCE_INFO ";
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
@@ -36,68 +37,47 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
   }
 
   @Override
-  public int saveExperienceInformation(List<MutableExperienceInformation> pMutableExperienceInformation) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.batchUpdate(query, getEmployeeExperienceInformationParams(pMutableExperienceInformation)).length;
+  public Long create(MutableExperienceInformation pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getEmployeeId(), pMutable.getExperienceInstitute(),
+        pMutable.getDesignation(), pMutable.getExperienceFromDate(), pMutable.getExperienceToDate(),
+        pMutable.getExperienceDuration(), pMutable.getExperienceDurationString(), pMutable.getExperienceCategoryId());
+    return id;
   }
 
   @Override
-  public int deleteExperienceInformation(String pEmployeeId) {
-    String query = DELETE_ALL + " WHERE EMPLOYEE_ID = ?";
-    return mJdbcTemplate.update(query, pEmployeeId);
-  }
-
-  private List<Object[]> getEmployeeExperienceInformationParams(
-      List<MutableExperienceInformation> pMutableExperienceInformation) {
-    List<Object[]> params = new ArrayList<>();
-    for(ExperienceInformation experienceInformation : pMutableExperienceInformation) {
-      params.add(new Object[] {mIdGenerator.getNumericId(), experienceInformation.getEmployeeId(),
-          experienceInformation.getExperienceInstitute(), experienceInformation.getDesignation(),
-          experienceInformation.getExperienceFromDate(), experienceInformation.getExperienceToDate(),
-          experienceInformation.getExperienceDuration(), experienceInformation.getExperienceDurationString(),
-          experienceInformation.getExperienceCategoryId()});
-
-    }
-    return params;
+  public ExperienceInformation get(final Long pId) {
+    String query = GET_ALL + " WHERE ID = ? ";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId},
+        new PersistentExperienceInformationDao.RoleRowMapper());
   }
 
   @Override
-  public List<ExperienceInformation> getEmployeeExperienceInformation(final String employeeId) {
-    String query = GET_ONE + " Where EMPLOYEE_ID = ? ORDER BY EXPERIENCE_FROM DESC";
-    return mJdbcTemplate
-        .query(query, new Object[] {employeeId}, new PersistentExperienceInformationDao.RoleRowMapper());
+  public List<ExperienceInformation> get(final String pEmployeeId) {
+    String query = GET_ALL + " WHERE EMPLOYEE_ID = ? ORDER BY EXPERIENCE_TO DESC ";
+    return mJdbcTemplate.query(query, new Object[] {pEmployeeId},
+        new PersistentExperienceInformationDao.RoleRowMapper());
   }
 
   @Override
-  public int updateExperienceInformation(List<MutableExperienceInformation> pMutableExperienceInformation) {
-    String query = UPDATE_ALL + "WHERE EMPLOYEE_ID = ? and ID = ? ";
-    return mJdbcTemplate.batchUpdate(query, getUpdateParams(pMutableExperienceInformation)).length;
-  }
-
-  private List<Object[]> getUpdateParams(List<MutableExperienceInformation> pMutableExperienceInformation) {
-    List<Object[]> params = new ArrayList<>();
-    for(ExperienceInformation pExperienceInformation : pMutableExperienceInformation) {
-      params.add(new Object[] {pExperienceInformation.getExperienceInstitute(),
-          pExperienceInformation.getDesignation(), pExperienceInformation.getExperienceFromDate(),
-          pExperienceInformation.getExperienceToDate(), pExperienceInformation.getExperienceDuration(),
-          pExperienceInformation.getExperienceDurationString(), pExperienceInformation.getExperienceCategoryId(),
-          pExperienceInformation.getEmployeeId(), pExperienceInformation.getId()});
-    }
-    return params;
+  public int update(MutableExperienceInformation pMutable) {
+    String query = UPDATE_ONE + " WHERE ID = ? AND EMPLOYEE_ID = ?";
+    return mJdbcTemplate.update(query, pMutable.getExperienceInstitute(), pMutable.getDesignation(),
+        pMutable.getExperienceFromDate(), pMutable.getExperienceToDate(), pMutable.getExperienceDuration(),
+        pMutable.getExperienceDurationString(), pMutable.getExperienceCategoryId(), pMutable.getId(),
+        pMutable.getEmployeeId());
   }
 
   @Override
-  public int deleteExperienceInformation(List<MutableExperienceInformation> pMutableExperienceInformation) {
-    String query = DELETE_ALL + " WHERE ID=? AND EMPLOYEE_ID=?";
-    return mJdbcTemplate.batchUpdate(query, getDeleteParams(pMutableExperienceInformation)).length;
+  public int delete(MutableExperienceInformation pMutable) {
+    String query = DELETE_ONE + " WHERE ID = ? AND EMPLOYEE_ID = ? ";
+    return mJdbcTemplate.update(query, pMutable.getId(), pMutable.getEmployeeId());
   }
 
-  private List<Object[]> getDeleteParams(List<MutableExperienceInformation> pMutableExperienceInformation) {
-    List<Object[]> params = new ArrayList<>();
-    for(ExperienceInformation pExperienceInformation : pMutableExperienceInformation) {
-      params.add(new Object[] {pExperienceInformation.getId(), pExperienceInformation.getEmployeeId()});
-    }
-    return params;
+  @Override
+  public boolean exists(String pEmployeeId) {
+    String query = EXISTS_ONE + " WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pEmployeeId}, Boolean.class);
   }
 
   class RoleRowMapper implements RowMapper<ExperienceInformation> {
@@ -105,15 +85,15 @@ public class PersistentExperienceInformationDao extends ExperienceInformationDao
     @Override
     public ExperienceInformation mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentExperienceInformation experienceInformation = new PersistentExperienceInformation();
-      experienceInformation.setId(resultSet.getLong("id"));
-      experienceInformation.setEmployeeId(resultSet.getString("employee_id"));
-      experienceInformation.setExperienceInstitute(resultSet.getString("experience_institute"));
-      experienceInformation.setDesignation(resultSet.getString("experience_designation"));
-      experienceInformation.setExperienceFromDate(resultSet.getString("experience_from"));
-      experienceInformation.setExperienceToDate(resultSet.getString("experience_to"));
-      experienceInformation.setExperienceDuration(resultSet.getInt("experience_duration"));
-      experienceInformation.setExperienceDurationString(resultSet.getString("experience_duration_string"));
-      experienceInformation.setExperienceCategoryId(resultSet.getInt("category"));
+      experienceInformation.setId(resultSet.getLong("ID"));
+      experienceInformation.setEmployeeId(resultSet.getString("EMPLOYEE_ID"));
+      experienceInformation.setExperienceInstitute(resultSet.getString("EXPERIENCE_INSTITUTE"));
+      experienceInformation.setDesignation(resultSet.getString("EXPERIENCE_DESIGNATION"));
+      experienceInformation.setExperienceFromDate(resultSet.getDate("EXPERIENCE_FROM"));
+      experienceInformation.setExperienceToDate(resultSet.getDate("EXPERIENCE_TO"));
+      experienceInformation.setExperienceDuration(resultSet.getInt("EXPERIENCE_DURATION"));
+      experienceInformation.setExperienceDurationString(resultSet.getString("EXPERIENCE_DURATION_STRING"));
+      experienceInformation.setExperienceCategoryId(resultSet.getInt("CATEGORY"));
       return experienceInformation;
     }
   }

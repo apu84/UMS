@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.*;
+import org.ums.domain.model.immutable.Course;
+import org.ums.domain.model.immutable.Department;
+import org.ums.domain.model.immutable.MarksSubmissionStatus;
+import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
 import org.ums.formatter.DateFormat;
 
@@ -22,14 +25,14 @@ public class MarksSubmissionStatusBuilder implements Builder<MarksSubmissionStat
   @Override
   public void build(JsonObjectBuilder pBuilder, MarksSubmissionStatus pReadOnly, UriInfo pUriInfo,
       LocalCache pLocalCache) {
-    Course course = (Course) pLocalCache.cache(() -> pReadOnly.getCourse(), pReadOnly.getCourseId(),
-        Course.class);
-    Syllabus syllabus = (Syllabus) pLocalCache.cache(() -> course.getSyllabus(), course.getSyllabusId(),
-        Syllabus.class);
-    Program program = (Program) pLocalCache.cache(() -> syllabus.getProgram(), syllabus.getProgramId(),
-        Syllabus.class);
-    Department department = (Department) pLocalCache.cache(() -> program.getDepartment(), program.getDepartmentId(),
-        Department.class);
+    Course course = (Course) pLocalCache.cache(() -> pReadOnly.getCourse(), pReadOnly.getCourseId(), Course.class);
+    // Syllabus syllabus = (Syllabus) pLocalCache.cache(() -> course.getSyllabus(),
+    // course.getSyllabusId(),
+    // Syllabus.class);
+    Program program =
+        (Program) pLocalCache.cache(() -> course.getOfferedToProgram(), course.getOfferedToProgramId(), Program.class);
+    Department department =
+        (Department) pLocalCache.cache(() -> program.getDepartment(), program.getDepartmentId(), Department.class);
     pBuilder.add("departmentId", department.getId());
     pBuilder.add("departmentName", department.getShortName());
     pBuilder.add("programName", program.getShortName());

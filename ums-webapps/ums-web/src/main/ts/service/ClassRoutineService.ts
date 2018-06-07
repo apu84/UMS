@@ -14,7 +14,16 @@ module ums{
     public getClassRoutineReportForTeacher():ng.IPromise<any>{
       var defer= this.$q.defer();
 
-      this.httpClient.get("/ums-webservice-academic/academic/routine/routineReportTeacher",  'application/pdf',
+        var contentType: string = UmsUtil.getFileContentType("pdf");
+        this.httpClient.get("/ums-webservice-academic/academic/routine/routineReportTeacher", undefined, (data: any, etag: string) => {
+                UmsUtil.writeFileContent(data, contentType, 'class-routine.pdf');
+            },
+            (response: any) => {
+                defer.resolve("success");
+                console.error(response);
+            }, 'arraybuffer');
+
+     /* this.httpClient.get("/ums-webservice-academic/academic/routine/routineReportTeacher",  'application/pdf',
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
@@ -24,7 +33,7 @@ module ums{
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
             defer.resolve("failure");
-          },'arraybuffer');
+          },'arraybuffer');*/
 
       return defer.promise;
     }

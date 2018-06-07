@@ -31,7 +31,7 @@ public class EmployeeDocument implements SearchDocument<String> {
 
   public EmployeeDocument(final Employee pEmployee) {
     id = pEmployee.getId();
-    name = Lists.newArrayList(pEmployee.getPersonalInformation().getFullName());
+    name = Lists.newArrayList(pEmployee.getPersonalInformation().getName());
     departmentDocument = new DepartmentDocument(pEmployee.getDepartment());
     // dynamicMappedFieldValues = new HashMap<>();
     // dynamicMappedFieldValues.put("key1", "value1");

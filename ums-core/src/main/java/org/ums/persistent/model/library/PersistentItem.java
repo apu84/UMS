@@ -5,6 +5,8 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.accounts.Currency;
 import org.ums.domain.model.immutable.library.Supplier;
 import org.ums.domain.model.mutable.library.MutableItem;
+import org.ums.enums.library.AcquisitionType;
+import org.ums.enums.library.BookBindingType;
 import org.ums.enums.library.ItemStatus;
 import org.ums.manager.library.ItemManager;
 import org.ums.manager.library.SupplierManager;
@@ -35,6 +37,9 @@ public class PersistentItem implements MutableItem {
   private int mCirculationStatus;
   private Currency mCurrency;
   private Long mCurrencyId;
+  private AcquisitionType mAcquisitionType;
+  private BookBindingType mBookBindingType;
+  private String mPaperQuality;
   private String mLastModified;
 
   static {
@@ -59,11 +64,14 @@ public class PersistentItem implements MutableItem {
     mStatus = pPersistentItem.getStatus();
     mCurrency = pPersistentItem.getCurrency();
     mCurrencyId = pPersistentItem.getCurrencyId();
+    mAcquisitionType = pPersistentItem.getAcquisitionType();
 
     mInsertedBy = pPersistentItem.getInsertedBy();
     mInsertedOn = pPersistentItem.getInsertedOn();
     mLastUpdatedBy = pPersistentItem.getLastUpdatedBy();
     mCirculationStatus = pPersistentItem.getCirculationStatus();
+    mBookBindingType = pPersistentItem.getBookBindingType();
+    mPaperQuality = pPersistentItem.getPaperQuality();
     mLastUpdatedOn = pPersistentItem.getLastUpdatedOn();
   }
 
@@ -276,4 +284,35 @@ public class PersistentItem implements MutableItem {
   public void setCurrencyId(Long pCurrencyId) {
     mCurrencyId = pCurrencyId;
   }
+
+  @Override
+  public AcquisitionType getAcquisitionType() {
+    return mAcquisitionType;
+  }
+
+  @Override
+  public void setAcquisitionType(AcquisitionType pAcquisitionType) {
+    mAcquisitionType = pAcquisitionType;
+  }
+
+  @Override
+  public BookBindingType getBookBindingType() {
+    return mBookBindingType;
+  }
+
+  @Override
+  public String getPaperQuality() {
+    return mPaperQuality;
+  }
+
+  @Override
+  public void setBookBindingType(BookBindingType pBookBindingType) {
+    mBookBindingType = pBookBindingType;
+  }
+
+  @Override
+  public void setPaperQuality(String pPaperQuality) {
+    mPaperQuality = pPaperQuality;
+  }
+
 }

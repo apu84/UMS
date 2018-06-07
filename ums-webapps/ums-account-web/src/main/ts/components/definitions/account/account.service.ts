@@ -5,13 +5,20 @@ module ums{
     Cr = "Cr"
   }
 
+  export enum AscendingOrDescendingType{
+      ASC=1,
+      DESC=2
+  }
+
   export interface IAccount {
-    rowNum: number;
+    rowNumber: number;
     id: string;
     accountCode: number;
     accountName: string;
     accGroupCode: string;
     accGroupName: string;
+    company: ICompany;
+    companyId: string;
     reserved: boolean;
     taxLimit: string;
     taxCode: string;
@@ -28,6 +35,11 @@ module ums{
     entries: IAccount[];
   }
 
+  export interface IAccountBalanceResponse{
+    account: IAccount;
+    accountBalance: IAccountBalance;
+  }
+
   export class AccountService{
     public static $inject = ['$q', 'HttpClient'];
 
@@ -37,10 +49,14 @@ module ums{
       this.accountServiceURL = "account/definition/account";
     }
 
-    public saveAccountPaginated(account: IAccount, itemPerPage: number, pageNumber: number): ng.IPromise<IAccount[]> {
+    public saveAccountPaginated(account: IAccount, accountBalance: IAccountBalance, itemPerPage: number, pageNumber: number, ascendingOrDescendingType: AscendingOrDescendingType): ng.IPromise<IAccount[]> {
       let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
-      this.httpClient.post(this.accountServiceURL + "/create/item-per-page/" + itemPerPage + "/page-number/" + pageNumber, account, HttpClient.MIME_TYPE_JSON)
-          .success((response: IAccountResponse) => defer.resolve(response.entries))
+      let accountBalanceResponse: IAccountBalanceResponse = <IAccountBalanceResponse>{};
+      accountBalanceResponse.account = account;
+
+      accountBalanceResponse.accountBalance = accountBalance;
+      this.httpClient.post(this.accountServiceURL + "/create/item-per-page/" + itemPerPage + "/page-number/" + pageNumber+"/type/"+ascendingOrDescendingType, accountBalanceResponse, HttpClient.MIME_TYPE_JSON)
+          .success((response: IAccount[]) => defer.resolve(response))
           .error((error) => {
             console.error(error);
             defer.resolve(undefined);
@@ -55,66 +71,88 @@ module ums{
       return defer.promise;
     }
 
-    public getAllPaginated(itemPerPage: number, pageNumber: number): ng.IPromise<IAccount[]> {
+    public getAllPaginated(itemPerPage: number, pageNumber: number, ascendingOrDescendingType: AscendingOrDescendingType): ng.IPromise<IAccount[]> {
       let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
-      this.httpClient.get(this.accountServiceURL + "/paginated/item-per-page/" + itemPerPage + "/page-number/" + pageNumber, HttpClient.MIME_TYPE_JSON,
-          ((response: IAccountResponse) => defer.resolve(response.entries)));
+
+      this.httpClient.get(this.accountServiceURL + "/paginated/item-per-page/" + itemPerPage + "/page-number/" + pageNumber+"/type/"+ascendingOrDescendingType, HttpClient.MIME_TYPE_JSON,
+          ((response: IAccount[]) => defer.resolve(response)));
       return defer.promise;
     }
 
     public getAccountsByAccountName(accountName: string): ng.IPromise<IAccount[]> {
       let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
       this.httpClient.get(this.accountServiceURL + "/search/account-name/" + accountName, HttpClient.MIME_TYPE_JSON,
-          ((response: IAccountResponse) => defer.resolve(response.entries)));
+          ((response: IAccount[]) => defer.resolve(response)));
       return defer.promise;
     }
 
     public getAccountsByGroupFlag(groupFlag: GroupFlag):ng.IPromise<IAccount[]>{
       let defer:ng.IDeferred<IAccount[]> = this.$q.defer();
       this.httpClient.get(this.accountServiceURL+"/group-flag/"+groupFlag, HttpClient.MIME_TYPE_JSON,
-          ((response:IAccountResponse)=> defer.resolve(response.entries)));
+          ((response:IAccount[])=> defer.resolve(response)));
       return defer.promise;
     }
 
     public getAllAccounts(): ng.IPromise<IAccount[]> {
       let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
       this.httpClient.get(this.accountServiceURL + "/all", HttpClient.MIME_TYPE_JSON,
-          ((response: IAccountResponse) => defer.resolve(response.entries)));
+          ((response: IAccount[]) => defer.resolve(response)));
       return defer.promise;
     }
 
     public getBankAndCostTypeAccounts(): ng.IPromise<IAccount[]> {
       let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
       this.httpClient.get(this.accountServiceURL + "/bank-cost-type-accounts", HttpClient.MIME_TYPE_JSON,
-          ((response: IAccountResponse) => defer.resolve(response.entries)));
+          ((response: IAccount[]) => defer.resolve(response)));
       return defer.promise;
     }
 
     public getExcludingBankAndCostTypeAccounts(): ng.IPromise<IAccount[]> {
       let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
       this.httpClient.get(this.accountServiceURL + "/excluding-bank-cost-type-accounts", HttpClient.MIME_TYPE_JSON,
-          ((response: IAccountResponse) => defer.resolve(response.entries)));
+          ((response: IAccount[]) => defer.resolve(response)));
       return defer.promise;
     }
 
     public getCustomerAndVendorTypeAccounts(): ng.IPromise<IAccount[]> {
       let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
       this.httpClient.get(this.accountServiceURL + "/customer-vendor-accounts", HttpClient.MIME_TYPE_JSON,
-          ((response: IAccountResponse) => defer.resolve(response.entries)));
+          ((response: IAccount[]) => defer.resolve(response)));
       return defer.promise;
     }
 
     public getVendorAccounts(): ng.IPromise<IAccount[]> {
       let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
       this.httpClient.get(this.accountServiceURL + "/vendor-accounts", HttpClient.MIME_TYPE_JSON,
-          ((response: IAccountResponse) => defer.resolve(response.entries)));
+          ((response: IAccount[]) => defer.resolve(response)));
       return defer.promise;
     }
 
     public getCustomerAccounts(): ng.IPromise<IAccount[]> {
       let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
       this.httpClient.get(this.accountServiceURL + "/customer-accounts", HttpClient.MIME_TYPE_JSON,
-          ((response: IAccountResponse) => defer.resolve(response.entries)));
+          ((response: IAccount[]) => defer.resolve(response)));
+      return defer.promise;
+    }
+
+    public getStudentAccounts(): ng.IPromise<IAccount[]> {
+      let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
+      this.httpClient.get(this.accountServiceURL + "/student-accounts", HttpClient.MIME_TYPE_JSON,
+          ((response: IAccount[]) => defer.resolve(response)));
+      return defer.promise;
+    }
+
+
+    public generateChartOfAccountsReport(): ng.IPromise<string> {
+      let defer: ng.IDeferred<string> = this.$q.defer();
+      var contentType: string = UmsUtil.getFileContentType("pdf");
+      this.httpClient.get(this.accountServiceURL + "/chart-of-accounts/", undefined, (data: any, etag: string) => {
+            UmsUtil.writeFileContent(data, contentType, 'Chart of Accounts Report.pdf');
+          },
+          (response: any) => {
+            defer.resolve("success");
+            console.error(response);
+          }, 'arraybuffer');
       return defer.promise;
     }
   }

@@ -1,6 +1,5 @@
 package org.ums.persistent.dao.library;
 
-import com.sun.org.apache.xpath.internal.SourceTree;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.library.RecordDaoDecorator;
@@ -8,7 +7,9 @@ import org.ums.domain.model.dto.library.ImprintDto;
 import org.ums.domain.model.immutable.library.Record;
 import org.ums.domain.model.mutable.library.MutableRecord;
 import org.ums.enums.common.Language;
-import org.ums.enums.library.*;
+import org.ums.enums.library.JournalFrequency;
+import org.ums.enums.library.MaterialType;
+import org.ums.enums.library.RecordStatus;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.library.PersistentRecord;
 
@@ -27,7 +28,7 @@ public class PersistentRecordDao extends RecordDaoDecorator {
           + "   SERIAL_NUMBER, SERIAL_SPECIAL, LIBRARY_LACKS, CHANGED_TITLE, ISBN, ISSN,  "
           + "   CORP_AUTH_MAIN, CORP_SUB_BODY, CORP_CITY_COUNTRY, EDITION, TRANS_TITLE_EDITION, FREQUENCY,  "
           + "   CALL_NO, CLASS_NO, CALL_DATE, CALL_EDITION, CALL_VOLUME, AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,  "
-          + "   DATE_YEAR_OF_PUBLICATION, COPY_RIGHT_DATE, COPY_RIGHT_DATE, MATERIAL_TYPE, STATUS, BINDING_TYPE, ACQUISITION_TYPE,  "
+          + "   DATE_YEAR_OF_PUBLICATION, COPY_RIGHT_DATE, COPY_RIGHT_DATE, MATERIAL_TYPE, STATUS,  "
           + "   KEYWORDS, DOCUMENTALIST, ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY,  CONTRIBUTORS,PHYSICAL_DESC, SUBJECTS, NOTES, TOTAL_ITEMS, TOTAL_AVAILABLE, TOTAL_CHECKED_OUT, TOTAL_ON_HOLD, LAST_MODIFIED "
           + "FROM RECORDS ";
 
@@ -36,22 +37,24 @@ public class PersistentRecordDao extends RecordDaoDecorator {
           + "   SERIAL_SPECIAL=?, LIBRARY_LACKS=?, CHANGED_TITLE=?, ISBN=?, ISSN=?, CORP_AUTH_MAIN=?, CORP_SUB_BODY=?, CORP_CITY_COUNTRY=?, EDITION=?, TRANS_TITLE_EDITION=?, "
           + "   FREQUENCY=?, CALL_NO=?, CLASS_NO=?, CALL_DATE=?, CALL_EDITION=?, CALL_VOLUME=?, AUTHOR_MARK=?, PUBLISHER=?, PLACE_OF_PUBLICATION=?,DATE_YEAR_OF_PUBLICATION=?, "
           + "  COPY_RIGHT_DATE=?, MATERIAL_TYPE=?, "
-          + "  STATUS=?, BINDING_TYPE=?, ACQUISITION_TYPE=?,  KEYWORDS=?, CONTRIBUTORS=?, SUBJECTS=?, PHYSICAL_DESC = ?, NOTES=?, TOTAL_ITEMS = ?, TOTAL_AVAILABLE = ?, TOTAL_CHECKED_OUT = ?, TOTAL_ON_HOLD = ?, LAST_UPDATED_ON=sysdate,  "
+          + "  STATUS=?, KEYWORDS=?, CONTRIBUTORS=?, SUBJECTS=?, PHYSICAL_DESC = ?, NOTES=?, TOTAL_ITEMS = ?, TOTAL_AVAILABLE = ?, TOTAL_CHECKED_OUT = ?, TOTAL_ON_HOLD = ?, LAST_UPDATED_ON=sysdate,  "
           + "  LAST_UPDATED_BY=?, LAST_MODIFIED=" + getLastModifiedSql();
 
   static String INSERT_ONE =
       "INSERT INTO RECORDS(MFN, LANGUAGE, TITLE, SUB_TITLE, GMD, SERIES_TITLE,  VOLUME_NO, VOLUME_TITLE, SERIAL_ISSUE_NO,SERIAL_NUMBER, "
           + "   SERIAL_SPECIAL, LIBRARY_LACKS, CHANGED_TITLE, ISBN, ISSN, CORP_AUTH_MAIN, CORP_SUB_BODY, CORP_CITY_COUNTRY, EDITION, TRANS_TITLE_EDITION, "
           + "   FREQUENCY, CALL_NO, CLASS_NO, CALL_DATE, CALL_EDITION, CALL_VOLUME,  AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,DATE_YEAR_OF_PUBLICATION, COPY_RIGHT_DATE, MATERIAL_TYPE, "
-          + "    STATUS, BINDING_TYPE, ACQUISITION_TYPE,  KEYWORDS, DOCUMENTALIST,CONTRIBUTORS, SUBJECTS,PHYSICAL_DESC, NOTES, TOTAL_ITEMS, TOTAL_AVAILABLE, TOTAL_CHECKED_OUT, TOTAL_ON_HOLD,  ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY, LAST_MODIFIED)  "
+          + "    STATUS, KEYWORDS, DOCUMENTALIST,CONTRIBUTORS, SUBJECTS,PHYSICAL_DESC, NOTES, TOTAL_ITEMS, TOTAL_AVAILABLE, TOTAL_CHECKED_OUT, TOTAL_ON_HOLD,  ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY, LAST_MODIFIED)  "
           + "  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
           + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
-          + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
-          + " ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0,"
+          + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
+          + " ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0,"
           + " sysdate, sysdate, ?, "
           + getLastModifiedSql() + ")";
 
   static String DELETE_ONE = "DELETE FROM RECORDS ";
+
+  static String GET_MFN = "SELECT SQN_RECORD.NEXTVAL FROM DUAL";
 
   private JdbcTemplate mJdbcTemplate;
   public IdGenerator mIdGenerator;
@@ -81,19 +84,20 @@ public class PersistentRecordDao extends RecordDaoDecorator {
             : pRecord.getImprint().getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord
             .getImprint().getDateOfPublication(), pRecord.getImprint().getCopyRightDate(),
         pRecord.getMaterialType() == null ? null : pRecord.getMaterialType().getId(),
-        pRecord.getRecordStatus() == null ? null : pRecord.getRecordStatus().getId(),
-        pRecord.getBookBindingType() == null ? null : pRecord.getBookBindingType().getId(), pRecord
-            .getAcquisitionType() == null ? null : pRecord.getAcquisitionType().getId(), pRecord.getKeyWords(), pRecord
+        pRecord.getRecordStatus() == null ? null : pRecord.getRecordStatus().getId(), pRecord.getKeyWords(), pRecord
             .getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord.getPhysicalDescriptionString(),
         pRecord.getNoteJsonString(), pRecord.getTotalItems(), pRecord.getTotalAvailable(),
         pRecord.getTotalCheckedOut(), pRecord.getTotalOnHold(), pRecord.getLastUpdatedBy(), pRecord.getMfn());
   }
 
+  private Long getMfn() {
+    return mJdbcTemplate.queryForObject(GET_MFN, Long.class);
+  }
+
   @Override
   public Long create(final MutableRecord pRecord) {
-    Long id = mIdGenerator.getNumericId();
-    pRecord.setMfn(id);
-    mJdbcTemplate.update(INSERT_ONE, pRecord.getMfn(), pRecord.getLanguage().getId(), pRecord.getTitle(), pRecord
+    pRecord.setId(getMfn());
+    mJdbcTemplate.update(INSERT_ONE, pRecord.getId(), pRecord.getLanguage().getId(), pRecord.getTitle(), pRecord
         .getSubTitle(), pRecord.getGmd(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord.getVolumeTitle(),
         pRecord.getSerialIssueNo(), pRecord.getSerialNumber(), pRecord.getSerialSpecial(), pRecord.getLibraryLacks(),
         pRecord.getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord.getCorpAuthorMain(), pRecord
@@ -103,12 +107,11 @@ public class PersistentRecordDao extends RecordDaoDecorator {
             .getAuthorMark(), pRecord.getImprint().getPublisher() == null ? Types.NULL : pRecord.getImprint()
             .getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord.getImprint()
             .getDateOfPublication(), pRecord.getImprint().getCopyRightDate(), pRecord.getMaterialType().getId(),
-        pRecord.getRecordStatus().getId(), pRecord.getBookBindingType().getId(), pRecord.getAcquisitionType().getId(),
-        pRecord.getKeyWords(), pRecord.getDocumentalist(), pRecord.getContributorJsonString(), pRecord
-            .getSubjectJsonString(), pRecord.getPhysicalDescriptionString(), pRecord.getNoteJsonString(), pRecord
-            .getLastUpdatedBy());
+        pRecord.getRecordStatus().getId(), pRecord.getKeyWords(), pRecord.getDocumentalist(), pRecord
+            .getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord.getPhysicalDescriptionString(),
+        pRecord.getNoteJsonString(), pRecord.getLastUpdatedBy());
 
-    return id;
+    return pRecord.getId();
   }
 
   @Override
@@ -169,8 +172,6 @@ public class PersistentRecordDao extends RecordDaoDecorator {
 
       record.setMaterialType(MaterialType.get(resultSet.getInt("MATERIAL_TYPE")));
       record.setRecordStatus(RecordStatus.get(resultSet.getInt("STATUS")));
-      record.setBookBindingType(BookBindingType.get(resultSet.getInt("BINDING_TYPE")));
-      record.setAcquisitionType(AcquisitionType.get(resultSet.getInt("ACQUISITION_TYPE")));
       record.setKeyWords(resultSet.getString("KEYWORDS"));
       record.setDocumentalist(resultSet.getString("DOCUMENTALIST"));
       record.setEntryDate(resultSet.getString("ENTRY_DATE"));

@@ -36,7 +36,7 @@ public class LmsAppStatusBuilder implements Builder<LmsAppStatus, MutableLmsAppS
     pBuilder.add("appId", pReadOnly.getLmsApplication().getId().toString());
     pBuilder.add("applicantsId", pReadOnly.getLmsApplication().getEmployee().getId());
     pBuilder.add("deptName", pReadOnly.getLmsApplication().getEmployee().getDepartment().getShortName());
-    pBuilder.add("applicantsName", pReadOnly.getLmsApplication().getEmployee().getPersonalInformation().getFullName());
+    pBuilder.add("applicantsName", pReadOnly.getLmsApplication().getEmployee().getPersonalInformation().getName());
     pBuilder.add("reason", pReadOnly.getLmsApplication().getReason());
     Format formatter = new SimpleDateFormat("dd/MM/yyyy");
     pBuilder.add("appliedOn", formatter.format(pReadOnly.getLmsApplication().getAppliedOn()));
@@ -59,7 +59,7 @@ public class LmsAppStatusBuilder implements Builder<LmsAppStatus, MutableLmsAppS
       pBuilder.add("rowNumber", pReadOnly.getRowNumber());
     pBuilder.add("actionTakenOn", formatter.format(pReadOnly.getActionTakenOn()));
     pBuilder.add("actionTakenBy", pReadOnly.getActionTakenBy().getId());
-    pBuilder.add("actionTakenByName", pReadOnly.getActionTakenBy().getPersonalInformation().getFullName());
+    pBuilder.add("actionTakenByName", pReadOnly.getActionTakenBy().getPersonalInformation().getName());
     pBuilder.add("comments", pReadOnly.getComments());
     pBuilder.add("actionStatus", pReadOnly.getActionStatus().getId());
     pBuilder.add("actionStatusLabel", pReadOnly.getActionStatus().getLabel());

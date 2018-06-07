@@ -13,9 +13,7 @@ import java.util.Date;
 public interface PersonalInformation extends Serializable, EditType<MutablePersonalInformation>, Identifier<String>,
     LastModifier {
 
-  String getFirstName();
-
-  String getLastName();
+  String getName();
 
   String getGender();
 
@@ -110,6 +108,4 @@ public interface PersonalInformation extends Serializable, EditType<MutablePerso
   String getEmergencyContactPhone();
 
   String getEmergencyContactAddress();
-
-  String getFullName();
 }

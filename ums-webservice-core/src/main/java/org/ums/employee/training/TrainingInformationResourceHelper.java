@@ -1,6 +1,7 @@
 package org.ums.employee.training;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,95 +21,58 @@ public class TrainingInformationResourceHelper extends
     ResourceHelper<TrainingInformation, MutableTrainingInformation, Long> {
 
   @Autowired
-  TrainingInformationManager mTrainingInformationManager;
+  TrainingInformationManager mManager;
 
   @Autowired
-  TrainingInformationBuilder mTrainingInformationBuilder;
-
-  public JsonObject getTrainingInformation(final String pEmployeeId, final UriInfo pUriInfo) {
-    List<TrainingInformation> pTrainingInformation = new ArrayList<>();
-    try {
-      pTrainingInformation = mTrainingInformationManager.getEmployeeTrainingInformation(pEmployeeId);
-    } catch(EmptyResultDataAccessException e) {
-
-    }
-    return toJson(pTrainingInformation, pUriInfo);
-  }
-
-  @Transactional
-  public Response saveTrainingInformation(JsonObject pJsonObject, UriInfo pUriInfo) {
-    LocalCache localCache = new LocalCache();
-    JsonArray entries = pJsonObject.getJsonArray("entries");
-    JsonArray trainingJsonArray = entries.getJsonObject(0).getJsonArray("training");
-    int sizeOfTrainingJsonArray = trainingJsonArray.size();
-
-    List<MutableTrainingInformation> createMutableTrainingInformation = new ArrayList<>();
-    List<MutableTrainingInformation> updateMutableTrainingInformation = new ArrayList<>();
-    List<MutableTrainingInformation> deleteMutableTrainingInformation = new ArrayList<>();
-
-    for(int i = 0; i < sizeOfTrainingJsonArray; i++) {
-      MutableTrainingInformation trainingInformation = new PersistentTrainingInformation();
-      mTrainingInformationBuilder.build(trainingInformation, trainingJsonArray.getJsonObject(i), localCache);
-      if(trainingJsonArray.getJsonObject(i).containsKey("dbAction")) {
-        if(trainingJsonArray.getJsonObject(i).getString("dbAction").equals("Create")) {
-          createMutableTrainingInformation.add(trainingInformation);
-        }
-        else if(trainingJsonArray.getJsonObject(i).getString("dbAction").equals("Update")) {
-          updateMutableTrainingInformation.add(trainingInformation);
-        }
-        else if(trainingJsonArray.getJsonObject(i).getString("dbAction").equals("Delete")) {
-          deleteMutableTrainingInformation.add(trainingInformation);
-        }
-      }
-      else {
-        Response.ResponseBuilder builder = Response.created(null);
-        builder.status(Response.Status.NOT_MODIFIED);
-        return builder.build();
-      }
-    }
-
-    if(createMutableTrainingInformation.size() != 0) {
-      mTrainingInformationManager.saveTrainingInformation(createMutableTrainingInformation);
-    }
-    if(updateMutableTrainingInformation.size() != 0) {
-      mTrainingInformationManager.updateTrainingInformation(updateMutableTrainingInformation);
-    }
-    if(deleteMutableTrainingInformation.size() != 0) {
-      mTrainingInformationManager.deleteTrainingInformation(deleteMutableTrainingInformation);
-    }
-    Response.ResponseBuilder builder = Response.created(null);
-    builder.status(Response.Status.CREATED);
-    return builder.build();
-  }
-
-  private JsonObject toJson(List<TrainingInformation> pTrainingInformation, UriInfo pUriInfo) {
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-
-    for(TrainingInformation trainingInformation : pTrainingInformation) {
-      JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-      getBuilder().build(jsonObject, trainingInformation, pUriInfo, localCache);
-      children.add(jsonObject);
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-    return object.build();
-  }
+  TrainingInformationBuilder mBuilder;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, final UriInfo pUriInfo) {
+    LocalCache localCache = new LocalCache();
+    MutableTrainingInformation mutableTrainingInformation = new PersistentTrainingInformation();
+    mBuilder.build(mutableTrainingInformation, pJsonObject.getJsonObject("entries"), localCache);
+    Long id = mManager.create(mutableTrainingInformation);
+    JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+    mBuilder.build(objectBuilder, mManager.get(id), pUriInfo, localCache);
+    localCache.invalidate();
+    return Response.ok(objectBuilder.build()).build();
+  }
+
+  public JsonObject get(final String pEmployeeId, final UriInfo pUriInfo) {
+    if(mManager.exists(pEmployeeId)) {
+      List<TrainingInformation> trainingInformationList = mManager.get(pEmployeeId);
+      return buildJsonResponse(trainingInformationList, pUriInfo);
+    }
     return null;
+  }
+
+  public Response update(JsonObject pJsonObject, final UriInfo pUriInfo) {
+    LocalCache localCache = new LocalCache();
+    MutableTrainingInformation mutableTrainingInformation = new PersistentTrainingInformation();
+    mBuilder.build(mutableTrainingInformation, pJsonObject.getJsonObject("entries"), localCache);
+    mManager.update(mutableTrainingInformation);
+    JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+    mBuilder.build(objectBuilder, mManager.get(mutableTrainingInformation.getId()), pUriInfo, localCache);
+    localCache.invalidate();
+    return Response.ok(objectBuilder.build()).build();
+  }
+
+  public Response delete(Long id, UriInfo pUriInfo) {
+    LocalCache localCache = new LocalCache();
+    MutableTrainingInformation mutableTrainingInformation = (MutableTrainingInformation) mManager.get(id);
+    mManager.delete(mutableTrainingInformation);
+    localCache.invalidate();
+    return Response.noContent().build();
   }
 
   @Override
   protected ContentManager<TrainingInformation, MutableTrainingInformation, Long> getContentManager() {
-    return mTrainingInformationManager;
+    return mManager;
   }
 
   @Override
   protected Builder<TrainingInformation, MutableTrainingInformation> getBuilder() {
-    return mTrainingInformationBuilder;
+    return mBuilder;
   }
 
   @Override

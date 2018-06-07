@@ -1,351 +1,399 @@
-<div data-ng-show="vm.showPublicationInputDiv">
-    <form name="nPublicationForm" data-validate="" data-onvalidate="submitPublicationForm">
-        <div data-ng-repeat="publication in vm.entry.publication track by $index">
-            <div class="panel panel-default">
-                <div class="panel-body">
+<style type="text/css">
+    .panel-group .panel .panel-title .accordion-toggle {
+        padding: 2px 2px !important;
+    }
+
+    .panel-group .panel .panel-title {
+        font-size: 15px !important;
+    }
+</style>
+<accordion close-others="true">
+    <div data-ng-repeat="publication in vm.publication track by $index">
+        <accordion-group is-open="isopen">
+            <form name="nForm[$index]" ng-submit="vm.submit($index)" novalidate>
+                <accordion-heading ng-click="isopen =! isopen">
                     <div class="row">
-                        <div class="col-md-1">
-                            <label class="control-label"><b>{{$index + 1}}.</b></label>
+                        <div class="col-md-9">
+                            <span style="cursor: pointer">{{$index + 1}}. {{publication.publicationTitle}}</span>
                         </div>
-                        <div class="col-md-10">
-                            <label class="control-label" for="iPublicationTitle{{$index}}">Title<span
+                        <div class="col-md-3">
+                            <div align="right">
+                                <i style="cursor: pointer" class="pull-right glyphicon"
+                                   ng-class="{'glyphicon-chevron-down': isopen, 'glyphicon-chevron-right': !isopen}">
+                                </i>
+                            </div>
+                        </div>
+                    </div>
+                </accordion-heading>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div data-ng-show="vm.enableEditButton">
+                            <div data-ng-show="!vm.enableEdit[$index]">
+                                <div align="right">
+                                    <a data-ng-click="vm.activeEditButton($index, true)"
+                                       style="cursor: pointer;">
+                                        <i style="color: blue;" class="fa fa-edit"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nPublicationTitle.$invalid && !nForm[$index].nPublicationTitle.$pristine }">
+                            <label for="iPublicationTitle" class="control-label">Title<span
+                                    data-ng-show="vm.enableEdit[$index]"
                                     class='require'>*</span></label>
-                            <div>
+                            <div data-ng-show="vm.enableEdit[$index]">
                                 <input type="text"
-                                       name="nPublicationTitle{{$index}}"
-                                       id="iPublicationTitle{{$index}}"
+                                       name="nPublicationTitle"
+                                       id="iPublicationTitle"
                                        data-ng-model="publication.publicationTitle"
                                        placeholder="Publication Title"
                                        maxlength="250"
                                        class="form-control" required>
                             </div>
-                        </div>
-                        <div class="col-md-1">[ <i title="Remove Row {{$index + 1}}"
-                                                   data-ng-click="vm.deleteRow('publication', $index)"
-                                                   class="fa fa-times fa-lg" style="color:red;cursor:pointer;"></i>
-                            ]
+                            <div data-ng-show="!vm.enableEdit[$index]">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{publication.publicationTitle}}</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-4">
-                            <label class="control-label" for="iPublicationType{{$index}}">Publication Type<span
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nPublicationType.$invalid && !nForm[$index].nPublicationType.$pristine }">
+                            <label for="iPublicationType" class="control-label">Publication Type<span
+                                    data-ng-show="vm.enableEdit[$index]"
                                     class='require'>*</span></label>
-                            <div>
-                                <select name="nPublicationType{{$index}}"
-                                        id="iPublicationType{{$index}}"
+                            <div data-ng-show="vm.enableEdit[$index]">
+
+                                <select name="nPublicationType"
+                                        id="iPublicationType"
                                         data-ng-model="publication.publicationType"
                                         data-ng-options="publicationType.name for publicationType in vm.publicationTypes track by publicationType.id"
                                         class="form-control" required>
                                     <option value="">Select Publication Type</option>
                                 </select>
                             </div>
+                            <div data-ng-show="!vm.enableEdit[$index]">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{publication.publicationType.name}}</label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <label class="control-label" for="iPublicationCountry{{$index}}">Country<span
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nPublicationCountry.$invalid && !nForm[$index].nPublicationCountry.$pristine }">
+                            <label for="iPublicationCountry" class="control-label">Country<span
+                                    data-ng-show="vm.enableEdit[$index]"
                                     class='require'>*</span></label>
-                            <div>
-                                <select name="nPublicationCountry{{$index}}"
-                                        id="iPublicationCountry{{$index}}"
+                            <div data-ng-show="vm.enableEdit[$index]">
+
+                                <select name="nPublicationCountry"
+                                        id="iPublicationCountry"
                                         data-ng-model="publication.publicationCountry"
                                         data-ng-options="country.name for country in vm.countries track by country.id"
                                         class="form-control" required>
                                     <option value="">Select Country</option>
                                 </select>
                             </div>
+
+                            <div data-ng-show="!vm.enableEdit[$index]">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{publication.publicationCountry.name}}</label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <label class="control-label" for="iDateOfPublication{{$index}}">Year<span class='require'>*</span></label>
-                            <div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nDateOfPublication.$invalid && !nForm[$index].nDateOfPublication.$pristine }">
+                            <label for="iDateOfPublication" class="control-label">Year of
+                                Publication<span
+                                        data-ng-show="vm.enableEdit[$index]"
+                                        class='require'>*</span></label>
+                            <div data-ng-show="vm.enableEdit[$index]">
+
                                 <input type="number"
-                                       name="nDateOfPublication{{$index}}"
-                                       id="iDateOfPublication{{$index}}"
+                                       name="nDateOfPublication"
+                                       id="iDateOfPublication"
                                        data-ng-model="publication.dateOfPublication"
                                        maxlength="4"
                                        class="datepicker-default form-control" required>
                             </div>
+
+                            <div data-ng-show="!vm.enableEdit[$index]">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{publication.dateOfPublication}}</label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-1"></div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-10">
-                            <label class="control-label" for="iPublicationJournalName{{$index}}">Journal/Conference
-                                Name<span ng-show="publication.publicationType.id==1 || publication.publicationType.id==2"><span
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nPublicationJournalName.$invalid && !nForm[$index].nPublicationJournalName.$pristine }">
+                            <label class="control-label" for="iPublicationJournalName">Journal/Conference
+                                Name<span
+                                        ng-show="publication.publicationType.id==1 || publication.publicationType.id==2"><span
                                         class='require'>*</span></span>
                             </label>
-                            <div>
+                            <div data-ng-show="vm.enableEdit[$index]">
                                 <input type="text"
-                                       name="nPublicationJournalName{{$index}}"
-                                       id="iPublicationJournalName{{$index}}"
+                                       name="nPublicationJournalName"
+                                       id="iPublicationJournalName"
                                        data-ng-model="publication.publicationJournalName"
                                        placeholder="Journal Name"
                                        maxlength="250"
-                                       class="form-control" ng-required="publication.publicationType.id==1 || publication.publicationType.id==2">
+                                       class="form-control"
+                                       ng-required="publication.publicationType.id==1 || publication.publicationType.id==2">
+                            </div>
+                            <div data-ng-show="!vm.enableEdit[$index]">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{publication.publicationJournalName}}</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-1"></div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-4">
-                            <label class="control-label" for="iPublicationISSN{{$index}}">ISSN/DOI</label>
-                            <div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nPublicationISSN.$invalid && !nForm[$index].nPublicationISSN.$pristine }">
+                            <label for="iPublicationISSN" class="control-label">ISSN<span
+                                    data-ng-show="vm.enableEdit[$index]"
+                                    class='require'>*</span></label>
+                            <div data-ng-show="vm.enableEdit[$index]">
+
                                 <input type="text"
-                                       name="nPublicationISSN{{$index}}"
-                                       id="iPublicationISSN{{$index}}"
+                                       name="nPublicationISSN"
+                                       id="iPublicationISSN"
                                        data-ng-model="publication.publicationISSN"
                                        placeholder="ISSN No."
                                        maxlength="80"
                                        class="form-control">
                             </div>
+
+                            <div data-ng-show="!vm.enableEdit[$index]">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{publication.publicationISSN}}</label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <label class="control-label" for="iPublicationVolume{{$index}}">Volume</label>
-                            <div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nPublicationVolume.$invalid && !nForm[$index].nPublicationVolume.$pristine }">
+                            <label for="iPublicationVolume" class="control-label">Volume<span
+                                    data-ng-show="vm.enableEdit[$index]"
+                                    class='require'>*</span></label>
+                            <div data-ng-show="vm.enableEdit[$index]">
                                 <input type="text"
-                                       name="nPublicationVolume{{$index}}"
-                                       id="iPublicationVolume{{$index}}"
+                                       name="nPublicationVolume"
+                                       id="iPublicationVolume"
                                        data-ng-model="publication.publicationVolume"
                                        placeholder="Volume"
                                        maxlength="80"
                                        class="form-control">
                             </div>
+
+                            <div data-ng-show="!vm.enableEdit[$index]">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{publication.publicationVolume}}</label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <label class="control-label" for="iPublicationIssue{{$index}}">Issue</label>
-                            <div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nPublicationIssue.$invalid && !nForm[$index].nPublicationIssue.$pristine }">
+                            <label for="iPublicationIssue" class="control-label">Issue<span
+                                    data-ng-show="vm.enableEdit[$index]"
+                                    class='require'>*</span></label>
+                            <div data-ng-show="vm.enableEdit[$index]">
                                 <input type="text"
-                                       name="nPublicationIssue{{$index}}"
-                                       id="iPublicationIssue{{$index}}"
+                                       name="nPublicationIssue"
+                                       id="iPublicationIssue"
                                        data-ng-model="publication.publicationIssue"
                                        placeholder="Issue"
                                        maxlength="80"
                                        class="form-control">
                             </div>
+
+                            <div data-ng-show="!vm.enableEdit[$index]">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{publication.publicationIssue}}</label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-1"></div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-4">
-                            <label class="control-label" for="iPublishername{{$index}}">Publisher Name<span ng-show="publication.publicationType.id==1 || publication.publicationType.id==3"><span
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nPublisherName.$invalid && !nForm[$index].nPublisherName.$pristine }">
+                            <label class="control-label" for="iPublisherName">Publisher Name<span
+                                    ng-show="publication.publicationType.id==1 || publication.publicationType.id==3"><span
                                     class='require'>*</span></span></label></label>
-                            <div>
+                            <div data-ng-show="vm.enableEdit[$index]">
                                 <input data-ng-model="publication.publisherName"
-                                       name="nPublishername{{$index}}"
-                                       id="iPublishername{{$index}}"
+                                       name="nPublisherName"
+                                       id="iPublisherName"
                                        type="text"
                                        placeholder="Publisher Name"
                                        maxlength="100"
                                        ng-required="publication.publicationType.id==1 || publication.publicationType.id==3"
                                        class="form-control">
                             </div>
+                            <div data-ng-show="!vm.enableEdit[$index]">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{publication.publisherName}}</label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <label class="control-label" for="iPublicationPage{{$index}}">Pages<span ng-show="publication.publicationType.id==1 || publication.publicationType.id==2"><span
-                                    class='require'>*</span></span></label>
-                            <div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label" for="iPublicationPage">Pages</label>
+                            <div data-ng-show="vm.enableEdit[$index]">
                                 <input type="text"
-                                       name="nPublicationPage{{$index}}"
-                                       id="iPublicationPage{{$index}}"
+                                       name="nPublicationPage"
+                                       id="iPublicationPage"
                                        data-ng-model="publication.publicationPages"
                                        placeholder="Page"
                                        maxlength="80"
-                                       ng-required="publication.publicationType.id==1 || publication.publicationType.id==2"
                                        class="form-control">
                             </div>
+                            <div data-ng-show="!vm.enableEdit[$index]">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{publication.publicationPages}}</label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <label class="control-label" for="iPublicationInterestGenre{{$index}}">Genre</label>
-                            <div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nPublicationInterestGenre.$invalid && !nForm[$index].nPublicationInterestGenre.$pristine }">
+                            <label class="control-label"
+                                   for="iPublicationInterestGenre">Genre</label>
+                            <div data-ng-show="vm.enableEdit[$index]">
                                 <input type="text"
-                                       name="nPublicationInterestGenre{{$index}}"
-                                       id="iPublicationInterestGenre{{$index}}"
+                                       name="nPublicationInterestGenre"
+                                       id="iPublicationInterestGenre"
                                        data-ng-model="publication.publicationInterestGenre"
                                        placeholder="Genre"
                                        maxlength="100"
                                        class="form-control">
                             </div>
+                            <div data-ng-show="!vm.enableEdit[$index]">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{publication.publicationInterestGenre}}</label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-1"></div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-4">
-                            <label class="control-label" for="iEmployeeWebLink{{$index}}">Web Link</label>
-                            <div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nForm[$index].nEmployeeWebLink.$invalid && !nForm[$index].nEmployeeWebLink.$pristine }">
+                            <label class="control-label"
+                                   for="iEmployeeWebLink">Web Link</label>
+                            <div data-ng-show="vm.enableEdit[$index]">
                                 <input type="url"
-                                       name="nEmployeeWebLink{{$index}}"
-                                       id="iEmployeeWebLink{{$index}}"
+                                       name="nEmployeeWebLink"
+                                       id="iEmployeeWebLink"
                                        data-ng-model="publication.publicationWebLink"
                                        placeholder="Web Link"
                                        maxlength="100"
                                        class="form-control">
                             </div>
-                        </div>
-                        <div class="col-md-3"></div>
-                        <div class="col-md-3"><span data-ng-show="publication.status=='9'" style="float: right"></span>
-                            <span data-ng-show="publication.status=='0'" style="float: right"><b>Waiting for head's approval</b></span>
-                            <span data-ng-show="publication.status=='1'"></span>
-                            <span data-ng-show="publication.status=='2'"
-                                  style="color: red; float: right;"><b>Rejected</b></span>
-                        </div>
-                        <div class="col-md-1"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                            <div data-ng-show="!vm.enableEdit[$index]">
 
-        <div class="row">
-            <div class="col-md-12">
-                <div align="center">
-                    [ <a title="Add New Row" data-ng-click="vm.addNewRow('publication')"><i class="fa fa-plus"
-                                                                                            aria-hidden="true"
-                                                                                            style="cursor: pointer;color: green;"></i></a>
-                    ]
-                </div>
-                <div align="right">
-                    <button type="button" title="Cancel" class="btn"
-                            data-ng-click="vm.showPublicationInputDiv=false; vm.showTab('publication');">Cancel
-                    </button>
-                    <button type="submit" title="Submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Submit
-                    </button>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
+                                <div class="underlineBox">
+                                    <label class="control-label">{{publication.publicationWebLink}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-<div data-ng-show="!vm.showPublicationInputDiv">
-    <div dir-paginate="publication in vm.paginatedPublication | itemsPerPage: vm.itemPerPage"
-         current-page="vm.currentPage" total-items="vm.totalRecord" pagination-id="iPagination">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-1">
-                        <label class="control-label"><b>{{publication.rowNumber}}.</b></label>
-                    </div>
-                    <div class="col-md-10">
-                        <label class="control-label" for="iPublicationTitle{{$index}}">Title</label>
-                        <div class="underlineBox">
-                            <label class="control-label">{{publication.publicationTitle}}</label>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label></label>
+                            <div align="right">
+                            <!--<span data-ng-show="publication.status=='0'"
+                                  style="float: right"><b>Waiting for approval</b></span>
+                                <span data-ng-show="publication.status=='1'"></span>
+                                <span data-ng-show="publication.status=='2'"
+                                      style="color: red; float: right;"><b>Rejected</b></span>-->
+                            </div>
                         </div>
                     </div>
                 </div>
+
+
                 <div class="row">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-4">
-                        <label class="control-label" for="iPublicationType{{$index}}">Publication Type</label>
-                        <div class="underlineBox">
-                            <label class="control-label">{{publication.publicationType.name}}</label>
+                    <div data-ng-show="vm.enableEdit[$index]">
+                        <div class="col-md-4">
+                           <span data-ng-show="publication.id">
+                               <button type="button" class="btn btn-primary btn-xs"
+                                       data-ng-click="vm.activeEditButton($index, false)"
+                                       style="cursor:pointer;">Cancel
+                            </button>
+                           </span>
+                        </div>
+                        <div class="col-md-8">
+                            <div align="right">
+                                <button type="button" class="btn btn-primary btn-xs"
+                                        title="Remove Row {{$index + 1}}"
+                                        data-ng-click="vm.delete($index)"
+                                        style="cursor:pointer;"><span
+                                        data-ng-show="!publication.id">Remove</span><span
+                                        data-ng-show="publication.id">Delete</span>
+                                </button>
+                                <button type="submit" title="Submit" class="btn btn-success btn-xs"
+                                        data-ng-disabled="nForm[$index].$invalid"
+                                        style="cursor:pointer;"><span
+                                        data-ng-show="!publication.id">Save</span><span
+                                        data-ng-show="publication.id">Update</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <label class="control-label" for="iPublicationCountry{{$index}}">Country</label>
-                        <div class="underlineBox">
-                            <label class="control-label">{{publication.publicationCountry.name}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="control-label" for="iDateOfPublication{{$index}}">Year</label>
-                        <div class="underlineBox">
-                            <label class="control-label">{{publication.dateOfPublication}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-1"></div>
                 </div>
-                <div class="row">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-10">
-                        <label class="control-label" for="iPublicationJournalName{{$index}}">Journal/Conference
-                            Name</label>
-                        <div class="underlineBox">
-                            <label class="control-label">{{publication.publicationJournalName}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-1"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-4">
-                        <label class="control-label" for="iPublicationISSN{{$index}}">ISSN/DOI</label>
-                        <div class="underlineBox">
-                            <label class="control-label">{{publication.publicationISSN}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="control-label" for="iPublicationVolume{{$index}}">Volume</label>
-                        <div class="underlineBox">
-                            <label class="control-label">{{publication.publicationVolume}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <label class=" control-label" for="iPublicationIssue{{$index}}">Issue</label>
-                        <div class="underlineBox">
-                            <label class="control-label">{{publication.publicationIssue}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-1"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-4">
-                        <label class="control-label" for="iPublishername{{$index}}">Publisher Name</label>
-                        <div class="underlineBox">
-                            <label class="control-label">{{publication.publisherName}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="control-label" for="iPublicationPage{{$index}}">Pages</label>
-                        <div class="underlineBox">
-                            <label class="control-label">{{publication.publicationPages}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="control-label" for="iPublicationInterestGenre{{$index}}">Genre</label>
-                        <div class="underlineBox">
-                            <label class="control-label">{{publication.publicationInterestGenre}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-1"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-4">
-                        <label class="control-label" for="iEmployeeWebLink{{$index}}">Web Link</label>
-                        <div class="underlineBox">
-                            <label class="control-label">{{publication.publicationWebLink}}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3"></div>
-                    <div class="col-md-3"><span data-ng-show="publication.status=='0'" style="float: right"><b>Waiting for head's approval</b></span>
-                        <span data-ng-show="publication.status=='1'"></span>
-                        <span data-ng-show="publication.status=='2'"
-                              style="color: red; float: right;"><b>Rejected</b></span>
-                    </div>
-                    <div class="col-md-1"></div>
-                </div>
-            </div>
-        </div>
+            </form>
+        </accordion-group>
     </div>
-    <div align="right">
-        <dir-pagination-controls boundary-links="true"
-                                 pagination-id="iPagination" on-page-change="vm.pageChanged(newPageNumber)"
-                                 template-url="views\directive\dirPagination.tpl.html">
-        </dir-pagination-controls>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div align="right">
-                <button type="button" title="Cancel" class="btn" data-ng-click="vm.showPublicationInputDiv=true"><i
-                        class="fa fa-edit"></i>&nbsp;Edit
-                </button>
-            </div>
+</accordion>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div data-ng-show="vm.enableEditButton">
+            <button title="Add New Row" type="button" class="btn btn-success btn-xs"
+                    data-ng-click="vm.addNew(); vm.activeEditButton(vm.publication.length - 1, true); isopen='true';"
+                    style="cursor: pointer">Add new
+            </button>
         </div>
     </div>
 </div>
-
-
-
-

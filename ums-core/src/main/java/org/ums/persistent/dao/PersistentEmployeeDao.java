@@ -93,7 +93,7 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
 
   @Override
   public String create(MutableEmployee pMutable) {
-    mJdbcTemplate.update(INSERT_ONE, pMutable.getId(), pMutable.getShortName(), pMutable.getDesignation(),
+    mJdbcTemplate.update(INSERT_ONE, pMutable.getId(), pMutable.getShortName(), pMutable.getDesignation().getId(),
         pMutable.getEmploymentType(), pMutable.getDepartment().getId(), pMutable.getJoiningDate(),
         pMutable.getStatus(), pMutable.getEmployeeType());
     return pMutable.getId();

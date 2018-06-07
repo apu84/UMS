@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -65,6 +66,7 @@ public class UmsUtils {
     GPA_MAP.put("C", 2.25);
     GPA_MAP.put("D", 2.00);
     GPA_MAP.put("F", 0.00);
+    GPA_MAP.put("W", 0.00);
     return Collections.unmodifiableMap(GPA_MAP);
   }
 
@@ -83,6 +85,11 @@ public class UmsUtils {
 
     }
     return fDate;
+  }
+
+  public static Date getDateWithoutTime(Date pDate) throws Exception {
+    String dateStr = formatDate(pDate, "dd-MM-yyyy");
+    return convertToDate(dateStr, "dd-MM-yyyy");
   }
 
   public static String formatDate(Date date, String outputFormat) {
@@ -160,6 +167,11 @@ public class UmsUtils {
     calendar.setTime(pDate);
     calendar.add(Calendar.DATE, -decrementDate);
     return calendar.getTime();
+  }
+
+  public static Integer differenceBetweenTwoDayes(Date pFromDate, Date pToDate) {
+    long diffInMillies = Math.abs(pFromDate.getTime() - pToDate.getTime());
+    return Integer.parseInt(TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS) + "");
   }
 
   public static String getWhereClause(String pFilter) {

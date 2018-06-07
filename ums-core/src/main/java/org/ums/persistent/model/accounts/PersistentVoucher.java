@@ -1,6 +1,7 @@
 package org.ums.persistent.model.accounts;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -12,7 +13,7 @@ import org.ums.manager.accounts.VoucherManager;
 /**
  * Created by Monjur-E-Morshed on 08-Jan-18.
  */
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PersistentVoucher implements MutableVoucher {
 
   @JsonIgnore

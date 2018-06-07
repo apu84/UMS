@@ -25,17 +25,16 @@ module ums{
 
     export interface INewEmployee {
         id: string;
-        firstName: string;
-        lastName: string;
-        department: object;
-        designation: object;
-        employmentType: object;
+        name: string;
+        department: any;
+        designation: any;
+        employmentType: any;
         joiningDate: string;
-        status: object;
+        status: any;
         shortName: string;
         email: string;
-        employeeType: object;
-        role: object;
+        employeeType: any;
+        role: any;
         endDate: string;
         IUMSAccount: boolean;
     }

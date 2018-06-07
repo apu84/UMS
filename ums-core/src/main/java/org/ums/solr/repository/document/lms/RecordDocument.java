@@ -2,19 +2,10 @@ package org.ums.solr.repository.document.lms;
 
 import com.google.common.collect.Lists;
 import org.apache.solr.client.solrj.beans.Field;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
-import org.ums.domain.model.immutable.Department;
-import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.library.Record;
 import org.ums.enums.library.MaterialType;
-import org.ums.manager.library.PublisherManager;
-import org.ums.solr.repository.document.DepartmentDocument;
 import org.ums.solr.repository.document.SearchDocument;
 import org.ums.util.UmsUtils;
 
@@ -86,9 +77,6 @@ public class RecordDocument implements SearchDocument<String> {
   @Field("bindingType_txt")
   private List<String> bindingType;
 
-  @Field("acquisitionType_txt")
-  private List<String> acquisitionType;
-
   @Field("keywords_txt")
   private List<String> keywords;
 
@@ -120,10 +108,6 @@ public class RecordDocument implements SearchDocument<String> {
     callNo = Lists.newArrayList(pRecord.getCallNo());
     // publisher = mPublisherManager.get(pRecord.getPublisherId()).getName();
     status = Lists.newArrayList(pRecord.getRecordStatus().getLabel());
-    bindingType =
-        Lists.newArrayList(pRecord.getBookBindingType() == null ? null : pRecord.getBookBindingType().getLabel());
-    acquisitionType =
-        Lists.newArrayList(pRecord.getAcquisitionType() == null ? null : pRecord.getAcquisitionType().getLabel());
     keywords = Lists.newArrayList(pRecord.getKeyWords());
 
     subjects = UmsUtils.convertJsonStringToStringArray(pRecord.getSubjectJsonString(), "subject");

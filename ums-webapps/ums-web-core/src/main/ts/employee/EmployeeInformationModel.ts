@@ -1,8 +1,13 @@
 module ums{
     export interface IPersonalInformationModel {
+        general: IGeneralInformationModel;
+        contact: IContactInformationModel;
+        emergencyContact: IEmergencyContactInformationModel;
+    }
+
+    export interface IGeneralInformationModel{
         employeeId: string;
-        firstName: string;
-        lastName: string;
+        name: string;
         fatherName: string;
         motherName: string;
         gender: IGender;
@@ -15,6 +20,11 @@ module ums{
         bloodGroup: ICommon;
         spouseNidNo: string;
         website: string;
+        type: string;
+    }
+
+    export interface IContactInformationModel{
+        employeeId: string;
         organizationalEmail: string;
         personalEmail: string;
         mobile: string;
@@ -33,20 +43,28 @@ module ums{
         perAddressDistrict: ICommon;
         perAddressThana: ICommon;
         perAddressPostCode: string;
+        type: string;
+    }
+
+    export interface IEmergencyContactInformationModel{
+        employeeId: string;
         emergencyContactName: string;
         emergencyContactRelation: ICommon;
         emergencyContactPhone: string;
         emergencyContactAddress: string;
+        type: string;
     }
 
     export interface IAcademicInformationModel{
         id: string;
         employeeId: string;
-        degree: IAcademicDegreeTypes;
+        degreeLevel: IDegreeLevel;
+        degreeTitle: IDegreeTitle;
         institution: string;
         passingYear: number;
         result: string;
-        dbAction: string;
+        major: string;
+        duration: number;
     }
 
     export interface IPublicationInformationModel{
@@ -68,7 +86,6 @@ module ums{
         appliedOn: string;
         actionTakenOn: string;
         rowNumber: number;
-        dbAction: string;
     }
 
     export interface ITrainingInformationModel{
@@ -81,7 +98,6 @@ module ums{
         trainingDuration: number;
         trainingDurationString: string;
         trainingCategory: ICommon;
-        dbAction: string;
     }
 
     export interface IAwardInformationModel{
@@ -91,7 +107,6 @@ module ums{
         awardInstitute: string;
         awardedYear: number;
         awardShortDescription: string;
-        dbAction: string;
     }
 
     export interface IExperienceInformationModel{
@@ -104,7 +119,6 @@ module ums{
         experienceDuration: number;
         experienceDurationString: string;
         experienceCategory: ICommon;
-        dbAction: string;
     }
 
     export interface IAdditionalInformationModel{
@@ -112,12 +126,11 @@ module ums{
         roomNo: string;
         extNo: string;
         academicInitial: string;
-        areaOfInterestInformation: Array<ICommon>;
     }
 
     export interface IAreaOfInterestInformationModel {
-        areaOfInterest: ICommon;
-        areaOfInterestId: number;
+        employeeId: string;
+        areaOfInterest: string;
     }
 
     export interface IServiceInformationModel{
@@ -128,8 +141,7 @@ module ums{
         employmentType: ICommon;
         joiningDate: string;
         resignDate: string;
-        dbAction: string;
-        intervalDetails: Array<IServiceDetailsModel>;
+        intervalDetails: IServiceDetailsModel[];
     }
 
     export interface IServiceDetailsModel{
@@ -139,7 +151,6 @@ module ums{
         endDate: string;
         comment: string;
         serviceId: string;
-        dbAction: string;
     }
 
     export interface IGender {
@@ -152,12 +163,16 @@ module ums{
         foreign_id: number;
     }
 
-    export interface IAcademicDegreeTypes{
+    export interface IDegreeLevel{
         id: number;
-        type: number;
-        typeName: string;
         name: string;
-        shortName: string;
+    }
+
+    export interface IDegreeTitle {
+        id: number;
+        title: string;
+        degreeLevel: IDegreeLevel;
+        degreeLevelId: number;
     }
 
     export interface IDepartment {

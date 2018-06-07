@@ -1,5 +1,6 @@
 package org.ums.resource.helper;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
@@ -9,7 +10,6 @@ import org.ums.resource.ResourceHelper;
 import org.ums.usermanagement.role.MutableRole;
 import org.ums.usermanagement.role.Role;
 import org.ums.usermanagement.role.RoleManager;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;

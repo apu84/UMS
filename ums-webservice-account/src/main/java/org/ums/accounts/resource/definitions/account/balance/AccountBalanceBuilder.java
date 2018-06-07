@@ -38,7 +38,8 @@ public class AccountBalanceBuilder implements Builder<AccountBalance, MutableAcc
     if(pJsonObject.containsKey("accountCode"))
       pMutable.setAccountCode(Long.parseLong(pJsonObject.getString("accountCode")));
     if(pJsonObject.containsKey("yearOpenBalance"))
-      pMutable.setYearOpenBalance(BigDecimal.valueOf(Double.parseDouble(pJsonObject.getString("yearOpenBalance"))));
+      pMutable.setYearOpenBalance(BigDecimal.valueOf(Double.parseDouble(pJsonObject.getJsonNumber("yearOpenBalance")
+          .toString())));
     if(pJsonObject.containsKey("yearOpenBalanceType"))
       pMutable.setYearOpenBalanceType(BalanceType.get(pJsonObject.getString("yearOpenBalanceType")));
     if(pJsonObject.containsKey("totMonthDbBal01"))

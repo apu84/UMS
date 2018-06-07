@@ -34,8 +34,11 @@ module ums {
       this.data = {
         year: year
       };
-      this.getHolidays();
       this.getLoggedUsersInfo();
+    }
+
+    public enableOptionClicked() {
+      this.enableButton = true;
     }
 
 
@@ -66,6 +69,7 @@ module ums {
         this.user = user;
         if (this.user.roleId == Utils.REGISTRAR)
           this.enableEdit = true;
+        this.getHolidays();
       });
     }
 
@@ -77,8 +81,13 @@ module ums {
       this.holidaysService.fetchHolidaysByYear(this.year).then((holidays: Array<Holidays>) => {
         if (holidays.length == 0)
           this.getHolidayTypes();
-        else
+        else {
           this.holidays = holidays;
+          if (this.enableEdit)
+            this.holidays = holidays;
+          else
+            this.holidays = holidays.filter((h: Holidays) => h.enable == true);
+        }
 
         this.showLoader = false;
       });

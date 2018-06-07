@@ -17,11 +17,13 @@ import org.ums.employee.personal.PersonalInformation;
 import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.voucher.number.control.ResetBasis;
+import org.ums.enums.accounts.definitions.voucher.number.control.TransactionType;
 import org.ums.enums.accounts.definitions.voucher.number.control.VoucherType;
 import org.ums.exceptions.ValidationException;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
+import org.ums.mapper.account.ChequeRegisterMapper;
 import org.ums.persistent.model.accounts.PersistentAccountTransaction;
 import org.ums.persistent.model.accounts.PersistentChequeRegister;
 import org.ums.persistent.model.accounts.PersistentCreditorLedger;
@@ -116,8 +118,9 @@ public class AccountTransactionCommonResourceHelper extends
     }
   }
 
+  @Transactional
   @NotNull
-  private TransactionResponse createVoucherNumber(Voucher pVoucher, TransactionResponse pTransactionResponse,
+  public TransactionResponse createVoucherNumber(Voucher pVoucher, TransactionResponse pTransactionResponse,
       VoucherNumberControl pVoucherNumberControl, Calendar pCalendar, Date pCurrentDate) throws Exception {
     if(pVoucherNumberControl.getResetBasis().equals(ResetBasis.YEARLY)) {
       Date firstDate = UmsUtils.convertToDate("01-01-" + pCalendar.get(Calendar.YEAR), "dd-MM-yyyy");
@@ -192,8 +195,8 @@ public class AccountTransactionCommonResourceHelper extends
   }
 
   @Transactional
-  public List<AccountTransaction> save(JsonArray pJsonValues) throws Exception {
-    List<MutableAccountTransaction> transactions = createTransactions(pJsonValues);
+  public List<AccountTransaction> save(List<PersistentAccountTransaction> persistentAccountTransactionList) throws Exception {
+    List<MutableAccountTransaction> transactions = createTransactions(persistentAccountTransactionList);
     checkWithVoucherLimit(transactions);
     createOrUpdateCreditorLedger(transactions.stream().filter(t -> t.getSupplierCode() != null).collect(Collectors.toList()));
     createOrUpdateDebtorLedger(transactions.stream().filter(t -> t.getCustomerCode() != null).collect(Collectors.toList()));
@@ -201,16 +204,24 @@ public class AccountTransactionCommonResourceHelper extends
     return new ArrayList<>(transactions);
   }
 
-  private void checkWithVoucherLimit(List<MutableAccountTransaction> pTransactions) throws ValidationException {
+  @Transactional
+  public void checkWithVoucherLimit(List<MutableAccountTransaction> pTransactions) throws ValidationException {
     if(pTransactions.size() == 0)
       return;
 
     VoucherNumberControl voucherNumberControl =
         mVoucherNumberControlManager.getByVoucher(pTransactions.get(0).getVoucher(), pTransactions.get(0).getCompany());
+    BigDecimal totalTransaction = new BigDecimal(0);
     for(MutableAccountTransaction t : pTransactions) {
-      if(t.getAmount() != null && t.getAmount().compareTo(voucherNumberControl.getVoucherLimit()) == 1) {
-        throw new ValidationException("Maximum limit exceeded");
-      }
+      if(t.getBalanceType().equals(BalanceType.Cr))
+        totalTransaction = totalTransaction.subtract(t.getAmount());
+      else
+        totalTransaction = totalTransaction.add(t.getAmount());
+
+    }
+
+    if(totalTransaction.compareTo(voucherNumberControl.getVoucherLimit()) == 1) {
+      throw new ValidationException("Maximum limit exceeded");
     }
   }
 
@@ -245,7 +256,7 @@ public class AccountTransactionCommonResourceHelper extends
     mutableAccountTransactions.forEach(a -> {
       a.setVoucherNo(a.getVoucherNo().substring(2));
       PersonalInformation personalInformation = mPersonalInformationManager.get(a.getModifiedBy());
-      a.setModifierName(personalInformation.getFirstName() + " " + (personalInformation.getLastName() == null ? "" : personalInformation.getLastName()));
+      a.setModifierName(personalInformation.getName());
     });
     PaginatedVouchers paginatedVouchers = new PaginatedVouchers();
     List<AccountTransaction> accountTransactions = new ArrayList<>(mutableAccountTransactions);
@@ -255,7 +266,7 @@ public class AccountTransactionCommonResourceHelper extends
   }
 
   public List<AccountTransaction> getByVoucherNoAndDate(String pVoucherNo, String pDate) throws Exception {
-    Date dateObj = UmsUtils.convertToDate(pDate, "yyyy-MM-dd");
+    Date dateObj = UmsUtils.convertToDate(pDate, "dd-MM-yyyy");
     Company company = mCompanyManager.getDefaultCompany();
     List<MutableAccountTransaction> mutableAccountTransactions = getContentManager().getByVoucherNoAndDate(company.getId() + pVoucherNo, dateObj);
     List<MutableDebtorLedger> debtorLedgers = mDebtorLedgerManager.get(new ArrayList<>(mutableAccountTransactions));
@@ -284,7 +295,8 @@ public class AccountTransactionCommonResourceHelper extends
   }
 
   @NotNull
-  private List<MutableAccountTransaction> createTransactions(JsonArray pJsonValues) throws Exception {
+  private List<MutableAccountTransaction> createTransactions(
+      List<PersistentAccountTransaction> persistentAccountTransactionList) throws Exception {
     List<MutableAccountTransaction> newTransactions = new ArrayList<>();
     List<MutableAccountTransaction> updateTransactions = new ArrayList<>();
     List<MutableChequeRegister> chequeRegisters = new ArrayList<>();
@@ -293,11 +305,12 @@ public class AccountTransactionCommonResourceHelper extends
     Company company = mCompanyManager.get("01");
     String voucherNo = "";
 
-    for(int i = 0; i < pJsonValues.size(); i++) {
-      PersistentAccountTransaction transaction = new PersistentAccountTransaction();
-      mAccountTransactionBuilder.build(transaction, pJsonValues.getJsonObject(i));
-      PersistentChequeRegister chequeRegister = new PersistentChequeRegister();
-      mChequeRegisterBuilder.build(chequeRegister, pJsonValues.getJsonObject(i));
+    for(int i = 0; i < persistentAccountTransactionList.size(); i++) {
+      PersistentAccountTransaction transaction = persistentAccountTransactionList.get(i);
+      // mAccountTransactionBuilder.build(transaction, pJsonValues.getJsonObject(i));
+      PersistentChequeRegister chequeRegister =
+          ChequeRegisterMapper.convertAccountTransactionToChequeRegister(transaction);
+      // mChequeRegisterBuilder.build(chequeRegister, null);
       transaction.setModifiedBy(loggedUser.getEmployeeId());
       transaction.setModifiedDate(new Date());
       transaction.setVoucherDate(new Date());
@@ -363,7 +376,7 @@ public class AccountTransactionCommonResourceHelper extends
   }
 
   @Transactional
-  public List<AccountTransaction> postTransactions(JsonArray pJsonValues) throws Exception {
+  public List<AccountTransaction> postTransactions(List<PersistentAccountTransaction> accountTransactionList) throws Exception {
     List<MutableAccountTransaction> newTransactions = new ArrayList<>();
     List<MutableAccountTransaction> updateTransactions = new ArrayList<>();
     List<MutableChequeRegister> chequeRegisters = new ArrayList<>();
@@ -371,11 +384,11 @@ public class AccountTransactionCommonResourceHelper extends
     User loggedUser = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     Company company = mCompanyManager.get("01");
     String voucherNo = "";
-    for (int i = 0; i < pJsonValues.size(); i++) {
-      PersistentAccountTransaction transaction = new PersistentAccountTransaction();
-      mAccountTransactionBuilder.build(transaction, pJsonValues.getJsonObject(i));
-      PersistentChequeRegister chequeRegister = new PersistentChequeRegister();
-      mChequeRegisterBuilder.build(chequeRegister, pJsonValues.getJsonObject(i));
+    for (int i = 0; i < accountTransactionList.size(); i++) {
+      PersistentAccountTransaction transaction = accountTransactionList.get(i);
+//      mAccountTransactionBuilder.build(transaction, pJsonValues.getJsonObject(i));
+      PersistentChequeRegister chequeRegister = ChequeRegisterMapper.convertAccountTransactionToChequeRegister(transaction);
+//      mChequeRegisterBuilder.build(chequeRegister, pJsonValues.getJsonObject(i));
       transaction.setModifiedBy(loggedUser.getEmployeeId());
       transaction.setModifiedDate(new Date());
       transaction.setPostDate(new Date());

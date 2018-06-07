@@ -4,6 +4,8 @@ import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.enums.registrar.ExperienceCategory;
 
+import java.util.Date;
+
 public class PersistentExperienceInformation implements MutableExperienceInformation {
 
   private static ExperienceInformationManager sExperienceInformationManager;
@@ -18,8 +20,8 @@ public class PersistentExperienceInformation implements MutableExperienceInforma
   private String mEmployeeId;
   private String mExperienceInstitute;
   private String mDesignation;
-  private String mExperienceFromDate;
-  private String mExperienceToDate;
+  private Date mExperienceFromDate;
+  private Date mExperienceToDate;
   private int mExperienceDuration;
   private String mExperienceDurationString;
   private ExperienceCategory mExperienceCategory;
@@ -94,12 +96,12 @@ public class PersistentExperienceInformation implements MutableExperienceInforma
   }
 
   @Override
-  public void setExperienceFromDate(String pExperienceFromDate) {
+  public void setExperienceFromDate(Date pExperienceFromDate) {
     mExperienceFromDate = pExperienceFromDate;
   }
 
   @Override
-  public void setExperienceToDate(String pExperienceToDate) {
+  public void setExperienceToDate(Date pExperienceToDate) {
     mExperienceToDate = pExperienceToDate;
   }
 
@@ -139,12 +141,12 @@ public class PersistentExperienceInformation implements MutableExperienceInforma
   }
 
   @Override
-  public String getExperienceFromDate() {
+  public Date getExperienceFromDate() {
     return mExperienceFromDate;
   }
 
   @Override
-  public String getExperienceToDate() {
+  public Date getExperienceToDate() {
     return mExperienceToDate;
   }
 

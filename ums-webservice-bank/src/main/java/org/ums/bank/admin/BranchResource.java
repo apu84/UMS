@@ -23,9 +23,9 @@ public class BranchResource extends Resource {
   BranchManager mBranchManager;
 
   @GET
-  @Path("/all")
-  public List<Branch> getAllBranch() throws Exception {
-    return mBranchManager.getAll();
+  @Path("/{bankId}/all")
+  public List<Branch> getAllBranch(@PathParam("bankId") Long pBankId) throws Exception {
+    return mBranchManager.getBranchesByBank(pBankId);
   }
 
   @GET

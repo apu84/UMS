@@ -58,6 +58,13 @@ module ums {
       return defer.promise;
     }
 
+      public closeCurrentYearAndCreateNewYear(startDate: string, endDate: string, transferType:number): ng.IPromise<IFinancialAccountYear[]> {
+          let defer: ng.IDeferred<IFinancialAccountYear[]> = this.$q.defer();
+          this.httpClient.get(this.financialAccountYearServiceUrl + "/startDate/"+startDate+"/endDate/"+endDate+"/transferType/"+transferType , HttpClient.MIME_TYPE_JSON,
+              (response:IFinancialAccountYear[])=>defer.resolve(response));
+          return defer.promise;
+      }
+
   }
 
   UMS.service("FinancialAccountYearService", FinancialAccountYearService);
