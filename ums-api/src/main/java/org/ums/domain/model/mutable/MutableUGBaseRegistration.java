@@ -36,4 +36,5 @@ public interface MutableUGBaseRegistration extends UGBaseRegistration, Editable<
   void setExamDate(final String pExamDate);
 
   void setMessage(final String pMessage);
+
 }

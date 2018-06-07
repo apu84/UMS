@@ -6,11 +6,13 @@ import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
+import org.ums.enums.ApplicationStatus;
 import org.ums.enums.ApplicationType;
 
 /**
  * Created by My Pc on 7/11/2016.
  */
+
 public interface MutableApplicationCCI extends ApplicationCCI, Editable<Long>, MutableLastModifier,
     MutableIdentifier<Long> {
   void setSemester(final Semester pSemester);
@@ -48,4 +50,37 @@ public interface MutableApplicationCCI extends ApplicationCCI, Editable<Long>, M
   void setRoomNo(final String pRoomNo);
 
   void setRoomId(final Integer pRoomId);
+
+  void setApplicationStatus(final ApplicationStatus applicationStatus);
+
+  void setCCIStatus(final Integer cciStatus);
+
+  void setGradeLetter(final String gradeLetter);
+
+  void setCarryYear(final Integer carryyear);
+
+  void setCarrySemester(final Integer carrySemester);
+
+  void setFullName(final String fullName);
+
+  void setCurrentEnrolledSemester(final Integer currentEnrolledSemester);
+
+  void setTotalcarry(final Integer totalcarry);
+
+  void setTotalApplied(final Integer totalApplied);
+
+  void setTotalApproved(final Integer totalApproved);
+
+  void setStartDate(final String pStartdate);
+
+  void setTransactionID(final String transactionId);
+
+  void setImprovementLimit(final Integer improvementLimit);
+
+  void setCarryLastDate(final String carryLastDate);
+
+  void setRowNumber(final Integer rowNumber);
+
+  void setSemesterName(final String semesterName);
+
 }

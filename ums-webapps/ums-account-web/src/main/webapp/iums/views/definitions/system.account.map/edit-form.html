@@ -21,13 +21,15 @@
                             <div class="form-group">
                                 <label for="groupName" class="col-md-3 control-label">Account Name</label>
                                 <div class="col-md-9">
-                                    <ui-select id="groupName" theme="bootstrap"
-                                               data-ng-model="vm.systemGroupMap.account"
+                                    <ui-select id="accountName" theme="bootstrap"
+                                               data-ng-model="vm.systemGroupMap.account" limit="100"
                                     >
                                         <ui-select-match placeholder="Select Account">
                                             {{vm.systemGroupMap.account.accountName}}
                                         </ui-select-match>
-                                        <ui-select-choices repeat="g in vm.accountList|filter:$select.search">
+                                        <ui-select-choices
+
+                                                repeat="g in vm.accountList|filter:$select.search| limitTo: $select.limit">
                                             <small ng-bind-html="g.accountName | highlight:$select.search"></small>
                                         </ui-select-choices>
                                     </ui-select>

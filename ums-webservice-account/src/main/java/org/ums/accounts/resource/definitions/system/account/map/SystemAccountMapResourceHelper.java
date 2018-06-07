@@ -43,7 +43,7 @@ public class SystemAccountMapResourceHelper {
   }
 
   @Transactional
-  public SystemAccountMap create(MutableSystemAccountMap pMutableSystemAccountMap) {
+  public Long create(MutableSystemAccountMap pMutableSystemAccountMap) {
 
     pMutableSystemAccountMap.setModifiedBy(mUserResourceHelper.getLoggedUser().getEmployeeId());
     pMutableSystemAccountMap.setCompanyId(mCompanyManager.getDefaultCompany().getId());
@@ -54,7 +54,7 @@ public class SystemAccountMapResourceHelper {
     else {
       mSystemAccountMapManager.update(pMutableSystemAccountMap);
     }
-    return pMutableSystemAccountMap;
+    return pMutableSystemAccountMap.getId();
   }
 
   @Transactional

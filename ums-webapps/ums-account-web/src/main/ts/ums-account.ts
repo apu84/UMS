@@ -18,7 +18,6 @@
     'ui.select',
     'angularAccounting',
     'ngHandsontable'
-
   ]).run(function(ExpireToken){
 
   });

@@ -55,7 +55,7 @@ public class PersistentStudentPayment implements MutableStudentPayment {
 
   @Override
   public void setTransactionId(String pTransactionId) {
-    this.mTransactionId = pTransactionId;
+    mTransactionId = pTransactionId;
   }
 
   @Override

@@ -1,5 +1,6 @@
 package org.ums.cache;
 
+import org.ums.domain.model.immutable.ApplicationTES;
 import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.manager.CacheManager;
@@ -11,6 +12,10 @@ import java.util.List;
 public class CourseTeacherCache extends
     AssignedTeacherCache<CourseTeacher, MutableCourseTeacher, Long, CourseTeacherManager> implements
     CourseTeacherManager {
+  @Override
+  public List<ApplicationTES> getAllSectionForSelectedCourse(String pCourseId, String pTeacherId, Integer pSemesterId) {
+    return getManager().getAllSectionForSelectedCourse(pCourseId, pTeacherId, pSemesterId);
+  }
 
   public CourseTeacherCache(final CacheManager<CourseTeacher, Long> pCacheManager) {
     super(pCacheManager);

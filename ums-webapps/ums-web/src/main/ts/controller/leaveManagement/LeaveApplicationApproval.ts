@@ -90,7 +90,6 @@ module ums {
       this.getUsersInformation();
       this.getAdditionaPermissions();
       this.getLeaveTypes();
-
     }
 
       private getLeaveTypes() {
@@ -197,7 +196,7 @@ module ums {
       if (this.pagination.currentPage == null)
         this.pagination.currentPage = 1;
       console.log(this.pagination.currentPage);
-      this.leaveApplicationStatusService.fetchAllLeaveApplicationsOfEmployeeWithPagination(this.applicantsId, this.leaveApprovalStatus.id, this.pagination.currentPage, this.itemsPerPage).then((leaveApplications) => {
+        this.leaveApplicationStatusService.fetchAllLeaveApplicationsOfEmployeeWithPagination(this.applicantsId, this.leaveApprovalStatus.id, this.pagination.currentPage, this.itemsPerPage).then((leaveApplications) => {
         this.pendingApplications = leaveApplications.statusList;
         this.totalItems = leaveApplications.totalSize;
         console.log("Histories...");

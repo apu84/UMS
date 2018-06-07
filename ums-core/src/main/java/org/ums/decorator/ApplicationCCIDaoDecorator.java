@@ -2,6 +2,7 @@ package org.ums.decorator;
 
 import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
+import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.manager.ApplicationCCIManager;
 
 import java.util.List;
@@ -12,6 +13,59 @@ import java.util.List;
 public class ApplicationCCIDaoDecorator extends
     ContentDaoDecorator<ApplicationCCI, MutableApplicationCCI, Long, ApplicationCCIManager> implements
     ApplicationCCIManager {
+  @Override
+  public ApplicationCCI getByTransactionId(String ptransactionId) {
+    return getManager().getByTransactionId(ptransactionId);
+  }
+
+  @Override
+  public String getStartdate(Integer pSemesterId) {
+    return getManager().getStartdate(pSemesterId);
+  }
+
+  @Override
+  public List<ApplicationCCI> getApprovedImprovemntInfo(String pStudentId) {
+    return getManager().getApprovedImprovemntInfo(pStudentId);
+  }
+
+  @Override
+  public Integer getAllReords(String pApprovalStatus, String empDeptId) {
+    return getManager().getAllReords(pApprovalStatus, empDeptId);
+  }
+
+  @Override
+  public String getApplicationCCIForCarryLastfdate(Integer pSemesterId) {
+    return getManager().getApplicationCCIForCarryLastfdate(pSemesterId);
+  }
+
+  @Override
+  public int updatebank(MutableStudentPayment MutableStudentPayment) {
+    return getManager().updatebank(MutableStudentPayment);
+  }
+
+  @Override
+  public List<ApplicationCCI> getApplicationCarryForHeadsApprovalAndAppiled(String pStudentId, Integer pSemesterId) {
+    return getManager().getApplicationCarryForHeadsApprovalAndAppiled(pStudentId, pSemesterId);
+  }
+
+  @Override
+  public List<ApplicationCCI> getApplicationCCIForImprovementLimit(String pStudentId) {
+    return getManager().getApplicationCCIForImprovementLimit(pStudentId);
+  }
+
+  @Override
+  public List<ApplicationCCI> getByStudentId(String pApprovalStatus, String pStudentId, Integer pSemesterId,
+      String empDeptId) {
+    return getManager().getByStudentId(pApprovalStatus, pStudentId, pSemesterId, empDeptId);
+  }
+
+  // carryHeadsApproval
+  @Override
+  public List<ApplicationCCI> getApplicationCarryForHeadsApproval(String pApprovalStatus, Integer pCurentpage,
+      Integer pItemPerpage, String empDeptId) {
+    return getManager().getApplicationCarryForHeadsApproval(pApprovalStatus, pCurentpage, pItemPerpage, empDeptId);
+  }
+
   @Override
   public List<ApplicationCCI> getByStudentIdAndSemesterAndType(String pStudentId, int pSemesterId, int pExamType) {
     return getManager().getByStudentIdAndSemesterAndType(pStudentId, pSemesterId, pExamType);
@@ -35,6 +89,11 @@ public class ApplicationCCIDaoDecorator extends
   @Override
   public List<ApplicationCCI> getByStudentIdAndSemester(String pStudentId, int pSemesterId) {
     return getManager().getByStudentIdAndSemester(pStudentId, pSemesterId);
+  }
+
+  @Override
+  public List<ApplicationCCI> getTotalCarry(String pStudentId, Integer pSemesterId) {
+    return getManager().getTotalCarry(pStudentId, pSemesterId);
   }
 
   @Override
