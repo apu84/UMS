@@ -27,9 +27,16 @@ public class ScheduleResource extends MutableScheduleResource {
   }
 
   @GET
-  @Path("/meetingType/{meetingType}")
+  @Path("/nextMeetingNo/meetingType/{meetingType}")
   public JsonObject getNextMeetingNo(final @PathParam("meetingType") int pMeetingTypeId, final @Context Request pRequest)
       throws Exception {
     return mHelper.getNextMeetingNo(pMeetingTypeId, mUriInfo);
+  }
+
+  @GET
+  @Path("/meetingType/{meetingType}")
+  public JsonObject getMeetingInfo(final @PathParam("meetingType") int pMeetingTypeId, final @Context Request pRequest)
+      throws Exception {
+    return mHelper.getMeetingInfo(pMeetingTypeId, mUriInfo);
   }
 }

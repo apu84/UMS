@@ -16,6 +16,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.List;
 
 @Component
 public class ScheduleResourceHelper extends ResourceHelper<Schedule, MutableSchedule, Long> {
@@ -52,6 +53,11 @@ public class ScheduleResourceHelper extends ResourceHelper<Schedule, MutableSche
     mManager.delete(mutableSchedule);
     localCache.invalidate();
     return Response.noContent().build();
+  }
+
+  public JsonObject getMeetingInfo(final int pMeetingTypeId, final UriInfo pUriInfo) {
+    List<Schedule> scheduleList = mManager.get(pMeetingTypeId);
+    return buildJsonResponse(scheduleList, pUriInfo);
   }
 
   public JsonObject getNextMeetingNo(final int pMeetingTypeId, final UriInfo pUriInfo) {

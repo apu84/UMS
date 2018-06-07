@@ -1,34 +1,30 @@
 package org.ums.solr.repository.transaction.meeting;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.ums.decorator.meeting.AgendaResolutionDaoDecorator;
-import org.ums.domain.model.immutable.meeting.AgendaResolution;
 import org.ums.domain.model.mutable.meeting.MutableAgendaResolution;
-import org.ums.manager.meeting.AgendaResolutionManager;
 import org.ums.solr.indexer.PersistentIndex;
 import org.ums.solr.indexer.model.MutableIndex;
 
 public class AgendaResolutionTransaction extends AgendaResolutionDaoDecorator {
 
   @Override
-  public Long saveAgendaResolution(MutableAgendaResolution pMutableAgendaResolution) {
-    Long id = getManager().saveAgendaResolution(pMutableAgendaResolution);
+  public Long create(MutableAgendaResolution pMutable) {
+    Long id = getManager().create(pMutable);
     generateIndexEntity(id, false);
     return id;
   }
 
   @Override
-  public int updateAgendaResolution(MutableAgendaResolution pMutableAgendaResolution) {
-    int update = getManager().updateAgendaResolution(pMutableAgendaResolution);
-    generateIndexEntity(pMutableAgendaResolution.getId(), false);
+  public int update(MutableAgendaResolution pMutable) {
+    int update = getManager().update(pMutable);
+    generateIndexEntity(pMutable.getId(), false);
     return update;
   }
 
   @Override
-  public int deleteAgendaResolution(Long pId) {
-    int delete = getManager().deleteAgendaResolution(pId);
-    generateIndexEntity(pId, true);
+  public int delete(MutableAgendaResolution pMutable) {
+    int delete = getManager().delete(pMutable);
+    generateIndexEntity(pMutable.getId(), true);
     return delete;
   }
 

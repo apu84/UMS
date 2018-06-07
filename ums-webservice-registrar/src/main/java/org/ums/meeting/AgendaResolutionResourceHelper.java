@@ -1,7 +1,6 @@
 package org.ums.meeting;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,13 +38,11 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
   AgendaResolutionRepository mRepository;
 
   public JsonObject getAgendaResolution(final String pScheduleId, final UriInfo pUriInfo) {
-    List<AgendaResolution> pAgendaResolution = new ArrayList<>();
-    try {
-      pAgendaResolution = mManager.getAgendaResolution(Long.parseLong(pScheduleId));
-    } catch(EmptyResultDataAccessException e) {
-
+    if(mManager.exists(Long.parseLong(pScheduleId))) {
+      List<AgendaResolution> agendaResolutionList = mManager.getAgendaResolution(Long.parseLong(pScheduleId));
+      return buildJsonResponse(agendaResolutionList, pUriInfo);
     }
-    return buildJson(pAgendaResolution, pUriInfo);
+    return null;
   }
 
   @Transactional
@@ -53,7 +50,7 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
     MutableAgendaResolution mutableAgendaResolution = new PersistentAgendaResolution();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableAgendaResolution, pJsonObject.getJsonObject("entries"), localCache);
-    mManager.saveAgendaResolution(mutableAgendaResolution);
+    mManager.create(mutableAgendaResolution);
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();
@@ -78,14 +75,14 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
     MutableAgendaResolution mutableAgendaResolution = new PersistentAgendaResolution();
     LocalCache localCache = new LocalCache();
     mBuilder.updateBuilder(mutableAgendaResolution, pJsonObject.getJsonObject("entries"), localCache);
-    mManager.updateAgendaResolution(mutableAgendaResolution);
+    mManager.update(mutableAgendaResolution);
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();
   }
 
   public Response deleteAgendaResolution(String pId, UriInfo pUriInfo) {
-    mManager.deleteAgendaResolution(Long.parseLong(pId));
+    mManager.delete((MutableAgendaResolution) mManager.get(Long.parseLong(pId)));
     return Response.noContent().build();
   }
 

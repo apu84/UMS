@@ -54,8 +54,9 @@ module ums{
 
         public getMeetingNumber(meetingType: number): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.scheduleUrl+"/getAll/meetingType/"+ meetingType, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.scheduleUrl+"/meetingType/"+ meetingType, HttpClient.MIME_TYPE_JSON,
                 (json: any, etag: string) => {
+                console.log(json);
                     defer.resolve(json.entries);
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {
@@ -66,7 +67,7 @@ module ums{
 
         public getNextMeetingNo(meetingType: number): ng.IPromise<any>{
             let defer = this.$q.defer();
-            this.httpClient.get(this.scheduleUrl+"/meetingType/"+ meetingType, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.scheduleUrl+"/nextMeetingNo/meetingType/"+ meetingType, HttpClient.MIME_TYPE_JSON,
                 (json: any, etag: string) => {
                     defer.resolve(json);
                 },
@@ -81,7 +82,7 @@ module ums{
         public saveAgendaResolution(json: any): ng.IPromise<any> {
             console.log(json);
             let defer = this.$q.defer();
-            this.httpClient.post(this.agendaResolutionUrl + "/save", json, 'application/json')
+            this.httpClient.post(this.agendaResolutionUrl, json, 'application/json')
                 .success(() => {
                     this.notify.success("Successfully Saved");
                     defer.resolve("Saved");
@@ -95,7 +96,7 @@ module ums{
 
         public getMeetingAgendaResolution(scheduleId: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.get(this.agendaResolutionUrl + "/get/scheduleId/"+ scheduleId, HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get(this.agendaResolutionUrl + "/scheduleId/"+ scheduleId, HttpClient.MIME_TYPE_JSON,
                 (json: any, etag: string) => {
                     defer.resolve(json.entries);
                 },
@@ -107,7 +108,7 @@ module ums{
 
         public updateMeetingAgendaResolution(json: any): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.put(this.agendaResolutionUrl + "/update", json, HttpClient.MIME_TYPE_JSON)
+            this.httpClient.put(this.agendaResolutionUrl, json, HttpClient.MIME_TYPE_JSON)
                 .success(() => {
                     this.notify.success("Update Successful");
                     defer.resolve();
@@ -120,7 +121,7 @@ module ums{
 
         public deleteMeetingAgendaResolution(id: string): ng.IPromise<any> {
             let defer = this.$q.defer();
-            this.httpClient.doDelete(this.agendaResolutionUrl + "/delete/" + id)
+            this.httpClient.doDelete(this.agendaResolutionUrl + "/" + id)
                 .success(() => {
                     this.notify.success("Delete Successful");
                     defer.resolve();
