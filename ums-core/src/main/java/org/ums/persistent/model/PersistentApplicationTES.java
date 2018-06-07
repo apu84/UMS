@@ -34,8 +34,7 @@ public class PersistentApplicationTES implements MutableApplicationTES {
   private String mSection;
   private String mDeptId;
   private String mDeptShortName;
-  private String mFirstName;
-  private String mLastName;
+  private String mFullName;
   private Integer mObservationType;
   private Integer mPoint;
   private String mComment;
@@ -66,8 +65,7 @@ public class PersistentApplicationTES implements MutableApplicationTES {
     mSection = persistentApplicationTES.getSection();
     mDeptId = persistentApplicationTES.getDeptId();
     mDeptShortName = persistentApplicationTES.getDeptShortName();
-    mFirstName = persistentApplicationTES.getFirstName();
-    mLastName = persistentApplicationTES.getLastName();
+    mFullName = persistentApplicationTES.getFullName();
     mObservationType = persistentApplicationTES.getObservationType();
     mPoint = persistentApplicationTES.getPoint();
     mComment = persistentApplicationTES.getComment();
@@ -223,13 +221,8 @@ public class PersistentApplicationTES implements MutableApplicationTES {
   }
 
   @Override
-  public void setFirstName(String pFirstName) {
-    mFirstName = pFirstName;
-  }
-
-  @Override
-  public void setLastName(String pLastName) {
-    mLastName = pLastName;
+  public void setFullName(String pFirstName) {
+    mFullName = pFirstName;
   }
 
   @Override
@@ -253,18 +246,13 @@ public class PersistentApplicationTES implements MutableApplicationTES {
   }
 
   @Override
-  public String getFirstName() {
-    return mFirstName;
+  public String getFullName() {
+    return mFullName;
   }
 
   @Override
-  public String getLastName() {
-    return mLastName;
-  }
-
-  @Override
-  public void setCourseTitle(String pCoursetitle) {
-    mCourseTitle = pCoursetitle;
+  public void setCourseTitle(String pCourseTitle) {
+    mCourseTitle = pCourseTitle;
   }
 
   @Override

@@ -34,9 +34,7 @@ public interface MutableApplicationTES extends ApplicationTES, Editable<Long>, M
 
   void setDeptShortName(final String pDeptShortName);
 
-  void setFirstName(final String pFirstName);
-
-  void setLastName(final String pLastName);
+  void setFullName(final String pFirstName);
 
   void setObservationType(final Integer pObservationType);
 

@@ -42,9 +42,7 @@ public interface ApplicationTES extends Serializable, LastModifier, EditType<Mut
 
   String getDeptShortName();
 
-  String getFirstName();
-
-  String getLastName();
+  String getFullName();
 
   String getStudentId();
 

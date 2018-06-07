@@ -70,11 +70,8 @@ public class ApplicationTESBuilder implements Builder<ApplicationTES, MutableApp
     if(pReadOnly.getDeptShortName() != null)
       pBuilder.add("deptShortName", pReadOnly.getDeptShortName());
 
-    if(pReadOnly.getFirstName() != null)
-      pBuilder.add("firstName", pReadOnly.getFirstName());
-
-    if(pReadOnly.getLastName() != null)
-      pBuilder.add("lastName", pReadOnly.getLastName());
+    if(pReadOnly.getFullName() != null)
+      pBuilder.add("fullName", pReadOnly.getFullName());
 
     if(pReadOnly.getStudentId() != null)
       pBuilder.add("studentId", pReadOnly.getStudentId());

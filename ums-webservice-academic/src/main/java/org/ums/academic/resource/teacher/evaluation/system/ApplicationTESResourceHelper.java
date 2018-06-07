@@ -442,7 +442,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       String teacherName, deptName, courseNo, courseTitle, programName = "";
       Integer registeredStudents = 0;
       double percentage = 0;
-      teacherName = mPersonalInformationManager.get(teacherRelatedCourseList.get(j).getTeacherId()).getFullName();
+      teacherName = mPersonalInformationManager.get(teacherRelatedCourseList.get(j).getTeacherId()).getName();
       deptName = mEmployeeManager.get(teacherRelatedCourseList.get(j).getTeacherId()).getDepartment().getShortName();
       courseNo = mCourseManager.get(teacherRelatedCourseList.get(j).getReviewEligibleCourseId()).getNo();
       courseTitle = mCourseManager.get(teacherRelatedCourseList.get(j).getReviewEligibleCourseId()).getTitle();
@@ -743,7 +743,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         String teacherName = "", courseNo = "", courseTitle = "", programName = "";
         double value = 0;
         double percentage = 0;
-        teacherName = mPersonalInformationManager.get(getTeachers.get(j).getTeacherId()).getFullName();
+        teacherName = mPersonalInformationManager.get(getTeachers.get(j).getTeacherId()).getName();
         courseNo = mCourseManager.get(getCourses.get(i).getReviewEligibleCourseId()).getNo();
         courseTitle = mCourseManager.get(getCourses.get(i).getReviewEligibleCourseId()).getTitle();
         if(studentNo != 0) {
@@ -987,10 +987,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
 
   private void getTeacherPersonalData(String pDeptId, List<MutableApplicationTES> applications) {
     for(int i = 0; i < applications.size(); i++) {
-      applications.get(i).setFirstName(
-          mPersonalInformationManager.get(applications.get(i).getTeacherId()).getFirstName());
-      applications.get(i)
-          .setLastName(mPersonalInformationManager.get(applications.get(i).getTeacherId()).getLastName());
+      applications.get(i).setFullName(mPersonalInformationManager.get(applications.get(i).getTeacherId()).getName());
       applications.get(i).setDeptShortName(mDepartmentManager.get(pDeptId).getShortName());
       applications.get(i).setDeptId(pDeptId);
       applications.get(i).setDesignation(

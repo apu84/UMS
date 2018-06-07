@@ -14,6 +14,7 @@ import org.ums.bank.branch.user.BranchUserManager;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
+import org.ums.enums.ApplicationStatus;
 import org.ums.fee.FeeType;
 import org.ums.fee.FeeTypeManager;
 import org.ums.fee.accounts.*;
@@ -119,7 +120,7 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
     }
     //
     paymentsUpadteCci=payments.stream().filter((s)->
-      s.getFeeCategoryId().equals("8") || s.getFeeCategoryId().equals("7")
+      s.getFeeCategoryId().equals(ApplicationStatus.APPROVED.getLabel()) || s.getFeeCategoryId().equals(ApplicationStatus.WAITING_FOR_PAYMENT.getLabel())
     ).collect(Collectors.toList());
     //
 
@@ -129,7 +130,7 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
     mStudentPaymentManager.update(payments);
     for(MutableStudentPayment payment: paymentsUpadteCci){
 
-     int x= applicationCCIManager.updatebank(payment);
+      applicationCCIManager.updatebank(payment);
     }
 
     updatePaymentStatus(latestPayments, mop, receiptNo, paymentDetails, pStudentId);

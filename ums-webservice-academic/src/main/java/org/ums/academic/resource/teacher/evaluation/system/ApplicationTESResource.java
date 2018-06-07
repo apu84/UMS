@@ -11,7 +11,7 @@ import org.ums.academic.resource.teacher.evaluation.system.helper.QuestionWiseRe
 import org.ums.academic.resource.teacher.evaluation.system.helper.Report;
 import org.ums.academic.resource.teacher.evaluation.system.helper.StudentComment;
 import org.ums.domain.model.immutable.ApplicationTES;
-import org.ums.logs.UmsLogMessage;
+import org.ums.logs.GetLog;
 import org.ums.manager.ApplicationTESManager;
 import org.ums.report.generator.teachersEvaluationReport.TesGenerator;
 import org.ums.resource.Resource;
@@ -42,28 +42,28 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
 
   @GET
   @Path("/getAllQuestions")
-  @UmsLogMessage(message = "Students Fetching Questions For Evaluation")
+  @GetLog(message = "Students Fetching Questions For Evaluation")
   public JsonObject getAllQuestions(@Context Request pRequest) {
     return mHelper.getAllQuestions(pRequest, mUriInfo);
   }
 
   @GET
   @Path("/getSemesterWiseQuestions/semesterId/{semester-id}")
-  @UmsLogMessage(message = "Get Semester Wise Questions For Specific Semester Id")
+  @GetLog(message = "Get Semester Wise Questions For Specific Semester Id")
   public JsonObject getSemesterWiseQuestions(@Context Request pRequest, @PathParam("semester-id") Integer pSemesterId) {
     return mHelper.getSemesterWiseQuestions(pSemesterId, pRequest, mUriInfo);
   }
 
   @GET
   @Path("/getQuestions")
-  @UmsLogMessage(message = "Get Questions For Set Evaluation,Migrate Questions")
+  @GetLog(message = "Get Questions For Set Evaluation,Migrate Questions")
   public JsonObject getQuestions(@Context Request pRequest) {
     return mHelper.getQuestions(pRequest, mUriInfo);
   }
 
   @GET
   @Path("/getDeleteEligibleQuestions")
-  @UmsLogMessage(message = "Get Questions that has been already been assigned to delete before final confirmation")
+  @GetLog(message = "Get Questions that has been already been assigned to delete before final confirmation")
   public JsonObject getDeleteEligibleQuestions(@Context Request pRequest) {
     return mHelper.getDeleteEligibleQuestions(pRequest, mUriInfo);
   }
@@ -71,7 +71,7 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   // getDeleteEligibleQuestions
   @GET
   @Path("/getInitialSemesterParameter")
-  @UmsLogMessage(message = "Semester Initializatio")
+  @GetLog(message = "Semester Initializatio")
   public JsonObject getInitialSemesterParameter(@Context Request pRequest) {
     return mHelper.getInitialSemesterParameter(pRequest, mUriInfo);
   }
@@ -79,14 +79,14 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   // getMigrateQuestions/semesterId/'+this.selectedSemesterId
   @GET
   @Path("/getMigrateQuestions/semesterId/{semester-id}")
-  @UmsLogMessage(message = "Get Questions For Migration")
+  @GetLog(message = "Get Questions For Migration")
   public JsonObject getMigrationQuestions(@Context Request pRequest, @PathParam("semester-id") Integer pSemesterId) {
     return mHelper.getMigrationQuestions(pSemesterId, pRequest, mUriInfo);
   }
 
   @GET
   @Path("/getQuestionWiseReport/deptId/{dept-id}/year/{year}/semester/{semester}/semesterId/{semester-id}/questionId/{question-id}")
-  @UmsLogMessage(message = "Get Questions Wise Report")
+  @GetLog(message = "Get Questions Wise Report")
   public List<QuestionWiseReport> getQuestionWiseReport(@Context Request pRequest,
       @PathParam("dept-id") String pDeptId, @PathParam("year") Integer pYear, @PathParam("semester") Integer pSemester,
       @PathParam("semester-id") Integer pSemesterId, @PathParam("question-id") Long pQuestionId) {
@@ -96,7 +96,7 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   // getInitialSemesterParameter
   @GET
   @Path("/getResult/courseId/{course-id}/teacherId/{teacher-id}/semesterId/{semester-id}")
-  @UmsLogMessage(message = "Get Individual Result For  Faculty")
+  @GetLog(message = "Get Individual Result For  Faculty")
   public List<Report> getResult(@Context Request pRequest, @PathParam("course-id") String pCourseId,
       @PathParam("teacher-id") String pTeacherId, @PathParam("semester-id") Integer pSemesterId) {
     return mHelper.getResult(pCourseId, pTeacherId, pSemesterId, pRequest, mUriInfo);
@@ -104,7 +104,7 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
 
   @GET
   @Path("/getComment/courseId/{course-id}/teacherId/{teacher-id}/semesterId/{semester-id}")
-  @UmsLogMessage(message = "Get Individual Result(Comments) For  Faculty")
+  @GetLog(message = "Get Individual Result(Comments) For  Faculty")
   public List<StudentComment> getComment(@Context Request pRequest, @PathParam("course-id") String pCourseId,
       @PathParam("teacher-id") String pTeacherId, @PathParam("semester-id") Integer pSemesterId) {
     return mHelper.getComments(pCourseId, pTeacherId, pSemesterId, pRequest, mUriInfo);
@@ -112,7 +112,7 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
 
   @GET
   @Path("/getReviewPercentage/courseId/{course-id}/teacherId/{teacher-id}/semesterId/{semester-id}")
-  @UmsLogMessage(message = "Get Review percentage Individual Result  For  Faculty")
+  @GetLog(message = "Get Review percentage Individual Result  For  Faculty")
   public JsonObject getReviewPercentage(@Context Request pRequest, @PathParam("course-id") String pCourseId,
       @PathParam("teacher-id") String pTeacherId, @PathParam("semester-id") Integer pSemesterId) {
     return mHelper.getReviewPercentage(pCourseId, pTeacherId, pSemesterId, pRequest, mUriInfo);
@@ -120,21 +120,21 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
 
   @GET
   @Path("/getRecordsOfAssignedCoursesByHead")
-  @UmsLogMessage(message = "Get Records Of Assigned Courses By Head")
+  @GetLog(message = "Get Records Of Assigned Courses By Head")
   public JsonObject getRecordsOfAssignedCoursesByHead(@Context Request pRequest) {
     return mHelper.getRecordsOfAssignedCoursesByHead(pRequest, mUriInfo);
   }
 
   @GET
   @Path("/getAllFacultyMembers")
-  @UmsLogMessage(message = "Get All Faculty Members")
+  @GetLog(message = "Get All Faculty Members")
   public JsonObject getFacultyMembers(@Context Request pRequest) {
     return mHelper.getAllFacultyMembers(pRequest, mUriInfo);
   }
 
   @GET
   @Path("/getEligibleFacultyMembers/semesterId/{semester-id}/deptId/{dept-id}")
-  @UmsLogMessage(message = "Get Eligible Faculty Members For Evaluation")
+  @GetLog(message = "Get Eligible Faculty Members For Evaluation")
   public JsonObject getEligibleFacultyMembers(@Context Request pRequest, @PathParam("semester-id") Integer pSemesterId,
       @PathParam("dept-id") String pDeptId) {
     return mHelper.getEligibleFacultyMembers(pSemesterId, pDeptId, pRequest, mUriInfo);
@@ -142,7 +142,7 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
 
   @GET
   @Path("/getAssignedCoursesForReview/teacherId/{teacher-id}/semesterId/{semester-id}")
-  @UmsLogMessage(message = "Get Assigned Courses For Review")
+  @GetLog(message = "Get Assigned Courses For Review")
   public JsonObject getAssignedCoursesForReview(@Context Request pRequest, @PathParam("teacher-id") String pTeacherId,
       @PathParam("semester-id") Integer pSemesterId) {
     return mHelper.getAssignedReviewableCoursesList(pTeacherId, pSemesterId, pRequest, mUriInfo);
@@ -150,7 +150,7 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
 
   @GET
   @Path("/getComparisionResult/deptId/{dept-id}/semesterId/{semester-id}")
-  @UmsLogMessage(message = "Get Assigned Courses For Review")
+  @GetLog(message = "Get Assigned Courses For Review")
   public List<ComparisonReport> getAssignedCou(@Context Request pRequest, @PathParam("dept-id") String pDeptId,
       @PathParam("semester-id") Integer pSemesterId) {
     List<ComparisonReport> report = mHelper.getComparisonResult(pDeptId, pSemesterId, pRequest, mUriInfo);
@@ -161,28 +161,28 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
 
   @GET
   @Path("/getStudentSubmitDeadLineInfo")
-  @UmsLogMessage(message = "Get Student Submit DeadLine Info")
+  @GetLog(message = "Get Student Submit DeadLine Info")
   public JsonObject getStudentSubmitDateInfo(@Context Request pRequest) {
     return mHelper.getStudentSubmitDateInfo(pRequest, mUriInfo);
   }
 
   @GET
   @Path("/getAssignedCourses/facultyId/{faculty-id}")
-  @UmsLogMessage(message = "Get Assigned Courses For Specific Faculty")
+  @GetLog(message = "Get Assigned Courses For Specific Faculty")
   public JsonObject getAssignedCourses(@Context Request pRequest, @PathParam("faculty-id") String pFacultyId) {
     return mHelper.getAssignedCourses(pFacultyId, pRequest, mUriInfo);
   }
 
   @GET
   @Path("/getReviewEligibleCourses/courseType/{course-type}")
-  @UmsLogMessage(message = "Get Review Eligible Courses")
+  @GetLog(message = "Get Review Eligible Courses")
   public JsonObject getReviewEligibleCourses(@Context Request pRequest, @PathParam("course-type") String pCourseType) {
     return mHelper.getReviewEligibleCourses(pCourseType, pRequest, mUriInfo);
   }
 
   @GET
   @Path("/getFacultyInfo/courseId/{course-id}/courseType/{course-type}")
-  @UmsLogMessage(message = "Get Faculty Info")
+  @GetLog(message = "Get Faculty Info")
   public JsonObject getFacultyInfo(@Context Request pRequest, @PathParam("course-id") String pCourseId,
       @PathParam("course-type") String pCourseType) {
     return mHelper.getFacultyInfo(pCourseId, pCourseType, pRequest, mUriInfo);
@@ -190,7 +190,7 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
 
   @GET
   @Path("/getAllQuestions/courseId/{course-id}/teacherId/{teacher-id}")
-  @UmsLogMessage(message = "Get Already Reviewed Courses")
+  @GetLog(message = "Get Already Reviewed Courses")
   public JsonObject getAlreadyReviewedCourses(@Context Request pRequest, @PathParam("course-id") String pCourseId,
       @PathParam("teacher-id") String pTeacherId) {
     return mHelper.getAlreadyReviewedCoursesInfo(pCourseId, pTeacherId, pRequest, mUriInfo);
@@ -199,7 +199,7 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   @GET
   @Path("/getReport/courseId/{course-id}/teacherId/{teacher-id}/semesterId/{semester-id}")
   @Produces("application/pdf")
-  @UmsLogMessage(message = "Generate Individual Evaluation Report PDF")
+  @GetLog(message = "Generate Individual Evaluation Report PDF")
   public StreamingOutput createTesReport(@PathParam("course-id") String pCourseId,
       @PathParam("teacher-id") String pTeacherId, @PathParam("semester-id") Integer pSemesterId) {
     return new StreamingOutput() {
@@ -218,7 +218,7 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   @GET
   @Path("/getReportSuperAdmin/deptId/{dept-id}/semesterId/{semester-id}")
   @Produces("application/pdf")
-  @UmsLogMessage(message = "Generate Comparison Report PDF")
+  @GetLog(message = "Generate Comparison Report PDF")
   public StreamingOutput createTesReportSuperAdmin(@PathParam("dept-id") String pDeptId,
       @PathParam("semester-id") Integer pSemesterId) {
     return new StreamingOutput() {
@@ -237,7 +237,7 @@ public class ApplicationTESResource extends MutableApplicationTESResource {
   @GET
   @Path("/getQuestionWisePDFReport/deptId/{dept-id}/year/{year}/semester/{semester}/semesterId/{semester-id}/questionId/{question-id}")
   @Produces("application/pdf")
-  @UmsLogMessage(message = "Generate Question Wise Report PDF")
+  @GetLog(message = "Generate Question Wise Report PDF")
   public StreamingOutput createTesQuestionReportSuperAdmin(@PathParam("dept-id") String pDeptId,
       @PathParam("year") Integer pYear, @PathParam("semester") Integer pSemester,
       @PathParam("semester-id") Integer pSemesterId, @PathParam("question-id") Long pQuestionId) {

@@ -502,8 +502,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       application.setCourseTitle(pResultSet.getString("COURSE_TITLE"));
       application.setTeacherId(pResultSet.getString("TEACHER_ID"));
       application.setSection(pResultSet.getString("ASSIGNED_SECTION"));
-      application.setFirstName(pResultSet.getString("FIRST_NAME"));
-      application.setLastName(pResultSet.getString("LAST_NAME"));
+      application.setFullName(pResultSet.getString("NAME"));
       return application;
     }
   }
@@ -537,8 +536,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
     @Override
     public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentApplicationTES application = new PersistentApplicationTES();
-      application.setFirstName(pResultSet.getString("FIRST_NAME"));
-      application.setLastName(pResultSet.getString("LAST_NAME"));
+      application.setFullName(pResultSet.getString("NAME"));
       application.setCourseTitle(pResultSet.getString("COURSE_TITLE"));
       application.setCourseNo(pResultSet.getString("COURSE_NO"));
       application.setSemester(pResultSet.getInt("SEMESTER_ID"));
@@ -584,8 +582,7 @@ public class PersistentApplicationTESDao extends ApplicationTESDaoDecorator {
       application.setSection(pResultSet.getString("SECTION"));
       application.setDeptId(pResultSet.getString("DEPT_OFFICE"));
       application.setDeptShortName(pResultSet.getString("SHORT_NAME"));
-      application.setFirstName(pResultSet.getString("FIRST_NAME"));
-      application.setLastName(pResultSet.getString("LAST_NAME"));
+      application.setFullName(pResultSet.getString("NAME"));
       return application;
     }
   }

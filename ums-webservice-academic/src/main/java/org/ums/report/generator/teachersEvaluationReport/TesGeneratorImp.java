@@ -127,7 +127,7 @@ public class TesGeneratorImp implements TesGenerator {
   //  String name=mEmployeeManagerManager.get(pTeacherId).getDepartment();
     //
     chunk = new Chunk("Semester: "+mSemesterManager.get(semesterId).getName()+"\n"+"Course Title: "+mCourseManager.get(courseId).getTitle()+" ("+mCourseManager.get(pCourseId).getNo()+")\n"+
-    "Teacher Name: "+mPersonalInformationManager.get(teacherId).getFullName()+"\n"+
+    "Teacher Name: "+mPersonalInformationManager.get(teacherId).getName()+"\n"+
             "Number of Student Registered For This Course: "+registeredStudents+"("+sectionForReview+")"+"\n"+
             "Number of Student Eligible For Evaluation: "+selectedRegisteredStudents+"("+selectedSectionForReview+")"+"\n"+
             "Student Reviewed: "+studentNo+" ("+percentage+"%)"+"\n"+
@@ -543,7 +543,7 @@ public class TesGeneratorImp implements TesGenerator {
         }
         String teacherName, deptName, courseNo, courseTitle, programName = "";
         Integer registeredStudents=0;double percentage=0;
-        teacherName = mPersonalInformationManager.get(parameters.get(j).getTeacherId()).getFullName();
+        teacherName = mPersonalInformationManager.get(parameters.get(j).getTeacherId()).getName();
         deptName = mEmployeeManager.get(parameters.get(j).getTeacherId()).getDepartment().getShortName();
         courseNo = mCourseManager.get(parameters.get(j).getReviewEligibleCourseId()).getNo();
         courseTitle = mCourseManager.get(parameters.get(j).getReviewEligibleCourseId()).getTitle();
