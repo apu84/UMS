@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.UGRegistrationResultDaoDecorator;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableUGRegistrationResult;
@@ -33,62 +34,85 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
 
   String SELECT_ALL_CCI =
       "SELECT "
-          + "  CCI.*, "
-          + "  MST_COURSE.COURSE_NO, "
-          + "  COURSE_TITLE, "
-          + "  to_char(exam_routine.exam_date, 'DD-MM-YYYY') exam_date "
-          + "FROM "
-          + "  ( "
-          + "    SELECT "
-          + "      student_id, "
-          + "      course_id, "
-          + "      GRADE_LETTER, "
-          + "      exam_type, "
-          + "      'Clearance' type "
-          + "    FROM UG_REGISTRATION_RESULT "
-          + "    WHERE GRADE_LETTER = 'F' AND "
-          + "          Semester_Id = ? AND Student_id = ? AND Exam_Type = 1 "
-          + "    UNION "
-          + "    SELECT "
-          + "      student_id, "
-          + "      course_id, "
-          + "      GRADE_LETTER, "
-          + "      exam_type, "
-          + "      'Improvement' type "
-          + "    FROM UG_REGISTRATION_RESULT "
-          + "    WHERE "
-          + "      Semester_Id = ? AND Student_id = ? AND GRADE_LETTER NOT IN ('F', 'A ', 'A', 'A-', 'B ') AND Exam_Type = 1 "
-          + "    UNION "
-          + "    SELECT "
-          + "      student_id, "
-          + "      course_id, "
-          + "      'F'     GRADE_LETTER, "
-          + "      1       Exam_Type, "
-          + "      'Carry' type "
-          + "    FROM "
-          + "      ( "
-          + "        SELECT "
-          + "          student_id, "
-          + "          course_id "
-          + "        FROM UG_REGISTRATION_RESULT "
-          + "        WHERE Student_id = ? AND Semester_Id != ? AND Exam_Type = 1 AND GRADE_LETTER = 'F' "
-          + "        MINUS "
-          + "        SELECT "
-          + "          student_id, "
-          + "          course_id "
-          + "        FROM UG_REGISTRATION_RESULT "
-          + "        WHERE Student_id = ? AND GRADE_LETTER != 'F' "
-          + "      ) "
-          + "  ) CCI, DB_IUMS.MST_COURSE, EXAM_ROUTINE "
-          + "WHERE MST_COURSE.COURSE_ID = CCI.COURSE_ID AND cci.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 and EXAM_ROUTINE.SEMESTER=? "
-          + "ORDER BY Type, COURSE_NO, EXAM_ROUTINE.EXAM_DATE";
+          + "               CCI.*, "
+          + "               MST_COURSE.COURSE_NO, "
+          + "               MST_COURSE.YEAR , "
+          + "               MST_COURSE.SEMESTER, "
+          + "               COURSE_TITLE,EXAM_ROUTINE.SEMESTER, "
+          + "               to_char(exam_routine.exam_date, 'DD-MM-YYYY') exam_date "
+          + "             FROM "
+          + "               ( "
+          + "                 SELECT "
+          + "                   student_id, "
+          + "                   course_id, "
+          + "                   GRADE_LETTER, "
+          + "                   exam_type, "
+          + "                   'Clearance' type "
+          + "                 FROM UG_REGISTRATION_RESULT "
+          + "                 WHERE GRADE_LETTER = 'F' AND "
+          + "                       Semester_Id = ? AND Student_id =? AND Exam_Type = 1 "
+          + "                 UNION "
+          + "                 SELECT "
+          + "                   student_id, "
+          + "                   course_id, "
+          + "                   GRADE_LETTER, "
+          + "                   exam_type, "
+          + "                   'Improvement' type "
+          + "                 FROM UG_REGISTRATION_RESULT "
+          + "                 WHERE "
+          + "                   Semester_Id = ? AND Student_id = ? AND GRADE_LETTER NOT IN ('F', 'A ', 'A', 'A-', 'B ') AND Exam_Type = 1 "
+          + "                 UNION "
+          + "                 SELECT "
+          + "                   student_id, "
+          + "                   course_id, "
+          + "                   'F'     GRADE_LETTER, "
+          + "                   1       Exam_Type, "
+          + "                   'Carry' type "
+          + "                 FROM "
+          + "                   ( "
+          + "                     select* from ( "
+          + "                        SELECT "
+          + "                       STUDENT_ID,course_id from UG_REGISTRATION_RESULT "
+          + "                     WHERE Student_id = ? AND Semester_Id NOT IN ? AND GRADE_LETTER = 'F' "
+          + "                    minus "
+          + "                    SELECT "
+          + "                       STUDENT_ID,course_id from UG_REGISTRATION_RESULT "
+          + "                     WHERE course_id in "
+          + "                     (SELECT "
+          + "                       course_id from UG_REGISTRATION_RESULT "
+          + "                     WHERE Student_id = ? AND Semester_Id NOT IN ? AND GRADE_LETTER = 'F') "
+          + "                     and Student_id = ? AND Semester_Id NOT IN ?  and GRADE_LETTER!='F' "
+          + "                     )tmp "
+          + " "
+          + "                   ) "
+          + "               ) CCI, DB_IUMS.MST_COURSE, EXAM_ROUTINE "
+          + "             WHERE MST_COURSE.COURSE_ID = CCI.COURSE_ID AND cci.course_id = exam_routine.course_id AND exam_routine.exam_type = 2 and EXAM_ROUTINE.SEMESTER=? "
+          + "             ORDER BY Type, COURSE_NO, EXAM_ROUTINE.EXAM_DATE";
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
+  private NamedParameterJdbcTemplate mNamedParameterJdbcTemplate;
 
-  public PersistentUGRegistrationResultDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
+  public PersistentUGRegistrationResultDao(JdbcTemplate pJdbcTemplate,
+      NamedParameterJdbcTemplate namedParameterJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mNamedParameterJdbcTemplate = namedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
+  }
+
+  @Override
+  public Integer getTotalRegisteredStudentForCourse(String pCourseId, List<String> pSection, Integer pSemesterId) {
+    String query =
+        "SELECT  COUNT (a.STUDENT_ID) FROM UG_REGISTRATION_RESULT_CURR a,STUDENTS b WHERE  a.COURSE_ID=:courseId AND b.THEORY_SECTION IN(:sectionList) AND a.SEMESTER_ID=:semesterId "
+            + "AND  a.STUDENT_ID=b.STUDENT_ID AND b.DEPT_ID=(select DEPT_ID from MST_PROGRAM where PROGRAM_ID=( "
+            + "select PROGRAM_ID from SEMESTER_SYLLABUS_MAP where SEMESTER_ID=:semesterId and (SYLLABUS_ID, Year, semester) in ( "
+            + "select SYLLABUS_ID, MST_COURSE.\"YEAR\", MST_COURSE.SEMESTER from COURSE_SYLLABUS_MAP, MST_COURSE WHERE COURSE_SYLLABUS_MAP.COURSE_ID= :courseId and "
+            + "MST_COURSE.COURSE_ID=COURSE_SYLLABUS_MAP.COURSE_ID)))";
+    Map parameterMap = new HashMap();
+    parameterMap.put("sectionList", pSection);
+    parameterMap.put("semesterId", pSemesterId);
+    parameterMap.put("courseId", pCourseId);
+    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, Integer.class);
   }
 
   @Override
@@ -135,7 +159,8 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   public List<UGRegistrationResult> getCarryClearanceImprovementCoursesByStudent(int pSemesterId, String pStudentId) {
     String query = SELECT_ALL_CCI;
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pStudentId, pSemesterId, pStudentId, pStudentId,
-        pSemesterId, pStudentId, pSemesterId}, new UGRegistrationResultCCIRowMapper());
+        pSemesterId, pStudentId, pSemesterId, pStudentId, pSemesterId, pSemesterId},
+        new UGRegistrationResultCCIRowMapper());
   }
 
   @Override

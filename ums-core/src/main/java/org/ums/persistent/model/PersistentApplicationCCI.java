@@ -7,6 +7,7 @@ import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
+import org.ums.enums.ApplicationStatus;
 import org.ums.enums.ApplicationType;
 import org.ums.manager.ApplicationCCIManager;
 import org.ums.manager.CourseManager;
@@ -50,6 +51,23 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   private Integer mCourseSemester;
   private String mRoomNo;
   private Integer mRoomId;
+  private ApplicationStatus mApplicationStatus;
+  // rumi
+  private Integer mCCIStatus;
+  private String mGradeLetter;
+  private Integer mcarryYear;
+  private Integer mcarrySemester;
+  private String mFullName;
+  private Integer mCurrentEnrolledSemester;
+  private Integer mGetTotalcarry;
+  private Integer mGetTotalApplied;
+  private Integer mGetTotalApproved;
+  private String mGetStartDate;
+  private String mTransactionId;
+  private Integer mImprovementLimit;
+  private String mCarryLastDate;
+  private Integer mRowNumber;
+  private String mSemesterName;
 
   public PersistentApplicationCCI() {
 
@@ -75,8 +93,187 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
     mCourseSemester = pPersistentApplicationCCI.getCourseSemester();
     mRoomNo = pPersistentApplicationCCI.getRoomNo();
     mRoomId = pPersistentApplicationCCI.getRoomId();
+    mApplicationStatus = pPersistentApplicationCCI.getApplicationStatus();
+    mCCIStatus = pPersistentApplicationCCI.getCCIStatus();
+    mGradeLetter = pPersistentApplicationCCI.getGradeLetter();
+    mcarryYear = pPersistentApplicationCCI.getCarryYear();
+    mcarrySemester = pPersistentApplicationCCI.getCarrySemester();
+    mFullName = pPersistentApplicationCCI.getFullName();
+    mCurrentEnrolledSemester = pPersistentApplicationCCI.getCurrentEnrolledSemester();
+    mGetTotalcarry = pPersistentApplicationCCI.getTotalcarry();
+    mGetTotalApplied = pPersistentApplicationCCI.getTotalApplied();
+    mGetTotalApproved = pPersistentApplicationCCI.getTotalApproved();
+    mGetStartDate = pPersistentApplicationCCI.getStartDate();
+    mTransactionId = pPersistentApplicationCCI.getTransactionID();
+    mImprovementLimit = pPersistentApplicationCCI.getImprovementLimit();
+    mCarryLastDate = pPersistentApplicationCCI.getCarryLastDate();
+    mRowNumber = pPersistentApplicationCCI.getRowNumber();
+    mSemesterName = pPersistentApplicationCCI.getSemesterName();
   }
 
+  @Override
+  public void setSemesterName(String semesterName) {
+    mSemesterName = semesterName;
+  }
+
+  @Override
+  public String getSemesterName() {
+    return mSemesterName;
+  }
+
+  @Override
+  public void setRowNumber(Integer rowNumber) {
+    mRowNumber = rowNumber;
+  }
+
+  @Override
+  public Integer getRowNumber() {
+    return mRowNumber;
+  }
+
+  @Override
+  public void setImprovementLimit(Integer improvementLimit) {
+    mImprovementLimit = improvementLimit;
+  }
+
+  @Override
+  public void setCarryLastDate(String carryLastDate) {
+    mCarryLastDate = carryLastDate;
+  }
+
+  @Override
+  public String getCarryLastDate() {
+    return mCarryLastDate;
+  }
+
+  @Override
+  public Integer getImprovementLimit() {
+    return mImprovementLimit;
+  }
+
+  @Override
+  public void setTransactionID(String transactionId) {
+    mTransactionId = transactionId;
+  }
+
+  @Override
+  public String getTransactionID() {
+    return mTransactionId;
+  }
+
+  @Override
+  public void setTotalcarry(Integer totalcarry) {
+    mGetTotalcarry = totalcarry;
+  }
+
+  @Override
+  public void setTotalApplied(Integer totalApplied) {
+    mGetTotalApplied = totalApplied;
+  }
+
+  @Override
+  public void setTotalApproved(Integer totalApproved) {
+    mGetTotalApproved = totalApproved;
+  }
+
+  @Override
+  public void setStartDate(String pStartdate) {
+    mGetStartDate = pStartdate;
+  }
+
+  @Override
+  public Integer getTotalcarry() {
+    return mGetTotalcarry;
+  }
+
+  @Override
+  public Integer getTotalApplied() {
+    return mGetTotalApplied;
+  }
+
+  @Override
+  public Integer getTotalApproved() {
+    return mGetTotalApproved;
+  }
+
+  @Override
+  public String getStartDate() {
+    return mGetStartDate;
+  }
+
+  @Override
+  public void setFullName(String fullName) {
+    mFullName = fullName;
+  }
+
+  @Override
+  public void setCurrentEnrolledSemester(Integer currentEnrolledSemester) {
+    mCurrentEnrolledSemester = currentEnrolledSemester;
+  }
+
+  @Override
+  public String getFullName() {
+    return mFullName;
+  }
+
+  @Override
+  public Integer getCurrentEnrolledSemester() {
+    return mCurrentEnrolledSemester;
+  }
+
+  @Override
+  public void setCarryYear(Integer carryyear) {
+    mcarryYear = carryyear;
+  }
+
+  @Override
+  public void setCarrySemester(Integer carrySemester) {
+    mcarrySemester = carrySemester;
+  }
+
+  @Override
+  public Integer getCarryYear() {
+    return mcarryYear;
+  }
+
+  @Override
+  public Integer getCarrySemester() {
+    return mcarrySemester;
+  }
+
+  @Override
+  public void setGradeLetter(String gradeLetter) {
+    mGradeLetter = gradeLetter;
+  }
+
+  @Override
+  public String getGradeLetter() {
+    return mGradeLetter;
+  }
+
+  // /rumi
+  @Override
+  public void setCCIStatus(Integer cciStatus) {
+    mCCIStatus = cciStatus;
+  }
+
+  @Override
+  public Integer getCCIStatus() {
+    return mCCIStatus;
+  }
+
+  @Override
+  public void setApplicationStatus(ApplicationStatus applicationStatus) {
+    mApplicationStatus = applicationStatus;
+
+  }
+
+  @Override
+  public ApplicationStatus getApplicationStatus() {
+    return mApplicationStatus;
+  }
+
+  // ////////
   @Override
   public void setRoomId(Integer pRoomId) {
     mRoomId = pRoomId;

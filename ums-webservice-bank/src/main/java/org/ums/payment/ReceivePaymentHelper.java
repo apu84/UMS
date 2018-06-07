@@ -3,13 +3,18 @@ package org.ums.payment;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.bank.branch.Branch;
 import org.ums.bank.branch.user.BranchUserManager;
+import org.ums.bank.branch.Branch;
+import org.ums.bank.branch.user.BranchUserManager;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.mutable.MutableApplicationCCI;
+import org.ums.enums.ApplicationStatus;
 import org.ums.fee.FeeType;
 import org.ums.fee.FeeTypeManager;
 import org.ums.fee.accounts.*;
@@ -21,6 +26,7 @@ import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.fee.payment.PersistentStudentPayment;
 import org.ums.fee.payment.StudentPayment;
 import org.ums.fee.payment.StudentPaymentManager;
+import org.ums.manager.ApplicationCCIManager;
 import org.ums.manager.ContentManager;
 import org.ums.manager.StudentManager;
 import org.ums.resource.ResourceHelper;
@@ -52,6 +58,8 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
   @Autowired
   private CertificateStatusManager mCertificateStatusManager;
   @Autowired
+  private ApplicationCCIManager applicationCCIManager;
+  @Autowired
   private BranchUserManager mBranchUserManager;
 
   @Override
@@ -71,6 +79,7 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
   public Response receivePayment(String pStudentId, JsonObject pJsonObject) {
     JsonArray entries = pJsonObject.getJsonArray("entries");
     List<MutableStudentPayment> payments = new ArrayList<>();
+    List<MutableStudentPayment> paymentsUpadteCci = new ArrayList<>();
     List<StudentPayment> latestPayments = new ArrayList<>();
     List<MutableCertificateStatus> certificateStatusList = new ArrayList<>();
     LocalCache cache = new LocalCache();
@@ -95,6 +104,7 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
       payment.setFeeCategoryId(latestPayment.getFeeCategoryId());
       payment.setSemesterId(latestPayment.getSemesterId());
       payment.setTransactionId(latestPayment.getTransactionId());
+
       payment.setBankBranchId(branch.getId());
       /*
        * if(mop == PaymentStatus.PaymentMethod.CASH.getId()) {
@@ -108,13 +118,25 @@ public class ReceivePaymentHelper extends ResourceHelper<StudentPayment, Mutable
       payments.add(payment);
       latestPayments.add(latestPayment);
     }
+    //
+    paymentsUpadteCci=payments.stream().filter((s)->
+      s.getFeeCategoryId().equals(ApplicationStatus.APPROVED.getLabel()) || s.getFeeCategoryId().equals(ApplicationStatus.WAITING_FOR_PAYMENT.getLabel())
+    ).collect(Collectors.toList());
+    //
 
     validatePayment(pStudentId, latestPayments, payments);
     if(certificateStatusList.size() > 0)
       mCertificateStatusManager.create(certificateStatusList);
     mStudentPaymentManager.update(payments);
+    for(MutableStudentPayment payment: paymentsUpadteCci){
+
+      applicationCCIManager.updatebank(payment);
+    }
+
     updatePaymentStatus(latestPayments, mop, receiptNo, paymentDetails, pStudentId);
+
     // PersistentCertificateStatus certificateStatus = new PersistentCertificateStatus();
+
     return Response.ok().build();
   }
 

@@ -1,0 +1,39 @@
+<div class="panel-body">
+    <pagination total-items="vm.commentPgTotalRecords" ng-model="vm.commentPgCurrentPage" max-size="7"
+                class="pagination-sm" boundary-links="true" rotate="false"
+                class="pagination-page"
+                items-per-page="vm.commentPgItemsPerPage"></pagination>
+    <table class="table table-bordered">
+        <thead>
+        <th style="background-color: #FAFAFA;width: 10px ">SL</th>
+        <th style="background-color: #FAFAFA; ">Questions</th>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="app in  (filterd = vm.studentComments | limitTo:vm.commentPgItemsPerPage:vm.commentPgItemsPerPage*(vm.commentPgCurrentPage - 1))">
+            <td>{{(vm.commentPgCurrentPage - 1) * vm.commentPgItemsPerPage + $index + 1}}</td>
+            <td><strong>{{app.questionDetails}}</strong> <br>
+                <span style="font-size: 12px" class="label label-success badge-success">
+                                    {{'Non Teaching Observation'}}
+                                </span>
+                <div align="left">
+                    <pagination total-items="app.comments.length"
+                                ng-model="vm.innerCommentPgCurrentPage" max-size="7"
+                                class="pagination-sm" boundary-links="true" rotate="false"
+                                class="pagination-page"
+                                items-per-page="vm.innerCommentPgItemsPerPage"></pagination>
+                </div>
+
+                <table class="table table-bordered">
+                    <tr data-ng-repeat="items in (filterd = app.comments | limitTo:vm.innerCommentPgItemsPerPage:vm.innerCommentPgItemsPerPage*(vm.innerCommentPgCurrentPage - 1))">
+                        <td style="width: 10px">
+                            {{(vm.innerCommentPgCurrentPage - 1) * vm.innerCommentPgItemsPerPage +
+                            $index + 1}}
+                        </td>
+                        <td>{{items}}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

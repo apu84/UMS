@@ -1,5 +1,4 @@
 module ums {
-
   interface IApplicationCCIScope extends ng.IScope {
     parameter: IParameterSetting;
     applicationMessage: string;
@@ -7,19 +6,29 @@ module ums {
     registrationResults: Array<IUGRegistrationResult>;
     responseResults: Array<IUGRegistrationResult>;
     applicationCCI: Array<AppCCI>;
+    carryLastdateIn:Array<ICarryLastdate>;
     twoOccuranceCourseList: Array<IUGRegistrationResult>;
+    ugResultsForSave:Array<IUGRegistrationResult>;
+    appImpApprove:Array<IAppImprove>;
     moreThanTwoOccuranceCourseList: Array<IUGRegistrationResult>;
+    //New property added
+    checkBoxCounter: number;
 
 
     appCCICarryNumber: number;
     appCCIImprovementNumber: number;
     appCCIClearanceNumber: number;
     appCCISpecialCarryNumber: number;
-
     CARRY: number;
     CLEARANCE: number;
     IMPROVEMENT: number;
     SPECIAL_CARRY: number;
+      dateCheckStatus:string;
+      statusApproved:number;
+      statusWaitingForPayment:number;
+      statusWaitingforHeadsApproval:number;
+      statusRejected:number;
+
 
     resultCarryNumber: number;
     resultImprovementNumber: number;
@@ -28,12 +37,32 @@ module ums {
     selectedCarryNumber: number;
     selectedImprovementNumber: number;
     selectedClearanceNumber: number;
+    //Rumi
+      carry_status_initial:number;
+      clerance_status_initial:number;
+      improvement_status_initial:number;
+      submitButtonParameter:string;
+      pendingApprovedStatus:number;
+      improvementLimit:number;
+      improvementLimitstatic:number;
+      improvemetLimitCrossed:boolean;
+      totalSemesterStatic:string;
+      carrylastDate:string;
+      carryStartDate:string;
+      carrylastDateDeadline:boolean;
+      carryStatusShow:string;
+      historyButtonStatus:boolean;
+
 
     //booleans
     applicationAllowed: boolean;
     applicationCCIFound: boolean;
     submitButtonClicked: boolean;
     loadingVisibility: boolean;
+    submitAndCloseEscape:boolean;
+    //Rumi
+      appcci_load_status:boolean;
+      submit_Button_Disable:boolean;
 
     //functions
     getParameterForCCIApplication: Function;
@@ -45,17 +74,36 @@ module ums {
     getApplicationCCI: Function;
     getApplicationCCIInfo: Function;
     postInitialization: Function;
-    checkMoreThanOneSelection: Function;
+      checkMoreThanOneSelectionSubmit: Function;
     makeDataEmpty: Function;
     cancel: Function;
     submit: Function;
     submitAndClose: Function;
     close: Function;
     convertToJson: Function;
+    finalSave:Function;
+      submitButtonEnable:Function;
+      receipt:Function;
+      improvementLimitCalculation:Function;
+      carryLastDateFinder:Function;
+      insertIntoStudentPayment:Function;
+      getApplicationCCIImprovemnetApproved:Function;
+   // alert:Function;
 
   }
+  //New interface
+  interface IAppImprove{
+      studentId: string;
+      semesterId:number;
+      courseId: number;
+      courseNo: string;
+      courseTitle:string;
+      courseYear:number;
+      courseSemester:number;
+      semesterName:string;
+  }
 
-  interface IUGRegistrationResult {
+  interface IUGRegistrationResult{
     studentId: string;
     courseId: string;
     gradeLetter: string;
@@ -64,10 +112,16 @@ module ums {
     courseNo: string;
     courseTitle: string;
     examDate: string;
+    lastApplyDate:string;
     apply: boolean;
     status: string;
     backgroundColor: string;
     color: string;
+    courseYear:number;
+    courseSemester:number;
+    deadline:string;
+    deadLineBol:boolean;
+    //status and pending status
   }
 
   interface AppCCI {
@@ -79,11 +133,23 @@ module ums {
     courseNo: string;
     courseTitle: string;
     examDate: string;
-  }
+    cciStatus:number;
+    grade:string;
+    statusName: string;
+    carryYear:number;
+    carrySemester:number;
+    transactionId:string;
+
+}
+
+interface ICarryLastdate{
+    carryLastdate:string;
+    deadLine:boolean;
+}
 
   export class ApplicationCCI {
 
-    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify', '$sce', '$window'];
+    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify','FeeReportService', '$sce', '$window'];
 
     private static REGULAR = 1;
     private static CLEARANCE = 2;
@@ -91,21 +157,52 @@ module ums {
     private static SPECIAL_CARRY = 4;
     private static IMPROVEMENT = 5;
     private static LEAVE = 6;
+    private static statusApproved=8;
+    private static dateCheckStatus="Date Over";
+      private static  statusWaitingForPayment=7;
+      private static statusWaitingforHeadsApproval=2;
+      private static statusRejected=9;
+
 
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IApplicationCCIScope,
                 private $q: ng.IQService, private notify: Notify,
+                private feeReportService: FeeReportService,
                 private $sce: ng.ISCEService, private $window: ng.IWindowService) {
+
+
+        $scope.checkBoxCounter = 0;
 
 
       $scope.CARRY = 3;
       $scope.IMPROVEMENT = 5;
       $scope.SPECIAL_CARRY = 4;
       $scope.CLEARANCE = 2;
+      $scope.statusApproved=8;
+      $scope.statusWaitingForPayment=7;
+      $scope.statusWaitingforHeadsApproval=2;
+      $scope.statusRejected=9;
+      $scope.dateCheckStatus="Date Over";
+      $scope.totalSemesterStatic="From 1.1 to 4.2"
+      //rumi
+        $scope.carry_status_initial=14;
+       // $scope.clerance_status_initial=15;
+        $scope.improvement_status_initial=16;
+        $scope.pendingApprovedStatus=0;
+        $scope.ugResultsForSave=[];
+        $scope.improvementLimitstatic=4;
+        $scope.improvemetLimitCrossed=false;
+        $scope.improvementLimit=0;
+        $scope.carrylastDate="";
+        $scope.submit_Button_Disable=true;
+        //-----
       $scope.submitButtonClicked = false;
       $scope.applicationAllowed = false;
       $scope.applicationCCIFound = false;
       $scope.loadingVisibility = false;
+      $scope.submitAndCloseEscape=false;
+      $scope.appcci_load_status=true;
       $scope.applicationMessage = "";
+      $scope.submitButtonParameter="";
       $scope.registrationResults = [];
       $scope.initialization = this.initializatino.bind(this);
       $scope.getParameterInfoForCCIApplication = this.getParameterInfoForCCIApplication.bind(this);
@@ -114,39 +211,120 @@ module ums {
       $scope.getApplicationCCI = this.getApplicationCCI.bind(this);
       $scope.getApplicationCCIInfo = this.getApplicationCCIInfo.bind(this);
       $scope.postInitialization = this.postInitialization.bind(this);
-      $scope.checkMoreThanOneSelection = this.checkMoreThanOneSelection.bind(this);
+      $scope.checkMoreThanOneSelectionSubmit = this.checkMoreThanOneSelectionSubmit.bind(this);
       $scope.makeDataEmpty = this.makeDataEmpty.bind(this);
       $scope.cancel = this.cancel.bind(this);
       $scope.submit = this.submit.bind(this);
+      $scope.receipt=this.receipt.bind(this);
+      $scope.improvementLimitCalculation=this.improvementLimitCalculation.bind(this);
+      $scope.carrylastDate=this.carryLastDateFinder.bind(this);
       $scope.submitAndClose = this.submitAndClose.bind(this);
+      $scope.getApplicationCCIImprovemnetApproved=this.getApplicationCCIImprovemnetApproved.bind(this);
       $scope.close = this.close.bind(this);
+      $scope.insertIntoStudentPayment=this.insertIntoStudentPayment.bind(this);
+     // $scope.submitButtonEnable=this.submitButtonEnable.bind(this);
+     // $scope.alert=this.alert.bind(this);
+        $scope.finalSave=this.finalSave.bind(this);
       $scope.convertToJson = this.convertToJson.bind(this);
+      this.improvementLimitCalculation();
+      this.carryLastDateFinder();
+
     }
 
+      private  finalSave(){
+          this.submitAndClose();
+      }
+
+      private carryLastDateFinder():ng.IPromise<any>{
+          this.$scope.carrylastDate="";
+          var defer = this.$q.defer();
+          var carryLastDate_check:Array<ICarryLastdate>=[];
+          this.httpClient.get('academic/applicationCCI/carryLastDate', HttpClient.MIME_TYPE_JSON,
+              (json: any, etag: string) => {
+              console.log("Jacksonlll");
+              console.log(json);
+                this.$scope.carrylastDate=json.date;
+                this.$scope.carryStartDate=json.StartDate;
+                  this.$scope.carrylastDateDeadline=json.deadline;
+                  console.log("-----"+this.$scope.carrylastDateDeadline);
+                  this.$scope.carryStatusShow=this.$scope.carrylastDateDeadline==true? "Not Allowed":"Available";
+                  defer.resolve(json.date);
+              },
+              (response: ng.IHttpPromiseCallbackArg<any>) => {
+                  console.error(response);
+              });
+          return defer.promise;
+      }
+      private improvementLimitCalculation(): ng.IPromise<any>{
+        this.$scope.improvementLimit=0;
+          var defer = this.$q.defer();
+          var improvement_limit_check: number=0;
+          this.httpClient.get('/ums-webservice-academic/academic/applicationCCI/getImprovementLimit', 'application/json',
+              (json: any, etag: string) => {
+                  improvement_limit_check = json;
+                  console.log("---------------------Improvement Limit ---------------------");
+                  this.$scope.improvementLimit=improvement_limit_check;
+                  this.$scope.historyButtonStatus=this.$scope.improvementLimit>0 ? false:true;
+                  this.$scope.improvemetLimitCrossed=this.$scope.improvementLimit<4 ? false:true;
+                  console.log(this.$scope.improvementLimit);
+                  defer.resolve(this.$scope.improvementLimit);
+              },
+              (response: ng.IHttpPromiseCallbackArg<any>) => {
+                  console.error(response);
+              });
+          return defer.promise;
+
+      }
+
+      public receipt(transactionId: string): void {
+        console.log("report:"+transactionId);
+        this.feeReportService.receipt(transactionId);
+      }
+
+      private insertIntoStudentPayment(){
+         /* this.convertToJson( )).
+          then((json:any)=>{
+              console.log("Stydeht payment Accept Clearance Exam");
+              console.log(json);
+              this.$scope.loadingVisibility = true;
+              this.$scope.responseResults = [];
+
+          })*/
+
+      }
+
     private submitAndClose() {
-      var json: any = this.convertToJson(this.$scope.registrationResults);
-      this.$scope.loadingVisibility = true;
-      this.$scope.responseResults = [];
-      this.httpClient.post('academic/applicationCCI', json, 'application/json')
-          .success((data, status, header, config) => {
-            console.log("#####################");
-            console.log(data);
+      this.convertToJson(this.$scope.registrationResults).then((json:any)=>{
+          console.log("Checking");
+          console.log(json);
 
-            this.$scope.responseResults = data.entries;
-            console.log(this.$scope.responseResults);
-            this.$scope.loadingVisibility = false;
+          this.$scope.loadingVisibility = true;
+          this.$scope.responseResults = [];
+          this.httpClient.post('academic/applicationCCI', json, 'application/json')
+              .success((data, status, header, config) => {
 
-            if (this.$scope.responseResults.length >= 1) {
-              this.$scope.submitButtonClicked = false;
-              this.$window.alert("Error in saving data");
-            } else {
-              $.notific8("Successfully saved data");
-              this.initializatino();
-            }
+                  this.$scope.responseResults = data.entries;
+                  if (this.$scope.responseResults.length >= 1) {
+                     // alert('Error->value:'+this.$scope.responseResults.length);
+                      this.$scope.submitButtonClicked = false;
+                      //this.$window.alert("Error in saving data");
+                  }
+                  console.log("Rumi");
 
-          }).error((data) => {
+                  console.log(this.$scope.responseResults.length);
+                  this.$scope.checkBoxCounter=0;
+                  this.$scope.submit_Button_Disable=true;
+               this.initializatino();
 
-      });
+                  this.$scope.loadingVisibility = false;
+                  this.notify.success("Data Saved successfully");
+
+              }).error((data) => {
+              this.notify.error("An error has stoped saving data");
+          });
+      })
+        this.insertIntoStudentPayment();
+
 
     }
 
@@ -155,31 +333,9 @@ module ums {
     }
 
     private submit() {
-      var totalOccurance: number = 0;
-      this.$scope.selectedCarryNumber = 0;
-      this.$scope.selectedClearanceNumber = 0;
-      this.$scope.selectedImprovementNumber = 0;
-
-      for (var i = 0; i < this.$scope.registrationResults.length; i++) {
-        if (this.$scope.registrationResults[i].apply == true) {
-          totalOccurance += 1;
-          if (this.$scope.registrationResults[i].type == ApplicationCCI.CARRY) {
-            this.$scope.selectedCarryNumber += 1;
-          }
-          else if (this.$scope.registrationResults[i].type == ApplicationCCI.CLEARANCE) {
-            this.$scope.selectedClearanceNumber += 1;
-          }
-          else {
-            this.$scope.selectedImprovementNumber += 1;
-          }
-        }
-      }
-
-      if (totalOccurance > 0) {
-        this.$scope.submitButtonClicked = true;
-
-      }
+            this.submitAndClose();
     }
+
 
     private makeDataEmpty(resultArr: Array<IUGRegistrationResult>): Array<IUGRegistrationResult> {
       this.$scope.resultCarryNumber = 0;
@@ -207,131 +363,48 @@ module ums {
     }
 
     private cancel() {
+        this.$scope.checkBoxCounter=0;
+        this.$scope.submit_Button_Disable=true;
       this.$scope.registrationResults = this.makeDataEmpty(this.$scope.registrationResults);
+      //this.$scope.submit_Button_Disable=true;
     }
 
 
-    private checkMoreThanOneSelection(result: IUGRegistrationResult) {
+    private checkMoreThanOneSelectionSubmit(result: IUGRegistrationResult) {
 
-      console.log("in the check operation");
-
-      var totalOccuranceNumberOfTheDate: number = 1;
-      var courseNoStore: Array<string> = [];
-      var dateStore: Array<string> = [];
-
-
-      for (var i = 0; i < this.$scope.registrationResults.length; i++) {
-        // $("#"+this.$scope.registrationResults[i].courseNo).css("background-color","white").css("color","black");
-        /* if(dateStore.length==0){
-           dateStore.push(this.$scope.registrationResults[i].examDate);
-         }
-         else{
-
-         }*/
-        if (this.$scope.registrationResults[i].courseNo != result.courseNo) {
-          if (this.$scope.registrationResults[i].examDate == result.examDate && this.$scope.registrationResults[i].apply == result.apply && result.apply == true) {
-            courseNoStore.push(this.$scope.registrationResults[i].courseNo);
-          }
+        if(result.apply){
+            this.$scope.checkBoxCounter++;
+            this.enableOrDisableSubmitButton();
         }
-      }
-      console.log(courseNoStore);
-      if (courseNoStore.length == 1) {
-
-
-        if (result.apply) {
-          courseNoStore.push(result.courseNo);
-        } else {
-          result.backgroundColor = "white";
-          result.color = "black";
-          result.status = "one";
+        else{
+            this.$scope.checkBoxCounter--;
+            this.enableOrDisableSubmitButton();
         }
 
-        for (var i = 0; i < courseNoStore.length; i++) {
-          for (var j = 0; j < this.$scope.registrationResults.length; j++) {
-            if (this.$scope.registrationResults[j].courseNo == courseNoStore[i]) {
-              this.$scope.registrationResults[j].status = "two";
-              this.$scope.registrationResults[j].backgroundColor = "yellow";
-              this.$scope.registrationResults[j].color = "black";
-              break;
-            }
-          }
+        console.log("value:"+this.$scope.submit_Button_Disable);
+
+    }
+
+    private enableOrDisableSubmitButton(): void{
+        if( this.$scope.checkBoxCounter > 0){
+            this.$scope.submit_Button_Disable=false;
+        }else{
+            this.$scope.submit_Button_Disable=true;
         }
-
-      }
-      /*if(courseNoStore.length>2)*/
-      else if (courseNoStore.length >= 2) {
-        if (result.apply) {
-          courseNoStore.push(result.courseNo);
-        } else {
-          result.backgroundColor = "white";
-          result.color = "black";
-          result.status = "one";
-        }
-
-        for (var i = 0; i < courseNoStore.length; i++) {
-          for (var j = 0; j < this.$scope.registrationResults.length; j++) {
-            if (this.$scope.registrationResults[j].courseNo == courseNoStore[i]) {
-              this.$scope.registrationResults[j].status = "three";
-              this.$scope.registrationResults[j].backgroundColor = "red";
-              this.$scope.registrationResults[j].color = "white";
-              break;
-            }
-          }
-        }
-      } else {
-        if (result.apply == false) {
-          if (result.status == "two") {
-            for (var i = 0; i < this.$scope.registrationResults.length; i++) {
-              if (this.$scope.registrationResults[i].examDate == result.examDate && this.$scope.registrationResults[i].courseNo != result.courseNo) {
-                this.$scope.registrationResults[i].backgroundColor = "white";
-                this.$scope.registrationResults[i].color = "black";
-                this.$scope.registrationResults[i].status = "one";
-              }
-            }
-          }
-          if (result.status == "three") {
-            var tempStoreOfResults: Array<IUGRegistrationResult> = [];
-            var counter: number = 0;
-            for (var i = 0; i < this.$scope.registrationResults.length; i++) {
-              if (this.$scope.registrationResults[i].examDate == result.examDate && this.$scope.registrationResults[i].courseNo != result.courseNo) {
-                counter += 1;
-              }
-            }
-            for (var j = 0; j < this.$scope.registrationResults.length; j++) {
-              if (counter == 2) {
-                this.$scope.registrationResults[i].backgroundColor = "yellow";
-                this.$scope.registrationResults[i].color = "black";
-                this.$scope.registrationResults[i].status = "two";
-              } else {
-                this.$scope.registrationResults[i].backgroundColor = "red";
-                this.$scope.registrationResults[i].color = "white";
-                this.$scope.registrationResults[i].status = "three";
-              }
-            }
-          }
-          result.backgroundColor = "white";
-          result.color = "black";
-          result.status = "one";
-        }
-
-      }
-
-
-      console.log(this.$scope.registrationResults);
     }
 
     private initializatino() {
       this.getParameterInfoForCCIApplication();
       this.getStudentInfo();
+        this.improvementLimitCalculation();
+        this.carryLastDateFinder();
     }
 
 
     private postInitialization() {
-      if (this.$scope.applicationCCI.length == 0) {
+
         this.getRegistrationResult();
-      } else {
-        this.$scope.applicationCCIFound = true;
-      }
+        this.$scope.applicationCCIFound = false;
     }
 
     private getRegistrationResult() {
@@ -348,29 +421,33 @@ module ums {
       this.$scope.appCCICarryNumber = 0;
       this.$scope.appCCIClearanceNumber = 0;
       this.$scope.appCCIImprovementNumber = 0;
+      this.$scope.pendingApprovedStatus=0;
 
-      this.getApplicationCCIInfo().then((appArr: Array<AppCCI>) => {
+        this.getApplicationCCIInfo().then((appArr: Array<AppCCI>) => {
 
-        for (var i = 0; i < appArr.length; i++) {
-          if (appArr[i].applicationType == ApplicationCCI.CLEARANCE) {
-            this.$scope.appCCIClearanceNumber += 1;
-          }
-          else if (appArr[i].applicationType == ApplicationCCI.IMPROVEMENT) {
-            this.$scope.appCCIImprovementNumber += 1;
-          }
-          else if (appArr[i].applicationType == ApplicationCCI.SPECIAL_CARRY) {
-            this.$scope.appCCISpecialCarryNumber += 1;
-          }
-          else {
-            this.$scope.appCCICarryNumber += 1;
-          }
-          this.$scope.applicationCCI.push(appArr[i]);
-        }
-        console.log(this.$scope.applicationCCI);
-        this.postInitialization();
-      });
+            for (var i = 0; i < appArr.length; i++) {
+                if (appArr[i].applicationType == ApplicationCCI.CLEARANCE) {
+                    this.$scope.appCCIClearanceNumber += 1;
+                }
+                else if (appArr[i].applicationType == ApplicationCCI.IMPROVEMENT) {
+                    this.$scope.appCCIImprovementNumber += 1;
+                }
+                else if (appArr[i].applicationType == ApplicationCCI.SPECIAL_CARRY) {
+                    this.$scope.appCCISpecialCarryNumber += 1;
+                }
+                else {
+                    this.$scope.appCCICarryNumber += 1;
+                }
 
-      console.log(this.$scope.appCCICarryNumber);
+            }
+
+            //console.log(this.$scope.applicationCCI);
+            this.postInitialization();
+        });
+
+       // console.log(this.$scope.appCCICarryNumber);
+
+      //console.log(this.$scope.appCCICarryNumber);
     }
 
 
@@ -423,7 +500,8 @@ module ums {
       this.httpClient.get('/ums-webservice-academic/academic/UGRegistrationResultResource/CarryClearanceImprovement', 'application/json',
           (json: any, etag: string) => {
             registrationResult = json.entries;
-
+              console.log("---------------------Registration result---------------------");
+              console.log(registrationResult);
             defer.resolve(registrationResult);
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
@@ -438,9 +516,10 @@ module ums {
       this.httpClient.get('/ums-webservice-academic/academic/applicationCCI/student', 'application/json',
           (json: any, etag: string) => {
             appCCIArr = json.entries;
-            console.log("**********");
-            console.log("Applicatino cci");
+            console.log("****RRRRRRRRRRRRRRRRR******");
+            console.log("Applicatino cci Updated!!");
             console.log(json);
+            this.$scope.applicationCCI=appCCIArr;
             defer.resolve(appCCIArr);
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
@@ -448,35 +527,66 @@ module ums {
           });
       return defer.promise;
     }
+      private getApplicationCCIImprovemnetApproved(): ng.IPromise<any> {
+          var defer = this.$q.defer();
+          var appCCIArr: Array<IAppImprove> = [];
+          this.httpClient.get('/ums-webservice-academic/academic/applicationCCI/ApprovedImprovementInfo', 'application/json',
+              (json: any, etag: string) => {
+                  appCCIArr = json.entries;
+                  console.log("****zzzzzzzz******");
+                  console.log(json.semesterName);
+                  console.log("Applicatino cci Updated!!");
+                  console.log(json);
+                  console.log("");
+                  this.$scope.appImpApprove=appCCIArr;
+                  defer.resolve(appCCIArr);
+              },
+              (response: ng.IHttpPromiseCallbackArg<any>) => {
+                  console.error(response);
+              });
+          return defer.promise;
+      }
 
-    private convertToJson(result: Array<IUGRegistrationResult>): any {
+    private convertToJson(result: Array<IUGRegistrationResult>): ng.IPromise<any> {
+        let defer:ng.IDeferred<any> = this.$q.defer();
       var completeJson = {};
       console.log("result");
       console.log(result);
       var jsonObj = [];
-      for (var i = 0; i < this.$scope.registrationResults.length; i++) {
+      for (var i = 0; i <this.$scope.registrationResults.length; i++) {
         var item = {};
         if (this.$scope.registrationResults[i].apply == true) {
           var a: IUGRegistrationResult = this.$scope.registrationResults[i];
-          item["semesterId"] = this.$scope.student[0].semesterId;
+          item["semesterId"] = this.$scope.student[0].currentEnrolledSemesterId;
           item["studentId"] = this.$scope.student[0].id;
           item["courseId"] = this.$scope.registrationResults[i].courseId;
-          /*var applicationTpe: any;
-          if (a.type == ApplicationCCI.CARRY) {
-            applicationTpe = 3;
-          } else if (a.type == ApplicationCCI.CLEARANCE) {
-            applicationTpe = 2;
-          } else {
-            applicationTpe = 5;
-          }*/
+
           item["applicationType"] = a.type;
+
+           if(this.$scope.registrationResults[i].type==ApplicationCCI.CLEARANCE){
+
+               this.$scope.clerance_status_initial=8;
+
+               item["cciStatus"] = this.$scope.clerance_status_initial;
+           }else if(this.$scope.registrationResults[i].type==ApplicationCCI.IMPROVEMENT){
+
+               this.$scope.improvement_status_initial=7;
+               item["cciStatus"] = this.$scope.improvement_status_initial;
+           }else{
+               this.$scope.carry_status_initial=2;
+               item["cciStatus"] = this.$scope.carry_status_initial;
+           }
+           console.log("Items");
+          console.log(item);
+          //this.notify.success("sending./.....");
           jsonObj.push(item);
         }
 
       }
       completeJson["entries"] = jsonObj;
       console.log(completeJson);
-      return completeJson;
+      defer.resolve(completeJson);
+      return defer.promise;
     }
 
   }

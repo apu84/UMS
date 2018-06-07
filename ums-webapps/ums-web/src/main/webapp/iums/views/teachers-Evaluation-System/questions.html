@@ -1,0 +1,111 @@
+<div>
+    <style>
+
+        thead {
+            background-color: #efefef;
+        }
+
+        .grid {
+            width: 750px;
+            height: 500px;
+        }
+
+        tbody {
+            overflow-y: scroll;
+            height: 450px;
+        }
+
+
+    </style>
+
+    <div class="row">
+        <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+            <i class="fa fa-angle-double-right fa-cx"></i></i>
+        </div>
+        <div class="panel panel-green" id="leftDiv">
+            <div class="panel-heading">
+                <h3 class="panel-title">Select Parameters </h3>
+            </div>
+            <div class="panel-body pan">
+                <form class="form-horizontal">
+                    <div class="form-body pal">
+                        <div class="form-group">
+                            <div class="col-md-8">
+                                <button type="button"
+                                        class="btn btn-success btn-sm"
+                                        data-ng-click="vm.setQuestionsForEvaluation()"
+                                        data-ng-model="kk">
+                                    <span class="glyphicon glyphicon-th-list"></span>
+                                    Set Questions For Evaluation &nbsp &nbsp &nbsp&nbsp &nbsp &nbsp
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-8">
+                                <button type="button"
+                                        class="btn btn-success btn-sm"
+                                        data-ng-click="vm.addNewQuestions()"
+                                        data-ng-model="kk">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                    Add New Questions For Evaluation &nbsp
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-8">
+                                <button type="button"
+                                        class="btn btn-success btn-sm"
+                                        data-ng-click="vm.migrateQuestions()"
+                                        data-ng-model="kk">
+                                    <span class="glyphicon glyphicon-transfer"></span>
+                                        Migrate Questions to New Semester
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="rightDiv">
+            <div class="panel">
+                <div class="panel-heading" data-ng-if="vm.initialStatus==true">
+                    Question set up Parameters</div>
+
+                <div class="panel-heading" data-ng-if="vm.setQuestionsForEvaluationStatus==true">
+                    Set Question For Evaluation</div>
+                <div class="panel-heading" data-ng-if="vm.addNewQuestionStatus==true">
+                    Add New Question</div>
+                <div class="panel-heading" data-ng-if="vm.migrateQuestionStatus==true">
+                    Migration Of Questions</div>
+                <div class="panel-body shadowPanel" style="min-height: 200px;">
+                    <div data-ng-if="vm.initialStatus==true">
+                        <p>Semester:<strong>{{" "+vm.semesterName}}</strong></p>
+                        <p>Start Date:<strong>{{" "+vm.startDate}}</strong> </p>
+                        <p>End Date: <strong>{{" "+vm.endDate}}</strong></p>
+                        <p>DeadLine:
+                            <span data-ng-if="vm.deadLine==true" style="font-size: 12px" class="label label-success badge-success">{{" "+vm.deadLineStatus}}</span>
+                            <span data-ng-if="vm.deadLine==false" style="font-size: 12px" class="label label-danger badge-danger">{{" "+vm.deadLineStatus}}</span>
+                        </p>
+                    </div>
+                    <div data-ng-if="vm.setQuestionsForEvaluationStatus==true">
+                        <div style="padding-bottom: 20px"  data-ng-include="'views/teachers-Evaluation-System/set-questions-for-evaluation.html'">
+
+                        </div>
+                    </div>
+                    <div data-ng-if="vm.addNewQuestionStatus==true">
+                        <div style="padding-bottom: 20px"  data-ng-include="'views/teachers-Evaluation-System/add-new-questions-for-evaluation.html'">
+
+                        </div>
+                    </div>
+                    <div data-ng-if="vm.migrateQuestionStatus==true">
+                        <div style="padding-bottom: 20px"  data-ng-include="'views/teachers-Evaluation-System/migrate-questions.html'">
+
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+    </div>
+</div>

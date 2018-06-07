@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.academic.tabulation.service.TabulationService;
 import org.ums.academic.tabulation.service.TabulationServiceImpl;
 import org.ums.cache.*;
@@ -46,6 +47,7 @@ import org.ums.services.academic.RemarksBuilder;
 import org.ums.services.academic.RemarksBuilderImpl;
 import org.ums.services.academic.StudentCarryCourseService;
 import org.ums.statistics.JdbcTemplateFactory;
+import org.ums.statistics.NamedParameterJdbcTemplateFactory;
 
 @Configuration("academicConfig")
 public class AcademicContext {
@@ -54,6 +56,9 @@ public class AcademicContext {
 
   @Autowired
   JdbcTemplateFactory mTemplateFactory;
+
+  @Autowired
+  NamedParameterJdbcTemplateFactory mNamedParameterJdbcTemplateFactory;
 
   @Autowired
   IdGenerator mIdGenerator;
@@ -215,6 +220,41 @@ public class AcademicContext {
   }
 
   @Bean
+  ApplicationTESManager applicationTESManager() {
+    ApplicationTESCache applicationTESCache = new ApplicationTESCache((mCacheFactory.getCacheManager()));
+    applicationTESCache.setManager(new PersistentApplicationTESDao(mTemplateFactory.getJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getNamedParameterJdbcTemplate(), mIdGenerator));
+    return applicationTESCache;
+  }
+
+  @Bean
+  ApplicationTesQuestionManager applicationTesQuestionManager() {
+    ApplicationTesQuestionCache applicationTesQuestionCache =
+        new ApplicationTesQuestionCache((mCacheFactory.getCacheManager()));
+    applicationTesQuestionCache.setManager(new PersistentApplicationTesQuestionDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
+    return applicationTesQuestionCache;
+  }
+
+  @Bean
+  ApplicationTesSetQuestionManager applicationTesSetQuestionManager() {
+    ApplicationTesSetQuestionCache applicationTesSetQuestionCache =
+        new ApplicationTesSetQuestionCache((mCacheFactory.getCacheManager()));
+    applicationTesSetQuestionCache.setManager(new PersistentApplicationTesSetQuestionDao(mTemplateFactory
+        .getJdbcTemplate(), mIdGenerator));
+    return applicationTesSetQuestionCache;
+  }
+
+  @Bean
+  ApplicationTesSelectedCourseManager applicationTesSelectedCourseManager() {
+    ApplicationTesSelectedCoursesCache applicationTesSelectedCoursesCache =
+        new ApplicationTesSelectedCoursesCache((mCacheFactory.getCacheManager()));
+    applicationTesSelectedCoursesCache.setManager(new PersistentApplicationTesSelectedCoursesDao(mTemplateFactory
+        .getJdbcTemplate(), mIdGenerator));
+    return applicationTesSelectedCoursesCache;
+  }
+
+  @Bean
   CourseTeacherManager courseTeacherManager() {
     CourseTeacherCache courseTeacherCache = new CourseTeacherCache(mCacheFactory.getCacheManager());
     courseTeacherCache.setManager(new PersistentCourseTeacherDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
@@ -290,7 +330,7 @@ public class AcademicContext {
             semesterManager(), mStudentCarryCourseService);
     UGRegistrationResultCache registrationResultCache = new UGRegistrationResultCache(mCacheFactory.getCacheManager());
     registrationResultCache.setManager(new PersistentUGRegistrationResultDao(mTemplateFactory.getJdbcTemplate(),
-        mIdGenerator));
+        mNamedParameterJdbcTemplateFactory.getNamedParameterJdbcTemplate(), mIdGenerator));
     resultAggregator.setManager(registrationResultCache);
     return resultAggregator;
   }

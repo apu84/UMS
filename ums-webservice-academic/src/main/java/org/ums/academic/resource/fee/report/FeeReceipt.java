@@ -11,10 +11,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.ums.domain.model.immutable.ApplicationCCI;
+import org.ums.domain.model.immutable.Course;
 import org.ums.fee.accounts.PaymentAccountsMapping;
 import org.ums.fee.accounts.PaymentAccountsMappingManager;
 import org.ums.fee.payment.StudentPayment;
 import org.ums.formatter.DateFormat;
+import org.ums.manager.ApplicationCCIManager;
+import org.ums.manager.CourseManager;
 import org.ums.util.Constants;
 import org.ums.util.NumberToWords;
 
@@ -29,6 +33,10 @@ public class FeeReceipt {
   @Autowired
   @Qualifier("genericDateFormat")
   DateFormat mDateFormat;
+  @Autowired
+  private ApplicationCCIManager mApplicationCCIManager;
+  @Autowired
+  private CourseManager mCourseManager;
 
   private Font universityNameFont, infoFont, tableFont, underLineFont;
   private java.util.List<StudentPayment> mPaymentList;
@@ -275,6 +283,29 @@ public class FeeReceipt {
       cell.addElement(paragraph);
       paymentTable.addCell(cell);
     }
+
+    for(StudentPayment payment : mPaymentList) {
+      cell = new PdfPCell();
+      cell.setBorder(Rectangle.NO_BORDER);
+      cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+      cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+      if(payment.getFeeCategory().getName().equals("Improvememt exam fee")
+          || payment.getFeeCategory().getName().equals("Carry over exam fee")) {
+        ApplicationCCI x = mApplicationCCIManager.getByTransactionId(payment.getTransactionId());
+        x.getCourseId();
+        // mCourseManager.get(x.getCourseId()).getTitle();
+        if(mCourseManager.get(x.getCourseId()) != null) {
+          paragraph =
+              new Paragraph("Course Title: " + mCourseManager.get(x.getCourseId()).getTitle() + " ("
+                  + mCourseManager.get(x.getCourseId()).getNo() + ")", infoFont);
+        }// ------------------fee
+         // category
+        paragraph.setAlignment(Element.ALIGN_LEFT);
+        cell.addElement(paragraph);
+        paymentTable.addCell(cell);
+      }
+    }
+
     breakDownCell.addElement(paymentTable);
     breakdown.addCell(breakDownCell);
 

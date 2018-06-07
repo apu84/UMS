@@ -22,7 +22,7 @@ public class MapperDao<K, V extends Serializable> implements Mapper<K, V> {
     else {
       dbFile = System.getProperty("java.io.tempDir") + File.separator + pFileName;
     }
-    mDB = DBMaker.fileDB(dbFile).fileLockDisable().make();
+    /* mDB = DBMaker.fileDB(dbFile).fileLockDisable().make(); */
     mMapName = pMapName;
   }
 

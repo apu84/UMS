@@ -63,9 +63,29 @@ module ums {
       let defer: ng.IDeferred<boolean> = this.$q.defer();
       this.httpClient.post(`/ums-webservice-bank/receive-payment/${studentId}`, payments,
           HttpClient.MIME_TYPE_JSON)
-          .success(() => defer.resolve(true))
-          .error(() => defer.resolve(false));
+          .success(() =>{
+
+                  defer.resolve(true);
+          }
+          ).error(() => defer.resolve(false));
+
       return defer.promise;
+    }
+    public InsertIntoCCI(json:any): ng.IPromise<any>{
+        let defer: ng.IDeferred<any> = this.$q.defer();
+        console.log("inside service");
+        console.log(json);
+        this.httpClient.post('academic/applicationCCI/transactionId', json, 'application/json')
+            .success((data, status, header, config) => {
+                /*this.responseResult=data.entries;
+                if(this.responseResult.length>=1){
+                    console.log("Error in savinf Data");
+                }*/
+
+            }).error((data) => {
+           console.log(data);
+        });
+        return defer.promise;
     }
 
     public getPayments(appliedPayments: PaymentFeeTypeGroup[], selectedTransactions: string[]): ReceivePayment[] {
