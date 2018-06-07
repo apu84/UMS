@@ -35,7 +35,7 @@ module ums{
             this.addDate('default');
         }
 
-        private getNextMeetingNo(): void {
+        public getNextMeetingNo(): void {
             if (this.meetingSchedule.type) {
                 this.meetingService.getNextMeetingNo(this.meetingSchedule.type.id).then((nextMeetingNo: any) => {
                     this.meetingSchedule.meetingNo = nextMeetingNo.nextMeetingNumber;
@@ -43,18 +43,17 @@ module ums{
             }
         }
 
-        private save(): void {
+        public save(form: ng.IFormController): void {
             this.convertToJson(this.meetingSchedule).then((json: any) => {
                 this.meetingService.saveMeetingSchedule(json).then(()=>{
-                    this.meetingSchedule = <IMeetingScheduleModel>{};
+                    this.resetForm(form);
                 })
             });
         }
 
-        private update(): void {
+        public update(): void {
             this.convertToJson(this.scheduleToEdit).then((json: any) => {
                 this.meetingService.updateMeetingSchedule(json).then(()=>{
-                    this.scheduleToEdit = <IMeetingScheduleModel>{};
                     this.getSchedule();
                 })
             });
@@ -140,6 +139,11 @@ module ums{
                     this.notify.error("Please select a meeting type");
                 }
             }
+        }
+
+        private resetForm(form: ng.IFormController) {
+            this.meetingSchedule = <IMeetingScheduleModel>{};
+            form.$setPristine();
         }
 
         private convertToJson(obj: any): ng.IPromise<any>{

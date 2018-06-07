@@ -10,7 +10,7 @@
                 </span>
                 </div>
                 <div class="panel-body pan">
-                    <form name="nScheduleForm" class="form-horizontal" ng-submit="vm.save()" novalidate>
+                    <form name="nScheduleForm" class="form-horizontal" ng-submit="vm.save(nScheduleForm)" novalidate>
                         <div class="form-body pal">
                             <div class="form-group"
                                  ng-class="{ 'has-error' : nScheduleForm.nType.$invalid && !nScheduleForm.nType.$pristine }">
