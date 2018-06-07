@@ -53,7 +53,11 @@ module ums {
 
     public createOrUpdate(systemAccountMap: ISystemAccountMap): ng.IPromise<ISystemAccountMap> {
       let defer: ng.IDeferred<ISystemAccountMap> = this.$q.defer();
-      this.httpClient.put(this.url + "/create-or-update", systemAccountMap, HttpClient.MIME_TYPE_JSON)
+      console.log("Object value");
+      console.log(systemAccountMap);
+      console.log("Json as string");
+      console.log(JSON.stringify(systemAccountMap));
+      this.httpClient.put(this.url + "/create-or-update", JSON.stringify(systemAccountMap), HttpClient.MIME_TYPE_JSON)
           .success((response: ISystemAccountMap) => defer.resolve(response))
           .error((response) => {
             console.error(response);

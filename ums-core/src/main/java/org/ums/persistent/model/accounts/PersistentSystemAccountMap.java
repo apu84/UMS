@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
@@ -14,6 +15,7 @@ import org.ums.enums.accounts.definitions.account.balance.AccountType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.AccountManager;
 import org.ums.manager.accounts.SystemAccountMapManager;
+import org.ums.serializer.UmsDateSerializer;
 
 import java.util.Date;
 
@@ -36,6 +38,7 @@ public class PersistentSystemAccountMap implements MutableSystemAccountMap {
   private Long mAccountId;
   private String mModifiedBy;
   private String mModifierName;
+  @JsonIgnore
   private Date mModifiedDate;
   @JsonIgnore
   private Company mCompany;
@@ -54,7 +57,7 @@ public class PersistentSystemAccountMap implements MutableSystemAccountMap {
   }
 
   @Override
-  @JsonProperty
+  @JsonProperty("company")
   public Company getCompany() {
     return mCompany == null ? mCompany : sCompanyManager.get(mCompanyId);
   }
@@ -121,7 +124,7 @@ public class PersistentSystemAccountMap implements MutableSystemAccountMap {
 
   @Override
   public String getModifierName() {
-    return mModifierName;
+    return sPersonalInformationManager.get(mModifiedBy).getName();
   }
 
   @Override
@@ -130,11 +133,14 @@ public class PersistentSystemAccountMap implements MutableSystemAccountMap {
   }
 
   @Override
+  @JsonProperty
+  @JsonSerialize(using = UmsDateSerializer.class)
   public Date getModifiedDate() {
     return mModifiedDate;
   }
 
   @Override
+  @JsonIgnore
   public void setModifiedDate(Date pModifiedDate) {
     this.mModifiedDate = pModifiedDate;
   }
