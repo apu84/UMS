@@ -12,7 +12,7 @@
       '/employeePublication': {title: 'Publication Approval', 'breadcrumb': ['Publication Approval']},
       '/schedule': {title: 'Schedule', 'breadcrumb': ['Schedule']},
       '/agendaResolution': {title: 'Agenda & Resolution', 'breadcrumb': ['Prepare Agenda & Resolution']},
-      '/meetingSearch': {title: 'Meeting Management', 'breadcrumb': ['Search']},
+      '/search': {title: 'Search', 'breadcrumb': ['Search']},
       '/newEmployee': {title: 'Create Employee', 'breadcrumb': ['Create Employee']},
       '/employeeProfile': {title: 'Profile', 'breadcrumb': ['Profile']},
       '/personal': {title: 'Profile', 'breadcrumb': ['Profile']},

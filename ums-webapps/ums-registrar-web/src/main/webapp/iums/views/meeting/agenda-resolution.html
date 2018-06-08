@@ -21,7 +21,7 @@
                                     id="iMeetingType"
                                     data-ng-model="vm.meetingType"
                                     data-ng-options="type.name for type in vm.meetingTypes track by type.id"
-                                    data-ng-change="vm.getMeetingNumber()"
+                                    data-ng-change="vm.getMeetingNumber(); vm.showRightDiv=false"
                                     class="form-control" required>
                                 <option value="">Select Meeting Type</option>
                             </select>
@@ -301,8 +301,41 @@
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div class="col-md-12">
+                                <u><a style="color: blue;cursor: pointer;" data-toggle="modal"
+                                      data-target="#printConfirmation"
+                                      data-ng-click="">Print</a>
+                                </u>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="printConfirmation" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
+     aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="modal-default-label" class="modal-title">Confirmation</h4>
+            </div>
+            <div class="modal-body">
+
+                Select print category:<br />
+                <input type="radio" id="square-radio-1" name="choice" ng-model="vm.printType" value="1"
+                       autocomplete="off"/>&nbsp;<label for="square-radio-1">Agenda Only</label><br />
+                <input type="radio" id="square-radio-2" name="choice" ng-model="vm.printType" value="2"
+                       autocomplete="off"/>&nbsp;<label for="square-radio-2">Agenda & Resolution Both</label><br />
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                <button type="button" class="btn btn-success" data-ng-click="vm.print()">Print</button>
             </div>
         </div>
     </div>

@@ -130,6 +130,19 @@ module ums{
             return defer.promise;
         }
 
+
+        public getMeetingMinutes(meetingType: number, meetingNo: number, printType: number): void {
+            let contentType: string = UmsUtil.getFileContentType("pdf");
+            let fileName = "Minutes Minutes";
+
+            this.httpClient.get(this.agendaResolutionUrl + "/meetingType/" + meetingType + "/meetingNo/" + meetingNo + "/printType/" + printType,
+                'application/pdf', (data: any, etag: string) => {
+                    UmsUtil.writeFileContent(data, contentType, fileName);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                }, 'arraybuffer');
+        }
         //search
 
     }
