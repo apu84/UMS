@@ -3,7 +3,6 @@ package org.ums.meeting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.meeting.AgendaResolution;
@@ -14,7 +13,6 @@ import org.ums.persistent.model.meeting.PersistentAgendaResolution;
 import org.ums.resource.ResourceHelper;
 import org.ums.solr.repository.document.meeting.AgendaResolutionDocument;
 import org.ums.solr.repository.meeting.AgendaResolutionRepository;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -45,17 +43,6 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
     return null;
   }
 
-  @Transactional
-  public Response saveAgendaResolution(JsonObject pJsonObject, UriInfo pUriInfo) {
-    MutableAgendaResolution mutableAgendaResolution = new PersistentAgendaResolution();
-    LocalCache localCache = new LocalCache();
-    getBuilder().build(mutableAgendaResolution, pJsonObject.getJsonObject("entries"), localCache);
-    mManager.create(mutableAgendaResolution);
-    Response.ResponseBuilder builder = Response.created(null);
-    builder.status(Response.Status.CREATED);
-    return builder.build();
-  }
-
   public JsonObject searchAgendaResolution(int pPage, int pItemPerPage, final String pFilter, final UriInfo pUriInfo) {
     List<AgendaResolutionDocument> agendaResolutionDocuments =
         mRepository.findByCustomQuery(queryBuilder(pFilter), new PageRequest(pPage, pItemPerPage));
@@ -74,7 +61,7 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
   public Response updateAgendaResolution(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableAgendaResolution mutableAgendaResolution = new PersistentAgendaResolution();
     LocalCache localCache = new LocalCache();
-    mBuilder.updateBuilder(mutableAgendaResolution, pJsonObject.getJsonObject("entries"), localCache);
+    mBuilder.build(mutableAgendaResolution, pJsonObject.getJsonObject("entries"), localCache);
     mManager.update(mutableAgendaResolution);
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
@@ -84,20 +71,6 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
   public Response deleteAgendaResolution(String pId, UriInfo pUriInfo) {
     mManager.delete((MutableAgendaResolution) mManager.get(Long.parseLong(pId)));
     return Response.noContent().build();
-  }
-
-  private JsonObject buildJson(List<AgendaResolution> pAgendaResolution, UriInfo pUriInfo) {
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    for(AgendaResolution agendaResolution : pAgendaResolution) {
-      JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-      getBuilder().build(jsonObject, agendaResolution, pUriInfo, localCache);
-      children.add(jsonObject);
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-    return object.build();
   }
 
   private JsonObject convertToJson(List<AgendaResolution> agendaResolutions, long totalCount, UriInfo pUriInfo) {
@@ -116,7 +89,13 @@ public class AgendaResolutionResourceHelper extends ResourceHelper<AgendaResolut
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    throw new NotImplementedException();
+    MutableAgendaResolution mutableAgendaResolution = new PersistentAgendaResolution();
+    LocalCache localCache = new LocalCache();
+    getBuilder().build(mutableAgendaResolution, pJsonObject.getJsonObject("entries"), localCache);
+    mManager.create(mutableAgendaResolution);
+    Response.ResponseBuilder builder = Response.created(null);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
   }
 
   @Override

@@ -1,5 +1,6 @@
 package org.ums.meeting;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.logs.GetLog;
 import org.ums.resource.Resource;
@@ -15,6 +16,9 @@ import javax.ws.rs.core.Request;
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class AgendaResolutionResource extends MutableAgendaResolutionResource {
+
+  @Autowired
+  private AgendaResolutionResourceHelper mHelper;
 
   @GET
   @Path("/scheduleId/{schedule-id}")

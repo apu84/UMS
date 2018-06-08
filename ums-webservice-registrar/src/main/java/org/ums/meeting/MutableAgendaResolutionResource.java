@@ -15,13 +15,13 @@ import javax.ws.rs.core.Response;
 public class MutableAgendaResolutionResource extends Resource {
 
   @Autowired
-  AgendaResolutionResourceHelper mHelper;
+  private AgendaResolutionResourceHelper mHelper;
 
   @POST
   @PostLog(message = "Created a meeting agenda resolution")
   public Response saveMeetingAgendaResolution(@Context HttpServletRequest pHttpServletRequest,
       final JsonObject pJsonObject) throws Exception {
-    return mHelper.saveAgendaResolution(pJsonObject, mUriInfo);
+    return mHelper.post(pJsonObject, mUriInfo);
   }
 
   @PUT
