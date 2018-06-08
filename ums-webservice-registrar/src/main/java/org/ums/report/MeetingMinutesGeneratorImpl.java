@@ -62,7 +62,7 @@ public class MeetingMinutesGeneratorImpl implements MeetingMinutesGenerator {
     emptyLine(paragraph, 2);
     document.add(paragraph);
 
-    for(AgendaResolution agendaResolution: agendaResolutionList){
+    for(AgendaResolution agendaResolution : agendaResolutionList) {
       chunk = new Chunk("No: " + agendaResolution.getAgendaNo());
       paragraph = new Paragraph(chunk);
       paragraph.setFont(fontTimes11Normal);
