@@ -163,9 +163,12 @@ module ums{
                 showExpandButton: true
             };
             this.convertToJson(agendaResolutionEntry).then((json: any) => {
-                this.meetingService.saveAgendaResolution(json).then(() =>{
-                    this.getAgendaResolution();
-                    this.reset();
+                this.meetingService.saveAgendaResolution(json).then((data: any) =>{
+                    console.log("THe " + data);
+                    if(data == "Saved") {
+                        this.getAgendaResolution();
+                        this.reset();
+                    }
                 });
             });
         }

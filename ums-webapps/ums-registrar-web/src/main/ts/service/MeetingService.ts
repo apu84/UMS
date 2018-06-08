@@ -56,7 +56,6 @@ module ums{
             let defer = this.$q.defer();
             this.httpClient.get(this.scheduleUrl+"/meetingType/"+ meetingType, HttpClient.MIME_TYPE_JSON,
                 (json: any, etag: string) => {
-                console.log(json);
                     defer.resolve(json.entries);
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {
@@ -80,7 +79,6 @@ module ums{
 
         // AgendaResolution
         public saveAgendaResolution(json: any): ng.IPromise<any> {
-            console.log(json);
             let defer = this.$q.defer();
             this.httpClient.post(this.agendaResolutionUrl, json, 'application/json')
                 .success(() => {
@@ -89,7 +87,7 @@ module ums{
                 })
                 .error((data) => {
                     this.notify.error("Error in Saving");
-                    defer.resolve("Error");
+                    defer.reject("Error");
                 });
             return defer.promise;
         }
