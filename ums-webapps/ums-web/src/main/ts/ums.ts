@@ -959,7 +959,27 @@ module ums {
                 });
             }]
         }
-    }).state('leaveApproval', {
+    }).state('dailyExamAttendanceReport', {
+          url: "/dailyExamAttendanceReport",
+          controller: 'DailyExamAttendanceReport',
+          controllerAs: 'vm',
+          templateUrl: 'views/daily-examination-report/student-exam-attendant-info.html',
+          resolve: {
+              loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+
+                  return $ocLazyLoad.load({
+                      files: [
+
+                          'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                          'vendors/bootstrap-datepicker/css/datepicker.css',
+                          'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                          'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                          'vendors/bootstrap-daterangepicker/daterangepicker.js'
+                      ]
+                  });
+              }]
+          }
+      }).state('leaveApproval', {
           url: "/leaveApproval",
           controller: 'LeaveApplicationApproval',
           controllerAs: 'vm',

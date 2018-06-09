@@ -202,6 +202,8 @@
 /// <reference path='controller/expelled-information/ExpelledInformation.ts'/>
 /// <reference path='controller/expelled-information/ExpelledInformationService.ts'/>
 /// <reference path='controller/expelled-information/ViewExpelledInformation.ts'/>
+/// <reference path='controller/daily-exam-attendance-report/dailyExamAttendanceReport.ts'/>
+/// <reference path='controller/daily-exam-attendance-report/dailyExamAttendanceReportService.ts'/>
 
 /// <reference path='dummy/DummyController.ts'/>
 /// <reference path='twofatest/two.fa.test.controller.ts'/>
