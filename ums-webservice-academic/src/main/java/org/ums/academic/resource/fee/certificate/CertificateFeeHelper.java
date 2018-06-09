@@ -4,18 +4,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.StudentRecord;
-import org.ums.domain.model.immutable.applications.AppRules;
+import org.ums.enums.accounts.definitions.account.balance.BalanceType;
+import org.ums.enums.accounts.definitions.voucher.number.control.VoucherType;
 import org.ums.fee.*;
 import org.ums.fee.certificate.*;
 import org.ums.fee.payment.MutableStudentPayment;
 import org.ums.fee.payment.PersistentStudentPayment;
 import org.ums.fee.payment.StudentPayment;
 import org.ums.fee.payment.StudentPaymentManager;
+import org.ums.manager.CompanyManager;
 import org.ums.manager.StudentManager;
 import org.ums.manager.StudentRecordManager;
+import org.ums.manager.accounts.AccountManager;
 import org.ums.manager.applications.AppRulesManager;
 import org.ums.persistent.model.accounts.PersistentAccountTransaction;
 import org.ums.persistent.model.accounts.PersistentSystemGroupMap;
@@ -58,6 +62,10 @@ public class CertificateFeeHelper {
   CertificateStatusLogManager mCertificateStatusLogManager;
   @Autowired
   HttpClient mHttpClient;
+  @Autowired
+  AccountManager mAccountManager;
+  @Autowired
+  CompanyManager mCompanyManager;
 
   JsonObject getAttendedSemesters(String pStudentId, UriInfo pUriInfo) {
     List<StudentRecord> studentRecords = mStudentRecordManager.getStudentRecord(pStudentId);
@@ -129,6 +137,21 @@ public class CertificateFeeHelper {
       }
     }
 
+  }
+
+  public void createJournalEntry(StudentPayment pStudentPayment, String pStudentId) {
+    Company company = mCompanyManager.getDefaultCompany();
+
+    PersistentAccountTransaction studentJournalEntry = new PersistentAccountTransaction();
+    studentJournalEntry.setAccountId(Long.parseLong(pStudentId));
+    studentJournalEntry.setPostDate(new Date());
+    studentJournalEntry.setVoucherId(VoucherType.JOURNAL_VOUCHER.getId());
+    studentJournalEntry.setAmount(pStudentPayment.getAmount());
+    studentJournalEntry.setBalanceType(BalanceType.Cr);
+    studentJournalEntry.setCompanyId(company.getId());
+    studentJournalEntry.setNarration("Certificate Payment");
+    studentJournalEntry.setVoucherDate(new Date());
+    // studentJournalEntry.setCurrencyId();
   }
 
   private void postIntoJournalVoucher(StudentPayment pStudentPayment) throws Exception {
