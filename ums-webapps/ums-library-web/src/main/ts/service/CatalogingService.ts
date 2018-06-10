@@ -130,6 +130,7 @@ module ums {
                 if (config.internalNote != "") {
                     item.internalNote = config.internalNote;
                 }
+                item.paperQuality = config.paperQuality;
                 item.status = config.status;
                 item.bindingType = config.bindingType;
                 item.acqType = config.acqType;

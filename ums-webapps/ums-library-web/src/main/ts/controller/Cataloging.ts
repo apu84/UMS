@@ -232,6 +232,8 @@ module ums {
             this.$scope.item = <IItem> {};
             this.$scope.item.currency = 1;
             this.$scope.item.acqType = Utils.NUMBER_SELECT;
+            this.$scope.item.status = 2;
+            this.$scope.item.bindingType = Utils.NUMBER_SELECT;
             this.$scope.data.itemReadOnlyMode = false;
             $('#supplier').select2('enable');
             $('#supplier').select2('data', null)
