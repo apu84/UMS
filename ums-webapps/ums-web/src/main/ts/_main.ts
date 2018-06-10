@@ -198,7 +198,7 @@
 /// <reference path='controller/tesController/headTes.ts'/>
 /// <reference path='controller/tesController/studentTes.ts'/>
 /// <reference path='controller/tesController/adminVcTes.ts'/>
-/// <reference path='controller/tesController/adminVcTesComparison.ts'/>
+/// <reference path='controller/tesController/AdminVcTesComparison.ts'/>
 /// <reference path='controller/tesController/questionsAdmin.ts'/>
 /// <reference path='controller/tesController/individualQuestionTesReport.ts'/>
 /// <reference path='controller/tesController/facultyEngineering/DeanEngineeringTes.ts'/>
