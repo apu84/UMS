@@ -61,4 +61,24 @@ public class PersistentCurrencyDao extends CurrencyDaoDecorator {
         rs.getString("modified_by")
     )));
   }
+
+  @Override
+  public Currency getBaseCurrency() {
+    String query = SELECT_ALL + " where CURRENCY_FLAG='B'";
+    return mJdbcTemplate.queryForObject(
+        query,
+        ((rs, rowNum) -> new PersistentCurrency(
+            rs.getLong("id"),
+            rs.getString("comp_code"),
+            rs.getInt("currency_code"),
+            rs.getString("CURR_DESCRIPTION"),
+            CurrencyFlag.get(rs.getString("currency_flag")),
+            rs.getString("notation"),
+            rs.getString("stat_flag"),
+            rs.getString("stat_up_flag"),
+            rs.getDate("modified_date"),
+            rs.getString("modified_by")
+        ))
+    );
+  }
 }

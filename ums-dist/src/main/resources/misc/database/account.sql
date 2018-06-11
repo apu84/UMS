@@ -1,3 +1,8 @@
+/*DATE 11-06-2018*/
+
+ALTER TABLE DT_TRANSACTION ADD PAID_AMOUNT NUMBER NULL;
+/*END OF DATE 11-06-2018*/
+
 /*Date 04-06-2018*/
 
 create table system_account_map(

@@ -22,4 +22,9 @@ public class CurrencyCache extends ContentCache<Currency, MutableCurrency, Long,
   protected CacheManager<Currency, Long> getCacheManager() {
     return mCurrencyLongCacheManager;
   }
+
+  @Override
+  public Currency getBaseCurrency() {
+    return getManager().getBaseCurrency();
+  }
 }

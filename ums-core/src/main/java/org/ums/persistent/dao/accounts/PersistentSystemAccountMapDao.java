@@ -54,6 +54,13 @@ public class PersistentSystemAccountMapDao extends SystemAccountMapDaoDecorator 
   }
 
   @Override
+  public SystemAccountMap get(AccountType pAccountType, Company pCompany) {
+    String query = SELECT_ALL + " where account_type=? and comp_code=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pAccountType.getValue(), pCompany.getId()},
+        new PersistentSystemAccountMapRowMapper());
+  }
+
+  @Override
   public SystemAccountMap get(Long pId) {
     String query = SELECT_ALL + " where id=:id";
     Map parameterMap = new HashMap();

@@ -1,15 +1,13 @@
 package org.ums.academic.resource.fee.certificate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.Company;
+import org.ums.configuration.UMSConfiguration;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.StudentRecord;
-import org.ums.enums.accounts.definitions.account.balance.BalanceType;
-import org.ums.enums.accounts.definitions.voucher.number.control.VoucherType;
 import org.ums.fee.*;
 import org.ums.fee.certificate.*;
 import org.ums.fee.payment.MutableStudentPayment;
@@ -22,7 +20,6 @@ import org.ums.manager.StudentRecordManager;
 import org.ums.manager.accounts.AccountManager;
 import org.ums.manager.applications.AppRulesManager;
 import org.ums.persistent.model.accounts.PersistentAccountTransaction;
-import org.ums.persistent.model.accounts.PersistentSystemGroupMap;
 import org.ums.twofa.HttpClient;
 import org.ums.util.UmsUtils;
 
@@ -31,11 +28,11 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,6 +63,10 @@ public class CertificateFeeHelper {
   AccountManager mAccountManager;
   @Autowired
   CompanyManager mCompanyManager;
+  @Autowired
+  UMSConfiguration mUMSConfiguration;
+  @Autowired
+  CertificateFeeService mCertificateFeeService;
 
   JsonObject getAttendedSemesters(String pStudentId, UriInfo pUriInfo) {
     List<StudentRecord> studentRecords = mStudentRecordManager.getStudentRecord(pStudentId);
@@ -92,7 +93,7 @@ public class CertificateFeeHelper {
     return builder.build();
   }
 
-  void applyForCertificate(HttpServletRequest pHttpServletRequest, String pFeeCategoryId, String pStudentId, Integer pForSemesterId) throws Exception {
+  Response applyForCertificate(HttpServletRequest pHttpServletRequest, String pFeeCategoryId, String pStudentId, Integer pForSemesterId) throws Exception {
     FeeCategory category = mFeeCategoryManager.get(pFeeCategoryId);
     Student student = mStudentManager.get(pStudentId);
     boolean resolvedCertificateDependencies = resolvedAllDependencies(category, student);
@@ -118,40 +119,50 @@ public class CertificateFeeHelper {
         if (fee.getAmount().equals(BigDecimal.ZERO) || (category.getType().getId() == FeeType.Types.REG_CERTIFICATE_FEE.getId() && payment.getStatus().getValue() == StudentPayment.Status.RECEIVED.getValue())) {
           StudentPayment studentPayment = mStudentPaymentManager.get(paymentId);
           insertIntoCertificateStatus(pStudentId, fee, studentPayment, today);
-        }else{
-          String url="https://localhost/ums-webservice-account/account/definition/system-group-map/all";
-          String response=  mHttpClient
-                  .getClient()
-                  .target(url)
-                  .request(MediaType.APPLICATION_JSON)
-                  .header("Authorization", pHttpServletRequest.getHeader("authorization"))
-                  .get(String.class);
-
-          ObjectMapper mapper = new ObjectMapper();
-          List<PersistentSystemGroupMap> vouchers  = Arrays.asList(mapper.readValue(response, PersistentSystemGroupMap[].class));
-
-
-          int xxx=0;
+          return Response
+              .status(Response.Status.OK)
+              .build();
+        } else {
+          return createJournalEntry(payment, pStudentId, pHttpServletRequest);
         }
 
+      } else {
+        return Response
+            .status(Response.Status.FORBIDDEN)
+            .build();
       }
+    } else {
+      return Response
+          .status(Response.Status.UNAUTHORIZED)
+          .build();
     }
 
   }
 
-  public void createJournalEntry(StudentPayment pStudentPayment, String pStudentId) {
-    Company company = mCompanyManager.getDefaultCompany();
+  /*
+   * String url="https://localhost/ums-webservice-account/account/definition/system-group-map/all";
+   * String response= mHttpClient .getClient() .target(url) .request(MediaType.APPLICATION_JSON)
+   * .header("Authorization", pHttpServletRequest.getHeader("authorization")) .get(String.class);
+   * 
+   * ObjectMapper mapper = new ObjectMapper(); List<PersistentSystemGroupMap> vouchers =
+   * Arrays.asList(mapper.readValue(response, PersistentSystemGroupMap[].class));
+   * 
+   * 
+   * int xxx=0;
+   */
 
-    PersistentAccountTransaction studentJournalEntry = new PersistentAccountTransaction();
-    studentJournalEntry.setAccountId(Long.parseLong(pStudentId));
-    studentJournalEntry.setPostDate(new Date());
-    studentJournalEntry.setVoucherId(VoucherType.JOURNAL_VOUCHER.getId());
-    studentJournalEntry.setAmount(pStudentPayment.getAmount());
-    studentJournalEntry.setBalanceType(BalanceType.Cr);
-    studentJournalEntry.setCompanyId(company.getId());
-    studentJournalEntry.setNarration("Certificate Payment");
-    studentJournalEntry.setVoucherDate(new Date());
-    // studentJournalEntry.setCurrencyId();
+  @Transactional
+  public Response createJournalEntry(StudentPayment pStudentPayment, String pStudentId,
+      HttpServletRequest pHttpServletRequest) {
+    List<PersistentAccountTransaction> journalEntries =
+        mCertificateFeeService.createStudentPaymentJournalEntry(pStudentPayment, pStudentId);
+    String url =
+        mUMSConfiguration.getHost() + "/ums-webservice-account/account/general-ledger/transaction/journal-voucher/post";
+    Response response =
+        mHttpClient.getClient().target(url).request()
+            .header("Authorization", pHttpServletRequest.getHeader("authorization")).post(Entity.json(journalEntries));
+    return response;
+
   }
 
   private void postIntoJournalVoucher(StudentPayment pStudentPayment) throws Exception {

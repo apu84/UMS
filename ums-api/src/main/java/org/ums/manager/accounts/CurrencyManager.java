@@ -8,4 +8,5 @@ import org.ums.manager.ContentManager;
  * Created by Monjur-E-Morshed on 29-Jan-18.
  */
 public interface CurrencyManager extends ContentManager<Currency, MutableCurrency, Long> {
+  Currency getBaseCurrency();
 }

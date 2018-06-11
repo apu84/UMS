@@ -38,8 +38,8 @@ public class CertificateFeeResource extends Resource {
   public Response applyForCertificate(@Context HttpServletRequest pHttpServletRequest,
       final @PathParam("semesterId") Integer pSemesterId, final @PathParam("categoryId") String pCategoryId)
       throws Exception {
-    mCertificateFeeHelper.applyForCertificate(pHttpServletRequest, pCategoryId, getLoggedInUserId(), pSemesterId);
-    return Response.ok().build();
+    return mCertificateFeeHelper
+        .applyForCertificate(pHttpServletRequest, pCategoryId, getLoggedInUserId(), pSemesterId);
   }
 
   @POST

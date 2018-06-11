@@ -4,6 +4,7 @@ import org.ums.cache.ContentCache;
 import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.SystemAccountMap;
 import org.ums.domain.model.mutable.accounts.MutableSystemAccountMap;
+import org.ums.enums.accounts.definitions.account.balance.AccountType;
 import org.ums.manager.CacheManager;
 import org.ums.manager.accounts.SystemAccountMapManager;
 
@@ -29,5 +30,10 @@ public class SystemAccountMapCache extends
   @Override
   public List<SystemAccountMap> getAll(Company pCompany) {
     return getManager().getAll(pCompany);
+  }
+
+  @Override
+  public SystemAccountMap get(AccountType pAccountType, Company pCompany) {
+    return getManager().get(pAccountType, pCompany);
   }
 }

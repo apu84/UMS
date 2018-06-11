@@ -10,4 +10,8 @@ import org.ums.manager.accounts.CurrencyManager;
  */
 public class CurrencyDaoDecorator extends ContentDaoDecorator<Currency, MutableCurrency, Long, CurrencyManager>
     implements CurrencyManager {
+  @Override
+  public Currency getBaseCurrency() {
+    return getManager().getBaseCurrency();
+  }
 }
