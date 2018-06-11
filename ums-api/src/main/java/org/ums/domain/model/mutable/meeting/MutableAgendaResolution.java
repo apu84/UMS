@@ -14,9 +14,13 @@ public interface MutableAgendaResolution extends AgendaResolution, Editable<Long
 
   void setAgendaEditor(final String pAgendaEditor);
 
+  void setPlainAgenda(final String pPlainAgenda);
+
   void setResolution(final String pResolution);
 
   void setResolutionEditor(final String pResolutionEditor);
+
+  void setPlainResolution(final String pPlainResolution);
 
   void setScheduleId(final Long pScheduleId);
 }
