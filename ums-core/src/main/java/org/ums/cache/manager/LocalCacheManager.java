@@ -13,6 +13,7 @@ import java.util.Map;
 @Component
 public class LocalCacheManager<R extends LastModifier, I> implements CacheManager<R, I> {
   private Map<String, R> mCache;
+  private Map<String, Object> mCacheObject;
   private Map<String, List<I>> mCacheList;
   private Map<String, String> mLastModified;
   private Map<String, List<String>> mCachedKeyList;
@@ -21,6 +22,7 @@ public class LocalCacheManager<R extends LastModifier, I> implements CacheManage
 
   public LocalCacheManager() {
     mCache = new HashMap<>();
+    mCacheObject = new HashMap<>();
     mCacheList = new HashMap<>();
     mCachedKeyList = new HashMap<>();
     mLastModified = new HashMap<>();
@@ -35,8 +37,18 @@ public class LocalCacheManager<R extends LastModifier, I> implements CacheManage
   }
 
   @Override
+  public void putObject(String pCacheId, Object cacheObject) {
+    mCacheObject.put(pCacheId, cacheObject);
+  }
+
+  @Override
   public R get(String pCacheId) {
     return mCache.get(pCacheId);
+  }
+
+  @Override
+  public Object getObject(String pCacheId) {
+    return mCacheObject.get(pCacheId);
   }
 
   @Override

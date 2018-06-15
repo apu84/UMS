@@ -3,7 +3,11 @@ package org.ums.util;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+import org.apache.shiro.SecurityUtils;
+import org.ums.cache.GenericCache;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.AccountTransaction;
+import org.ums.service.InjectableUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -13,7 +17,7 @@ import java.util.List;
 /**
  * Created by Monjur-E-Morshed on 24-Mar-18.
  */
-public class UmsAccountUtils {
+public class Utils {
 
   public static Long RETAIL_EARNINGS_ACCOUNT_CODE = 1111188888L;
   public static Long OPENING_BALANCE_ADJUSTMENT_ACCOUNT_CODE = 1111199999L;
@@ -63,7 +67,7 @@ public class UmsAccountUtils {
 
   private static String numberToWords(int number) {
     // if this number is 75, then this function should return seventy five
-    int intQuotient = (int) (number / 10);
+    int intQuotient = (number / 10);
     StringBuilder word = new StringBuilder();
 
     if(intQuotient > 0) {
@@ -207,6 +211,11 @@ public class UmsAccountUtils {
     }
 
     return result;
+  }
 
+  public static Company getCompany() {
+    String cacheKey = SecurityUtils.getSubject().getPrincipal().toString() + "-company";
+    GenericCache accountCache = new GenericCache(InjectableUtils.getCacheManager());
+    return accountCache.getObject(cacheKey) != null ? (Company) accountCache.getObject(cacheKey) : null;
   }
 }

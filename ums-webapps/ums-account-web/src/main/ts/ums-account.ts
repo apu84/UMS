@@ -35,7 +35,7 @@
         .state('userHome', {
           url: "/userHome",
           templateUrl: 'views/user-home.html',
-          controller: 'MainController',
+          controller: 'AccountsMainController',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({

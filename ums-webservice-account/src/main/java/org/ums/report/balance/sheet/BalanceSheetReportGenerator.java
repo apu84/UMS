@@ -15,7 +15,7 @@ import org.ums.enums.accounts.general.ledger.reports.BalanceSheetFetchType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
 import org.ums.report.balance.sheet.helper.CellAndTotalBalance;
-import org.ums.util.UmsAccountUtils;
+import org.ums.util.Utils;
 import org.ums.util.UmsUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -248,7 +248,7 @@ public class BalanceSheetReportGenerator {
     pAssetTable.addCell(cell);
 
     cell = new PdfPCell();
-    paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(pSectionTotalBalance), mBoldFont);
+    paragraph = new Paragraph(Utils.getFormattedBalance(pSectionTotalBalance), mBoldFont);
     paragraph.setAlignment(Element.ALIGN_RIGHT);
     cell.addElement(paragraph);
     cell.setPaddingBottom(3);
@@ -285,9 +285,9 @@ public class BalanceSheetReportGenerator {
       if(groupAccountList.size() == 0) {
         cell = new PdfPCell();
         if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
-          paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(new BigDecimal(0)), mBoldFont);
+          paragraph = new Paragraph(Utils.getFormattedBalance(new BigDecimal(0)), mBoldFont);
         else
-          paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(new BigDecimal(0)), mLiteFont);
+          paragraph = new Paragraph(Utils.getFormattedBalance(new BigDecimal(0)), mLiteFont);
         paragraph.setAlignment(Element.ALIGN_RIGHT);
         cell.addElement(paragraph);
         if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED)) {
@@ -308,9 +308,9 @@ public class BalanceSheetReportGenerator {
         cell = new PdfPCell();
         sectionTotalBalance = sectionTotalBalance.add(groupTotalBalance);
         if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
-          paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(groupTotalBalance), mBoldFont);
+          paragraph = new Paragraph(Utils.getFormattedBalance(groupTotalBalance), mBoldFont);
         else
-          paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(groupTotalBalance), mLiteFont);
+          paragraph = new Paragraph(Utils.getFormattedBalance(groupTotalBalance), mLiteFont);
         paragraph.setAlignment(Element.ALIGN_RIGHT);
         if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
           cell.setColspan(2);
@@ -345,7 +345,7 @@ public class BalanceSheetReportGenerator {
         pAssetTable.addCell(cell);
 
         cell = new PdfPCell();
-        paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(accountTotalBalance), mLiteFont);
+        paragraph = new Paragraph(Utils.getFormattedBalance(accountTotalBalance), mLiteFont);
         paragraph.setAlignment(Element.ALIGN_RIGHT);
         cell.addElement(paragraph);
         cell.setBorder(Rectangle.NO_BORDER);

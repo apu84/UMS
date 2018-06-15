@@ -68,6 +68,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/Image.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/UITab.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/MainNavigation.ts'/>
+/// <reference path='./components/directives/CompanyName.ts'  />
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/BindHtml.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/DatePicker.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/AutoComplete.ts'/>
@@ -102,6 +103,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/refresh.token.service.ts'/>
 
 /// <reference path='data.ts'/>
+/// <reference path='components/AccountsMainController.ts'/>
 /// <reference path='components/definitions/group/group.controller.ts'/>
 /// <reference path='components/definitions/group/group.service.ts'/>
 /// <reference path='components/definitions/account/account.controller.ts'/>
@@ -143,8 +145,6 @@
 /// <reference path='components/general-ledger/transactions/common/cheque.register.service.ts'/>
 /// <reference path='components/general-ledger/reports/general.ledger.report.controller.ts'/>
 /// <reference path='components/general-ledger/reports/general.ledger.report.service.ts'/>
-
-
 
 /// <reference path="components/directives/balance.type.directive.ts"/>
 

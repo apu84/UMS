@@ -16,7 +16,7 @@ import org.ums.manager.accounts.AccountTransactionManager;
 import org.ums.manager.accounts.ChequeRegisterManager;
 import org.ums.report.itext.UmsCell;
 import org.ums.report.itext.UmsParagraph;
-import org.ums.util.UmsAccountUtils;
+import org.ums.util.Utils;
 import org.ums.util.UmsUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -125,7 +125,7 @@ public class TransactionReportGenerator {
     }
 
     UmsParagraph paragraph =
-        new UmsParagraph("In words : " + UmsAccountUtils.convertNumberToWords(totalDebit) + " Only", mLiteFont);
+        new UmsParagraph("In words : " + Utils.convertNumberToWords(totalDebit) + " Only", mLiteFont);
     pDocument.add(paragraph);
 
     paragraph = new UmsParagraph("Narration : " + pAccountTransactionList.get(0).getNarration(), mLiteFont);
@@ -226,14 +226,14 @@ public class TransactionReportGenerator {
     cell.setColspan(4);
     voucherBodyTable.addCell(cell);
 
-    paragraph = new UmsParagraph(UmsAccountUtils.getFormattedBalance(totalDebit), mBoldFont);
+    paragraph = new UmsParagraph(Utils.getFormattedBalance(totalDebit), mBoldFont);
     paragraph.setAlignment(Element.ALIGN_RIGHT);
     cell = new UmsCell(paragraph);
     cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
     cell.setVerticalAlignment(Element.ALIGN_CENTER);
     voucherBodyTable.addCell(cell);
 
-    paragraph = new UmsParagraph(UmsAccountUtils.getFormattedBalance(totalCredit), mBoldFont);
+    paragraph = new UmsParagraph(Utils.getFormattedBalance(totalCredit), mBoldFont);
     paragraph.setAlignment(Element.ALIGN_RIGHT);
     cell = new UmsCell(paragraph);
     cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -275,7 +275,7 @@ public class TransactionReportGenerator {
     UmsCell cell = new UmsCell();
     UmsParagraph paragraph = new UmsParagraph();
 
-    String modifiedAmount = UmsAccountUtils.getFormattedBalance(pMutableAccountTransaction.getAmount());
+    String modifiedAmount = Utils.getFormattedBalance(pMutableAccountTransaction.getAmount());
     if(pMutableAccountTransaction.getBalanceType().equals(BalanceType.Dr)) {
       paragraph = new UmsParagraph(modifiedAmount, mLiteFont);
       paragraph.setAlignment(Element.ALIGN_RIGHT);

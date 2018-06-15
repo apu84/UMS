@@ -7,6 +7,10 @@ public interface CacheManager<R, I> {
 
   void put(String pCacheId, List<I> pReadOnlyIds);
 
+  void putObject(String pCacheId, Object object);
+
+  Object getObject(String pCacheId);
+
   void putKeys(String pCacheId, List<String> pKeys);
 
   R get(String pCacheId);

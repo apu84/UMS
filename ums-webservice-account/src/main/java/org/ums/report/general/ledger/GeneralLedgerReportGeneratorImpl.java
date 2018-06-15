@@ -11,24 +11,21 @@ import org.ums.domain.model.immutable.accounts.Currency;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.domain.model.mutable.accounts.MutableChequeRegister;
-import org.ums.enums.accounts.definitions.account.balance.AccountType;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.currency.CurrencyFlag;
 import org.ums.enums.accounts.definitions.group.GroupType;
 import org.ums.enums.accounts.general.ledger.reports.FetchType;
-import org.ums.enums.accounts.general.ledger.vouchers.AccountTransactionType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
 import org.ums.service.AccountBalanceService;
 import org.ums.service.AccountTransactionService;
-import org.ums.util.UmsAccountUtils;
+import org.ums.util.Utils;
 import org.ums.util.UmsUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -38,7 +35,7 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.ums.util.UmsAccountUtils.*;
+import static org.ums.util.Utils.*;
 
 /**
  * Created by Monjur-E-Morshed on 20-Mar-18.
@@ -245,7 +242,7 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
                       )
                       .collect(Collectors.toList())));
 
-      String balanceStr = UmsAccountUtils.getBalanceInDebitOrCredit(totalOpeningBalance);
+      String balanceStr = Utils.getBalanceInDebitOrCredit(totalOpeningBalance);
       cell = new PdfPCell(new Paragraph(balanceStr, mLiteFont));
       cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
       setTopBorderAndAddCell(table, cell);
@@ -288,12 +285,12 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
 
         }
 
-        cell = new PdfPCell(new Paragraph(transaction.getBalanceType().equals(BalanceType.Dr) ? UmsAccountUtils.getFormattedBalance(transaction.getAmount()) : "", mLiteFont));
+        cell = new PdfPCell(new Paragraph(transaction.getBalanceType().equals(BalanceType.Dr) ? Utils.getFormattedBalance(transaction.getAmount()) : "", mLiteFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         setNoBorderAndAddCell(table, cell);
 
 
-        cell = new PdfPCell(new Paragraph(transaction.getBalanceType().equals(BalanceType.Cr) ? UmsAccountUtils.getFormattedBalance(transaction.getAmount()) : " ", mLiteFont));
+        cell = new PdfPCell(new Paragraph(transaction.getBalanceType().equals(BalanceType.Cr) ? Utils.getFormattedBalance(transaction.getAmount()) : " ", mLiteFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         setNoBorderAndAddCell(table, cell);
 
@@ -306,7 +303,7 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
         }
 
 
-        cell = new PdfPCell(new Paragraph(UmsAccountUtils.getBalanceInDebitOrCredit(totalOpeningBalance), mLiteFont));
+        cell = new PdfPCell(new Paragraph(Utils.getBalanceInDebitOrCredit(totalOpeningBalance), mLiteFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         setNoBorderAndAddCell(table, cell);
 
@@ -321,19 +318,19 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
       BigDecimal totalDebitBalance = new BigDecimal(0);
       BigDecimal totalCreditBalance = new BigDecimal(0);
 
-      totalDebitBalance = UmsAccountUtils.countTotalAmount(accountReportBodyTransactions.stream().filter(t -> t.getBalanceType().equals(BalanceType.Dr)).collect(Collectors.toList()));
-      totalCreditBalance = UmsAccountUtils.countTotalAmount(accountReportBodyTransactions.stream().filter(t -> t.getBalanceType().equals(BalanceType.Cr)).collect(Collectors.toList()));
+      totalDebitBalance = Utils.countTotalAmount(accountReportBodyTransactions.stream().filter(t -> t.getBalanceType().equals(BalanceType.Dr)).collect(Collectors.toList()));
+      totalCreditBalance = Utils.countTotalAmount(accountReportBodyTransactions.stream().filter(t -> t.getBalanceType().equals(BalanceType.Cr)).collect(Collectors.toList()));
 
-      cell = new PdfPCell(new Paragraph(UmsAccountUtils.getFormattedBalance(totalDebitBalance), mLiteFont));
+      cell = new PdfPCell(new Paragraph(Utils.getFormattedBalance(totalDebitBalance), mLiteFont));
       cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
       setTopBorderAndAddCell(table, cell);
 
 
-      cell = new PdfPCell(new Paragraph(UmsAccountUtils.getFormattedBalance(totalCreditBalance), mLiteFont));
+      cell = new PdfPCell(new Paragraph(Utils.getFormattedBalance(totalCreditBalance), mLiteFont));
       cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
       setTopBorderAndAddCell(table, cell);
 
-      cell = new PdfPCell(new Paragraph(UmsAccountUtils.getBalanceInDebitOrCredit(totalOpeningBalance), mLiteFont));
+      cell = new PdfPCell(new Paragraph(Utils.getBalanceInDebitOrCredit(totalOpeningBalance), mLiteFont));
       cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
       setTopBorderAndAddCell(table, cell);
     }

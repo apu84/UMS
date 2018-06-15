@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.ums.cache.CacheFactory;
+import org.ums.cache.UserCompanyMapCache;
 import org.ums.cache.accounts.*;
 import org.ums.generator.IdGenerator;
+import org.ums.manager.UserCompanyMapManager;
 import org.ums.manager.accounts.*;
+import org.ums.persistent.dao.PersistentUserCompanyMapDao;
 import org.ums.persistent.dao.accounts.*;
 import org.ums.statistics.JdbcTemplateFactory;
 import org.ums.statistics.NamedParameterJdbcTemplateFactory;
@@ -169,6 +172,14 @@ public class AccountsContext {
         .getAccountsJdbcTemplate(), mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(),
         mIdGenerator));
     return voucherNumberControlCache;
+  }
+
+  @Bean
+  UserCompanyMapManager userCompanyMapManager() {
+    UserCompanyMapCache userCompanyMapCache = new UserCompanyMapCache(mCacheFactory.getCacheManager());
+    userCompanyMapCache.setManager(new PersistentUserCompanyMapDao(mTemplateFactory.getAccountsJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getAccountNamedParameterJdbcTemplate(), mIdGenerator));
+    return userCompanyMapCache;
   }
 
 }
