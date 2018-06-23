@@ -223,6 +223,15 @@ public class AcademicContext {
   }
 
   @Bean
+  StudentsExamAttendantInfoManager studentsExamAttendantInfoManager() {
+    StudentsExamAttendantInfoCache studentsExamAttendantInfoCache =
+        new StudentsExamAttendantInfoCache(mCacheFactory.getCacheManager());
+    studentsExamAttendantInfoCache.setManager(new PersistentStudentsExamAttendantInfoDao(mTemplateFactory
+        .getJdbcTemplate(), mIdGenerator));
+    return studentsExamAttendantInfoCache;
+  }
+
+  @Bean
   CourseTeacherManager courseTeacherManager() {
     CourseTeacherCache courseTeacherCache = new CourseTeacherCache(mCacheFactory.getCacheManager());
     courseTeacherCache.setManager(new PersistentCourseTeacherDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));

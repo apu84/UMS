@@ -50,7 +50,7 @@ public class PersistentExpelledInformationDao extends ExpelledInformationDaoDeco
 
   @Override
   public List<ExpelledInformation> getAll() {
-    return mJdbcTemplate.query(SELECT_ALL, new ExpelledInformationRowmapper());
+    return mJdbcTemplate.query(SELECT_ALL, new ExpelledInformationRowMapper());
   }
 
   @Override
@@ -61,7 +61,7 @@ public class PersistentExpelledInformationDao extends ExpelledInformationDaoDeco
     return id;
   }
 
-  class ExpelledInformationRowmapper implements RowMapper<ExpelledInformation> {
+  class ExpelledInformationRowMapper implements RowMapper<ExpelledInformation> {
     @Override
     public ExpelledInformation mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentExpelledInformation application = new PersistentExpelledInformation();

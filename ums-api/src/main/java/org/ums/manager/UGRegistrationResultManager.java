@@ -3,6 +3,7 @@ package org.ums.manager;
 import java.util.List;
 import java.util.Map;
 
+import org.ums.domain.model.immutable.StudentsExamAttendantInfo;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableUGRegistrationResult;
 import org.ums.enums.CourseRegType;
@@ -46,4 +47,6 @@ public interface UGRegistrationResultManager extends
 
   Map<String, TabulationCourseModel> getResultForTabulation(Integer pProgramId, Integer pSemesterId, Integer pYear,
       Integer pSemester);
+
+  List<StudentsExamAttendantInfo> getExamAttendantInfo(Integer pSemesterId, String pExamDate, Integer pExamType);
 }

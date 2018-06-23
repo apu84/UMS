@@ -43,7 +43,7 @@ module ums{
             this.examTypeList=[];
             this.studentId="";
             this.reasonOfExpel="";
-            this.examTypeList=this.appConstants.examType;
+            this.examTypeList=this.appConstants.regType;
             this.examType=this.examTypeList[0];
             this.selectedExamTypeId=this.examType.id;
             this.selectedExamTypeName=this.examType.name;

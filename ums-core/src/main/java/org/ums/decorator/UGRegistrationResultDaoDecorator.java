@@ -3,6 +3,7 @@ package org.ums.decorator;
 import java.util.List;
 import java.util.Map;
 
+import org.ums.domain.model.immutable.StudentsExamAttendantInfo;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableUGRegistrationResult;
 import org.ums.enums.CourseRegType;
@@ -86,6 +87,11 @@ public class UGRegistrationResultDaoDecorator extends
   public Map<String, TabulationCourseModel> getResultForTabulation(Integer pProgramId, Integer pSemesterId,
       Integer pYear, Integer pSemester) {
     return getManager().getResultForTabulation(pProgramId, pSemesterId, pYear, pSemester);
+  }
+
+  @Override
+  public List<StudentsExamAttendantInfo> getExamAttendantInfo(Integer pSemesterId, String pExamDate, Integer pExamType) {
+    return getManager().getExamAttendantInfo(pSemesterId, pExamDate, pExamType);
   }
 
   @Override

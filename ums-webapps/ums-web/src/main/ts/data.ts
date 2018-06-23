@@ -77,6 +77,7 @@
         '/leaveApproval': {title: 'Leave Application Approval', 'breadcrumb': ['Leave Application Approval']},
         '/expelledInformation': {title: 'Expelled Students Information', 'breadcrumb': ['Expelled Students Information']},
         '/viewExpelledInformation': {title: 'View Expelled Information', 'breadcrumb': ['Expelled Students Information']},
+        '/dailyExamAttendanceReport': {title: 'Daily Exam Attendance Report', 'breadcrumb': ['Daily Exam Attendance Report']},
         '/publicHolidays': {title: 'Public Holidays', 'breadcrumb': ['Public Holidays  ']},
         '/search': {title: 'Library:Search', 'breadcrumb': ['Search']},
         '/employeeProfile': {title: 'Profile', 'breadcrumb': ['Profile']},

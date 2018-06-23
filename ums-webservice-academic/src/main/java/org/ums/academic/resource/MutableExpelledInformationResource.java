@@ -22,14 +22,14 @@ public class MutableExpelledInformationResource extends Resource {
   @POST
   @Path("/addRecords")
   @Produces({MediaType.APPLICATION_JSON})
-  public Response createApplicationCCI(final JsonObject pJsonObject) throws Exception {
+  public Response addExpelRecords(final JsonObject pJsonObject) throws Exception {
     return mHelper.post(pJsonObject, mUriInfo);
   }
 
   @PUT
   @Path("/deleteExpelStudents")
   @Produces({MediaType.APPLICATION_JSON})
-  public Response deleteQuestion(final JsonObject pJsonObject) {
+  public Response deleteExpelRecords(final JsonObject pJsonObject) {
     return mHelper.deleteExpelStudents(pJsonObject, mUriInfo);
   }
 }

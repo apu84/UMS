@@ -12,11 +12,13 @@ import java.util.stream.Collectors;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.UGRegistrationResultDaoDecorator;
+import org.ums.domain.model.immutable.StudentsExamAttendantInfo;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableUGRegistrationResult;
 import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
 import org.ums.generator.IdGenerator;
+import org.ums.persistent.model.PersistentStudentsExamAttendantInfo;
 import org.ums.persistent.model.PersistentUGRegistrationResult;
 
 public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDecorator {
@@ -95,12 +97,27 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   String REG_COURSE_BY_SEM_EXAM_REG =
       "SELECT ID,STUDENT_ID,COURSE_ID,EXAM_TYPE,REG_TYPE,SEMESTER_ID,LAST_MODIFIED FROM UG_REGISTRATION_RESULT WHERE SEMESTER_ID=? AND EXAM_TYPE=? AND REG_TYPE=?";
 
+  String EXAM_ATTENDANT_INFO =
+      "SELECT a.COURSE_ID,a.PROGRAM_ID,c.DEPT_ID, b.\"YEAR\",b.SEMESTER ,( "
+          + "SELECT COUNT(STUDENT_ID) FROM  UG_REGISTRATION_RESULT WHERE COURSE_ID=a.COURSE_ID AND SEMESTER_ID=? AND EXAM_TYPE=? "
+          + ") as TOTAL_STUDENT, "
+          + "(SELECT ABSENT_STUDENT FROM EXAM_ATTENDANT_INFORMATION WHERE PROGRAM_ID=a.PROGRAM_ID AND SEMESTER_ID=? AND EXAM_TYPE=? "
+          + "and \"YEAR\"=b.\"YEAR\" AND  SEMESTER=b.SEMESTER AND EXAM_DATE = TO_DATE(?,'YYYY-MM-DD')) as ABSENT_STUDENT FROM "
+          + " EXAM_ROUTINE a,MST_COURSE b,MST_PROGRAM c WHERE a.SEMESTER=? AND a.EXAM_DATE = TO_DATE(?,'YYYY-MM-DD') "
+          + " AND a.COURSE_ID=b.COURSE_ID AND a.EXAM_TYPE=? AND a.PROGRAM_ID=c.PROGRAM_ID ORDER  BY c.DEPT_ID";
+
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
 
   public PersistentUGRegistrationResultDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mIdGenerator = pIdGenerator;
+  }
+
+  @Override
+  public List<StudentsExamAttendantInfo> getExamAttendantInfo(Integer pSemesterId, String pExamDate, Integer pExamType) {
+    return mJdbcTemplate.query(EXAM_ATTENDANT_INFO, new Object[] {pSemesterId, pExamType, pSemesterId, pExamType,
+        pExamDate, pSemesterId, pExamDate, pExamType}, new ExamAttendantRowMapper());
   }
 
   @Override
@@ -272,6 +289,20 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
       result.setCourseTitle(pResultSet.getString("COURSE_TITLE"));
       result.setExamDate(pResultSet.getString("EXAM_DATE"));
       return result;
+    }
+  }
+  class ExamAttendantRowMapper implements RowMapper<StudentsExamAttendantInfo> {
+    @Override
+    public StudentsExamAttendantInfo mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentStudentsExamAttendantInfo application = new PersistentStudentsExamAttendantInfo();
+      application.setCourseId(pResultSet.getString("COURSE_ID"));
+      application.setProgramId(pResultSet.getInt("PROGRAM_ID"));
+      application.setDeptId(pResultSet.getString("DEPT_ID"));
+      application.setYear(pResultSet.getInt("YEAR"));
+      application.setSemester(pResultSet.getInt("SEMESTER"));
+      application.setRegisteredStudents(pResultSet.getInt("TOTAL_STUDENT"));
+      application.setAbsentStudents(pResultSet.getInt("ABSENT_STUDENT"));
+      return application;
     }
   }
 

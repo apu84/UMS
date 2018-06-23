@@ -1,3 +1,94 @@
-<div>
-    <h3>Hello From Another Side</h3>
+<div class="row" >
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
+    </div>
+    <div class="panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select </h3>
+        </div>
+        <div class="panel-body pan">
+            <form action="" class="form-horizontal">
+                <div class="form-body pal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Semester</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="semester"
+                                    id="semester"
+                                    data-ng-options="semester.name for semester in vm.semesters track by semester.id"
+                                    data-ng-model="vm.semester"
+                                    data-ng-change="vm.semesterChanged(vm.semester)"
+                            >
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Exam Type</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="meritType"
+                                    id="meritType"
+                                    data-ng-options="examType.name for examType in vm.examTypeList track by examType.id"
+                                    data-ng-model="vm.examType"
+                                    data-ng-change="vm.changeExamType(vm.examType)"
+                            >
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Exam Date</label>
+                        <div class="col-md-8">
+                            <select class="form-control" name="examDate"  data-ng-model="vm.examDate" data-ng-change="vm.ExamDateChange(vm.examDate)">
+                                <option value="">Select an Exam Date</option>
+                                <option data-ng-repeat="examRoutine in vm.examRoutineArr">{{examRoutine.examDate}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" data-ng-click="vm.doSomething()" class="btn btn-success">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="rightDiv">
+        <div class="panel">
+            <div class="panel-heading">Student's Attendant Information</div>
+            <div class="panel-body">
+                <div class="row">
+                        <div data-ng-repeat="app in vm.examInfo" data-ng-if="$index % 1 == 0">
+                                <div class="col-sm-3">
+                                    <div>
+                                        <p><span class="badge badge-success">{{app.programName}}</span></p>
+                                    <table class="table table-hover table-bordered table-advanced">
+                                        <thead>
+                                        <tr role="row" class="heading">
+                                            <th width="10%">Y-S</th>
+                                            <th width="10%">R-S</th>
+                                            <th width="10%">P-S</th>
+                                            <th width="10%">A-S</th>
+                                        </tr>
+                                        </thead>
+                                        <thead>
+                                        <tr data-ng-repeat="val in app.examAttendantYearSemesterWiseDataList">
+                                             <td>{{val.year+"-"+val.semester}}</td>
+                                            <td style="color: lightskyblue;text-align: center">{{val.totalAttendantStudentNumber}}</td>
+                                            <td style="color: #5cb85c;text-align: center">{{val.totalAttendantStudentNumber-val.absentStudent}}</td>
+                                            <td style="color: red;"><input type="text" size="2" data-ng-model="val.absentStudent"  style="text-align: center" value="val.absentStudent"></td>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                </div>
+                        </div>
+               </div>
+                <div  align="right">
+                    <button type="button" data-ng-click="vm.save()" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
