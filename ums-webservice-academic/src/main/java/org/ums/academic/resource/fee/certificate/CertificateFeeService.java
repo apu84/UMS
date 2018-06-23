@@ -48,7 +48,7 @@ public class CertificateFeeService {
   private AccountManager mAccountManager;
 
   public List<PersistentAccountTransaction> createStudentPaymentJournalEntry(StudentPayment pStudentPayment,
-                                                                             String pStudentId) {
+      String pStudentId) {
     Company company = mCompanyManager.getDefaultCompany();
     Currency baseCurrency = mCurrencyManager.getBaseCurrency();
     PersistentAccountTransaction studentJournalEntry = new PersistentAccountTransaction();
@@ -67,7 +67,7 @@ public class CertificateFeeService {
 
     Student student = mStudentManager.get(pStudentId);
     Account paymentAccount = new PersistentAccount();
-    if (student.getProgram().getFacultyId() == FacultyType.Engineering.getId())
+    if(student.getProgram().getFacultyId() == FacultyType.Engineering.getId())
       paymentAccount = mSystemAccountMapManager.get(AccountType.ENGINEERING_PROGRAM_ACCOUNT, company).getAccount();
     else
       paymentAccount = mSystemAccountMapManager.get(AccountType.BUSINESS_PROGRAM_ACCOUNT, company).getAccount();
