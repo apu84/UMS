@@ -13,6 +13,7 @@ import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
 import org.ums.report.itext.UmsCell;
 import org.ums.report.itext.UmsParagraph;
+import org.ums.util.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -50,7 +51,7 @@ public class ChartOfAccountsReportGenerator {
   public void createChartsOfAccountsReport(OutputStream pOutputStream) throws Exception {
 
 
-    Company company = mCompanyManager.getDefaultCompany();
+    Company company = Utils.getCompany();
     List<Account> accountList = mAccountManager.getAccounts(company);
 
     Map<String, List<Account>> groupMapWithAccounts = accountList
@@ -80,16 +81,15 @@ public class ChartOfAccountsReportGenerator {
     UmsCell accountCategoryCell;
 
 
-
-    Group assetGroup = mSystemGroupMapManager.get(GroupType.ASSETS, mCompanyManager.getDefaultCompany()).getGroup();
-    List<Group> assetRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(assetGroup.getGroupCode()));
+    Group assetGroup = mSystemGroupMapManager.get(GroupType.ASSETS, Utils.getCompany()).getGroup();
+    List<Group> assetRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(assetGroup.getGroupCode()), Utils.getCompany());
     Chunk chunk = new Chunk(assetGroup.getGroupName(), mBoldFontItalic);
     paragraph = new UmsParagraph(chunk);
     //document.add(paragraph);
-      accountCategoryCell = new UmsCell();
-      accountCategoryCell.addElement(paragraph);
-      accountCategoryCell.setColspan(3);
-      table.addCell(accountCategoryCell);
+    accountCategoryCell = new UmsCell();
+    accountCategoryCell.addElement(paragraph);
+    accountCategoryCell.setColspan(3);
+    table.addCell(accountCategoryCell);
 
     table = createGroupBasedAccountReport(table, assetRelatedGroupList, groupMapWithAccounts);
 
@@ -98,14 +98,14 @@ public class ChartOfAccountsReportGenerator {
     document.add(new UmsParagraph(" "));
 
     table = setHeader();
-    Group liabilityGroup = mSystemGroupMapManager.get(GroupType.LIABILITIES, mCompanyManager.getDefaultCompany()).getGroup();
-    List<Group> liabilityRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(liabilityGroup.getGroupCode()));
+    Group liabilityGroup = mSystemGroupMapManager.get(GroupType.LIABILITIES, Utils.getCompany()).getGroup();
+    List<Group> liabilityRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(liabilityGroup.getGroupCode()), Utils.getCompany());
     chunk = new Chunk(liabilityGroup.getGroupName(), mBoldFontItalic);
     paragraph = new UmsParagraph(chunk);
-      accountCategoryCell = new UmsCell();
-      accountCategoryCell.addElement(paragraph);
-      accountCategoryCell.setColspan(3);
-      table.addCell(accountCategoryCell);
+    accountCategoryCell = new UmsCell();
+    accountCategoryCell.addElement(paragraph);
+    accountCategoryCell.setColspan(3);
+    table.addCell(accountCategoryCell);
     table = createGroupBasedAccountReport(table, liabilityRelatedGroupList, groupMapWithAccounts);
     document.add(table);
     document.add(new UmsParagraph(" "));
@@ -113,14 +113,14 @@ public class ChartOfAccountsReportGenerator {
 
 
     table = setHeader();
-    Group incomeGroup = mSystemGroupMapManager.get(GroupType.INCOME, mCompanyManager.getDefaultCompany()).getGroup();
-    List<Group> incomeRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(incomeGroup.getGroupCode()));
+    Group incomeGroup = mSystemGroupMapManager.get(GroupType.INCOME, Utils.getCompany()).getGroup();
+    List<Group> incomeRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(incomeGroup.getGroupCode()), Utils.getCompany());
     chunk = new Chunk(incomeGroup.getGroupName(), mBoldFontItalic);
     paragraph = new UmsParagraph(chunk);
-      accountCategoryCell = new UmsCell();
-      accountCategoryCell.addElement(paragraph);
-      accountCategoryCell.setColspan(3);
-      table.addCell(accountCategoryCell);
+    accountCategoryCell = new UmsCell();
+    accountCategoryCell.addElement(paragraph);
+    accountCategoryCell.setColspan(3);
+    table.addCell(accountCategoryCell);
     table = createGroupBasedAccountReport(table, incomeRelatedGroupList, groupMapWithAccounts);
     document.add(table);
     document.add(new UmsParagraph(" "));
@@ -128,14 +128,14 @@ public class ChartOfAccountsReportGenerator {
 
 
     table = setHeader();
-    Group expenseGroup = mSystemGroupMapManager.get(GroupType.EXPENSES, mCompanyManager.getDefaultCompany()).getGroup();
-    List<Group> expenseRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(expenseGroup.getGroupCode()));
+    Group expenseGroup = mSystemGroupMapManager.get(GroupType.EXPENSES, Utils.getCompany()).getGroup();
+    List<Group> expenseRelatedGroupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(expenseGroup.getGroupCode()), Utils.getCompany());
     chunk = new Chunk(expenseGroup.getGroupName(), mBoldFontItalic);
     paragraph = new UmsParagraph(chunk);
-      accountCategoryCell = new UmsCell();
-      accountCategoryCell.addElement(paragraph);
-      accountCategoryCell.setColspan(3);
-      table.addCell(accountCategoryCell);
+    accountCategoryCell = new UmsCell();
+    accountCategoryCell.addElement(paragraph);
+    accountCategoryCell.setColspan(3);
+    table.addCell(accountCategoryCell);
     table = createGroupBasedAccountReport(table, expenseRelatedGroupList, groupMapWithAccounts);
 
     document.add(table);

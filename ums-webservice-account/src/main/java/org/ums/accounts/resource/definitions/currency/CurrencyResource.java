@@ -3,6 +3,7 @@ package org.ums.accounts.resource.definitions.currency;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.accounts.Currency;
 import org.ums.resource.Resource;
+import org.ums.util.Utils;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -22,6 +23,6 @@ public class CurrencyResource extends MutableCurrencyResource {
   @GET
   @Path("/all")
   public List<Currency> getAll() {
-    return mCurrencyResourceHelper.getContentManager().getAll();
+    return mCurrencyResourceHelper.getContentManager().getAll(Utils.getCompany());
   }
 }

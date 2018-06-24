@@ -16,8 +16,8 @@ import org.ums.manager.accounts.AccountTransactionManager;
 import org.ums.manager.accounts.ChequeRegisterManager;
 import org.ums.report.itext.UmsCell;
 import org.ums.report.itext.UmsParagraph;
-import org.ums.util.Utils;
 import org.ums.util.UmsUtils;
+import org.ums.util.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -50,7 +50,7 @@ public class TransactionReportGenerator {
 
   public void createVoucherReport(String pVoucherNo, Date pVoucherDate, OutputStream pOutputStream) throws Exception {
 
-    Company company = mCompanyManager.getDefaultCompany();
+    Company company = Utils.getCompany();
     pVoucherNo = company.getId() + pVoucherNo;
     List<MutableAccountTransaction> accountTransactionList =
         mTransactionManager.getByVoucherNoAndDate(pVoucherNo, pVoucherDate);
@@ -182,38 +182,38 @@ public class TransactionReportGenerator {
     return table;
   }
 
-  private PdfPTable createVoucherReportBody(List<MutableAccountTransaction> pAccountTransactionList){
-      List<Long> transactionIdList = pAccountTransactionList
-              .stream()
-              .map(t-> t.getId())
-              .collect(Collectors.toList());
-      List<MutableChequeRegister> chequeRegisterList = mChequeRegisterManager.getByTransactionIdList(transactionIdList);
-      Map<Long, MutableChequeRegister> chequeRegisterMapWithTransactionid = chequeRegisterList
-              .stream()
-              .collect(Collectors.toMap(t->t.getAccountTransactionId(), t->t));
+  private PdfPTable createVoucherReportBody(List<MutableAccountTransaction> pAccountTransactionList) {
+    List<Long> transactionIdList = pAccountTransactionList
+        .stream()
+        .map(t -> t.getId())
+        .collect(Collectors.toList());
+    List<MutableChequeRegister> chequeRegisterList = mChequeRegisterManager.getByTransactionIdList(transactionIdList);
+    Map<Long, MutableChequeRegister> chequeRegisterMapWithTransactionid = chequeRegisterList
+        .stream()
+        .collect(Collectors.toMap(t -> t.getAccountTransactionId(), t -> t));
 
-      float[] tableWidth = new float[]{1,4,1,2,2,2};
-      PdfPTable voucherBodyTable = new PdfPTable(tableWidth);
-      voucherBodyTable.setWidthPercentage(100);
-      voucherBodyTable.setSpacingBefore(25f);
-      voucherBodyTable.setSpacingAfter(25f);
-      voucherBodyTable = createVoucherBodyHeader(voucherBodyTable);
+    float[] tableWidth = new float[]{1, 4, 1, 2, 2, 2};
+    PdfPTable voucherBodyTable = new PdfPTable(tableWidth);
+    voucherBodyTable.setWidthPercentage(100);
+    voucherBodyTable.setSpacingBefore(25f);
+    voucherBodyTable.setSpacingAfter(25f);
+    voucherBodyTable = createVoucherBodyHeader(voucherBodyTable);
 
-      BigDecimal totalDebit = new BigDecimal(0);
-      BigDecimal totalCredit = new BigDecimal(0);
+    BigDecimal totalDebit = new BigDecimal(0);
+    BigDecimal totalCredit = new BigDecimal(0);
 
-      for(MutableAccountTransaction accountTransaction: pAccountTransactionList){
-          voucherBodyTable = createVoucherBodyRow(accountTransaction, chequeRegisterMapWithTransactionid, voucherBodyTable);
+    for (MutableAccountTransaction accountTransaction : pAccountTransactionList) {
+      voucherBodyTable = createVoucherBodyRow(accountTransaction, chequeRegisterMapWithTransactionid, voucherBodyTable);
 
-          if(accountTransaction.getBalanceType().equals(BalanceType.Dr))
-              totalDebit = totalDebit.add(accountTransaction.getAmount());
-          else
-              totalCredit = totalCredit.add(accountTransaction.getAmount());
-      }
+      if (accountTransaction.getBalanceType().equals(BalanceType.Dr))
+        totalDebit = totalDebit.add(accountTransaction.getAmount());
+      else
+        totalCredit = totalCredit.add(accountTransaction.getAmount());
+    }
 
-      addTotalSection(voucherBodyTable, totalDebit, totalCredit);
+    addTotalSection(voucherBodyTable, totalDebit, totalCredit);
 
-      return voucherBodyTable;
+    return voucherBodyTable;
   }
 
   private void addTotalSection(PdfPTable voucherBodyTable, BigDecimal totalDebit, BigDecimal totalCredit) {

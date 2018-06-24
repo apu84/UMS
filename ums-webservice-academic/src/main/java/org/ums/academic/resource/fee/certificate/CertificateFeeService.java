@@ -10,6 +10,7 @@ import org.ums.enums.FacultyType;
 import org.ums.enums.accounts.definitions.account.balance.AccountType;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.voucher.number.control.VoucherType;
+import org.ums.enums.common.CompanyType;
 import org.ums.fee.payment.StudentPayment;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.CompanyManager;
@@ -20,6 +21,7 @@ import org.ums.manager.accounts.CurrencyManager;
 import org.ums.manager.accounts.SystemAccountMapManager;
 import org.ums.persistent.model.accounts.PersistentAccount;
 import org.ums.persistent.model.accounts.PersistentAccountTransaction;
+import org.ums.persistent.model.accounts.PersistentCurrency;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -49,8 +51,14 @@ public class CertificateFeeService {
 
   public List<PersistentAccountTransaction> createStudentPaymentJournalEntry(StudentPayment pStudentPayment,
       String pStudentId) {
-    Company company = mCompanyManager.getDefaultCompany();
-    Currency baseCurrency = mCurrencyManager.getBaseCurrency();
+    Student student = mStudentManager.get(pStudentId);
+    Company company = mCompanyManager.get(CompanyType.AUST_TECHNICAL.getValue());
+    Currency baseCurrency = new PersistentCurrency();
+    if(student.getProgram().getFacultyId() == FacultyType.Engineering.getId())
+      baseCurrency = mCurrencyManager.getBaseCurrency(mCompanyManager.get(CompanyType.AUST_TECHNICAL.getValue()));
+    else
+      baseCurrency = mCurrencyManager.getBaseCurrency(mCompanyManager.get(CompanyType.AUST_NON_TECHNICAL.getValue()));
+
     PersistentAccountTransaction studentJournalEntry = new PersistentAccountTransaction();
     studentJournalEntry.setAccountId(mAccountManager.getAccount(Long.parseLong(pStudentId), company).getId());
     studentJournalEntry.setPostDate(new Date());
@@ -65,7 +73,6 @@ public class CertificateFeeService {
     studentJournalEntry.setModifiedBy(pStudentId);
     studentJournalEntry.setModifiedDate(new Date());
 
-    Student student = mStudentManager.get(pStudentId);
     Account paymentAccount = new PersistentAccount();
     if(student.getProgram().getFacultyId() == FacultyType.Engineering.getId())
       paymentAccount = mSystemAccountMapManager.get(AccountType.ENGINEERING_PROGRAM_ACCOUNT, company).getAccount();

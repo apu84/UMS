@@ -13,19 +13,20 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 28-Dec-17.
  */
 public interface AccountManager extends ContentManager<Account, MutableAccount, Long> {
-  Integer getSize();
+  Integer getSize(Company pCompany);
 
   Account getAccount(Long pAccountCode, Company pCompany);
 
   boolean exists(Long pAccountCode, Company pCompany);
 
-  List<Account> getAllPaginated(int itemPerPage, int pageNumber, AscendingOrDescendingType ascendingOrDescendingType);
+  List<Account> getAllPaginated(int itemPerPage, int pageNumber, AscendingOrDescendingType ascendingOrDescendingType,
+      Company company);
 
   List<Account> getAccounts(String pAccountName);
 
-  List<Account> getExcludingGroups(List<String> groupCodeList);
+  List<Account> getExcludingGroups(List<String> groupCodeList, Company company);
 
-  List<Account> getIncludingGroups(List<String> groupCodeList);
+  List<Account> getIncludingGroups(List<String> groupCodeList, Company company);
 
   /**
    * @param pGroupFlag

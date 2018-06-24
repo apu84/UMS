@@ -2,6 +2,7 @@ package org.ums.domain.model.mutable.accounts;
 
 import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
 import org.ums.domain.model.mutable.MutableLastModifier;
 import org.ums.enums.accounts.definitions.financial.account.year.BookClosingFlagType;
@@ -16,6 +17,10 @@ import java.util.Date;
 public interface MutableFinancialAccountYear extends FinancialAccountYear, Editable<Long>, MutableLastModifier,
     MutableIdentifier<Long> {
   void setStringId(Long pId);
+
+  void setCompany(Company pCompany);
+
+  void setCompanyId(String pCompanyId);
 
   void setCurrentStartDate(Date pCurrentStartDate);
 

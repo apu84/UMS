@@ -53,7 +53,12 @@ public class UserCompanyMapResource {
   @Path("/company")
   public String getCompany() {
     Company company = Utils.getCompany();
-    return "{\"company\":\"" + company == null ? "" : company.getName() + "\"}";
+    String name = company == null ? "" : company.getName();
+    String companyName = "{\"company\":\"" + name + "\"}";
+    System.out.println("**************");
+    System.out.println(companyName);
+    System.out.println("**************");
+    return companyName;
   }
 
 }

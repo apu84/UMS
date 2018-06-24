@@ -28,7 +28,7 @@ public class GroupResource extends MutableGroupResource {
   @GET
   @Path("/all")
   public List<Group> getAll(UriInfo pUriInfo) throws Exception {
-    return mGroupManager.getAll();
+    return mHelper.getAllGroups(pUriInfo);
   }
 
 }

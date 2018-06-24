@@ -14,6 +14,7 @@ import org.ums.manager.accounts.SystemGroupMapManager;
 import org.ums.resource.ResourceHelper;
 import org.ums.resource.helper.UserResourceHelper;
 import org.ums.usermanagement.user.UserManager;
+import org.ums.util.Utils;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
@@ -47,7 +48,7 @@ public class SystemGroupMapResourceHelper extends ResourceHelper<SystemGroupMap,
 
   public List<SystemGroupMap> getAllSystemGroupMapByCompany() {
     // todo get user's company
-    Company company = mCompanyManager.getDefaultCompany();
+    Company company = Utils.getCompany();
     List<SystemGroupMap> systemGroupMapList = mSystemGroupMapManager.getAllByCompany(company);
     return systemGroupMapList;
   }
@@ -56,7 +57,7 @@ public class SystemGroupMapResourceHelper extends ResourceHelper<SystemGroupMap,
     if(pMutableSystemGroupMap.getGroupType() == null || pMutableSystemGroupMap.getGroup() == null)
       throw new Exception("All fields are not properly filled");
     pMutableSystemGroupMap.setId(mIdGenerator.getNumericId());
-    pMutableSystemGroupMap.setCompanyId(mCompanyManager.getDefaultCompany().getId());
+    pMutableSystemGroupMap.setCompanyId(Utils.getCompany().getId());
     pMutableSystemGroupMap.setModifiedBy(mUserResourceHelper.getLoggedUser().getEmployeeId());
     pMutableSystemGroupMap.setModifiedDate(new Date());
     mSystemGroupMapManager.create(pMutableSystemGroupMap);

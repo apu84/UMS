@@ -8,6 +8,7 @@ import org.ums.enums.common.AscendingOrDescendingType;
 import org.ums.logs.GetLog;
 import org.ums.report.definition.ChartOfAccountsReportGenerator;
 import org.ums.resource.Resource;
+import org.ums.util.Utils;
 
 import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +38,7 @@ public class AccountResource extends MutableAccountResource {
   @Path("/total-size")
   @GetLog(message = "Requested for total company related account size")
   public Integer getTotalSize() {
-    return mHelper.getContentManager().getSize();
+    return mHelper.getContentManager().getSize(Utils.getCompany());
   }
 
   @GET

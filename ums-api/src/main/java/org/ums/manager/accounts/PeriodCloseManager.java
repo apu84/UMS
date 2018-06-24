@@ -1,5 +1,6 @@
 package org.ums.manager.accounts;
 
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.PeriodClose;
 import org.ums.domain.model.mutable.accounts.MutablePeriodClose;
 import org.ums.manager.ContentManager;
@@ -11,10 +12,10 @@ import java.util.List;
  */
 public interface PeriodCloseManager extends ContentManager<PeriodClose, MutablePeriodClose, Long> {
 
-  boolean checkWhetherCurrentOpenedYearExists();
+  boolean checkWhetherCurrentOpenedYearExists(Company pCompany);
 
-  List<PeriodClose> getByCurrentYear();
+  List<PeriodClose> getByCurrentYear(Company pCompany);
 
-  List<PeriodClose> getByPreviousYear();
+  List<PeriodClose> getByPreviousYear(Company pCompany);
 
 }

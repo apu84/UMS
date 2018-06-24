@@ -130,6 +130,8 @@
 /// <reference path='components/definitions/system.group.map/system.group.map.controller.ts'/>
 
 /// <reference path='components/common/receipt/receipt.service.ts'/>
+/// <reference path='components/common/user.company.map/user.company.map.service.ts'/>
+
 
 /// <reference path='components/balance-sheet/balance.sheet.report.controller.ts'/>
 /// <reference path='components/balance-sheet/balance.sheet.report.service.ts'/>

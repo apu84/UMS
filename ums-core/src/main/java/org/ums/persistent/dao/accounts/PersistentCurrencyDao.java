@@ -3,6 +3,7 @@ package org.ums.persistent.dao.accounts;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.accounts.CurrencyDaoDecorator;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.Currency;
 import org.ums.enums.accounts.definitions.currency.CurrencyFlag;
 import org.ums.generator.IdGenerator;
@@ -31,8 +32,24 @@ public class PersistentCurrencyDao extends CurrencyDaoDecorator {
 
   @Override
   public List<Currency> getAll() {
-    String query = SELECT_ALL+" ORDER BY CURRENCY_FLAG";
+    String query = SELECT_ALL + " ORDER BY CURRENCY_FLAG";
     return mJdbcTemplate.query(query, ((rs, rowNum) -> new PersistentCurrency(
+        rs.getLong("id"),
+        rs.getString("comp_code"),
+        rs.getInt("currency_code"),
+        rs.getString("CURR_DESCRIPTION"),
+        CurrencyFlag.get(rs.getString("currency_flag")),
+        rs.getString("notation"),
+        rs.getString("stat_flag"),
+        rs.getString("stat_up_flag"),
+        rs.getDate("modified_date"),
+        rs.getString("modified_by"))));
+  }
+
+  @Override
+  public List<Currency> getAll(Company pCompany) {
+    String query = SELECT_ALL + " where comp_code=? ORDER BY CURRENCY_FLAG";
+    return mJdbcTemplate.query(query, new Object[]{pCompany.getId()}, ((rs, rowNum) -> new PersistentCurrency(
         rs.getLong("id"),
         rs.getString("comp_code"),
         rs.getInt("currency_code"),
@@ -63,10 +80,11 @@ public class PersistentCurrencyDao extends CurrencyDaoDecorator {
   }
 
   @Override
-  public Currency getBaseCurrency() {
-    String query = SELECT_ALL + " where CURRENCY_FLAG='B'";
+  public Currency getBaseCurrency(Company pCompany) {
+    String query = SELECT_ALL + " where CURRENCY_FLAG='B' and comp_code=?";
     return mJdbcTemplate.queryForObject(
         query,
+        new Object[]{pCompany.getId()},
         ((rs, rowNum) -> new PersistentCurrency(
             rs.getLong("id"),
             rs.getString("comp_code"),

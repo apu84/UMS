@@ -39,7 +39,7 @@ public class AccountService {
 
   @Transactional
   public Account getOpeningBalanceAdjustmentAccount() {
-    Company company = mCompanyManager.getDefaultCompany();
+    Company company = Utils.getCompany();
     Long openingBalanceAdjustmentAccountCode = Utils.OPENING_BALANCE_ADJUSTMENT_ACCOUNT_CODE;
     Account account = new PersistentAccount();
     if(mAccountManager.exists(openingBalanceAdjustmentAccountCode, company))
@@ -47,11 +47,11 @@ public class AccountService {
     if(account.getId() == null) {
       PersistentAccount openingBalanceAdjustmentAccount = new PersistentAccount();
       openingBalanceAdjustmentAccount.setId(mIdGenerator.getNumericId());
-      if(!mSystemGroupManager.exists(GroupType.CURRENT_LIABILITIES, mCompanyManager.getDefaultCompany()))
-        new ValidationException("Current Liabilities is not assigned in the System Group Map");
+      if(!mSystemGroupManager.exists(GroupType.CURRENT_LIABILITIES, Utils.getCompany()))
+        throw new ValidationException("Current Liabilities is not assigned in the System Group Map");
       else
         openingBalanceAdjustmentAccount.setAccGroupCode(mSystemGroupManager
-            .get(GroupType.CURRENT_LIABILITIES, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode());
+            .get(GroupType.CURRENT_LIABILITIES, Utils.getCompany()).getGroup().getGroupCode());
       openingBalanceAdjustmentAccount.setAccountName("OPENING BALANCE ADJUSTMENT ACCOUNT");
       openingBalanceAdjustmentAccount.setAccountCode(openingBalanceAdjustmentAccountCode);
       openingBalanceAdjustmentAccount.setCompanyId(company.getId());
@@ -71,7 +71,7 @@ public class AccountService {
   @Transactional
   public Account getRetailEarningsAccount() {
 
-    Company company = mCompanyManager.getDefaultCompany();
+    Company company = Utils.getCompany();
 
     if(mAccountManager.exists(Utils.RETAIL_EARNINGS_ACCOUNT_CODE, company)) {
       return mAccountManager.getAccount(Utils.RETAIL_EARNINGS_ACCOUNT_CODE, company);

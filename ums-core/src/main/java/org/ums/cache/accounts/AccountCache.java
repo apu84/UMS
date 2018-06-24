@@ -28,8 +28,8 @@ public class AccountCache extends ContentCache<Account, MutableAccount, Long, Ac
   }
 
   @Override
-  public Integer getSize() {
-    return getManager().getSize();
+  public Integer getSize(Company pCompany) {
+    return getManager().getSize(pCompany);
   }
 
   @Override
@@ -44,8 +44,8 @@ public class AccountCache extends ContentCache<Account, MutableAccount, Long, Ac
 
   @Override
   public List<Account> getAllPaginated(int itemPerPage, int pageNumber,
-      AscendingOrDescendingType ascendingOrDescendingType) {
-    return getManager().getAllPaginated(itemPerPage, pageNumber, ascendingOrDescendingType);
+      AscendingOrDescendingType ascendingOrDescendingType, Company company) {
+    return getManager().getAllPaginated(itemPerPage, pageNumber, ascendingOrDescendingType, company);
   }
 
   @Override
@@ -59,13 +59,13 @@ public class AccountCache extends ContentCache<Account, MutableAccount, Long, Ac
   }
 
   @Override
-  public List<Account> getExcludingGroups(List<String> groupCodeList) {
-    return getManager().getExcludingGroups(groupCodeList);
+  public List<Account> getExcludingGroups(List<String> groupCodeList, Company company) {
+    return getManager().getExcludingGroups(groupCodeList, company);
   }
 
   @Override
-  public List<Account> getIncludingGroups(List<String> groupCodeList) {
-    return getManager().getIncludingGroups(groupCodeList);
+  public List<Account> getIncludingGroups(List<String> groupCodeList, Company company) {
+    return getManager().getIncludingGroups(groupCodeList, company);
   }
 
   @Override
