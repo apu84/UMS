@@ -3,7 +3,7 @@ module ums {
 
     export class AccountController {
 
-    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'employeeService', 'AccountBalanceService'];
+      public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'employeeService', 'AccountBalanceService', 'UserCompanyMapService', '$state'];
 
     private groups: IGroup[];
     private selectedGroup: IGroup;
@@ -26,7 +26,9 @@ module ums {
                 private groupService: GroupService,
                 private $timeout: ng.ITimeoutService,
                 private employeeService: EmployeeService,
-                private accountBalanceService: AccountBalanceService) {
+                private accountBalanceService: AccountBalanceService,
+                private userCompanyMapService: UserCompanyMapService,
+                private $state: any) {
 
       this.initialize();
 
@@ -40,15 +42,22 @@ module ums {
     }
 
     public initialize() {
-      this.searchBar = false;
-      this.itemsPerPage = 15;
-      this.pageNumber = 1;
-      this.searchValue = "";
-      this.currentPage = 1;
-      this.ascendingOrDescendingType = AscendingOrDescendingType.DESC;
-      this.loadAllGroups();
-      this.getTotalAccountSize();
-      this.selectedGroup = <IGroup>{};
+      console.log("*******");
+      console.log(this.userCompanyMapService.companyName);
+      if (this.userCompanyMapService.companyName == '' || this.userCompanyMapService.companyName == null)
+        this.$state.go('userHome');
+      else {
+        this.searchBar = false;
+        this.itemsPerPage = 15;
+        this.pageNumber = 1;
+        this.searchValue = "";
+        this.currentPage = 1;
+        this.ascendingOrDescendingType = AscendingOrDescendingType.DESC;
+        this.loadAllGroups();
+        this.getTotalAccountSize();
+        this.selectedGroup = <IGroup>{};
+      }
+
     }
 
     public loadAllGroups() {

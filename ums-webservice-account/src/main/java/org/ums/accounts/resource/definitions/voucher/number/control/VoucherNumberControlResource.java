@@ -12,6 +12,7 @@ import org.ums.domain.model.mutable.accounts.MutableVoucherNumberControl;
 import org.ums.manager.SemesterManager;
 import org.ums.persistent.model.accounts.PersistentVoucherNumberControl;
 import org.ums.resource.Resource;
+import org.ums.util.Utils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -40,7 +41,8 @@ public class VoucherNumberControlResource extends MutableVoucherNumberControlRes
   public String getVoucherNumberControlBasedOnCurrentFinancialYear(final @Context HttpServletRequest pRequest)
       throws Exception {
     System.out.println(pRequest.getRequestURL());
-    List<VoucherNumberControl> numberControls = mHelper.getContentManager().getByCurrentFinancialYear();
+    List<VoucherNumberControl> numberControls =
+        mHelper.getContentManager().getByCurrentFinancialYear(Utils.getCompany());
     List<Semester> semesters = semesterManager.getAll();
     ObjectMapper mapper = new ObjectMapper();
     return mapper.writeValueAsString(numberControls);

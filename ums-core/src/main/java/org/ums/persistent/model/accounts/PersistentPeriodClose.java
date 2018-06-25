@@ -12,11 +12,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
 import org.ums.domain.model.immutable.accounts.Month;
 import org.ums.domain.model.immutable.accounts.PeriodClose;
 import org.ums.domain.model.mutable.accounts.MutablePeriodClose;
 import org.ums.enums.accounts.definitions.OpenCloseFlag;
+import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.FinancialAccountYearManager;
 import org.ums.manager.accounts.MonthManager;
 import org.ums.manager.accounts.PeriodCloseManager;
@@ -32,6 +34,8 @@ public class PersistentPeriodClose implements MutablePeriodClose {
   private static FinancialAccountYearManager sFinancialAccountYearManager;
   @JsonIgnore
   private static PeriodCloseManager sPeriodCloseManager;
+  @JsonIgnore
+  private static CompanyManager sCompanyManager;
 
   @JsonProperty("id")
   @JsonIgnore
@@ -43,6 +47,9 @@ public class PersistentPeriodClose implements MutablePeriodClose {
   @JsonProperty("monthId")
   @JsonIgnore
   private Long mMonthId;
+  @JsonIgnore
+  private Company mCompany;
+  private String mCompanyId;
   @JsonProperty("financialAccountYear")
   @JsonIgnore
   private FinancialAccountYear mFinancialAccountYear;
@@ -75,6 +82,28 @@ public class PersistentPeriodClose implements MutablePeriodClose {
   @JsonSerialize(using = ToStringSerializer.class)
   public Long getId() {
     return mId;
+  }
+
+  @Override
+  @JsonProperty("company")
+  public Company getCompany() {
+    return mCompany == null ? sCompanyManager.get(mCompanyId) : mCompany;
+  }
+
+  @Override
+  @JsonIgnore
+  public void setCompany(Company pCompany) {
+    mCompany = pCompany;
+  }
+
+  @Override
+  public String getCompanyId() {
+    return mCompanyId;
+  }
+
+  @Override
+  public void setCompanyId(String pCompanyId) {
+    mCompanyId = pCompanyId;
   }
 
   @Override
@@ -227,6 +256,7 @@ public class PersistentPeriodClose implements MutablePeriodClose {
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sMonthManager = applicationContext.getBean("monthManager", MonthManager.class);
+    sCompanyManager = applicationContext.getBean("companyManager", CompanyManager.class);
     sFinancialAccountYearManager =
         applicationContext.getBean("financialAccountYearManager", FinancialAccountYearManager.class);
     sPeriodCloseManager = applicationContext.getBean("periodCloseManager", PeriodCloseManager.class);

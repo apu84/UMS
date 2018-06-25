@@ -10,6 +10,7 @@ import org.ums.generator.IdGenerator;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.SystemAccountMapManager;
 import org.ums.resource.helper.UserResourceHelper;
+import org.ums.util.Utils;
 
 import javax.ws.rs.core.Response;
 import java.net.URI;
@@ -31,7 +32,7 @@ public class SystemAccountMapResourceHelper {
 
   public List<SystemAccountMap> getAll() {
     try {
-      return mSystemAccountMapManager.getAll(mCompanyManager.getDefaultCompany());
+      return mSystemAccountMapManager.getAll(Utils.getCompany());
     } catch(EmptyResultDataAccessException e) {
       e.printStackTrace();
       return null;
@@ -46,7 +47,7 @@ public class SystemAccountMapResourceHelper {
   public Long create(MutableSystemAccountMap pMutableSystemAccountMap) {
 
     pMutableSystemAccountMap.setModifiedBy(mUserResourceHelper.getLoggedUser().getEmployeeId());
-    pMutableSystemAccountMap.setCompanyId(mCompanyManager.getDefaultCompany().getId());
+    pMutableSystemAccountMap.setCompanyId(Utils.getCompany().getId());
     if(pMutableSystemAccountMap.getId() == null) {
       pMutableSystemAccountMap.setId(mIdGenerator.getNumericId());
       mSystemAccountMapManager.create(pMutableSystemAccountMap);

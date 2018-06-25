@@ -13,6 +13,7 @@ import org.ums.persistent.model.accounts.PersistentPredefinedNarration;
 import org.ums.resource.ResourceHelper;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
+import org.ums.util.Utils;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -52,6 +53,7 @@ public class PredefinedNarrationResourceHelper extends
       mPredefinedNarrationBuilder.build(predefinedNarration, pJsonArray.getJsonObject(i));
       predefinedNarration.setModifiedBy(user.getEmployeeId());
       predefinedNarration.setModifiedDate(new Date());
+      predefinedNarration.setCompanyId(Utils.getCompany().getId());
       if(predefinedNarration.getId() == null) {
         predefinedNarration.setId(mIdGenerator.getNumericId());
         newList.add(predefinedNarration);
@@ -66,7 +68,7 @@ public class PredefinedNarrationResourceHelper extends
     if(updatedList.size() > 0)
       getContentManager().update(updatedList);
 
-    return getContentManager().getAll();
+    return getContentManager().getAll(Utils.getCompany());
   }
 
   @NotNull
@@ -75,6 +77,7 @@ public class PredefinedNarrationResourceHelper extends
     for(int i = 0; i < pJsonArray.size(); i++) {
       MutablePredefinedNarration narration = new PersistentPredefinedNarration();
       mPredefinedNarrationBuilder.build(narration, pJsonArray.getJsonObject(i));
+      narration.setCompanyId(Utils.getCompany().getId());
       pMutablePredefinedNarrations.add(narration);
     }
     return pMutablePredefinedNarrations;

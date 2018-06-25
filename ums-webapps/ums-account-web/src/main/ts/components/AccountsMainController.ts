@@ -1,9 +1,9 @@
 module ums {
   export class AccountsMainController {
-    public static $inject = ['$scope', 'HttpClient'];
+    public static $inject = ['$scope', 'HttpClient', 'UserCompanyMapService'];
 
     constructor(private $scope:any,
-                private httpClient:HttpClient) {
+                private httpClient: HttpClient, private userCompanyMapService: UserCompanyMapService) {
 
       httpClient.get("userHome", HttpClient.MIME_TYPE_JSON, (response) => {
         $scope.userHome = response.infoList;
@@ -28,6 +28,9 @@ module ums {
       this.httpClient.post('account/user-company-map/company/'+$("#selectedCompany").val(), {},
           HttpClient.MIME_TYPE_JSON)
           .success((response: any) => {
+            console.log("$$$$$$");
+            console.log($("#selectedCompany  option:selected").text());
+            this.userCompanyMapService.companyName = $("#selectedCompany  option:selected").text();
             console.log(response);
             $('#modalCompanySelection').modal('hide');
           })

@@ -5,9 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
-import org.ums.domain.model.immutable.Employee;
-import org.ums.domain.model.immutable.accounts.Account;
-import org.ums.domain.model.immutable.accounts.AccountBalance;
 import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.domain.model.mutable.accounts.MutableFinancialAccountYear;
@@ -20,10 +17,10 @@ import org.ums.manager.accounts.FinancialAccountYearManager;
 import org.ums.resource.ResourceHelper;
 import org.ums.resource.helper.UserResourceHelper;
 import org.ums.service.AccountBalanceService;
-import org.ums.service.AccountService;
 import org.ums.service.FinancialYearService;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
+import org.ums.util.Utils;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
@@ -80,7 +77,8 @@ public class FinancialAccountYearResourceHelper extends
   public void closeAndCreateNewFinancialAccountYear(final Date startDate, final Date endDate,
       final FinancialAccountYearTransferType pFinancialAccountYearTransferType) {
 
-    MutableFinancialAccountYear financialAccountYear = mFinancialAccountYearManager.getOpenedFinancialAccountYear();
+    MutableFinancialAccountYear financialAccountYear =
+        mFinancialAccountYearManager.getOpenedFinancialAccountYear(Utils.getCompany());
     User modifer = mUserResourceHelper.getLoggedUser();
     MutableFinancialAccountYear newFinancialAccountYear =
         mFinancialYearService.createNewFinancialAccountYear(startDate, endDate, financialAccountYear);
@@ -94,6 +92,7 @@ public class FinancialAccountYearResourceHelper extends
       financialAccountYear.setBookClosingFlag(BookClosingFlagType.CLOSED);
       financialAccountYear.setModifiedBy(modifer.getEmployeeId());
       financialAccountYear.setModifiedDate(new Date());
+      financialAccountYear.setCompanyId(Utils.getCompany().getId());
     }
 
     mFinancialAccountYearManager.update(financialAccountYear);

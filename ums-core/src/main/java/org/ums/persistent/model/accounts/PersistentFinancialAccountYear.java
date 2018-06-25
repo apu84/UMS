@@ -2,12 +2,13 @@ package org.ums.persistent.model.accounts;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.mutable.accounts.MutableFinancialAccountYear;
 import org.ums.enums.accounts.definitions.financial.account.year.BookClosingFlagType;
 import org.ums.enums.accounts.definitions.financial.account.year.YearClosingFlagType;
+import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.FinancialAccountYearManager;
 import org.ums.serializer.UmsDateSerializer;
 
@@ -20,15 +21,19 @@ import java.util.Date;
 public class PersistentFinancialAccountYear implements MutableFinancialAccountYear {
 
   private static FinancialAccountYearManager sFinancialAccountYearManager;
+  private static CompanyManager sCompanyManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sCompanyManager = applicationContext.getBean("companyManager", CompanyManager.class);
     sFinancialAccountYearManager =
         applicationContext.getBean("financialAccountYearManager", FinancialAccountYearManager.class);
   }
 
   private Long mId;
   private String mStringId;
+  private String mCompanyId;
+  private Company mCompany;
   private Date mCurrentStartDate;
   private Date mCurrentEndDate;
   private Date mPreviousStartDate;
@@ -57,6 +62,26 @@ public class PersistentFinancialAccountYear implements MutableFinancialAccountYe
     mStatUpFlag = pPersistentFinancialAccountYear.getStatUpFlag();
     mModifiedDate = pPersistentFinancialAccountYear.getModifiedDate();
     mModifiedBy = pPersistentFinancialAccountYear.getModifiedBy();
+  }
+
+  @Override
+  public String getCompanyId() {
+    return mCompanyId;
+  }
+
+  @Override
+  public void setCompanyId(String pCompanyId) {
+    mCompanyId = pCompanyId;
+  }
+
+  @Override
+  public Company getCompany() {
+    return mCompany == null ? sCompanyManager.get(mCompanyId) : mCompany;
+  }
+
+  @Override
+  public void setCompany(Company pCompany) {
+    mCompany = pCompany;
   }
 
   @Override

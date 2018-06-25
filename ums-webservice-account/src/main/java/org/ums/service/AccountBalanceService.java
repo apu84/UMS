@@ -8,7 +8,6 @@ import org.ums.domain.model.immutable.accounts.*;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.enums.accounts.definitions.MonthType;
-import org.ums.enums.accounts.definitions.account.balance.AccountType;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.financial.account.year.YearClosingFlagType;
 import org.ums.enums.accounts.definitions.group.GroupType;
@@ -16,9 +15,9 @@ import org.ums.generator.IdGenerator;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
 import org.ums.persistent.model.accounts.PersistentAccount;
-import org.ums.persistent.model.accounts.PersistentAccountBalance;
 import org.ums.persistent.model.accounts.PersistentGroup;
 import org.ums.usermanagement.user.User;
+import org.ums.util.Utils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -210,11 +209,12 @@ public class AccountBalanceService {
     return pAccountBalance;
   }
 
+  @Transactional
   public MutableAccountBalance createAccountBalance(MutableAccount account, User user, MutableAccountBalance accountBalance) {
     if (accountBalance != null) {
       FinancialAccountYear financialAccountYears = mFinancialAccountYearManager.getAll().stream().filter(f -> f.getYearClosingFlag().equals(YearClosingFlagType.OPEN)).collect(Collectors.toList()).get(0);
-      accountBalance.setId(  mIdGenerator.getNumericId());
-      accountBalance.setYearOpenBalanceType(accountBalance.getYearOpenBalanceType()==null? BalanceType.Dr: accountBalance.getYearOpenBalanceType());
+      accountBalance.setId(mIdGenerator.getNumericId());
+      accountBalance.setYearOpenBalanceType(accountBalance.getYearOpenBalanceType() == null ? BalanceType.Dr : accountBalance.getYearOpenBalanceType());
       accountBalance.setYearOpenBalance(accountBalance.getYearOpenBalance() == null ? new BigDecimal(0.00) : accountBalance.getYearOpenBalance());
       accountBalance.setFinStartDate(financialAccountYears.getCurrentStartDate());
       accountBalance.setFinEndDate(financialAccountYears.getCurrentEndDate());
@@ -224,7 +224,7 @@ public class AccountBalanceService {
       accountBalance.setModifiedDate(new Date());
       BigDecimal openingBalance = accountBalance.getYearOpenBalance();
       Account openingBalanceAdjustmentAccount = mAccountService.getOpeningBalanceAdjustmentAccount();
-      if(!account.getId().equals(openingBalanceAdjustmentAccount.getId()))
+      if (!account.getId().equals(openingBalanceAdjustmentAccount.getId()))
         accountBalance.setYearOpenBalance(new BigDecimal(0));
       accountBalance.setTotDebitTrans(accountBalance.getYearOpenBalance() == null ? new BigDecimal(0.00) : accountBalance.getYearOpenBalance());
       accountBalance.setTotCreditTrans(new BigDecimal(0.000));
@@ -238,37 +238,37 @@ public class AccountBalanceService {
   @Transactional
   public List<MutableAccountBalance> transferAccountBalanceToNewAcademicYear(FinancialAccountYear pNewFinancialAccountYear) {
 
-    Company company = mCompanyManager.getDefaultCompany();
+    Company company = Utils.getCompany();
     Group incomeGroup = new PersistentGroup();
     Group expenditureGroup = new PersistentGroup();
     Group assetGroup = new PersistentGroup();
     Group liabilitiesGroup = new PersistentGroup();
 
     List<SystemGroupMap> systemGroupMapList = mSystemGroupMapManager.getAllByCompany(company);
-    for(SystemGroupMap systemGroupMap : systemGroupMapList) {
-      if(systemGroupMap.getGroupType().equals(GroupType.INCOME))
+    for (SystemGroupMap systemGroupMap : systemGroupMapList) {
+      if (systemGroupMap.getGroupType().equals(GroupType.INCOME))
         incomeGroup = systemGroupMap.getGroup();
-      if(systemGroupMap.getGroupType().equals(GroupType.EXPENSES))
+      if (systemGroupMap.getGroupType().equals(GroupType.EXPENSES))
         expenditureGroup = systemGroupMap.getGroup();
-      if(systemGroupMap.getGroupType().equals(GroupType.ASSETS))
+      if (systemGroupMap.getGroupType().equals(GroupType.ASSETS))
         assetGroup = systemGroupMap.getGroup();
-      if(systemGroupMap.getGroupType().equals(GroupType.LIABILITIES))
+      if (systemGroupMap.getGroupType().equals(GroupType.LIABILITIES))
         liabilitiesGroup = systemGroupMap.getGroup();
     }
 
-    List<Group> incomeGroupList =mGrouopManager.getIncludingMainGroupList(Arrays.asList(incomeGroup.getGroupCode())) ;
-    List<Group> expenditureGroupList = mGrouopManager.getIncludingMainGroupList(Arrays.asList(expenditureGroup.getGroupCode()));
-    List<Group> assetGroupList = mGrouopManager.getIncludingMainGroupList(Arrays.asList(assetGroup.getGroupCode()));
-    List<Group> liabilitiesGroupList = mGrouopManager.getIncludingMainGroupList(Arrays.asList(liabilitiesGroup.getGroupCode()));
+    List<Group> incomeGroupList = mGrouopManager.getIncludingMainGroupList(Arrays.asList(incomeGroup.getGroupCode()), Utils.getCompany());
+    List<Group> expenditureGroupList = mGrouopManager.getIncludingMainGroupList(Arrays.asList(expenditureGroup.getGroupCode()), Utils.getCompany());
+    List<Group> assetGroupList = mGrouopManager.getIncludingMainGroupList(Arrays.asList(assetGroup.getGroupCode()), Utils.getCompany());
+    List<Group> liabilitiesGroupList = mGrouopManager.getIncludingMainGroupList(Arrays.asList(liabilitiesGroup.getGroupCode()), Utils.getCompany());
 
     List<Account> incomeRelatedAccountList =
-        mAccountManger.getIncludingGroups(incomeGroupList.stream().map(g->g.getGroupCode()).collect(Collectors.toList()));
+        mAccountManger.getIncludingGroups(incomeGroupList.stream().map(g -> g.getGroupCode()).collect(Collectors.toList()), Utils.getCompany());
     List<Account> expenditureRelatedAccountList =
-        mAccountManger.getIncludingGroups(expenditureGroupList.stream().map(g->g.getGroupCode()).collect(Collectors.toList()));
+        mAccountManger.getIncludingGroups(expenditureGroupList.stream().map(g -> g.getGroupCode()).collect(Collectors.toList()), Utils.getCompany());
     List<Account> assetRelatedAccountList =
-            mAccountManger.getIncludingGroups(assetGroupList.stream().map(g->g.getGroupCode()).collect(Collectors.toList()));
+        mAccountManger.getIncludingGroups(assetGroupList.stream().map(g -> g.getGroupCode()).collect(Collectors.toList()), Utils.getCompany());
     List<Account> liabilitiesRelatedAccountList =
-        mAccountManger.getIncludingGroups(liabilitiesGroupList.stream().map(g->g.getGroupCode()).collect(Collectors.toList()));
+        mAccountManger.getIncludingGroups(liabilitiesGroupList.stream().map(g -> g.getGroupCode()).collect(Collectors.toList()), Utils.getCompany());
 
     List<Account> combinedAccountList = new ArrayList<>();
     combinedAccountList.addAll(incomeRelatedAccountList);
@@ -278,9 +278,9 @@ public class AccountBalanceService {
 
     List<MutableAccountBalance> accountBalanceList = mAccountBalanceManager.getAccountBalance(pNewFinancialAccountYear.getPreviousStartDate(), pNewFinancialAccountYear.getPreviousEndDate(), combinedAccountList);
     Map<Long, MutableAccountBalance> accountBalanceMapWithAccountId =
-            accountBalanceList
+        accountBalanceList
             .parallelStream()
-            .collect(Collectors.toMap(a->a.getAccountCode(), a->a));
+            .collect(Collectors.toMap(a -> a.getAccountCode(), a -> a));
 
     List<MutableAccountBalance> transferredAssetAndLiabilitiesAccountBalanceList = transferAssetRelatedAccountsToNewYearBasedAccountBalance(assetRelatedAccountList, liabilitiesRelatedAccountList, accountBalanceMapWithAccountId, pNewFinancialAccountYear);
     List<MutableAccountBalance> transferredIncomeAndExpenditureAccountBalanceList = transferIncomeAndExpenditureAccountBalance(incomeRelatedAccountList, expenditureRelatedAccountList, accountBalanceMapWithAccountId, pNewFinancialAccountYear);

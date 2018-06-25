@@ -1,3 +1,10 @@
+--- Date: 23-06-2018
+--- Added company column in fin_account_year
+
+alter table fin_account_year
+add column comp_code varchar2(2);
+
+
 --- Date: 15-06-2018
 --- Added User Company Map Table
 

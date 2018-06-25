@@ -15,6 +15,7 @@ import org.ums.manager.accounts.AccountBalanceManager;
 import org.ums.manager.accounts.AccountManager;
 import org.ums.manager.accounts.FinancialAccountYearManager;
 import org.ums.resource.ResourceHelper;
+import org.ums.util.Utils;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
@@ -37,7 +38,8 @@ public class AccountBalanceResourceHelper extends ResourceHelper<AccountBalance,
 
   public BigDecimal getAccountBalance(final String pAccountId) {
     Account account = mAccountManager.get(Long.parseLong(pAccountId));
-    FinancialAccountYear financialAccountYear = mFinancialAccountYearManager.getOpenedFinancialAccountYear();
+    FinancialAccountYear financialAccountYear =
+        mFinancialAccountYearManager.getOpenedFinancialAccountYear(Utils.getCompany());
     AccountBalance accountBalance =
         mAccountBalanceManager.getAccountBalance(financialAccountYear.getCurrentStartDate(),
             financialAccountYear.getCurrentEndDate(), account);

@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.accounts.PeriodCloseDaoDecorator;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.PeriodClose;
 import org.ums.domain.model.mutable.accounts.MutablePeriodClose;
 import org.ums.enums.accounts.definitions.OpenCloseFlag;
@@ -33,26 +34,26 @@ public class PersistentPeriodCloseDao extends PeriodCloseDaoDecorator {
   }
 
   @Override
-  public List<PeriodClose> getByCurrentYear() {
+  public List<PeriodClose> getByCurrentYear(Company pCompany) {
     String query =
-        "select * from PERIOD_CLOSE where FIN_ACCOUNT_YEAR_ID in (select id from FIN_ACCOUNT_YEAR where YEAR_CLOSING_FLAG='O')";
-    return mJdbcTemplate.query(query, new PersistentPeriodCloseRowMapper());
+        "select * from PERIOD_CLOSE where comp_code=? and FIN_ACCOUNT_YEAR_ID in (select id from FIN_ACCOUNT_YEAR where YEAR_CLOSING_FLAG='O')";
+    return mJdbcTemplate.query(query, new Object[] {pCompany.getId()}, new PersistentPeriodCloseRowMapper());
   }
 
   @Override
-  public List<PeriodClose> getByPreviousYear() {
+  public List<PeriodClose> getByPreviousYear(Company pCompany) {
     String query =
         "SELECT * " + "FROM PERIOD_CLOSE " + "WHERE FIN_ACCOUNT_YEAR_ID IN (SELECT id "
             + "                              FROM FIN_ACCOUNT_YEAR "
-            + "                              WHERE CURRENT_START_DATE IN (SELECT PREVIOUS_START_DATE "
+            + "                              WHERE comp_code=? and  CURRENT_START_DATE IN (SELECT PREVIOUS_START_DATE "
             + "                                                           FROM FIN_ACCOUNT_YEAR "
             + "                                                           WHERE YEAR_CLOSING_FLAG = 'O'))";
-    return mJdbcTemplate.query(query, new PersistentPeriodCloseRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pCompany.getId()}, new PersistentPeriodCloseRowMapper());
   }
 
   @Override
-  public boolean checkWhetherCurrentOpenedYearExists() {
-    return super.checkWhetherCurrentOpenedYearExists();
+  public boolean checkWhetherCurrentOpenedYearExists(Company pCompany) {
+    return super.checkWhetherCurrentOpenedYearExists(pCompany);
   }
 
   @Override
@@ -64,8 +65,8 @@ public class PersistentPeriodCloseDao extends PeriodCloseDaoDecorator {
   @Override
   public Long create(MutablePeriodClose pMutable) {
     String query =
-        "insert into PERIOD_CLOSE(ID, CLOSE_MONTH, CLOSE_YEAR, PERIOD_CLOSING_FLAG, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY, FIN_ACCOUNT_YEAR_ID) VALUES ("
-            + ":id, :closeMonth, :closeYear, :periodClosingFlag, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy)";
+        "insert into PERIOD_CLOSE(ID, CLOSE_MONTH, CLOSE_YEAR, PERIOD_CLOSING_FLAG, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY, FIN_ACCOUNT_YEAR_ID, COMP_CODE) VALUES ("
+            + ":id, :closeMonth, :closeYear, :periodClosingFlag, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy, :finAccountYearId, :compCode)";
     Map namedParameters = new HashMap();
     namedParameters.put("id", pMutable.getId());
     namedParameters.put("closeMonth", pMutable.getMonth().getId());
@@ -75,6 +76,8 @@ public class PersistentPeriodCloseDao extends PeriodCloseDaoDecorator {
     namedParameters.put("statUpFlag", pMutable.getStatUpFlag());
     namedParameters.put("modifiedDate", pMutable.getModifiedDate());
     namedParameters.put("modifiedBy", pMutable.getModifiedBy());
+    namedParameters.put("finAccountYearId", pMutable.getFinancialAccountYear().getId());
+    namedParameters.put("compCode", pMutable.getCompany().getId());
     mNamedParameterJdbcTemplate.update(query, namedParameters);
     return pMutable.getId();
   }
@@ -98,8 +101,8 @@ public class PersistentPeriodCloseDao extends PeriodCloseDaoDecorator {
   @Override
   public List<Long> create(List<MutablePeriodClose> pMutableList) {
     String query =
-        "insert into PERIOD_CLOSE(ID, MONTH_ID, CLOSE_YEAR, PERIOD_CLOSING_FLAG, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY, FIN_ACCOUNT_YEAR_ID)  VALUES  "
-            + "  (?,?,?,?,?,?,?,?,?)";
+        "insert into PERIOD_CLOSE(ID, MONTH_ID, CLOSE_YEAR, PERIOD_CLOSING_FLAG, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY, FIN_ACCOUNT_YEAR_ID, COMP_CODE)  VALUES  "
+            + "  (?,?,?,?,?,?,?,?,?,?)";
     List<Object[]> params = getCreateParams(pMutableList);
     mJdbcTemplate.batchUpdate(query, getCreateParams(pMutableList));
     return null;
@@ -111,7 +114,8 @@ public class PersistentPeriodCloseDao extends PeriodCloseDaoDecorator {
     for(PeriodClose periodClose : periodCloses) {
       params.add(new Object[] {periodClose.getId(), periodClose.getMonth().getId(), periodClose.getCloseYear(),
           periodClose.getPeriodClosingFlag().getValue(), periodClose.getStatFlag(), periodClose.getStatUpFlag(),
-          periodClose.getModifiedDate(), periodClose.getModifiedBy(), periodClose.getFinancialAccountYear().getId()});
+          periodClose.getModifiedDate(), periodClose.getModifiedBy(), periodClose.getFinancialAccountYear().getId(),
+          periodClose.getCompany().getId()});
     }
     return params;
   }
@@ -129,6 +133,7 @@ public class PersistentPeriodCloseDao extends PeriodCloseDaoDecorator {
       periodClose.setModifiedDate(rs.getDate("modified_date"));
       periodClose.setModifiedBy(rs.getString("modified_by"));
       periodClose.setFinancialAccountYearId(rs.getLong("fin_account_year_id"));
+      periodClose.setCompanyId(rs.getString("comp_code"));
       return periodClose;
     }
   }
