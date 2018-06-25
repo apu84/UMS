@@ -84,9 +84,6 @@ public class AcademicContext {
   MessageResource mMessageResource;
 
   @Autowired
-  NamedParameterJdbcTemplateFactory mNamedParameterJdbcTemplateFactory;
-
-  @Autowired
   @Qualifier("fileContentManager")
   BinaryContentManager<byte[]> mBinaryContentManager;
 

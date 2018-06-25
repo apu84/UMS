@@ -10,7 +10,7 @@ public class RoutineConfigDaoDecorator extends
     RoutineConfigManager {
 
   @Override
-  public RoutineConfig get(Integer pSemesterId, Integer pProgramId) {
-    return getManager().get(pSemesterId, pProgramId);
+  public RoutineConfig get(Integer pSemesterId, org.ums.enums.ProgramType pProgramType) {
+    return getManager().get(pSemesterId, pProgramType);
   }
 }

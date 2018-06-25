@@ -2,9 +2,9 @@ package org.ums.persistent.model.routine;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.routine.MutableRoutineConfig;
+import org.ums.enums.ProgramType;
 import org.ums.enums.routine.DayType;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
@@ -18,8 +18,7 @@ public class PersistentRoutineConfig implements MutableRoutineConfig {
   private static SemesterManager sSemesterManager;
   private static RoutineConfigManager sRoutineConfigManager;
   private Long mId;
-  private Program mProgram;
-  private Integer mProgramId;
+  private ProgramType mProgramType;
   private Semester mSemester;
   private Integer mSemesterId;
   private DayType mDayFrom;
@@ -30,6 +29,16 @@ public class PersistentRoutineConfig implements MutableRoutineConfig {
   private String mLastModified;
 
   @Override
+  public void setProgramType(ProgramType pProgramType) {
+    mProgramType = pProgramType;
+  }
+
+  @Override
+  public ProgramType getProgramType() {
+    return mProgramType;
+  }
+
+  @Override
   public Long getId() {
     return mId;
   }
@@ -37,26 +46,6 @@ public class PersistentRoutineConfig implements MutableRoutineConfig {
   @Override
   public void setId(Long pId) {
     this.mId = pId;
-  }
-
-  @Override
-  public Program getProgram() {
-    return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
-  }
-
-  @Override
-  public void setProgram(Program pProgram) {
-    this.mProgram = pProgram;
-  }
-
-  @Override
-  public Integer getProgramId() {
-    return mProgramId;
-  }
-
-  @Override
-  public void setProgramId(Integer pProgramId) {
-    this.mProgramId = pProgramId;
   }
 
   @Override
@@ -163,8 +152,6 @@ public class PersistentRoutineConfig implements MutableRoutineConfig {
 
   public PersistentRoutineConfig(MutableRoutineConfig pRoutineConfig) {
     setId(pRoutineConfig.getId());
-    setProgram(pRoutineConfig.getProgram());
-    setProgramId(pRoutineConfig.getProgramId());
     setSemester(pRoutineConfig.getSemester());
     setSemesterId(pRoutineConfig.getSemesterId());
     setDayFrom(pRoutineConfig.getDayFrom());
@@ -177,7 +164,6 @@ public class PersistentRoutineConfig implements MutableRoutineConfig {
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sRoutineConfigManager = applicationContext.getBean("routineConfigManager", RoutineConfigManager.class);
   }

@@ -153,6 +153,8 @@
 /// <reference path='controller/semester/ModifySeatPlan.ts'/>
 /// <reference path='controller/semester/AppCCI.ts'/>
 /// <reference path='controller/semester/SeatPlanReports.ts'/>
+/// <reference path='controller/semester/SemesterConfig.ts'/>
+
 
 /// <reference path='controller/course/NewCourseUg.ts'/>
 /// <reference path='controller/course/NewCoursePg.ts'/>

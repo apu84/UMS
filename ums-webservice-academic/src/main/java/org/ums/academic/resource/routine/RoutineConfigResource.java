@@ -33,9 +33,9 @@ public class RoutineConfigResource extends Resource {
 
   @GET
   @GetLog(message = "Requested for routine config")
-  @Path("/semester/{semester-id}/program/{program-id}")
+  @Path("/semester/{semester-id}/programType/{program-type}")
   public JsonObject getRoutineConfig(@Context HttpServletRequest httpServletRequest,
-      @PathParam("semester-id") Integer pSemesterId, @PathParam("program-id") Integer pProgramId) {
-    return mHelper.get(pSemesterId, pProgramId, mUriInfo);
+      @PathParam("semester-id") Integer pSemesterId, @PathParam("program-type") Integer pProgramType) {
+    return mHelper.get(pSemesterId, org.ums.enums.ProgramType.get(pProgramType), mUriInfo);
   }
 }

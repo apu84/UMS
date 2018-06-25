@@ -363,22 +363,22 @@ module ums {
           }
         })
         .state('applicationTES', {
-            url: "/applicationTES",
-            controller: 'studentTES',
-            controllerAs: 'vm',
-            templateUrl: 'views/teachers-Evaluation-System/student-tes.html',
-            resolve: {
-                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load({
-                        files: [
-                            'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                            'vendors/bootstrap-datepicker/css/datepicker.css',
-                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
-                        ]
-                    });
-                }]
-            }
+          url: "/applicationTES",
+          controller: 'studentTES',
+          controllerAs: 'vm',
+          templateUrl: 'views/teachers-Evaluation-System/student-tes.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                ]
+              });
+            }]
+          }
         })
         .state('showSyllabusList', {
           url: "/showSyllabusList",
@@ -444,6 +444,13 @@ module ums {
           controller: 'NewCoursePg',
           templateUrl: 'views/course/new-course-pg.html'
         })
+
+        .state('semesterConfig', {
+          url: "/semesterConfig",
+          controller: 'SemesterConfig',
+          templateUrl: 'views/semester/semester-config.html'
+        })
+
         .state('semesterSettingParameter', {
           url: "/semesterSettingParameter",
           controller: 'SemesterSettingParameter',
@@ -597,17 +604,11 @@ module ums {
           templateUrl: 'views/routine/class-routine.html',
           controllerAs: 'vm'
         })
-        .state('classRoutine.classRoutineConfig', {
-            url: "/classRoutineConfig",
-            controller: 'RoutineConfigCongroller',
-            templateUrl: 'views/routine/class-routine-config.html',
-            controllerAs: 'vm',
-            params:{
-                'semester':null,
-                'user':null,
-                'department':null,
-                'program':null
-            }
+        .state('classRoutineConfig', {
+          url: "/classRoutineConfig",
+          controller: 'RoutineConfigController',
+          templateUrl: 'views/routine/class-routine-config.html',
+          controllerAs: 'vm'
         })
         .state('uploadMeritList', {
           url: "/uploadMeritList",
@@ -962,263 +963,263 @@ module ums {
           }
         })
         .state('cciApproval', {
-            url: "/cciApproval",
-            controller: 'CarryApplicationApproval',
-            controllerAs: 'vm',
-            templateUrl: 'views/cciManagement/cci-application-approval.html',
-            resolve: {
-                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load({
-                        files: [
-                            'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                            'vendors/bootstrap-datepicker/css/datepicker.css',
-                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                            'vendors/bootstrap-daterangepicker/daterangepicker.js'
-                        ]
-                    });
-                }]
-            }
+          url: "/cciApproval",
+          controller: 'CarryApplicationApproval',
+          controllerAs: 'vm',
+          templateUrl: 'views/cciManagement/cci-application-approval.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                  'vendors/bootstrap-daterangepicker/daterangepicker.js'
+                ]
+              });
+            }]
+          }
         }).state('teacherEvaluationSystem', {
-        url: "/teacherEvaluationSystem",
-        controller: 'AdminVcTes',
-        controllerAs: 'vm',
-        templateUrl: 'views/teachers-Evaluation-System/admin-vc-tes.html',
-        resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load({
-                    files: [
-                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                        'vendors/bootstrap-datepicker/css/datepicker.css',
-                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                        'vendors/bootstrap-daterangepicker/daterangepicker.js'
-                    ]
-                });
-            }]
-        }
+      url: "/teacherEvaluationSystem",
+      controller: 'AdminVcTes',
+      controllerAs: 'vm',
+      templateUrl: 'views/teachers-Evaluation-System/admin-vc-tes.html',
+      resolve: {
+        loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+          return $ocLazyLoad.load({
+            files: [
+              'vendors/bootstrap-switch/css/bootstrap-switch.css',
+              'vendors/bootstrap-datepicker/css/datepicker.css',
+              'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+              'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+              'vendors/bootstrap-daterangepicker/daterangepicker.js'
+            ]
+          });
+        }]
+      }
     }).state('teacherEvaluationSystemEng', {
-        url: "/teacherEvaluationSystemEng",
-        controller: 'DeanEngineeringTes',
-        controllerAs: 'vm',
-        templateUrl: 'views/teachers-Evaluation-System/admin-vc-tes.html',
-        resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load({
-                    files: [
-                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                        'vendors/bootstrap-datepicker/css/datepicker.css',
-                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                        'vendors/bootstrap-daterangepicker/daterangepicker.js'
-                    ]
-                });
-            }]
-        }
-    }).state('teacherEvaluationSystemBbaAndArs',{
-        url: "/teacherEvaluationSystemBbaAndArs",
-        controller: 'DeanBusinessAndSocialTes',
-        controllerAs: 'vm',
-        templateUrl: 'views/teachers-Evaluation-System/admin-vc-tes.html',
-        resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load({
-                    files: [
-                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                        'vendors/bootstrap-datepicker/css/datepicker.css',
-                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                        'vendors/bootstrap-daterangepicker/daterangepicker.js'
-                    ]
-                });
-            }]
-        }
-    }).state('teacherEvaluationSystemArc',{
-        url: "/teacherEvaluationSystemArc",
-        controller: 'DeanArchitectureTes',
-        controllerAs: 'vm',
-        templateUrl: 'views/teachers-Evaluation-System/admin-vc-tes.html',
-        resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load({
-                    files: [
-                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                        'vendors/bootstrap-datepicker/css/datepicker.css',
-                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                        'vendors/bootstrap-daterangepicker/daterangepicker.js'
-                    ]
-                });
-            }]
-        }
+      url: "/teacherEvaluationSystemEng",
+      controller: 'DeanEngineeringTes',
+      controllerAs: 'vm',
+      templateUrl: 'views/teachers-Evaluation-System/admin-vc-tes.html',
+      resolve: {
+        loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+          return $ocLazyLoad.load({
+            files: [
+              'vendors/bootstrap-switch/css/bootstrap-switch.css',
+              'vendors/bootstrap-datepicker/css/datepicker.css',
+              'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+              'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+              'vendors/bootstrap-daterangepicker/daterangepicker.js'
+            ]
+          });
+        }]
+      }
+    }).state('teacherEvaluationSystemBbaAndArs', {
+      url: "/teacherEvaluationSystemBbaAndArs",
+      controller: 'DeanBusinessAndSocialTes',
+      controllerAs: 'vm',
+      templateUrl: 'views/teachers-Evaluation-System/admin-vc-tes.html',
+      resolve: {
+        loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+          return $ocLazyLoad.load({
+            files: [
+              'vendors/bootstrap-switch/css/bootstrap-switch.css',
+              'vendors/bootstrap-datepicker/css/datepicker.css',
+              'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+              'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+              'vendors/bootstrap-daterangepicker/daterangepicker.js'
+            ]
+          });
+        }]
+      }
+    }).state('teacherEvaluationSystemArc', {
+      url: "/teacherEvaluationSystemArc",
+      controller: 'DeanArchitectureTes',
+      controllerAs: 'vm',
+      templateUrl: 'views/teachers-Evaluation-System/admin-vc-tes.html',
+      resolve: {
+        loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+          return $ocLazyLoad.load({
+            files: [
+              'vendors/bootstrap-switch/css/bootstrap-switch.css',
+              'vendors/bootstrap-datepicker/css/datepicker.css',
+              'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+              'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+              'vendors/bootstrap-daterangepicker/daterangepicker.js'
+            ]
+          });
+        }]
+      }
     }).state('tesComparison', {
-        url: "/tesComparison",
-        controller: 'AdminVcTesComparison',
-        controllerAs: 'vm',
-        templateUrl: 'views/teachers-Evaluation-System/search-box-evaluation-compare.html',
-        resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load({
-                    files: [
-                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                        'vendors/bootstrap-datepicker/css/datepicker.css',
-                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                        'vendors/bootstrap-daterangepicker/daterangepicker.js'
-                    ]
-                });
-            }]
-        }
+      url: "/tesComparison",
+      controller: 'AdminVcTesComparison',
+      controllerAs: 'vm',
+      templateUrl: 'views/teachers-Evaluation-System/search-box-evaluation-compare.html',
+      resolve: {
+        loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+          return $ocLazyLoad.load({
+            files: [
+              'vendors/bootstrap-switch/css/bootstrap-switch.css',
+              'vendors/bootstrap-datepicker/css/datepicker.css',
+              'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+              'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+              'vendors/bootstrap-daterangepicker/daterangepicker.js'
+            ]
+          });
+        }]
+      }
     }).state('tesComparisonEng', {
-        url: "/tesComparisonEng",
-        controller: 'DeanEngineeringComparison',
-        controllerAs: 'vm',
-        templateUrl: 'views/teachers-Evaluation-System/search-box-evaluation-compare.html',
-        resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load({
-                    files: [
-                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                        'vendors/bootstrap-datepicker/css/datepicker.css',
-                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                        'vendors/bootstrap-daterangepicker/daterangepicker.js'
-                    ]
-                });
-            }]
-        }
+      url: "/tesComparisonEng",
+      controller: 'DeanEngineeringComparison',
+      controllerAs: 'vm',
+      templateUrl: 'views/teachers-Evaluation-System/search-box-evaluation-compare.html',
+      resolve: {
+        loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+          return $ocLazyLoad.load({
+            files: [
+              'vendors/bootstrap-switch/css/bootstrap-switch.css',
+              'vendors/bootstrap-datepicker/css/datepicker.css',
+              'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+              'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+              'vendors/bootstrap-daterangepicker/daterangepicker.js'
+            ]
+          });
+        }]
+      }
     }).state('tesComparisonBbaAndArs', {
-        url: "/tesComparisonBbaAndArs",
-        controller: 'DeanBusinessAndSocialComparison',
-        controllerAs: 'vm',
-        templateUrl: 'views/teachers-Evaluation-System/search-box-evaluation-compare.html',
-        resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load({
-                    files: [
-                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                        'vendors/bootstrap-datepicker/css/datepicker.css',
-                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                        'vendors/bootstrap-daterangepicker/daterangepicker.js'
-                    ]
-                });
-            }]
-        }
+      url: "/tesComparisonBbaAndArs",
+      controller: 'DeanBusinessAndSocialComparison',
+      controllerAs: 'vm',
+      templateUrl: 'views/teachers-Evaluation-System/search-box-evaluation-compare.html',
+      resolve: {
+        loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+          return $ocLazyLoad.load({
+            files: [
+              'vendors/bootstrap-switch/css/bootstrap-switch.css',
+              'vendors/bootstrap-datepicker/css/datepicker.css',
+              'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+              'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+              'vendors/bootstrap-daterangepicker/daterangepicker.js'
+            ]
+          });
+        }]
+      }
     }).state('questionWiseReport', {
-        url: "/questionWiseReport",
-        controller: 'IndividualQuestionTesReport',
-        controllerAs: 'vm',
-        templateUrl: 'views/teachers-Evaluation-System/individual-question-tes-report.html',
-        resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load({
-                    files: [
-                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                        'vendors/bootstrap-datepicker/css/datepicker.css',
-                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                        'vendors/bootstrap-daterangepicker/daterangepicker.js'
-                    ]
-                });
-            }]
-        }
+      url: "/questionWiseReport",
+      controller: 'IndividualQuestionTesReport',
+      controllerAs: 'vm',
+      templateUrl: 'views/teachers-Evaluation-System/individual-question-tes-report.html',
+      resolve: {
+        loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+          return $ocLazyLoad.load({
+            files: [
+              'vendors/bootstrap-switch/css/bootstrap-switch.css',
+              'vendors/bootstrap-datepicker/css/datepicker.css',
+              'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+              'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+              'vendors/bootstrap-daterangepicker/daterangepicker.js'
+            ]
+          });
+        }]
+      }
     }).state('questionWiseReportEng', {
-        url: "/questionWiseReportEng",
-        controller: 'IndividualQuestionTesReport',
-        controllerAs: 'vm',
-        templateUrl: 'views/teachers-Evaluation-System/individual-question-tes-report.html',
-        resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load({
-                    files: [
-                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                        'vendors/bootstrap-datepicker/css/datepicker.css',
-                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                        'vendors/bootstrap-daterangepicker/daterangepicker.js'
-                    ]
-                });
-            }]
-        }
+      url: "/questionWiseReportEng",
+      controller: 'IndividualQuestionTesReport',
+      controllerAs: 'vm',
+      templateUrl: 'views/teachers-Evaluation-System/individual-question-tes-report.html',
+      resolve: {
+        loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+          return $ocLazyLoad.load({
+            files: [
+              'vendors/bootstrap-switch/css/bootstrap-switch.css',
+              'vendors/bootstrap-datepicker/css/datepicker.css',
+              'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+              'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+              'vendors/bootstrap-daterangepicker/daterangepicker.js'
+            ]
+          });
+        }]
+      }
     }).state('questionWiseReportBbaAndArs', {
-        url: "/questionWiseReportBbaAndArs",
-        controller: 'DeanBusinessAndSocialIndividualQuestion',
-        controllerAs: 'vm',
-        templateUrl: 'views/teachers-Evaluation-System/individual-question-tes-report.html',
-        resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load({
-                    files: [
-                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                        'vendors/bootstrap-datepicker/css/datepicker.css',
-                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                        'vendors/bootstrap-daterangepicker/daterangepicker.js'
-                    ]
-                });
-            }]
-        }
+      url: "/questionWiseReportBbaAndArs",
+      controller: 'DeanBusinessAndSocialIndividualQuestion',
+      controllerAs: 'vm',
+      templateUrl: 'views/teachers-Evaluation-System/individual-question-tes-report.html',
+      resolve: {
+        loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+          return $ocLazyLoad.load({
+            files: [
+              'vendors/bootstrap-switch/css/bootstrap-switch.css',
+              'vendors/bootstrap-datepicker/css/datepicker.css',
+              'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+              'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+              'vendors/bootstrap-daterangepicker/daterangepicker.js'
+            ]
+          });
+        }]
+      }
     }).state('questionWiseReportArc', {
-        url: "/questionWiseReportArc",
-        controller: 'DeanArchitectureIndividualQuestion',
-        controllerAs: 'vm',
-        templateUrl: 'views/teachers-Evaluation-System/individual-question-tes-report.html',
-        resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load({
-                    files: [
-                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                        'vendors/bootstrap-datepicker/css/datepicker.css',
-                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                        'vendors/bootstrap-daterangepicker/daterangepicker.js'
-                    ]
-                });
-            }]
-        }
+      url: "/questionWiseReportArc",
+      controller: 'DeanArchitectureIndividualQuestion',
+      controllerAs: 'vm',
+      templateUrl: 'views/teachers-Evaluation-System/individual-question-tes-report.html',
+      resolve: {
+        loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+          return $ocLazyLoad.load({
+            files: [
+              'vendors/bootstrap-switch/css/bootstrap-switch.css',
+              'vendors/bootstrap-datepicker/css/datepicker.css',
+              'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+              'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+              'vendors/bootstrap-daterangepicker/daterangepicker.js'
+            ]
+          });
+        }]
+      }
     }).state('assignQuestions', {
-        url: "/assignQuestions",
-        controller: 'QuestionsAdmin',
-        controllerAs: 'vm',
-        templateUrl: 'views/teachers-Evaluation-System/questions.html',
-        resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load({
-                    files: [
-                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                        'vendors/bootstrap-datepicker/css/datepicker.css',
-                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                        'vendors/bootstrap-daterangepicker/daterangepicker.js'
-                    ]
-                });
-            }]
-        }
+      url: "/assignQuestions",
+      controller: 'QuestionsAdmin',
+      controllerAs: 'vm',
+      templateUrl: 'views/teachers-Evaluation-System/questions.html',
+      resolve: {
+        loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+          return $ocLazyLoad.load({
+            files: [
+              'vendors/bootstrap-switch/css/bootstrap-switch.css',
+              'vendors/bootstrap-datepicker/css/datepicker.css',
+              'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+              'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+              'vendors/bootstrap-daterangepicker/daterangepicker.js'
+            ]
+          });
+        }]
+      }
     }).state('tes', {
-        url: "/tes",
-        controller: 'HeadTES',
-        controllerAs: 'vm',
-        templateUrl: 'views/teachers-Evaluation-System/head-tes.html',
-        resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load({
-                    files: [
-                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                        'vendors/bootstrap-datepicker/css/datepicker.css',
-                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                        'vendors/bootstrap-daterangepicker/daterangepicker.js',
-                        'vendors/select2/select2-madmin.css',
-                        'vendors/bootstrap-select/bootstrap-select.min.css',
-                        'vendors/multi-select/css/multi-select-madmin.css',
-                        'vendors/select2/select2.min.js',
-                        'vendors/bootstrap-select/bootstrap-select.min.js',
-                        'vendors/multi-select/js/jquery.multi-select.js'
-                    ]
-                });
-            }]
-        }
+      url: "/tes",
+      controller: 'HeadTES',
+      controllerAs: 'vm',
+      templateUrl: 'views/teachers-Evaluation-System/head-tes.html',
+      resolve: {
+        loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+          return $ocLazyLoad.load({
+            files: [
+              'vendors/bootstrap-switch/css/bootstrap-switch.css',
+              'vendors/bootstrap-datepicker/css/datepicker.css',
+              'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+              'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+              'vendors/bootstrap-daterangepicker/daterangepicker.js',
+              'vendors/select2/select2-madmin.css',
+              'vendors/bootstrap-select/bootstrap-select.min.css',
+              'vendors/multi-select/css/multi-select-madmin.css',
+              'vendors/select2/select2.min.js',
+              'vendors/bootstrap-select/bootstrap-select.min.js',
+              'vendors/multi-select/js/jquery.multi-select.js'
+            ]
+          });
+        }]
+      }
     }).state('userGuide', {
           url: "/userGuide",
           controller: 'UserGuide',

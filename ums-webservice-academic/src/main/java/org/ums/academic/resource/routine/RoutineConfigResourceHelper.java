@@ -53,19 +53,17 @@ public class RoutineConfigResourceHelper extends ResourceHelper<RoutineConfig, M
     return routineConfig;
   }
 
-  public JsonObject get(final Integer pSemesterId, final Integer pProgramId, final UriInfo pUriInfo) {
+  public JsonObject get(final Integer pSemesterId, final org.ums.enums.ProgramType pProgramType, final UriInfo pUriInfo) {
     RoutineConfig routineConfig = new PersistentRoutineConfig();
     LocalCache localCache = new LocalCache();
     try {
-      routineConfig = getContentManager().get(pSemesterId, pProgramId);
+      routineConfig = getContentManager().get(pSemesterId, pProgramType);
       return toJson(routineConfig, pUriInfo, localCache);
 
     } catch(EmptyResultDataAccessException e) {
       e.printStackTrace();
       return null;
-
     }
-
   }
 
   @Override

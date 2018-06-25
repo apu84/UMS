@@ -12,8 +12,7 @@ module ums{
 
     export interface RoutineConfig{
         id: string;
-        program: Program;
-        programId: number;
+      programType: number;
         semester: Semester;
         semesterId: number;
         dayFrom: DayType;
@@ -35,14 +34,21 @@ module ums{
         public saveOrUpdate(routineConfig: RoutineConfig): ng.IPromise<RoutineConfig>{
             let defer:ng.IDeferred<RoutineConfig> = this.$q.defer();
             this.httpClient.put(this.routineUrl, routineConfig, HttpClient.MIME_TYPE_JSON)
-                .success((response:any)=>defer.resolve(response.entries));
+                .success((response: any) => {
+                  this.notify.success("Saved Successfully")
+                  defer.resolve(response)
+                });
             return defer.promise;
         }
 
-        public getBySemesterAndProgram(semesterId: number, programId: number):ng.IPromise<RoutineConfig>{
+      public getBySemesterAndProgramType(semesterId: number, programType: number): ng.IPromise<RoutineConfig> {
             let defer: ng.IDeferred<RoutineConfig> = this.$q.defer();
-            this.httpClient.get(this.routineUrl+"/semester/"+semesterId+"/program/"+programId, HttpClient.MIME_TYPE_JSON,
-                (response:any)=>defer.resolve(response.entries));
+        this.httpClient.get(this.routineUrl + "/semester/" + semesterId + "/programType/" + programType, HttpClient.MIME_TYPE_JSON,
+            (response: any) => {
+              console.log("response");
+              console.log(response);
+              defer.resolve(response)
+            });
             return defer.promise;
         }
     }

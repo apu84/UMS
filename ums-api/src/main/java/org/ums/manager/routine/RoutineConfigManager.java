@@ -5,5 +5,5 @@ import org.ums.domain.model.mutable.routine.MutableRoutineConfig;
 import org.ums.manager.ContentManager;
 
 public interface RoutineConfigManager extends ContentManager<RoutineConfig, MutableRoutineConfig, Long> {
-  RoutineConfig get(Integer pSemesterId, Integer pProgramId);
+  RoutineConfig get(Integer pSemesterId, org.ums.enums.ProgramType pProgramType);
 }
