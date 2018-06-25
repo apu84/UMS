@@ -57,7 +57,7 @@ module ums {
                     {id: '22', name: 'Postgraduate'}
                 ],
                 deptShort: [
-                    {id: '', name: 'Select Dept./School'},
+                    {id: '',   name: 'Select Dept./School'},
                     {id: '01', name: 'ARC'},
                     {id: '02', name: 'BBA'},
                     {id: '03', name: 'CE'},
@@ -536,6 +536,17 @@ module ums {
                     {id: "41", name: "4-1"},
                     {id: "42", name: "4-2"}
                 ],
+                semester: [
+                    {id: 1, name: "1st Semester"},
+                    {id: 2, name: "2nd Semester"}
+                ],
+                year: [
+                    {id: 1, name: "1st Year"},
+                    {id: 2, name: "2nd Year"},
+                    {id: 3, name: "3rd Year"},
+                    {id: 4, name: "4th Year"},
+                    {id: 5, name: "5th Year"}
+                ],
                 leaveApprovalStatus: [
                     {id: 1, name: "Waiting for head's approval"},
                     {id: 2, name: "Waiting For Registrar's Approval"},
@@ -545,6 +556,54 @@ module ums {
                     {id: 6, name: "Rejected by VC"},
                     {id: 7, name: "Application Approved"},
                     {id: 8, name: "All"}
+                ],
+                carryApprovalStatus: [
+                    {id: 1, name: "Waiting for head's approval"},
+                    {id: 2, name: "Approved By Head"},
+                    {id: 3, name: "Rejected By Head"},
+                    {id: 4, name: "All"}
+                ],
+                courseTypeTES: [
+                    {id: 1, name: "Theory"}
+                ],observationTypeTes: [
+                    {id: 1, name: "Class Room Observation"},
+                    {id: 2, name: "Non-Class Room Observation"},
+                    {id: 3, name: "Non Teaching Observation"}
+                ],deptForTes: [
+                    {id: '01', name: 'ARC'},
+                    {id: '02', name: 'BBA'},
+                    {id: '03', name: 'CE'},
+                    {id: '04', name: 'CSE'},
+                    {id: '05', name: 'EEE'},
+                    {id: '06', name: 'TE'},
+                    {id: '07', name: 'MPE'},
+                    {id: '15', name: 'ARS'},
+                    {id: '08', name: 'All Department Teacher Evaluation List'},
+                    {id: '09', name: 'Maximum Score Holder of All Dept'},
+                    {id: '10', name: 'Minimum Score Holder of All Dept'},
+                    {id: '11', name: 'Faculty of Engineering'},
+                    {id: '12', name: 'Faculty of Business And Social Science'},
+                    {id: '13', name: 'Faculty of Architecture'}
+                ],deptShortName: [
+                    {id: '01', name: 'ARC'},
+                    {id: '02', name: 'BBA'},
+                    {id: '03', name: 'CE'},
+                    {id: '04', name: 'CSE'},
+                    {id: '05', name: 'EEE'},
+                    {id: '06', name: 'TE'},
+                    {id: '07', name: 'MPE'},
+                    {id: '15', name: 'ARS'}
+                ],facultyEngineering: [
+                    {id: '03', name: 'CE'},
+                    {id: '04', name: 'CSE'},
+                    {id: '05', name: 'EEE'},
+                    {id: '06', name: 'TE'},
+                    {id: '07', name: 'MPE'}
+                ],facultyBusinessAndSocial: [
+                    {id: '02', name: 'BBA'},
+                    {id: '15', name: 'ARS'}
+                ],facultyArchitecture: [
+                    {id: '01', name: 'ARC'}
                 ],
                 departmentOffice: [
                     {id: '01', name: 'Department of Architecture'},
@@ -669,7 +728,15 @@ module ums {
               {id:"6", name:"Cash in hand"},
               {id:"7", name:"Sundry Debtor"},
               {id:"8", name:"Sundry Creditor"},
-              {id:"9", name:"Current Liabilities"}
+              {id: "9", name: "Current Liabilities"},
+              {id: "10", name: "Tution Fees & Other Student Fees"}
+            ],
+            accountTypes: [
+              {id: 1, name: "Engineering Program Account"},
+              {id: 2, name: "Business Program Account"},
+              {id: 3, name: "Convocation Program Account"},
+              {id: 4, name: "Provident Fund Account"},
+              {id: 5, name: "Student Welfare Fund Account"}
             ],
             financialYearCloseTransferType:[
                 {id:1, name:'All accounts closing'},
@@ -702,9 +769,9 @@ module ums {
                     {id: 1, name: 'Hard Bound'},
                     {id: 2, name: 'Soft Cover'},
                     {id: 3, name: 'Paperback'},
-                    {id: 4, name: 'Clip binding'},
-                    {id: 5, name: 'Gum paste binding'},
-                    {id: 6, name: 'Cloth binding'}
+                    {id: 4, name: 'Clip Binding'},
+                    {id: 5, name: 'Gum Paste Binding'},
+                    {id: 6, name: 'Cloth Binding'}
                 ],
                 acquisitionTypes: [
                     {id: 101101, name: 'Select Acquisition Type'},

@@ -541,4 +541,5 @@ public class CoreContext {
   FCMTokenManager fcmTokenManager() {
     return new PersistentFCMTokenDao(mTemplateFactory.getJdbcTemplate());
   }
+
 }

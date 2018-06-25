@@ -38,7 +38,16 @@
     '/gradeSubmissionDeadLine': {title: 'Grade Submission Deadline', 'breadcrumb': ['Grade Submission Deadline']},
     '/studentAdviser': {title: 'Students Adviser', 'breadcrumb': ['Students Adviser']},
     '/resultProcessing': {title: 'Result Processing', 'breadcrumb': ['Result Processing']},
-    '/classAttendance': {title: 'Attendance Sheet', 'breadcrumb': ['Attendance Sheet']}
+    '/classAttendance': {title: 'Attendance Sheet', 'breadcrumb': ['Attendance Sheet']},
+      '/employeeProfile': {title: 'Profile', 'breadcrumb': ['Profile']},
+      '/personal': {title: 'Profile', 'breadcrumb': ['Profile']},
+      '/academic': {title: 'Profile', 'breadcrumb': ['Profile']},
+      '/publication': {title: 'Profile', 'breadcrumb': ['Profile']},
+      '/award': {title: 'Profile', 'breadcrumb': ['Profile']},
+      '/training': {title: 'Profile', 'breadcrumb': ['Profile']},
+      '/experience': {title: 'Profile', 'breadcrumb': ['Profile']},
+      '/additional': {title: 'Profile', 'breadcrumb': ['Profile']},
+      '/service': {title: 'Profile', 'breadcrumb': ['Profile']}
 
   };
 

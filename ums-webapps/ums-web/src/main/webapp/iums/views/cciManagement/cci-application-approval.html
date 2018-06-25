@@ -1,0 +1,213 @@
+<style>
+    .animate-if.ng-leave {
+        transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.2s;
+    }
+
+    .animate-if.ng-enter {
+        transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    }
+
+    .animate-if.ng-enter,
+    .animate-if.ng-leave.ng-leave-active {
+        opacity: 0;
+    }
+
+    .animate-if.ng-leave,
+    .animate-if.ng-enter.ng-enter-active {
+        opacity: 1;
+    }
+
+    .modal-header,h4 {
+        color:white;
+        text-align: center;
+        font-size: 20px;
+        padding:5px 10px;
+    }
+
+
+
+</style>
+
+
+
+
+<div class="row" ng-cloak="">
+    <div class="panel">
+        <div class="panel-body shadowPanel" style="min-height: 590px;">
+
+        <div style="padding: 0px">
+
+            <div class="panel panel-info" >
+                <div class="panel-heading" align="center">
+                    Carry Application Approval
+                </div>
+
+                <div style="padding-top:20px;padding-bottom: 40px"  data-ng-hide="vm.carrylastDateDeadline" data-ng-include="'views/cciManagement/carry-application-with-status-selection.html'">
+
+                </div>
+                <div class="panel-body" >
+                    <div align="right">
+                        <dir-pagination-controls boundary-links="true"
+                                                 data-ng-hide="vm.pgDisable"
+                                                 pagination-id="applicationCCI"
+                                                 on-page-change="vm.pageChanged(vm.pagination.currentPage)"
+                                                 template-url="views\cciManagement\dirPagination.html"></dir-pagination-controls>
+                    </div>
+
+                    <table class="table table-bordered" data-ng-hide="vm.carrylastDateDeadline">
+                        <thead>
+                        <th style="background-color: #FAFAFA; ">#</th>
+                        <th style="background-color: #FAFAFA; ">Applied On</th>
+                        <th style="background-color: #FAFAFA; ">Applicant Name</th>
+                        <th style="background-color: #FAFAFA;">Applicant Id</th>
+                        <th style="background-color: #FAFAFA; ">Course No</th>
+                        <th style="background-color: #FAFAFA; ">Course Title</th>
+                        <th style="background-color: #FAFAFA; ">Current Semester</th>
+                        <th style="background-color: #FAFAFA; ">Current CGPA</th>
+                        <th style="width:180px; max-width: 180px;background-color: #FAFAFA;">Status</th>
+                        </thead>
+                        <tbody>
+
+                        <tr style="border: 1px solid #959ba2"
+                            dir-paginate="app in vm.applicationCCI | itemsPerPage: vm.itemsPerPage | orderBy :'statusName'"
+                            current-page="vm.pagination.currentPage"
+                            total-items="vm.totalItems"
+                            pagination-id="applicationCCI"
+                            data-toggle="modal"
+                            data-target="#myModal"
+                            data-ng-click="vm.click(app.studentId,app.semesterId,app.fullName,app.courseTitle,app.courseNo)"
+                            style="cursor: pointer">
+                            <td>{{app.rowNum}}</td>
+                            <td>{{app.applicationDate}}</td>
+                            <td>{{app.fullName}}</td>
+                            <td>{{app.studentId}}</td>
+                            <td>{{app.courseNo}}</td>
+                            <td>{{app.courseTitle}}</td>
+                            <td>{{app.carryYear+"-"+app.carrySemester}}</td>
+                            <td>2.8</td>
+                            <td>{{app.statusName}}</td>
+                        </tr>
+                        </tbody>
+                    </table><p align="center" style="color:gray;font-size: 15px">
+                    Start Date of CarryApporval:
+                    <span style="font-size: 15px" class="label label-info badge-info">{{vm.carryStartDate}}</span>
+                    Last Date of CarryApporval:
+                    <span style="font-size: 15px" class="label label-warning badge-warning">{{vm.carrylastDate}}</span>
+                    Current Status:
+                    <span style="font-size: 15px" data-ng-if="vm.carryStatusShow=='Available'" class="label label-success badge-success">{{vm.carryStatusShow}}</span>
+                    <span style="font-size: 15px" data-ng-if="vm.carryStatusShow=='Not Allowed'" class="label label-danger badge-danger">{{vm.carryStatusShow}}</span>
+                    </p>
+
+                        <div class="modal fade" id="myModal" role="dialog" >
+                         <!--   <div class="modal-backdrop"> -->
+                            <div class="modal-dialog ">
+
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header" >
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Carry Applications Approval</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="panel-body">
+                                            <table class="table table-borderless table-condensed table-hover">
+                                                <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <p>Applicant_ID:  <strong>{{vm.studentIdTA}}</strong></p>
+                                                        <p>Semester_ID: <strong> {{vm.semesterIdTA}}</strong></p>
+                                                        <p>Applicant_Name: <strong> {{vm.fullNameTA}}</strong></p>
+                                                        <p>Total_Carry :  <strong>{{vm.totalcarry}}</strong></p>
+                                                        <p>Total_Applied :  <strong>{{vm.totalApplied}}</strong></p>
+                                                    </td>
+                                                    <td>
+                                                        <div align="right" >
+                                                            <img class="img-square"
+                                                                 style="border: 5px solid #fff;  box-shadow: 0 2px 3px rgba(0,0,0,0);"
+                                                                 src=""
+                                                                 width="100"
+                                                                 height="100"
+                                                                 data-profile-picture="">
+                                                        </div>
+                                                    </td>
+
+
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                    <div class="panel panel-warning">
+                                        <div class="panel-heading" align="center">
+                                            Applicant Request's
+                                        </div>
+                                        <div class="panel-body">
+                                            <table class="table table-bordered" >
+                                                <thead>
+                                                <th style="background-color: #FAFAFA; ">Course No</th>
+                                                <th style="background-color: #FAFAFA; ">Course Title</th>
+                                                <th style="background-color: #FAFAFA; ">Current Status</th>
+                                                <th style="background-color: #FAFAFA; ">Response</th>
+                                                </thead>
+                                                <tbody>
+                                                <tr data-ng-repeat="a in vm.applicationModalAppliedInfo">
+                                                    <td>{{a.courseNo}}</td>
+                                                    <td>{{a.courseTitle}}</td>
+                                                    <td style="background-color: #FAFAFA; "><strong>{{a.statusName}}</strong></td>
+                                                    <td><input type="checkbox" data-ng-model="a.apply" data-ng-hide="a.statusName==vm.statusDefaultWaitingForpayment || a.statusName==vm.statusDefaultApproved ?  true : false" data-ng-click="vm.checkMoreThanOneSelectionSubmit(a)" ></td>
+                                                </tr>s
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-danger">
+                                        <div class="panel-heading" align="center">
+                                            Applicant Carry Courses
+                                        </div>
+                                        <div class="panel-body">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                <th style="background-color: #FAFAFA; ">Course No</th>
+                                                <th style="background-color: #FAFAFA; ">Course Title</th>
+                                                <th style="background-color: #FAFAFA; ">Carry Semester</th>
+                                                </thead>
+                                                <tbody>
+                                                <tr data-ng-repeat="a in vm.applicationModalTableinfo">
+                                                    <td>{{a.courseNo}}</td>
+                                                    <td>{{a.courseTitle}}</td>
+                                                    <td>{{a.carryYear+"."+a.carrySemester}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-success" data-ng-disabled="vm.submit_Button_Disable"   data-ng-click="vm.submitModal(vm.modalAccept)" data-dismiss="modal">Accept</button>
+                                        <button type="button" class="btn btn-primary" data-ng-disabled="vm.submit_Button_Disable"  data-ng-click="vm.submitModal(vm.modalReject)" data-dismiss="modal">Reject</button>
+                                        <button type="button" class="btn btn-info"   data-ng-click="vm.close()" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+
+                           <!-- </div> -->
+                        </div>
+                </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+</div>
+
+
+
+
+
+

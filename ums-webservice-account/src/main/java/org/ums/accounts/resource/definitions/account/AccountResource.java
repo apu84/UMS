@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
+import org.ums.enums.common.AscendingOrDescendingType;
 import org.ums.logs.GetLog;
 import org.ums.report.definition.ChartOfAccountsReportGenerator;
 import org.ums.resource.Resource;
+import org.ums.util.Utils;
 
 import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +17,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.StreamingOutput;
-import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -37,7 +38,7 @@ public class AccountResource extends MutableAccountResource {
   @Path("/total-size")
   @GetLog(message = "Requested for total company related account size")
   public Integer getTotalSize() {
-    return mHelper.getContentManager().getSize();
+    return mHelper.getContentManager().getSize(Utils.getCompany());
   }
 
   @GET
@@ -48,11 +49,11 @@ public class AccountResource extends MutableAccountResource {
   }
 
   @GET
-  @Path("/paginated/item-per-page/{item-per-page}/page-number/{page-number}")
+  @Path("/paginated/item-per-page/{item-per-page}/page-number/{page-number}/type/{type}")
   @GetLog(message = "Requested for paginated  account list")
   public List<Account> getAllPaginated(@PathParam("item-per-page") int pItemPerPage,
-      @PathParam("page-number") int pPageNumber) {
-    return mHelper.getAllPaginated(pItemPerPage, pPageNumber);
+      @PathParam("page-number") int pPageNumber, @PathParam("type") int pType) {
+    return mHelper.getAllPaginated(pItemPerPage, pPageNumber, AscendingOrDescendingType.get(pType));
   }
 
   @GET
@@ -96,6 +97,12 @@ public class AccountResource extends MutableAccountResource {
   @Path("/customer-accounts")
   public List<Account> getCustomerAccounts(final @Context HttpServletRequest pHttpServletRequest) throws Exception {
     return mHelper.getCustomerAccounts(mUriInfo);
+  }
+
+  @GET
+  @Path("/student-accounts")
+  public List<Account> getStudentAccounts(final @Context HttpServletRequest pHttpServletRequest) throws Exception {
+    return mHelper.getStudentAccounts(mUriInfo);
   }
 
   @GET

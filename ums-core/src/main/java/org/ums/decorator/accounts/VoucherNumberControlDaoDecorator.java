@@ -17,8 +17,8 @@ public class VoucherNumberControlDaoDecorator extends
     VoucherNumberControlManager {
 
   @Override
-  public List<VoucherNumberControl> getByCurrentFinancialYear() {
-    return getManager().getByCurrentFinancialYear();
+  public List<VoucherNumberControl> getByCurrentFinancialYear(Company pCompany) {
+    return getManager().getByCurrentFinancialYear(pCompany);
   }
 
   @Override

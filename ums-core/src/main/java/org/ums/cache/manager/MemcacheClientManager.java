@@ -34,7 +34,17 @@ public class MemcacheClientManager<R extends LastModifier, I> implements CacheMa
   }
 
   @Override
+  public void putObject(String pCacheId, Object pCacheObject) {
+    mObjectCache.set(pCacheId, 0, pCacheObject);
+  }
+
+  @Override
   public R get(String pCacheId) {
+    return (R) mObjectCache.get(pCacheId);
+  }
+
+  @Override
+  public Object getObject(String pCacheId) {
     return (R) mObjectCache.get(pCacheId);
   }
 

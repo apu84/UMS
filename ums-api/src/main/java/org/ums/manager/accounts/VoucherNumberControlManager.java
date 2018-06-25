@@ -14,7 +14,7 @@ import java.util.List;
 public interface VoucherNumberControlManager extends
     ContentManager<VoucherNumberControl, MutableVoucherNumberControl, Long> {
 
-  List<VoucherNumberControl> getByCurrentFinancialYear();
+  List<VoucherNumberControl> getByCurrentFinancialYear(Company pCompany);
 
   VoucherNumberControl getByVoucher(Voucher pVoucher, Company pCompany);
 

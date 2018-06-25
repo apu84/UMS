@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.accounts.CurrencyConversionDaoDecorator;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.CurrencyConversion;
 import org.ums.domain.model.mutable.accounts.MutableCurrencyConversion;
 import org.ums.generator.IdGenerator;
@@ -42,6 +43,18 @@ public class PersistentCurrencyConversionDao extends CurrencyConversionDaoDecora
             + "    CURRENCY_ID, " + "    max(MODIFIED_DATE) modified_date " + "  FROM CURRENCY_CONV "
             + "  GROUP BY COMP_CODE, CURRENCY_ID) ORDER BY CURRENCY_ID";
     return mJdbcTemplate.query(query, new PersistentCurrencyConversionRowMapper());
+  }
+
+  @Override
+  public List<CurrencyConversion> getAll(Company pCompany) {
+    String query =
+        "SELECT " + "  ID, " + "  COMP_CODE, " + "  CURRENCY_ID, " + "  CONV_FACTOR, " + "  RCONV_FACTOR, "
+            + "  BCONV_FACTOR, " + "  RBCONV_FACTOR, " + "  DEFAULT_COMP, " + "  STAT_FLAG, " + "  STAT_UP_FLAG, "
+            + "  MODIFIED_DATE, " + "  MODIFIED_BY " + "FROM CURRENCY_CONV "
+            + "WHERE (COMP_CODE, CURRENCY_ID, MODIFIED_DATE) IN ( " + "  SELECT " + "    comp_code, "
+            + "    CURRENCY_ID, " + "    max(MODIFIED_DATE) modified_date " + "  FROM CURRENCY_CONV  where comp_code=?"
+            + "  GROUP BY COMP_CODE, CURRENCY_ID) ORDER BY CURRENCY_ID";
+    return mJdbcTemplate.query(query, new Object[] {pCompany.getId()}, new PersistentCurrencyConversionRowMapper());
   }
 
   class PersistentCurrencyConversionRowMapper implements RowMapper<CurrencyConversion> {

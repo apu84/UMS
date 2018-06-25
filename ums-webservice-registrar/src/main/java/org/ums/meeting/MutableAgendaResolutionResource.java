@@ -1,33 +1,42 @@
 package org.ums.meeting;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.ums.logs.DeleteLog;
+import org.ums.logs.PostLog;
+import org.ums.logs.PutLog;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 public class MutableAgendaResolutionResource extends Resource {
 
   @Autowired
-  AgendaResolutionResourceHelper mHelper;
+  private AgendaResolutionResourceHelper mHelper;
 
   @POST
-  @Path("/save")
-  public Response saveMeetingAgendaResolution(final JsonObject pJsonObject) throws Exception {
-    return mHelper.saveAgendaResolution(pJsonObject, mUriInfo);
+  @PostLog(message = "Created a meeting agenda resolution")
+  public Response saveMeetingAgendaResolution(@Context HttpServletRequest pHttpServletRequest,
+      final JsonObject pJsonObject) throws Exception {
+    return mHelper.post(pJsonObject, mUriInfo);
   }
 
   @PUT
-  @Path("/update")
-  public Response updateMeetingAgendaResolution(final JsonObject pJsonObject) throws Exception {
+  @PutLog(message = "Updated a meeting agenda resolution")
+  public Response updateMeetingAgendaResolution(@Context HttpServletRequest pHttpServletRequest,
+      final JsonObject pJsonObject) throws Exception {
     return mHelper.updateAgendaResolution(pJsonObject, mUriInfo);
   }
 
   @DELETE
-  @Path("/delete/{id}")
-  public Response deleteMeetingAgendaResolution(final @PathParam("id") String pId) throws Exception {
-    return mHelper.deleteAgendaResolution(pId, mUriInfo);
+  @Path(PATH_PARAM_OBJECT_ID)
+  @DeleteLog(message = "Deleted a meeting agenda resolution")
+  public Response deleteMeetingAgendaResolution(@Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("object-id") String pObjectId) throws Exception {
+    return mHelper.deleteAgendaResolution(pObjectId, mUriInfo);
   }
 
 }

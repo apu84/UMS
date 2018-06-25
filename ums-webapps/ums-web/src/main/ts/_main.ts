@@ -197,6 +197,22 @@
 /// <reference path='controller/admission/AdmissionTotalSeatAssignment.ts'/>
 /// <reference path='controller/sectionAssign/sectionAssignment.ts'/>
 
+/// <reference path='controller/cciManagement/cciApproval.ts'/>
+/// <reference path='controller/tesController/headTes.ts'/>
+/// <reference path='controller/tesController/studentTes.ts'/>
+/// <reference path='controller/tesController/adminVcTes.ts'/>
+/// <reference path='controller/tesController/AdminVcTesComparison.ts'/>
+/// <reference path='controller/tesController/questionsAdmin.ts'/>
+/// <reference path='controller/tesController/individualQuestionTesReport.ts'/>
+/// <reference path='controller/tesController/facultyEngineering/DeanEngineeringTes.ts'/>
+/// <reference path='controller/tesController/facultyEngineering/DeanEngineeringComparison.ts'/>
+/// <reference path='controller/tesController/facultyEngineering/DeanEngineeringIndividualQuestion.ts'/>
+/// <reference path='controller/tesController/facultyBusinessAndSocialScience/DeanBusinessAndSocialTes.ts'/>
+/// <reference path='controller/tesController/facultyBusinessAndSocialScience/DeanBusinessAndSocialComparison.ts'/>
+/// <reference path='controller/tesController/facultyBusinessAndSocialScience/DeanBusinessAndSocialIndividualQuestion.ts'/>
+/// <reference path='controller/tesController/facultyArchitecture/DeanArchitectureTes.ts'/>
+/// <reference path='controller/tesController/facultyArchitecture/DeanArchitectureIndividualQuestion.ts'/>
+
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>
 /// <reference path='controller/syllabus/GridSyllabus.ts'/>

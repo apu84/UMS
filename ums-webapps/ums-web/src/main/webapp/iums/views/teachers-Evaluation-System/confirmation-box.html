@@ -1,0 +1,53 @@
+<div class="panel-body">
+    <span  style="font-size: 14px" class="label label-success badge-success">ClassRoom Observation</span>
+    <span style="color: black" class="badge">1</span>  <span class="label label-danger badge-danger">Poor</span>
+    <span style="color: black" class="badge">2</span>  <span class="label label-warning badge-warning">Below Average</span>
+    <span style="color: black" class="badge">3</span>  <span class="label label-info badge-info">Average</span>
+    <span style="color: black" class="badge">4</span>  <span class="label label-primary badge-primary">Above Average</span>
+    <span style="color: black" class="badge">5</span>  <span class="label label-success badge-success">Excellent</span>
+    <table class="table table-bordered">
+        <thead>
+        <th style="background-color: #e7f5fe;width:20px; max-width: 20px;">#</th>
+        <th style="background-color: #e7f5fe;">Questions</th>
+        <th style="background-color: #e7f5fe;width:200px;">Point</th>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="app in vm.questionListAndReview" data-ng-if="app.observationType==1">
+            <td>{{$index+1}}</td>
+            <td>{{app.questionDetails}}</td>
+            <td>{{app.point}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <span  style="font-size: 14px" class="label label-success badge-success">Non ClassRoom Observation</span>
+    <table class="table table-bordered">
+        <thead>
+        <th style="background-color: #e7f5fe;width:20px; max-width: 20px;">#</th>
+        <th style="background-color: #e7f5fe;">Questions</th>
+        <th style="background-color: #e7f5fe;width:200px;">Point</th>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="app in vm.questionListAndReview" data-ng-if="app.observationType==2">
+            <td>{{$index+1}}</td>
+            <td>{{app.questionDetails}}</td>
+            <td>{{app.point}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <span  style="font-size: 14px" class="label label-success badge-success">Non Teaching Observation</span>
+    <table class="table table-bordered">
+        <thead>
+        <th style="background-color: #e7f5fe;width:20px; max-width: 20px;">#</th>
+        <th style="background-color: #e7f5fe;">Questions</th>
+        <th style="background-color: #e7f5fe;width:200px; ">Comment</th>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="app in vm.questionListAndReview" data-ng-if="app.observationType==3">
+            <td>{{$index+1}}</td>
+            <td>{{app.questionDetails}}</td>
+            <td>{{app.comment}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>

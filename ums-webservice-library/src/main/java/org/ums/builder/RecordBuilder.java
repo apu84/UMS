@@ -7,7 +7,6 @@ import org.ums.domain.model.dto.library.ImprintDto;
 import org.ums.domain.model.immutable.library.Record;
 import org.ums.domain.model.mutable.library.MutableRecord;
 import org.ums.enums.common.Language;
-import org.ums.enums.library.BookBindingType;
 import org.ums.enums.library.JournalFrequency;
 import org.ums.enums.library.MaterialType;
 import org.ums.enums.library.RecordStatus;
@@ -40,8 +39,6 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     pBuilder.add("materialTypeName", pReadOnly.getMaterialType() == null ? "Unknown" : pReadOnly.getMaterialType()
         .getLabel());
     pBuilder.add("status", pReadOnly.getRecordStatus() == null ? 101101 : pReadOnly.getRecordStatus().getId());
-    pBuilder.add("bindingType", pReadOnly.getBookBindingType() == null ? 101101 : pReadOnly.getBookBindingType()
-        .getId());
     pBuilder.add("title", pReadOnly.getTitle());
     pBuilder.add("subTitle", pReadOnly.getSubTitle() == null ? "" : pReadOnly.getSubTitle());
     pBuilder.add("gmd", pReadOnly.getGmd() == null ? "" : pReadOnly.getGmd());
@@ -109,8 +106,6 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
 
     try {
 
-      pMutable.setBookBindingType(pJsonObject.getInt("bindingType") == 101101 ? null : BookBindingType.get(pJsonObject
-          .getInt("bindingType")));
       if(pJsonObject.containsKey("frequency"))
         pMutable.setFrequency(pJsonObject.getInt("frequency") == 101101 ? null : JournalFrequency.get(pJsonObject
             .getInt("frequency")));

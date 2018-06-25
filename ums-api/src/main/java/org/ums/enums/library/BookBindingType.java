@@ -9,19 +9,13 @@ import java.util.Map;
  */
 public enum BookBindingType {
 
-  SADDLE(1, "Saddle Stitched"),
-  LOOP(2, "'Loop Stitched'"),
-  STAB(3, "'Stab Stitched or Side Stitched'"),
-  SEWN(4, "'Sewn Bound'"),
-  PERFECT(5, "'Perfect Bound'"),
-  TAPE(6, "'Tape Bound'"),
-  SCREW(7, "'Screw Bound'"),
-  HARDCOVER(8, "'Hardcover or Case Bound'"),
-  PLASTIC(9, "'Plastic Grip'"),
-  COMB(10, "'Comb Bound or Plastic Bound'"),
-  SPIRAL(11, "'Spiral Bound or Coil Bound'"),
-  WIRE_O(12, "'Wire-O Bound or Wire Bound'");
-  ;
+  EMPTY(101101, ""),
+  Hard_Bound(1, "Hard Bound"),
+  Soft_Cover(2, "Soft Cover"),
+  Paperback(3, "Paperback"),
+  Clip_Binding(4, "Clip Binding"),
+  Gum_Paste_Binding(5, "Gum Paste Binding"),
+  Cloth_Binding(6, "Cloth Binding");
 
   private String label;
   private int id;

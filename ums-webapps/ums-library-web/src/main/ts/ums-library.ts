@@ -87,7 +87,24 @@ module ums {
             })
             .state('cataloging', {
                 url: "/cataloging",
-                templateUrl: 'views/admin/cataloging/catalog-home.html'
+                templateUrl: 'views/admin/cataloging/catalog-home.html',
+                resolve: {
+                    contributor: ['contributorService', function(contributorService){
+                        return contributorService.fetchAllContributors().then((contributors) =>{
+                            return contributors.entries;
+                        });
+                    }],
+                    publisher: ['publisherService', function(publisherService){
+                        return publisherService.fetchAllPublishers().then((publishers) =>{
+                            return publishers.entries;
+                        });
+                    }],
+                    supplier: ['supplierService', function(supplierService){
+                        return supplierService.fetchAllSuppliers().then((suppliers) =>{
+                            return suppliers.entries;
+                        });
+                    }]
+                }
             })
             .state('cataloging.thesis', {
                 url: "/thesis",

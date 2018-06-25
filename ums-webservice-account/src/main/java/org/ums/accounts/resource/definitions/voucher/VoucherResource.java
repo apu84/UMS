@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.accounts.Voucher;
 import org.ums.resource.Resource;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -20,7 +21,8 @@ public class VoucherResource extends MutableVoucherResource {
 
   @GET
   @Path("/all")
-  public List<Voucher> getAll(final @Context Request pRequest) {
+  public List<Voucher> getAll(final @Context HttpServletRequest pHttpServletRequest) {
+    System.out.println(pHttpServletRequest.getRequestURI());
     return mVoucherManager.getAll();
   }
 

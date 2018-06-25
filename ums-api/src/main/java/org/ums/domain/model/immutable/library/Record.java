@@ -7,7 +7,6 @@ import org.ums.domain.model.dto.library.ImprintDto;
 import org.ums.domain.model.dto.library.PhysicalDescriptionDto;
 import org.ums.domain.model.mutable.library.MutableRecord;
 import org.ums.enums.common.Language;
-import org.ums.enums.library.BookBindingType;
 import org.ums.enums.library.JournalFrequency;
 import org.ums.enums.library.MaterialType;
 import org.ums.enums.library.RecordStatus;
@@ -84,8 +83,6 @@ public interface Record extends Serializable, EditType<MutableRecord>, LastModif
   MaterialType getMaterialType();
 
   RecordStatus getRecordStatus();
-
-  BookBindingType getBookBindingType();
 
   String getKeyWords();
 

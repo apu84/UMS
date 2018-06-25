@@ -2,14 +2,13 @@ package org.ums.accounts.resource.definitions.currency;
 
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.accounts.CurrencyConversion;
-import org.ums.persistent.model.accounts.PersistentCurrencyConversion;
 import org.ums.resource.Resource;
+import org.ums.util.Utils;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +24,7 @@ public class CurrencyConversionResource extends MutableCurrencyConversionResourc
   @Path("/all")
   public List<CurrencyConversion> getAll() throws Exception {
     List<CurrencyConversion> currencyConversions = mCurrencyConversionResourceHelper.getContentManager().getAll();
-    return mCurrencyConversionResourceHelper.getContentManager().getAll();
+    return mCurrencyConversionResourceHelper.getContentManager().getAll(Utils.getCompany());
   }
 
 }

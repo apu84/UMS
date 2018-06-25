@@ -1,0 +1,95 @@
+<div class="col-sm-4">
+    <div class="form-group" align="right">
+        <label class="col-md-8 control-label"><input type="text"
+                                                     class="form-control required"
+                                                     id="resultsPerPloage"
+                                                     placeholder='Search by Teacher Name'
+                                                     data-ng-model="vm.facultyName"/></label>
+    </div>
+</div>
+
+<div class="col-sm-4">
+    <div class="form-group" align="right">
+        <div class="col-md-8">
+            <button type="button"
+                    data-toggle="modal"
+                    data-ng-click="vm.getRecordsOfAssignedCoursesByHead()"
+                    data-target="#myModal"
+                    class="btn btn-success btn-sm" data-ng-model="kko">List of Teachers Requiring Evaluation
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="col-sm-4">
+    <div class="form-group" align="right">
+        <div class="col-md-8">
+            <button type="button"
+                    class="btn btn-success btn-sm"
+                    data-ng-click="vm.getSemester()"
+                    data-ng-model="kk">Evaluation Score
+            </button>
+        </div>
+    </div>
+</div>
+<br/>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <!--   <div class="modal-backdrop"> -->
+    <div class="modal-dialog modal-lg ">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Courses Assigned For Evaluation</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <span style="font-size: 14px" class="label label-success badge-success">Session: <strong>{{vm.semesterName}}</strong></span>
+                    <label><input type="text"
+                                  size="200"
+                                  class="form-control required"
+                                  id="search"
+                                  placeholder='Search by Teacher Name'
+                                  data-ng-model="assignedCourseSearch"/></label><br><br>
+
+                    <pagination total-items="vm.assignedCourseForCurrentSemesterLength"
+                                ng-model="vm.pCurrentPage" max-size="7"
+                                class="pagination-sm" boundary-links="true" rotate="false"
+                                class="pagination-page"
+                                items-per-page="vm.pItemsPerPage"></pagination>
+                    <table class="table table-striped">
+                        <thead>
+                        <th style="background-color: #FAFAFA; ">SL</th>
+                        <th style="background-color: #FAFAFA; ">Faculty Name</th>
+                        <th style="background-color: #FAFAFA; ">CourseNo</th>
+                        <th style="background-color: #FAFAFA; ">CourseTitle</th>
+                        <th style="background-color: #FAFAFA; ">Section</th>
+                        <th style="background-color: #FAFAFA; ">Assigned Date</th>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="app in (filterd = vm.setRivewedCoursesHistory | filter:assignedCourseSearch | limitTo:vm.pItemsPerPage:vm.pItemsPerPage*(vm.pCurrentPage - 1))">
+                            <td>{{(vm.pCurrentPage - 1) * vm.pItemsPerPage + $index + 1}}</td>
+                            <td>{{app.firstName+" "+app.lastName}}</td>
+                            <td>{{app.courseNo}}</td>
+                            <td>{{app.courseTitle}}</td>
+                            <td>{{app.section}}</td>
+                            <td>{{app.date}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

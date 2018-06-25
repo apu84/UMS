@@ -18,7 +18,6 @@
     'ui.select',
     'angularAccounting',
     'ngHandsontable'
-
   ]).run(function(ExpireToken){
 
   });
@@ -36,7 +35,7 @@
         .state('userHome', {
           url: "/userHome",
           templateUrl: 'views/user-home.html',
-          controller: 'MainController',
+          controller: 'AccountsMainController',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
@@ -82,6 +81,12 @@
           controller: 'SystemGroupMapController',
           controllerAs: 'vm',
           templateUrl: 'views/definitions/system.group.map/system-group-map.html'
+        })
+        .state('systemAccountMap', {
+          url: "/systemAccountMap",
+          controller: 'SystemAccountMapController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/system.account.map/system-account-map.html'
         })
         .state('account', {
           url: "/account",

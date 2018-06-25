@@ -8,20 +8,22 @@ module ums {
             '$stateParams',
             'employmentTypeService',
             'departmentService',
-            'designationService'
+            'designationService',
+            'employeeService'
         ];
 
         private service: IServiceInformationModel[] = [];
         readonly userId: string = "";
         private stateParams: any;
         private designations: ICommon[] = [];
+        private filteredDesignation: any = [];
         private employmentTypes: ICommon[] = [];
         private serviceIntervals: ICommon[] = [];
         private serviceRegularIntervals: ICommon[] = [];
         private serviceContractIntervals: ICommon[] = [];
         private departments: IDepartment[] = [];
         private enableEdit: boolean[] = [false];
-        private enableServiceDetailEdit: boolean[] = [false];
+        private enableServiceDetailEdit: boolean[][] = [[false],[false]];
         private enableEditButton: boolean = false;
 
         constructor(private registrarConstants: any,
@@ -31,7 +33,8 @@ module ums {
                     private $stateParams: any,
                     private employmentTypeService: EmploymentTypeService,
                     private departmentService: DepartmentService,
-                    private designationService: DesignationService) {
+                    private designationService: DesignationService,
+                    private employeeService: EmployeeService) {
 
             this.service = [];
             this.stateParams = $stateParams;
@@ -56,6 +59,24 @@ module ums {
             this.serviceRegularIntervals.push(this.registrarConstants.servicePeriods[1]);
             this.serviceRegularIntervals.push(this.registrarConstants.servicePeriods[2]);
             this.serviceContractIntervals.push(this.registrarConstants.servicePeriods[3]);
+        }
+
+        public filterDesignationSelection(index: number): void{
+            this.filteredDesignation[index] = [];
+            this.employeeService.getDesignation(this.service[index].department.id.toString()).then((response: any) => {
+                if (response.length < 1) {
+                    this.notify.error("No designation found");
+                }
+                else{
+                    for (let i = 0; i < response.length; i++) {
+                        for (let j = 0; j < this.designations.length; j++) {
+                            if (response[i].designationId == this.designations[j].id) {
+                                this.filteredDesignation[index].push(this.designations[j]);
+                            }
+                        }
+                    }
+                }
+            });
         }
 
         public submit(type: string, index: number, parentIndex?: number): void {
@@ -103,9 +124,9 @@ module ums {
             else if (type === 'serviceDetails') {
                 this.employeeInformationService.saveServiceDetailInformation(json).then((data: any) => {
                     this.service[parentIndex].intervalDetails[index] = data;
-                    this.enableServiceDetailEdit[index] = false;
+                    this.enableServiceDetailEdit[parentIndex][index] = false;
                 }).catch((reason: any) => {
-                    this.enableServiceDetailEdit[index] = true;
+                    this.enableServiceDetailEdit[parentIndex][index] = true;
                 });
             }
         }
@@ -122,9 +143,9 @@ module ums {
             else if (type === 'serviceDetails') {
                 this.employeeInformationService.updateServiceDetailInformation(json).then((data: any) => {
                     this.service[parentIndex].intervalDetails[index] = data;
-                    this.enableServiceDetailEdit[index] = false;
+                    this.enableServiceDetailEdit[parentIndex][index] = false;
                 }).catch((reason: any) => {
-                    this.enableServiceDetailEdit[index] = true;
+                    this.enableServiceDetailEdit[parentIndex][index] = true;
                 });
             }
         }
@@ -134,6 +155,7 @@ module ums {
             this.employeeInformationService.getServiceInformation(this.userId).then((serviceInformation: any) => {
                 if (serviceInformation) {
                     this.service = serviceInformation;
+                    this.setInitialDesignation();
                 }
                 else {
                     this.service = [];
@@ -141,12 +163,19 @@ module ums {
             });
         }
 
-        public activeEditButton(type: string, index: number, canEdit: boolean): void {
+        private setInitialDesignation() {
+            for (let i = 0; i < this.service.length; i++) {
+                this.filterDesignationSelection(i);
+            }
+        }
+
+        public activeEditButton(type: string, index: number, canEdit: boolean, parentIndex?: number): void {
             if (type === 'service') {
                 this.enableEdit[index] = canEdit;
             }
             else if (type === 'serviceDetails') {
-                this.enableServiceDetailEdit[index] = canEdit;
+                console.log(index + " " + parentIndex);
+                this.enableServiceDetailEdit[parentIndex][index] = canEdit;
             }
         }
 

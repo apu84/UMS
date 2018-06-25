@@ -5,6 +5,7 @@ module ums {
     public static $inject = ['$scope', '$modal', 'notify', 'GroupService'];
 
     public groups: IGroup[];
+    public groupsDisplay: IGroup[];
     public groupsForSearch: IGroup[];
     public tempGroup: IGroup[];
     public addedGroup: IGroup;
@@ -45,10 +46,12 @@ module ums {
     }
 
     private initialize() {
+      this.groupsDisplay = [];
       this.groupService.getAllGroups().then((groups: IGroup[]) => {
           this.groupsForSearch=[];
           for(var i=(groups.length-1); i>=0; i--){
               this.groupsForSearch.push(groups[i]);
+            this.groupsDisplay.push(angular.copy(groups[i]));
           }
         this.assignToGroupAndMap(groups);
       });

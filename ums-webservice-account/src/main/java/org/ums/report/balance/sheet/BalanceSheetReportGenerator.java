@@ -15,8 +15,8 @@ import org.ums.enums.accounts.general.ledger.reports.BalanceSheetFetchType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
 import org.ums.report.balance.sheet.helper.CellAndTotalBalance;
-import org.ums.util.UmsAccountUtils;
 import org.ums.util.UmsUtils;
+import org.ums.util.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -55,7 +55,7 @@ public class BalanceSheetReportGenerator {
                                        BalanceSheetFetchType pDebtorLedgerFetchType, OutputStream pOutputStream) throws Exception {
 
 
-    FinancialAccountYear financialAccountYear = mFinancialAccountYearManager.getOpenedFinancialAccountYear();
+    FinancialAccountYear financialAccountYear = mFinancialAccountYearManager.getOpenedFinancialAccountYear(Utils.getCompany());
     List<MutableAccountBalance> accountBalanceList = mAccountBalanceManager.getAccountBalance(financialAccountYear.getCurrentStartDate(), financialAccountYear.getCurrentEndDate());
     Map<Account, AccountBalance> accountBalanceMapWithAccount = accountBalanceList
         .stream()
@@ -113,12 +113,12 @@ public class BalanceSheetReportGenerator {
     assetCell.setBorder(Rectangle.NO_BORDER);
     table.addCell(assetCell);*/
 
-    List<Group> assetGroups = mGroupManager.getIncludingMainGroupList(Arrays.asList(mSystemGroupMapManager.get(GroupType.ASSETS, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode()))
+    List<Group> assetGroups = mGroupManager.getIncludingMainGroupList(Arrays.asList(mSystemGroupMapManager.get(GroupType.ASSETS, Utils.getCompany()).getGroup().getGroupCode()), Utils.getCompany())
         .stream()
-        .filter(a -> !a.getGroupCode().equals(mSystemGroupMapManager.get(GroupType.ASSETS, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode()))
+        .filter(a -> !a.getGroupCode().equals(mSystemGroupMapManager.get(GroupType.ASSETS, Utils.getCompany()).getGroup().getGroupCode()))
         .collect(Collectors.toList());
     CellAndTotalBalance assetCellAndTotalBalance = createGroupSection(
-            GroupType.ASSETS,
+        GroupType.ASSETS,
         pBalanceSheetFetchType,
         accountBalanceMapWithAccount,
         accountMapWithGroupCode,
@@ -135,9 +135,9 @@ public class BalanceSheetReportGenerator {
 
 
     PdfPCell rightSection = new PdfPCell();
-    List<Group> liabilitiesGroup = mGroupManager.getIncludingMainGroupList(Arrays.asList(mSystemGroupMapManager.get(GroupType.LIABILITIES, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode()))
+    List<Group> liabilitiesGroup = mGroupManager.getIncludingMainGroupList(Arrays.asList(mSystemGroupMapManager.get(GroupType.LIABILITIES, Utils.getCompany()).getGroup().getGroupCode()), Utils.getCompany())
         .stream()
-        .filter(a -> !a.getGroupCode().equals(mSystemGroupMapManager.get(GroupType.LIABILITIES, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode()))
+        .filter(a -> !a.getGroupCode().equals(mSystemGroupMapManager.get(GroupType.LIABILITIES, Utils.getCompany()).getGroup().getGroupCode()))
         .collect(Collectors.toList());
 
     CellAndTotalBalance liabilitiesCellAndTotalBalance = createGroupSection(GroupType.LIABILITIES,
@@ -154,12 +154,12 @@ public class BalanceSheetReportGenerator {
     rightTable.addCell(liabilitiesCellAndTotalBalance.getCell());
     //rightSection.addElement(rightTable);
 
-    List<Group> incomeGroup = mGroupManager.getIncludingMainGroupList(Arrays.asList(mSystemGroupMapManager.get(GroupType.INCOME, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode()))
+    List<Group> incomeGroup = mGroupManager.getIncludingMainGroupList(Arrays.asList(mSystemGroupMapManager.get(GroupType.INCOME, Utils.getCompany()).getGroup().getGroupCode()), Utils.getCompany())
         .stream()
-        .filter(a -> !a.getGroupCode().equals(mSystemGroupMapManager.get(GroupType.INCOME, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode()))
+        .filter(a -> !a.getGroupCode().equals(mSystemGroupMapManager.get(GroupType.INCOME, Utils.getCompany()).getGroup().getGroupCode()))
         .collect(Collectors.toList());
 
-    CellAndTotalBalance incomeCellAndTotalBalance = createGroupSection( GroupType.INCOME,
+    CellAndTotalBalance incomeCellAndTotalBalance = createGroupSection(GroupType.INCOME,
         pBalanceSheetFetchType,
         accountBalanceMapWithAccount,
         accountMapWithGroupCode,
@@ -173,9 +173,9 @@ public class BalanceSheetReportGenerator {
     rightTable.addCell(incomeCellAndTotalBalance.getCell());
 
 
-    List<Group> expenseGroup = mGroupManager.getIncludingMainGroupList(Arrays.asList(mSystemGroupMapManager.get(GroupType.EXPENSES, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode()))
+    List<Group> expenseGroup = mGroupManager.getIncludingMainGroupList(Arrays.asList(mSystemGroupMapManager.get(GroupType.EXPENSES, Utils.getCompany()).getGroup().getGroupCode()), Utils.getCompany())
         .stream()
-        .filter(a -> !a.getGroupCode().equals(mSystemGroupMapManager.get(GroupType.EXPENSES, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode()))
+        .filter(a -> !a.getGroupCode().equals(mSystemGroupMapManager.get(GroupType.EXPENSES, Utils.getCompany()).getGroup().getGroupCode()))
         .collect(Collectors.toList());
 
     CellAndTotalBalance expenseCellAndTotalBalance = createGroupSection(GroupType.EXPENSES,
@@ -195,7 +195,7 @@ public class BalanceSheetReportGenerator {
     rightSection.setBorder(Rectangle.NO_BORDER);
     table.addCell(rightSection);
     document.add(table);
-    float[] totalAmmountTableWidth={4,8};
+    float[] totalAmmountTableWidth = {4, 8};
     PdfPTable totalAmountTable = new PdfPTable(2);
     PdfPTable assetTotalAmountTable = new PdfPTable(totalAmmountTableWidth);
     addTotalAmountOfTheSection(assetTotalAmountTable, assetCellAndTotalBalance.getTotalBalance());
@@ -211,8 +211,8 @@ public class BalanceSheetReportGenerator {
     totalAmountTable.addCell(cell);
 
     document.add(totalAmountTable);
-        document.close();
-        baos.writeTo(pOutputStream);
+    document.close();
+    baos.writeTo(pOutputStream);
   }
 
   private CellAndTotalBalance createGroupSection(GroupType pGroupTYpe, BalanceSheetFetchType pBalanceSheetFetchType,
@@ -248,7 +248,7 @@ public class BalanceSheetReportGenerator {
     pAssetTable.addCell(cell);
 
     cell = new PdfPCell();
-    paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(pSectionTotalBalance), mBoldFont);
+    paragraph = new Paragraph(Utils.getFormattedBalance(pSectionTotalBalance), mBoldFont);
     paragraph.setAlignment(Element.ALIGN_RIGHT);
     cell.addElement(paragraph);
     cell.setPaddingBottom(3);
@@ -285,9 +285,9 @@ public class BalanceSheetReportGenerator {
       if(groupAccountList.size() == 0) {
         cell = new PdfPCell();
         if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
-          paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(new BigDecimal(0)), mBoldFont);
+          paragraph = new Paragraph(Utils.getFormattedBalance(new BigDecimal(0)), mBoldFont);
         else
-          paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(new BigDecimal(0)), mLiteFont);
+          paragraph = new Paragraph(Utils.getFormattedBalance(new BigDecimal(0)), mLiteFont);
         paragraph.setAlignment(Element.ALIGN_RIGHT);
         cell.addElement(paragraph);
         if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED)) {
@@ -308,9 +308,9 @@ public class BalanceSheetReportGenerator {
         cell = new PdfPCell();
         sectionTotalBalance = sectionTotalBalance.add(groupTotalBalance);
         if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
-          paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(groupTotalBalance), mBoldFont);
+          paragraph = new Paragraph(Utils.getFormattedBalance(groupTotalBalance), mBoldFont);
         else
-          paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(groupTotalBalance), mLiteFont);
+          paragraph = new Paragraph(Utils.getFormattedBalance(groupTotalBalance), mLiteFont);
         paragraph.setAlignment(Element.ALIGN_RIGHT);
         if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
           cell.setColspan(2);
@@ -345,7 +345,7 @@ public class BalanceSheetReportGenerator {
         pAssetTable.addCell(cell);
 
         cell = new PdfPCell();
-        paragraph = new Paragraph(UmsAccountUtils.getFormattedBalance(accountTotalBalance), mLiteFont);
+        paragraph = new Paragraph(Utils.getFormattedBalance(accountTotalBalance), mLiteFont);
         paragraph.setAlignment(Element.ALIGN_RIGHT);
         cell.addElement(paragraph);
         cell.setBorder(Rectangle.NO_BORDER);
@@ -384,7 +384,7 @@ public class BalanceSheetReportGenerator {
     Phrase innerPhrase = new Phrase();
     Paragraph paragraph = new Paragraph("Balance Sheet For ", mLiteFont);
     innerPhrase.add(paragraph);
-    paragraph = new Paragraph(mCompanyManager.getDefaultCompany().getName(), mBoldFont);
+    paragraph = new Paragraph(Utils.getCompany().getName(), mBoldFont);
     innerPhrase.add(paragraph);
     paragraph = new Paragraph(innerPhrase);
     paragraph.setAlignment(Element.ALIGN_CENTER);

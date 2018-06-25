@@ -41,7 +41,8 @@
                                     <select name="nDepartment"
                                             id="iDepartment"
                                             data-ng-model="service.department"
-                                            data-ng-options="department.longName for department in vm.departments track by department.id"
+                                            data-ng-options="depts.longName group by depts.category for depts in vm.departments | orderBy: 'id' track by depts.id"
+                                            data-ng-change="vm.filterDesignationSelection($index)"
                                             class="form-control" required>
                                         <option value="">Select Department</option>
                                     </select>
@@ -68,7 +69,7 @@
                                     <select name="nDesignation"
                                             id="iDesignation"
                                             data-ng-model="service.designation"
-                                            data-ng-options="designation.name for designation in vm.designations track by designation.id"
+                                            data-ng-options="designation.name for designation in vm.filteredDesignation[$index] track by designation.id"
                                             class="form-control" required>
                                         <option value="">Select Designation</option>
                                     </select>
@@ -226,7 +227,7 @@
                                     <tr ng-form="nServiceDetailForm[$index]">
                                         <td>{{$index + 1}}</td>
                                         <td>
-                                            <div data-ng-show="vm.enableServiceDetailEdit[$index]">
+                                            <div data-ng-show="vm.enableServiceDetailEdit[$parent.$index][$index]">
                                                 <div data-ng-show="service.employmentType.name=='Regular'">
                                                     <select
                                                             name="nRegularPeriod"
@@ -248,28 +249,29 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div data-ng-show="!vm.enableServiceDetailEdit[$index]">
+                                            <div data-ng-show="!vm.enableServiceDetailEdit[$parent.$index][$index]">
                                                 <label class="control-label">{{interval.interval.name}}</label>
                                             </div>
                                         </td>
                                         <td>
-                                            <div data-ng-show="vm.enableServiceDetailEdit[$index]"><input type="text"
-                                                                                                          name="nStartDate"
-                                                                                                          id="iStartDate"
-                                                                                                          data-ng-model="interval.startDate"
-                                                                                                          data-provide="datepicker"
-                                                                                                          data-date-format="dd/mm/yyyy"
-                                                                                                          placeholder="DD/MM/YYYY"
-                                                                                                          autocomplete="off"
-                                                                                                          class="datepicker-default form-control"
-                                                                                                          required>
+                                            <div data-ng-show="vm.enableServiceDetailEdit[$parent.$index][$index]">
+                                                <input type="text"
+                                                       name="nStartDate"
+                                                       id="iStartDate"
+                                                       data-ng-model="interval.startDate"
+                                                       data-provide="datepicker"
+                                                       data-date-format="dd/mm/yyyy"
+                                                       placeholder="DD/MM/YYYY"
+                                                       autocomplete="off"
+                                                       class="datepicker-default form-control"
+                                                       required>
                                             </div>
-                                            <div data-ng-show="!vm.enableServiceDetailEdit[$index]">
+                                            <div data-ng-show="!vm.enableServiceDetailEdit[$parent.$index][$index]">
                                                 <label class="control-label">{{interval.startDate}}</label>
                                             </div>
                                         </td>
                                         <td>
-                                            <div data-ng-show="vm.enableServiceDetailEdit[$index]">
+                                            <div data-ng-show="vm.enableServiceDetailEdit[$parent.$index][$index]">
                                                 <input type="text"
                                                        name="nEndDate"
                                                        id="iEndDate"
@@ -280,31 +282,35 @@
                                                        autocomplete="off"
                                                        class="datepicker-default form-control">
                                             </div>
-                                            <div data-ng-show="!vm.enableServiceDetailEdit[$index]">
+                                            <div data-ng-show="!vm.enableServiceDetailEdit[$parent.$index][$index]">
                                                 <label class="control-label">{{interval.endDate}}</label>
                                             </div>
                                         </td>
 
                                         <td>
-                                            <div data-ng-show="vm.enableServiceDetailEdit[$index]"><input type="text"
-                                                                                                          name="nComment"
-                                                                                                          id="iComment"
-                                                                                                          data-ng-model="interval.comment"
-                                                                                                          maxlength="100"
-                                                                                                          class="form-control">
+                                            <div data-ng-show="vm.enableServiceDetailEdit[$parent.$index][$index]">
+                                                <input type="text"
+                                                       name="nComment"
+                                                       id="iComment"
+                                                       data-ng-model="interval.comment"
+                                                       maxlength="100"
+                                                       class="form-control">
                                             </div>
-                                            <div data-ng-show="!vm.enableServiceDetailEdit[$index]">
+                                            <div data-ng-show="!vm.enableServiceDetailEdit[$parent.$index][$index]">
                                                 <label class="control-label">{{interval.comment}}</label>
                                             </div>
                                         </td>
                                         <td>
-                                            <div data-ng-show="!vm.enableServiceDetailEdit[$index]">
-                                                <a data-ng-click="vm.activeEditButton('serviceDetails', $index, true)"
-                                                   style="cursor: pointer;">
-                                                    <i style="color: blue;" class="fa fa-edit"></i>
-                                                </a>
+
+                                            <div data-ng-show="vm.enableEditButton">
+                                                <div data-ng-show="!vm.enableServiceDetailEdit[$parent.$index][$index]">
+                                                    <a data-ng-click="vm.activeEditButton('serviceDetails', $index, true, $parent.$index)"
+                                                       style="cursor: pointer;">
+                                                        <i style="color: blue;" class="fa fa-edit"></i>
+                                                    </a>
+                                                </div>
                                             </div>
-                                            <div data-ng-show="vm.enableServiceDetailEdit[$index]">
+                                            <div data-ng-show="vm.enableServiceDetailEdit[$parent.$index][$index]">
                                                 <button type="button" class="btn btn-primary btn-xs"
                                                         title="Remove Row {{$index + 1}}"
                                                         data-ng-click="vm.delete('serviceDetails', $index, $parent.$index)"
@@ -329,7 +335,7 @@
                         <div class="col-md-12">
                             <div data-ng-show="vm.enableEditButton">
                                 <button title="Add New Row" type="button" class="btn btn-success btn-xs"
-                                        data-ng-click="vm.addNew('serviceDetails', $index);"
+                                        data-ng-click="vm.addNew('serviceDetails', $index); vm.activeEditButton('serviceDetails', service.intervalDetails.length - 1, true, $parent.$index)"
                                         style="cursor: pointer">Add new
                                 </button>
                             </div>

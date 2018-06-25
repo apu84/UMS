@@ -41,6 +41,13 @@ public class PersistentDeptDesignationMapDao extends DeptDesignationMapDaoDecora
         new PersistentDeptDesignationMapDao.DeptDesignationRowMapper());
   }
 
+  @Override
+  public List<DeptDesignationMap> getDeptDesignationMap(final String pDepartment) {
+    String query = SELECT_ALL + " WHERE DEPARTMENT = ? ";
+    return mJdbcTemplate.query(query, new Object[] {pDepartment},
+        new PersistentDeptDesignationMapDao.DeptDesignationRowMapper());
+  }
+
   class DeptDesignationRowMapper implements RowMapper<DeptDesignationMap> {
 
     @Override

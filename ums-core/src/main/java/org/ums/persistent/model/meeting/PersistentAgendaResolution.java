@@ -18,8 +18,10 @@ public class PersistentAgendaResolution implements MutableAgendaResolution {
   private String mAgendaNo;
   private String mAgenda;
   private String mAgendaEditor;
+  private String mPlainAgenda;
   private String mResolution;
   private String mResolutionEditor;
+  private String mPlainResolution;
   private Long mScheduleId;
   private String mLastModified;
 
@@ -30,8 +32,10 @@ public class PersistentAgendaResolution implements MutableAgendaResolution {
     mAgendaNo = pPersistentAgendaResolution.getAgendaNo();
     mAgenda = pPersistentAgendaResolution.getAgenda();
     mAgendaEditor = pPersistentAgendaResolution.getAgendaEditor();
+    mPlainAgenda = pPersistentAgendaResolution.getPlainAgenda();
     mResolution = pPersistentAgendaResolution.getResolution();
     mResolutionEditor = pPersistentAgendaResolution.getResolutionEditor();
+    mPlainResolution = pPersistentAgendaResolution.getPlainResolution();
     mScheduleId = pPersistentAgendaResolution.getScheduleId();
     mLastModified = pPersistentAgendaResolution.getLastModified();
   }
@@ -52,6 +56,11 @@ public class PersistentAgendaResolution implements MutableAgendaResolution {
   }
 
   @Override
+  public void setPlainAgenda(String pPlainAgenda) {
+    mPlainAgenda = pPlainAgenda;
+  }
+
+  @Override
   public void setResolution(String pResolution) {
     mResolution = pResolution;
   }
@@ -59,6 +68,11 @@ public class PersistentAgendaResolution implements MutableAgendaResolution {
   @Override
   public void setResolutionEditor(String pResolutionEditor) {
     mResolutionEditor = pResolutionEditor;
+  }
+
+  @Override
+  public void setPlainResolution(String pPlainResolution) {
+    mPlainResolution = pPlainResolution;
   }
 
   @Override
@@ -107,6 +121,11 @@ public class PersistentAgendaResolution implements MutableAgendaResolution {
   }
 
   @Override
+  public String getPlainAgenda() {
+    return mPlainAgenda;
+  }
+
+  @Override
   public String getResolution() {
     return mResolution;
   }
@@ -114,6 +133,11 @@ public class PersistentAgendaResolution implements MutableAgendaResolution {
   @Override
   public String getResolutionEditor() {
     return mResolutionEditor;
+  }
+
+  @Override
+  public String getPlainResolution() {
+    return mPlainResolution;
   }
 
   @Override

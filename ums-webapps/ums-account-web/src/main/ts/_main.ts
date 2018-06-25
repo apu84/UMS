@@ -68,6 +68,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/Image.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/UITab.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/MainNavigation.ts'/>
+/// <reference path='./components/directives/CompanyName.ts'  />
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/BindHtml.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/DatePicker.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/AutoComplete.ts'/>
@@ -102,6 +103,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/refresh.token.service.ts'/>
 
 /// <reference path='data.ts'/>
+/// <reference path='components/AccountsMainController.ts'/>
 /// <reference path='components/definitions/group/group.controller.ts'/>
 /// <reference path='components/definitions/group/group.service.ts'/>
 /// <reference path='components/definitions/account/account.controller.ts'/>
@@ -117,6 +119,8 @@
 /// <reference path='components/definitions/period-close/period.close.controller.ts'/>
 /// <reference path='components/definitions/period-close/period.close.service.ts'/>
 /// <reference path='components/definitions/period-close/month.service.ts'/>
+/// <reference path='components/definitions/system.account.map/system.account.map.controller.ts'/>
+/// <reference path='components/definitions/system.account.map/system.account.map.service.ts'/>
 /// <reference path='components/definitions/voucher/voucher.service.ts'/>
 /// <reference path='components/definitions/voucher/voucher.number.control.controller.ts'/>
 /// <reference path='components/definitions/voucher/voucher.number.control.service.ts'/>
@@ -126,6 +130,8 @@
 /// <reference path='components/definitions/system.group.map/system.group.map.controller.ts'/>
 
 /// <reference path='components/common/receipt/receipt.service.ts'/>
+/// <reference path='components/common/user.company.map/user.company.map.service.ts'/>
+
 
 /// <reference path='components/balance-sheet/balance.sheet.report.controller.ts'/>
 /// <reference path='components/balance-sheet/balance.sheet.report.service.ts'/>
@@ -141,8 +147,6 @@
 /// <reference path='components/general-ledger/transactions/common/cheque.register.service.ts'/>
 /// <reference path='components/general-ledger/reports/general.ledger.report.controller.ts'/>
 /// <reference path='components/general-ledger/reports/general.ledger.report.service.ts'/>
-
-
 
 /// <reference path="components/directives/balance.type.directive.ts"/>
 

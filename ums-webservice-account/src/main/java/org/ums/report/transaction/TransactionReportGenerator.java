@@ -16,8 +16,8 @@ import org.ums.manager.accounts.AccountTransactionManager;
 import org.ums.manager.accounts.ChequeRegisterManager;
 import org.ums.report.itext.UmsCell;
 import org.ums.report.itext.UmsParagraph;
-import org.ums.util.UmsAccountUtils;
 import org.ums.util.UmsUtils;
+import org.ums.util.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -50,7 +50,7 @@ public class TransactionReportGenerator {
 
   public void createVoucherReport(String pVoucherNo, Date pVoucherDate, OutputStream pOutputStream) throws Exception {
 
-    Company company = mCompanyManager.getDefaultCompany();
+    Company company = Utils.getCompany();
     pVoucherNo = company.getId() + pVoucherNo;
     List<MutableAccountTransaction> accountTransactionList =
         mTransactionManager.getByVoucherNoAndDate(pVoucherNo, pVoucherDate);
@@ -125,7 +125,7 @@ public class TransactionReportGenerator {
     }
 
     UmsParagraph paragraph =
-        new UmsParagraph("In words : " + UmsAccountUtils.convertNumberToWords(totalDebit) + " Only", mLiteFont);
+        new UmsParagraph("In words : " + Utils.convertNumberToWords(totalDebit) + " Only", mLiteFont);
     pDocument.add(paragraph);
 
     paragraph = new UmsParagraph("Narration : " + pAccountTransactionList.get(0).getNarration(), mLiteFont);
@@ -182,38 +182,38 @@ public class TransactionReportGenerator {
     return table;
   }
 
-  private PdfPTable createVoucherReportBody(List<MutableAccountTransaction> pAccountTransactionList){
-      List<Long> transactionIdList = pAccountTransactionList
-              .stream()
-              .map(t-> t.getId())
-              .collect(Collectors.toList());
-      List<MutableChequeRegister> chequeRegisterList = mChequeRegisterManager.getByTransactionIdList(transactionIdList);
-      Map<Long, MutableChequeRegister> chequeRegisterMapWithTransactionid = chequeRegisterList
-              .stream()
-              .collect(Collectors.toMap(t->t.getAccountTransactionId(), t->t));
+  private PdfPTable createVoucherReportBody(List<MutableAccountTransaction> pAccountTransactionList) {
+    List<Long> transactionIdList = pAccountTransactionList
+        .stream()
+        .map(t -> t.getId())
+        .collect(Collectors.toList());
+    List<MutableChequeRegister> chequeRegisterList = mChequeRegisterManager.getByTransactionIdList(transactionIdList);
+    Map<Long, MutableChequeRegister> chequeRegisterMapWithTransactionid = chequeRegisterList
+        .stream()
+        .collect(Collectors.toMap(t -> t.getAccountTransactionId(), t -> t));
 
-      float[] tableWidth = new float[]{1,4,1,2,2,2};
-      PdfPTable voucherBodyTable = new PdfPTable(tableWidth);
-      voucherBodyTable.setWidthPercentage(100);
-      voucherBodyTable.setSpacingBefore(25f);
-      voucherBodyTable.setSpacingAfter(25f);
-      voucherBodyTable = createVoucherBodyHeader(voucherBodyTable);
+    float[] tableWidth = new float[]{1, 4, 1, 2, 2, 2};
+    PdfPTable voucherBodyTable = new PdfPTable(tableWidth);
+    voucherBodyTable.setWidthPercentage(100);
+    voucherBodyTable.setSpacingBefore(25f);
+    voucherBodyTable.setSpacingAfter(25f);
+    voucherBodyTable = createVoucherBodyHeader(voucherBodyTable);
 
-      BigDecimal totalDebit = new BigDecimal(0);
-      BigDecimal totalCredit = new BigDecimal(0);
+    BigDecimal totalDebit = new BigDecimal(0);
+    BigDecimal totalCredit = new BigDecimal(0);
 
-      for(MutableAccountTransaction accountTransaction: pAccountTransactionList){
-          voucherBodyTable = createVoucherBodyRow(accountTransaction, chequeRegisterMapWithTransactionid, voucherBodyTable);
+    for (MutableAccountTransaction accountTransaction : pAccountTransactionList) {
+      voucherBodyTable = createVoucherBodyRow(accountTransaction, chequeRegisterMapWithTransactionid, voucherBodyTable);
 
-          if(accountTransaction.getBalanceType().equals(BalanceType.Dr))
-              totalDebit = totalDebit.add(accountTransaction.getAmount());
-          else
-              totalCredit = totalCredit.add(accountTransaction.getAmount());
-      }
+      if (accountTransaction.getBalanceType().equals(BalanceType.Dr))
+        totalDebit = totalDebit.add(accountTransaction.getAmount());
+      else
+        totalCredit = totalCredit.add(accountTransaction.getAmount());
+    }
 
-      addTotalSection(voucherBodyTable, totalDebit, totalCredit);
+    addTotalSection(voucherBodyTable, totalDebit, totalCredit);
 
-      return voucherBodyTable;
+    return voucherBodyTable;
   }
 
   private void addTotalSection(PdfPTable voucherBodyTable, BigDecimal totalDebit, BigDecimal totalCredit) {
@@ -226,14 +226,14 @@ public class TransactionReportGenerator {
     cell.setColspan(4);
     voucherBodyTable.addCell(cell);
 
-    paragraph = new UmsParagraph(UmsAccountUtils.getFormattedBalance(totalDebit), mBoldFont);
+    paragraph = new UmsParagraph(Utils.getFormattedBalance(totalDebit), mBoldFont);
     paragraph.setAlignment(Element.ALIGN_RIGHT);
     cell = new UmsCell(paragraph);
     cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
     cell.setVerticalAlignment(Element.ALIGN_CENTER);
     voucherBodyTable.addCell(cell);
 
-    paragraph = new UmsParagraph(UmsAccountUtils.getFormattedBalance(totalCredit), mBoldFont);
+    paragraph = new UmsParagraph(Utils.getFormattedBalance(totalCredit), mBoldFont);
     paragraph.setAlignment(Element.ALIGN_RIGHT);
     cell = new UmsCell(paragraph);
     cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -275,7 +275,7 @@ public class TransactionReportGenerator {
     UmsCell cell = new UmsCell();
     UmsParagraph paragraph = new UmsParagraph();
 
-    String modifiedAmount = UmsAccountUtils.getFormattedBalance(pMutableAccountTransaction.getAmount());
+    String modifiedAmount = Utils.getFormattedBalance(pMutableAccountTransaction.getAmount());
     if(pMutableAccountTransaction.getBalanceType().equals(BalanceType.Dr)) {
       paragraph = new UmsParagraph(modifiedAmount, mLiteFont);
       paragraph.setAlignment(Element.ALIGN_RIGHT);

@@ -16,7 +16,15 @@
         '/cataloging': {title: 'Cataloging', 'breadcrumb': ['Cataloging']},
         '/search/:1': {title: "Catalog: Search", 'breadcrumb': ['Catalog']},
         '/:1/record/:2': {title: 'Catalog: Records', 'breadcrumb': ['Catalog']},
-        '/profile': {title: 'Profile', 'breadcrumb': ['Profile']}
+        '/employeeProfile': {title: 'Profile', 'breadcrumb': ['Profile']},
+        '/personal': {title: 'Profile', 'breadcrumb': ['Profile']},
+        '/academic': {title: 'Profile', 'breadcrumb': ['Profile']},
+        '/publication': {title: 'Profile', 'breadcrumb': ['Profile']},
+        '/award': {title: 'Profile', 'breadcrumb': ['Profile']},
+        '/training': {title: 'Profile', 'breadcrumb': ['Profile']},
+        '/experience': {title: 'Profile', 'breadcrumb': ['Profile']},
+        '/additional': {title: 'Profile', 'breadcrumb': ['Profile']},
+        '/service': {title: 'Profile', 'breadcrumb': ['Profile']}
     };
 
 

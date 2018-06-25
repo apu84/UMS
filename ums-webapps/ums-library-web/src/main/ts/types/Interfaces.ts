@@ -37,7 +37,6 @@ module ums {
         illustrations: string;
         accompanyingMaterials: string;
         dimensions: string;
-        paperQuality: string;
     }
 
     export interface IRecord {
@@ -48,8 +47,6 @@ module ums {
         materialTypeName: string;
         status: number;
         statusName: string;
-        bindingType: number;
-        bindingTypeName: string;
         title: string;
         subTitle: string;
         gmd: string;
@@ -107,6 +104,9 @@ module ums {
         acqType: number;
         acqTypeName: string;
         circulationStatus: number;
+        bindingType: number;
+        bindingTypeName: string;
+        paperQuality: string;
     }
 
     export interface ISupplier {

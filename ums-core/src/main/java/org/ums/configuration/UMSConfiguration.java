@@ -59,6 +59,9 @@ public class UMSConfiguration {
   @Value("${fcm.service-config}")
   private String mFirebaseConfigPath;
 
+  @Value("${host}")
+  private String mHost;
+
   public String getFirebaseConfigPath() {
     return mFirebaseConfigPath;
   }
@@ -133,5 +136,9 @@ public class UMSConfiguration {
 
   public String getAccountJdbcPassword() {
     return mAccountJdbcPassword;
+  }
+
+  public String getHost() {
+    return mHost;
   }
 }

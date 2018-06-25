@@ -17,7 +17,6 @@ import org.ums.employee.personal.PersonalInformation;
 import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.voucher.number.control.ResetBasis;
-import org.ums.enums.accounts.definitions.voucher.number.control.TransactionType;
 import org.ums.enums.accounts.definitions.voucher.number.control.VoucherType;
 import org.ums.exceptions.ValidationException;
 import org.ums.generator.IdGenerator;
@@ -33,8 +32,8 @@ import org.ums.service.PredefinedNarrationService;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 import org.ums.util.UmsUtils;
+import org.ums.util.Utils;
 
-import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -99,7 +98,8 @@ public class AccountTransactionCommonResourceHelper extends
 
   public TransactionResponse getVoucherNo(Long pVoucherId) throws Exception {
     Voucher voucher = mVoucherManager.get(pVoucherId);
-    FinancialAccountYear openFinancialYear = mFinancialAccountYearManager.getOpenedFinancialAccountYear();
+    FinancialAccountYear openFinancialYear =
+        mFinancialAccountYearManager.getOpenedFinancialAccountYear(Utils.getCompany());
     Date currentDay = new Date();
     TransactionResponse transactionResponse = new TransactionResponse();
     Company usersCompany = mCompanyManager.get("01");
@@ -248,7 +248,7 @@ public class AccountTransactionCommonResourceHelper extends
       mutableAccountTransactions = getContentManager().getAllPaginated(itemPerPage, pageNumber, voucher);
       totalNumber = getContentManager().getTotalNumber(voucher);
     } else {
-      Company company = mCompanyManager.getDefaultCompany();
+      Company company = Utils.getCompany();
       voucherNO = company.getId() + voucherNO;
       mutableAccountTransactions = getContentManager().getAllPaginated(itemPerPage, pageNumber, voucher, voucherNO);
       totalNumber = getContentManager().getTotalNumber(voucher, voucherNO);
@@ -267,7 +267,7 @@ public class AccountTransactionCommonResourceHelper extends
 
   public List<AccountTransaction> getByVoucherNoAndDate(String pVoucherNo, String pDate) throws Exception {
     Date dateObj = UmsUtils.convertToDate(pDate, "dd-MM-yyyy");
-    Company company = mCompanyManager.getDefaultCompany();
+    Company company = Utils.getCompany();
     List<MutableAccountTransaction> mutableAccountTransactions = getContentManager().getByVoucherNoAndDate(company.getId() + pVoucherNo, dateObj);
     List<MutableDebtorLedger> debtorLedgers = mDebtorLedgerManager.get(new ArrayList<>(mutableAccountTransactions));
     List<MutableCreditorLedger> creditorLedgers = mCreditorLedgerManager.get(new ArrayList<>(mutableAccountTransactions));
@@ -433,7 +433,8 @@ public class AccountTransactionCommonResourceHelper extends
   }
 
   private void updateAccountBalance(List<MutableAccountTransaction> pTransactions) {
-    FinancialAccountYear currentFinancialAccountYear = mFinancialAccountYearManager.getOpenedFinancialAccountYear();
+    FinancialAccountYear currentFinancialAccountYear =
+        mFinancialAccountYearManager.getOpenedFinancialAccountYear(Utils.getCompany());
     List<Account> accounts = new ArrayList<>();
     Map<Long, MutableAccountTransaction> accountMapWithTransaction = new HashMap<>();
     BigDecimal totalDebit = BigDecimal.valueOf(0.00);

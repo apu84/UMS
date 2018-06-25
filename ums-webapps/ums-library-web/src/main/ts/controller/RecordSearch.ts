@@ -20,12 +20,14 @@ module ums {
     }
 
     export class RecordSearch {
-        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'catalogingService', '$stateParams', 'supplierService', 'publisherService', 'contributorService'];
+        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'catalogingService', '$stateParams', 'supplierService', 'publisherService', 'contributorService',
+            'contributor', 'supplier', 'publisher'];
 
         constructor(private $scope: IRecordSearchScope,
                     private $q: ng.IQService, private notify: Notify, private libConstants: any,
                     private catalogingService: CatalogingService, private $stateParams: any,
-                    private supplierService: SupplierService, private publisherService: PublisherService, private contributorService: ContributorService) {
+                    private supplierService: SupplierService, private publisherService: PublisherService, private contributorService: ContributorService,
+                    private contributor: any, private supplier: any, private publisher: any) {
 
             $scope.recordList = Array<IRecord>();
             $scope.recordIdList = Array<String>();
@@ -78,9 +80,9 @@ module ums {
                 this.fetchRecords(1);
             }
 
-            this.getAllSuppliers();
-            this.getAllContributors();
-            this.getAllPublishers();
+            this.$scope.contributorList = contributor;
+            this.$scope.supplierList = supplier;
+            this.$scope.publisherList = publisher;
         }
 
         private prepareFilter() {
@@ -119,8 +121,10 @@ module ums {
 
 
         // common
-        private pageChanged(pageNumber) {
-            this.fetchRecords(pageNumber);
+        private pageChanged(pageNumber, randomValue) {
+            if(randomValue == 1) {
+                this.fetchRecords(pageNumber);
+            }
         }
 
         private fetchRecords(pageNumber: number): void {
@@ -201,8 +205,7 @@ module ums {
                         pagination: jsonObj.pagination,
                         illustrations: jsonObj.illustrations,
                         accompanyingMaterials: jsonObj.accompanyingMaterials,
-                        dimensions: jsonObj.dimensions,
-                        paperQuality: jsonObj.paperQuality
+                        dimensions: jsonObj.dimensions
                     };
                     this.$scope.recordList[index].physicalDescription = physicalDescription;
                 }

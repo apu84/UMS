@@ -1,5 +1,6 @@
 package org.ums.manager;
 
+import org.ums.domain.model.immutable.ApplicationTES;
 import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 
@@ -11,4 +12,7 @@ public interface CourseTeacherManager extends AssignedTeacherManager<CourseTeach
   List<CourseTeacher> getCourseTeacher(final int pSemesterId, final String pCourseId);
 
   List<CourseTeacher> getCourseTeacher(final int pSemesterId);
+
+  List<ApplicationTES> getAllSectionForSelectedCourse(final String pCourseId, String pTeacherId,
+      final Integer pSemesterId);
 }

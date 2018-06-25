@@ -10,7 +10,6 @@ import org.ums.domain.model.immutable.library.Record;
 import org.ums.domain.model.immutable.library.Subject;
 import org.ums.domain.model.mutable.MutableLastModifier;
 import org.ums.enums.common.Language;
-import org.ums.enums.library.BookBindingType;
 import org.ums.enums.library.JournalFrequency;
 import org.ums.enums.library.MaterialType;
 import org.ums.enums.library.RecordStatus;
@@ -89,8 +88,6 @@ public interface MutableRecord extends Record, Editable<Long>, MutableLastModifi
   void setMaterialType(MaterialType pMaterialType);
 
   void setRecordStatus(RecordStatus pRecordStatus);
-
-  void setBookBindingType(BookBindingType pBookBindingType);
 
   void setKeyWords(String pKeywords);
 

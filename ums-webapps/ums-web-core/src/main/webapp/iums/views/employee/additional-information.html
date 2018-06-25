@@ -1,174 +1,208 @@
-<form name="nAdditionalForm" ng-submit="vm.submit('additional')" novalidate>
-    <div class="panel panel-default">
-        <div class="panel-heading" style="font-size: 15px;">
-            <div class="row">
-                <div class="col-md-9">Work Place Information</div>
-                <div class="col-md-3">
-                    <div data-ng-show="vm.enableEditButton">
-                        <div data-ng-show="!vm.enableEdit['additional']">
-                            <div align="right">
-                                <a data-ng-click="vm.activeEditButton(true, 'additional')"
-                                   style="cursor: pointer;">
-                                    <i style="color: blue;" class="fa fa-edit"></i>
-                                </a>
+<div class="row">
+    <div class="col-md-4">
+        <form name="nAdditionalForm" ng-submit="vm.submit('additional')" novalidate>
+            <div class="panel panel-default">
+                <div class="panel-heading" style="font-size: 15px;">
+                    <div class="row">
+                        <div class="col-md-9">Work Place Information</div>
+                        <div class="col-md-3">
+                            <div data-ng-show="vm.enableEditButton">
+                                <div data-ng-show="!vm.enableEdit">
+                                    <div align="right">
+                                        <a data-ng-click="vm.activeEditButton(true, 'additional')"
+                                           style="cursor: pointer;">
+                                            <i style="color: blue;" class="fa fa-edit"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="iRoomNo" class="control-label">Room No.</label>
+                                <div data-ng-show="vm.enableEdit">
+                                    <input type="text"
+                                           name="nRoomNo"
+                                           id="iRoomNo"
+                                           data-ng-model="vm.additional.roomNo"
+                                           placeholder="Room No"
+                                           maxlength="15"
+                                           class="form-control">
+                                </div>
+
+                                <div data-ng-show="!vm.enableEdit">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{vm.additional.roomNo}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="iExtNo" class="control-label">Ext No.</label>
+                                <div data-ng-show="vm.enableEdit">
+                                    <input type="text"
+                                           name="nExtNo"
+                                           id="iExtNo"
+                                           data-ng-model="vm.additional.extNo"
+                                           placeholder="Ext No"
+                                           maxlength="6"
+                                           class="form-control">
+                                </div>
+                                <div data-ng-show="!vm.enableEdit">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{vm.additional.extNo}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="iAcademicInitial" class="control-label">Academic Initial</label>
+                                <div data-ng-show="vm.enableEdit">
+                                    <input type="text"
+                                           name="nAcademicInitial"
+                                           id="iAcademicInitial"
+                                           data-ng-model="vm.additional.academicInitial"
+                                           placeholder="Academic Initial"
+                                           maxlength="25"
+                                           class="form-control">
+                                </div>
+                                <div data-ng-show="!vm.enableEdit">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{vm.additional.academicInitial}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div data-ng-show="vm.enableEdit">
+                            <div class="col-md-4">
+                                <button type="button" class="btn btn-primary btn-xs"
+                                        data-ng-click="vm.activeEditButton(false, 'additional')"
+                                        style="cursor:pointer;">Cancel
+                                </button>
+                            </div>
+                            <div class="col-md-8">
+                                <div align="right">
+                                    <button type="submit" title="Submit" class="btn btn-success btn-xs"
+                                            data-ng-disabled="!vm.additional.roomNo && !vm.additional.extNo && !vm.additional.academicInitial"
+                                            style="cursor:pointer;">Save
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="iRoomNo" class="control-label">Room No.</label>
-                        <div data-ng-show="vm.enableEdit['additional']">
-                            <input type="text"
-                                   name="nRoomNo"
-                                   id="iRoomNo"
-                                   data-ng-model="vm.additional.roomNo"
-                                   placeholder="Room No"
-                                   maxlength="15"
-                                   class="form-control">
-                        </div>
-
-                        <div data-ng-show="!vm.enableEdit['additional']">
-                            <div class="underlineBox">
-                                <label class="control-label">{{vm.additional.roomNo}}</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="iExtNo" class="control-label">Ext No.</label>
-                        <div data-ng-show="vm.enableEdit['additional']">
-                            <input type="text"
-                                   name="nExtNo"
-                                   id="iExtNo"
-                                   data-ng-model="vm.additional.extNo"
-                                   placeholder="Ext No"
-                                   maxlength="6"
-                                   class="form-control">
-                        </div>
-                        <div data-ng-show="!vm.enableEdit['additional']">
-                            <div class="underlineBox">
-                                <label class="control-label">{{vm.additional.extNo}}</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="iAcademicInitial" class="control-label">Academic Initial</label>
-                        <div data-ng-show="vm.enableEdit['additional']">
-                            <input type="text"
-                                   name="nAcademicInitial"
-                                   id="iAcademicInitial"
-                                   data-ng-model="vm.additional.academicInitial"
-                                   placeholder="Academic Initial"
-                                   maxlength="25"
-                                   class="form-control">
-                        </div>
-                        <div data-ng-show="!vm.enableEdit['additional']">
-                            <div class="underlineBox">
-                                <label class="control-label">{{vm.additional.academicInitial}}</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div data-ng-show="vm.enableEdit['additional']">
-                    <div class="col-md-4">
-                        <button type="button" class="btn btn-primary btn-xs"
-                                data-ng-click="vm.activeEditButton(false, 'additional')"
-                                style="cursor:pointer;">Cancel
-                        </button>
-                    </div>
-                    <div class="col-md-8">
-                        <div align="right">
-                            <button type="submit" title="Submit" class="btn btn-success btn-xs"
-                                    data-ng-disabled="!vm.additional.roomNo && !vm.additional.extNo && !vm.additional.academicInitial"
-                                    style="cursor:pointer;">Save
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
-</form>
 
-<form name="nAoiForm" ng-submit="vm.submit('aoi')" novalidate>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col-md-9">Area Of Interest</div>
-                <div class="col-md-3">
-                    <div data-ng-show="vm.enableEditButton">
-                        <div data-ng-show="!vm.enableEdit['aoi']">
-                            <div align="right">
-                                <a data-ng-click="vm.activeEditButton(true, 'aoi')"
-                                   style="cursor: pointer;">
-                                    <i style="color: blue;" class="fa fa-edit"></i>
-                                </a>
+    <div class="col-md-8">
+
+        <form name="nAoiForm" ng-submit="vm.submit('aoi')" novalidate>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-9">Area Of Interest</div>
+                        <div class="col-md-3">
+                            <div data-ng-show="vm.enableEditButton">
+                                <div data-ng-show="!vm.enableAoiEdit">
+                                    <div align="right">
+                                        <a data-ng-click="vm.activeEditButton(true, 'aoi')"
+                                           style="cursor: pointer;">
+                                            <i style="color: blue;" class="fa fa-edit"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <div data-ng-repeat="aoi in vm.aoi track by $index">
+                        <div class="col-md-6">
+                            <div class="col-md-1">
+                                <label for="iAoi{{$index}}" class="control-label">{{$index + 1}}.</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div data-ng-show="vm.enableAoiEdit">
+                                    <input name="nAoi{{$index}}"
+                                           id="iAoi{{$index}}"
+                                           data-ng-model="aoi.areaOfInterest"
+                                           class="form-control" required>
+                                </div>
+                                <div data-ng-show="!vm.enableAoiEdit">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{aoi.areaOfInterest}}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1">
+                                <div data-ng-show="vm.enableAoiEdit">
+                                    <i class="fa fa-trash" aria-hidden="true"
+                                       title="Remove Row {{$index + 1}}"
+                                       data-ng-click="vm.delete($index)"
+                                       style="color: red; cursor:pointer;"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div data-ng-if="(($index + 1)%2)==0">
+                            <br /> <br />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <br/>
+                            <div data-ng-show="vm.enableEditButton">
+                                <div data-ng-show="vm.enableAoiEdit">
+                                    <button title="Add New Row" type="button" class="btn btn-success btn-xs"
+                                            data-ng-click="vm.addNew(); vm.activeEditButton(true, 'aoi')"
+                                            style="cursor: pointer">Add new
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <br/>
+                        <div data-ng-show="vm.enableAoiEdit">
+                            <div class="col-md-4">
+                                <button type="button" class="btn btn-primary btn-xs"
+                                        data-ng-click="vm.activeEditButton(false, 'aoi')"
+                                        style="cursor:pointer;">Cancel
+                                </button>
+                            </div>
+                            <div class="col-md-8">
+                                <div align="right">
+                                    <button type="submit" title="Submit" class="btn btn-success btn-xs"
+                                            data-ng-disabled="!vm.aoi"
+                                            style="cursor:pointer;">Save
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="panel-body">
-            <div data-ng-show="vm.enableEdit['aoi']">
-                <div class="row">
-                    <div class="col-md-12">
-                        <select name="nAoi"
-                                id="iAoi"
-                                data-ng-model="vm.aoi.areaOfInterest"
-                                data-ng-options="areaOfInterest.name for areaOfInterest in vm.arrayOfAreaOfInterest track by areaOfInterest.id"
-                                class="select2-multi-value form-control"
-                                multiple="multiple">
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div data-ng-show="!vm.enableEdit['aoi']">
-                <label data-ng-repeat="aoi in vm.aoi.areaOfInterest track by aoi.id"
-                       class="control-label">
-                    <ul>
-                        <li><u>{{aoi.name}}</u></li>
-                    </ul>&nbsp;&nbsp;</label>
-            </div>
-
-            <div class="row">
-                <div data-ng-show="vm.enableEdit['aoi']">
-                    <div class="col-md-4">
-                        <button type="button" class="btn btn-primary btn-xs"
-                                data-ng-click="vm.activeEditButton(false, 'aoi')"
-                                style="cursor:pointer;">Cancel
-                        </button>
-                    </div>
-                    <div class="col-md-8">
-                        <div align="right">
-                            <button type="submit" title="Submit" class="btn btn-success btn-xs"
-                                    data-ng-disabled="!vm.areaOfInterestInformation"
-                                    style="cursor:pointer;">Save
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
-</form>
-
-<script type="text/javascript">
-    $(".select2-multi-value").select2({
-        placeholder: "Your Interested Area",
-        allowClear: true
-    });
-</script>
+</div>

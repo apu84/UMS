@@ -6,9 +6,12 @@ import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.builder.UGRegistrationResultBuilder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableUGRegistrationResult;
+import org.ums.enums.CourseRegType;
+import org.ums.manager.ApplicationCCIManager;
 import org.ums.manager.StudentManager;
 import org.ums.manager.UGRegistrationResultManager;
 import org.ums.resource.ResourceHelper;
@@ -21,6 +24,7 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by My Pc on 7/13/2016.
@@ -32,6 +36,8 @@ public class UGRegistrationResultResourceHelper extends
 
   @Autowired
   UGRegistrationResultManager mManager;
+  @Autowired
+  ApplicationCCIManager applicationCCIManager;
 
   @Autowired
   StudentManager mStudentManager;
@@ -48,8 +54,52 @@ public class UGRegistrationResultResourceHelper extends
 
     String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(mStudentId);
-    List<UGRegistrationResult> results =
-        mManager.getCarryClearanceImprovementCoursesByStudent(student.getSemesterId(), student.getId());
+   // Integer x1=student.getCurrentYear();
+   // Integer x2=student.getCurrentAcademicSemester();
+
+    List<String> cciTakenCourses = applicationCCIManager.getByStudentIdAndSemester(student.getId(),student.getCurrentEnrolledSemester().getId())
+            .stream()
+            .map(a->a.getCourse().getId())
+            .collect(Collectors.toList());
+    //--------------------
+      List<UGRegistrationResult> results =
+              mManager.getCarryClearanceImprovementCoursesByStudent(student.getCurrentEnrolledSemester().getId(),
+                      student.getId()).
+                      stream().
+                      filter(p-> {
+                        if(p.getType().equals(CourseRegType.CARRY)){
+                          if(student.getDepartmentId()=="01"){
+                            if(student.getCurrentYear()==5 && student.getCurrentAcademicSemester()==2){
+                              return  cciTakenCourses.contains(p.getCourse().getId())== false ;
+                            }else{
+                              return  cciTakenCourses.contains(p.getCourse().getId())== false && p.getCourse().getSemester()
+                                      != student.getCurrentAcademicSemester();
+                            }
+                          }else if(student.getDepartmentId()=="06"){//for textile department 4.1 && 4.2 can give all carryover exam's
+                            if(student.getCurrentYear()==4 && (student.getCurrentAcademicSemester()==1 || student.getCurrentAcademicSemester()==2)){
+                              return  cciTakenCourses.contains(p.getCourse().getId())== false ;
+                            }else{
+                              return  cciTakenCourses.contains(p.getCourse().getId())== false && p.getCourse().getSemester()
+                                      != student.getCurrentAcademicSemester();
+                            }
+                          }else{
+                            if(student.getCurrentYear()==4 && student.getCurrentAcademicSemester()==2){
+
+                              return  cciTakenCourses.contains(p.getCourse().getId())==false;
+
+                            }else{
+
+                              return  cciTakenCourses.contains(p.getCourse().getId())==false && p.getCourse().getSemester()
+                                      != student.getCurrentAcademicSemester();
+                            }
+                          }
+                        }else{
+                          return  cciTakenCourses.contains(p.getCourse().getId())==false;
+                        }
+
+                      })
+              .collect(Collectors.toList());
+      //------------
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -63,6 +113,7 @@ public class UGRegistrationResultResourceHelper extends
     localCache.invalidate();
 
     return object.build();
+
   }
 
   public JsonObject getResultForApplicationCCIOfCarryClearanceAndImprovement(List<UGRegistrationResult> results,

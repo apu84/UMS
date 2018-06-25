@@ -5,6 +5,11 @@ module ums{
     Cr = "Cr"
   }
 
+  export enum AscendingOrDescendingType{
+      ASC=1,
+      DESC=2
+  }
+
   export interface IAccount {
     rowNumber: number;
     id: string;
@@ -44,12 +49,13 @@ module ums{
       this.accountServiceURL = "account/definition/account";
     }
 
-    public saveAccountPaginated(account: IAccount, accountBalance: IAccountBalance, itemPerPage: number, pageNumber: number): ng.IPromise<IAccount[]> {
+    public saveAccountPaginated(account: IAccount, accountBalance: IAccountBalance, itemPerPage: number, pageNumber: number, ascendingOrDescendingType: AscendingOrDescendingType): ng.IPromise<IAccount[]> {
       let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
       let accountBalanceResponse: IAccountBalanceResponse = <IAccountBalanceResponse>{};
       accountBalanceResponse.account = account;
+
       accountBalanceResponse.accountBalance = accountBalance;
-      this.httpClient.post(this.accountServiceURL + "/create/item-per-page/" + itemPerPage + "/page-number/" + pageNumber, accountBalanceResponse, HttpClient.MIME_TYPE_JSON)
+      this.httpClient.post(this.accountServiceURL + "/create/item-per-page/" + itemPerPage + "/page-number/" + pageNumber+"/type/"+ascendingOrDescendingType, accountBalanceResponse, HttpClient.MIME_TYPE_JSON)
           .success((response: IAccount[]) => defer.resolve(response))
           .error((error) => {
             console.error(error);
@@ -65,9 +71,10 @@ module ums{
       return defer.promise;
     }
 
-    public getAllPaginated(itemPerPage: number, pageNumber: number): ng.IPromise<IAccount[]> {
+    public getAllPaginated(itemPerPage: number, pageNumber: number, ascendingOrDescendingType: AscendingOrDescendingType): ng.IPromise<IAccount[]> {
       let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
-      this.httpClient.get(this.accountServiceURL + "/paginated/item-per-page/" + itemPerPage + "/page-number/" + pageNumber, HttpClient.MIME_TYPE_JSON,
+
+      this.httpClient.get(this.accountServiceURL + "/paginated/item-per-page/" + itemPerPage + "/page-number/" + pageNumber+"/type/"+ascendingOrDescendingType, HttpClient.MIME_TYPE_JSON,
           ((response: IAccount[]) => defer.resolve(response)));
       return defer.promise;
     }
@@ -124,6 +131,13 @@ module ums{
     public getCustomerAccounts(): ng.IPromise<IAccount[]> {
       let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
       this.httpClient.get(this.accountServiceURL + "/customer-accounts", HttpClient.MIME_TYPE_JSON,
+          ((response: IAccount[]) => defer.resolve(response)));
+      return defer.promise;
+    }
+
+    public getStudentAccounts(): ng.IPromise<IAccount[]> {
+      let defer: ng.IDeferred<IAccount[]> = this.$q.defer();
+      this.httpClient.get(this.accountServiceURL + "/student-accounts", HttpClient.MIME_TYPE_JSON,
           ((response: IAccount[]) => defer.resolve(response)));
       return defer.promise;
     }

@@ -72,13 +72,14 @@ module ums {
     }
 
     export class Cataloging {
-        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'supplierService', 'publisherService', 'contributorService', 'catalogingService', 'countryService', '$state', '$stateParams', 'HttpClient'];
+        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'supplierService', 'publisherService', 'contributorService', 'catalogingService',
+            'countryService', '$state', '$stateParams', 'HttpClient', 'contributor', 'publisher', 'supplier'];
 
         constructor(private $scope: ICatalogingScope,
                     private $q: ng.IQService, private notify: Notify, private libConstants: any,
                     private supplierService: SupplierService, private publisherService: PublisherService, private contributorService: ContributorService,
-                    private catalogingService: CatalogingService, private countryService: CountryService, private $state: any, private $stateParams: any, private httpClient: HttpClient) {
-
+                    private catalogingService: CatalogingService, private countryService: CountryService, private $state: any, private $stateParams: any, private httpClient: HttpClient,
+                    private contributor: any, private publisher: any, private supplier: any) {
 
             $scope.state = $state;
 
@@ -169,7 +170,6 @@ module ums {
             $scope.record.materialType = 1;
             this.setMaterialTypeName(1);
             $scope.record.status = 0;
-            $scope.record.bindingType = Utils.NUMBER_SELECT;
 
 
             $scope.item = <IItem> {};
@@ -177,6 +177,7 @@ module ums {
             $scope.supplier = <ISupplier> {};
             $scope.item.status = 2;
             $scope.item.currency = 1;
+            $scope.item.bindingType = Utils.NUMBER_SELECT;
             $scope.bulk = {
                 config: {}
             };
@@ -184,6 +185,7 @@ module ums {
             $scope.bulk.config.currency = 1;
             $scope.bulk.config.status = 2;
             $scope.bulk.config.acqType = Utils.NUMBER_SELECT;
+            $scope.bulk.config.bindingType = Utils.NUMBER_SELECT;
 
 
             $scope.record.contributorList = Array<IContributor>();
@@ -215,14 +217,14 @@ module ums {
             // this.initializeDatePickers();
             this.setRecordHeaderTitle();
 
-            this.getAllSuppliers();
-            this.getAllContributors();
-            this.getAllPublishers();
+            this.$scope.contributorList = contributor;
+            this.$scope.supplierList = supplier;
+            this.$scope.publisherList = publisher;
             this.loadCountries();
             this.getAllCurrencies();
-            $scope.showSupplierSelect2 = false;
-            $scope.showPublisherSelect2 = false;
-            $scope.showContributorSelect2 = false;
+            $scope.showSupplierSelect2 = true;
+            $scope.showPublisherSelect2 = true;
+            $scope.showContributorSelect2 = true;
 
         }
 
@@ -230,6 +232,8 @@ module ums {
             this.$scope.item = <IItem> {};
             this.$scope.item.currency = 1;
             this.$scope.item.acqType = Utils.NUMBER_SELECT;
+            this.$scope.item.status = 2;
+            this.$scope.item.bindingType = Utils.NUMBER_SELECT;
             this.$scope.data.itemReadOnlyMode = false;
             $('#supplier').select2('enable');
             $('#supplier').select2('data', null)
@@ -310,8 +314,7 @@ module ums {
                         pagination: jsonObj.pagination,
                         illustrations: jsonObj.illustrations,
                         accompanyingMaterials: jsonObj.accompanyingMaterials,
-                        dimensions: jsonObj.dimensions,
-                        paperQuality: jsonObj.paperQuality
+                        dimensions: jsonObj.dimensions
                     };
                     this.$scope.record.physicalDescription = physicalDescription;
                 }
@@ -853,7 +856,6 @@ module ums {
             this.$scope.record.mfnNo = undefined;
             this.$scope.record.language = 1;
             this.$scope.record.status = 0;
-            this.$scope.record.bindingType = 1;
             this.$scope.record.language = 1;
             let offSet = (new Date).getMilliseconds();
             this.$scope.record.title = "Material Title " + offSet;
@@ -908,7 +910,6 @@ module ums {
             this.$scope.record.physicalDescription.illustrations = "Illustrations " + offSet;
             this.$scope.record.physicalDescription.accompanyingMaterials = "Materials " + offSet;
             this.$scope.record.physicalDescription.dimensions = "Dimensions " + offSet;
-            this.$scope.record.physicalDescription.paperQuality = "Paper Quality " + offSet;
 
             this.$scope.record.noteList[0].note = "Note 0";
             this.$scope.record.subjectList[0].subject = "Subject 0";

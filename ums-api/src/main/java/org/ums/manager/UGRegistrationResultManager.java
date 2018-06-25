@@ -40,4 +40,8 @@ public interface UGRegistrationResultManager extends
 
   Map<String, TabulationCourseModel> getResultForTabulation(Integer pProgramId, Integer pSemesterId, Integer pYear,
       Integer pSemester);
+
+  Integer getTotalRegisteredStudentForCourse(final String pCourseId, final List<String> pSection,
+      final Integer pSemesterId);
+
 }

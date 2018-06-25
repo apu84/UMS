@@ -12,6 +12,7 @@ import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
+import org.ums.enums.common.AscendingOrDescendingType;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.accounts.PersistentAccount;
 import org.ums.util.UmsUtils;
@@ -39,12 +40,13 @@ public class PersistentAccountDao extends AccountDaoDecorator {
   }
 
   @Override
-  public List<Account> getExcludingGroups(List<String> groupCodeList) {
+  public List<Account> getExcludingGroups(List<String> groupCodeList, Company company) {
     if(groupCodeList.size() == 0)
       return null;
-    String query = "select * from mst_account where acc_group_code not in (:groupCodeList)";
+    String query = "select * from mst_account where acc_group_code not in (:groupCodeList) and comp_code=:compCode";
     Map parameterMap = new HashMap();
     parameterMap.put("groupCodeList", groupCodeList);
+    parameterMap.put("compCode", company.getId());
     return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentAccountRowMapper());
   }
 
@@ -57,12 +59,13 @@ public class PersistentAccountDao extends AccountDaoDecorator {
   }
 
   @Override
-  public List<Account> getIncludingGroups(List<String> groupCodeList) {
+  public List<Account> getIncludingGroups(List<String> groupCodeList, Company company) {
     if(groupCodeList.size() == 0)
       return null;
-    String query = "select * from mst_account where acc_group_code  in (:groupCodeList)";
+    String query = "select * from mst_account where acc_group_code  in (:groupCodeList) and comp_code=:compCode";
     Map parameterMap = new HashMap();
     parameterMap.put("groupCodeList", groupCodeList);
+    parameterMap.put("compCode", company.getId());
     return mNamedParameterJdbcTemplate.query(query, parameterMap, new PersistentAccountRowMapper());
   }
 
@@ -88,18 +91,25 @@ public class PersistentAccountDao extends AccountDaoDecorator {
   }
 
   @Override
-  public List<Account> getAllPaginated(int itemPerPage, int pageNumber) {
+  public List<Account> getAllPaginated(int itemPerPage, int pageNumber,
+      AscendingOrDescendingType pAscendingOrDescendingType, Company company) {
     int startIndex = (itemPerPage * (pageNumber - 1)) + 1;
     int endIndex = startIndex + itemPerPage - 1;
+    String ascendingOrDecendingType =
+        pAscendingOrDescendingType.equals(AscendingOrDescendingType.ASCENDING) ? "ASC" : "DESC";
     String query =
-        "select * from (select ROWNUM row_num,mst_account.* from mst_account)tmp where row_num>=? and row_num<=? ";
-    return mJdbcTemplate.query(query, new Object[] {startIndex, endIndex}, new PersistentAccountRowMapper());
+        "select * from (select ROWNUM row_num, tmp_account.* from (select mst_account.* from mst_account order by MODIFIED_DATE "
+            + ascendingOrDecendingType + ") tmp_account)tmp where row_num>=? and row_num<=? and comp_code=?";
+    return mJdbcTemplate.query(query, new Object[] {startIndex, endIndex, company.getId()},
+        new PersistentAccountRowMapper());
   }
 
   @Override
-  public Integer getSize() {
-    String query = "select count(*) from mst_account";
-    return mJdbcTemplate.queryForObject(query, Integer.class);
+  public Integer getSize(Company pCompany) {
+    String query = "select count(*) from mst_account where comp_code=:compCode";
+    Map parameterMap = new HashMap();
+    parameterMap.put("compCode", pCompany.getId());
+    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, Integer.class);
   }
 
   @Override

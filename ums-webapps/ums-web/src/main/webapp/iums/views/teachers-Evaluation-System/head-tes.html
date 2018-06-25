@@ -1,0 +1,148 @@
+<style>
+    .animate-if.ng-leave {
+        transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.2s;
+    }
+
+    .animate-if.ng-enter {
+        transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    }
+
+    .animate-if.ng-enter,
+    .animate-if.ng-leave.ng-leave-active {
+        opacity: 0;
+    }
+
+    .animate-if.ng-leave,
+    .animate-if.ng-enter.ng-enter-active {
+        opacity: 1;
+    }
+
+    .modal-header,h4 {
+        color:white;
+        text-align: center;
+        font-size: 20px;
+        padding:5px 10px;
+    }
+    .score {
+        color: deeppink;
+    }
+    .selected {
+        background-color:#FAFAFA;
+        color:deeppink;
+        font-weight:bold;
+    }
+
+</style>
+
+<div class="row" data-ng-init="vm.getAllFacultyMembers()" data-ng-if="vm.evaluationResultStatus==true" style="padding: 10px">
+    <div class="panel" >
+        <div >
+
+                    <div style="padding-top:20px;padding-bottom: 40px"  data-ng-include="'views/teachers-Evaluation-System/head-tes-selection.html'">
+
+                    </div>
+                    <div class="panel-body" >
+                        <pagination total-items="vm.getTotalRecords" ng-model="vm.currentPageNumber" max-size="7"
+                                    class="pagination-sm" boundary-links="true" rotate="false"
+                                    class="pagination-page"
+                                    items-per-page="vm.itemPerPage"></pagination>
+
+                        <table class="table table-striped">
+                            <thead>
+                            <th style="background-color: #FAFAFA;width: 20px">SL</th>
+                            <th style="background-color: #FAFAFA; ">Faculty Name</th>
+                            <th style="background-color: #FAFAFA; ">Department</th>
+                            <th style="background-color: #FAFAFA; ">Designation</th>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="app in (filterd =  vm.facultyList | orderBy :'designation' | filter: vm.facultyName | limitTo:vm.itemPerPage:vm.itemPerPage*(vm.currentPageNumber - 1)) "
+                                style="cursor: pointer" data-ng-click="vm.getAssignedCourses(app.teacherId,app.firstName,app.lastName,app.deptId,app.designation)"
+                                data-toggle="modal"
+                                data-target="#myModalNew">
+                                <td>{{(vm.currentPageNumber - 1) * vm.itemPerPage + $index + 1}}</td>
+                                <td>{{app.firstName+" "+app.lastName}}</td>
+                                <td>{{app.deptShortName}}</td>
+                                <td>{{app.designation}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+        </div>
+    </div>
+</div>
+
+
+<div  data-ng-if="vm.evaluationResultStatus==false">
+    <div style="padding: 0px"
+         data-ng-include="'views/teachers-Evaluation-System/search-box.html'">
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="myModalNew" role="dialog" >
+    <!--   <div class="modal-backdrop"> -->
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" >
+                <button type="button"  class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Assign Course</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body" >
+                    <table class="table table-borderless table-condensed table-hover">
+                        <tr>
+                            <td width="80%"><p>Teacher Name:  <strong style="font-size: 14px">{{vm.fName}}</strong></p>
+                                Designation:  <strong style="font-size: 14px">{{vm.designationStatus}}</strong></td>
+                            <td>
+                                Semester:    <strong>{{vm.semesterName}}</strong><br>
+                                Start date: <strong>{{vm.startDate}}</strong><br>
+                                End date:   <strong>{{vm.endDate}}</strong><br>
+                                Deadline:   <span data-ng-if="vm.deadLine==true" class="label label-success badge-success">Available</span>
+                                <span data-ng-if="vm.deadLine==false" class="label label-danger badge-danger">Not Allowed</span>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class="table table-bordered">
+                        <thead>
+                        <th style="background-color: #FAFAFA;width: 10px; ">SL</th>
+                        <th style="background-color: #FAFAFA; ">Course No</th>
+                        <th style="background-color: #FAFAFA; ">Course Title</th>
+                        <th style="background-color: #FAFAFA; ">Section</th>
+                        <th style="background-color: #FAFAFA; ">ProgramName</th>
+                        <th style="background-color: #FAFAFA; ">Status</th>
+                        <th style="background-color: #FAFAFA;" data-ng-show="vm.deadLine">Evaluate</th>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="app in vm.assignedCourses | orderBy: 'section' ">
+                            <td>{{$index+1}}</td>
+                            <td>{{app.courseNo }}</td>
+                            <td> {{app.courseTitle}}</td>
+                            <td>{{app.section}}</td>
+                            <td><span  class="label label-warning badge-warning">{{app.programShortName}}</span></td>
+                            <td><span ng-if="app.status==vm.statusValue" class="label label-success badge-success">Set For Evaluation</span>
+                                <span ng-if="app.status!=vm.statusValue" class="label label-danger badge-danger">Not Assigned</span>
+                            </td>
+                            <td data-ng-show="vm.deadLine"><input data-ng-show="(app.status==0 && vm.deadLine==true) ? true:false"
+                                       type="checkbox"
+                                       data-ng-model="app.apply"
+                                       data-ng-click="vm.checkMoreThanOneSelectionSubmit(app)"></td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success"  data-ng-disabled="vm.submit_Button_Disable" data-ng-click="vm.submit()" data-dismiss="modal" >submit</button>
+                <button type="button" class="btn btn-info"   data-ng-click="vm.close()"   data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>

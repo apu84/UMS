@@ -3,7 +3,7 @@ module ums {
 
 
   import IPaymentVoucher = ums.IPaymentVoucher;
-    import ISystemGroupMap = ums.ISystemGroupMap;
+  import ISystemGroupMap = ums.ISystemGroupMap;
 
   export class PaymentVoucherController {
     public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'PaymentVoucherService', 'VoucherService', 'CurrencyService', 'CurrencyConversionService', 'AccountBalanceService', 'ChequeRegisterService', '$q', 'VoucherNumberControlService', 'SystemGroupMapService'];
@@ -39,6 +39,11 @@ module ums {
     private dateFormat: string;
     private searchVoucherNo: string;
     private maximumTransaferableAmount: number;
+    private customerAccounts: IAccount[];
+    private vendorAccounts: IAccount[];
+    private customerAccountMapWithId: any;
+    private vendorAccountMapWithId: any;
+    private studentAccountMapWithId: any;
 
 
     constructor($scope: ng.IScope,
@@ -286,6 +291,34 @@ module ums {
         this.assignChequeNumberToVouchers(vouchers);
       });
       this.voucherNo = vouchers[0].voucherNo;
+    }
+
+
+    private getVendorAndCustomerAccounts() {
+      this.accountService.getVendorAccounts().then((accountListForAddModal: IAccount[]) => {
+        this.vendorAccounts = [];
+        this.vendorAccountMapWithId = {};
+        this.vendorAccounts = accountListForAddModal;
+        this.vendorAccounts.forEach((v: IAccount) => this.vendorAccountMapWithId[v.id] = v);
+      });
+      this.customerAccounts = [];
+      this.customerAccountMapWithId = {};
+
+      this.accountService.getCustomerAccounts().then((accountListForAddModal: IAccount[]) => {
+        accountListForAddModal.forEach((a: IAccount) => {
+          this.customerAccounts.push(a);
+          this.customerAccountMapWithId[a.id] = a;
+        });
+      });
+
+      this.accountService.getStudentAccounts().then((accountListForAddModal: IAccount[]) => {
+        this.studentAccountMapWithId = {};
+        accountListForAddModal.forEach((a: IAccount) => {
+          this.customerAccounts.push(a);
+          this.customerAccountMapWithId[a.id] = a;
+          this.studentAccountMapWithId[a.id] = a;
+        });
+      });
     }
 
 

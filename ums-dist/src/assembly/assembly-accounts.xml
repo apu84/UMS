@@ -79,6 +79,7 @@
                 <include>org.apache.commons:commons-text</include>
                 <include>org.jgrapht:jgrapht-core</include>
                 <include>com.google.firebase:firebase-admin</include>
+                <include>org.jsoup:jsoup</include>
             </includes>
             <outputDirectory>lib</outputDirectory>
             <useTransitiveDependencies>true</useTransitiveDependencies>

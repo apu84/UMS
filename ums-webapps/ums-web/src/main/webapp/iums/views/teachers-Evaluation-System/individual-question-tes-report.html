@@ -1,0 +1,152 @@
+<style>
+    .selected {
+        background-color:#FAFAFA;
+        color:deeppink;
+        font-weight:bold;
+    }
+</style>
+<div class="row">
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
+    </div>
+    <div class="panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select Parameters </h3>
+        </div>
+        <div class="panel-body pan">
+            <form class="form-horizontal">
+                <div class="form-body pal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Department</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="leaveType"
+                                    data-ng-disabled="vm.searchResult==true"
+                                    id="leaveTypejj"
+                                    data-ng-options="dept.name for dept in vm.deptList track by dept.id"
+                                    data-ng-model="vm.deptName"
+                                    data-ng-change="vm.deptChanged(vm.deptName)"
+                            ></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Semester</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="leaveType"
+                                    id="leaveType"
+                                    data-ng-disabled="vm.searchResult==true"
+                                    data-ng-options="semester.name for semester in vm.semesters track by semester.id"
+                                    data-ng-model="vm.semester"
+                                    data-ng-change="vm.semesterChanged(vm.semester)"
+                            ></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Year</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="leaveType1"
+                                    id="leaveType1"
+                                    data-ng-disabled="vm.searchResult==true"
+                                    data-ng-options=" L.name for L in vm.yearList track by L.id"
+                                    data-ng-model="vm.yearName"
+                                    data-ng-change="vm.yearChanged(vm.yearName)"
+                            ></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Semester</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="leaveType1"
+                                    id="leaveType98"
+                                    data-ng-disabled="vm.searchResult==true"
+                                    data-ng-options=" L.name for L in vm.academicSemesterList track by L.id"
+                                    data-ng-model="vm.academicSemesterName"
+                                    data-ng-change="vm.academicSemester(vm.academicSemesterName)"
+                            ></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" class="btn btn-info" data-ng-if="vm.searchResult==true" data-ng-click="vm.clear()">
+                        Questions
+                    </button>
+
+                    <button type="button" class="btn btn-success" data-ng-if="vm.searchResult==false" data-ng-click="vm.search()">
+                        Search
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="rightDiv">
+        <div class="panel">
+            <div class="panel-heading" data-ng-if="vm.searchResult==false" >Select A Question And Search</b><span
+                    class="subtitle"></span></div>
+            <div class="panel-heading" data-ng-if="vm.searchResult==true">Evaluation Result</b><span
+                    class="subtitle"></span></div>
+            <div class="panel-body shadowPanel" style="min-height: 253px;">
+                <div class="row" style="padding: 10px;" data-ng-if="vm.searchResult==false">
+                    <table class="table table-bordered">
+                        <thead>
+                        <th style="background-color: #FAFAFA;width: 10px ">SL</th>
+                        <th style="background-color: #FAFAFA; ">Question Details</th>
+                        <th style="background-color: #FAFAFA; ">Observation Type</th>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="app in vm.questionListAndReview | orderBy:'observationType'"
+                            ng-class="{'selected':$index == vm.selectedRow}"
+                            data-ng-click="vm.getInfo(app.questionId,app.questionDetails,$index)">
+                            <td>{{$index+1}}</td>
+                            <td>{{app.questionDetails}}</td>
+                            <td> <span ng-if="app.observationType==1" class="label label-success badge-success" >Class Room Observation</span>
+                                <span ng-if="app.observationType==2" class="label label-info badge-info">Non Class Room Observation</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row" style="padding: 10px;" data-ng-if="vm.searchResult==true">
+                    <p>Semester:<strong>{{" "+vm.semesterName}}</strong></p>
+                    <p>Year-Semester:<strong>{{" "+vm.year+" "+vm.acaSemester}}</strong></p>
+                    <p>Department:<strong>{{" "+vm.departmentName}}</strong></p>
+                    <p>Question Details:<strong>{{" "+vm.questionDetails}}</strong></p>
+                    <div align="right">
+                        <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.getReport()">
+                            <span class="glyphicon glyphicon-download"></span> Download pdf
+                        </button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                        <th style="background-color: #FAFAFA;width: 10px ">SL</th>
+                        <th style="background-color: #FAFAFA; ">Teacher Name</th>
+                        <th style="background-color: #FAFAFA; ">Course No</th>
+                        <th style="background-color: #FAFAFA; ">Course Title</th>
+                        <th style="background-color: #FAFAFA; ">Program Name</th>
+                        <th style="background-color: #FAFAFA; ">Score</th>
+                        <th style="background-color: #FAFAFA; ">Reviewer</th>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="app in vm.searchReport | orderBy:'-score'">
+                            <td>{{$index+1}}</td>
+                            <td>{{app.teacherName}}</td>
+                            <td>{{app.courseNo}}</td>
+                            <td>{{app.courseTitle}}</td>
+                            <td>{{app.programName}}</td>
+                            <td>{{app.score}}</td>
+                            <td>{{app.percentage}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

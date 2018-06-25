@@ -130,8 +130,7 @@ module ums{
 
     export interface IAreaOfInterestInformationModel {
         employeeId: string;
-        areaOfInterest: ICommon;
-        areaOfInterestId: number;
+        areaOfInterest: string;
     }
 
     export interface IServiceInformationModel{

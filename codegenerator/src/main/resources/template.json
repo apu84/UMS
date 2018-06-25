@@ -1,6 +1,6 @@
 {
   "model": {
-    "name": "RoutineConfig",
+    "name": "SystemAccountMap",
     "package": "org.ums.domain.model.immutable",
     "fields": [
       {
@@ -10,54 +10,32 @@
         }
       },
       {
-        "Program": {
+        "groupType": "AccountType"
+      },
+      {
+        "Account": {
           "type": "Ref",
           "reference": {
-            "name": "Program",
-            "package": "org.ums.domain.model.immutable",
+            "name": "Account",
+            "package": "org.ums.domain.model.immutable.accounts",
             "id": {
-              "type": "Integer"
+              "type": "Long"
             },
             "manager": {
-              "name": "ProgramManager",
-              "package": "org.ums.manager"
+              "name": "AccountManager",
+              "package": "org.ums.manager.accounts"
             }
           }
         }
       },
       {
-        "Semester": {
-          "type": "Ref",
-          "reference": {
-            "name": "Semester",
-            "package": "org.ums.domain.model.immutable",
-            "id": {
-              "type": "Integer"
-            },
-            "manager": {
-              "name": "SemesterManager",
-              "package": "org.ums.manager"
-            }
-          }
-        }
+        "modifiedBy": "String"
       },
       {
-        "day_from": "Integer"
+        "modifierName": "String"
       },
       {
-        "day_to": "Integer"
-      },
-      {
-        "start_time": "LocalTime"
-      },
-      {
-        "end_time":"LocalTime"
-      },
-      {
-        "duration":"Integer"
-      },
-      {
-        "last_modified":"String"
+        "modifiedDate": "Date"
       }
     ]
   }

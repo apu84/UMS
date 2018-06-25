@@ -9,8 +9,6 @@ import org.ums.enums.library.MaterialType;
 import org.ums.solr.repository.document.SearchDocument;
 import org.ums.util.UmsUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,6 +29,15 @@ public class RecordDocument implements SearchDocument<String> {
 
   @Field("cTitle_s")
   private String cTitle;
+
+  @Field("whitespaceRemovedTitle_s")
+  private String whitespaceRemovedTitle;
+
+  @Field("onlyAlphaNumericTitle_s")
+  private String onlyAlphaNumericTitle;
+
+  @Field("onlyAlphaTitle_s")
+  private String onlyAlphaTitle;
 
   @Field("type_s")
   private String type = DOCUMENT_TYPE;
@@ -68,6 +75,9 @@ public class RecordDocument implements SearchDocument<String> {
   @Field("callNo_txt")
   private List<String> callNo;
 
+  @Field("cCallNo_s")
+  private String cCallNo;
+
   @Field("publisher_txt")
   private List<String> publisher;
 
@@ -86,8 +96,9 @@ public class RecordDocument implements SearchDocument<String> {
   @Field("subjects_txt")
   private String[] subjects;
 
-  @Field(child = true)
-  private List<ContributorDocument> contributorDocument;
+  /*
+   * @Field(child = true) private List<ContributorDocument> contributorDocument;
+   */
 
   public RecordDocument() {}
 
@@ -95,6 +106,9 @@ public class RecordDocument implements SearchDocument<String> {
     id = pRecord.getMfn().toString();
     title = Lists.newArrayList(pRecord.getTitle());
     cTitle = pRecord.getTitle();
+    whitespaceRemovedTitle = pRecord.getTitle().replaceAll(" ", "");
+    onlyAlphaNumericTitle = pRecord.getTitle().replaceAll("[^a-zA-Z0-9]+", "");
+    onlyAlphaTitle = pRecord.getTitle().replaceAll("[^a-zA-Z]+", "");
     materialType = Lists.newArrayList(MaterialType.get(pRecord.getMaterialType().getId()).getLabel());
     seriesTitle = Lists.newArrayList(pRecord.getSeriesTitle());
     volumeTitle = Lists.newArrayList(pRecord.getVolumeTitle());
@@ -106,23 +120,22 @@ public class RecordDocument implements SearchDocument<String> {
     corpAuthorBody = Lists.newArrayList(pRecord.getCorpSubBody());
     corpCityCountry = Lists.newArrayList(pRecord.getCorpCityCountry());
     callNo = Lists.newArrayList(pRecord.getCallNo());
+    cCallNo = pRecord.getCallNo();
     // publisher = mPublisherManager.get(pRecord.getPublisherId()).getName();
     status = Lists.newArrayList(pRecord.getRecordStatus().getLabel());
-    bindingType =
-        Lists.newArrayList(pRecord.getBookBindingType() == null ? null : pRecord.getBookBindingType().getLabel());
-
     keywords = Lists.newArrayList(pRecord.getKeyWords());
 
     subjects = UmsUtils.convertJsonStringToStringArray(pRecord.getSubjectJsonString(), "subject");
 
-    List<ContributorDocument> aa = new ArrayList<>();
-    aa.add(new ContributorDocument("Author", "kawsur"));
-    aa.add(new ContributorDocument("Co-Author", "morshed"));
-    // String contributorString = "[{\"viewOrder\":1,\"id\":\"2\",\"role\":\"2\"}]";
-    contributorDocument = aa;
-
-    // contributors = Lists.newArrayList(pRecord.getContributorJsonString());
-    contributors = Arrays.asList(new String[] {"kawsur", "morshed"});// Lists.newArrayList({""});
+    /*
+     * aa.add(new ContributorDocument("Co-Author", "morshed")); aa.add(new
+     * ContributorDocument("Author", "kawsur")); List<ContributorDocument> aa = new ArrayList<>();
+     * // String contributorString = "[{\"viewOrder\":1,\"id\":\"2\",\"role\":\"2\"}]";
+     * contributorDocument = aa;
+     * 
+     * // contributors = Lists.newArrayList(pRecord.getContributorJsonString()); contributors =
+     * Arrays.asList(new String[] {"kawsur", "morshed"});// Lists.newArrayList({""});
+     */
   }
 
   @Override

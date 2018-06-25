@@ -1,12 +1,14 @@
 package org.ums.cache.accounts;
 
 import org.ums.cache.ContentCache;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.FinancialAccountYear;
 import org.ums.domain.model.mutable.accounts.MutableFinancialAccountYear;
 import org.ums.manager.CacheManager;
 import org.ums.manager.accounts.FinancialAccountYearManager;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Monjur-E-Morshed on 08-Jan-18.
@@ -27,8 +29,13 @@ public class FinancialAccountYearCache extends
   }
 
   @Override
-  public MutableFinancialAccountYear getOpenedFinancialAccountYear() {
-    return getManager().getOpenedFinancialAccountYear();
+  public MutableFinancialAccountYear getOpenedFinancialAccountYear(Company pCompany) {
+    return getManager().getOpenedFinancialAccountYear(pCompany);
+  }
+
+  @Override
+  public List<FinancialAccountYear> getAll(Company pCompany) {
+    return getManager().getAll(pCompany);
   }
 
   @Override

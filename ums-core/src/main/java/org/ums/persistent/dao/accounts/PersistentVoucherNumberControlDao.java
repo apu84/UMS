@@ -45,10 +45,10 @@ public class PersistentVoucherNumberControlDao extends VoucherNumberControlDaoDe
   }
 
   @Override
-  public List<VoucherNumberControl> getByCurrentFinancialYear() {
+  public List<VoucherNumberControl> getByCurrentFinancialYear(Company pCompany) {
     String query =
-        "select * from MST_VOUCHER_NUMBER_CONTROL where FIN_ACCOUNT_YEAR_ID in (select id from FIN_ACCOUNT_YEAR where YEAR_CLOSING_FLAG='O')";
-    return mNamedParameterJdbcTemplate.query(query, new PersistentVoucherNumberControlRowMapper());
+        "select * from MST_VOUCHER_NUMBER_CONTROL where FIN_ACCOUNT_YEAR_ID in (select id from FIN_ACCOUNT_YEAR where YEAR_CLOSING_FLAG='O') and comp_code=? order by voucher_id";
+    return mJdbcTemplate.query(query, new Object[] {pCompany.getId()}, new PersistentVoucherNumberControlRowMapper());
   }
 
   @Override
@@ -141,8 +141,8 @@ public class PersistentVoucherNumberControlDao extends VoucherNumberControlDaoDe
 
   @Override
   public List<Long> create(List<MutableVoucherNumberControl> pMutableList) {
-    String query = "insert into MST_VOUCHER_NUMBER_CONTROL(ID, FIN_ACCOUNT_YEAR_ID,VOUCHER_ID, RESET_BASIS, START_VOUCHER_NO, VOUCHER_LIMIT, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY)" +
-        " values(:id, :finAccountYearId, :voucherId, :resetBasis, :startVoucherNo, :voucherLimit, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy)";
+    String query = "insert into MST_VOUCHER_NUMBER_CONTROL(ID, FIN_ACCOUNT_YEAR_ID,VOUCHER_ID, RESET_BASIS, START_VOUCHER_NO, VOUCHER_LIMIT, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY, COMP_CODE)" +
+        " values(:id, :finAccountYearId, :voucherId, :resetBasis, :startVoucherNo, :voucherLimit, :statFlag, :statUpFlag, :modifiedDate, :modifiedBy, :compCode)";
     pMutableList.forEach(v -> v.setId(mIdGenerator.getNumericId()));
     Map<String, Object>[] maps = new HashMap[pMutableList.size()];
 
@@ -164,6 +164,7 @@ public class PersistentVoucherNumberControlDao extends VoucherNumberControlDaoDe
       map.put("statUpFlag", pMutableList.get(i).getStatUpFlag());
       map.put("modifiedDate", pMutableList.get(i).getModifiedDate());
       map.put("modifiedBy", pMutableList.get(i).getModifiedBy());
+      map.put("compCode", pMutableList.get(i).getCompany().getId());
       pMaps[i] = map;
     }
   }

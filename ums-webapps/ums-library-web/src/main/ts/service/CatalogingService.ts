@@ -130,7 +130,9 @@ module ums {
                 if (config.internalNote != "") {
                     item.internalNote = config.internalNote;
                 }
+                item.paperQuality = config.paperQuality;
                 item.status = config.status;
+                item.bindingType = config.bindingType;
                 item.acqType = config.acqType;
                 item.currency = config.currency;
                 item.price = Number(config.price);
@@ -149,7 +151,7 @@ module ums {
         /**
          * Fetch Record List
          */
-        public fetchRecords(page: number, itemPerPage: number, orderBy: string, filter: any): ng.IPromise<any> {
+        public fetchRecords(page: number, itemPerPage: number, orderBy: string, filter: any): ng.IPromise<any>{
 
             var defer = this.$q.defer();
             var tPage = page - 1;

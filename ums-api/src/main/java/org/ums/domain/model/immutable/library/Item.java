@@ -6,6 +6,7 @@ import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.immutable.accounts.Currency;
 import org.ums.domain.model.mutable.library.MutableItem;
 import org.ums.enums.library.AcquisitionType;
+import org.ums.enums.library.BookBindingType;
 import org.ums.enums.library.ItemStatus;
 
 import java.io.Serializable;
@@ -51,4 +52,7 @@ public interface Item extends Serializable, EditType<MutableItem>, LastModifier,
 
   Long getCurrencyId();
 
+  BookBindingType getBookBindingType();
+
+  String getPaperQuality();
 }

@@ -131,6 +131,19 @@ module ums{
           return defer.promise;
       }
 
+      public getDesignation(pDeptId: string): ng.IPromise<any>{
+          var defer = this.$q.defer();
+          this.httpClient.get("deptDesignationMap/dept/" + pDeptId, 'application/json',
+              (result:any,etag:string)=>{
+                  defer.resolve(result.entries);
+              },
+              (response:ng.IHttpPromiseCallbackArg<any>)=>{
+                  console.error(response);
+              });
+
+          return defer.promise;
+      }
+
       public getSimilarUsers(name: string): ng.IPromise<any>{
           var defer = this.$q.defer();
           this.httpClient.get("employee/personal/firstName/name/" + name, 'application/json',

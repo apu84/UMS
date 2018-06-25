@@ -3,6 +3,7 @@ package org.ums.domain.model.immutable.accounts;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.mutable.accounts.MutableFinancialAccountYear;
 import org.ums.enums.accounts.definitions.financial.account.year.BookClosingFlagType;
 import org.ums.enums.accounts.definitions.financial.account.year.YearClosingFlagType;
@@ -18,6 +19,10 @@ public interface FinancialAccountYear extends Serializable, LastModifier, EditTy
     Identifier<Long> {
 
   String getStringId();
+
+  Company getCompany();
+
+  String getCompanyId();
 
   Date getCurrentStartDate();
 

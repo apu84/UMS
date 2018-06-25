@@ -5,6 +5,7 @@ import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
 import org.ums.enums.accounts.definitions.group.GroupFlag;
+import org.ums.enums.common.AscendingOrDescendingType;
 import org.ums.manager.accounts.AccountManager;
 
 import java.util.List;
@@ -16,8 +17,8 @@ public class AccountDaoDecorator extends ContentDaoDecorator<Account, MutableAcc
     AccountManager {
 
   @Override
-  public Integer getSize() {
-    return getManager().getSize();
+  public Integer getSize(Company pCompany) {
+    return getManager().getSize(pCompany);
   }
 
   @Override
@@ -31,8 +32,9 @@ public class AccountDaoDecorator extends ContentDaoDecorator<Account, MutableAcc
   }
 
   @Override
-  public List<Account> getAllPaginated(int itemPerPage, int pageNumber) {
-    return getManager().getAllPaginated(itemPerPage, pageNumber);
+  public List<Account> getAllPaginated(int itemPerPage, int pageNumber,
+      AscendingOrDescendingType ascendingOrDescendingType, Company company) {
+    return getManager().getAllPaginated(itemPerPage, pageNumber, ascendingOrDescendingType, company);
   }
 
   @Override
@@ -46,13 +48,13 @@ public class AccountDaoDecorator extends ContentDaoDecorator<Account, MutableAcc
   }
 
   @Override
-  public List<Account> getExcludingGroups(List<String> groupCodeList) {
-    return getManager().getExcludingGroups(groupCodeList);
+  public List<Account> getExcludingGroups(List<String> groupCodeList, Company company) {
+    return getManager().getExcludingGroups(groupCodeList, company);
   }
 
   @Override
-  public List<Account> getIncludingGroups(List<String> groupCodeList) {
-    return getManager().getIncludingGroups(groupCodeList);
+  public List<Account> getIncludingGroups(List<String> groupCodeList, Company company) {
+    return getManager().getIncludingGroups(groupCodeList, company);
   }
 
   @Override

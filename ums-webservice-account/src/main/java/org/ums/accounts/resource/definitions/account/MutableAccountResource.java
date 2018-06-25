@@ -3,6 +3,7 @@ package org.ums.accounts.resource.definitions.account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.accounts.resource.definitions.account.helper.AccountBalanceResponse;
 import org.ums.domain.model.immutable.accounts.Account;
+import org.ums.enums.common.AscendingOrDescendingType;
 import org.ums.logs.PostLog;
 import org.ums.persistent.model.accounts.PersistentAccount;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
@@ -26,11 +27,12 @@ public class MutableAccountResource extends Resource {
   protected AccountResourceHelper mHelper;
 
   @POST
-  @Path("/create/item-per-page/{item-per-page}/page-number/{page-number}")
+  @Path("/create/item-per-page/{item-per-page}/page-number/{page-number}/type/{type}")
   public List<Account> createAccount(@PathParam("item-per-page") int pItemPerPage,
-      @PathParam("page-number") int pItemNumber, AccountBalanceResponse pAccountBalanceResponse) throws Exception {
+      @PathParam("page-number") int pItemNumber, @PathParam("type") int pType,
+      AccountBalanceResponse pAccountBalanceResponse) throws Exception {
     return mHelper.createAccount(pAccountBalanceResponse.getAccount(), pAccountBalanceResponse.getAccountBalance(),
-        pItemPerPage, pItemNumber);
+        pItemPerPage, pItemNumber, AscendingOrDescendingType.get(pType));
   }
 
   @POST
