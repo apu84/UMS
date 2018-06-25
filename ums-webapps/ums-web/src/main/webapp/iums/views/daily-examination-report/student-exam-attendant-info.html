@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="form-actions text-right pal">
-                    <button type="button" data-ng-click="vm.doSomething()" class="btn btn-success">Search</button>
+                    <button type="button" data-ng-click="vm.search()" class="btn btn-success">Search</button>
                 </div>
             </form>
         </div>
@@ -56,37 +56,45 @@
 
     <div id="rightDiv">
         <div class="panel">
-            <div class="panel-heading">Student's Attendant Information</div>
+            <div class="panel-heading">Student's Attendance-> Semester: <b>{{vm.semesterName}}</b> Exam Type: <b>{{vm.selectedExamTypeName}}</b> Exam Date: <b>
+                {{vm.selectedExamDate}}
+            </b></div>
             <div class="panel-body">
-                <div class="row">
-                        <div data-ng-repeat="app in vm.examInfo" data-ng-if="$index % 1 == 0">
-                                <div class="col-sm-3">
-                                    <div>
-                                        <p><span class="badge badge-success">{{app.programName}}</span></p>
+                <div data-ng-show="vm.enableRightDiv">
+                    <table width="100%">
+                        <tr ng-repeat="app in vm.examInfo" data-ng-if="$index % 4 == 0" >
+                            <td ng-repeat="app in vm.examInfo.slice($index, $index + 4)">
+                                <div style="padding-right:20px;">
+                                    <p><span class="badge badge-success">{{app.programName}}</span></p>
                                     <table class="table table-hover table-bordered table-advanced">
                                         <thead>
                                         <tr role="row" class="heading">
-                                            <th width="10%">Y-S</th>
-                                            <th width="10%">R-S</th>
-                                            <th width="10%">P-S</th>
-                                            <th width="10%">A-S</th>
+                                            <th width="10%">Y/S</th>
+                                            <th width="10%">Reg</th>
+                                            <th width="10%">Pr</th>
+                                            <th width="10%">Ab</th>
                                         </tr>
                                         </thead>
                                         <thead>
                                         <tr data-ng-repeat="val in app.examAttendantYearSemesterWiseDataList">
-                                             <td>{{val.year+"-"+val.semester}}</td>
+                                            <td>{{val.year+"/"+val.semester}}</td>
                                             <td style="color: lightskyblue;text-align: center">{{val.totalAttendantStudentNumber}}</td>
                                             <td style="color: #5cb85c;text-align: center">{{val.totalAttendantStudentNumber-val.absentStudent}}</td>
                                             <td style="color: red;"><input type="text" size="2" data-ng-model="val.absentStudent"  style="text-align: center" value="val.absentStudent"></td>
                                         </tr>
                                         </thead>
                                     </table>
+
                                 </div>
-                                </div>
-                        </div>
-               </div>
-                <div  align="right">
-                    <button type="button" data-ng-click="vm.save()" class="btn btn-success">Save</button>
+                            </td>
+                        </tr>
+                    </table>
+
+                <div  align="right" style="padding-right:20px">
+                    <button type="button" data-ng-click="vm.save()"  class="btn btn-success">Submit</button>
+                    <!-- data-ng-show="vm.enableSubmitButton"
+                    -->
+                </div>
                 </div>
             </div>
         </div>

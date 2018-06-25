@@ -20,9 +20,12 @@ module ums{
         public examInfo:Array<IStudentsExamAttendantData>;
         public semester:Semester;
         public selectedSemesterId:number;
-        examRoutineArr:any;
-        selectedExamDate:string;
-        examAttendantInfo:Array<IExamAttendantInfo>;
+        public examRoutineArr:any;
+        public selectedExamDate:string;
+        public activeSemesterId:number;
+        public semesterName:string;
+        public enableSubmitButton:boolean;
+        enableRightDiv:boolean;
         public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService','DailyExamAttendanceReportService','examRoutineService'];
 
         constructor(private appConstants: any,
@@ -42,8 +45,11 @@ module ums{
             this.selectedExamTypeId=this.examType.id;
             this.selectedExamTypeName=this.examType.name;
             this.selectedExamDate="";
+            this.enableRightDiv=false;
             this.getSemesters();
             this.getExamDates();
+            this.enableSubmitButton=this.isEligibleForSubmitData();
+            console.log(this.enableSubmitButton);
         }
         private getExamDates(){
             let examTypeId=this.selectedExamTypeId == ExamType.REGULAR ? ExamType.REGULAR:ExamType.CARRY_CLEARANCE_IMPROVEMENT;
@@ -59,54 +65,72 @@ module ums{
         }
         private ExamDateChange(value:any){
             this.selectedExamDate=value;
+            this.enableRightDiv=false;
             console.log("Exam Date: "+this.selectedExamDate);
 
         }
         private getSemesters():void{
             this.semesterService.fetchSemesters(11,5).then((semesters:Array<Semester>)=>{
                 this.semesters=semesters;
+                console.log("Semester's");
                 console.log(this.semesters);
                 for(var i=0;i<semesters.length;i++){
                     if(semesters[i].status==1){
                         this.semester = semesters[i];
+                        this.activeSemesterId=semesters[i].id;
                         break;
                     }
                 }
                 this.selectedSemesterId=this.semester.id;
-                console.log("I____Id: "+this.selectedSemesterId);
+                this.semesterName=this.semester.name;
+                console.log("Selected_Id: "+this.selectedSemesterId);
+                console.log("Active_Semester_Id: "+this.activeSemesterId);
             });
         }
         private semesterChanged(val:any){
             console.log("Name: "+val.name+"\nsemesterId: "+val.id);
             this.selectedSemesterId=val.id;
+            this.semesterName=val.name;
+            console.log("Active Semester id: "+this.activeSemesterId);
+            this.enableSubmitButton=this.isEligibleForSubmitData();
+            this.enableRightDiv=false;
             this.getExamDates();
         }
+
+        private isEligibleForSubmitData():boolean{
+             return this.activeSemesterId==this.selectedSemesterId ? true:false;
+        }
+
         private changeExamType(value:any){
             console.log(value.id+"  "+value.name);
             this.selectedExamTypeId=value.id;
             this.selectedExamTypeName=value.name;
+            this.enableRightDiv=false;
             this.getExamDates();
 
         }
-        private doSomething():void{
+        private search():void{
             Utils.expandRightDiv();
+            this.enableRightDiv=true;
+            this.getData();
+        }
+        private getData(){
             console.log("")
+            this.examInfo=[];
             var reg:Array<IStudentsExamAttendantData>=[];
             this.dailyExamAttendanceReportService.getExamAttendantInfo(this.selectedSemesterId,this.selectedExamDate,this.selectedExamTypeId).then((data) => {
                 console.log("Course-List");
                 reg=data;
                 this.examInfo=reg;
                 console.log(this.examInfo);
-
-                console.log("Length-> "+this.examInfo.length);
-
             })
+
         }
         private  save():void {
             console.log("Convert To Json");
            var json:any = this.convertToJson(this.examInfo);
            this.dailyExamAttendanceReportService.addStudentAttendantInfo(json).then((data)=>{
-               console.log(data);
+               this.getData();
            })
 
         }

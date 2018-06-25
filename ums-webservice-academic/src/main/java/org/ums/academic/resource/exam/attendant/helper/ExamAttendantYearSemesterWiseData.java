@@ -8,17 +8,15 @@ public class ExamAttendantYearSemesterWiseData {
   private Integer semester;
   private Integer totalAttendantStudentNumber;
   private Integer programId;
-  private String courseId;
   private Integer absentStudent;
   private Integer presentStudent;
 
   public ExamAttendantYearSemesterWiseData(Integer year, Integer semester, Integer totalAttendantStudentNumber,
-      Integer programId, String courseId, Integer absentStudent, Integer presentStudent) {
+      Integer programId, Integer absentStudent, Integer presentStudent) {
     this.year = year;
     this.semester = semester;
     this.totalAttendantStudentNumber = totalAttendantStudentNumber;
     this.programId = programId;
-    this.courseId = courseId;
     this.absentStudent = absentStudent;
     this.presentStudent = presentStudent;
   }
@@ -49,14 +47,6 @@ public class ExamAttendantYearSemesterWiseData {
 
   public void setProgramId(Integer programId) {
     this.programId = programId;
-  }
-
-  public String getCourseId() {
-    return courseId;
-  }
-
-  public void setCourseId(String courseId) {
-    this.courseId = courseId;
   }
 
   public Integer getYear() {

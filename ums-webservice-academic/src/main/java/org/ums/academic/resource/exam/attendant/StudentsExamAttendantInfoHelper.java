@@ -7,6 +7,8 @@ import org.ums.academic.resource.exam.attendant.helper.ExamAttendantYearSemester
 import org.ums.academic.resource.exam.attendant.helper.StudentsExamAttendantData;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.Program;
+import org.ums.domain.model.immutable.ProgramType;
 import org.ums.domain.model.immutable.StudentsExamAttendantInfo;
 import org.ums.domain.model.mutable.MutableStudentsExamAttendantInfo;
 import org.ums.manager.*;
@@ -19,10 +21,8 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -79,46 +79,70 @@ public class StudentsExamAttendantInfoHelper extends
     List<StudentsExamAttendantInfo> examAttendantInfoList =
         mUGRegistrationResultManager.getExamAttendantInfo(pSemesterId,
             UmsUtils.formatDate(pExamDate, "dd-MM-yyyy", "yyyy-MM-dd"), pExamType);
-    HashMap<Integer,HashMap<String,Integer>> examAttendantMap= new HashMap<Integer, HashMap<String, Integer>>();
-    HashMap<String, Integer> yearSemesterRegStudentMap= new HashMap<String, Integer>();
-    for(StudentsExamAttendantInfo app:examAttendantInfoList){
-        yearSemesterRegStudentMap.put(app.getYear().toString() + "-" + app.getSemester().toString()+"-"+app.getProgramId().toString(),
-                yearSemesterRegStudentMap.containsKey(app.getYear().toString() + "-" + app.getSemester().toString()+"-"+app.getProgramId().toString()) ?
-                        yearSemesterRegStudentMap.get(app.getYear().toString() + "-" + app.getSemester().toString()+"-"+app.getProgramId().toString())+
-                        app.getRegisteredStudents():app.getRegisteredStudents());
+    Map<String,Integer> absentStudentsMap=examAttendantInfoList
+            .stream()
+            .collect(Collectors.toMap(e->e.getYear().toString()+"-"+e.getSemester()+"-"+e.getProgramId(),e->e.getAbsentStudents(),
+                    (oldValue, newValue) -> oldValue));
+    List<Program> programs=mProgramManager.getAll();
+    Map<Integer,String> programDeptMap=programs.stream().
+            collect(Collectors.toMap(e->e.getId(),e->e.getDepartmentId()));
+    Map<Integer, Map<String, List<StudentsExamAttendantInfo>>> map=
+            examAttendantInfoList.stream().collect(Collectors.groupingBy(StudentsExamAttendantInfo::getProgramId,
+                    Collectors.groupingBy(p->p.getYear().toString()+"-"+p.getSemester())));
+    Map<Integer, Map<String, Integer>> tmpMap = new HashMap<>();
+    for(Map.Entry<Integer, Map<String, List<StudentsExamAttendantInfo>>> entry: map.entrySet()){
+      Map<String, List<StudentsExamAttendantInfo>> tmpInnerMap = entry.getValue();
+      for(Map.Entry<String, List<StudentsExamAttendantInfo>> innerEntry: tmpInnerMap.entrySet()){
+        Map<String, Integer> tmpConvertedMap = new HashMap<>();
+        tmpConvertedMap.put(innerEntry.getKey(), innerEntry.getValue().stream().mapToInt(p->p.getRegisteredStudents()).sum());
+        Map<String, Integer> previousMap = new HashMap<>();
+        if(tmpMap.containsKey(entry.getKey()))
+          previousMap = tmpMap.get(entry.getKey());
+        previousMap.put(innerEntry.getKey(), innerEntry.getValue().stream().mapToInt(p->p.getRegisteredStudents()).sum());
+        tmpMap.put(entry.getKey(), previousMap);
+      }
     }
-
-
-    Map<Integer, List<StudentsExamAttendantInfo>> result=examAttendantInfoList.stream().collect(Collectors.groupingBy(StudentsExamAttendantInfo::getProgramId));
-
     List<StudentsExamAttendantData> studentsExamAttendantDataList = new ArrayList<>();
-
-    return createStudentsExamAttendantData(result, studentsExamAttendantDataList);
+    return createStudentsExamAttendantData(tmpMap,studentsExamAttendantDataList,absentStudentsMap,programDeptMap);
   }
 
-  public List<StudentsExamAttendantData> createStudentsExamAttendantData(
-      Map<Integer, List<StudentsExamAttendantInfo>> result,
-      List<StudentsExamAttendantData> studentsExamAttendantDataList) {
-    for(Map.Entry<Integer, List<StudentsExamAttendantInfo>> entry : result.entrySet()) {
+  public List<StudentsExamAttendantData> createStudentsExamAttendantData(Map<Integer, Map<String, Integer>> result,
+      List<StudentsExamAttendantData> studentsExamAttendantDataList, Map<String, Integer> absentStudentsMap,
+      Map<Integer, String> programDeptMap) {
+
+    for(Map.Entry<Integer, Map<String, Integer>> entry : result.entrySet()) {
       StudentsExamAttendantData studentsExamAttendantData = new StudentsExamAttendantData();
       studentsExamAttendantData.setProgramName(mProgramManager.get(entry.getKey()).getShortName());
-
+      studentsExamAttendantData.setDeptId(Integer.parseInt(programDeptMap.get(entry.getKey())));
       List<ExamAttendantYearSemesterWiseData> examAttendantYearSemesterWiseDataList = new ArrayList<>();
-      for(StudentsExamAttendantInfo studentsExamAttendantInfo : entry.getValue()) {
+      Map<String, Integer> tmpInnerMap = entry.getValue();
+
+      for(Map.Entry<String, Integer> innerMap : tmpInnerMap.entrySet()) {
+        String key = innerMap.getKey();
+        String[] parts = key.split("-");
+        Integer year = Integer.parseInt(parts[0]);
+        Integer semester = Integer.parseInt(parts[1]);
+        Integer programId = entry.getKey();
+        Integer registeredStudents = innerMap.getValue();
         ExamAttendantYearSemesterWiseData examAttendantYearSemesterWiseData =
-            new ExamAttendantYearSemesterWiseData(studentsExamAttendantInfo.getYear(),
-                studentsExamAttendantInfo.getSemester(), studentsExamAttendantInfo.getRegisteredStudents(),
-                studentsExamAttendantInfo.getProgramId(), studentsExamAttendantInfo.getCourseId(),
-                studentsExamAttendantInfo.getAbsentStudents() == null ? 0 : studentsExamAttendantInfo
-                    .getAbsentStudents(),
-                (studentsExamAttendantInfo.getRegisteredStudents())
-                    - (studentsExamAttendantInfo.getAbsentStudents() == null ? 0 : studentsExamAttendantInfo
-                        .getAbsentStudents()));
+            new ExamAttendantYearSemesterWiseData(
+                year,
+                semester,
+                registeredStudents,
+                programId,
+                absentStudentsMap.get(year.toString() + "-" + semester.toString() + "-" + programId.toString()) == null ? 0
+                    : absentStudentsMap.get(year.toString() + "-" + semester.toString() + "-" + programId.toString()),
+                registeredStudents
+                    - (absentStudentsMap.get(year.toString() + "-" + semester.toString() + "-" + programId.toString()) == null ? 0
+                        : absentStudentsMap.get(year.toString() + "-" + semester.toString() + "-"
+                            + programId.toString())));
         examAttendantYearSemesterWiseDataList.add(examAttendantYearSemesterWiseData);
       }
+
       studentsExamAttendantData.setExamAttendantYearSemesterWiseDataList(examAttendantYearSemesterWiseDataList);
       studentsExamAttendantDataList.add(studentsExamAttendantData);
     }
+   studentsExamAttendantDataList.sort(Comparator.comparing(StudentsExamAttendantData::getDeptId));
     return studentsExamAttendantDataList;
   }
 

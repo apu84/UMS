@@ -99,6 +99,7 @@ public class ExpelledInformationResourceHelper extends
     Map<String, String> examRoutineMapWithCourseId = examRoutineList
             .stream()
             .collect(Collectors.toMap(e->e.getCourseId(), e->e.getExamDate()));
+
     List<ExpelledInformation> expelledInfo=getContentManager().getAll();
 
     List<UGRegistrationResult> registeredTheoryCourseList =

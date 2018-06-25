@@ -7,14 +7,25 @@ import java.util.List;
  */
 public class StudentsExamAttendantData {
   private String programName;
+  private Integer deptId;
+
   private List<ExamAttendantYearSemesterWiseData> examAttendantYearSemesterWiseDataList;
 
   public StudentsExamAttendantData() {}
 
-  public StudentsExamAttendantData(String programName,
+  public StudentsExamAttendantData(String programName, Integer deptId,
       List<ExamAttendantYearSemesterWiseData> examAttendantYearSemesterWiseDataList) {
     this.programName = programName;
+    this.deptId = deptId;
     this.examAttendantYearSemesterWiseDataList = examAttendantYearSemesterWiseDataList;
+  }
+
+  public Integer getDeptId() {
+    return deptId;
+  }
+
+  public void setDeptId(Integer deptId) {
+    this.deptId = deptId;
   }
 
   public String getProgramName() {
@@ -33,4 +44,5 @@ public class StudentsExamAttendantData {
       List<ExamAttendantYearSemesterWiseData> examAttendantYearSemesterWiseDataList) {
     this.examAttendantYearSemesterWiseDataList = examAttendantYearSemesterWiseDataList;
   }
+
 }
