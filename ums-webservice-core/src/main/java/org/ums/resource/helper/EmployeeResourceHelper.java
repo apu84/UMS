@@ -2,7 +2,6 @@ package org.ums.resource.helper;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.credential.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
@@ -266,12 +265,12 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     pMutablePersonalInformation.setNationalityId(0);
     pMutablePersonalInformation.setReligionId(0);
     pMutablePersonalInformation.setMaritalStatusId(0);
-    pMutablePersonalInformation.setSpouseName(" ");
-    pMutablePersonalInformation.setNidNo(" ");
+    pMutablePersonalInformation.setSpouseName(null);
+    pMutablePersonalInformation.setNidNo(null);
     pMutablePersonalInformation.setBloodGroupId(0);
-    pMutablePersonalInformation.setSpouseNidNo(" ");
-    pMutablePersonalInformation.setWebsite(" ");
-    pMutablePersonalInformation.setOrganizationalEmail(" ");
+    pMutablePersonalInformation.setSpouseNidNo(null);
+    pMutablePersonalInformation.setWebsite(null);
+    pMutablePersonalInformation.setOrganizationalEmail(null);
     pMutablePersonalInformation.setPersonalEmail(pJsonObject.getString("email"));
     pMutablePersonalInformation.setMobileNumber(" ");
     pMutablePersonalInformation.setPhoneNumber(" ");

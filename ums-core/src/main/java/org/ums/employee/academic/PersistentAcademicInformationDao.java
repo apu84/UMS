@@ -50,8 +50,8 @@ public class PersistentAcademicInformationDao extends AcademicInformationDaoDeco
   }
 
   @Override
-  public List<AcademicInformation> get(final String pEmployeeId) {
-    String query = GET_ALL + " WHERE EMPLOYEE_ID = ? ORDER BY PASSING_YEAR DESC ";
+  public List<AcademicInformation> get(final String pEmployeeId){
+    String query = GET_ALL + " WHERE EMPLOYEE_ID = ? ORDER BY DEGREE_LEVEL_ID DESC, PASSING_YEAR DESC ";
     return mJdbcTemplate.query(query, new Object[] {pEmployeeId}, new PersistentAcademicInformationDao.RoleRowMapper());
   }
 
