@@ -986,7 +986,7 @@
                                 </select>
                                 <label data-ng-show="nEmergencyContactForm.nEmergencyContactRelation.$invalid && !nEmergencyContactForm.nEmergencyContactRelation.$pristine"
                                        class="help-block control-label">
-                                    Youname is required.</label>
+                                    Relation is required.</label>
                             </div>
 
                             <div data-ng-show="vm.emergencyContactReadOnly">
@@ -1014,7 +1014,7 @@
                                        class="form-control" required>
                                 <label data-ng-show="nEmergencyContactForm.nEmergencyContactPhone.$invalid && !nEmergencyContactForm.nEmergencyContactPhone.$pristine"
                                        class="help-block control-label">
-                                    Youname is required.</label>
+                                    Contact number is required.</label>
                             </div>
                             <div data-ng-show="vm.emergencyContactReadOnly">
                                 <div class="underlineBox">
@@ -1024,25 +1024,19 @@
                         </div>
                     </div>
                     <div class="col-md-9">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nEmergencyContactForm.nEmergencyContactAddress.$invalid && !nEmergencyContactForm.nEmergencyContactAddress.$pristine}">
-                            <label for="iEmergencyContactAddress" class="control-label">Address</label>
-                            <div data-ng-show="!vm.emergencyContactReadOnly">
-                                <input type="text"
-                                       name="nEmergencyContactAddress"
-                                       id="iEmergencyContactAddress"
-                                       data-ng-model="vm.entry.emergencyContact.emergencyContactAddress"
-                                       placeholder="Address"
-                                       ng-readonly="vm.emergencyContactReadOnly"
-                                       class="form-control">
-                                <label data-ng-show="nEmergencyContactForm.nEmergencyContactAddress.$invalid && !nEmergencyContactForm.nEmergencyContactAddress.$pristine"
-                                       class="help-block control-label">
-                                    Youname is required.</label>
-                            </div>
-                            <div data-ng-show="vm.emergencyContactReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.emergencyContact.emergencyContactAddress}}</label>
-                                </div>
+                        <label for="iEmergencyContactAddress" class="control-label">Address</label>
+                        <div data-ng-show="!vm.emergencyContactReadOnly">
+                            <input type="text"
+                                   name="nEmergencyContactAddress"
+                                   id="iEmergencyContactAddress"
+                                   data-ng-model="vm.entry.emergencyContact.emergencyContactAddress"
+                                   placeholder="Address"
+                                   ng-readonly="vm.emergencyContactReadOnly"
+                                   class="form-control">
+                        </div>
+                        <div data-ng-show="vm.emergencyContactReadOnly">
+                            <div class="underlineBox">
+                                <label class="control-label">{{vm.entry.emergencyContact.emergencyContactAddress}}</label>
                             </div>
                         </div>
                     </div>
@@ -1059,7 +1053,7 @@
                         <div class="col-md-1">
                             <div align="right">
                                 <button type="submit" class="btn btn-success btn-xs"
-                                        data-ng-disabled="nEmergencyContactForm.$invalid">Submit
+                                        data-ng-disabled="nEmergencyContactForm.$invalid">Submit asd asd asd
                                 </button>
                             </div>
                         </div>
