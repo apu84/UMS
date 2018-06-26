@@ -54,6 +54,12 @@ public class PersistentAgendaResolutionDao extends AgendaResolutionDaoDecorator 
   }
 
   @Override
+  public List<AgendaResolution> getAll() {
+    String query = GET_ONE;
+    return mJdbcTemplate.query(query, new PersistentAgendaResolutionDao.RoleRowMapper());
+  }
+
+  @Override
   public AgendaResolution get(final Long pId) {
     String query = GET_ONE + " WHERE ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentAgendaResolutionDao.RoleRowMapper());
