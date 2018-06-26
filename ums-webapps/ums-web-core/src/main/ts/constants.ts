@@ -822,6 +822,13 @@ module ums {
                     {id: 15, name: 'Bi-Weekly'},
                     {id: 30, name: 'Monthly '},
                     {id: 360, name: 'Yearly'}
+                ],
+                currencyTypes: [
+                    {id: 1, name: 'BDT'},
+                    {id: 2, name: 'INR'},
+                    {id: 3, name: 'USD'},
+                    {id: 4, name: 'EUR'},
+                    {id: 5, name: 'GBP'}
                 ]
             }
         }

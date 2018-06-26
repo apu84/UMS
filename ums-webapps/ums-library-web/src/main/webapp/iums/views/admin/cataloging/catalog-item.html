@@ -154,7 +154,7 @@
                 <select style="width: 98%" class="required" data-ng-model="item.currency" id="currency"
                         name="currency" ng-disabled="data.itemReadOnlyMode"
                         ng-class="{'disabledElement': data.itemReadOnlyMode}" data-convert-to-number>
-                    <option data-ng-repeat="currency in currencies" value="{{currency.id}}">{{currency.notation}}
+                    <option data-ng-repeat="currency in data.currencies" value="{{currency.id}}">{{currency.name}}
                     </option>
                 </select>
             </div>
@@ -312,7 +312,7 @@
                                            id="bulkCurrency{{$index}}"
                                            name="bulkCurrency{{$index}}" ng-disabled="data.itemReadOnlyMode"
                                            ng-class="{'disabledElement': data.itemReadOnlyMode}" data-convert-to-number>
-                    <option data-ng-repeat="currency in currencies" value="{{currency.id}}">{{currency.notation}}
+                    <option data-ng-repeat="currency in data.currencies" value="{{currency.id}}">{{currency.name}}
                     </option>
                 </select></td>
                 <td align="center"><input type='text'
@@ -382,9 +382,8 @@
                 <td width="10%">Currency :</td>
                 <td width="23%"><select style="height: 24px;padding: 0px; width: 158px;"
                                         data-ng-model="bulk.config.currency" data-convert-to-number>
-                    <option data-ng-repeat="currency in currencies" value="{{currency.id}}">
-                        {{currency.notation}}
-                    </option>
+                    <option data-ng-repeat="currency in data.currencies" value="{{currency.id}}">
+                        {{currency.name}}
                 </select></td>
             </tr>
             <tr>
