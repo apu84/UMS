@@ -1,31 +1,36 @@
 package org.ums.persistent.dao.routine;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.routine.RoutineDaoDecorator;
-import org.ums.domain.model.immutable.routine.Routine;
 import org.ums.domain.model.immutable.Student;
+import org.ums.domain.model.immutable.routine.Routine;
 import org.ums.domain.model.mutable.routine.MutableRoutine;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.routine.PersistentRoutine;
+import org.ums.util.UmsUtils;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Time;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PersistentRoutineDao extends RoutineDaoDecorator {
   static String SELECT_ALL =
       "SELECT ROUTINE_ID,SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_ID,LAST_MODIFIED FROM CLASS_ROUTINE ";
   static String UPDATE_ONE =
-      "UPDATE CLASS_ROUTINE SET SEMESTER_ID=?,PROGRAM_ID=?,COURSE_ID=?,DAY=?,SECTION=?,YEAR=?,SEMESTER=?,START_TIME=?,END_TIME=?,DURATION=?,ROOM_ID=?,LAST_MODIFIED="
-          + getLastModifiedSql() + " ";
+      "UPDATE CLASS_ROUTINE SET SEMESTER_ID=:semesterId,PROGRAM_ID=:programId,COURSE_ID=:courseId,DAY=:day,SECTION=:section,YEAR=:year,SEMESTER=:semester,START_TIME=:startTime,"
+          + "END_TIME=:endTime,DURATION=:duration,ROOM_ID=:roomId,LAST_MODIFIED=:lastModified ";
   static String DELETE_ONE = "DELETE FROM CLASS_ROUTINE ";
   static String INSERT_ONE =
       "INSERT INTO CLASS_ROUTINE(ROUTINE_ID, SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_ID,LAST_MODIFIED) "
-          + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," + getLastModifiedSql() + ")";
+          + "VALUES(:routineId, :semesterId, :programId, :courseId, :day, :section, :year, :semester, :startTime, :endTime, :duration, :roomId,:lastModified ";
+
   static String ORDER_BY = "ORDER BY SEMESTER_ID ";
   static String SELECT_ALL_FOR_TEACHER = "SELECT " + "  CLASS_ROUTINE.ROUTINE_ID, " + "  CLASS_ROUTINE.SEMESTER_ID, "
       + "  CLASS_ROUTINE.COURSE_ID, " + "  CLASS_ROUTINE.SECTION, " + "  CLASS_ROUTINE.YEAR, "
@@ -49,7 +54,7 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
           + "FROM CLASS_ROUTINE WHERE SEMESTER_ID=? AND PROGRAM_ID=? AND YEAR=? AND SEMESTER=?";
 
   static String SELECT_ALL_FOR_EMPLOYEE =
-      "SELECT ROUTINE_ID,SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_ID,LAST_MODIFIED FROM CLASS_ROUTINE WHERE SEMESTER_ID=? and PROGRAM_ID=? and YEAR=? and SEMESTER=? ";
+      "select * FROM CLASS_ROUTINE WHERE SEMESTER_ID=? and PROGRAM_ID=? and YEAR=? and SEMESTER=? and SECTION LIKE '?' ";
   private JdbcTemplate mJdbcTemplate;
   private NamedParameterJdbcTemplate mNamedParameterJdbcTemplate;
   private IdGenerator mIdGenerator;
@@ -72,44 +77,30 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   }
 
   public int update(final MutableRoutine pMutableRoutine) {
-    String query = UPDATE_ONE + " WHERE ROUTINE_ID=?";
-    return mJdbcTemplate.update(query, pMutableRoutine.getSemester().getId(), pMutableRoutine.getProgram().getId(),
-        pMutableRoutine.getCourseId(), pMutableRoutine.getDay(), pMutableRoutine.getSection(),
-        pMutableRoutine.getAcademicYear(), pMutableRoutine.getAcademicSemester(), pMutableRoutine.getStartTime(),
-        pMutableRoutine.getEndTime(), pMutableRoutine.getDuration(), pMutableRoutine.getRoomId(),
-        pMutableRoutine.getId());
+    String query = UPDATE_ONE + " WHERE ROUTINE_ID=:routineId";
+    Map updateParameters = getInsertOrUpdateParameters(pMutableRoutine);
+    return mNamedParameterJdbcTemplate.update(query, updateParameters);
   }
 
   @Override
   public Long create(final MutableRoutine pMutable) {
     Long id = mIdGenerator.getNumericId();
-    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getSemester().getId(), pMutable.getProgram().getId(),
-        pMutable.getCourseId(), pMutable.getDay(), pMutable.getSection(), pMutable.getAcademicYear(),
-        pMutable.getAcademicSemester(), pMutable.getStartTime(), pMutable.getEndTime(), pMutable.getDuration(),
-        pMutable.getRoomId());
+    mNamedParameterJdbcTemplate.update(INSERT_ONE, getInsertOrUpdateParameters(pMutable));
     return id;
   }
 
   @Override
   public List<Routine> getTeacherRoutine(String teacherId) {
     String query = SELECT_ALL_FOR_TEACHER;
-    return mJdbcTemplate.query(query, new Object[] {teacherId}, new RoutineRowMapperWithCourseNo());
+    return mJdbcTemplate.query(query, new Object[]{teacherId}, new RoutineRowMapper());
   }
 
   @Override
   public List<Routine> getRoutine(int pSemesterId, int pProgramId) {
     String query =
-        " SELECT    " + "                CLASS_ROUTINE.ROUTINE_ID,    "
-            + "                CLASS_ROUTINE.SEMESTER_ID,    " + "                CLASS_ROUTINE.COURSE_ID,    "
-            + "                CLASS_ROUTINE.SECTION,    " + "                CLASS_ROUTINE.YEAR,    "
-            + "                CLASS_ROUTINE.SEMESTER,    " + "                CLASS_ROUTINE.START_TIME,    "
-            + "                CLASS_ROUTINE.END_TIME,    " + "                CLASS_ROUTINE.DURATION,    "
-            + "                CLASS_ROUTINE.ROOM_ID,    " + "                CLASS_ROUTINE.DAY,    "
-            + "                CLASS_ROUTINE.PROGRAM_ID,    " + "                MST_COURSE.COURSE_NO    "
-            + "              FROM    " + "                CLASS_ROUTINE,MST_COURSE "
-            + " WHERE CLASS_ROUTINE.COURSE_ID=MST_COURSE.COURSE_ID  " + " and CLASS_ROUTINE.SEMESTER_ID=?  "
+        SELECT_ALL + " WHERE CLASS_ROUTINE.COURSE_ID=MST_COURSE.COURSE_ID  " + " and CLASS_ROUTINE.SEMESTER_ID=?  "
             + " and program_id=?  ORDER BY CLASS_ROUTINE.DAY, class_routine.START_TIME";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramId}, new RoutineRowMapperWithCourseNo());
+    return mJdbcTemplate.query(query, new Object[]{pSemesterId, pProgramId}, new RoutineRowMapper());
   }
 
   @Override
@@ -122,9 +113,10 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   }
 
   @Override
-  public List<Routine> getEmployeeRoutine(int semesterId, int programId, int year, int semester) {
-    String query = SELECT_ALL_FOR_EMPLOYEE;
-    return mJdbcTemplate.query(query, new Object[] {semesterId, programId, year, semester}, new RoutineRowMapper());
+  public List<Routine> getRoutine(int semesterId, int programId, int year, int semester, String section) {
+    String query = "select * FROM CLASS_ROUTINE WHERE SEMESTER_ID=? and PROGRAM_ID=? and YEAR=? and SEMESTER=? and SECTION LIKE '" + section + "%'";
+    return mJdbcTemplate.query(query, new Object[]{semesterId, programId, year, semester},
+        new RoutineRowMapper());
   }
 
   @Override
@@ -135,57 +127,53 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
 
   @Override
   public int update(List<MutableRoutine> pMutableList) {
-    String update = UPDATE_ONE + " where routine_id=?";
-    return mJdbcTemplate.batchUpdate(update, getUpdateParamList(pMutableList)).length;
+    String update = UPDATE_ONE + " where routine_id=:routineId";
+    Map<String, Object>[] updateParameters = getParameterObjects(pMutableList);
+    return mNamedParameterJdbcTemplate.batchUpdate(update, updateParameters).length;
   }
 
   @Override
   public int delete(List<MutableRoutine> pMutableList) {
-    String query = DELETE_ONE + " where routine_id=?";
-    return mJdbcTemplate.batchUpdate(query, getDeleteParamList(pMutableList)).length;
+    String query = DELETE_ONE + " where routine_id=:routineId";
+    Map<String, Object>[] deleteParameters = getParameterObjects(pMutableList);
+    return mNamedParameterJdbcTemplate.batchUpdate(query, deleteParameters).length;
   }
 
   @Override
   public List<Long> create(List<MutableRoutine> pMutableList) {
-    List<Object[]> params = getInsertParamList(pMutableList);
-    mJdbcTemplate.batchUpdate(INSERT_ONE, params);
-    return params.stream().map(param -> (Long) param[0])
-        .collect(Collectors.toCollection(ArrayList::new));
+    Map<String, Object>[] createParameters = getParameterObjects(pMutableList);
+    mNamedParameterJdbcTemplate.batchUpdate(INSERT_ONE, createParameters);
+    return pMutableList
+        .stream()
+        .map(p -> p.getId())
+        .collect(Collectors.toList());
   }
 
-  private List<Object[]> getInsertParamList(List<MutableRoutine> pRoutines) {
-    List<Object[]> params = new ArrayList<>();
-
-    for(Routine routine : pRoutines) {
-      params.add(new Object[] {mIdGenerator.getNumericId(), routine.getSemester().getId(),
-          routine.getProgram().getId(), routine.getCourseId(), routine.getDay(), routine.getSection(),
-          routine.getAcademicYear(), routine.getAcademicSemester(), routine.getStartTime(), routine.getEndTime(),
-          routine.getDuration(), routine.getRoomId()});
+  private Map<String, Object>[] getParameterObjects(List<MutableRoutine> pMutableRoutines) {
+    Map<String, Object>[] parameterMaps = new HashMap[pMutableRoutines.size()];
+    for (int i = 0; i < pMutableRoutines.size(); i++) {
+      parameterMaps[i] = getInsertOrUpdateParameters(pMutableRoutines.get(i));
     }
-
-    return params;
+    return parameterMaps;
   }
 
-  private List<Object[]> getUpdateParamList(List<MutableRoutine> pRoutines) {
-    List<Object[]> params = new ArrayList<>();
+  private Map getInsertOrUpdateParameters(MutableRoutine pMutableRoutine) {
+    Map parameter = new HashMap();
+    parameter.put("routineId", pMutableRoutine.getId());
+    parameter.put("semesterId", pMutableRoutine.getSemester().getId());
+    parameter.put("programId", pMutableRoutine.getProgram().getId());
+    parameter.put("courseId", pMutableRoutine.getCourse().getId());
+    parameter.put("day", pMutableRoutine.getDay());
+    parameter.put("section", pMutableRoutine.getSection());
+    parameter.put("year", pMutableRoutine.getAcademicYear());
+    parameter.put("semester", pMutableRoutine.getAcademicSemester());
+    parameter.put("startTime", Time.valueOf(pMutableRoutine.getStartTime()));
+    parameter.put("endTime", Time.valueOf(pMutableRoutine.getEndTime()));
+    parameter.put("duration", pMutableRoutine.getDuration());
+    parameter.put("roomId", pMutableRoutine.getRoom().getId());
+    parameter.put("lastModified", UmsUtils.formatDate(new Date(), "YYYYMMDDHHMMSS"));
 
-    for(Routine routine : pRoutines) {
-      params.add(new Object[] {routine.getSemester().getId(), routine.getProgram().getId(), routine.getCourseId(),
-          routine.getDay(), routine.getSection(), routine.getAcademicYear(), routine.getAcademicSemester(),
-          routine.getStartTime(), routine.getEndTime(), routine.getDuration(), routine.getRoomId(), routine.getId()});
-    }
-
-    return params;
-  }
-
-  private List<Object[]> getDeleteParamList(List<MutableRoutine> pRoutines) {
-    List<Object[]> params = new ArrayList<>();
-
-    for(Routine routine : pRoutines) {
-      params.add(new Object[] {routine.getId()});
-    }
-
-    return params;
+    return parameter;
   }
 
   class RoutineRowMapper implements RowMapper<Routine> {
@@ -208,27 +196,4 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
     }
   }
 
-  /**
-   * RoutineRowMapperWithCourseNo--> this row mapper has courseNo information attached with it.
-   * Also, getter for duration variable is added. All others are same as the RoutineRowMapper.
-   */
-  class RoutineRowMapperWithCourseNo implements RowMapper<Routine> {
-    @Override
-    public Routine mapRow(ResultSet pResultSet, int pI) throws SQLException {
-      PersistentRoutine persistentRoutine = new PersistentRoutine();
-      persistentRoutine.setId(pResultSet.getLong("ROUTINE_ID"));
-      persistentRoutine.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
-      persistentRoutine.setCourseId(pResultSet.getString("COURSE_ID"));
-      persistentRoutine.setSection(pResultSet.getString("SECTION"));
-      persistentRoutine.setAcademicYear(pResultSet.getInt("YEAR"));
-      persistentRoutine.setAcademicSemester(pResultSet.getInt("SEMESTER"));
-      persistentRoutine.setStartTime(pResultSet.getTime("START_TIME").toLocalTime());
-      persistentRoutine.setEndTime(pResultSet.getTime("END_TIME").toLocalTime());
-      persistentRoutine.setDuration(pResultSet.getInt("duration"));
-      persistentRoutine.setRoomId(pResultSet.getLong("ROOM_ID"));
-      persistentRoutine.setDay(pResultSet.getInt("DAY"));
-      persistentRoutine.setProgramId(pResultSet.getInt("PROGRAM_ID"));
-      return persistentRoutine;
-    }
-  }
 }

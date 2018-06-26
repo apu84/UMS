@@ -8,13 +8,14 @@
             <h3 class="panel-title">Select </h3>
         </div>
         <div class="panel-body pan">
-            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="vm.searchForRoutineData" >
+            <form action="" class="form-horizontal" data-validate="" data-onvalidate="vm.searchForRoutineData">
                 <div class="form-body pal">
 
                     <div class="form-group">
                         <label class="col-md-4 control-label">Program Type</label>
                         <div class="col-md-8">
-                            <select name="programType" class="form-control required" data-ng-model="vm.programType" ng-change="vm.fetchSemesters()" >
+                            <select name="programType" class="form-control required" data-ng-model="vm.programType"
+                                    ng-change="vm.fetchSemesters()">
                                 <option value="">Select Program Type</option>
                                 <option value="11">Undergraduate</option>
                                 <option value="22">PostGraduate</option>
@@ -26,10 +27,10 @@
                         <div class="col-md-8">
                             <select
                                     class="form-control required"
-                                name="semester"
-                                id="semester"
-                                ng-options="semester.name for semester in vm.semesterList track by semester.id"
-                                ng-model="vm.selectedSemester"></select>
+                                    name="semester"
+                                    id="semester"
+                                    ng-options="semester.name for semester in vm.semesterList track by semester.id"
+                                    ng-model="vm.selectedSemester"></select>
 
                         </div>
                     </div>
@@ -37,10 +38,11 @@
                         <label class="col-md-4 control-label">Department</label>
                         <div class="col-md-8">
                             <select
-                                class="form-control required"
-                                name="department"
-                                id="department"
-                                ng-options="department.name for department in vm.deptList" ng-model="vm.selectedDept"></select>
+                                    class="form-control required"
+                                    name="department"
+                                    id="department"
+                                    ng-options="department.name for department in vm.deptList"
+                                    ng-model="vm.selectedDept"></select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -50,7 +52,8 @@
                                     class="form-control required"
                                     name="program"
                                     id="program"
-                                    ng-options="program.shortName for program in vm.programList" ng-model="vm.selectedProgram"></select>
+                                    ng-options="program.shortName for program in vm.programList"
+                                    ng-model="vm.selectedProgram"></select>
                         </div>
                     </div>
 
@@ -70,7 +73,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Semester</label>
                         <div class="col-md-8">
-                            <select name="semester" class="form-control required" data-ng-model="studentsSemester">
+                            <select name="semester" class="form-control required" data-ng-model="vm.studentsSemester">
                                 <option value="">Select Semester</option>
                                 <option value="1">1st semester</option>
                                 <option value="2">2nd semester</option>
@@ -85,7 +88,7 @@
                                     name="theorySection"
                                     id="theorySection"
                                     ng-options="theorySection.name for theorySection in vm.theorySectionList"
-                            ng-model="vm.selectedTheorySection">
+                                    ng-model="vm.selectedTheorySection">
                             </select>
                         </div>
                     </div>
@@ -93,13 +96,13 @@
 
                 </div>
                 <div class="form-actions text-right pal">
-                    <button type="button" class="btn btn-success" ng-click="vm.fetchRoutineConfig()">Search</button>
+                    <button type="button" class="btn btn-success" ng-click="vm.searchForRoutineData()">Search</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div  id="rightDiv">
+    <div id="rightDiv">
 
         <div class="panel" style="min-height: 490px;">
             <div class="panel-heading" style="font-size: 14px;">
@@ -108,30 +111,31 @@
                 <b>Semester:</b> {{vm.studentsSemester}}<span style="margin-left: 15px;"></span>
                 <b>Section:</b>{{vm.selectedTheorySection.name}}
                 <span
-                    class="subtitle"></span></div>
+                        class="subtitle"></span></div>
             <div class="panel-body">
-                <div ng-if="vm.showRoutineSection">
-                    <div class="row">
-                        <div class="col-md-10" align="right">
-                        </div>
-                        <div class="col-md-1" >
-                            <div class="dropdown dropdown-menu-left" >
-                                <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">Menu
-                                    <span class="caret"></span></button>
-                                <ul class="dropdown-menu" >
-                                    <li><a>Section ({{vm.selectedTheorySection.name}}) based view</a></li>
-                                    <li><a>Teacher based view</a></li>
-                                    <li><a>Room based view</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="com-md-1" align="right">
-                            <i class="fa fa-cogs" aria-hidden="true" style="cursor: pointer;"></i>
-                        </div>
+                <div class="row" ng-if="vm.routineData">
+                    <div class="col-md-12">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Time/<br/>Day</th>
+                                <th ng-repeat="header in vm.tableHeader">
+                                    {{header.startTime}} -<br>{{header.endTime}}
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="day in vm.weekDay">
+                                <td>{{day.name}}</td>
+                                <td ng-repeat="header in vm.tableHeader">
+                                    <p></p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
+
                 </div>
-
-
             </div>
         </div>
     </div>
@@ -139,6 +143,6 @@
 <div ng-include="'views/routine/routine-config-modal.html'"></div>
 
 <script type="text/javascript">
-//    setTimeout(function () {$(".fa+.fa-chevron-down").tooltip({placement : 'top', trigger : 'hover', title : "Download Promotion List"});}, 100);
-$(".tooltips").tooltip();
+    //    setTimeout(function () {$(".fa+.fa-chevron-down").tooltip({placement : 'top', trigger : 'hover', title : "Download Promotion List"});}, 100);
+    $(".tooltips").tooltip();
 </script>

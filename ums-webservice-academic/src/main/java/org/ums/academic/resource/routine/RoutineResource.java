@@ -7,6 +7,7 @@ import org.ums.logs.GetLog;
 import org.ums.manager.routine.RoutineManager;
 import org.ums.resource.Resource;
 
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -86,13 +87,13 @@ public class RoutineResource extends MutableRoutineResource {
   }
 
   @GET
-  @Path("/routineForEmployee/semester/{semesterId}/year/{year}/semester/{semester}/section/{section}")
+  @Path("/semester/{semesterId}/program/{programId}/year/{year}/semester/{semester}/section/{section}")
   @GetLog(message = "Accessed class routine report for employee")
-  public JsonObject getRoutineForEmployee(final @Context HttpServletRequest pHttpServletRequest,
-      final @PathParam("semesterId") String semesterId, final @PathParam("year") String year,
-      final @PathParam("semester") String semester, final @PathParam("section") String section) {
-    return mRoutineResourceHelper.getRoutineForEmployee(Integer.parseInt(semesterId), Integer.parseInt(year),
-        Integer.parseInt(semester), section, mUriInfo);
+  public JsonArray getRoutineForEmployee(final @Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("semesterId") int semesterId, final @PathParam("programId") int programId,
+      final @PathParam("year") int year, final @PathParam("semester") int semester,
+      final @PathParam("section") String section) {
+    return mRoutineResourceHelper.getRoutine(semesterId, programId, year, semester, section, mUriInfo);
   }
 
   @GET

@@ -83,7 +83,8 @@ module ums {
                     {id: "3", name: 'Monday'},
                     {id: "4", name: 'Tuesday'},
                     {id: "5", name: 'Wednesday'},
-                    {id: "6", name: 'Thursday'}
+                  {id: "6", name: 'Thursday'},
+                  {id: "7", name: 'Friday'}
                 ],
                 officeShort: {
                     '80': 'RO',

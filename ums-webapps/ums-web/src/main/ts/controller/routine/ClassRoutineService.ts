@@ -1,33 +1,26 @@
 module ums{
 
-    interface IClassRoutine{
-        id:number;
-        semesterId:number;
-        section:string;
-        courseId:string;
-        courseNo:string;
-        programId:number;
-        day:string;
-        academicYear:number;
-        academicSemester:number;
-        startTime:string;
-        endTime:string;
-        duration:string;
-        roomNo:string;
-        roomId:number;
-        updated:boolean;
-        editRoutine:boolean;
-        showEditButton:boolean;
-        showAddButton:boolean;
-        showCancelButton:boolean;
-        courseType:string;
-        status:string;
-        backgroundColor:string;
+  export interface ClassRoutine {
+    id: number;
+    semesterId: number;
+    semester: Semester;
+    programId: number;
+    program: Program;
+    courseId: string;
+    course: Course;
+    day: string;
+    section: string;
+    academicYear: number;
+    academicSemester: number;
+    startTime: string;
+    endTime: string;
+    duration: string;
+    roomId: number;
     }
 
   export class ClassRoutineService{
 
-    private routineUrl:string='/ums-webservice-academic/academic/routine';
+    private routineUrl: string = 'academic/routine';
     public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
     constructor(private appConstants: any, private httpClient: HttpClient,
                 private $q:ng.IQService, private notify: Notify,
@@ -136,20 +129,15 @@ module ums{
     }
 
     public getClassRoutineForEmployee(semesterId:number,
+                                      programId: number,
                                       year:number,
                                       semester:number,
                                       section:string):ng.IPromise<any>{
-      var defer = this.$q.defer();
-      var routines:any={};
-      this.httpClient.get("/ums-webservice-academic/academic/routine/routineForEmployee/semester/"
-          +semesterId+"/year/"+year+"/semester/"+semester+"/section/"+section,'application/json',
-          (data:any,etag:string)=>{
-            routines = data.entries;
-            for(var i=0;i<routines.length;i++){
-              routines.status="exist";
-              routines.updated=false;
-            }
-            defer.resolve(routines);
+      let defer = this.$q.defer();
+      this.httpClient.get(this.routineUrl + "/semester/"
+          + semesterId + "/program/" + programId + "/year/" + year + "/semester/" + semester + "/section/" + section, 'application/json',
+          (data: ClassRoutine[], etag: string) => {
+            defer.resolve(data);
           },
           (response:ng.IHttpPromiseCallbackArg<any>)=>{
             console.error(response);

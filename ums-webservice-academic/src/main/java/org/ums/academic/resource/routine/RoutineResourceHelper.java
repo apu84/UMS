@@ -2,6 +2,7 @@ package org.ums.academic.resource.routine;
 
 import com.itextpdf.text.DocumentException;
 import org.apache.shiro.SecurityUtils;
+import org.json.simple.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,6 +148,11 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return builder.build();
   }
 
+  public JsonArray getRoutine(final Semester pSemester, final Program pProgram) {
+    List<Routine> routineList;
+    return null;
+  }
+
   public JsonObject buildRoutines(final List<Routine> pRoutines, final UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -211,40 +217,18 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return object.build();
   }
 
-  public JsonObject getRoutineForEmployee(final int semesterId, final int academicYear, final int academicSemester,
-      final String section, final UriInfo pUriInfo) {
-    /*
-     * List<Routine> routines = new ArrayList<>(); String userId =
-     * SecurityUtils.getSubject().getPrincipal().toString(); User user = mUserManager.get(userId);
-     * String employeeId = user.getEmployeeId(); Employee employee =
-     * mEmployeeManager.get(employeeId); String deptId = employee.getDepartment().getId();
-     * List<Program> programLIst = mProgramManager .getAll() .stream() .filter(pProgram ->
-     * pProgram.getDepartmentId().equals(deptId)) .collect(Collectors.toList()); //DateFormat
-     * timeFormat = new SimpleDateFormat("hh:mm a");
-     * 
-     * 
-     * 
-     * try{
-     * 
-     * routines = getContentManager(). getEmployeeRoutine(semesterId, programLIst.get(0).getId(),
-     * academicYear, academicSemester).stream() .filter(routine-> routine.getSection().charAt(0)==
-     * section.charAt(0)) .sorted(Comparator.comparing(Routine::getDay).thenComparing(
-     * r->r.getStartTime
-     * ().substring(Math.max(r.getStartTime().length()-2,0))).thenComparing(Routine::getStartTime))
-     * .collect(Collectors.toList());
-     * 
-     * }catch (EmptyResultDataAccessException e){
-     * 
-     * //// TODO: 17-Sep-16 : check for catching proper exception
-     * 
-     * mLogger.error(e.getMessage()); } JsonObjectBuilder object = Json.createObjectBuilder();
-     * JsonArrayBuilder children = Json.createArrayBuilder(); LocalCache localCache = new
-     * LocalCache();
-     * 
-     * for (Routine routine : routines) { children.add(toJson(routine, pUriInfo, localCache)); }
-     * object.add("entries", children); localCache.invalidate(); return object.build();
-     */
-    return null;
+  public JsonArray getRoutine(final int semesterId, final int pProgramId, final int pAcademicYear,
+      final int pAcademicSemester, final String pSection, final UriInfo pUriInfo) {
+    List<Routine> routineList =
+        getContentManager().getRoutine(semesterId, pProgramId, pAcademicYear, pAcademicSemester, pSection);
+    JsonArrayBuilder routineJsonArrayBuilder = Json.createArrayBuilder();
+    for(Routine routine : routineList) {
+      LocalCache localCache = new LocalCache();
+      JsonObjectBuilder routineJsonObjectBuilder = Json.createObjectBuilder();
+      getBuilder().build(routineJsonObjectBuilder, routine, pUriInfo, localCache);
+      routineJsonArrayBuilder.add(routineJsonObjectBuilder);
+    }
+    return routineJsonArrayBuilder.build();
   }
 
   @Override

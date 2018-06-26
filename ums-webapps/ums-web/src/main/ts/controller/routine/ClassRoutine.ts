@@ -5,10 +5,19 @@ module ums {
       programs: Program[];
   }
 
+  interface ITableHeader {
+    startTime: string;
+    endTime: string;
+  }
+
+  interface IConstant {
+    id: string;
+    name: string;
+  }
 
   import IParameter = ums.IParameter;
 
-    export class ClassRoutine  {
+  export class ClassRoutineController {
 
     private selectedSemester: Semester;
     private semesterList: Semester[];
@@ -32,6 +41,9 @@ module ums {
     private routineConfig:RoutineConfig;
     private showRoutineSection:boolean;
     private loggedUser: User;
+    private routineData: ClassRoutine[];
+    private tableHeader: ITableHeader[];
+    private weekDay: IConstant[];
 
     public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window','semesterService','courseService','classRoomService','classRoutineService','$timeout','userService','routineConfigService','$state'];
     constructor(private appConstants: any,
@@ -78,11 +90,66 @@ module ums {
             this.selectedDept=<IParameter>{};
             this.selectedDept = this.deptMapWithId[user.departmentId];
             this.selectedProgram = this.selectedDeptProgram.programs[0];
-            console.log("Selected program");
-            console.log(this.selectedDeptProgram.programs);
             this.programList = this.selectedDeptProgram.programs;
         });
     }
+
+    public fetchRoutineConfig(): ng.IPromise<any> {
+      let defer = this.$q.defer();
+      this.routineConfigService.getBySemesterAndProgramType(this.selectedSemester.id, +this.selectedSemester.programTypeId).then((routineConfig: RoutineConfig) => {
+        this.routineConfig = routineConfig;
+        defer.resolve(routineConfig);
+      });
+      return defer.promise;
+    }
+
+    public generateBody() {
+      let weekDays: IConstant[] = [];
+      weekDays = this.appConstants.weekday;
+      console.log("week days");
+      console.log(weekDays);
+      this.weekDay = [];
+      for (var i = 0; i < weekDays.length; i++) {
+        if (+weekDays[i].id >= this.routineConfig.dayFrom && +weekDays[i].id <= this.routineConfig.dayTo)
+          this.weekDay.push(weekDays[i]);
+      }
+    }
+
+    public generateHeader() {
+      console.log("Generating empty routine");
+      let startTime: any = {};
+      startTime = moment(this.routineConfig.startTime, 'hh:mm A');
+      let endTime = moment(this.routineConfig.endTime, 'hh:mm A');
+      this.tableHeader = [];
+      while (startTime < endTime) {
+        let tableHeaderTmp: ITableHeader = <ITableHeader>{};
+        tableHeaderTmp.startTime = moment(startTime).format('hh:mm A');
+        startTime = moment(startTime).add(this.routineConfig.duration, 'm').toDate();
+        tableHeaderTmp.endTime = moment(startTime).format('hh:mm A');
+        this.tableHeader.push(tableHeaderTmp);
+      }
+    }
+
+    public fetchRoutineData() {
+      this.fetchRoutineConfig().then((routineConfig: RoutineConfig) => {
+        if (this.routineConfig == null || this.routineConfig == undefined) {
+          this.notify.error("Routine of the semester is not yet configured, please contact with the registrar office");
+        }
+        else {
+
+          this.classRoutineService.getClassRoutineForEmployee(this.selectedSemester.id, this.selectedProgram.id, +this.studentsYear, +this.studentsSemester, this.selectedTheorySection.id).then((routineData: ClassRoutine[]) => {
+            this.generateHeader();
+            this.generateBody();
+            this.routineData = [];
+            this.routineData = routineData;
+            if (routineData.length == 0)
+              console.log("routine data");
+            console.log(routineData);
+          });
+        }
+      });
+    }
+
 
 
     public fetchSemesters(){
@@ -98,32 +165,16 @@ module ums {
         });
     }
 
-    public fetchRoutineConfig(){
-        this.showRoutineSection=true;
-
-        console.log("In the routine config");
-        this.routineConfigService.getBySemesterAndProgram(this.selectedSemester.id, +this.selectedProgram.id).then((routineConfig:RoutineConfig)=>{
-            if(routineConfig==undefined){
-                this.notify.error("Routine configuration is not set");
-                console.log("logged user");
-                console.log(this.loggedUser);
-                $("#routineConfigModal").modal('toggle');
-                this.$state.go('classRoutine.classRoutineConfig',{semester:this.selectedSemester, user:this.loggedUser,department:this.selectedDept, program:this.selectedProgram});
-            }
-            else
-                this.routineConfig = routineConfig;
-        });
-    }
-
 
 
     public searchForRoutineData(){
-        Utils.expandRightDiv();
-    }
+      this.fetchRoutineData();
+      Utils.expandRightDiv();
 
+    }
 
 
   }
 
-  UMS.controller("ClassRoutine", ClassRoutine);
+  UMS.controller("ClassRoutine", ClassRoutineController);
 }

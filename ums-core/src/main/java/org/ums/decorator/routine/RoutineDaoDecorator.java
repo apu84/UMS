@@ -2,8 +2,8 @@ package org.ums.decorator.routine;
 
 import org.ums.decorator.ContentDaoDecorator;
 import org.ums.domain.model.immutable.Student;
-import org.ums.domain.model.mutable.routine.MutableRoutine;
 import org.ums.domain.model.immutable.routine.Routine;
+import org.ums.domain.model.mutable.routine.MutableRoutine;
 import org.ums.manager.routine.RoutineManager;
 
 import java.util.List;
@@ -24,8 +24,8 @@ public class RoutineDaoDecorator extends ContentDaoDecorator<Routine, MutableRou
   }
 
   @Override
-  public List<Routine> getEmployeeRoutine(int semesterId, int programId, int year, int semester) {
-    return getManager().getEmployeeRoutine(semesterId, programId, year, semester);
+  public List<Routine> getRoutine(int semesterId, int programId, int year, int semester, String section) {
+    return getManager().getRoutine(semesterId, programId, year, semester, section);
   }
 
   @Override

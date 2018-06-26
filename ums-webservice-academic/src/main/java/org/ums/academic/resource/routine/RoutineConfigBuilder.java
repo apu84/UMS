@@ -49,7 +49,7 @@ public class RoutineConfigBuilder implements Builder<RoutineConfig, MutableRouti
 
   @Override
   public void build(MutableRoutineConfig pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    if (pJsonObject.containsKey("id"))
+    if(pJsonObject.containsKey("id"))
       pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
     pMutable.setProgramType(ProgramType.get(pJsonObject.getInt("programType")));
     pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
