@@ -63,12 +63,11 @@ module ums {
         showContributorLoader: boolean;
         showPublisherLoader: boolean;
         showSupplierLoader: boolean;
-        currencies: Array<ICurrency>;
     }
 
     interface ICurrency {
         id: string;
-        notation: string;
+        name: string;
     }
 
     export class Cataloging {
@@ -125,6 +124,7 @@ module ums {
             $scope.bulkItemList = Array<IItem>();
             $scope.recordList = Array<IRecord>();
 
+
             $scope.data = {
                 languageOptions: libConstants.languages,
                 bindingTypeOptions: libConstants.bindingTypes,
@@ -134,6 +134,7 @@ module ums {
                 itemOptions: libConstants.itemStatus,
                 materialTypeOptions: libConstants.materialTypes,
                 journalFrequencyOptions: libConstants.journalFrequency,
+                currencies: libConstants.currencyTypes,
                 readOnlyMode: false,
                 supplierReadOnlyMode: false,
                 showItemMainButtonPanel: true,
@@ -206,8 +207,6 @@ module ums {
                 this.$scope.data.readOnlyMode = true;
             }
 
-            $scope.currencies = Array<ICurrency>();
-
             this.initNavButtonCallbacks();
 
             // this.addNewRow("");
@@ -221,7 +220,6 @@ module ums {
             this.$scope.supplierList = supplier;
             this.$scope.publisherList = publisher;
             this.loadCountries();
-            this.getAllCurrencies();
             $scope.showSupplierSelect2 = true;
             $scope.showPublisherSelect2 = true;
             $scope.showContributorSelect2 = true;
@@ -965,13 +963,6 @@ module ums {
                         }
                     }
                 }
-            });
-        }
-
-        private getAllCurrencies(): void {
-            this.httpClient.get("/ums-webservice-account/account/definition/currency/all", HttpClient.MIME_TYPE_JSON,
-                (response: any) => {
-                this.$scope.currencies = response;
             });
         }
     }
