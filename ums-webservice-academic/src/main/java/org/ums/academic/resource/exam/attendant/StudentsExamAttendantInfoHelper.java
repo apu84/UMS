@@ -138,7 +138,6 @@ public class StudentsExamAttendantInfoHelper extends
                             + programId.toString())));
         examAttendantYearSemesterWiseDataList.add(examAttendantYearSemesterWiseData);
       }
-
       studentsExamAttendantData.setExamAttendantYearSemesterWiseDataList(examAttendantYearSemesterWiseDataList);
       studentsExamAttendantDataList.add(studentsExamAttendantData);
     }

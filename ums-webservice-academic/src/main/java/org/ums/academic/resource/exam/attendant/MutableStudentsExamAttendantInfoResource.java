@@ -2,6 +2,7 @@ package org.ums.academic.resource.exam.attendant;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.academic.resource.exam.attendant.StudentsExamAttendantInfoHelper;
+import org.ums.report.generator.examAttendance.ExamAttendanceGenerator;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;

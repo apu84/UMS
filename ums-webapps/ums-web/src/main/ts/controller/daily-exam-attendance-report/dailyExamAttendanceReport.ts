@@ -134,6 +134,11 @@ module ums{
            })
 
         }
+        private getPdfVersionReport(){
+            this.dailyExamAttendanceReportService.getExamAttendantReport(this.selectedSemesterId,this.selectedExamTypeId,this.selectedExamDate).then((data)=>{
+               console.log("success!!")
+            });
+        }
         public convertToJson(result: Array<IStudentsExamAttendantData>): any {
             var completeJson = {};
             console.log("result");

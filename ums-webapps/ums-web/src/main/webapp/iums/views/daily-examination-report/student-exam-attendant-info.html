@@ -76,7 +76,7 @@
                                         </tr>
                                         </thead>
                                         <thead>
-                                        <tr data-ng-repeat="val in app.examAttendantYearSemesterWiseDataList">
+                                        <tr data-ng-repeat="val in app.examAttendantYearSemesterWiseDataList | orderBy:['year','semester']">
                                             <td>{{val.year+"/"+val.semester}}</td>
                                             <td style="color: lightskyblue;text-align: center">{{val.totalAttendantStudentNumber}}</td>
                                             <td style="color: #5cb85c;text-align: center">{{val.totalAttendantStudentNumber-val.absentStudent}}</td>
@@ -91,6 +91,7 @@
                     </table>
 
                 <div  align="right" style="padding-right:20px">
+                    <button type="button" data-ng-click="vm.getPdfVersionReport()"  class="btn btn-info">Download Pdf</button>
                     <button type="button" data-ng-click="vm.save()"  class="btn btn-success">Submit</button>
                     <!-- data-ng-show="vm.enableSubmitButton"
                     -->

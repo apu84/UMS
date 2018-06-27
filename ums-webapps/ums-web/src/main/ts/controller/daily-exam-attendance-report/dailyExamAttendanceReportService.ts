@@ -33,7 +33,6 @@ module ums{
         }
         public addStudentAttendantInfo(json:any):ng.IPromise<any>{
             var defer = this.$q.defer();
-            var that=this;
             console.log("Inside-Service")
             console.log(json);
             this.httpClient.post("academic/studentsExamAttendantInfo/addStudentAttendantRecords",json,'application/json')
@@ -46,6 +45,22 @@ module ums{
                     this.notify.error("Problem in saving data");
                     defer.resolve('failure');
                 });
+            return defer.promise;
+        }
+
+        public getExamAttendantReport(pSemesterId:number,pExamType:number,pExamDate:string){
+            console.log("in");
+            var defer = this.$q.defer();
+            let contentType: string = UmsUtil.getFileContentType("pdf");
+            let fileName="Daily Examination Report";
+            this.httpClient.get('/ums-webservice-academic/academic/studentsExamAttendantInfo/getReport/semesterId/'+pSemesterId+'/examType/'+pExamType+'/examDate/'+pExamDate, 'application/pdf',
+                (data: any, etag: string) => {
+                    console.log("pdf");
+                    UmsUtil.writeFileContent(data, contentType, fileName);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                }, 'arraybuffer');
             return defer.promise;
         }
 

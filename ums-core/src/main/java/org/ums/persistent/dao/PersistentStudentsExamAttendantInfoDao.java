@@ -1,11 +1,16 @@
 package org.ums.persistent.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.StudentsExamAttendantInfoDaoDecorator;
+import org.ums.domain.model.immutable.StudentsExamAttendantInfo;
 import org.ums.domain.model.mutable.MutableStudentsExamAttendantInfo;
 import org.ums.generator.IdGenerator;
+import org.ums.persistent.model.PersistentStudentsExamAttendantInfo;
 import org.ums.util.UmsUtils;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +37,18 @@ public class PersistentStudentsExamAttendantInfoDao extends StudentsExamAttendan
           + "   INSERT (ID,PROGRAM_ID,SEMESTER_ID,YEAR,SEMESTER,EXAM_TYPE,PRESENT_STUDENT,ABSENT_STUDENT,REGISTERED_STUDENT,EXAM_DATE)  "
           + "     VALUES (?,?,?,?,?,?,?,?,?,TO_DATE(?,'DD-MM-YYYY'))";
 
+  String EXAM_ATTENDANT_INFO =
+      "SELECT PROGRAM_ID,SEMESTER_ID,\"YEAR\",SEMESTER,EXAM_TYPE,PRESENT_STUDENT,ABSENT_STUDENT,REGISTERED_STUDENT,to_char(EXAM_DATE,'DD-MM-YYYY') EXAM_DATE FROM EXAM_ATTENDANT_INFORMATION WHERE  SEMESTER_ID=? AND EXAM_TYPE=? "
+          + " AND EXAM_DATE = TO_DATE(?,'DD-MM-YYYY')";
+
+  @Override
+  public List<StudentsExamAttendantInfo> getSemesterExamTypeDateWiseRecords(Integer pSemesterId, Integer pExamType,
+      String pExamDate) {
+
+    return mJdbcTemplate.query(EXAM_ATTENDANT_INFO, new Object[] {pSemesterId, pExamType, pExamDate},
+        new ExamAttendantRowMapper());
+  }
+
   @Override
   public List<Long> create(List<MutableStudentsExamAttendantInfo> pMutableList) {
     List<Object[]> parameters = getInsertParamList(pMutableList);
@@ -54,5 +71,24 @@ public class PersistentStudentsExamAttendantInfoDao extends StudentsExamAttendan
       e.printStackTrace();
     }
     return params;
+  }
+}
+
+
+class ExamAttendantRowMapper implements RowMapper<StudentsExamAttendantInfo> {
+
+  @Override
+  public StudentsExamAttendantInfo mapRow(ResultSet pResultSet, int i) throws SQLException {
+    PersistentStudentsExamAttendantInfo application = new PersistentStudentsExamAttendantInfo();
+    application.setProgramId(pResultSet.getInt("PROGRAM_ID"));
+    application.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
+    application.setYear(pResultSet.getInt("YEAR"));
+    application.setSemester(pResultSet.getInt("SEMESTER"));
+    application.setExamType(pResultSet.getInt("EXAM_TYPE"));
+    application.setPresentStudents(pResultSet.getInt("PRESENT_STUDENT"));
+    application.setAbsentStudents(pResultSet.getInt("ABSENT_STUDENT"));
+    application.setRegisteredStudents(pResultSet.getInt("REGISTERED_STUDENT"));
+    application.setExamDate(pResultSet.getString("EXAM_DATE"));
+    return application;
   }
 }
