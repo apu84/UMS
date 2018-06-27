@@ -16,6 +16,7 @@ module ums {
         private enableAoiEdit: boolean = false;
         private enableEditButton: boolean = false;
         private stateParams: any;
+        private showLoader: boolean = false;
 
         constructor(private registrarConstants: any,
                     private $q: ng.IQService,
@@ -33,26 +34,27 @@ module ums {
         }
 
         public get(type: string): void {
+            this.showLoader = true;
             if (type === 'additional') {
                 this.employeeInformationService.getAdditionalInformation(this.userId).then((additionalInformation: any) => {
-                    console.log(additionalInformation);
                     if (additionalInformation) {
                         this.additional = additionalInformation;
                     }
                     else {
                         this.additional = <IAdditionalInformationModel>{};
                     }
+                    this.showLoader = false;
                 });
             }
             else if (type === 'aoi') {
                 this.employeeInformationService.getAoiInformation(this.userId).then((aoiInformation: any) => {
                     if (aoiInformation) {
-                        console.log(aoiInformation);
                         this.aoi = aoiInformation;
                     }
                     else {
                         this.aoi = [];
                     }
+                    this.showLoader = false;
                 });
             }
         }
