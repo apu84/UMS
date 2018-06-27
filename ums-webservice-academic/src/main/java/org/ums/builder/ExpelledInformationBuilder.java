@@ -97,5 +97,7 @@ public class ExpelledInformationBuilder implements Builder<ExpelledInformation, 
       pMutable.setExpelledReason(pJsonObject.getString("expelReason"));
     if(pJsonObject.containsKey("regType"))
       pMutable.setRegType(pJsonObject.getInt("regType"));
+    if(pJsonObject.containsKey("examDate"))
+      pMutable.setExamDate(pJsonObject.getString("examDate"));
   }
 }

@@ -6,6 +6,8 @@ import org.ums.domain.model.mutable.MutableExpelledInformation;
 import org.ums.manager.CacheManager;
 import org.ums.manager.ExpelledInformationManager;
 
+import java.util.List;
+
 /**
  * Created by Monjur-E-Morshed on 5/27/2018.
  */
@@ -23,4 +25,9 @@ public class ExpelledInformationCache extends
     return mCacheManager;
   }
 
+  @Override
+  public List<ExpelledInformation> getSemesterExamTyeDateWiseRecords(Integer pSemesterId, Integer pExamType,
+      String pExamDate) {
+    return getManager().getSemesterExamTyeDateWiseRecords(pSemesterId, pExamType, pExamDate);
+  }
 }

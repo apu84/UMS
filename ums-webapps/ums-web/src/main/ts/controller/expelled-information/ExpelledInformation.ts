@@ -137,6 +137,7 @@ module ums{
                     item["examType"] = this.selectedExamTypeId !=ExamType.REGULAR ? ExamType.CARRY_CLEARANCE_IMPROVEMENT:ExamType.REGULAR;
                     item["regType"] = this.selectedRegType;
                     item["expelReason"] = this.reasonOfExpel;
+                    item["examDate"]=this.examDate;
                     jsonObj.push(item);
             completeJson["entries"] = jsonObj;
             console.log(completeJson);

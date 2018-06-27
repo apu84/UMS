@@ -10,5 +10,7 @@ import java.util.List;
  */
 public interface ExpelledInformationManager extends
     ContentManager<ExpelledInformation, MutableExpelledInformation, Long> {
+  List<ExpelledInformation> getSemesterExamTyeDateWiseRecords(final Integer pSemesterId, final Integer pExamType,
+      final String pExamDate);
 
 }

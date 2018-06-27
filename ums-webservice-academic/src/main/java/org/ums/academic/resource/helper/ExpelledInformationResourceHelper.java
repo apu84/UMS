@@ -59,7 +59,6 @@ public class ExpelledInformationResourceHelper extends
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    List<MutableExpelledInformation> applications = new ArrayList<>();
     JsonArray entries = pJsonObject.getJsonArray("entries");
     LocalCache localCache = new LocalCache();
     JsonObject jsonObject = entries.getJsonObject(0);

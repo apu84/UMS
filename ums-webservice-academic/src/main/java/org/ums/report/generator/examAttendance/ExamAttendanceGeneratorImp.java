@@ -7,11 +7,11 @@ import com.itextpdf.text.pdf.PdfWriter;
 import org.jvnet.hk2.internal.Collector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.ums.domain.model.immutable.ExpelledInformation;
 import org.ums.domain.model.immutable.StudentsExamAttendantInfo;
+import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
-import org.ums.manager.ProgramManager;
-import org.ums.manager.SemesterManager;
-import org.ums.manager.StudentsExamAttendantInfoManager;
+import org.ums.manager.*;
 import org.ums.report.itext.UmsCell;
 import org.ums.report.itext.UmsParagraph;
 
@@ -35,6 +35,12 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
   StudentsExamAttendantInfoManager mStudentsExamAttendantInfoManager;
   @Autowired
   ProgramManager mProgramManager;
+  @Autowired
+  ExpelledInformationManager mExpelledInformationManager;
+  @Autowired
+  StudentManager mStudentManager;
+  @Autowired
+  CourseManager mCourseManager;
 
   @Override
   public void createTestimonial(Integer pSemesterId, Integer pExamType, String pExamDate, OutputStream pOutputStream)
@@ -99,6 +105,7 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
     Map<Integer,List<StudentsExamAttendantInfo>> programIdMap=studentsExamAttendantInfoList.
             stream().collect(Collectors.groupingBy(StudentsExamAttendantInfo::getProgramId));
       Map<Integer,List<StudentsExamAttendantInfo>> programMap=new TreeMap<Integer,List<StudentsExamAttendantInfo>>(programIdMap);
+      List<ExpelledInformation> expelledInformation=mExpelledInformationManager.getSemesterExamTyeDateWiseRecords(pSemesterId,pExamType,pExamDate);
 
     //
 
@@ -126,7 +133,7 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
       programTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
     }
 
-    Integer totalReg=0,totalPs=0,totalAb=0,maxRowNo=0;
+    Integer totalReg=0,totalPs=0,totalAb=0,maxRowNo=0,totalExp=expelledInformation.size();
       for(Map.Entry<Integer, List<StudentsExamAttendantInfo>> entry:programMap.entrySet()){
        if(entry.getValue().size()>maxRowNo){
            maxRowNo=entry.getValue().size();
@@ -212,10 +219,72 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
     cell = new UmsCell(new Phrase("Total Absent: "+totalAb,fontTimes10Bold));
     cell.setHorizontalAlignment(UmsCell.ALIGN_RIGHT);
     totalInfoTable.addCell(cell);
-    cell = new UmsCell(new Phrase("Total Expelled: "+5,fontTimes10Bold));
+    cell = new UmsCell(new Phrase("Total Expelled: "+totalExp,fontTimes10Bold));
     cell.setHorizontalAlignment(UmsCell.ALIGN_RIGHT);
     totalInfoTable.addCell(cell);
     document.add(totalInfoTable);
+      chunk = new Chunk("\n02. Expelled information\n");
+      paragraph = new UmsParagraph();
+      paragraph.setAlignment(Element.ALIGN_CENTER);
+      paragraph.setFont(fontTimes10Bold);
+      paragraph.add(chunk);
+      document.add(paragraph);
+    //Expelled Information
+      //Table Creation for programs
+      PdfPTable expelledInfoTable = new PdfPTable(7);
+      expelledInfoTable.setSpacingBefore(5);
+      expelledInfoTable.setSpacingAfter(5);
+      expelledInfoTable.setWidthPercentage(100);
+      //table creation for Info
+      // program cell
+      cell = new UmsCell(new Phrase("Student Name",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      expelledInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Student ID",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      expelledInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Dept",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      expelledInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Year/Sem.",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      expelledInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("RegType",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      expelledInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Course Title",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      expelledInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Reason of Expulsion",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      expelledInfoTable.addCell(cell);
+
+      for(int i=0;i<expelledInformation.size();i++){
+          cell = new UmsCell(new Phrase(""+mStudentManager.get(expelledInformation.get(i).getStudentId()).getFullName(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          expelledInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+expelledInformation.get(i).getStudentId(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          expelledInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+mStudentManager.get(expelledInformation.get(i).getStudentId()).getDepartment().getShortName(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          expelledInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+mStudentManager.get(expelledInformation.get(i).getStudentId()).getCurrentYear()+"/"+
+                  mStudentManager.get(expelledInformation.get(i).getStudentId()).getCurrentAcademicSemester(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          expelledInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+ CourseRegType.get(expelledInformation.get(i).getRegType()).getLabel(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          expelledInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+mCourseManager.get(expelledInformation.get(i).getCourseId()).getTitle()+"("+
+                  mCourseManager.get(expelledInformation.get(i).getCourseId()).getNo()+")",fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          expelledInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+expelledInformation.get(i).getExpelledReason(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          expelledInfoTable.addCell(cell);
+      }
+      document.add(expelledInfoTable);
     document.close();
     baos.writeTo(pOutputStream);
   }
