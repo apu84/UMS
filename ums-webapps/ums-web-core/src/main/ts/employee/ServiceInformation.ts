@@ -25,6 +25,7 @@ module ums {
         private enableEdit: boolean[] = [false];
         private enableServiceDetailEdit: boolean[][] = [[false],[false]];
         private enableEditButton: boolean = false;
+        private showLoader: boolean = false;
 
         constructor(private registrarConstants: any,
                     private $q: ng.IQService,
@@ -151,6 +152,7 @@ module ums {
         }
 
         private get(): void {
+            this.showLoader = true;
             this.service = [];
             this.employeeInformationService.getServiceInformation(this.userId).then((serviceInformation: any) => {
                 if (serviceInformation) {
@@ -160,6 +162,7 @@ module ums {
                 else {
                     this.service = [];
                 }
+                this.showLoader = false;
             });
         }
 

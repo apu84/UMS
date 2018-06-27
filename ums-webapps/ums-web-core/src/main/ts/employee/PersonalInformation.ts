@@ -1,6 +1,4 @@
 module ums {
-    import IGeneralInformationModel = ums.IGeneralInformationModel;
-
     class PersonalInformation {
         public static $inject = ['registrarConstants', '$q', 'notify',
             'countryService', 'divisionService', 'districtService', 'thanaService',
@@ -43,6 +41,7 @@ module ums {
         private enableEdit: boolean;
         private enableEditButton: boolean = false;
         private test: boolean = true;
+        private showLoader: boolean = true;
 
         constructor(private registrarConstants: any,
                     private $q: ng.IQService,
@@ -158,6 +157,7 @@ module ums {
 
 
         private getPersonalInformation() {
+            this.showLoader = true;
             this.employeeInformationService.getPersonalInformation(this.userId)
                 .then((data: any) => {
                     this.initializePersonalObjects('all');
@@ -169,6 +169,7 @@ module ums {
                     this.copyOfGeneralInformation = angular.copy(this.entry.general);
                     this.copyOfContactInformation = angular.copy(this.entry.contact);
                     this.copyOfEmergencyContactInformation = angular.copy(this.entry.emergencyContact);
+                    this.showLoader = false;
                 });
         }
 

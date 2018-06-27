@@ -15,6 +15,7 @@ module ums {
         private stateParams: any;
         private enableEdit: boolean[] = [false];
         private enableEditButton: boolean = false;
+        private showLoader: boolean = false;
 
         constructor(private registrarConstants: any,
                     private $q: ng.IQService,
@@ -62,6 +63,7 @@ module ums {
 
 
         private get(): void {
+            this.showLoader = true;
             this.training = [];
             this.employeeInformationService.getTrainingInformation(this.userId).then((trainingData: any) => {
                 if (trainingData) {
@@ -70,6 +72,7 @@ module ums {
                 else {
                     this.training = [];
                 }
+                this.showLoader = false;
             });
         }
 
