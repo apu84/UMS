@@ -639,8 +639,7 @@ module ums {
                 ],
                 officialEmployeeTypes: [
                     {id: 2, name: "Officer"},
-                    {id: 3, name: "Staff"},
-                    {id: 9, name: "Top Management"}
+                    {id: 3, name: "Staff"}
                 ],
                 MARKS_SUBMISSION_STATUS: {
                     NOT_SUBMITTED: 0,
