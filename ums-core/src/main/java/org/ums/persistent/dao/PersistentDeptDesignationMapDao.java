@@ -13,7 +13,7 @@ import java.util.List;
 public class PersistentDeptDesignationMapDao extends DeptDesignationMapDaoDecorator {
 
   static String SELECT_ALL =
-      "SELECT ID, DEPARTMENT, EMPLOYEE_TYPE, DESIGNATION, LAST_MODIFIED FROM DEPT_DESIGNATION_MAP";
+      "SELECT ID, DEPARTMENT, EMPLOYEE_TYPE, DESIGNATION, ROLE_ID, LAST_MODIFIED FROM DEPT_DESIGNATION_MAP";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -57,6 +57,7 @@ public class PersistentDeptDesignationMapDao extends DeptDesignationMapDaoDecora
       persistentDeptDesignationMap.setDepartmentId(rs.getString("DEPARTMENT"));
       persistentDeptDesignationMap.setEmployeeTypeId(rs.getInt("EMPLOYEE_TYPE"));
       persistentDeptDesignationMap.setDesignationId(rs.getInt("DESIGNATION"));
+      persistentDeptDesignationMap.setRoleId(rs.getInt("ROLE_ID"));
       persistentDeptDesignationMap.setLastModified(rs.getString("LAST_MODIFIED"));
       return persistentDeptDesignationMap;
     }

@@ -17,6 +17,7 @@ public class DeptDesignationMapBuilder implements Builder<DeptDesignationMap, Mu
     pBuilder.add("departmentId", pReadOnly.getDepartmentId());
     pBuilder.add("employeeTypeId", pReadOnly.getEmployeeTypeId());
     pBuilder.add("designationId", pReadOnly.getDesignationId());
+    pBuilder.add("roleId", pReadOnly.getRoleId());
     pBuilder.add("lastModified", pReadOnly.getLastModified() == null ? "" : pReadOnly.getLastModified());
   }
 
