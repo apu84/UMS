@@ -3,10 +3,10 @@ package org.ums.persistent.model;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Department;
-import org.ums.domain.model.immutable.DeptDesignationMap;
 import org.ums.domain.model.immutable.Designation;
 import org.ums.domain.model.mutable.MutableDeptDesignationMap;
 import org.ums.manager.DeptDesignationMapManager;
+import org.ums.usermanagement.role.Role;
 
 public class PersistentDeptDesignationMap implements MutableDeptDesignationMap {
 
@@ -24,6 +24,8 @@ public class PersistentDeptDesignationMap implements MutableDeptDesignationMap {
   private int mEmployeeTypeId;
   private int mDesignationId;
   private Designation mDesignation;
+  private Role mRole;
+  private int mRoleId;
   private String mLastModified;
 
   public PersistentDeptDesignationMap() {
@@ -37,6 +39,8 @@ public class PersistentDeptDesignationMap implements MutableDeptDesignationMap {
     mEmployeeTypeId = pPersistentDeptDesignationMap.getEmployeeTypeId();
     mDesignationId = pPersistentDeptDesignationMap.getEmployeeTypeId();
     mDesignation = pPersistentDeptDesignationMap.getDesignation();
+    mRole = pPersistentDeptDesignationMap.getRole();
+    mRoleId = pPersistentDeptDesignationMap.getRoleId();
     mLastModified = pPersistentDeptDesignationMap.getLastModified();
   }
 
@@ -106,6 +110,16 @@ public class PersistentDeptDesignationMap implements MutableDeptDesignationMap {
   }
 
   @Override
+  public void setRole(Role pRole) {
+    mRole = pRole;
+  }
+
+  @Override
+  public void setRoleId(int pRoleId) {
+    mRoleId = pRoleId;
+  }
+
+  @Override
   public Department getDepartment() {
     return mDepartment;
   }
@@ -128,5 +142,15 @@ public class PersistentDeptDesignationMap implements MutableDeptDesignationMap {
   @Override
   public Designation getDesignation() {
     return mDesignation;
+  }
+
+  @Override
+  public Role getRole() {
+    return mRole;
+  }
+
+  @Override
+  public int getRoleId() {
+    return mRoleId;
   }
 }

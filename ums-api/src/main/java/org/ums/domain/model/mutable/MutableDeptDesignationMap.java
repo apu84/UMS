@@ -5,6 +5,7 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.DeptDesignationMap;
 import org.ums.domain.model.immutable.Designation;
+import org.ums.usermanagement.role.Role;
 
 public interface MutableDeptDesignationMap extends DeptDesignationMap, Editable<Integer>, MutableIdentifier<Integer>,
     MutableLastModifier {
@@ -18,4 +19,8 @@ public interface MutableDeptDesignationMap extends DeptDesignationMap, Editable<
   void setDesignationId(final int pDesignationId);
 
   void setDesignation(final Designation pDesignation);
+
+  void setRole(final Role pRole);
+
+  void setRoleId(final int pRoleId);
 }
