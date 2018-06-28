@@ -25,7 +25,7 @@ module ums {
         private enableEdit: boolean[] = [false];
         private enableServiceDetailEdit: boolean[][] = [[false],[false]];
         private enableEditButton: boolean = false;
-        private showLoader: boolean = false;
+        private showLoader: boolean = true;
 
         constructor(private registrarConstants: any,
                     private $q: ng.IQService,
