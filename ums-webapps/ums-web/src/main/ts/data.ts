@@ -78,6 +78,7 @@
         '/expelledInformation': {title: 'Expelled Students Information', 'breadcrumb': ['Expelled Students Information']},
         '/viewExpelledInformation': {title: 'View Expelled Information', 'breadcrumb': ['Expelled Students Information']},
         '/dailyExamAttendanceReport': {title: 'Daily Exam Attendance Report', 'breadcrumb': ['Daily Exam Attendance Report']},
+        '/absentLateComingInfo': {title: 'Absent/Late Coming', 'breadcrumb': ['Absent/Late Coming']},
         '/publicHolidays': {title: 'Public Holidays', 'breadcrumb': ['Public Holidays  ']},
         '/search': {title: 'Library:Search', 'breadcrumb': ['Search']},
         '/employeeProfile': {title: 'Profile', 'breadcrumb': ['Profile']},

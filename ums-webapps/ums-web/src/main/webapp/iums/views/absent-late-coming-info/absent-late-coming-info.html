@@ -1,0 +1,159 @@
+<div>
+    <div class="panel">
+        <div class="panel-heading">Add absent/late coming informations
+        </div>
+        <div class="panel-body">
+            <div class="row ">
+                <div class="col-md-12">
+                    <div class="form-body pal">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="fromStudentList" class="control-label"><b>Select Department</b></label>
+                                    <div class="input-icon left">
+                                        <select
+                                                class="form-control required"
+                                                name="theorySection"
+                                                id="theoryBulk"
+                                                style="width: 70%;"
+                                                data-ng-options="theory.name for theory in bulkTheorySectionList track by theory.id"
+                                                data-ng-model="bulkTheorySection"
+                                                data-ng-change="changeBulkTheorySection(bulkTheorySection)"
+                                        >
+                                            <option value="">Select Department</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="toStudentList" class="control-label"><b>Empoyee Name</b></label>
+                                    <div class="input-icon left">
+                                        <input type="text" id="toStudentList" style="width: 70%;" class="form-control"
+                                              placeholder="Enter employee name" data-ng-model="toStudentId"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="toStudentList" class="control-label"><b>Exam Type</b></label>
+                                <div class="input-icon left">
+                                    <select
+                                            class="form-control required"
+                                            name="theorySection"
+                                            id="theoryBulk"
+                                            style="width: 70%;"
+                                            data-ng-options="theory.name for theory in bulkTheorySectionList track by theory.id"
+                                            data-ng-model="bulkTheorySection"
+                                            data-ng-change="changeBulkTheorySection(bulkTheorySection)"
+                                    >
+                                        <option value=""><b>Select Exam Type</b></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-12">
+                    <div class="form-body pal">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="fromStudentList" class="control-label"><b>Absent/Late Status</b></label>
+                                    <div class="input-icon left">
+                                        <select
+                                                class="form-control required"
+                                                name="theorySection"
+                                                id="theoryBulk"
+                                                style="width: 70%;"
+                                                data-ng-options="theory.name for theory in bulkTheorySectionList track by theory.id"
+                                                data-ng-model="bulkTheorySection"
+                                                data-ng-change="changeBulkTheorySection(bulkTheorySection)"
+                                        ><option value="">Select Absent/Late Status</option></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="toStudentList" class="control-label"><b>Remarks</b></label>
+                                    <div class="input-icon left">
+                                        <select
+                                                class="form-control required"
+                                                name="theorySection"
+                                                id="theoryBulk"
+                                                style="width: 70%;"
+                                                data-ng-options="theory.name for theory in bulkTheorySectionList track by theory.id"
+                                                data-ng-model="bulkTheorySection"
+                                                data-ng-change="changeBulkTheorySection(bulkTheorySection)"
+                                        >
+                                            <option value="">Remarks</option></select>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="toStudentList" class="control-label"><b>Invigilation Room</b></label>
+                                <div class="input-icon left">
+                                    <select
+                                            class="form-control required"
+                                            name="theorySection"
+                                            id="theoryBulk"
+                                            style="width: 70%;"
+                                            data-ng-options="theory.name for theory in bulkTheorySectionList track by theory.id"
+                                            data-ng-model="bulkTheorySection"
+                                            data-ng-change="changeBulkTheorySection(bulkTheorySection)"
+                                    ><option value="">Invigilation Room</option></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-12">
+                    <div class="form-body pal">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="fromStudentList" class="control-label"><b>Exam Date</b></label>
+                                    <div class="input-icon left">
+                                        <select
+                                                class="form-control required"
+                                                name="theorySection"
+                                                id="theoryBulk"
+                                                style="width: 70%;"
+                                                data-ng-options="theory.name for theory in bulkTheorySectionList track by theory.id"
+                                                data-ng-model="bulkTheorySection"
+                                                data-ng-change="changeBulkTheorySection(bulkTheorySection)"
+                                        ><option value="">Invigilation Exam date</option></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="fromStudentList" class="control-label"><b>Arrival Time</b></label>
+                                    <div class="input-icon left">
+                                        <input type="text"
+                                              placeholder="Enter arrival time" id="fromStudentListj" style="width: 70%;" class="form-control" data-ng-model="fromStudentId" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="fromStudentList" class="control-label"> </label>
+                                    <div class="input-icon left">
+                                        <button type="button" class="btn btn-success" style="width: 70%;" data-ng-click="vm.doSomething()">submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+</div>
+</div>
