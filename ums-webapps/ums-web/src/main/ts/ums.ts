@@ -604,6 +604,12 @@ module ums {
           templateUrl: 'views/routine/class-routine.html',
           controllerAs: 'vm'
         })
+        .state('classRoutine.classRoutineChart', {
+          url: "/classRoutineChart",
+          controller: 'ClassRoutineChartController',
+          templateUrl: 'views/routine/class-routine-chart.html',
+          controllerAs: 'vm'
+        })
         .state('classRoutineConfig', {
           url: "/classRoutineConfig",
           controller: 'RoutineConfigController',

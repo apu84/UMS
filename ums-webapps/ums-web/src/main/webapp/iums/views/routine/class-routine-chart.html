@@ -1,0 +1,24 @@
+<div class="col-md-12" ng-if="vm.classRoutineService.routineData">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Time/<br/>Day</th>
+            <th ng-repeat="header in vm.tableHeader">
+                {{header.startTime}} -<br>{{header.endTime}}
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="day in vm.weekDay">
+            <td>{{day.name}}</td>
+            <td ng-repeat="header in vm.tableHeader">
+                <div align="right">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true" style="cursor: pointer"
+                       ng-click="vm.edit()"></i>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+

@@ -30,7 +30,7 @@
                                     name="semester"
                                     id="semester"
                                     ng-options="semester.name for semester in vm.semesterList track by semester.id"
-                                    ng-model="vm.selectedSemester"></select>
+                                    ng-model="vm.classRoutineService.selectedSemester"></select>
 
                         </div>
                     </div>
@@ -53,14 +53,15 @@
                                     name="program"
                                     id="program"
                                     ng-options="program.shortName for program in vm.programList"
-                                    ng-model="vm.selectedProgram"></select>
+                                    ng-model="vm.classRoutineService.selectedProgram"></select>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-md-4 control-label">Year</label>
                         <div class="col-md-8">
-                            <select name="year" class="form-control required" data-ng-model="vm.studentsYear">
+                            <select name="year" class="form-control required"
+                                    data-ng-model="vm.classRoutineService.studentsYear">
                                 <option value="">Select Year</option>
                                 <option value="1">1st year</option>
                                 <option value="2">2nd year</option>
@@ -73,7 +74,8 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Semester</label>
                         <div class="col-md-8">
-                            <select name="semester" class="form-control required" data-ng-model="vm.studentsSemester">
+                            <select name="semester" class="form-control required"
+                                    data-ng-model="vm.classRoutineService.studentsSemester">
                                 <option value="">Select Semester</option>
                                 <option value="1">1st semester</option>
                                 <option value="2">2nd semester</option>
@@ -88,7 +90,7 @@
                                     name="theorySection"
                                     id="theorySection"
                                     ng-options="theorySection.name for theorySection in vm.theorySectionList"
-                                    ng-model="vm.selectedTheorySection">
+                                    ng-model="vm.classRoutineService.selectedTheorySection">
                             </select>
                         </div>
                     </div>
@@ -113,28 +115,8 @@
                 <span
                         class="subtitle"></span></div>
             <div class="panel-body">
-                <div class="row" ng-if="vm.routineData">
-                    <div class="col-md-12">
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Time/<br/>Day</th>
-                                <th ng-repeat="header in vm.tableHeader">
-                                    {{header.startTime}} -<br>{{header.endTime}}
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr ng-repeat="day in vm.weekDay">
-                                <td>{{day.name}}</td>
-                                <td ng-repeat="header in vm.tableHeader">
-                                    <p></p>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
+                <div class="row" ng-if="vm.classRoutineService.routineData">
+                    <div ui-view></div>
                 </div>
             </div>
         </div>

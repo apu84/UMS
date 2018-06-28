@@ -1,5 +1,20 @@
 module ums{
 
+  interface DeptProgram {
+    deptId: string;
+    programs: Program[];
+  }
+
+  interface ITableHeader {
+    startTime: string;
+    endTime: string;
+  }
+
+  interface IConstant {
+    id: string;
+    name: string;
+  }
+
   export interface ClassRoutine {
     id: number;
     semesterId: number;
@@ -20,7 +35,16 @@ module ums{
 
   export class ClassRoutineService{
 
-    private routineUrl: string = 'academic/routine';
+    public routineData: ClassRoutine[];
+    public tableHeader: ITableHeader[];
+    public weekDay: IConstant[];
+    public selectedSemester: Semester;
+    public selectedProgram: Program;
+    public selectedTheorySection: IParameter;
+    public studentsYear: string;
+    public studentsSemester: string;
+    public enableEdit: boolean;
+    public routineUrl: string = 'academic/routine';
     public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
     constructor(private appConstants: any, private httpClient: HttpClient,
                 private $q:ng.IQService, private notify: Notify,

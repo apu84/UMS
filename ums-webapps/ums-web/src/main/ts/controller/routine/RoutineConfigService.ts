@@ -24,6 +24,7 @@ module ums{
 
     export class RoutineConfigService{
         private routineUrl:string='academic/routine-config';
+      public routineConfig: RoutineConfig;
         public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
         constructor(private appConstants: any, private httpClient: HttpClient,
                     private $q:ng.IQService, private notify: Notify,

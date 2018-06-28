@@ -1,6 +1,6 @@
 module ums {
 
-  export interface DeptProgram {
+  interface DeptProgram {
       deptId: string;
       programs: Program[];
   }
@@ -44,19 +44,17 @@ module ums {
     private routineData: ClassRoutine[];
     private tableHeader: ITableHeader[];
     private weekDay: IConstant[];
+    private state: any;
+    private searchButtonClicked: boolean;
 
-    public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window','semesterService','courseService','classRoomService','classRoutineService','$timeout','userService','routineConfigService','$state'];
+    public static $inject = ['appConstants', '$q', 'notify', 'semesterService', 'classRoomService', 'classRoutineService',
+      'userService', 'routineConfigService', '$state'];
     constructor(private appConstants: any,
-                private httpClient: HttpClient,
                 private $q:ng.IQService,
                 private notify: Notify,
-                private $sce:ng.ISCEService,
-                private $window:ng.IWindowService,
                 private semesterService:SemesterService,
-                private courseService:CourseService,
                 private classRoomService:ClassRoomService,
                 private classRoutineService:ClassRoutineService,
-                private $timeout : ng.ITimeoutService,
                 private userService: UserService,
                 private routineConfigService: RoutineConfigService,
                 private $state:any) {
@@ -64,13 +62,14 @@ module ums {
         this.init();
     }
 
-    private init(){
+    public init() {
+      this.state = this.$state;
         this.showRoutineSection=false;
         this.programType = this.UNDERGRADUATE;
         this.theorySectionList = this.appConstants.theorySections;
-        this.selectedTheorySection = this.theorySectionList[0];
-        this.studentsYear='1';
-        this.studentsSemester='1';
+      this.classRoutineService.selectedTheorySection = this.theorySectionList[0];
+      this.classRoutineService.studentsYear = '1';
+      this.classRoutineService.studentsSemester = '1';
         this.deptList = this.appConstants.deptShort;
         this.deptMapWithId={};
         this.deptList.forEach((d:IParameter)=> this.deptMapWithId[d.id]=d);
@@ -79,6 +78,7 @@ module ums {
         this.deptProgramList.forEach((d:DeptProgram)=>this.deptProgramMapWithDept[d.deptId]=d);
         this.fetchSemesters();
         this.fetchCurrentUser();
+      this.searchButtonClicked = false;
     }
 
     public fetchCurrentUser(){
@@ -89,45 +89,32 @@ module ums {
             this.selectedDeptProgram = this.deptProgramMapWithDept[user.departmentId];
             this.selectedDept=<IParameter>{};
             this.selectedDept = this.deptMapWithId[user.departmentId];
-            this.selectedProgram = this.selectedDeptProgram.programs[0];
+          this.classRoutineService.selectedProgram = this.selectedDeptProgram.programs[0];
             this.programList = this.selectedDeptProgram.programs;
+        });
+    }
+
+    public fetchSemesters(){
+        this.semesterService.fetchSemesters(+this.programType).then((semesterList: Semester[])=>{
+            this.semesterList=[];
+            this.selectedSemester=<Semester>{};
+            for(let i:number=0; i<semesterList.length; i++){
+                if(semesterList[i].status==this.ACTIVE_STATUS)
+                  this.classRoutineService.selectedSemester = semesterList[i];
+                this.semesterList.push(semesterList[i]);
+            }
+            console.log(this.semesterList);
         });
     }
 
     public fetchRoutineConfig(): ng.IPromise<any> {
       let defer = this.$q.defer();
-      this.routineConfigService.getBySemesterAndProgramType(this.selectedSemester.id, +this.selectedSemester.programTypeId).then((routineConfig: RoutineConfig) => {
-        this.routineConfig = routineConfig;
-        defer.resolve(routineConfig);
+      console.log(this.classRoutineService.selectedSemester);
+      this.routineConfigService.getBySemesterAndProgramType(this.classRoutineService.selectedSemester.id, +this.classRoutineService.selectedSemester.programTypeId).then((routineConfig: RoutineConfig) => {
+        this.routineConfigService.routineConfig = routineConfig;
+        defer.resolve(this.routineConfig = routineConfig);
       });
       return defer.promise;
-    }
-
-    public generateBody() {
-      let weekDays: IConstant[] = [];
-      weekDays = this.appConstants.weekday;
-      console.log("week days");
-      console.log(weekDays);
-      this.weekDay = [];
-      for (var i = 0; i < weekDays.length; i++) {
-        if (+weekDays[i].id >= this.routineConfig.dayFrom && +weekDays[i].id <= this.routineConfig.dayTo)
-          this.weekDay.push(weekDays[i]);
-      }
-    }
-
-    public generateHeader() {
-      console.log("Generating empty routine");
-      let startTime: any = {};
-      startTime = moment(this.routineConfig.startTime, 'hh:mm A');
-      let endTime = moment(this.routineConfig.endTime, 'hh:mm A');
-      this.tableHeader = [];
-      while (startTime < endTime) {
-        let tableHeaderTmp: ITableHeader = <ITableHeader>{};
-        tableHeaderTmp.startTime = moment(startTime).format('hh:mm A');
-        startTime = moment(startTime).add(this.routineConfig.duration, 'm').toDate();
-        tableHeaderTmp.endTime = moment(startTime).format('hh:mm A');
-        this.tableHeader.push(tableHeaderTmp);
-      }
     }
 
     public fetchRoutineData() {
@@ -137,42 +124,20 @@ module ums {
         }
         else {
 
-          this.classRoutineService.getClassRoutineForEmployee(this.selectedSemester.id, this.selectedProgram.id, +this.studentsYear, +this.studentsSemester, this.selectedTheorySection.id).then((routineData: ClassRoutine[]) => {
-            this.generateHeader();
-            this.generateBody();
-            this.routineData = [];
-            this.routineData = routineData;
-            if (routineData.length == 0)
-              console.log("routine data");
-            console.log(routineData);
+          this.classRoutineService.getClassRoutineForEmployee(this.classRoutineService.selectedSemester.id, this.classRoutineService.selectedProgram.id, +this.classRoutineService.studentsYear, +this.classRoutineService.studentsSemester, this.classRoutineService.selectedTheorySection.id).then((routineData: ClassRoutine[]) => {
+            this.classRoutineService.routineData = [];
+            this.classRoutineService.routineData = routineData;
           });
         }
       });
     }
 
-
-
-    public fetchSemesters(){
-        this.semesterService.fetchSemesters(+this.programType).then((semesterList: Semester[])=>{
-            this.semesterList=[];
-            this.selectedSemester=<Semester>{};
-            for(let i:number=0; i<semesterList.length; i++){
-                if(semesterList[i].status==this.ACTIVE_STATUS)
-                    this.selectedSemester = semesterList[i];
-                this.semesterList.push(semesterList[i]);
-            }
-            console.log(this.semesterList);
-        });
-    }
-
-
-
     public searchForRoutineData(){
-      this.fetchRoutineData();
+      this.$state.go('classRoutine.classRoutineChart');
       Utils.expandRightDiv();
-
+      this.searchButtonClicked = true;
+      this.fetchRoutineData();
     }
-
 
   }
 
