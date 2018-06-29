@@ -2,7 +2,7 @@ package org.ums.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.resource.helper.DeptDesignationMapResourceHelper;
+import org.ums.resource.helper.DeptDesignationRoleMapResourceHelper;
 
 import javax.json.JsonObject;
 import javax.ws.rs.GET;
@@ -12,11 +12,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 
 @Component
-@Path("deptDesignationMap")
-public class DeptDesignationMapResource extends Resource {
+@Path("deptDesignationRoleMap")
+public class DeptDesignationRoleMapResource extends Resource {
 
   @Autowired
-  DeptDesignationMapResourceHelper mHelper;
+  DeptDesignationRoleMapResourceHelper mHelper;
 
   @GET
   @Path("/all")
