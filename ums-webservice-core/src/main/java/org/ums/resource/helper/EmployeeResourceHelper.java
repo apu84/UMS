@@ -20,7 +20,10 @@ import org.ums.employee.service.*;
 import org.ums.enums.common.EmploymentPeriod;
 import org.ums.enums.common.EmploymentType;
 import org.ums.formatter.DateFormat;
-import org.ums.manager.*;
+import org.ums.manager.DepartmentManager;
+import org.ums.manager.DesignationManager;
+import org.ums.manager.EmployeeManager;
+import org.ums.manager.EmploymentTypeManager;
 import org.ums.persistent.model.PersistentEmployee;
 import org.ums.resource.EmployeeResource;
 import org.ums.resource.ResourceHelper;
@@ -83,9 +86,6 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   EmploymentTypeManager mEmploymentTypeManager;
 
   @Autowired
-  DesignationRoleMapManager mDesignationRoleMapManager;
-
-  @Autowired
   RoleManager mRoleManager;
 
   @Autowired
@@ -115,13 +115,15 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     mServiceInformationDetailManager.create(mutableServiceInformationDetail);
 
     if(pJsonObject.getJsonObject("entries").containsKey("IUMSAccount")
-        && pJsonObject.getJsonObject("entries").getBoolean("IUMSAccount") && pJsonObject.getJsonObject("entries").getJsonObject("designation").getInt("roleId") != 0) {
+        && pJsonObject.getJsonObject("entries").getBoolean("IUMSAccount")
+        && pJsonObject.getJsonObject("entries").getJsonObject("designation").getInt("roleId") != 0) {
 
       tempPassword = RandomStringUtils.random(6, true, true);
       MutableUser mutableUser = new PersistentUser();
       prepareUserInformation(mutableUser, pJsonObject.getJsonObject("entries"));
 
-      mutableUser.setPrimaryRole(mRoleManager.get(pJsonObject.getJsonObject("entries").getJsonObject("designation").getInt("roleId")));
+      mutableUser.setPrimaryRole(mRoleManager.get(pJsonObject.getJsonObject("entries").getJsonObject("designation")
+          .getInt("roleId")));
       mutableUser.setTemporaryPassword(tempPassword.toCharArray());
       mUserManager.create(mutableUser);
 
