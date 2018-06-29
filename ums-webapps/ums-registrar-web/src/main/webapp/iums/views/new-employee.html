@@ -284,13 +284,19 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div align="left">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input id="iIUMSAccount" name="nIUMSACCOUNT" type="checkbox"
-                                                   data-ng-model="vm.newEmployee.IUMSAccount">
-                                            <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
-                                            <b>Create IUMS account</b>
-                                        </label>
+                                    <div data-ng-if="vm.newEmployee.designation.roleId!=0">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input id="iIUMSAccount" name="nIUMSACCOUNT" type="checkbox"
+                                                       data-ng-model="vm.newEmployee.IUMSAccount">
+                                                <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                                <b>Create IUMS account</b>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div data-ng-if="vm.newEmployee.designation.roleId==0">
+                                        <p> <span style="color: red;">* N.B:</span> &nbsp;<b>IUMS account</b> will not be available for this user. But we will keep information for further process.
+                                        Please proceed to submit.</p>
                                     </div>
                                 </div>
                             </div>
