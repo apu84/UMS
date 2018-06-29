@@ -4,18 +4,18 @@ import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Designation;
-import org.ums.domain.model.mutable.MutableDeptDesignationMap;
-import org.ums.manager.DeptDesignationMapManager;
+import org.ums.domain.model.mutable.MutableDeptDesignationRoleMap;
+import org.ums.manager.DeptDesignationRoleMapManager;
 import org.ums.usermanagement.role.Role;
 
-public class PersistentDeptDesignationMap implements MutableDeptDesignationMap {
+public class PersistentDeptDesignationRoleMap implements MutableDeptDesignationRoleMap {
 
-  private static DeptDesignationMapManager sDeptDesignationMapManager;
+  private static DeptDesignationRoleMapManager sDeptDesignationRoleMapManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sDeptDesignationMapManager =
-        applicationContext.getBean("deptDesignationMapManager", DeptDesignationMapManager.class);
+    sDeptDesignationRoleMapManager =
+        applicationContext.getBean("deptDesignationMapManager", DeptDesignationRoleMapManager.class);
   }
 
   private int mId;
@@ -28,40 +28,40 @@ public class PersistentDeptDesignationMap implements MutableDeptDesignationMap {
   private int mRoleId;
   private String mLastModified;
 
-  public PersistentDeptDesignationMap() {
+  public PersistentDeptDesignationRoleMap() {
 
   }
 
-  public PersistentDeptDesignationMap(final PersistentDeptDesignationMap pPersistentDeptDesignationMap) {
-    mId = pPersistentDeptDesignationMap.getId();
-    mDepartment = pPersistentDeptDesignationMap.getDepartment();
-    mDepartmentId = pPersistentDeptDesignationMap.getDepartmentId();
-    mEmployeeTypeId = pPersistentDeptDesignationMap.getEmployeeTypeId();
-    mDesignationId = pPersistentDeptDesignationMap.getEmployeeTypeId();
-    mDesignation = pPersistentDeptDesignationMap.getDesignation();
-    mRole = pPersistentDeptDesignationMap.getRole();
-    mRoleId = pPersistentDeptDesignationMap.getRoleId();
-    mLastModified = pPersistentDeptDesignationMap.getLastModified();
+  public PersistentDeptDesignationRoleMap(final PersistentDeptDesignationRoleMap pPersistentDeptDesignationRoleMap) {
+    mId = pPersistentDeptDesignationRoleMap.getId();
+    mDepartment = pPersistentDeptDesignationRoleMap.getDepartment();
+    mDepartmentId = pPersistentDeptDesignationRoleMap.getDepartmentId();
+    mEmployeeTypeId = pPersistentDeptDesignationRoleMap.getEmployeeTypeId();
+    mDesignationId = pPersistentDeptDesignationRoleMap.getEmployeeTypeId();
+    mDesignation = pPersistentDeptDesignationRoleMap.getDesignation();
+    mRole = pPersistentDeptDesignationRoleMap.getRole();
+    mRoleId = pPersistentDeptDesignationRoleMap.getRoleId();
+    mLastModified = pPersistentDeptDesignationRoleMap.getLastModified();
   }
 
   @Override
-  public MutableDeptDesignationMap edit() {
-    return new PersistentDeptDesignationMap(this);
+  public MutableDeptDesignationRoleMap edit() {
+    return new PersistentDeptDesignationRoleMap(this);
   }
 
   @Override
   public Integer create() {
-    return sDeptDesignationMapManager.create(this);
+    return sDeptDesignationRoleMapManager.create(this);
   }
 
   @Override
   public void update() {
-    sDeptDesignationMapManager.update(this);
+    sDeptDesignationRoleMapManager.update(this);
   }
 
   @Override
   public void delete() {
-    sDeptDesignationMapManager.delete(this);
+    sDeptDesignationRoleMapManager.delete(this);
   }
 
   @Override

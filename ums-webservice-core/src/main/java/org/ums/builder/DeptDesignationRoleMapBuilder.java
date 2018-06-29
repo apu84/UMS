@@ -2,17 +2,18 @@ package org.ums.builder;
 
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.DeptDesignationMap;
-import org.ums.domain.model.mutable.MutableDeptDesignationMap;
+import org.ums.domain.model.immutable.DeptDesignationRoleMap;
+import org.ums.domain.model.mutable.MutableDeptDesignationRoleMap;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
 @Component
-public class DeptDesignationMapBuilder implements Builder<DeptDesignationMap, MutableDeptDesignationMap> {
+public class DeptDesignationRoleMapBuilder implements Builder<DeptDesignationRoleMap, MutableDeptDesignationRoleMap> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, DeptDesignationMap pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, DeptDesignationRoleMap pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("departmentId", pReadOnly.getDepartmentId());
     pBuilder.add("employeeTypeId", pReadOnly.getEmployeeTypeId());
@@ -22,7 +23,7 @@ public class DeptDesignationMapBuilder implements Builder<DeptDesignationMap, Mu
   }
 
   @Override
-  public void build(MutableDeptDesignationMap pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
+  public void build(MutableDeptDesignationRoleMap pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
   }
 }

@@ -3,12 +3,12 @@ package org.ums.domain.model.mutable;
 import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Department;
-import org.ums.domain.model.immutable.DeptDesignationMap;
+import org.ums.domain.model.immutable.DeptDesignationRoleMap;
 import org.ums.domain.model.immutable.Designation;
 import org.ums.usermanagement.role.Role;
 
-public interface MutableDeptDesignationMap extends DeptDesignationMap, Editable<Integer>, MutableIdentifier<Integer>,
-    MutableLastModifier {
+public interface MutableDeptDesignationRoleMap extends DeptDesignationRoleMap, Editable<Integer>,
+    MutableIdentifier<Integer>, MutableLastModifier {
 
   void setDepartment(final Department pDepartment);
 
