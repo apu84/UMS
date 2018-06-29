@@ -11,7 +11,6 @@ import org.ums.builder.Builder;
 import org.ums.builder.EmployeeBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Department;
-import org.ums.domain.model.immutable.DesignationRoleMap;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.mutable.MutableEmployee;
 import org.ums.employee.personal.MutablePersonalInformation;
@@ -116,16 +115,13 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     mServiceInformationDetailManager.create(mutableServiceInformationDetail);
 
     if(pJsonObject.getJsonObject("entries").containsKey("IUMSAccount")
-        && pJsonObject.getJsonObject("entries").getBoolean("IUMSAccount")) {
+        && pJsonObject.getJsonObject("entries").getBoolean("IUMSAccount") && pJsonObject.getJsonObject("entries").getJsonObject("designation").getInt("roleId") != 0) {
 
       tempPassword = RandomStringUtils.random(6, true, true);
       MutableUser mutableUser = new PersistentUser();
       prepareUserInformation(mutableUser, pJsonObject.getJsonObject("entries"));
-      DesignationRoleMap designationRoleMap =
-          mDesignationRoleMapManager
-              .get(pJsonObject.getJsonObject("entries").getJsonObject("designation").getInt("id"));
 
-      mutableUser.setPrimaryRole(mRoleManager.get(designationRoleMap.getRoleId()));
+      mutableUser.setPrimaryRole(mRoleManager.get(pJsonObject.getJsonObject("entries").getJsonObject("designation").getInt("roleId")));
       mutableUser.setTemporaryPassword(tempPassword.toCharArray());
       mUserManager.create(mutableUser);
 

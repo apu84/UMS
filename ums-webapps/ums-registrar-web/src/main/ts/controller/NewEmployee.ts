@@ -108,6 +108,7 @@ module ums {
                         for (let i = 0; i < response.length; i++) {
                             for (let j = 0; j < this.allDesignations.length; j++) {
                                 if (response[i].designationId == this.allDesignations[j].id) {
+                                    this.allDesignations[j].roleId = response[i].roleId;
                                     this.changedDesignationTypes.push(this.allDesignations[j]);
                                 }
                             }
