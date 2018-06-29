@@ -58,9 +58,9 @@ public class RegistrarContext {
 
   @Bean
   DeptDesignationRoleMapManager deptDesignationMapManager() {
-    DeptDesignationRoleMapCache deptDesignationMapCache =
+    DeptDesignationRoleMapCache deptDesignationRoleMapCache =
         new DeptDesignationRoleMapCache(mCacheFactory.getCacheManager());
-    deptDesignationMapCache.setManager(new PersistentDeptDesignationRoleMapDao(mTemplateFactory.getJdbcTemplate()));
-    return deptDesignationMapCache;
+    deptDesignationRoleMapCache.setManager(new PersistentDeptDesignationRoleMapDao(mTemplateFactory.getJdbcTemplate()));
+    return deptDesignationRoleMapCache;
   }
 }
