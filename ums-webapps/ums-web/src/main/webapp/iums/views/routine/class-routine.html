@@ -42,7 +42,7 @@
                                     name="department"
                                     id="department"
                                     ng-options="department.name for department in vm.deptList"
-                                    ng-model="vm.selectedDept"></select>
+                                    ng-model="vm.selectedDept" ng-change="vm.selectPrograms()"></select>
                         </div>
                     </div>
                     <div class="form-group">

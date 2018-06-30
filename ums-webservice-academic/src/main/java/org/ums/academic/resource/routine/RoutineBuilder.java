@@ -2,10 +2,7 @@ package org.ums.academic.resource.routine;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.builder.Builder;
-import org.ums.builder.CourseBuilder;
-import org.ums.builder.ProgramBuilder;
-import org.ums.builder.SemesterBuilder;
+import org.ums.builder.*;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.routine.Routine;
 import org.ums.domain.model.mutable.routine.MutableRoutine;
@@ -40,6 +37,8 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
   ProgramBuilder mProgramBuilder;
   @Autowired
   IdGenerator mIdGenerator;
+  @Autowired
+  ClassRoomBuilder mClassRoomBuilder;
 
   @Override
   public void build(JsonObjectBuilder pBuilder, Routine pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
@@ -64,6 +63,9 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
     pBuilder.add("startTime", formatter.format(pReadOnly.getStartTime()));
     pBuilder.add("endTime", formatter.format(pReadOnly.getEndTime()));
     pBuilder.add("duration", pReadOnly.getDuration());
+    JsonObjectBuilder room = Json.createObjectBuilder();
+    mClassRoomBuilder.build(room, pReadOnly.getRoom(), pUriInfo, pLocalCache);
+    pBuilder.add("room", room);
     pBuilder.add("roomId", pReadOnly.getRoomId().toString());
   }
 

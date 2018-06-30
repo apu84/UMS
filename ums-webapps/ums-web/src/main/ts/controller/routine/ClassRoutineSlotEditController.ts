@@ -35,6 +35,8 @@ module ums {
     public add() {
       console.log("in the add section");
       let slotRoutine: ClassRoutine = <ClassRoutine>{};
+      slotRoutine.course = <Course>{};
+      slotRoutine.room = <ClassRoom>{};
       this.slotRoutineList.push(slotRoutine);
     }
   }

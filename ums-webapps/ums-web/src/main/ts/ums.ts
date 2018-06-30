@@ -614,10 +614,7 @@ module ums {
           url: "/classRoutineSlotEditForm",
           controller: 'ClassRoutineSlotEditController',
           templateUrl: 'views/routine/routine-slot-edit-form.html',
-          controllerAs: 'vm',
-          params: {
-            'counter': null
-          }
+          controllerAs: 'vm'
         })
         .state('classRoutineConfig', {
           url: "/classRoutineConfig",

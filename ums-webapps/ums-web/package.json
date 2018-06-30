@@ -17,6 +17,7 @@
     "node": ">=0.8.0"
   },
   "dependencies": {
+    "@uirouter/angularjs": "^1.0.18",
     "angular-slides": "^1.1.0"
   }
 }

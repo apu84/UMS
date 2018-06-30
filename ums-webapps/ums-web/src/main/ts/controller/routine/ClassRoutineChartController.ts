@@ -83,8 +83,9 @@ module ums {
     public edit() {
       console.log("in the edit");
       $("#routineConfigModal").modal('show');
-      this.counter += 1;
-      this.$state.go('classRoutine.classRoutineChart.classRoutineSlotEditForm', {counter: this.counter});
+      this.counter += 2;
+      this.$state.go('classRoutine.classRoutineChart.classRoutineSlotEditForm', {}, {reload: 'classRoutine.classRoutineChart.classRoutineSlotEditForm'}
+      );
       // $('#routineConfigModal').modal('toggle');
       /*$('#myModal').modal('toggle');
       $('#myModal').modal('show');

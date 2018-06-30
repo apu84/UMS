@@ -23,16 +23,16 @@
             </div>
             <br/>
             <div class="row">
-                <form class="form-horizontal" ng-repeat="r in vm.slotRoutineList">
+                <form class="form-horizontal" ng-repeat="slotRoutine in vm.slotRoutineList">
                     <hr/>
                     <hr/>
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="course">Course :</label>
                         <div class="col-sm-10">
                             <ui-select id="courseNo" theme="bootstrap"
-                                       data-ng-model="r.course"
+                                       data-ng-model="slotRoutine.course"
                             >
-                                <ui-select-match placeholder="Select Course">{{r.title}}
+                                <ui-select-match placeholder="Select Course">{{slotRoutine.course.title}}
                                 </ui-select-match>
                                 <ui-select-choices id="course"
                                                    repeat="g in vm.classRoutineService.courseList|filter:$select.search">
@@ -57,9 +57,9 @@
                         <label class="control-label col-sm-2" for="roomNo">Room No :</label>
                         <div class="col-sm-10">
                             <ui-select id="room" theme="bootstrap"
-                                       data-ng-model="r.course"
+                                       data-ng-model="slotRoutine.room"
                             >
-                                <ui-select-match placeholder="Select Room No">{{r.roomNo}}
+                                <ui-select-match placeholder="Select Room No">{{slotRoutine.room.roomNo}}
                                 </ui-select-match>
                                 <ui-select-choices id="roomNo"
                                                    repeat="g in vm.classRoutineService.roomList | filter:$select.search">

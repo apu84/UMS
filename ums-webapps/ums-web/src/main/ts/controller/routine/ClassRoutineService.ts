@@ -30,6 +30,7 @@ module ums{
     startTime: string;
     endTime: string;
     duration: string;
+    room: ClassRoom;
     roomId: number;
     }
 

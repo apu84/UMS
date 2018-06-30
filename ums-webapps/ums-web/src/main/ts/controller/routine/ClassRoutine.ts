@@ -46,6 +46,7 @@ module ums {
     private weekDay: IConstant[];
     private state: any;
     private searchButtonClicked: boolean;
+    private counter: number = 1;
 
     public static $inject = ['appConstants', '$q', 'notify', 'semesterService', 'classRoomService', 'classRoutineService',
       'userService', 'routineConfigService', '$state'];
@@ -90,9 +91,13 @@ module ums {
             this.selectedDeptProgram = this.deptProgramMapWithDept[user.departmentId];
             this.selectedDept=<IParameter>{};
             this.selectedDept = this.deptMapWithId[user.departmentId];
-          this.classRoutineService.selectedProgram = this.selectedDeptProgram.programs[0];
-            this.programList = this.selectedDeptProgram.programs;
+          this.selectPrograms();
         });
+    }
+
+    public selectPrograms() {
+      this.classRoutineService.selectedProgram = this.selectedDeptProgram.programs[0];
+      this.programList = this.selectedDeptProgram.programs;
     }
 
     public fetchSemesters(){
@@ -134,8 +139,10 @@ module ums {
     }
 
     public searchForRoutineData(){
-      this.$state.go('classRoutine.classRoutineChart');
       Utils.expandRightDiv();
+
+      this.counter += 1;
+      this.$state.go('classRoutine.classRoutineChart', {}, {reload: 'classRoutine.classRoutineChart'});
       this.searchButtonClicked = true;
       this.fetchRoutineData();
     }
