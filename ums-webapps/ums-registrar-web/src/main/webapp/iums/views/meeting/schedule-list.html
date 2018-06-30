@@ -5,41 +5,37 @@
 
 <div class="row">
     <div class="col-md-6">
-        <h4>Upcoming Meetings ...</h4>
+        <h4><u>Upcoming Meetings ...</u></h4>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div data-ng-show="vm.showUpcomingFilterFields">
             <select id="iUpcomingFilterType"
                     name="nUpcomingFilterType"
                     data-ng-model="vm.upcomingMeetingType"
                     data-ng-options="meetingType.name for meetingType in vm.meetingTypes track by meetingType.id"
+                    data-ng-change="vm.doFilter('upcoming')"
                     class="form-control">
                 <option value="">Select Meeting Type</option>
             </select>
         </div>
     </div>
-    <div class="col-md-1">
-        <div data-ng-show="vm.showUpcomingFilterFields">
-            <button data-ng-click="vm.doFilter('upcoming')" class="btn btn-default">
-                <i style="cursor: pointer" title="Go Back" class="fa fa-search"></i>
-            </button>
-        </div>
-    </div>
     <div class="col-md-2">
         <div align="right" data-ng-show="!vm.showUpcomingFilterFields">
-            <button data-ng-click="vm.modifyFilterFields('upcoming', true)" class="btn btn-blue">
-                <i style="cursor: pointer" title="Filter" class="fa fa-filter"></i>
+            <button data-toggle="tooltip" title="Filter" data-ng-click="vm.modifyFilterFields('upcoming', true)"
+                    class="btn btn-blue">
+                <i style="cursor: pointer" class="fa fa-filter"></i>
             </button>
         </div>
         <div align="right" data-ng-show="vm.showUpcomingFilterFields">
-            <button data-ng-click="vm.undoFilter('upcoming')" class="btn btn-info">
-                <i style="cursor: pointer" title="Undo Filter" class="fa fa-undo"></i>
+            <button data-toggle="tooltip" title="Undo Filter" data-ng-click="vm.undoFilter('upcoming')"
+                    class="btn btn-info">
+                <i style="cursor: pointer" class="fa fa-undo"></i>
             </button>
-            <button data-ng-click="vm.modifyFilterFields('upcoming', false)" class="btn btn-danger">
-                <i style="cursor: pointer" title="Close" class="fa fa-close"></i>
+            <button data-toggle="tooltip" title="Close Filter" data-ng-click="vm.modifyFilterFields('upcoming', false)"
+                    class="btn btn-danger">
+                <i style="cursor: pointer" class="fa fa-close"></i>
             </button>
         </div>
-
     </div>
 </div>
 
@@ -55,16 +51,17 @@
         <th>Action</th>
     </tr>
     </thead>
-    <tbody data-ng-repeat="(k, v) in vm.upcomingMeetingScheduleList">
+    <!--<tbody data-ng-repeat="(k, v) in vm.upcomingMeetingScheduleList">-->
+    <tbody data-ng-repeat="meetingUpcoming in (filterdUpcoming = (vm.upcomingMeetingScheduleList)) | filter: {type: vm.upcomingMeetingType} | limitTo:vm.itemsPerPageOfUpcoming:vm.itemsPerPageOfUpcoming*(vm.currentPageNumberOfUpcoming - 1)">
     <tr>
-        <td>{{k + 1}}</td>
-        <td>{{v.type.name}}</td>
-        <td>{{v.meetingNo}}</td>
-        <td>{{v.refNo}}</td>
-        <td>{{v.datetime}}</td>
-        <td>{{v.room}}</td>
+        <td>{{(vm.currentPageNumberOfUpcoming - 1) * vm.itemsPerPageOfUpcoming + $index + 1}}</td>
+        <td>{{meetingUpcoming.type.name}}</td>
+        <td>{{meetingUpcoming.meetingNo}}</td>
+        <td>{{meetingUpcoming.refNo}}</td>
+        <td>{{meetingUpcoming.datetime}}</td>
+        <td>{{meetingUpcoming.room}}</td>
         <td><a data-toggle="modal" data-target="#editSchedule"
-               data-ng-click="vm.selectedScheduleToEdit(v)"
+               data-ng-click="vm.selectedScheduleToEdit(filterdUpcoming[(vm.currentPageNumberOfUpcoming - 1) * vm.itemsPerPageOfUpcoming + $index], (vm.currentPageNumberOfUpcoming - 1) * vm.itemsPerPageOfUpcoming + $index)"
                style="cursor: pointer;"><i
                 class="fa fa-edit" style="cursor: pointer; color: blue;"></i>
         </a>
@@ -73,40 +70,43 @@
     </tbody>
 </table>
 
+<div align="right">
+    <pagination total-items="filterdUpcoming.length" ng-model="vm.currentPageNumberOfUpcoming"
+                class="pagination-sm pagination-page" boundary-links="true" rotate="false"
+                items-per-page="vm.itemsPerPageOfUpcoming"></pagination>
+</div>
+
 <div class="row">
     <div class="col-md-6">
-        <h4>Previous Meetings ...</h4>
+        <h4><u>Previous Meetings ...</u></h4>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div data-ng-show="vm.showPreviousFilterFields">
             <select id="iFilterType"
                     name="nFilterType"
                     data-ng-model="vm.previousMeetingType"
                     data-ng-options="meetingType.name for meetingType in vm.meetingTypes track by meetingType.id"
+                    data-ng-change="vm.doFilter('previous')"
                     class="form-control">
                 <option value="">Select Meeting Type</option>
             </select>
         </div>
     </div>
-    <div class="col-md-1">
-        <div data-ng-show="vm.showPreviousFilterFields">
-            <button data-ng-click="vm.doFilter('previous')" class="btn btn-default">
-                <i style="cursor: pointer" title="Go Back" class="fa fa-search"></i>
-            </button>
-        </div>
-    </div>
     <div class="col-md-2">
         <div align="right" data-ng-show="!vm.showPreviousFilterFields">
-            <button data-ng-click="vm.modifyFilterFields('previous', true)" class="btn btn-blue">
+            <button data-toggle="tooltip" title="Filter" data-ng-click="vm.modifyFilterFields('previous', true)"
+                    class="btn btn-blue">
                 <i style="cursor: pointer" title="Filter" class="fa fa-filter"></i>
             </button>
         </div>
         <div align="right" data-ng-show="vm.showPreviousFilterFields">
-            <button data-ng-click="vm.undoFilter('previous')" class="btn btn-info">
+            <button data-toggle="tooltip" title="Undo Filter" data-ng-click="vm.undoFilter('previous')"
+                    class="btn btn-info">
                 <i style="cursor: pointer" title="Undo Filter" class="fa fa-undo"></i>
             </button>
-            <button data-ng-click="vm.modifyFilterFields('previous', false)" class="btn btn-danger">
-                <i style="cursor: pointer" title="Close" class="fa fa-close"></i>
+            <button data-toggle="tooltip" title="Close Filter" data-ng-click="vm.modifyFilterFields('previous', false)"
+                    class="btn btn-danger">
+                <i style="cursor: pointer" class="fa fa-close"></i>
             </button>
         </div>
 
@@ -124,18 +124,25 @@
         <th>Room / Place</th>
     </tr>
     </thead>
-    <tbody data-ng-repeat="(k, v) in vm.previousMeetingScheduleList">
+    <!--<tbody data-ng-repeat="(k, v) in vm.previousMeetingScheduleList">-->
+    <tbody data-ng-repeat="meetingPrevious in (filterdPrevious = (vm.previousMeetingScheduleList)) | filter: {type: vm.previousMeetingType} | limitTo:vm.itemsPerPageOfPrevious:vm.itemsPerPageOfPrevious*(vm.currentPageNumberOfPrevious - 1)">
     <tr>
-        <td>{{k + 1}}</td>
-        <td>{{v.type.name}}</td>
-        <td>{{v.meetingNo}}</td>
-        <td>{{v.refNo}}</td>
-        <td>{{v.datetime}}</td>
-        <td>{{v.room}}</td>
+        <td>{{(vm.currentPageNumberOfPrevious - 1) * vm.itemsPerPageOfPrevious + $index + 1}}</td>
+        <td>{{meetingPrevious.type.name}}</td>
+        <td>{{meetingPrevious.meetingNo}}</td>
+        <td>{{meetingPrevious.refNo}}</td>
+        <td>{{meetingPrevious.datetime}}</td>
+        <td>{{meetingPrevious.room}}</td>
     </tr>
     </tbody>
 </table>
 
+<div align="right">
+    <pagination total-items="meetingPrevious.length" ng-model="vm.currentPageNumberOfPrevious" max-size="7"
+                class="pagination-sm" boundary-links="true" rotate="false"
+                class="pagination-page"
+                items-per-page="vm.itemsPerPageOfPrevious"></pagination>
+</div>
 
 <div id="editSchedule" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
      aria-hidden="true" class="modal fade">

@@ -26,6 +26,10 @@ module ums{
         private showMeetingList: boolean = false;
         private showUpcomingFilterFields: boolean = false;
         private showPreviousFilterFields: boolean = false;
+        private currentPageNumberOfUpcoming: number = 1;
+        private itemsPerPageOfUpcoming: number = 5;
+        private currentPageNumberOfPrevious: number = 1;
+        private itemsPerPageOfPrevious: number = 5;
 
         constructor(private registrarConstants: any, private $q: ng.IQService, private notify: Notify,
                     private $scope: ng.IScope, private meetingService: MeetingService) {
@@ -109,9 +113,11 @@ module ums{
 
         public undoFilter(type: string): void{
             if(type == 'upcoming'){
+                this.upcomingMeetingType = <IConstants>{};
                 this.findUpcomingMeetingScheduleList();
             }
             else if(type == "previous"){
+                this.previousMeetingType = <IConstants>{};
                 this.findPreviousMeetingScheduleList();
             }
         }
