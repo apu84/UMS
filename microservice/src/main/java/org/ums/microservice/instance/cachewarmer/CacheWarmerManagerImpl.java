@@ -3,14 +3,11 @@ package org.ums.microservice.instance.cachewarmer;
 import org.apache.shiro.mgt.SecurityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.ums.cache.CacheFactory;
 import org.ums.configuration.UMSConfiguration;
-import org.ums.manager.CacheManager;
 import org.ums.manager.CacheWarmerManager;
 import org.ums.manager.ContentManager;
 import org.ums.microservice.AbstractService;
 import org.ums.microservice.configuration.ServiceConfiguration;
-import org.ums.microservice.configuration.ServiceContext;
 
 public class CacheWarmerManagerImpl extends AbstractService implements CacheWarmerManager {
   private static final Logger mLogger = LoggerFactory.getLogger(CacheWarmerManagerImpl.class);
@@ -25,19 +22,17 @@ public class CacheWarmerManagerImpl extends AbstractService implements CacheWarm
 
   @Override
   public void warm() {
-    if(login(mServiceConfiguration.getCacheWarmerAppId(), mServiceConfiguration.getCacheWarmerAppToken())) {
-      try {
-        if(mContentManagers.length > 0) {
-          // start warming up
-          mLogger.info("Started warming up cache");
-          for(ContentManager contentManager : mContentManagers) {
-            contentManager.getAll();
-          }
+    try {
+      if(mContentManagers.length > 0) {
+        // start warming up
+        mLogger.info("Started warming up cache");
+        for(ContentManager contentManager : mContentManagers) {
+          contentManager.getAll();
         }
-        mLogger.info("Cache warm up finish");
-      } catch(Exception e) {
-        mLogger.error("Failed to warm up cache properly, will now fallback to initial state", e);
       }
+      mLogger.info("Cache warm up finish");
+    } catch(Exception e) {
+      mLogger.error("Failed to warm up cache properly, will now fallback to initial state", e);
     }
   }
 
