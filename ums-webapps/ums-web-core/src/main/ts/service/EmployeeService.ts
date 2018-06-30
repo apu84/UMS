@@ -133,7 +133,7 @@ module ums{
 
       public getDesignation(pDeptId: string): ng.IPromise<any>{
           var defer = this.$q.defer();
-          this.httpClient.get("deptDesignationMap/dept/" + pDeptId, 'application/json',
+          this.httpClient.get("deptDesignationRoleMap/dept/" + pDeptId, 'application/json',
               (result:any,etag:string)=>{
                   defer.resolve(result.entries);
               },
