@@ -49,13 +49,14 @@
     <div class="panel">
         <div class="panel-heading">List of Expelled Students of Exam Type: <b>{{vm.selectedExamTypeName}}</b></div>
         <div class="panel-body">
-            <div style="padding-top: 10px;padding-bottom:20px;background-color: #f3fafe" data-ng-show="vm.showFilterOptions">
+            <div style="padding-top: 10px;padding-bottom:20px;" data-ng-show="vm.showFilterOptions">
                 <span class="label label-success badge-success">Filter Operations</span><p></p>
             <div class="row">
                 <div class="col-md-4" >
                     <input type="text"
                            class="form-control required"
                            id="rstudenid"
+                           style="width: 70%";
                            placeholder="Search By Student ID"
                            data-ng-model="vm.studentId"
                     />
@@ -66,17 +67,16 @@
                             class="form-control required"
                             name="leaveType"
                             id="leaveTypejj"
+                            style="width: 70%";
                             data-ng-options="dept.name for dept in vm.deptList track by dept.id"
                             data-ng-model="vm.deptName"
                             data-ng-change="vm.deptChanged(vm.deptName)"
                     ></select>
-
-                    </select>
                 </div>
             </div>
             <div class="col-md-4">
                 <div>
-                    <select class="form-control" name="examDate"  data-ng-model="vm.examDate" data-ng-change="vm.ExamDateChange(vm.examDate)">
+                    <select class="form-control" name="examDate" style="width: 70%"; data-ng-model="vm.examDate" data-ng-change="vm.ExamDateChange(vm.examDate)">
                         <option value="">Select an Exam Date</option>
                         <option data-ng-repeat="examRoutine in vm.examRoutineArr">{{examRoutine.examDate}}</option>
                     </select>

@@ -5,12 +5,6 @@ module ums{
         id:any;
         name:string;
     }
-    interface IExamAttendantInfo{
-        val:number;
-        info:any[];
-    }
-
-
     class DailyExamAttendanceReport{
         examTypeList:Array<IConstants>;
         examType:IConstants;
@@ -26,7 +20,8 @@ module ums{
         public semesterName:string;
         public enableSubmitButton:boolean;
         enableRightDiv:boolean;
-        public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService','DailyExamAttendanceReportService','examRoutineService'];
+        public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService','DailyExamAttendanceReportService',
+            'examRoutineService'];
 
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -49,7 +44,6 @@ module ums{
             this.getSemesters();
             this.getExamDates();
             this.enableSubmitButton=this.isEligibleForSubmitData();
-            console.log(this.enableSubmitButton);
         }
         private getExamDates(){
             let examTypeId=this.selectedExamTypeId == ExamType.REGULAR ? ExamType.REGULAR:ExamType.CARRY_CLEARANCE_IMPROVEMENT;

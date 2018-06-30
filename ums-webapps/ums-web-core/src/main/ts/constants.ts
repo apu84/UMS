@@ -438,6 +438,13 @@ module ums {
                     {id: "1", name: "Semester Withdraw"},
                     {id: "2", name: "Optional Course Selection"}
                 ],
+                absentPresentStatus: [
+                    {id: "1", name: "Absent"},
+                    {id: "2", name: "Late Coming"}
+                ], absPreRemarks: [
+                    {id: "1", name: "Did not inform"},
+                    {id: "2", name: "inform"}
+                ],
                 actors: [
                     {id: "0", name: "Student"},
                     {id: "1", name: "Head"},

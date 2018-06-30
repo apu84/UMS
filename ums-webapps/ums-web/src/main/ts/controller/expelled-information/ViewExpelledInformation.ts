@@ -65,7 +65,6 @@ module ums{
             this.studentId="";
             this.deptList = [];
             this.deptList = this.appConstants.deptShort;
-            this.deptList =this.deptList.slice(0);
             this.deptName=this.deptList[0];
             this.getSemesters();
             this.getExamDates();
