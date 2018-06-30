@@ -610,6 +610,15 @@ module ums {
           templateUrl: 'views/routine/class-routine-chart.html',
           controllerAs: 'vm'
         })
+        .state('classRoutine.classRoutineChart.classRoutineSlotEditForm', {
+          url: "/classRoutineSlotEditForm",
+          controller: 'ClassRoutineSlotEditController',
+          templateUrl: 'views/routine/routine-slot-edit-form.html',
+          controllerAs: 'vm',
+          params: {
+            'counter': null
+          }
+        })
         .state('classRoutineConfig', {
           url: "/classRoutineConfig",
           controller: 'RoutineConfigController',

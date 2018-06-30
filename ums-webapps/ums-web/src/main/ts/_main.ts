@@ -94,6 +94,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/model/User.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/AdditionalRolePermissions.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/Employee.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/model/Teacher.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/AdmissionStudent.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/Semester.ts'/>
 /// <reference path='./model/leaveManagement/LmsApplication.ts'/>
@@ -127,6 +128,7 @@
 /// <reference path='service/CommonService.ts'/>
 /// <reference path='service/FacultyService.ts'/>
 /// <reference path='controller/routine/ClassRoutineService.ts'/>
+/// <reference path='controller/routine/ClassRoutineSlotEditController.ts'/>
 /// <reference path='controller/routine/RoutineConfigController.ts'/>
 /// <reference path='controller/routine/RoutineConfigService.ts'/>
 /// <reference path='service/ExamGradeService.ts'/>
@@ -143,6 +145,7 @@
 /// <reference path='service/StudentService.ts'/>
 /// <reference path='service/TeacherService.ts'/>
 /// <reference path='service/AdmissionCertificateVerificationService.ts'/>
+/// <reference path='service/CourseTeacherService.ts'/>
 
 /// <reference path='controller/student/NewStudent.ts'/>
 

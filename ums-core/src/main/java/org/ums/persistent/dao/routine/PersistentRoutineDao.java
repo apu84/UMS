@@ -92,7 +92,7 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   @Override
   public List<Routine> getTeacherRoutine(String teacherId) {
     String query = SELECT_ALL_FOR_TEACHER;
-    return mJdbcTemplate.query(query, new Object[]{teacherId}, new RoutineRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {teacherId}, new RoutineRowMapper());
   }
 
   @Override
@@ -100,7 +100,7 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
     String query =
         SELECT_ALL + " WHERE CLASS_ROUTINE.COURSE_ID=MST_COURSE.COURSE_ID  " + " and CLASS_ROUTINE.SEMESTER_ID=?  "
             + " and program_id=?  ORDER BY CLASS_ROUTINE.DAY, class_routine.START_TIME";
-    return mJdbcTemplate.query(query, new Object[]{pSemesterId, pProgramId}, new RoutineRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramId}, new RoutineRowMapper());
   }
 
   @Override
@@ -114,9 +114,10 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
 
   @Override
   public List<Routine> getRoutine(int semesterId, int programId, int year, int semester, String section) {
-    String query = "select * FROM CLASS_ROUTINE WHERE SEMESTER_ID=? and PROGRAM_ID=? and YEAR=? and SEMESTER=? and SECTION LIKE '" + section + "%'";
-    return mJdbcTemplate.query(query, new Object[]{semesterId, programId, year, semester},
-        new RoutineRowMapper());
+    String query =
+        "select * FROM CLASS_ROUTINE WHERE SEMESTER_ID=? and PROGRAM_ID=? and YEAR=? and SEMESTER=? and SECTION LIKE '"
+            + section + "%'";
+    return mJdbcTemplate.query(query, new Object[] {semesterId, programId, year, semester}, new RoutineRowMapper());
   }
 
   @Override
@@ -151,7 +152,7 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
 
   private Map<String, Object>[] getParameterObjects(List<MutableRoutine> pMutableRoutines) {
     Map<String, Object>[] parameterMaps = new HashMap[pMutableRoutines.size()];
-    for (int i = 0; i < pMutableRoutines.size(); i++) {
+    for(int i = 0; i < pMutableRoutines.size(); i++) {
       parameterMaps[i] = getInsertOrUpdateParameters(pMutableRoutines.get(i));
     }
     return parameterMaps;

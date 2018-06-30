@@ -108,10 +108,11 @@
 
         <div class="panel" style="min-height: 490px;">
             <div class="panel-heading" style="font-size: 14px;">
-                <b>Academic Semester:</b> {{vm.selectedSemester.name}}<span style="margin-left: 15px;"></span>
-                <b>Year:</b> {{vm.studentsYear}}<span style="margin-left: 15px;"></span>
-                <b>Semester:</b> {{vm.studentsSemester}}<span style="margin-left: 15px;"></span>
-                <b>Section:</b>{{vm.selectedTheorySection.name}}
+                <b>Academic Semester:</b> {{vm.classRoutineService.selectedSemester.name}}<span
+                    style="margin-left: 15px;"></span>
+                <b>Year:</b> {{vm.classRoutineService.studentsYear}}<span style="margin-left: 15px;"></span>
+                <b>Semester:</b> {{vm.classRoutineService.studentsSemester}}<span style="margin-left: 15px;"></span>
+                <b>Section:</b>{{vm.classRoutineService.selectedTheorySection.name}}
                 <span
                         class="subtitle"></span></div>
             <div class="panel-body">
@@ -122,7 +123,6 @@
         </div>
     </div>
 </div>
-<div ng-include="'views/routine/routine-config-modal.html'"></div>
 
 <script type="text/javascript">
     //    setTimeout(function () {$(".fa+.fa-chevron-down").tooltip({placement : 'top', trigger : 'hover', title : "Download Promotion List"});}, 100);

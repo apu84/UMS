@@ -9,10 +9,11 @@ import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.manager.CourseTeacherManager;
 import org.ums.persistent.model.PersistentCourseTeacher;
 
-import javax.json.JsonArray;
-import javax.json.JsonObject;
+import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class CourseTeacherResourceHelper extends
@@ -29,6 +30,40 @@ public class CourseTeacherResourceHelper extends
     modifyContent(pJsonObject);
     Response.ResponseBuilder builder = Response.ok();
     return builder.build();
+  }
+
+  public JsonArray createOrUpdateCourseTeacher(JsonArray pJsonArray, UriInfo pUriInfo) {
+    List<MutableCourseTeacher> newCourseTeacherList = new ArrayList<>();
+    List<MutableCourseTeacher> existingCourseTeacherList = new ArrayList<>();
+    for(int i = 0; i < pJsonArray.size(); i++) {
+      LocalCache localCache = new LocalCache();
+      JsonObject jsonObject = pJsonArray.getJsonObject(i);
+      MutableCourseTeacher courseTeacher = new PersistentCourseTeacher();
+      getBuilder().build(courseTeacher, jsonObject, localCache);
+      if(courseTeacher.getId() == null)
+        newCourseTeacherList.add(courseTeacher);
+      else
+        existingCourseTeacherList.add(courseTeacher);
+    }
+    if(newCourseTeacherList.size() > 0)
+      getContentManager().create(newCourseTeacherList);
+    if(existingCourseTeacherList.size() > 0)
+      getContentManager().update(existingCourseTeacherList);
+
+    return getCourseTeacher(newCourseTeacherList.get(0).getSemesterId(), newCourseTeacherList.get(0).getCourseId(),
+        newCourseTeacherList.get(0).getSection(), pUriInfo);
+  }
+
+  public JsonArray getCourseTeacher(Integer pSemesterId, String pCourseId, String pSection, UriInfo pUriInfo) {
+    List<CourseTeacher> courseTeacherList = getContentManager().getCourseTeacher(pSemesterId, pCourseId, pSection);
+    JsonArrayBuilder courseTeacherArrayBuilder = Json.createArrayBuilder();
+    for(CourseTeacher courseTeacher : courseTeacherList) {
+      LocalCache localCache = new LocalCache();
+      JsonObjectBuilder courseTeacherObjectBuilder = Json.createObjectBuilder();
+      getBuilder().build(courseTeacherObjectBuilder, courseTeacher, pUriInfo, localCache);
+      courseTeacherArrayBuilder.add(courseTeacherObjectBuilder);
+    }
+    return courseTeacherArrayBuilder.build();
   }
 
   @Override

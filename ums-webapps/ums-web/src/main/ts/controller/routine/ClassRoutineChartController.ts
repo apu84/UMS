@@ -1,4 +1,6 @@
 module ums {
+  import ClassRoom = ums.ClassRoom;
+
   interface DeptProgram {
     deptId: string;
     programs: Program[];
@@ -18,8 +20,9 @@ module ums {
     private routineData: ClassRoutine[];
     private tableHeader: ITableHeader[];
     private weekDay: IConstant[];
+    private counter: number = 0;
 
-    public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'courseService', 'classRoomService', 'classRoutineService', '$timeout', 'userService', 'routineConfigService', '$state'];
+    public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'courseService', 'classRoomService', 'classRoutineService', '$timeout', 'userService', 'routineConfigService', '$state', 'employeeService'];
 
     constructor(private appConstants: any,
                 private httpClient: HttpClient,
@@ -34,7 +37,8 @@ module ums {
                 private $timeout: ng.ITimeoutService,
                 private userService: UserService,
                 private routineConfigService: RoutineConfigService,
-                private $state: any) {
+                private $state: any,
+                private employeeService: EmployeeService) {
 
       this.init();
     }
@@ -42,6 +46,49 @@ module ums {
     public init() {
       this.generateHeader();
       this.generateBody();
+      if (this.classRoutineService.enableEdit) {
+        this.getCourseList();
+        this.getClassRoomList();
+        this.getTeacherList();
+      }
+    }
+
+    public getCourseList() {
+      this.courseService.getCourse(this.classRoutineService.selectedSemester.id,
+          this.classRoutineService.selectedProgram.id,
+          +this.classRoutineService.studentsYear,
+          +this.classRoutineService.studentsSemester).then((courseList: Course[]) => {
+        this.classRoutineService.courseList = [];
+        this.classRoutineService.courseList = courseList;
+      })
+    }
+
+    public getTeacherList() {
+      this.employeeService.getActiveTeacherByDept().then((teacherList: Employee[]) => {
+        this.classRoutineService.teacherList = [];
+        this.classRoutineService.teacherList = teacherList;
+      })
+    }
+
+    public getClassRoomList() {
+      //todo fetch dept wise room list
+      this.classRoomService.getClassRooms().then((roomList: ClassRoom[]) => {
+        this.classRoutineService.roomList = [];
+        this.classRoutineService.roomList = roomList;
+        console.log("Room list");
+        console.log(this.classRoutineService.roomList);
+      });
+    }
+
+    public edit() {
+      console.log("in the edit");
+      $("#routineConfigModal").modal('show');
+      this.counter += 1;
+      this.$state.go('classRoutine.classRoutineChart.classRoutineSlotEditForm', {counter: this.counter});
+      // $('#routineConfigModal').modal('toggle');
+      /*$('#myModal').modal('toggle');
+      $('#myModal').modal('show');
+      $('#myModal').modal('hide');*/
     }
 
     public generateBody() {

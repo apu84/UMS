@@ -79,6 +79,7 @@ module ums {
         this.fetchSemesters();
         this.fetchCurrentUser();
       this.searchButtonClicked = false;
+      this.classRoutineService.enableEdit = true;
     }
 
     public fetchCurrentUser(){

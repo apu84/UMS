@@ -37,6 +37,11 @@ public class CourseTeacherCache extends
   }
 
   @Override
+  public List<CourseTeacher> getCourseTeacher(int pSemesterId, String pCourseId, String pSection) {
+    return getManager().getCourseTeacher(pSemesterId, pCourseId, pSection);
+  }
+
+  @Override
   protected String getCacheKey(Long pId) {
     return CacheUtil.getCacheKey(CourseTeacher.class, pId);
   }

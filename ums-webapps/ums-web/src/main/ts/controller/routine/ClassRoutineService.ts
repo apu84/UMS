@@ -44,6 +44,10 @@ module ums{
     public studentsYear: string;
     public studentsSemester: string;
     public enableEdit: boolean;
+    public routineMapWithTimeAndDay: any;
+    public courseList: Course[];
+    public roomList: ClassRoom[];
+    public teacherList: Employee[];
     public routineUrl: string = 'academic/routine';
     public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
     constructor(private appConstants: any, private httpClient: HttpClient,

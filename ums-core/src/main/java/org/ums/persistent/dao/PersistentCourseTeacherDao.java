@@ -1,10 +1,5 @@
 package org.ums.persistent.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.domain.model.immutable.ApplicationTES;
@@ -14,6 +9,11 @@ import org.ums.generator.IdGenerator;
 import org.ums.manager.CourseTeacherManager;
 import org.ums.persistent.model.PersistentApplicationTES;
 import org.ums.persistent.model.PersistentCourseTeacher;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<CourseTeacher, MutableCourseTeacher, Long>
     implements CourseTeacherManager {
@@ -120,6 +120,12 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
   public List<CourseTeacher> getAssignedSections(Integer pSemesterId, String pCourseId, String pTeacherId) {
     String query = SELECT_ALL + " WHERE SEMESTER_ID = ? AND COURSE_ID = ? AND TEACHER_ID = ?";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pTeacherId}, getRowMapper());
+  }
+
+  @Override
+  public List<CourseTeacher> getCourseTeacher(int pSemesterId, String pCourseId, String pSection) {
+    String query = SELECT_ALL + " WHERE SEMESTER_ID=? AND COURSE_ID=? AND SECTION LIKE '" + pSection + "%'";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId}, getRowMapper());
   }
 
   class CourseTeacherRowMapper implements RowMapper<CourseTeacher> {

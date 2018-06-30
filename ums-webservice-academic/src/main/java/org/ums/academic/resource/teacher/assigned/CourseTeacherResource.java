@@ -4,16 +4,16 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.domain.model.immutable.TaskStatus;
-import org.ums.logs.GetLog;
-import org.ums.response.type.GenericResponse;
-import org.ums.usermanagement.user.User;
 import org.ums.enums.CourseCategory;
+import org.ums.logs.GetLog;
+import org.ums.logs.PostLog;
 import org.ums.manager.CourseTeacherManager;
 import org.ums.manager.SemesterSyllabusMapManager;
-import org.ums.usermanagement.user.UserManager;
 import org.ums.resource.Resource;
+import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -104,6 +104,15 @@ public class CourseTeacherResource extends Resource {
   }
 
   @GET
+  @GetLog(message = "Requested for course and section based course teacher")
+  @Path("/semesterId/{semester-id}/courseId/{course-id}/section/{section}")
+  public JsonArray get(@Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("course-id") String pCourseId,
+      final @PathParam("section") String pSection) {
+    return mResourceHelper.getCourseTeacher(pSemesterId, pCourseId, pSection, mUriInfo);
+  }
+
+  @GET
   @Path("/{semester-id}/{teacher-id}/course")
   @GetLog(message = "Accessed assigned course list for a teacher of a semester")
   public JsonObject getByCourse(@Context HttpServletRequest pHttpServletRequest, final @Context Request pRequest,
@@ -114,5 +123,12 @@ public class CourseTeacherResource extends Resource {
   @POST
   public Response post(final JsonObject pJsonObject) {
     return mResourceHelper.post(pJsonObject, mUriInfo);
+  }
+
+  @POST
+  @PostLog(message = "Save or update course teacher information from routine")
+  @Path("/saveOrUpdate")
+  public JsonArray saveOrUpdateCourseTeacher(final JsonArray pJsonArray) {
+    return mResourceHelper.createOrUpdateCourseTeacher(pJsonArray, mUriInfo);
   }
 }
