@@ -19,6 +19,8 @@ module ums {
   }
 
   export class CourseTeacherService {
+    public courseMapWithCourseTeachers: any = {};
+    public courseTeacherList: CourseTeacherInterface[] = [];
     public courseTeacherUrl: string = 'academic/courseTeacher';
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window'];
 
@@ -29,6 +31,15 @@ module ums {
     }
 
     public getCourseTeacherBySemesterAndCourseAndSection(semesterId: number, courseId: string, section: string): ng.IPromise<CourseTeacherInterface[]> {
+      let defer: ng.IDeferred<CourseTeacherInterface[]> = this.$q.defer();
+      this.httpClient.get(this.courseTeacherUrl + "/semesterId/" + semesterId + "/courseId/" + courseId + "/section/" + section, HttpClient.MIME_TYPE_JSON,
+          (response: CourseTeacherInterface[]) => {
+            defer.resolve(response);
+          });
+      return defer.promise;
+    }
+
+    public getCourseTeacherByProgramAndSemesterAndYearAndAcademicSemester(semesterId: number, courseId: string, section: string): ng.IPromise<CourseTeacherInterface[]> {
       let defer: ng.IDeferred<CourseTeacherInterface[]> = this.$q.defer();
       this.httpClient.get(this.courseTeacherUrl + "/semesterId/" + semesterId + "/courseId/" + courseId + "/section/" + section, HttpClient.MIME_TYPE_JSON,
           (response: CourseTeacherInterface[]) => {

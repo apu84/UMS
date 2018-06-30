@@ -35,9 +35,17 @@ module ums {
     public add() {
       console.log("in the add section");
       let slotRoutine: ClassRoutine = <ClassRoutine>{};
-      slotRoutine.course = <Course>{};
-      slotRoutine.room = <ClassRoom>{};
       this.slotRoutineList.push(slotRoutine);
+    }
+
+    public assignEndTime(classRoutine: ClassRoutine) {
+      let duration: number = angular.copy(this.routineConfigService.routineConfig.duration);
+      if (classRoutine.course.type_value == Utils.COURSE_TYPE_SESSIONAL)
+        duration = duration * 3;
+      let startTime: any = {};
+      startTime = moment(classRoutine.startTime, 'hh:mm A');
+      let endTime: any = moment(startTime).add(duration, 'm').toDate();
+      classRoutine.endTime = moment(endTime).format('hh:mm A');
     }
   }
 

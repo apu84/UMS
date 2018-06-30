@@ -24,5 +24,6 @@ module ums {
     syllabusName: string;
     optionalGroupId: string;
     optionalGroupName: string;
+    type_value: number;
   }
 }
