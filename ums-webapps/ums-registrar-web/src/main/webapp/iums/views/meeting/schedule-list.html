@@ -69,11 +69,17 @@
     </tr>
     </tbody>
 </table>
-
-<div align="right">
-    <pagination total-items="filterdUpcoming.length" ng-model="vm.currentPageNumberOfUpcoming"
-                class="pagination-sm pagination-page" boundary-links="true" rotate="false"
-                items-per-page="vm.itemsPerPageOfUpcoming"></pagination>
+<div class="row">
+    <div class="col-md-4">
+        <b><u>Total :</u></b> {{filterdUpcoming.length}}
+    </div>
+    <div class="col-md-8">
+        <div align="right">
+            <pagination total-items="filterdUpcoming.length" ng-model="vm.currentPageNumberOfUpcoming"
+                        class="pagination-sm pagination-page" boundary-links="true" rotate="false"
+                        items-per-page="vm.itemsPerPageOfUpcoming"></pagination>
+        </div>
+    </div>
 </div>
 
 <div class="row">
@@ -137,11 +143,18 @@
     </tbody>
 </table>
 
-<div align="right">
-    <pagination total-items="meetingPrevious.length" ng-model="vm.currentPageNumberOfPrevious" max-size="7"
-                class="pagination-sm" boundary-links="true" rotate="false"
-                class="pagination-page"
-                items-per-page="vm.itemsPerPageOfPrevious"></pagination>
+<div class="row">
+    <div class="col-md-4">
+        <b><u>Total :</u></b> {{filterdPrevious.length}}
+    </div>
+    <div class="col-md-8">
+        <div align="right">
+            <pagination total-items="filterdPrevious.length" ng-model="vm.currentPageNumberOfPrevious" max-size="7"
+                        class="pagination-sm" boundary-links="true" rotate="false"
+                        class="pagination-page"
+                        items-per-page="vm.itemsPerPageOfPrevious"></pagination>
+        </div>
+    </div>
 </div>
 
 <div id="editSchedule" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
@@ -246,4 +259,3 @@
         </div>
     </div>
 </div>
-
