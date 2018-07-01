@@ -2,7 +2,6 @@ package org.ums.resource.helper;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.json.Json;
@@ -15,7 +14,6 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,10 +26,11 @@ import org.ums.domain.model.mutable.library.MutableItem;
 import org.ums.domain.model.mutable.library.MutableRecord;
 import org.ums.manager.library.ItemManager;
 import org.ums.manager.library.RecordManager;
-import org.ums.persistent.model.library.PersistentItem;
 import org.ums.persistent.model.library.PersistentRecord;
 import org.ums.resource.RecordResource;
 import org.ums.resource.ResourceHelper;
+import org.ums.solr.repository.converter.Converter;
+import org.ums.solr.repository.converter.SimpleConverter;
 import org.ums.solr.repository.document.lms.RecordDocument;
 import org.ums.solr.repository.lms.RecordRepository;
 import org.ums.usermanagement.user.User;
@@ -85,9 +84,8 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     getBuilder().build(mutableRecord, pJsonObject, localCache);
     mutableRecord.create();
 
-    URI contextURI =
-        pUriInfo.getBaseUriBuilder().path(RecordResource.class).path(RecordResource.class, "get")
-            .build(mutableRecord.getId());
+    URI contextURI = pUriInfo.getBaseUriBuilder().path(RecordResource.class).path(RecordResource.class, "get")
+        .build(mutableRecord.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
@@ -123,7 +121,8 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
       }
 
       // queryString =
-      // String.format("{!parent which=\"type_s:Record  AND _text_:*%s*\"}roleName_txt:*%s* OR contributorName_txt:*%s*",
+      // String.format("{!parent which=\"type_s:Record AND _text_:*%s*\"}roleName_txt:*%s* OR
+      // contributorName_txt:*%s*",
       // filterDto.getBasicQueryTerm(), filterDto.getBasicQueryTerm(),
       // filterDto.getBasicQueryTerm());
 
@@ -142,10 +141,12 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     record = (PersistentRecord) mManager.get(Long.parseLong(pMfnNo));
     List<Item> itemList = new ArrayList<>();
     if(record.getTotalItems() == record.getTotalAvailable()) {
+      Converter<Record, RecordDocument> converter = new SimpleConverter<>(Record.class, RecordDocument.class);
       itemList = mItemManger.getByMfn(record.getMfn());
       mManager.delete(record);
       for(Item item : itemList) {
         mItemManger.delete((MutableItem) item);
+        mRecordRepository.delete(converter.convert(record));
       }
       localCache.invalidate();
       return Response.noContent().build();
