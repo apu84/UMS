@@ -439,11 +439,11 @@ module ums {
                     {id: "2", name: "Optional Course Selection"}
                 ],
                 absentPresentStatus: [
-                    {id: "1", name: "Absent"},
-                    {id: "2", name: "Late Coming"}
+                    {id: 1, name: "Absent"},
+                    {id: 2, name: "Late Coming"}
                 ], absPreRemarks: [
-                    {id: "1", name: "Did not inform"},
-                    {id: "2", name: "inform"}
+                    {id: 1, name: "Did not inform"},
+                    {id: 2, name: "Inform"}
                 ],
                 actors: [
                     {id: "0", name: "Student"},

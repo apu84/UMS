@@ -21,11 +21,16 @@ module ums{
         public remarks:IConstants;
         public deptList: Array<IConstants>;
         public deptName: IConstants;
+        public classRooms:Array<ClassRoom>;
+        public classRoom:ClassRoom;
+        public employees:Array<Employee>;
+        public employee:Employee;
         public selectedDepartmentId:string;
         public selectedAbsPreStatusId:number;
         public selectedRemarkStatus:string;
         public arrivalTime: string;
-        public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService','DailyExamAttendanceReportService','examRoutineService'];
+        public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService',
+            'programService','DailyExamAttendanceReportService','examRoutineService','classRoomService','employeeService'];
 
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -37,7 +42,9 @@ module ums{
                     private facultyService: FacultyService,
                     private programService: ProgramService,
                     private dailyExamAttendanceReportService: DailyExamAttendanceReportService,
-                    private examRoutineService: ExamRoutineService) {
+                    private examRoutineService: ExamRoutineService,
+                    private classRoomService:ClassRoomService,
+                    private employeeService:EmployeeService) {
             this.examTypeList=[];
             this.examTypeList=this.appConstants.examType;
             this.examType=this.examTypeList[0];
@@ -57,9 +64,35 @@ module ums{
             this.arrivalTime="";
             this.getSemesters()
             this.initializeDatePickers();
+            this.getClassRoomInfo();
         }
         private doSomething():void{
             alert('hello from another side');
+        }
+        private getEmployees(deptId:string){
+            this.employeeService.getAll().then((data:Array<Employee>)=>{
+                console.log("***emp info***");
+                this.employees=data;
+                this.employees=this.employees.filter((a)=>a.deptOfficeId==deptId && a.status==1);
+                for(let i=0;i<this.employees.length;i++){
+                    this.employees[i].employeeName=this.employees[i].employeeName+"("+this.employees[i].designationName+")";
+                }
+                console.log(this.employees);
+            })
+        }
+        private employeeChanged(value:any){
+            console.log(value);
+
+        }
+        private getClassRoomInfo(){
+            this.classRoomService.getClassRooms().then((data:Array<ClassRoom>)=>{
+               console.log("Class Room Info");
+               this.classRooms=data;
+               console.log(this.classRooms);
+            });
+        }
+        public classRoomChanged(value:any){
+            console.log(value);
         }
         private dateChanged(arrivalTime: any) {
             this.arrivalTime=arrivalTime;
@@ -90,6 +123,7 @@ module ums{
         private deptChanged(deptId:any){
             this.selectedDepartmentId=deptId.id;
             console.log("id: "+this.selectedDepartmentId);
+            this.getEmployees(this.selectedDepartmentId);
 
         }
         private changeExamType(value:any){

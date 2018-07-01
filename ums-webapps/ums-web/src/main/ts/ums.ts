@@ -991,6 +991,8 @@ module ums {
                       files: [
 
                           'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                          'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
+                          'vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
                           'vendors/bootstrap-datepicker/css/datepicker.css',
                           'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                           'vendors/bootstrap-switch/js/bootstrap-switch.min.js',

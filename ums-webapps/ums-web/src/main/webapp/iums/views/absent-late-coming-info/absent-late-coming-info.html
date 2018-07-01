@@ -27,8 +27,15 @@
                                 <div class="form-group">
                                     <label for="toStudentList" class="control-label"><span class="glyphicon glyphicon-user"><b> Empoyee Name</b></span></label>
                                     <div class="input-icon left">
-                                        <input type="text" id="toStudentList" style="width: 70%;" class="form-control"
-                                              placeholder="Enter employee name" data-ng-model="toStudentId"/>
+                                        <select
+                                                class="form-control required"
+                                                name="leaveType"
+                                                id="leaveTypejj"
+                                                style="width: 70%";
+                                                data-ng-options="employee.employeeName for employee in vm.employees track by employee.id"
+                                                data-ng-model="vm.employee"
+                                                data-ng-change="vm.employeeChanged(vm.employee)"
+                                        ><option value="">Select an Exam Date</option></select>
                                     </div>
                                 </div>
                             </div>
@@ -85,7 +92,7 @@
                                                 data-ng-model="vm.remarks"
                                                 data-ng-change="vm.changeRemarkStatus(vm.remarks)"
                                         >
-                                        </select>
+                                        </select>s
                                     </div>
                                 </div>
                             </div>
@@ -94,12 +101,12 @@
                                 <div class="input-icon left">
                                     <select
                                             class="form-control required"
-                                            name="theorySection"
-                                            id="theoryBulk"
-                                            style="width: 70%;"
-                                            data-ng-options="theory.name for theory in bulkTheorySectionList track by theory.id"
-                                            data-ng-model="bulkTheorySection"
-                                            data-ng-change="changeBulkTheorySection(bulkTheorySection)"
+                                            name="leaveType"
+                                            id="leaveTypejj"
+                                            style="width: 70%";
+                                            data-ng-options="classRoom.roomNo for classRoom in vm.classRooms track by classRoom.id"
+                                            data-ng-model="vm.classRoom"
+                                            data-ng-change="vm.classRoomChanged(vm.classRoom)"
                                     ><option value="">Reserved</option></select>
                                 </div>
                             </div>
@@ -128,8 +135,10 @@
                                 <div class="form-group">
                                     <label for="theoryBulk" class="control-label"><span class="glyphicon glyphicon-calendar"><b> Arrival Time</b></span></label>
                                     <input align="center" contenteditable="editable"
+                                           ng-disabled="editable"
                                            style="width:70%;text-align: center;"
                                            type="text"
+                                           style="width: 70%";
                                            data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY"
                                            class="datepicker-default form-control"
                                            data-ng-model="vm.arrivalTime"
@@ -141,7 +150,7 @@
                                 <div class="form-group">
                                     <label for="theoryBulk" class="control-label"> </label>
                                     <div class="input-icon left" align="center">
-                                        <button type="button" class="btn btn-success" style="width:40%;" data-ng-click="vm.doSomething()">submit</button>
+                                        <button type="button" class="btn btn-success" style="width:40%;" data-ng-click="vm.getClassRoomInfo()">submit</button>
                                     </div>
                                 </div>
                             </div>
