@@ -91,7 +91,7 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     return null;
   }
 
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public List<Account> createAccount(PersistentAccount pAccount, PersistentAccountBalance pAccountBalance,
       int pItemPerPage, int pItemNumber, AscendingOrDescendingType pAscendingOrDescendingType) throws Exception {
     MutableAccount account = pAccount;
@@ -111,21 +111,23 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     account.setAccountCode(account.getAccountCode() == null || account.getAccountCode().equals("") ? mIdGenerator
         .getNumericId() : account.getAccountCode());
     account.setCompanyId(Utils.getCompany().getId());
-    account.setId(account.getId() == null ? mIdGenerator.getNumericId() : account.getId());
-
+    if(account.getId() == null) {
+      account.setId(mIdGenerator.getNumericId());
+      getContentManager().create(account);
+    }
+    else
+      getContentManager().update(account);
+    /*
+     * if(account.getId() == null) { Long id = getContentManager().create(account); } else {
+     * getContentManager().update(account); return getAllPaginated(pItemPerPage, pItemNumber,
+     * pAscendingOrDescendingType); }
+     */
     MutableAccountBalance accountBalance = pAccountBalance;
     accountBalance = mAccountBalanceService.createAccountBalance(account, user, accountBalance);
 
     if(accountBalance.getYearOpenBalance().equals(new BigDecimal(0)) == false)
       mAccountTransactionService.createOpeningBalanceJournalEntry(account, accountBalance);
 
-    if(account.getId() == null) {
-      Long id = getContentManager().create(account);
-    }
-    else {
-      getContentManager().update(account);
-      return getAllPaginated(pItemPerPage, pItemNumber, pAscendingOrDescendingType);
-    }
     return getAllPaginated(pItemPerPage, pItemNumber, pAscendingOrDescendingType);
   }
 

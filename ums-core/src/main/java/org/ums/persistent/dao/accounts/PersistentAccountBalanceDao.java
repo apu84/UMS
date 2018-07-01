@@ -2,6 +2,8 @@ package org.ums.persistent.dao.accounts;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
+import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.accounts.AccountBalanceDaoDecorator;
@@ -15,6 +17,7 @@ import org.ums.util.UmsUtils;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -135,16 +138,42 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
 
   @Override
   public int update(List<MutableAccountBalance> pMutableList) {
-    String query = UPDATE_ONE;
-    Map<String, Object>[] parameterObjects = getParameterObjects(pMutableList);
-    return mNamedParameterJdbcTemplate.batchUpdate(query, parameterObjects).length;
+    for (MutableAccountBalance accountBalance : pMutableList) {
+      update(accountBalance);
+    }
+    // String query = UPDATE_ONE;
+    // Map<String, Object>[] parameterObjects = getParameterObjects(pMutableList);
+    // return mNamedParameterJdbcTemplate.batchUpdate(query, parameterObjects).length;
+    return pMutableList.size();
   }
 
   @Override
   public int update(MutableAccountBalance pMutable) {
-    String query = UPDATE_ONE;
-    Map parameterMap = getInsertParameters(pMutable);
-    return mNamedParameterJdbcTemplate.update(query, parameterMap);
+
+    PreparedStatementCreatorFactory preparedStatementCreatorFactory =
+        new PreparedStatementCreatorFactory(
+            "select  ID,FIN_START_DATE, FIN_END_DATE, ACCOUNT_CODE, YEAR_OPEN_BALANCE, YEAR_OPEN_BALANCE_TYPE, TOT_MONTH_DB_BAL_04, TOT_MONTH_CR_BAL_04, TOT_MONTH_DB_BAL_05, TOT_MONTH_CR_BAL_05, TOT_MONTH_DB_BAL_06, TOT_MONTH_CR_BAL_06, TOT_MONTH_DB_BAL_07, TOT_MONTH_CR_BAL_07, TOT_MONTH_DB_BAL_08, TOT_MONTH_CR_BAL_08, TOT_MONTH_DB_BAL_09, TOT_MONTH_CR_BAL_09, TOT_MONTH_DB_BAL_10, TOT_MONTH_CR_BAL_10, TOT_MONTH_DB_BAL_11, TOT_MONTH_CR_BAL_11, TOT_MONTH_DB_BAL_12, TOT_MONTH_CR_BAL_12, TOT_MONTH_DB_BAL_01, TOT_MONTH_CR_BAL_01, TOT_MONTH_DB_BAL_02, TOT_MONTH_CR_BAL_02, TOT_MONTH_DB_BAL_03, TOT_MONTH_CR_BAL_03, TOT_DEBIT_TRANS, TOT_CREDIT_TRANS, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY, LAST_MODIFIED from MST_ACCOUNT_BALANCE where ID=? for update",
+            new int[]{Types.NUMERIC});
+    preparedStatementCreatorFactory.setUpdatableResults(true);
+    preparedStatementCreatorFactory.setResultSetType(ResultSet.TYPE_FORWARD_ONLY);
+
+    RowCallbackHandler rowCallbackHandler = new RowCallbackHandler() {
+      @Override
+      public void processRow(ResultSet rs) throws SQLException {
+        try {
+          updateResultSet(rs, pMutable);
+        } catch (Exception e) {
+          e.printStackTrace();
+        } finally {
+          rs.updateLong("ID", rs.getLong("ID"));
+          rs.updateRow();
+        }
+      }
+    };
+    mJdbcTemplate.query(preparedStatementCreatorFactory.newPreparedStatementCreator(new Object[]{pMutable.getId()}),
+        rowCallbackHandler);
+    // return mNamedParameterJdbcTemplate.update(query, parameterMap);
+    return 1;
   }
 
   @Override
@@ -172,6 +201,45 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
       parameterMaps[i] = getInsertParameters(pMutableAccountBalances.get(i));
     }
     return parameterMaps;
+  }
+
+  private void updateResultSet(ResultSet pResultSet, MutableAccountBalance pMutableAccountBalance) throws Exception {
+    pResultSet.updateDate("FIN_START_DATE", new java.sql.Date(pMutableAccountBalance.getFinStartDate().getTime()));
+    pResultSet.updateDate("FIN_END_DATE", new java.sql.Date(pMutableAccountBalance.getFinEndDate().getTime()));
+    pResultSet.updateLong("ACCOUNT_CODE", pMutableAccountBalance.getAccountCode());
+    pResultSet.updateBigDecimal("YEAR_OPEN_BALANCE", pMutableAccountBalance.getYearOpenBalance());
+    pResultSet.updateString("YEAR_OPEN_BALANCE_TYPE", pMutableAccountBalance.getYearOpenBalanceType().getValue());
+    pResultSet.updateBigDecimal("TOT_MONTH_DB_BAL_01", pMutableAccountBalance.getTotMonthDbBal01());
+    pResultSet.updateBigDecimal("TOT_MONTH_DB_BAL_02", pMutableAccountBalance.getTotMonthDbBal02());
+    pResultSet.updateBigDecimal("TOT_MONTH_DB_BAL_03", pMutableAccountBalance.getTotMonthDbBal03());
+    pResultSet.updateBigDecimal("TOT_MONTH_DB_BAL_04", pMutableAccountBalance.getTotMonthDbBal04());
+    pResultSet.updateBigDecimal("TOT_MONTH_DB_BAL_05", pMutableAccountBalance.getTotMonthDbBal05());
+    pResultSet.updateBigDecimal("TOT_MONTH_DB_BAL_06", pMutableAccountBalance.getTotMonthDbBal06());
+    pResultSet.updateBigDecimal("TOT_MONTH_DB_BAL_07", pMutableAccountBalance.getTotMonthDbBal07());
+    pResultSet.updateBigDecimal("TOT_MONTH_DB_BAL_08", pMutableAccountBalance.getTotMonthDbBal08());
+    pResultSet.updateBigDecimal("TOT_MONTH_DB_BAL_09", pMutableAccountBalance.getTotMonthDbBal09());
+    pResultSet.updateBigDecimal("TOT_MONTH_DB_BAL_10", pMutableAccountBalance.getTotMonthDbBal10());
+    pResultSet.updateBigDecimal("TOT_MONTH_DB_BAL_11", pMutableAccountBalance.getTotMonthDbBal11());
+    pResultSet.updateBigDecimal("TOT_MONTH_DB_BAL_12", pMutableAccountBalance.getTotMonthDbBal12());
+    pResultSet.updateBigDecimal("TOT_MONTH_CR_BAL_01", pMutableAccountBalance.getTotMonthCrBal01());
+    pResultSet.updateBigDecimal("TOT_MONTH_CR_BAL_02", pMutableAccountBalance.getTotMonthCrBal02());
+    pResultSet.updateBigDecimal("TOT_MONTH_CR_BAL_03", pMutableAccountBalance.getTotMonthCrBal03());
+    pResultSet.updateBigDecimal("TOT_MONTH_CR_BAL_04", pMutableAccountBalance.getTotMonthCrBal04());
+    pResultSet.updateBigDecimal("TOT_MONTH_CR_BAL_05", pMutableAccountBalance.getTotMonthCrBal05());
+    pResultSet.updateBigDecimal("TOT_MONTH_CR_BAL_06", pMutableAccountBalance.getTotMonthCrBal06());
+    pResultSet.updateBigDecimal("TOT_MONTH_CR_BAL_07", pMutableAccountBalance.getTotMonthCrBal07());
+    pResultSet.updateBigDecimal("TOT_MONTH_CR_BAL_08", pMutableAccountBalance.getTotMonthCrBal08());
+    pResultSet.updateBigDecimal("TOT_MONTH_CR_BAL_09", pMutableAccountBalance.getTotMonthCrBal09());
+    pResultSet.updateBigDecimal("TOT_MONTH_CR_BAL_10", pMutableAccountBalance.getTotMonthCrBal10());
+    pResultSet.updateBigDecimal("TOT_MONTH_CR_BAL_11", pMutableAccountBalance.getTotMonthCrBal11());
+    pResultSet.updateBigDecimal("TOT_MONTH_CR_BAL_12", pMutableAccountBalance.getTotMonthCrBal12());
+    pResultSet.updateBigDecimal("TOT_DEBIT_TRANS", pMutableAccountBalance.getTotDebitTrans());
+    pResultSet.updateBigDecimal("TOT_CREDIT_TRANS", pMutableAccountBalance.getTotCreditTrans());
+    pResultSet.updateString("STAT_FLAG", pMutableAccountBalance.getStatFlag());
+    pResultSet.updateString("STAT_UP_FLAG", pMutableAccountBalance.getStatUpFlag());
+    pResultSet.updateDate("MODIFIED_DATE", new java.sql.Date(pMutableAccountBalance.getModifiedDate().getTime()));
+    pResultSet.updateString("MODIFIED_BY", pMutableAccountBalance.getModifiedBy());
+    pResultSet.updateString("LAST_MODIFIED", UmsUtils.formatDate(new Date(), "YYYYMMDDHHMMSS"));
   }
 
   private Map getInsertOrUpdateParameters(MutableAccountBalance pMutableAccountBalance) {
