@@ -146,7 +146,7 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
       mManager.delete(record);
       for(Item item : itemList) {
         mItemManger.delete((MutableItem) item);
-        mRecordRepository.delete(converter.convert(record));
+        mRecordRepository.delete(Long.valueOf(converter.convert(record).getId()));
       }
       localCache.invalidate();
       return Response.noContent().build();
