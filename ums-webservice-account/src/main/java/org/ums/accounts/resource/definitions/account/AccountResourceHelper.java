@@ -4,7 +4,6 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.ums.accounts.resource.definitions.account.balance.AccountBalanceBuilder;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.accounts.Account;
@@ -17,13 +16,11 @@ import org.ums.enums.accounts.definitions.voucher.number.control.VoucherType;
 import org.ums.enums.common.AscendingOrDescendingType;
 import org.ums.exceptions.ValidationException;
 import org.ums.generator.IdGenerator;
-import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
 import org.ums.persistent.model.accounts.PersistentAccount;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
 import org.ums.resource.ResourceHelper;
 import org.ums.service.AccountBalanceService;
-import org.ums.service.AccountService;
 import org.ums.service.AccountTransactionService;
 import org.ums.service.VoucherService;
 import org.ums.usermanagement.user.User;
@@ -58,25 +55,11 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
   @Autowired
   private AccountBuilder mAccountBuilder;
   @Autowired
-  private AccountBalanceManager mAccountBalanceManager;
-  @Autowired
-  private AccountBalanceBuilder mAccountBalanceBuilder;
-  @Autowired
-  private FinancialAccountYearManager mFinancialAccountYearManager;
-  @Autowired
-  private MonthManager mMonthManager;
-  @Autowired
-  private MonthBalanceManager mMonthBalanceManager;
-  @Autowired
   private GroupManager mGroupManager;
   @Autowired
   private AccountBalanceService mAccountBalanceService;
   @Autowired
   private SystemGroupMapManager mSystemGroupMapManager;
-  @Autowired
-  private CompanyManager mCompanyManager;
-  @Autowired
-  private AccountService mAccountService;
   @Autowired
   private AccountTransactionService mAccountTransactionService;
   @Autowired
@@ -114,6 +97,11 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
     if(account.getId() == null) {
       account.setId(mIdGenerator.getNumericId());
       getContentManager().create(account);
+      MutableAccountBalance accountBalance = pAccountBalance;
+      accountBalance = mAccountBalanceService.createAccountBalance(account, user, accountBalance);
+
+      if(accountBalance.getYearOpenBalance().equals(new BigDecimal(0)) == false)
+        mAccountTransactionService.createOpeningBalanceJournalEntry(account, accountBalance);
     }
     else
       getContentManager().update(account);
@@ -122,11 +110,6 @@ public class AccountResourceHelper extends ResourceHelper<Account, MutableAccoun
      * getContentManager().update(account); return getAllPaginated(pItemPerPage, pItemNumber,
      * pAscendingOrDescendingType); }
      */
-    MutableAccountBalance accountBalance = pAccountBalance;
-    accountBalance = mAccountBalanceService.createAccountBalance(account, user, accountBalance);
-
-    if(accountBalance.getYearOpenBalance().equals(new BigDecimal(0)) == false)
-      mAccountTransactionService.createOpeningBalanceJournalEntry(account, accountBalance);
 
     return getAllPaginated(pItemPerPage, pItemNumber, pAscendingOrDescendingType);
   }

@@ -77,8 +77,12 @@ public class PersistentAccountDao extends AccountDaoDecorator {
 
   @Override
   public List<Account> getAccounts(String pAccountName) {
-    String query = "select * from MST_ACCOUNT where ACCOUNT_NAME like :accountName";
+    pAccountName = pAccountName.toUpperCase();
+    String query =
+        "select * from MST_ACCOUNT where UPPER(ACCOUNT_NAME) like '%" + pAccountName + "%' OR ACCOUNT_CODE LIKE '%"
+            + pAccountName + "%'";
     SqlParameterSource namedParameters = new MapSqlParameterSource("accountName", "%" + pAccountName + "%");
+
     return this.mNamedParameterJdbcTemplate.query(query, namedParameters, new PersistentAccountRowMapper());
     // return mJdbcTemplate.query(query, new Object[]{pAccountName}, new
     // PersistentAccountRowMapper());
