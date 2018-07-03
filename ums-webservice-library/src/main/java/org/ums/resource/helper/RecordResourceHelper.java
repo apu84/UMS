@@ -1,16 +1,6 @@
 package org.ums.resource.helper;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-
+import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +27,15 @@ import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 import org.ums.util.UmsUtils;
 
-import com.google.gson.Gson;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Ifti on 19-Feb-17.
@@ -84,8 +82,9 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     getBuilder().build(mutableRecord, pJsonObject, localCache);
     mutableRecord.create();
 
-    URI contextURI = pUriInfo.getBaseUriBuilder().path(RecordResource.class).path(RecordResource.class, "get")
-        .build(mutableRecord.getId());
+    URI contextURI =
+        pUriInfo.getBaseUriBuilder().path(RecordResource.class).path(RecordResource.class, "get")
+            .build(mutableRecord.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
@@ -96,7 +95,7 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     List<RecordDocument> recordDocuments =
         mRecordRepository.findByCustomQuery(query, new PageRequest(pPage, pItemPerPage), query.contains("*:*"));
     List<Record> records = new ArrayList<>();
-    for(RecordDocument document : recordDocuments) {
+    for (RecordDocument document : recordDocuments) {
       records.add(mManager.get(Long.valueOf(document.getId())));
     }
     // queryBuilder(pFilter);
@@ -108,14 +107,13 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     FilterDto filterDto = g.fromJson(pFilter, FilterDto.class);
     String queryString = "";
 
-    if(filterDto.getSearchType().equalsIgnoreCase("basic")) {
+    if (filterDto.getSearchType().equalsIgnoreCase("basic")) {
       String queryTerm;
-      if(filterDto.getBasicQueryField().equals("any")) {
+      if (filterDto.getBasicQueryField().equals("any")) {
         /* queryString = String.format("%s AND type_s:Record", queryTerm); */
         queryTerm = StringUtils.isEmpty(filterDto.getBasicQueryTerm()) ? "*:*" : filterDto.getBasicQueryTerm();
         queryString = String.format("%s AND type_s:Record", queryTerm);
-      }
-      else {
+      } else {
         queryTerm = StringUtils.isEmpty(filterDto.getBasicQueryTerm()) ? "*" : filterDto.getBasicQueryTerm();
         queryString = String.format(filterDto.getBasicQueryField() + ":%s AND type_s:Record", queryTerm);
       }
@@ -126,8 +124,7 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
       // filterDto.getBasicQueryTerm(), filterDto.getBasicQueryTerm(),
       // filterDto.getBasicQueryTerm());
 
-    }
-    else if(filterDto.getSearchType().equalsIgnoreCase("advanced")) {
+    } else if (filterDto.getSearchType().equalsIgnoreCase("advanced")) {
       queryString = "title_txt:Programming AND type_s: Record";
     }
 
@@ -140,11 +137,11 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     PersistentRecord record = new PersistentRecord();
     record = (PersistentRecord) mManager.get(Long.parseLong(pMfnNo));
     List<Item> itemList = new ArrayList<>();
-    if(record.getTotalItems() == record.getTotalAvailable()) {
+    if (record.getTotalItems() == record.getTotalAvailable()) {
       Converter<Record, RecordDocument> converter = new SimpleConverter<>(Record.class, RecordDocument.class);
       itemList = mItemManger.getByMfn(record.getMfn());
       mManager.delete(record);
-      for(Item item : itemList) {
+      for (Item item : itemList) {
         mItemManger.delete((MutableItem) item);
         mRecordRepository.delete(Long.valueOf(converter.convert(record).getId()));
       }
@@ -160,7 +157,7 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
 
-    for(Record record : records) {
+    for (Record record : records) {
       children.add(toJson(record, pUriInfo, localCache));
     }
     object.add("entries", children);

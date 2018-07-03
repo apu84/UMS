@@ -138,7 +138,7 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
 
   @Override
   public int update(List<MutableAccountBalance> pMutableList) {
-    for (MutableAccountBalance accountBalance : pMutableList) {
+    for(MutableAccountBalance accountBalance : pMutableList) {
       update(accountBalance);
     }
     // String query = UPDATE_ONE;
@@ -153,7 +153,7 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
     PreparedStatementCreatorFactory preparedStatementCreatorFactory =
         new PreparedStatementCreatorFactory(
             "select  ID,FIN_START_DATE, FIN_END_DATE, ACCOUNT_CODE, YEAR_OPEN_BALANCE, YEAR_OPEN_BALANCE_TYPE, TOT_MONTH_DB_BAL_04, TOT_MONTH_CR_BAL_04, TOT_MONTH_DB_BAL_05, TOT_MONTH_CR_BAL_05, TOT_MONTH_DB_BAL_06, TOT_MONTH_CR_BAL_06, TOT_MONTH_DB_BAL_07, TOT_MONTH_CR_BAL_07, TOT_MONTH_DB_BAL_08, TOT_MONTH_CR_BAL_08, TOT_MONTH_DB_BAL_09, TOT_MONTH_CR_BAL_09, TOT_MONTH_DB_BAL_10, TOT_MONTH_CR_BAL_10, TOT_MONTH_DB_BAL_11, TOT_MONTH_CR_BAL_11, TOT_MONTH_DB_BAL_12, TOT_MONTH_CR_BAL_12, TOT_MONTH_DB_BAL_01, TOT_MONTH_CR_BAL_01, TOT_MONTH_DB_BAL_02, TOT_MONTH_CR_BAL_02, TOT_MONTH_DB_BAL_03, TOT_MONTH_CR_BAL_03, TOT_DEBIT_TRANS, TOT_CREDIT_TRANS, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY, LAST_MODIFIED from MST_ACCOUNT_BALANCE where ID=? for update",
-            new int[]{Types.NUMERIC});
+            new int[] {Types.NUMERIC});
     preparedStatementCreatorFactory.setUpdatableResults(true);
     preparedStatementCreatorFactory.setResultSetType(ResultSet.TYPE_FORWARD_ONLY);
 
@@ -162,7 +162,7 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
       public void processRow(ResultSet rs) throws SQLException {
         try {
           updateResultSet(rs, pMutable);
-        } catch (Exception e) {
+        } catch(Exception e) {
           e.printStackTrace();
         } finally {
           rs.updateLong("ID", rs.getLong("ID"));
@@ -170,7 +170,7 @@ public class PersistentAccountBalanceDao extends AccountBalanceDaoDecorator {
         }
       }
     };
-    mJdbcTemplate.query(preparedStatementCreatorFactory.newPreparedStatementCreator(new Object[]{pMutable.getId()}),
+    mJdbcTemplate.query(preparedStatementCreatorFactory.newPreparedStatementCreator(new Object[] {pMutable.getId()}),
         rowCallbackHandler);
     // return mNamedParameterJdbcTemplate.update(query, parameterMap);
     return 1;
