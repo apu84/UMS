@@ -2,7 +2,7 @@ module ums {
     class PersonalInformation {
         public static $inject = ['registrarConstants', '$q', 'notify',
             'countryService', 'divisionService', 'districtService', 'thanaService',
-            'employeeInformationService', 'areaOfInterestService',
+            'employeeInformationService',
             '$stateParams', 'FileUpload'];
 
         private entry: {
@@ -51,7 +51,6 @@ module ums {
                     private districtService: DistrictService,
                     private thanaService: ThanaService,
                     private employeeInformationService: EmployeeInformationService,
-                    private areaOfInterestService: AreaOfInterestService,
                     private $stateParams: any,
                     private FileUpload: FileUpload) {
 
