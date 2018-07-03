@@ -21,6 +21,7 @@ module ums {
 
     UMS.constant("appConstants", Constants.Default());
     UMS.constant("registrarConstants", Constants.RegistrarConstant());
+    UMS.constant("libConstants", Constants.LibConstant());
 
     UMS.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
         $urlRouterProvider.otherwise("/userHome");
