@@ -3,5 +3,6 @@ module ums {
     id: string;
     name: string;
     shortName: string;
+    address: string;
   }
 }

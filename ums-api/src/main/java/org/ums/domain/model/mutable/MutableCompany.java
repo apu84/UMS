@@ -12,4 +12,6 @@ public interface MutableCompany extends Company, Editable<String>, MutableIdenti
   void setName(String pName);
 
   void setShortName(String pShortName);
+
+  void setAddress(String pAddress);
 }
