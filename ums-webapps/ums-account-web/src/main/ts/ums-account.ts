@@ -249,6 +249,112 @@
             }]
           }
         })
+        .state('employeeProfile', {
+            url: "/employeeProfile",
+            templateUrl: 'views/employee/employee-profile.html',
+            controller: 'EmployeeProfile',
+            controllerAs: 'vm',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        files: [
+                            'vendors/select2/select2-madmin.css',
+                            'vendors/bootstrap-select/bootstrap-select.min.css',
+                            'vendors/multi-select/css/multi-select-madmin.css',
+                            'vendors/select2/select2.min.js',
+                            'vendors/bootstrap-select/bootstrap-select.min.js',
+                            'vendors/multi-select/js/jquery.multi-select.js',
+                            'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                            'vendors/bootstrap-datepicker/css/datepicker.css',
+                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                            'vendors/bootstrap-imageupload/bootstrap-imageupload.css',
+                            'vendors/bootstrap-imageupload/bootstrap-imageupload.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('employeeProfile.personal', {
+            url: "/personal",
+            params : {
+                'id': null,
+                'edit': null
+            },
+            templateUrl: 'views/employee/personal-information.html',
+            controller: 'PersonalInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.academic', {
+            url: "/academic",
+            params : {
+                'id': null,
+                'edit': null
+            },
+            templateUrl: 'views/employee/academic-information.html',
+            controller: 'AcademicInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.publication', {
+            url: "/publication",
+            params : {
+                'id': null,
+                'edit': null
+            },
+            templateUrl: 'views/employee/publication-information.html',
+            controller: 'PublicationInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.training', {
+            url: "/training",
+            params : {
+                'id': null,
+                'edit': null
+            },
+            templateUrl: 'views/employee/training-information.html',
+            controller: 'TrainingInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.award', {
+            url: "/award",
+            params : {
+                'id': null,
+                'edit': null
+            },
+            templateUrl: 'views/employee/award-information.html',
+            controller: 'AwardInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.experience', {
+            url: "/experience",
+            params : {
+                'id': null,
+                'edit': null
+            },
+            templateUrl: 'views/employee/experience-information.html',
+            controller: 'ExperienceInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.additional', {
+            url: "/additional",
+            params : {
+                'id': null,
+                'edit': null
+            },
+            templateUrl: 'views/employee/additional-information.html',
+            controller: 'AdditionalInformation',
+            controllerAs: 'vm'
+        })
+        .state('employeeProfile.service', {
+            url: "/service",
+            params : {
+                'id': null,
+                'edit': null
+            },
+            templateUrl: 'views/employee/service-information.html',
+            controller: 'ServiceInformation',
+            controllerAs: 'vm'
+        })
         .state('logout', {
           url: "/logout",
           controller: 'Logout'
