@@ -341,12 +341,15 @@ module ums {
                     }]
                 }
             })
-
             .state('borrow', {
                 url: "/borrow",
                 controller: 'BorrowHistory',
                 templateUrl: 'views/borrow-history.html',
                 controllerAs: 'vm'
+            })
+            .state('logout', {
+                url: "/logout",
+                controller: 'Logout'
             })
     });
 }
