@@ -1,5 +1,5 @@
-module ums{
-  export class CompanyService{
+module ums {
+  export class CompanyService {
     public static $inject = ['$q', 'HttpClient'];
 
     private url = "company"
@@ -9,7 +9,7 @@ module ums{
 
     }
 
-    public getCompanyById(id: string){
+    public getCompanyById(id: string) {
 
     }
 
