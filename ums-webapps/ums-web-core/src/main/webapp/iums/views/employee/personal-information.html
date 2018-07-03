@@ -410,8 +410,7 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nGeneralForm.nPersonalWebsite.$invalid && !nGeneralForm.nPersonalWebsite.$pristine}">
+                            <div class="form-group">
                                 <label for="iPersonalWebsite" class="control-label">Personal Website</label>
                                 <div data-ng-show="!vm.generalReadOnly">
                                     <input type="url"
@@ -421,9 +420,6 @@
                                            placeholder="Personal Website"
                                            ng-readonly="vm.generalReadOnly"
                                            class="form-control">
-                                    <label data-ng-show="nGeneralForm.nPersonalWebsite.$invalid && !nGeneralForm.nPersonalWebsite.$pristine"
-                                           class="help-block control-label">
-                                        Have any website or blog?</label>
                                 </div>
                                 <div data-ng-show="vm.generalReadOnly">
                                     <div class="underlineBox">
