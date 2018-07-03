@@ -36,6 +36,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/HttpClient.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/FileUpload.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CookieService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/CompanyService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/EmployeeService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/UserService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Settings.ts'/>

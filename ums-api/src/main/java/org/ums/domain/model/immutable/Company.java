@@ -15,4 +15,6 @@ public interface Company extends Serializable, EditType<MutableCompany>, LastMod
   String getName();
 
   String getShortName();
+
+  String getAddress();
 }

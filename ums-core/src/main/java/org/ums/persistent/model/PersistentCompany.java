@@ -15,11 +15,22 @@ public class PersistentCompany implements MutableCompany {
   private String mId;
   private String mName;
   private String mShortName;
+  private String mAddress;
   private String mLastModified;
 
   @Override
   public String getId() {
     return mId;
+  }
+
+  @Override
+  public String getAddress() {
+    return mAddress;
+  }
+
+  @Override
+  public void setAddress(String pAddress) {
+    mAddress = pAddress;
   }
 
   @Override
@@ -86,10 +97,11 @@ public class PersistentCompany implements MutableCompany {
     setLastModified(pCompany.getLastModified());
   }
 
-  public PersistentCompany(String pId, String pName, String pShortName) {
+  public PersistentCompany(String pId, String pName, String pShortName, String pAddress) {
     mId = pId;
     mName = pName;
     mShortName = pShortName;
+    mAddress = pAddress;
   }
 
   static {
