@@ -8,7 +8,7 @@ module ums {
       httpClient.get("userHome", HttpClient.MIME_TYPE_JSON, (response) => {
         $scope.userHome = response.infoList;
         $scope.userRole = response.userRole;
-        if(response.userRole!="Teacher") {
+        if(response.userRole=="student") {
           if(document.getElementById("empProfile"))
             document.getElementById("empProfile").style.display="none";
         }
