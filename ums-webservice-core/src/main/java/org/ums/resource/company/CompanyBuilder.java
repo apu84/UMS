@@ -43,8 +43,8 @@ public class CompanyBuilder implements Builder<Company, MutableCompany> {
   public void build(MutableCompany pMutableCompany, JsonObject pJsonObject) {
     if(pJsonObject.containsKey("id"))
       pMutableCompany.setId(pJsonObject.getString("id"));
-      pMutableCompany.setName(pJsonObject.getString("name"));
-      pMutableCompany.setShortName(pJsonObject.getString("shortName"));
-      pMutableCompany.setAddress(pJsonObject.getString("address"));
+    pMutableCompany.setName(pJsonObject.getString("name"));
+    pMutableCompany.setShortName(pJsonObject.getString("shortName"));
+    pMutableCompany.setAddress(pJsonObject.getString("address"));
   }
 }

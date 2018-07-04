@@ -216,10 +216,10 @@ public class BalanceSheetReportGenerator {
   }
 
   private CellAndTotalBalance createGroupSection(GroupType pGroupTYpe, BalanceSheetFetchType pBalanceSheetFetchType,
-                                                 Map<Account, AccountBalance> pAccountBalanceMapWithAccount, Map<String, List<Account>> pAccountMapWithGroupCode,
-                                                 List<Group> pGroups) {
+      Map<Account, AccountBalance> pAccountBalanceMapWithAccount, Map<String, List<Account>> pAccountMapWithGroupCode,
+      List<Group> pGroups) {
     PdfPCell cell;
-    float[] innerTableCellWidth = new float[]{6, 6};
+    float[] innerTableCellWidth = new float[] {6, 6};
     PdfPTable assetTable = new PdfPTable(innerTableCellWidth);
 
     BigDecimal sectionTotalBalance = new BigDecimal(0);
@@ -259,45 +259,46 @@ public class BalanceSheetReportGenerator {
 
   @NotNull
   private BigDecimal generateInternalGroupBody(GroupType pGroupType, BalanceSheetFetchType pBalanceSheetFetchType,
-                                               Map<Account, AccountBalance> pAccountBalanceMapWithAccount, Map<String, List<Account>> pAccountMapWithGroupCode,
-                                               PdfPTable pAssetTable, List<Group> ppGroups, BigDecimal sectionTotalBalance) {
+      Map<Account, AccountBalance> pAccountBalanceMapWithAccount, Map<String, List<Account>> pAccountMapWithGroupCode,
+      PdfPTable pAssetTable, List<Group> ppGroups, BigDecimal sectionTotalBalance) {
     PdfPCell cell;
     Paragraph paragraph;
 
-    for (Group group : ppGroups) {
+    for(Group group : ppGroups) {
       cell = new PdfPCell();
-      if (pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
+      if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
         paragraph = new Paragraph(group.getGroupName(), mBoldFont);
       else
         paragraph = new Paragraph(group.getGroupName(), mLiteFont);
       paragraph.setAlignment(Element.ALIGN_LEFT);
       cell.addElement(paragraph);
 
-      if (pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
+      if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
         cell.setColspan(2);
 
       cell.setBorder(Rectangle.NO_BORDER);
       pAssetTable.addCell(cell);
       List<Account> groupAccountList = new ArrayList<>();
-      if (pAccountMapWithGroupCode.containsKey(group.getGroupCode()))
+      if(pAccountMapWithGroupCode.containsKey(group.getGroupCode()))
         groupAccountList = pAccountMapWithGroupCode.get(group.getGroupCode());
 
-      if (groupAccountList.size() == 0) {
+      if(groupAccountList.size() == 0) {
         cell = new PdfPCell();
-        if (pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
+        if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
           paragraph = new Paragraph(Utils.getFormattedBalance(new BigDecimal(0)), mBoldFont);
         else
           paragraph = new Paragraph(Utils.getFormattedBalance(new BigDecimal(0)), mLiteFont);
         paragraph.setAlignment(Element.ALIGN_RIGHT);
         cell.addElement(paragraph);
-        if (pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED)) {
+        if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED)) {
           cell.setColspan(2);
         }
         sectionTotalBalance = sectionTotalBalance.add(new BigDecimal(0));
         cell.setBorder(Rectangle.NO_BORDER);
         pAssetTable.addCell(cell);
 
-      } else {
+      }
+      else {
         BigDecimal totalAccountBalance = new BigDecimal(0);
         BigDecimal groupTotalBalance = new BigDecimal(0);
         groupTotalBalance =
@@ -306,12 +307,12 @@ public class BalanceSheetReportGenerator {
 
         cell = new PdfPCell();
         sectionTotalBalance = sectionTotalBalance.add(groupTotalBalance);
-        if (pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
+        if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
           paragraph = new Paragraph(Utils.getFormattedBalance(groupTotalBalance), mBoldFont);
         else
           paragraph = new Paragraph(Utils.getFormattedBalance(groupTotalBalance), mLiteFont);
         paragraph.setAlignment(Element.ALIGN_RIGHT);
-        if (pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
+        if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED))
           cell.setColspan(2);
         cell.addElement(paragraph);
         cell.setBorder(Rectangle.NO_BORDER);
@@ -325,18 +326,18 @@ public class BalanceSheetReportGenerator {
   }
 
   private BigDecimal generateGroupBasedAccountSection(GroupType pGroupType,
-                                                      BalanceSheetFetchType pBalanceSheetFetchType, Map<Account, AccountBalance> pAccountBalanceMapWithAccount,
-                                                      PdfPTable pAssetTable, List<Account> pGroupAccountList, BigDecimal pTotalAccountBalance,
-                                                      BigDecimal pGroupTotalBalance) {
+      BalanceSheetFetchType pBalanceSheetFetchType, Map<Account, AccountBalance> pAccountBalanceMapWithAccount,
+      PdfPTable pAssetTable, List<Account> pGroupAccountList, BigDecimal pTotalAccountBalance,
+      BigDecimal pGroupTotalBalance) {
     PdfPCell cell;
     Paragraph paragraph;
-    for (Account account : pGroupAccountList) {
+    for(Account account : pGroupAccountList) {
       AccountBalance accountBalance = pAccountBalanceMapWithAccount.get(account);
       BigDecimal accountTotalBalance = calculateAccountTotalBalance(pGroupType, accountBalance);
 
       pTotalAccountBalance = pTotalAccountBalance.add(accountTotalBalance);
       pGroupTotalBalance = pGroupTotalBalance.add(accountTotalBalance);
-      if (pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED)) {
+      if(pBalanceSheetFetchType.equals(BalanceSheetFetchType.DETAILED)) {
         cell = new PdfPCell();
         paragraph = new Paragraph(account.getAccountName(), mLiteFont);
         cell.addElement(paragraph);
@@ -356,7 +357,7 @@ public class BalanceSheetReportGenerator {
 
   private BigDecimal calculateAccountTotalBalance(GroupType pGroupType, AccountBalance accountBalance) {
     BigDecimal accountTotalBalance = new BigDecimal(0);
-    if (pGroupType.equals(GroupType.ASSETS))
+    if(pGroupType.equals(GroupType.ASSETS))
       accountTotalBalance = accountBalance.getTotDebitTrans().subtract(accountBalance.getTotCreditTrans());
     else
       accountTotalBalance = accountBalance.getTotCreditTrans().subtract(accountBalance.getTotDebitTrans());
@@ -373,7 +374,7 @@ public class BalanceSheetReportGenerator {
   }
 
   private void generateInitialHeaderInfo(Date pDate, Document pDocument) throws DocumentException {
-    float[] columnSize = new float[]{1, 6, 2};
+    float[] columnSize = new float[] {1, 6, 2};
     PdfPTable table = new PdfPTable(columnSize);
     PdfPCell cell = new PdfPCell(new Paragraph(""));
     cell.setBorder(Rectangle.NO_BORDER);

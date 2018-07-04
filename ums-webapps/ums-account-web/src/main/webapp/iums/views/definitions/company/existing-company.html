@@ -1,0 +1,88 @@
+<style>
+    table {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        height: 600px; /* this can vary */
+    }
+
+    table * {
+        box-sizing: inherit;
+        -moz-box-sizing: inherit;
+    }
+
+    thead {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    tbody {
+        overflow-y: scroll;
+        display: inline-block;
+    }
+
+    thead > tr, tbody > tr, tfoot > tr {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+
+    thead, tfoot {
+        flex-shrink: 0;
+    }
+
+    th, tbody td {
+        width: 100%; /* this can vary */
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+    }
+
+    tfoot {
+        display: inline-block;
+    }
+
+    tfoot td {
+        width: 100%;
+        display: inline-block;
+    }
+
+    .st-sort-ascent:before {
+        content: '\25B2';
+    }
+
+    .st-sort-descent:before {
+        content: '\25BC';
+    }
+</style>
+<table st-table="vm.companyList" class="table table-striped" st-safe-src="vm.companyListDisplay" st-paginatio-scroll>
+    <thead align="center">
+    <tr>
+        <th st-ratio="40" st-sort="name">Full Name</th>
+        <th st-ratio="20" st-sort="shortName">Short Name</th>
+        <th st-ratio="35" st-sort="address">Address</th>
+        <th st-ratio="5">Action</th>
+    </tr>
+    <tr>
+        <th><input placeholder="search company name" st-search="name"/></th>
+        <th><input placeholder="search short name" st-search="displayCode"/></th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="c in vm.companyList">
+        <td st-ratio="40">{{c.name}}</td>
+        <td st-ratio="20">{{c.shortName}}</td>
+        <td st-ratio="35">{{c.address}}</td>
+        <td st-ratio="5">
+            <button class="btn btn-default btn-sm" ng-click="vm.editButtonClicked(c)"
+                    data-toggle="modal"
+                    data-target="#addModal"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+        </td>
+    </tr>
+    </tbody>
+</table>
