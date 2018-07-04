@@ -25,7 +25,8 @@ public class PersistentCompanyDao extends CompanyDaoDecorator {
   private NamedParameterJdbcTemplate mNamedParameterJdbcTemplate;
   private IdGenerator mIdGenerator;
 
-  public PersistentCompanyDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
+  public PersistentCompanyDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate,
+      IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mIdGenerator = pIdGenerator;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
@@ -45,7 +46,7 @@ public class PersistentCompanyDao extends CompanyDaoDecorator {
 
   @Override
   public String create(MutableCompany pMutable) {
-    String query=INSERT_ONE;
+    String query = INSERT_ONE;
     Map parameterMap = new HashMap();
     getParameterMap(pMutable, parameterMap);
     mNamedParameterJdbcTemplate.update(query, parameterMap);
@@ -70,6 +71,5 @@ public class PersistentCompanyDao extends CompanyDaoDecorator {
   public Company getDefaultCompany() {
     return get("01");
   }
-
 
 }

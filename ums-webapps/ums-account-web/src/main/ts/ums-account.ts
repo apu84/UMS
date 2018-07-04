@@ -72,61 +72,67 @@ module ums {
                 }
             })
 
-            .state('group', {
-                url: "/group",
-                controller: 'GroupController',
-                controllerAs: 'vm',
-                templateUrl: 'views/definitions/group/account.group.html'
-            })
-            .state('systemGroupMap', {
-                url: "/systemGroupMap",
-                controller: 'SystemGroupMapController',
-                controllerAs: 'vm',
-                templateUrl: 'views/definitions/system.group.map/system-group-map.html'
-            })
-            .state('systemAccountMap', {
-                url: "/systemAccountMap",
-                controller: 'SystemAccountMapController',
-                controllerAs: 'vm',
-                templateUrl: 'views/definitions/system.account.map/system-account-map.html'
-            })
-            .state('account', {
-                url: "/account",
-                controller: 'AccountController',
-                controllerAs: 'vm',
-                templateUrl: 'views/definitions/account/account.html'
-            })
-            .state('budgetAllocation', {
-                url: "/budgetAllocation",
-                controller: 'BudgetAllocationController',
-                controllerAs: 'vm',
-                templateUrl: 'views/definitions/budget-allocation/budget.allocation.html'
-            })
-            .state('periodClose', {
-                url: "/periodClose",
-                controller: 'PeriodCloseController',
-                controllerAs: 'vm',
-                templateUrl: 'views/definitions/period-close/period.close.html'
-            })
-            .state('narration', {
-                url: "/narration",
-                controller: 'NarrationController',
-                controllerAs: 'vm',
-                templateUrl: 'views/definitions/narration/narration.html'
-            })
-            .state('voucherNumberControl', {
-                url: "/voucherNumberControl",
-                controller: 'VoucherNumberController',
-                controllerAs: 'vm',
-                templateUrl: 'views/definitions/voucher/voucher.number.control.html',
-                resolve: {
-                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load({
-                            files: [
-                                'vendors/jquery-tablesorter/themes/blue/style-custom.css',
-                                'vendors/jquery-tablesorter/jquery.tablesorter.js'
-                            ]
-                        });
+        .state('group', {
+          url: "/group",
+          controller: 'GroupController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/group/account.group.html'
+        })
+        .state('systemGroupMap', {
+          url: "/systemGroupMap",
+          controller: 'SystemGroupMapController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/system.group.map/system-group-map.html'
+        })
+        .state('systemAccountMap', {
+          url: "/systemAccountMap",
+          controller: 'SystemAccountMapController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/system.account.map/system-account-map.html'
+        })
+        .state('account', {
+          url: "/account",
+          controller: 'AccountController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/account/account.html'
+        })
+        .state('company', {
+          url: "/company",
+          controller: 'CompanyController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/company/company.html'
+        })
+        .state('budgetAllocation', {
+          url: "/budgetAllocation",
+          controller: 'BudgetAllocationController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/budget-allocation/budget.allocation.html'
+        })
+        .state('periodClose', {
+          url: "/periodClose",
+          controller: 'PeriodCloseController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/period-close/period.close.html'
+        })
+        .state('narration', {
+          url: "/narration",
+          controller: 'NarrationController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/narration/narration.html'
+        })
+        .state('voucherNumberControl', {
+          url: "/voucherNumberControl",
+          controller: 'VoucherNumberController',
+          controllerAs: 'vm',
+          templateUrl: 'views/definitions/voucher/voucher.number.control.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/jquery-tablesorter/themes/blue/style-custom.css',
+                  'vendors/jquery-tablesorter/jquery.tablesorter.js'
+                ]
+              });
 
                     }]
                 }

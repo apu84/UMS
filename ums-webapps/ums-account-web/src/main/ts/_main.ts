@@ -132,6 +132,7 @@
 /// <reference path='components/definitions/account/account.balance.service.ts'/>
 /// <reference path='components/definitions/currency/currency.service.ts'/>
 /// <reference path='components/definitions/currency/currency.conversion.service.ts'/>
+/// <reference path='components/definitions/company/company.controller.ts'/>
 /// <reference path='components/definitions/financial.account.year/financial.account.year.controller.ts'/>
 /// <reference path='components/definitions/financial.account.year/financial.account.year.closing.controller.ts'/>
 /// <reference path='components/definitions/financial.account.year/financial.account.year.service.ts'/>
@@ -149,7 +150,6 @@
 /// <reference path='components/definitions/narration/narration.service.ts'/>
 /// <reference path='components/definitions/system.group.map/system.group.map.service.ts'/>
 /// <reference path='components/definitions/system.group.map/system.group.map.controller.ts'/>
-
 /// <reference path='components/common/receipt/receipt.service.ts'/>
 /// <reference path='components/common/user.company.map/user.company.map.service.ts'/>
 

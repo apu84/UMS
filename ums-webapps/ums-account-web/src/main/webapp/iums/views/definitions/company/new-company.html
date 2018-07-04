@@ -1,0 +1,52 @@
+<div id="addModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{vm.modalHeader}}</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" name="addForm">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="companyName">Full Name</label>
+                        <div class="col-sm-6">
+                            <input type="text" id="companyname" ng-model="vm.company.name"
+                                   class="form-control" name="companyName" required/>
+                            <span ng-show="addForm.companyName.$touched && addForm.companyName.$invalid ">Company full name is required</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="shortName">Short name</label>
+                        <div class="col-sm-6">
+                            <input type="text" id="shortName" ng-model="vm.company.shortName"
+                                   class="form-control" name="shortName" ng-maxlength="10" required/>
+                            <span ng-show="addForm.shortName.$touched && addForm.shortName.$invalid ">Short name is required and must be below 10 characters</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="address">Address</label>
+                        <div class="col-sm-6">
+                            <input type="text" id="address" ng-model="vm.company.address"
+                                   class="form-control" name="address" required/>
+                            <span ng-show="addForm.address.$touched && addForm.address.$invalid ">Address is required</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success"
+                        ng-click="vm.save();addForm.name.$touched=false;addForm.shortName.$touched=false;addForm.address.$touched=false"
+                        data-dismiss="modal"
+                        data-ng-disabled="addForm.$invalid">
+                    Add or Update
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>

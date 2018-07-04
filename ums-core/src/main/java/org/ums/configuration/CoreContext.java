@@ -129,7 +129,8 @@ public class CoreContext {
   @Bean
   CompanyManager companyManager() {
     CompanyCache companyCache = new CompanyCache(mCacheFactory.getCacheManager());
-    companyCache.setManager(new PersistentCompanyDao(mTemplateFactory.getJdbcTemplate(), mNamedParameterJdbcTemplateFactory.getNamedParameterJdbcTemplate(), mIdGenerator));
+    companyCache.setManager(new PersistentCompanyDao(mTemplateFactory.getJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getNamedParameterJdbcTemplate(), mIdGenerator));
     return companyCache;
   }
 
