@@ -255,7 +255,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
 
   private void preparePersonalInformation(MutablePersonalInformation pMutablePersonalInformation, JsonObject pJsonObject) {
     String email = pJsonObject.containsKey("email") ? pJsonObject.getString("email") : "-";
-    if(email == null || email.equals("")){
+    if(email == null || email.equals("")) {
       email = "-";
     }
     pMutablePersonalInformation.setId(pJsonObject.getString("id"));
