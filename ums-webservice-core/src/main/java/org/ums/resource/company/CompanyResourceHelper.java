@@ -59,7 +59,7 @@ public class CompanyResourceHelper extends ResourceHelper<Company, MutableCompan
   public JsonArray getAllCompany(UriInfo pUriInfo) {
     List<Company> companyList = getContentManager().getAll();
     JsonArrayBuilder companyJsonArray = Json.createArrayBuilder();
-    for (Company company : companyList) {
+    for(Company company : companyList) {
       LocalCache localCache = new LocalCache();
       JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
       getBuilder().build(jsonObjectBuilder, company, pUriInfo, localCache);

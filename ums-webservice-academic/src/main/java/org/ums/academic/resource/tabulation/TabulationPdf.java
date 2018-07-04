@@ -53,29 +53,29 @@ public class TabulationPdf {
 
     document.open();
     int totalPageRequired = totalPageRequired(pReportModel.getTabulationEntries().size());
-    for (int i = 1; i <= totalPageRequired; i++) {
+    for(int i = 1; i <= totalPageRequired; i++) {
       PdfPTable contentTable = new PdfPTable(20);
-      contentTable.setWidths(new float[]{4f, 7f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f,
+      contentTable.setWidths(new float[] {4f, 7f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f,
           4f});
       contentTable.setWidthPercentage(100);
       contentTableHeader(contentTable);
       headerSecondLine(contentTable, pReportModel);
       headerThirdLine(contentTable, pReportModel);
-      for (int j = startIndex(i); j < totalNumberOfEntriesToBeDrawn(i, pReportModel.getTabulationEntries().size()); j++) {
+      for(int j = startIndex(i); j < totalNumberOfEntriesToBeDrawn(i, pReportModel.getTabulationEntries().size()); j++) {
         entryLineFirstPage(contentTable, pReportModel, pReportModel.getTabulationEntries().get(j));
       }
       document.add(contentTable);
 
       document.newPage();
       PdfPTable secondPageContentTable = new PdfPTable(12);
-      secondPageContentTable.setWidths(new int[]{5, 9, 9, 9, 9, 8, 7, 7, 5, 5, 22, 5});
+      secondPageContentTable.setWidths(new int[] {5, 9, 9, 9, 9, 8, 7, 7, 5, 5, 22, 5});
       secondPageContentTable.setWidthPercentage(100);
       secondPageTableHeader(secondPageContentTable);
-      for (int j = startIndex(i); j < totalNumberOfEntriesToBeDrawn(i, pReportModel.getTabulationEntries().size()); j++) {
+      for(int j = startIndex(i); j < totalNumberOfEntriesToBeDrawn(i, pReportModel.getTabulationEntries().size()); j++) {
         entryLineSecondPage(secondPageContentTable, pReportModel, pReportModel.getTabulationEntries().get(j));
       }
       document.add(secondPageContentTable);
-      if (i != totalPageRequired) {
+      if(i != totalPageRequired) {
         document.newPage();
       }
     }
@@ -154,18 +154,18 @@ public class TabulationPdf {
     cell.setColspan(2);
     contentTable.addCell(cell);
 
-    for (Course theoryCourse : pReportModel.getTheoryCourses()) {
+    for(Course theoryCourse : pReportModel.getTheoryCourses()) {
       addInnerTable(contentTable, theoryCourse.getNo());
     }
     addEmptyCell(contentTable, (6 - pReportModel.getTheoryCourses().size()));
 
-    for (Course sessionalCourse : pReportModel.getSessionalCourses()) {
+    for(Course sessionalCourse : pReportModel.getSessionalCourses()) {
       addInnerTable(contentTable, sessionalCourse.getNo());
     }
 
     addEmptyCell(contentTable, (5 - pReportModel.getSessionalCourses().size()));
 
-    for (Course theoryCourse : pReportModel.getTheoryCourses()) {
+    for(Course theoryCourse : pReportModel.getTheoryCourses()) {
       addInnerTable(contentTable, theoryCourse.getNo());
     }
     addEmptyCell(contentTable, (6 - pReportModel.getTheoryCourses().size()));
@@ -192,18 +192,18 @@ public class TabulationPdf {
     cell.setColspan(1);
     contentTable.addCell(cell);
 
-    for (Course theoryCourse : pReportModel.getTheoryCourses()) {
+    for(Course theoryCourse : pReportModel.getTheoryCourses()) {
       addInnerTable(contentTable, "cr.", theoryCourse.getCrHr() + "");
     }
     addEmptyCell(contentTable, (6 - pReportModel.getTheoryCourses().size()));
 
-    for (Course sessionalCourse : pReportModel.getSessionalCourses()) {
+    for(Course sessionalCourse : pReportModel.getSessionalCourses()) {
       addInnerTable(contentTable, "cr.", sessionalCourse.getCrHr() + "");
     }
 
     addEmptyCell(contentTable, (5 - pReportModel.getSessionalCourses().size()));
 
-    for (Course theoryCourse : pReportModel.getTheoryCourses()) {
+    for(Course theoryCourse : pReportModel.getTheoryCourses()) {
       addInnerTable(contentTable, "cr.", theoryCourse.getCrHr() + "");
     }
     addEmptyCell(contentTable, (6 - pReportModel.getTheoryCourses().size()));
@@ -219,7 +219,7 @@ public class TabulationPdf {
   }
 
   private void entryLineFirstPage(final PdfPTable contentTable, final TabulationReportModel pReportModel,
-                                  final TabulationEntryModel entryModel) throws DocumentException {
+      final TabulationEntryModel entryModel) throws DocumentException {
     PdfPCell cell;
     Paragraph paragraph;
     Map<String, Double> GPA_MAP = UmsUtils.getGPAMap();
@@ -242,7 +242,7 @@ public class TabulationPdf {
     cell.setColspan(1);
     contentTable.addCell(cell);
 
-    for (Course theoryCourse : pReportModel.getTheoryCourses()) {
+    for(Course theoryCourse : pReportModel.getTheoryCourses()) {
       String gradeLetter = entryModel.getRegularCourseList().get(theoryCourse.getId()).getGradeLetter();
       double gradePoint = GPA_MAP.get(gradeLetter) * theoryCourse.getCrHr();
       addInnerTable(contentTable, entryModel.getRegularCourseList().get(theoryCourse.getId()).getGradeLetter(),
@@ -251,7 +251,7 @@ public class TabulationPdf {
     List<Course> optionalTheoryCourse =
         getOptionalCourses(pReportModel.getTheoryCourses(), entryModel.getRegularCourseList(), CourseType.THEORY,
             CourseRegType.REGULAR);
-    for (Course theoryCourse : optionalTheoryCourse) {
+    for(Course theoryCourse : optionalTheoryCourse) {
       String gradeLetter = entryModel.getRegularCourseList().get(theoryCourse.getId()).getGradeLetter();
       double gradePoint = GPA_MAP.get(gradeLetter) * theoryCourse.getCrHr();
       addInnerTable(contentTable, theoryCourse.getNo(), theoryCourse.getCrHr() + "", entryModel.getRegularCourseList()
@@ -259,7 +259,7 @@ public class TabulationPdf {
     }
     addEmptyCell(contentTable, (6 - (pReportModel.getTheoryCourses().size() + optionalTheoryCourse.size())));
 
-    for (Course sessionalCourse : pReportModel.getSessionalCourses()) {
+    for(Course sessionalCourse : pReportModel.getSessionalCourses()) {
       String gradeLetter = entryModel.getRegularCourseList().get(sessionalCourse.getId()).getGradeLetter();
       double gradePoint = GPA_MAP.get(gradeLetter) * sessionalCourse.getCrHr();
       addInnerTable(contentTable, gradeLetter, gradePoint + "");
@@ -268,7 +268,7 @@ public class TabulationPdf {
     List<Course> optionalSessionalCourse =
         getOptionalCourses(pReportModel.getSessionalCourses(), entryModel.getRegularCourseList(), CourseType.SESSIONAL,
             CourseRegType.REGULAR);
-    for (Course sessionalCourse : optionalSessionalCourse) {
+    for(Course sessionalCourse : optionalSessionalCourse) {
       String gradeLetter = entryModel.getRegularCourseList().get(sessionalCourse.getId()).getGradeLetter();
       double gradePoint = GPA_MAP.get(gradeLetter) * sessionalCourse.getCrHr();
       addInnerTable(contentTable, sessionalCourse.getNo(), sessionalCourse.getCrHr() + "", entryModel
@@ -276,12 +276,13 @@ public class TabulationPdf {
     }
     addEmptyCell(contentTable, (5 - (pReportModel.getSessionalCourses().size() + optionalSessionalCourse.size())));
 
-    for (Course theoryCourse : pReportModel.getTheoryCourses()) {
-      if (entryModel.getClearanceCourseList().containsKey(theoryCourse.getId())) {
+    for(Course theoryCourse : pReportModel.getTheoryCourses()) {
+      if(entryModel.getClearanceCourseList().containsKey(theoryCourse.getId())) {
         String gradeLetter = entryModel.getClearanceCourseList().get(theoryCourse.getId()).getGradeLetter();
         double gradePoint = GPA_MAP.get(gradeLetter) * theoryCourse.getCrHr();
         addInnerTable(contentTable, gradeLetter, gradePoint + "");
-      } else {
+      }
+      else {
         addEmptyCell(contentTable, 1);
       }
     }
@@ -290,8 +291,8 @@ public class TabulationPdf {
         getOptionalCourses(pReportModel.getTheoryCourses(), entryModel.getClearanceCourseList(), CourseType.THEORY,
             CourseRegType.CLEARANCE);
 
-    for (Course theoryCourse : optionalTheoryClearanceCourse) {
-      if (entryModel.getClearanceCourseList().containsKey(theoryCourse.getId())) {
+    for(Course theoryCourse : optionalTheoryClearanceCourse) {
+      if(entryModel.getClearanceCourseList().containsKey(theoryCourse.getId())) {
         String gradeLetter = entryModel.getClearanceCourseList().get(theoryCourse.getId()).getGradeLetter();
         double gradePoint = GPA_MAP.get(gradeLetter) * theoryCourse.getCrHr();
         addInnerTable(contentTable, theoryCourse.getNo(), theoryCourse.getCrHr() + "", gradeLetter, gradePoint + "");
@@ -321,7 +322,7 @@ public class TabulationPdf {
   }
 
   private void entryLineSecondPage(final PdfPTable contentTable, final TabulationReportModel pReportModel,
-                                   TabulationEntryModel entryModel) throws DocumentException {
+      TabulationEntryModel entryModel) throws DocumentException {
     PdfPCell cell;
     Paragraph paragraph;
     Map<String, Double> GPA_MAP = UmsUtils.getGPAMap();
@@ -335,7 +336,7 @@ public class TabulationPdf {
     cell.setColspan(1);
     contentTable.addCell(cell);
 
-    for (UGRegistrationResult carryCourse : entryModel.getCarryCourseList().values()) {
+    for(UGRegistrationResult carryCourse : entryModel.getCarryCourseList().values()) {
       String gradeLetter = carryCourse.getGradeLetter();
       double gradePoint = GPA_MAP.get(gradeLetter) * carryCourse.getCourse().getCrHr();
       addInnerTable(contentTable, carryCourse.getCourse().getNo(), carryCourse.getCourse().getCrHr() + "", gradeLetter
@@ -345,10 +346,11 @@ public class TabulationPdf {
     addInnerTable(contentTable, entryModel.getPresentCompletedCrHr() + "", entryModel.getPresentCompletedGradePoints()
         + "");
 
-    if (entryModel.getPreviousSemesterCompletedCrHr() > 0) {
+    if(entryModel.getPreviousSemesterCompletedCrHr() > 0) {
       addInnerTable(contentTable, entryModel.getPreviousSemesterCompletedCrHr() + "",
           entryModel.getPreviousSemesterCompletedGradePoints() + "");
-    } else {
+    }
+    else {
       addInnerTable(contentTable, "", "");
     }
 
@@ -409,7 +411,7 @@ public class TabulationPdf {
     PdfPCell cell;
     Paragraph paragraph;
     PdfPTable table = new PdfPTable(2);
-    table.setWidths(new int[]{40, 60});
+    table.setWidths(new int[] {40, 60});
     table.setWidthPercentage(100);
     // table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
     cell = new PdfPCell();
@@ -442,7 +444,7 @@ public class TabulationPdf {
     PdfPCell cell;
     Paragraph paragraph;
     PdfPTable table1 = new PdfPTable(2);
-    table1.setWidths(new int[]{65, 35});
+    table1.setWidths(new int[] {65, 35});
     table1.setWidthPercentage(100);
     // table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
     cell = new PdfPCell();
@@ -463,7 +465,7 @@ public class TabulationPdf {
     table1.addCell(cell);
 
     PdfPTable table2 = new PdfPTable(2);
-    table2.setWidths(new int[]{35, 65});
+    table2.setWidths(new int[] {35, 65});
     table2.setWidthPercentage(100);
     cell = new PdfPCell();
     cell.setBorder(Rectangle.NO_BORDER);
@@ -494,7 +496,7 @@ public class TabulationPdf {
   private void addEmptyCell(PdfPTable contentTable, int number) {
     PdfPCell cell;
     Paragraph paragraph;
-    for (int i = 0; i < number; i++) {
+    for(int i = 0; i < number; i++) {
       cell = new PdfPCell();
       cell.setHorizontalAlignment(Element.ALIGN_LEFT);
       cell.setVerticalAlignment(Element.ALIGN_CENTER);
@@ -657,7 +659,7 @@ public class TabulationPdf {
         headerTable.addCell(headerTableCell);
         document.add(headerTable);
 
-      } catch (Exception de) {
+      } catch(Exception de) {
         de.printStackTrace();
       }
     }
@@ -692,7 +694,7 @@ public class TabulationPdf {
       Phrase footer = new Phrase(String.format("page %d", writer.getPageNumber()), pageNoFont);
       ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_RIGHT, footer, document.right(),
           document.top() - 10, 0);
-      if (writer.getPageNumber() % 2 != 0) {
+      if(writer.getPageNumber() % 2 != 0) {
         Phrase continued = new Phrase("Continued on the opposite side", pageNoFont);
         ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_RIGHT, continued, document.right(),
             document.top() - 20, 0);
