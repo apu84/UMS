@@ -254,6 +254,10 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   }
 
   private void preparePersonalInformation(MutablePersonalInformation pMutablePersonalInformation, JsonObject pJsonObject) {
+    String email = pJsonObject.containsKey("email") ? pJsonObject.getString("email") : "-";
+    if(email == null || email.equals("")){
+      email = "-";
+    }
     pMutablePersonalInformation.setId(pJsonObject.getString("id"));
     pMutablePersonalInformation.setName(pJsonObject.getString("name"));
     pMutablePersonalInformation.setFatherName(" ");
@@ -269,7 +273,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     pMutablePersonalInformation.setSpouseNidNo(null);
     pMutablePersonalInformation.setWebsite(null);
     pMutablePersonalInformation.setOrganizationalEmail(null);
-    pMutablePersonalInformation.setPersonalEmail(pJsonObject.getString("email"));
+    pMutablePersonalInformation.setPersonalEmail(email);
     pMutablePersonalInformation.setMobileNumber(" ");
     pMutablePersonalInformation.setPhoneNumber(" ");
     pMutablePersonalInformation.setPresentAddressLine1(" ");
@@ -322,7 +326,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
         .setEmploymentPeriod(pJsonObject.getJsonObject("employmentType").getInt("id") == EmploymentType.REGULAR.getId() ? EmploymentPeriod.CONTRACTUAL
             : EmploymentPeriod.CONTRACT);
     pMutableServiceInformationDetail.setStartDate(mDateFormat.parse(pJsonObject.getString("joiningDate")));
-    pMutableServiceInformationDetail.setEndDate(mDateFormat.parse(pJsonObject.getString("endDate")));
+    pMutableServiceInformationDetail.setEndDate(null);
     pMutableServiceInformationDetail.setComment(" ");
   }
 
