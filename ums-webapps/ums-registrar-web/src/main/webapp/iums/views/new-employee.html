@@ -62,6 +62,11 @@
     .card:hover {
         box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.3);
     }
+
+    img {
+        width: 80px;
+        height: 100px;
+    }
 </style>
 <div class="panel panel-default">
     <div class="panel-heading">New Employee Form</div>
@@ -188,7 +193,7 @@
                                 <div class="form-group"
                                      ng-class="{ 'has-error' : nEmployeeForm.nEmail.$invalid && !nEmployeeForm.nEmail.$pristine }">
                                     <label for="iEmail" class="control-label">Email<span data-ng-if="!vm.isStaff"
-                                            class="require">*</span></label>
+                                                                                         class="require">*</span></label>
                                     <input type="email"
                                            id="iEmail"
                                            name="nEmail"
@@ -276,8 +281,9 @@
                                         </div>
                                     </div>
                                     <div data-ng-if="vm.newEmployee.designation.roleId==0">
-                                        <p> <span style="color: red;">* N.B:</span> &nbsp;<b>IUMS account</b> will not be available for this user. But we will keep information for further process.
-                                        Please proceed to submit.</p>
+                                        <p><span style="color: red;">* N.B:</span> &nbsp;<b>IUMS account</b> will not be
+                                            available for this user. But we will keep information for further process.
+                                            Please proceed to submit.</p>
                                     </div>
                                 </div>
                             </div>
@@ -310,23 +316,21 @@
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="row">
-                                    <div class="col-md-2">
-                                        <div align="center">
-                                            <h3>{{$index + 1}}.</h3>
-                                        </div>
+                                    <div class="col-md-1">
+                                        <h5>{{$index + 1}}.</h5>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div align="center">
-                                            <img class="img-circle"
-                                                 style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0);"
-                                                 src=""
-                                                 img-id="user.general.employeeId"
-                                                 data-profile-picture="">
-                                        </div>
+                                    <div class="col-md-3">
+                                        <img class="img-circle"
+                                             style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0);"
+                                             src=""
+                                             img-id="user.general.employeeId"
+                                             data-profile-picture="">
                                     </div>
-                                    <div class="col-md-6">
-                                        <h5>{{user.general.name}}</h5>({{user.general.employeeId}})
-                                        {{user.score}}% similar
+                                    <div class="col-md-8">
+                                        <h5>{{user.general.name}} ({{user.general.employeeId}})</h5>
+                                        <h6>{{user.deptName}}</h6>
+                                        <h6>{{user.designation}}</h6>
+                                        <h6>{{user.score}}% similar</h6>
                                     </div>
                                 </div>
                             </div>

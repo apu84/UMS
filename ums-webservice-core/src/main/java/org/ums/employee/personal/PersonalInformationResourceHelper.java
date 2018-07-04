@@ -1,20 +1,24 @@
 package org.ums.employee.personal;
 
 import org.apache.commons.lang.NotImplementedException;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.text.similarity.*;
-import org.json.simple.JSONValue;
+import org.apache.commons.text.similarity.JaroWinklerDistance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.Employee;
+import org.ums.manager.EmployeeManager;
 import org.ums.resource.ResourceHelper;
 
-import javax.json.*;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -26,6 +30,9 @@ public class PersonalInformationResourceHelper extends
 
   @Autowired
   private PersonalInformationBuilder mBuilder;
+
+  @Autowired
+  private EmployeeManager mEmployeeManager;
 
   public JsonObject get(final String pEmployeeId, final UriInfo pUriInfo) {
     LocalCache localCache = new LocalCache();
@@ -40,9 +47,9 @@ public class PersonalInformationResourceHelper extends
         LocalCache localCache = new LocalCache();
         Map<PersonalInformation, Double> similarUsers = new HashMap<>();
         List<PersonalInformation> personalInformationList = mManager.getAll();
-        CharSequence target = pName.trim().toLowerCase();
+        CharSequence target = pName.trim().toLowerCase().replaceAll("[^a-zA-Z0-9]+", "");
         for (PersonalInformation personalInformation : personalInformationList) {
-          CharSequence source = personalInformation.getName().trim().toLowerCase();
+          CharSequence source = personalInformation.getName().trim().toLowerCase().replaceAll("[^a-zA-Z0-9]+", "");
             JaroWinklerDistance jaroWinklerDistance = new JaroWinklerDistance();
             Double score = jaroWinklerDistance.apply(target, source);
             if (score > 0.9) {
@@ -109,6 +116,9 @@ public class PersonalInformationResourceHelper extends
       JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
       mBuilder.build(jsonObjectBuilder, entry.getKey(), pUriInfo, localCache);
       jsonObjectBuilder.add("score", Math.round(entry.getValue() * 100));
+      Employee employee = mEmployeeManager.get(entry.getKey().getId());
+      jsonObjectBuilder.add("deptName", employee.getDepartment().getLongName());
+      jsonObjectBuilder.add("designation", employee.getDesignation().getDesignationName());
       children.add(jsonObjectBuilder.build());
     }
     object.add("entries", children);
