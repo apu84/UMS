@@ -187,13 +187,13 @@
                             <div class="col-md-6">
                                 <div class="form-group"
                                      ng-class="{ 'has-error' : nEmployeeForm.nEmail.$invalid && !nEmployeeForm.nEmail.$pristine }">
-                                    <label for="iEmail" class="control-label">Email<span
+                                    <label for="iEmail" class="control-label">Email<span data-ng-if="!vm.isStaff"
                                             class="require">*</span></label>
                                     <input type="email"
                                            id="iEmail"
                                            name="nEmail"
                                            class="form-control"
-                                           ng-model="vm.newEmployee.email" required>
+                                           ng-model="vm.newEmployee.email" ng-required="!vm.isStaff">
                                     <label data-ng-show="nEmployeeForm.nEmail.$invalid && !nEmployeeForm.nEmail.$pristine"
                                            class="help-block control-label">Email is required
                                         (someone@abc.com).</label>
@@ -238,25 +238,6 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group"
-                                     ng-class="{ 'has-error' : nEmployeeForm.nEndDate.$invalid && !nEmployeeForm.nEndDate.$pristine}">
-                                    <label for="iEndDate" class="control-label">Expected Renewal Date<span
-                                            class="require">*</span></label>
-                                    <input type="text"
-                                           name="nEndDate"
-                                           id="iEndDate"
-                                           data-ng-model="vm.newEmployee.endDate"
-                                           data-provide="datepicker"
-                                           data-date-format="dd/mm/yyyy"
-                                           placeholder="DD/MM/YYYY"
-                                           autocomplete="off"
-                                           class="form-control" required>
-                                    <label data-ng-show="nEmployeeForm.nEndDate.$invalid && !nEmployeeForm.nEndDate.$pristine"
-                                           class="help-block control-label">
-                                        Date is Required.</label>
-                                </div>
-                            </div>
                             <div class="col-md-6">
                                 <div class="form-group"
                                      ng-class="{ 'has-error' : nEmployeeForm.nShortName.$invalid && !nEmployeeForm.nShortName.$pristine }">
