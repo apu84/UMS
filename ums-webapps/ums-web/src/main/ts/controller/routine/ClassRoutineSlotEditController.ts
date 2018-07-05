@@ -38,6 +38,20 @@ module ums {
       this.slotRoutineList.push(slotRoutine);
     }
 
+    public courseSelected(course: Course) {
+      console.log("Course is selected");
+      console.log(course);
+    }
+
+    public remove(routine: ClassRoutine) {
+      for (var i = 0; i < this.slotRoutineList.length; i++) {
+        if (routine == this.slotRoutineList[i]) {
+          this.slotRoutineList.splice(i, 1);
+          break;
+        }
+      }
+    }
+
     public assignEndTime(classRoutine: ClassRoutine) {
       let duration: number = angular.copy(this.routineConfigService.routineConfig.duration);
       if (classRoutine.course.type_value == Utils.COURSE_TYPE_SESSIONAL)

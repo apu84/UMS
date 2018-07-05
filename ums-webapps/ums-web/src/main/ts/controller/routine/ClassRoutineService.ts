@@ -70,18 +70,6 @@ module ums{
                 console.error(response);
             }, 'arraybuffer');
 
-     /* this.httpClient.get("/ums-webservice-academic/academic/routine/routineReportTeacher",  'application/pdf',
-          (data:any, etag:string) => {
-            var file = new Blob([data], {type: 'application/pdf'});
-            var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
-            this.$window.open(fileURL);
-            defer.resolve(fileURL);
-          },
-          (response:ng.IHttpPromiseCallbackArg<any>) => {
-            console.error(response);
-            defer.resolve("failure");
-          },'arraybuffer');*/
-
       return defer.promise;
     }
 
@@ -101,7 +89,18 @@ module ums{
       return defer.promise;
     }
 
-
+    public getRoutineBySemesterAndCourse(semesterId: number, courseId: string): ng.IPromise<ClassRoutine[]> {
+      var defer: ng.IDeferred<ClassRoutine[]> = this.$q.defer();
+      this.httpClient.get("/ums-webservice-academic/academic/routine/semester/" + semesterId + "/course/" + courseId, 'application/json',
+          (data: ClassRoutine[], etag: string) => {
+            defer.resolve(data);
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+            this.notify.error("Error in fetching routine data");
+          });
+      return defer.promise;
+    }
     public getRoomBasedClassRoutine(semesterId:number, roomId?:number):ng.IPromise<any>{
       var defer= this.$q.defer();
 

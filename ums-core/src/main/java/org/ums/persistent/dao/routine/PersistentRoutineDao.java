@@ -76,6 +76,12 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
     return mJdbcTemplate.query(query, new RoutineRowMapper());
   }
 
+  @Override
+  public List<Routine> getRoutine(int pSemesterId, String pCourseId) {
+    String query = SELECT_ALL + " where semester_id=? and course_id=?";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId}, new RoutineRowMapper());
+  }
+
   public int update(final MutableRoutine pMutableRoutine) {
     String query = UPDATE_ONE + " WHERE ROUTINE_ID=:routineId";
     Map updateParameters = getInsertOrUpdateParameters(pMutableRoutine);

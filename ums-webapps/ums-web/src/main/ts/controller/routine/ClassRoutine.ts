@@ -117,6 +117,10 @@ module ums {
       let defer = this.$q.defer();
       console.log(this.classRoutineService.selectedSemester);
       this.routineConfigService.getBySemesterAndProgramType(this.classRoutineService.selectedSemester.id, +this.classRoutineService.selectedSemester.programTypeId).then((routineConfig: RoutineConfig) => {
+        console.log('fetched routine config');
+        console.log(routineConfig);
+        if (routineConfig.id == null)
+          this.notify.error("Routine configuration is not yet set for the semester, please contact with registrar office")
         this.routineConfigService.routineConfig = routineConfig;
         defer.resolve(this.routineConfig = routineConfig);
       });

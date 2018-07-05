@@ -2,24 +2,28 @@ package org.ums.academic.resource.routine;
 
 import com.itextpdf.text.DocumentException;
 import org.apache.shiro.SecurityUtils;
-import org.json.simple.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.Program;
+import org.ums.domain.model.immutable.Semester;
+import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.routine.Routine;
-import org.ums.generator.IdGenerator;
-import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableProgram;
-import org.ums.domain.model.mutable.routine.MutableRoutine;
 import org.ums.domain.model.mutable.MutableSemester;
-import org.ums.manager.*;
+import org.ums.domain.model.mutable.routine.MutableRoutine;
+import org.ums.generator.IdGenerator;
+import org.ums.manager.DepartmentManager;
+import org.ums.manager.EmployeeManager;
+import org.ums.manager.ProgramManager;
+import org.ums.manager.StudentManager;
 import org.ums.manager.routine.RoutineManager;
 import org.ums.persistent.model.PersistentProgram;
-import org.ums.persistent.model.routine.PersistentRoutine;
 import org.ums.persistent.model.PersistentSemester;
+import org.ums.persistent.model.routine.PersistentRoutine;
 import org.ums.resource.ResourceHelper;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
@@ -30,7 +34,9 @@ import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -151,6 +157,18 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
   public JsonArray getRoutine(final Semester pSemester, final Program pProgram) {
     List<Routine> routineList;
     return null;
+  }
+
+  public JsonArray getRoutine(final Integer pSemesterId, final String pCourseId, final UriInfo pUriInfo) {
+    List<Routine> routineList = getContentManager().getRoutine(pSemesterId, pCourseId);
+    JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+    JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(Routine routine : routineList) {
+      getBuilder().build(jsonObjectBuilder, routine, pUriInfo, localCache);
+      jsonArrayBuilder.add(jsonObjectBuilder);
+    }
+    return jsonArrayBuilder.build();
   }
 
   public JsonObject buildRoutines(final List<Routine> pRoutines, final UriInfo pUriInfo) {

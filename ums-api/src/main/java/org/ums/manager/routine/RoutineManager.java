@@ -12,6 +12,8 @@ public interface RoutineManager extends ContentManager<Routine, MutableRoutine, 
 
   List<Routine> getStudentRoutine(Student student);
 
+  List<Routine> getRoutine(int pSemesterId, String pCourseId);
+
   List<Routine> getRoutine(int semesterId, int programId, int year, int semester, String section);
 
   List<Routine> getRoutine(int pSemesterId, int pProgramId);

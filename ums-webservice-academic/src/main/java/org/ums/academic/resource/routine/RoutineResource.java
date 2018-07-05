@@ -42,6 +42,14 @@ public class RoutineResource extends MutableRoutineResource {
   }
 
   @GET
+  @Path("/semester/{semesterId}/course/{courseId}")
+  @GetLog(message = "Requested for semester and course wise routine")
+  public JsonArray getRoutine(final @Context HttpServletRequest pHttpServletRequest,
+      @PathParam("semesterId") Integer pSemesterId, @PathParam("courseId") String pCourseId) {
+    return mRoutineResourceHelper.getRoutine(pSemesterId, pCourseId, mUriInfo);
+  }
+
+  @GET
   @Path("/routineReportTeacher")
   @Produces("application/pdf")
   @GetLog(message = "Accessed teacher's class routine report (PDF)")
