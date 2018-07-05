@@ -746,7 +746,7 @@ module ums {
                 languages: [
                     {id: 101101, name: 'Select a Language'},
                     {id: 1, name: 'English'},
-                    {id: 2, name: 'Bangla'},
+                    {id: 2, name: 'Bengali'},
                     {id: 3, name: 'French'},
                     {id: 4, name: 'Chinese'},
                     {id: 5, name: 'Russian'},
@@ -756,8 +756,7 @@ module ums {
                     {id: 9, name: 'Hindi'},
                     {id: 10, name: 'Urdu'},
                     {id: 11, name: 'Arabic'},
-                    {id: 12, name: 'Chinese'},
-                    {id: 13, name: 'Sanskrit'}
+                    {id: 12, name: 'Sanskrit'}
                 ],
                 bindingTypes: [
                     {id: 101101, name: 'Select Binding Type'},

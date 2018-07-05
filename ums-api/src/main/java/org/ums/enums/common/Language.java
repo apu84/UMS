@@ -9,8 +9,19 @@ import java.util.Map;
  */
 public enum Language {
 
-  BANGLA(1, "Bangla"),
-  ENGLISH(2, "English'");
+  SELECT_A_LANGUAGE(101101, "Select a Language"),
+  ENGLISH(1, "English"),
+  BENGALI(2, "Bengali"),
+  FRENCH(3, "French"),
+  CHINESE(4, "Chinese"),
+  RUSSIAN(5, "Russian"),
+  SPANISH(6, "Spanish"),
+  GERMAN(7, "German"),
+  JAPANESE(8, "Japanese"),
+  HINDI(9, "Hindi"),
+  URDU(10, "Urdu"),
+  ARABIC(11, "Arabic"),
+  SANSKRIT(12, "Sanskrit");
 
   private String label;
   private int id;
