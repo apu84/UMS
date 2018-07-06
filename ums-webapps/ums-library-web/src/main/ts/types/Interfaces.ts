@@ -28,8 +28,8 @@ module ums {
         publisher: string;
         publisherName: string;
         placeOfPublication: string;
-        yearDateOfPublication: string;
-        copyRightDate: string;
+        yearOfPublication: string;
+        yearOfCopyRight: string;
     }
 
     export interface IPhysicalDescription {
@@ -49,7 +49,7 @@ module ums {
         statusName: string;
         title: string;
         subTitle: string;
-        gmd: string;
+        gmd: number;
         seriesTitle: string;
         volumeNo: string;
         volumeTitle: string;
@@ -68,7 +68,7 @@ module ums {
         frequency: number;
         callNo: string;
         classNo: string;
-        callDate: string;
+        callYear: string;
         callEdition: string;
         callVolume: string;
         authorMark: string;

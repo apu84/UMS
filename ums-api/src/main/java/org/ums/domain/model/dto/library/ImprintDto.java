@@ -12,8 +12,8 @@ public class ImprintDto implements Serializable {
   private Publisher publisher;
   private Long publisherId;
   private String placeOfPublication;
-  private String dateOfPublication;
-  private String copyRightDate;
+  private Integer yearOfPublication;
+  private Integer yearOfCopyRight;
 
   public Publisher getPublisher() {
     return publisher;
@@ -31,20 +31,20 @@ public class ImprintDto implements Serializable {
     this.placeOfPublication = placeOfPublication;
   }
 
-  public String getDateOfPublication() {
-    return dateOfPublication;
+  public Integer getYearOfPublication() {
+    return yearOfPublication;
   }
 
-  public void setDateOfPublication(String dateOfPublication) {
-    this.dateOfPublication = dateOfPublication;
+  public void setYearOfPublication(Integer yearOfPublication) {
+    this.yearOfPublication = yearOfPublication;
   }
 
-  public String getCopyRightDate() {
-    return copyRightDate;
+  public Integer getYearOfCopyRight() {
+    return yearOfCopyRight;
   }
 
-  public void setCopyRightDate(String copyRightDate) {
-    this.copyRightDate = copyRightDate;
+  public void setYearOfCopyRight(Integer yearOfCopyRight) {
+    this.yearOfCopyRight = yearOfCopyRight;
   }
 
   public Long getPublisherId() {

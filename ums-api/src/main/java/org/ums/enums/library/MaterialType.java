@@ -9,8 +9,9 @@ import java.util.Map;
  */
 public enum MaterialType {
 
-  BOOKS(1, "Book"),
-  JOURNALS(2, "Journal"),
+  SELECT_MATERIAL_TYPE(101101, "Select Material Type"),
+  BOOK(1, "Book"),
+  JOURNAL(2, "Journal"),
   THESIS_PROJECT(3, "Thesis/Project");
 
   private String label;

@@ -816,6 +816,11 @@ module ums {
                     {id: 30, name: 'Monthly '},
                     {id: 360, name: 'Yearly'}
                 ],
+                gmdOptions: [
+                    {id: 101101, name: "Select Category"},
+                    {id: 1, name: "GMD"},
+                    {id: 2, name: "SMD"}
+                ],
                 currencyTypes: [
                     {id: 1, name: 'BDT'},
                     {id: 2, name: 'INR'},

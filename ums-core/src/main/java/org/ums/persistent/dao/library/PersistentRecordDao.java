@@ -7,6 +7,7 @@ import org.ums.domain.model.dto.library.ImprintDto;
 import org.ums.domain.model.immutable.library.Record;
 import org.ums.domain.model.mutable.library.MutableRecord;
 import org.ums.enums.common.Language;
+import org.ums.enums.library.GeneralMaterialDescription;
 import org.ums.enums.library.JournalFrequency;
 import org.ums.enums.library.MaterialType;
 import org.ums.enums.library.RecordStatus;
@@ -27,30 +28,34 @@ public class PersistentRecordDao extends RecordDaoDecorator {
       "Select MFN, LANGUAGE, TITLE, SUB_TITLE, GMD, SERIES_TITLE, VOLUME_NO, VOLUME_TITLE, SERIAL_ISSUE_NO,  "
           + "   SERIAL_NUMBER, SERIAL_SPECIAL, LIBRARY_LACKS, CHANGED_TITLE, ISBN, ISSN,  "
           + "   CORP_AUTH_MAIN, CORP_SUB_BODY, CORP_CITY_COUNTRY, EDITION, TRANS_TITLE_EDITION, FREQUENCY,  "
-          + "   CALL_NO, CLASS_NO, CALL_DATE, CALL_EDITION, CALL_VOLUME, AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,  "
-          + "   DATE_YEAR_OF_PUBLICATION, COPY_RIGHT_DATE, COPY_RIGHT_DATE, MATERIAL_TYPE, STATUS,  "
-          + "   KEYWORDS, DOCUMENTALIST, ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY,  CONTRIBUTORS,PHYSICAL_DESC, SUBJECTS, NOTES, TOTAL_ITEMS, TOTAL_AVAILABLE, TOTAL_CHECKED_OUT, TOTAL_ON_HOLD, LAST_MODIFIED "
-          + "FROM RECORDS ";
+          + "   CALL_NO, CLASS_NO, CALL_YEAR, CALL_EDITION, CALL_VOLUME, AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,  "
+          + "   YEAR_OF_PUBLICATION, YEAR_OF_COPY_RIGHT, MATERIAL_TYPE, STATUS,  "
+          + "   KEYWORDS, DOCUMENTALIST, ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY, CONTRIBUTORS,PHYSICAL_DESC, SUBJECTS, "
+          + " NOTES, TOTAL_ITEMS, TOTAL_AVAILABLE, TOTAL_CHECKED_OUT, TOTAL_ON_HOLD, LAST_MODIFIED " + "FROM RECORDS ";
 
   static String UPDATE_ONE =
       "UPDATE RECORDS SET LANGUAGE = ?, TITLE=?,  SUB_TITLE=?, GMD=?, SERIES_TITLE=?, VOLUME_NO=?, VOLUME_TITLE=?, SERIAL_ISSUE_NO=?, SERIAL_NUMBER=?, "
           + "   SERIAL_SPECIAL=?, LIBRARY_LACKS=?, CHANGED_TITLE=?, ISBN=?, ISSN=?, CORP_AUTH_MAIN=?, CORP_SUB_BODY=?, CORP_CITY_COUNTRY=?, EDITION=?, TRANS_TITLE_EDITION=?, "
-          + "   FREQUENCY=?, CALL_NO=?, CLASS_NO=?, CALL_DATE=?, CALL_EDITION=?, CALL_VOLUME=?, AUTHOR_MARK=?, PUBLISHER=?, PLACE_OF_PUBLICATION=?,DATE_YEAR_OF_PUBLICATION=?, "
-          + "  COPY_RIGHT_DATE=?, MATERIAL_TYPE=?, "
-          + "  STATUS=?, KEYWORDS=?, CONTRIBUTORS=?, SUBJECTS=?, PHYSICAL_DESC = ?, NOTES=?, TOTAL_ITEMS = ?, TOTAL_AVAILABLE = ?, TOTAL_CHECKED_OUT = ?, TOTAL_ON_HOLD = ?, LAST_UPDATED_ON=sysdate,  "
+          + "   FREQUENCY=?, CALL_NO=?, CLASS_NO=?, CALL_YEAR=?, CALL_EDITION=?, CALL_VOLUME=?, AUTHOR_MARK=?, PUBLISHER=?, PLACE_OF_PUBLICATION=?,YEAR_OF_PUBLICATION=?, "
+          + "  YEAR_OF_COPY_RIGHT=?, MATERIAL_TYPE=?, "
+          + "  STATUS=?, KEYWORDS=?, CONTRIBUTORS=?, SUBJECTS=?, PHYSICAL_DESC = ?, NOTES=?, TOTAL_ITEMS = ?, TOTAL_AVAILABLE = ?,"
+          + " TOTAL_CHECKED_OUT = ?, TOTAL_ON_HOLD = ?, LAST_UPDATED_ON=sysdate"
+          + ",  "
           + "  LAST_UPDATED_BY=?, LAST_MODIFIED=" + getLastModifiedSql();
 
   static String INSERT_ONE =
       "INSERT INTO RECORDS(MFN, LANGUAGE, TITLE, SUB_TITLE, GMD, SERIES_TITLE,  VOLUME_NO, VOLUME_TITLE, SERIAL_ISSUE_NO,SERIAL_NUMBER, "
           + "   SERIAL_SPECIAL, LIBRARY_LACKS, CHANGED_TITLE, ISBN, ISSN, CORP_AUTH_MAIN, CORP_SUB_BODY, CORP_CITY_COUNTRY, EDITION, TRANS_TITLE_EDITION, "
-          + "   FREQUENCY, CALL_NO, CLASS_NO, CALL_DATE, CALL_EDITION, CALL_VOLUME,  AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,DATE_YEAR_OF_PUBLICATION, COPY_RIGHT_DATE, MATERIAL_TYPE, "
+          + "   FREQUENCY, CALL_NO, CLASS_NO, CALL_YEAR, CALL_EDITION, CALL_VOLUME,  AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,YEAR_OF_PUBLICATION, YEAR_OF_COPY_RIGHT, MATERIAL_TYPE, "
           + "    STATUS, KEYWORDS, DOCUMENTALIST,CONTRIBUTORS, SUBJECTS,PHYSICAL_DESC, NOTES, TOTAL_ITEMS, TOTAL_AVAILABLE, TOTAL_CHECKED_OUT, TOTAL_ON_HOLD,  ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY, LAST_MODIFIED)  "
           + "  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
           + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
           + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
           + " ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0,"
-          + " sysdate, sysdate, ?, "
-          + getLastModifiedSql() + ")";
+          + " "
+          + "sysdate "
+          + ", "
+          + "sysdate , ?, " + getLastModifiedSql() + ")";
 
   static String DELETE_ONE = "DELETE FROM RECORDS ";
 
@@ -66,28 +71,30 @@ public class PersistentRecordDao extends RecordDaoDecorator {
 
   @Override
   public Record get(final Long pId) {
-    String query = SELECT_ALL + " Where MFN = ?";
+    String query = SELECT_ALL + " WHERE MFN = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentRecordDao.RecordRowMapper());
   }
 
   @Override
   public int update(final MutableRecord pRecord) {
-    String query = UPDATE_ONE + "   Where MFN= ? ";
+    String query = UPDATE_ONE + "   WHERE MFN= ? ";
     return mJdbcTemplate.update(query, pRecord.getLanguage() == null ? null : pRecord.getLanguage().getId(), pRecord
-        .getTitle(), pRecord.getSubTitle(), pRecord.getGmd(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord
-        .getVolumeTitle(), pRecord.getSerialIssueNo(), pRecord.getSerialNumber(), pRecord.getSerialSpecial(), pRecord
-        .getLibraryLacks(), pRecord.getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord
-        .getCorpAuthorMain(), pRecord.getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord
-        .getTranslateTitleEdition(), pRecord.getFrequency() == null ? Types.NULL : pRecord.getFrequency().getId(),
-        pRecord.getCallNo(), pRecord.getClassNo(), pRecord.getCallDate(), pRecord.getCallEdition(), pRecord
-            .getCallVolume(), pRecord.getAuthorMark(), pRecord.getImprint().getPublisher() == null ? Types.NULL
-            : pRecord.getImprint().getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord
-            .getImprint().getDateOfPublication(), pRecord.getImprint().getCopyRightDate(),
+        .getTitle(), pRecord.getSubTitle(), pRecord.getGmd() == null ? null : pRecord.getGmd().getId(), pRecord
+        .getSeriesTitle(), pRecord.getVolumeNo(), pRecord.getVolumeTitle(), pRecord.getSerialIssueNo(), pRecord
+        .getSerialNumber(), pRecord.getSerialSpecial(), pRecord.getLibraryLacks(), pRecord.getChangedTitle(), pRecord
+        .getIsbn(), pRecord.getIssn(), pRecord.getCorpAuthorMain(), pRecord.getCorpSubBody(), pRecord
+        .getCorpCityCountry(), pRecord.getEdition(), pRecord.getTranslateTitleEdition(),
+        pRecord.getFrequency() == null ? Types.NULL : pRecord.getFrequency().getId(), pRecord.getCallNo(), pRecord
+            .getClassNo(), pRecord.getCallYear(), pRecord.getCallEdition(), pRecord.getCallVolume(), pRecord
+            .getAuthorMark(), pRecord.getImprint().getPublisher() == null ? Types.NULL : pRecord.getImprint()
+            .getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord.getImprint()
+            .getYearOfPublication(), pRecord.getImprint().getYearOfCopyRight(),
         pRecord.getMaterialType() == null ? null : pRecord.getMaterialType().getId(),
         pRecord.getRecordStatus() == null ? null : pRecord.getRecordStatus().getId(), pRecord.getKeyWords(), pRecord
             .getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord.getPhysicalDescriptionString(),
         pRecord.getNoteJsonString(), pRecord.getTotalItems(), pRecord.getTotalAvailable(),
-        pRecord.getTotalCheckedOut(), pRecord.getTotalOnHold(), pRecord.getLastUpdatedBy(), pRecord.getMfn());
+        pRecord.getTotalCheckedOut(), pRecord.getTotalOnHold(),
+        pRecord.getLastUpdatedBy() == null ? "" : pRecord.getLastUpdatedBy(), pRecord.getId());
   }
 
   private Long getMfn() {
@@ -98,16 +105,16 @@ public class PersistentRecordDao extends RecordDaoDecorator {
   public Long create(final MutableRecord pRecord) {
     pRecord.setId(getMfn());
     mJdbcTemplate.update(INSERT_ONE, pRecord.getId(), pRecord.getLanguage().getId(), pRecord.getTitle(), pRecord
-        .getSubTitle(), pRecord.getGmd(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord.getVolumeTitle(),
-        pRecord.getSerialIssueNo(), pRecord.getSerialNumber(), pRecord.getSerialSpecial(), pRecord.getLibraryLacks(),
-        pRecord.getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord.getCorpAuthorMain(), pRecord
-            .getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord.getTranslateTitleEdition(),
-        pRecord.getFrequency() == null ? Types.NULL : pRecord.getFrequency().getId(), pRecord.getCallNo(), pRecord
-            .getClassNo(), pRecord.getCallDate(), pRecord.getCallEdition(), pRecord.getCallVolume(), pRecord
-            .getAuthorMark(), pRecord.getImprint().getPublisher() == null ? Types.NULL : pRecord.getImprint()
-            .getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord.getImprint()
-            .getDateOfPublication(), pRecord.getImprint().getCopyRightDate(), pRecord.getMaterialType().getId(),
-        pRecord.getRecordStatus().getId(), pRecord.getKeyWords(), pRecord.getDocumentalist(), pRecord
+        .getSubTitle(), pRecord.getGmd().getId(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord
+        .getVolumeTitle(), pRecord.getSerialIssueNo(), pRecord.getSerialNumber(), pRecord.getSerialSpecial(), pRecord
+        .getLibraryLacks(), pRecord.getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord
+        .getCorpAuthorMain(), pRecord.getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord
+        .getTranslateTitleEdition(), pRecord.getFrequency() == null ? Types.NULL : pRecord.getFrequency().getId(),
+        pRecord.getCallNo(), pRecord.getClassNo(), pRecord.getCallYear(), pRecord.getCallEdition(), pRecord
+            .getCallVolume(), pRecord.getAuthorMark(), pRecord.getImprint().getPublisher() == null ? Types.NULL
+            : pRecord.getImprint().getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord
+            .getImprint().getYearOfPublication(), pRecord.getImprint().getYearOfCopyRight(), pRecord.getMaterialType()
+            .getId(), pRecord.getRecordStatus().getId(), pRecord.getKeyWords(), pRecord.getDocumentalist(), pRecord
             .getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord.getPhysicalDescriptionString(),
         pRecord.getNoteJsonString(), pRecord.getLastUpdatedBy());
 
@@ -123,7 +130,7 @@ public class PersistentRecordDao extends RecordDaoDecorator {
   @Override
   public int delete(final MutableRecord pRecord) {
     String query = DELETE_ONE + " WHERE MFN = ?";
-    return mJdbcTemplate.update(query, pRecord.getMfn());
+    return mJdbcTemplate.update(query, pRecord.getId());
   }
 
   class RecordRowMapper implements RowMapper<Record> {
@@ -132,13 +139,11 @@ public class PersistentRecordDao extends RecordDaoDecorator {
 
       PersistentRecord record = new PersistentRecord();
       record.setId(resultSet.getLong("MFN"));
-      record.setMfn(resultSet.getLong("MFN"));
       record.setLanguage(Language.get(resultSet.getInt("LANGUAGE")));
       record.setTitle(resultSet.getString("TITLE"));
       record.setSubTitle(resultSet.getString("SUB_TITLE"));
-      record.setGmd(resultSet.getString("GMD"));
+      record.setGmd(GeneralMaterialDescription.get(resultSet.getInt("GMD")));
       record.setSeriesTitle(resultSet.getString("SERIES_TITLE"));
-
       record.setVolumeNo(resultSet.getString("VOLUME_NO"));
       record.setVolumeTitle(resultSet.getString("VOLUME_TITLE"));
       record.setSerialIssueNo(resultSet.getString("SERIAL_ISSUE_NO"));
@@ -156,39 +161,33 @@ public class PersistentRecordDao extends RecordDaoDecorator {
       record.setFrequency(JournalFrequency.get(resultSet.getInt("FREQUENCY")));
       record.setCallNo(resultSet.getString("CALL_NO"));
       record.setClassNo(resultSet.getString("CLASS_NO"));
-      record.setCallDate(resultSet.getString("CALL_DATE"));
+      record.setCallYear(resultSet.getInt("CALL_YEAR"));
       record.setCallEdition(resultSet.getString("CALL_EDITION"));
       record.setCallVolume(resultSet.getString("CALL_VOLUME"));
       record.setAuthorMark(resultSet.getString("AUTHOR_MARK"));
-
       ImprintDto imprintDto = new ImprintDto();
       imprintDto.setPublisherId(resultSet.getLong("PUBLISHER"));
       imprintDto.setPlaceOfPublication(resultSet.getString("PLACE_OF_PUBLICATION"));
-      imprintDto.setDateOfPublication(resultSet.getString("DATE_YEAR_OF_PUBLICATION"));
-      imprintDto.setCopyRightDate(resultSet.getString("COPY_RIGHT_DATE"));
+      imprintDto.setYearOfPublication(resultSet.getInt("YEAR_OF_PUBLICATION"));
+      imprintDto.setYearOfCopyRight(resultSet.getInt("YEAR_OF_COPY_RIGHT"));
       record.setImprint(imprintDto);
-
       record.setPhysicalDescriptionString(resultSet.getString("PHYSICAL_DESC"));
-
       record.setMaterialType(MaterialType.get(resultSet.getInt("MATERIAL_TYPE")));
       record.setRecordStatus(RecordStatus.get(resultSet.getInt("STATUS")));
       record.setKeyWords(resultSet.getString("KEYWORDS"));
-      record.setDocumentalist(resultSet.getString("DOCUMENTALIST"));
-      record.setEntryDate(resultSet.getString("ENTRY_DATE"));
-
-      record.setLastUpdatedOn(resultSet.getString("LAST_UPDATED_ON"));
-      record.setLastUpdatedBy(resultSet.getString("LAST_UPDATED_BY"));
-      record.setLastModified(resultSet.getString("LAST_MODIFIED"));
-
       record.setContributorJsonString(resultSet.getString("CONTRIBUTORS"));
       record.setPhysicalDescriptionString(resultSet.getString("PHYSICAL_DESC"));
       record.setSubjectJsonString(resultSet.getString("SUBJECTS"));
       record.setNoteJsonString(resultSet.getString("NOTES"));
-
       record.setTotalItems(resultSet.getInt("TOTAL_ITEMS"));
       record.setTotalAvailable(resultSet.getInt("TOTAL_AVAILABLE"));
       record.setTotalCheckedOut(resultSet.getInt("TOTAL_CHECKED_OUT"));
       record.setTotalOnHold(resultSet.getInt("TOTAL_ON_HOLD"));
+      record.setDocumentalist(resultSet.getString("DOCUMENTALIST"));
+      record.setEntryDate(resultSet.getDate("ENTRY_DATE"));
+      record.setLastUpdatedOn(resultSet.getDate("LAST_UPDATED_ON"));
+      record.setLastUpdatedBy(resultSet.getString("LAST_UPDATED_BY"));
+      record.setLastModified(resultSet.getString("LAST_MODIFIED"));
 
       AtomicReference<Record> atomicReference = new AtomicReference<>(record);
       return atomicReference.get();

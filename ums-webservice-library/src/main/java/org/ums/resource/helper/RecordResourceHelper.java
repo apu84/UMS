@@ -139,9 +139,9 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     PersistentRecord record = new PersistentRecord();
     record = (PersistentRecord) mManager.get(Long.parseLong(pMfnNo));
     List<Item> itemList = new ArrayList<>();
-    if(record.getTotalItems() == record.getTotalAvailable()) {
+    if(record.getTotalItems().equals(record.getTotalAvailable())) {
       Converter<Record, RecordDocument> converter = new SimpleConverter<>(Record.class, RecordDocument.class);
-      itemList = mItemManger.getByMfn(record.getMfn());
+      itemList = mItemManger.getByMfn(record.getId());
       mManager.delete(record);
       for(Item item : itemList) {
         mItemManger.delete((MutableItem) item);
