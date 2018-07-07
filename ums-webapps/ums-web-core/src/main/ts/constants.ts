@@ -444,6 +444,9 @@ module ums {
                 ], absPreRemarks: [
                     {id: 1, name: "Did not inform"},
                     {id: 2, name: "Inform"}
+                ],amPmType: [
+                    {id: 1, name: "AM"},
+                    {id: 2, name: "PM"}
                 ],
                 actors: [
                     {id: "0", name: "Student"},

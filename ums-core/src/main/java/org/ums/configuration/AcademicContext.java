@@ -24,6 +24,7 @@ import org.ums.message.MessageResource;
 import org.ums.persistent.dao.*;
 import org.ums.persistent.dao.applications.PersistentAppConfigDao;
 import org.ums.persistent.dao.applications.PersistentAppRulesDao;
+import org.ums.persistent.model.PersistentAbsLateComingInfoDao;
 import org.ums.punishment.PersistentPunishmentDao;
 import org.ums.punishment.PunishmentCache;
 import org.ums.punishment.PunishmentManager;
@@ -229,6 +230,14 @@ public class AcademicContext {
     studentsExamAttendantInfoCache.setManager(new PersistentStudentsExamAttendantInfoDao(mTemplateFactory
         .getJdbcTemplate(), mIdGenerator));
     return studentsExamAttendantInfoCache;
+  }
+
+  @Bean
+  AbsLateComingInfoManager absLateComingInfoManager() {
+    AbsLateComingInfoCache absLateComingInfoCache = new AbsLateComingInfoCache(mCacheFactory.getCacheManager());
+    absLateComingInfoCache.setManager(new PersistentAbsLateComingInfoDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
+    return absLateComingInfoCache;
   }
 
   @Bean

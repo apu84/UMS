@@ -10,36 +10,37 @@ import java.io.Serializable;
 /**
  * Created by Monjur-E-Morshed on 7/1/2018.
  */
-public interface AbsLateComingInfo extends Serializable, LastModifier, EditType<MutableAbsLateComingInfo>, Identifier<Long> {
+public interface AbsLateComingInfo extends Serializable, LastModifier, EditType<MutableAbsLateComingInfo>,
+    Identifier<Long> {
 
-    Long getId();
+  Long getId();
 
-    Integer getSemesterId();
+  Integer getSemesterId();
 
-    Integer getExamType();
+  Integer getExamType();
 
-    Integer getPresentType();
+  Integer getPresentType();
 
-    String getPresentInfo();
+  String getPresentInfo();
 
-    String getRemarks();
+  String getRemarks();
 
-    String getEmployeeId();
+  String getEmployeeId();
 
-    String getEmployeeName();
+  String getEmployeeName();
 
-    String getEmployeeType();
+  String getEmployeeType();
 
-    String getDeptId();
+  String getDeptId();
 
-    String getDeptName();
+  String getDeptName();
 
-    String getInvigilatorRoomId();
+  Integer getInvigilatorRoomId();
 
-    String getInvigilatorRoomName();
+  String getInvigilatorRoomName();
 
-    String getExamDate();
+  String getExamDate();
 
-    String getArrivalTime();
+  String getArrivalTime();
 
 }

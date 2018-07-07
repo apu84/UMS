@@ -8,34 +8,34 @@ import org.ums.domain.model.immutable.AbsLateComingInfo;
  * Created by Monjur-E-Morshed on 7/1/2018.
  */
 public interface MutableAbsLateComingInfo extends AbsLateComingInfo, Editable<Long>, MutableLastModifier,
-        MutableIdentifier<Long> {
-    void  setId(final Long pId);
+    MutableIdentifier<Long> {
+  void setId(final Long pId);
 
-    void setSemesterId(final Integer pSemesterId);
+  void setSemesterId(final Integer pSemesterId);
 
-    void setExamType(final Integer pSetExamType);
+  void setExamType(final Integer pSetExamType);
 
-    void setPresentType(final Integer pPresentType);
+  void setPresentType(final Integer pPresentType);
 
-    void setPresentInfo(final String  pPresentInfo);
+  void setPresentInfo(final String pPresentInfo);
 
-    void setRemarks(final String pRemarks);
+  void setRemarks(final String pRemarks);
 
-    void setEmployeeId(final String pEmployeeId);
+  void setEmployeeId(final String pEmployeeId);
 
-    void setEmployeeName();
+  void setEmployeeName(final String pEmployeeName);
 
-    void setEmployeeType();
+  void setEmployeeType(final String pEmployeeType);
 
-    void setDeptId();
+  void setDeptId(final String pDeptId);
 
-    void setDeptName();
+  void setDeptName(final String pDeptName);
 
-    void setInvigilatorRoomId();
+  void setInvigilatorRoomId(final Integer pInvigilatorRoomId);
 
-    void setInvigilatorRoomName();
+  void setInvigilatorRoomName(final String pInvigilatorRoomName);
 
-    void setExamDate();
+  void setExamDate(final String pExamDate);
 
-   void setArrivalTime();
+  void setArrivalTime(final String pArrivalTime);
 }

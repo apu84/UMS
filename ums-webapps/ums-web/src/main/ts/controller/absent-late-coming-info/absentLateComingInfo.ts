@@ -17,18 +17,23 @@ module ums{
         public semesterName:string;
         public absPreStatusList:Array<IConstants>;
         public absPreStatus:IConstants;
-        public remarksList:Array<IConstants>;
-        public remarks:IConstants;
         public deptList: Array<IConstants>;
         public deptName: IConstants;
         public classRooms:Array<ClassRoom>;
         public classRoom:ClassRoom;
         public employees:Array<Employee>;
         public employee:Employee;
+        public amPmList:Array<IConstants>;
+        public amPm:IConstants;
         public selectedDepartmentId:string;
         public selectedAbsPreStatusId:number;
-        public selectedRemarkStatus:string;
+        public remarks:string;
+        public selectedClassRoomId:number;
+        public selectedEmployeeId:number;
         public arrivalTime: string;
+        public amPmValue:string;
+        public isArrivalTimeEligible:boolean;
+        public absent:number;
         public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService',
             'programService','DailyExamAttendanceReportService','examRoutineService','classRoomService','employeeService'];
 
@@ -53,18 +58,26 @@ module ums{
             this.absPreStatusList=this.appConstants.absentPresentStatus;
             this.absPreStatus=this.absPreStatusList[0];
             this.selectedAbsPreStatusId=this.absPreStatus.id;
-            this.remarksList=[];
-            this.remarksList=this.appConstants.absPreRemarks;
-            this.remarks=this.remarksList[0];
-            this.selectedRemarkStatus=this.remarks.name;
+            this.remarks="";
             this.deptList = [];
             this.deptList = this.appConstants.deptShort;
             this.deptName=this.deptList[0];
             this.selectedExamDate="";
             this.arrivalTime="";
+            this.amPmList = [];
+            this.amPmList = this.appConstants.amPmType;
+            this.amPm=this.amPmList[0];
+            this.amPmValue=this.amPmList[0].name;
+            this.isArrivalTimeEligible=false;
+            this.absent=1;
             this.getSemesters()
             this.initializeDatePickers();
             this.getClassRoomInfo();
+        }
+        private changeStatus(val:any){
+            console.log(val);
+            this.amPmValue=val.name;
+
         }
         private doSomething():void{
             alert('hello from another side');
@@ -82,6 +95,7 @@ module ums{
         }
         private employeeChanged(value:any){
             console.log(value);
+            this.selectedEmployeeId=value.id;
 
         }
         private getClassRoomInfo(){
@@ -93,6 +107,7 @@ module ums{
         }
         public classRoomChanged(value:any){
             console.log(value);
+            this.selectedClassRoomId=value.id;
         }
         private dateChanged(arrivalTime: any) {
             this.arrivalTime=arrivalTime;
@@ -133,16 +148,14 @@ module ums{
             this.getExamDates();
 
         }
-        private changeAbsPreStatus(value:any){
-            console.log(value.id+"  "+value.name);
-            this.selectedAbsPreStatusId=value.id;
-
+        private changeAbsPreStatus(value:any) {
+            console.log(value.id + "  " + value.name);
+            this.selectedAbsPreStatusId = value.id;
+           this.isArrivalTimeEligible= this.selectedAbsPreStatusId ==this.absent ? false:true;
         }
-        private changeRemarkStatus(value:any){
-            console.log(value.id+"  "+value.name);
-            this.selectedRemarkStatus=value.name;
 
-        }
+
+
         private getSemesters():void{
             this.semesterService.fetchSemesters(11,5).then((semesters:Array<Semester>)=>{
                 this.semesters=semesters;
@@ -162,7 +175,35 @@ module ums{
                 this.getExamDates();
             });
         }
+        private ExamDateChange(value:any){
+            this.selectedExamDate=value;
+            console.log("Exam Date: "+this.selectedExamDate);
+
+        }
+        private save():void{
+         var json=this.convertToJson();
+         console.log("Helooooooo");
+         console.log(json);
+        }
+        public convertToJson(): any {
+            var completeJson = {};
+            console.log("result");
+            var jsonObj = [];
+            var item = {};
+            item["employeeId"] =this.selectedEmployeeId;
+            item["examType"] =this.selectedExamTypeId;
+            item["presentType"]=this.selectedAbsPreStatusId;
+            item["remarks"]=this.remarks;
+            item["roomId"]=this.selectedClassRoomId;
+            item["examDate"]=this.selectedExamDate;
+            item["arrivalTime"]=this.arrivalTime+" "+this.amPmValue;
+            jsonObj.push(item);
+            completeJson["entries"] = jsonObj;
+            console.log(completeJson);
+            return completeJson;
+        }
 
     }
+
     UMS.controller("AbsentLateComingInfo",AbsentLateComingInfo);
 }
