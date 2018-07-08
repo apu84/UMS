@@ -32,7 +32,9 @@ public class AreaOfInterestInformationResourceHelper extends
     if(pJsonObject.getJsonArray("entries").size() > 0) {
       List<AreaOfInterestInformation> areaOfInterestInformations =
           mManager.getAll(pJsonObject.getJsonArray("entries").getJsonObject(0).getString("employeeId"));
-      mManager.delete((MutableAreaOfInterestInformation) areaOfInterestInformations.get(0));
+      if(!areaOfInterestInformations.isEmpty()){
+        mManager.delete((MutableAreaOfInterestInformation) areaOfInterestInformations.get(0));
+      }
       for(int i = 0; i < pJsonObject.getJsonArray("entries").size(); i++) {
         MutableAreaOfInterestInformation mutableAreaOfInterestInformation = new PersistentAreaOfInterestInformation();
         mBuilder.build(mutableAreaOfInterestInformation, pJsonObject.getJsonArray("entries").getJsonObject(i),

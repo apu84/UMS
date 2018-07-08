@@ -62,6 +62,8 @@ module ums {
 
         private submit(type: string): void {
             if (type === 'additional') {
+                this.additional.employeeId = this.stateParams.id;
+                console.log(this.additional);
                 this.convertToJson(this.additional).then((json: any) => {
                     this.employeeInformationService.saveAdditionalInformation(json).then((data: any) => {
                         this.enableEdit = false;
@@ -82,7 +84,6 @@ module ums {
         }
 
         public activeEditButton(canEdit: boolean, type: string): void {
-            console.log(canEdit + " " + type);
             if(type === 'additional'){
                 this.enableEdit = canEdit;
             }
