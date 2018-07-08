@@ -10,7 +10,7 @@ module  ums{
             var defer = this.$q.defer();
             console.log("Inside-Service")
             console.log(json);
-            this.httpClient.post("academic/studentsExamAttendantInfo/addStudentAttendantRecords",json,'application/json')
+            this.httpClient.post("academic/absLateComing/addRecords",json,'application/json')
                 .success(()=>{
                     this.notify.success("Successfully Saved");
                     defer.resolve('success')

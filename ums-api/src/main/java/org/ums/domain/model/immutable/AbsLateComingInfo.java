@@ -35,7 +35,7 @@ public interface AbsLateComingInfo extends Serializable, LastModifier, EditType<
 
   String getDeptName();
 
-  Integer getInvigilatorRoomId();
+  Long getInvigilatorRoomId();
 
   String getInvigilatorRoomName();
 

@@ -31,7 +31,7 @@ public interface MutableAbsLateComingInfo extends AbsLateComingInfo, Editable<Lo
 
   void setDeptName(final String pDeptName);
 
-  void setInvigilatorRoomId(final Integer pInvigilatorRoomId);
+  void setInvigilatorRoomId(final Long pInvigilatorRoomId);
 
   void setInvigilatorRoomName(final String pInvigilatorRoomName);
 

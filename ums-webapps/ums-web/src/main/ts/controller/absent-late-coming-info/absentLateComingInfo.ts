@@ -28,14 +28,14 @@ module ums{
         public selectedDepartmentId:string;
         public selectedAbsPreStatusId:number;
         public remarks:string;
-        public selectedClassRoomId:number;
+        public selectedClassRoomId:string;
         public selectedEmployeeId:number;
         public arrivalTime: string;
         public amPmValue:string;
         public isArrivalTimeEligible:boolean;
         public absent:number;
         public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService',
-            'programService','DailyExamAttendanceReportService','examRoutineService','classRoomService','employeeService'];
+            'programService','DailyExamAttendanceReportService','examRoutineService','classRoomService','employeeService','absLateComingService'];
 
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -49,7 +49,8 @@ module ums{
                     private dailyExamAttendanceReportService: DailyExamAttendanceReportService,
                     private examRoutineService: ExamRoutineService,
                     private classRoomService:ClassRoomService,
-                    private employeeService:EmployeeService) {
+                    private employeeService:EmployeeService,
+                    private absLateComingService:AbsLateComingService) {
             this.examTypeList=[];
             this.examTypeList=this.appConstants.examType;
             this.examType=this.examTypeList[0];
@@ -79,9 +80,6 @@ module ums{
             this.amPmValue=val.name;
 
         }
-        private doSomething():void{
-            alert('hello from another side');
-        }
         private getEmployees(deptId:string){
             this.employeeService.getAll().then((data:Array<Employee>)=>{
                 console.log("***emp info***");
@@ -106,8 +104,12 @@ module ums{
             });
         }
         public classRoomChanged(value:any){
-            console.log(value);
-            this.selectedClassRoomId=value.id;
+            if(value.id==null){
+                this.selectedClassRoomId="0";
+            }else{
+                this.selectedClassRoomId=value.id;
+            }
+            console.log(this.selectedClassRoomId);
         }
         private dateChanged(arrivalTime: any) {
             this.arrivalTime=arrivalTime;
@@ -151,6 +153,7 @@ module ums{
         private changeAbsPreStatus(value:any) {
             console.log(value.id + "  " + value.name);
             this.selectedAbsPreStatusId = value.id;
+            this.arrivalTime="";
            this.isArrivalTimeEligible= this.selectedAbsPreStatusId ==this.absent ? false:true;
         }
 
@@ -181,9 +184,12 @@ module ums{
 
         }
         private save():void{
-         var json=this.convertToJson();
+         var json:any=this.convertToJson();
          console.log("Helooooooo");
-         console.log(json);
+         this.absLateComingService.addAbsLateComingInfo(json).then((data)=>{
+            console.log(data);
+         });
+
         }
         public convertToJson(): any {
             var completeJson = {};
@@ -194,15 +200,14 @@ module ums{
             item["examType"] =this.selectedExamTypeId;
             item["presentType"]=this.selectedAbsPreStatusId;
             item["remarks"]=this.remarks;
-            item["roomId"]=this.selectedClassRoomId;
+            item["invigilatorRoomId"]=this.selectedClassRoomId==null? "0":this.selectedClassRoomId.toString();
             item["examDate"]=this.selectedExamDate;
-            item["arrivalTime"]=this.arrivalTime+" "+this.amPmValue;
+            item["arrivalTime"]=(this.arrivalTime==undefined || this.arrivalTime=="") ? 'null':this.arrivalTime+" "+this.amPmValue;
             jsonObj.push(item);
             completeJson["entries"] = jsonObj;
             console.log(completeJson);
             return completeJson;
         }
-
     }
 
     UMS.controller("AbsentLateComingInfo",AbsentLateComingInfo);

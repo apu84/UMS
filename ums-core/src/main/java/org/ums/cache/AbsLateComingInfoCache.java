@@ -5,6 +5,8 @@ import org.ums.domain.model.mutable.MutableAbsLateComingInfo;
 import org.ums.manager.AbsLateComingInfoManager;
 import org.ums.manager.CacheManager;
 
+import java.util.List;
+
 /**
  * Created by Monjur-E-Morshed on 7/1/2018.
  */
@@ -19,6 +21,12 @@ public class AbsLateComingInfoCache extends
 
   @Override
   protected CacheManager<AbsLateComingInfo, Long> getCacheManager() {
-    return null;
+    return mCacheManager;
+  }
+
+  @Override
+  public List<AbsLateComingInfo> getInfoBySemesterExamTypeAndExamDate(Integer pSemesterId, Integer pExamType,
+      String pExamDate) {
+    return getManager().getInfoBySemesterExamTypeAndExamDate(pSemesterId, pExamType, pExamDate);
   }
 }

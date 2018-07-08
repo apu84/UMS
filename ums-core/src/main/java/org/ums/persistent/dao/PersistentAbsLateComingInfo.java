@@ -34,7 +34,7 @@ public class PersistentAbsLateComingInfo implements MutableAbsLateComingInfo {
   private String mEmployeeType;
   private String mDeptId;
   private String mDeptName;
-  private Integer mInvigilatorRoomId;
+  private Long mInvigilatorRoomId;
   private String mInvigilatorRoomName;
   private String mExamDate;
   private String mArrivalTime;
@@ -119,7 +119,7 @@ public class PersistentAbsLateComingInfo implements MutableAbsLateComingInfo {
   }
 
   @Override
-  public void setInvigilatorRoomId(Integer pInvigilatorRoomId) {
+  public void setInvigilatorRoomId(Long pInvigilatorRoomId) {
     mInvigilatorRoomId = pInvigilatorRoomId;
   }
 
@@ -211,7 +211,7 @@ public class PersistentAbsLateComingInfo implements MutableAbsLateComingInfo {
   }
 
   @Override
-  public Integer getInvigilatorRoomId() {
+  public Long getInvigilatorRoomId() {
     return mInvigilatorRoomId;
   }
 

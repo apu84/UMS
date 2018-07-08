@@ -7,10 +7,14 @@ import com.itextpdf.text.pdf.PdfWriter;
 import org.jvnet.hk2.internal.Collector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.ums.domain.model.immutable.AbsLateComingInfo;
+import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.ExpelledInformation;
 import org.ums.domain.model.immutable.StudentsExamAttendantInfo;
+import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
+import org.ums.enums.common.EmployeeType;
 import org.ums.manager.*;
 import org.ums.report.itext.UmsCell;
 import org.ums.report.itext.UmsParagraph;
@@ -41,6 +45,16 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
   StudentManager mStudentManager;
   @Autowired
   CourseManager mCourseManager;
+  @Autowired
+  AbsLateComingInfoManager mAbsLateComingInfoManager;
+  @Autowired
+  PersonalInformationManager mPersonalInformationManager;
+  @Autowired
+  DepartmentManager mDepartmentManager;
+  @Autowired
+  ClassRoomManager mClassRoomManager;
+  @Autowired
+  EmployeeManager mEmployeeManager;
 
   @Override
   public void createTestimonial(Integer pSemesterId, Integer pExamType, String pExamDate, OutputStream pOutputStream)
@@ -60,7 +74,7 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
     Font fontTimes9Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 9);
 
     document.open();
-    document.setPageSize(PageSize.A4);
+    document.setPageSize(PageSize.A4.rotate());
 
     UmsParagraph paragraph = null;
     Chunk chunk = null;
@@ -106,6 +120,9 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
             stream().collect(Collectors.groupingBy(StudentsExamAttendantInfo::getProgramId));
       Map<Integer,List<StudentsExamAttendantInfo>> programMap=new TreeMap<Integer,List<StudentsExamAttendantInfo>>(programIdMap);
       List<ExpelledInformation> expelledInformation=mExpelledInformationManager.getSemesterExamTyeDateWiseRecords(pSemesterId,pExamType,pExamDate);
+      List<AbsLateComingInfo> absLateComingInfoList = mAbsLateComingInfoManager.getInfoBySemesterExamTypeAndExamDate(pSemesterId,pExamType,pExamDate);
+      List<AbsLateComingInfo> lateComingInfoList=absLateComingInfoList.stream().filter(a->a.getPresentType()==2).collect(Collectors.toList());
+      List<AbsLateComingInfo> absentInfoList=absLateComingInfoList.stream().filter(a->a.getPresentType()==1).collect(Collectors.toList());
 
     //
 
@@ -258,10 +275,11 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
       cell = new UmsCell(new Phrase("Reason of Expulsion",fontTimes9Bold));
       cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
       expelledInfoTable.addCell(cell);
+      expelledInfoTable.setHeaderRows(1);
 
       for(int i=0;i<expelledInformation.size();i++){
           cell = new UmsCell(new Phrase(""+mStudentManager.get(expelledInformation.get(i).getStudentId()).getFullName(),fontTimes8Normal));
-          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
           expelledInfoTable.addCell(cell);
           cell = new UmsCell(new Phrase(""+expelledInformation.get(i).getStudentId(),fontTimes8Normal));
           cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
@@ -285,7 +303,108 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
           expelledInfoTable.addCell(cell);
       }
       document.add(expelledInfoTable);
-    document.close();
+      chunk = new Chunk("\n04. Late Coming information\n");
+      paragraph = new UmsParagraph();
+      paragraph.setAlignment(Element.ALIGN_CENTER);
+      paragraph.setFont(fontTimes10Bold);
+      paragraph.add(chunk);
+      document.add(paragraph);
+      //LateComing Info
+      PdfPTable lateComingInfoTable = new PdfPTable(6);
+      lateComingInfoTable.setSpacingBefore(5);
+      lateComingInfoTable.setSpacingAfter(5);
+      lateComingInfoTable.setWidthPercentage(100);
+      //table creation for Info
+      // program cell
+      cell = new UmsCell(new Phrase("Employee Name",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      lateComingInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Faculty/Staff",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      lateComingInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Dept",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      lateComingInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Arrival Time",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      lateComingInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Remarks",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      lateComingInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Invigilation Room",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      lateComingInfoTable.addCell(cell);
+      lateComingInfoTable.setHeaderRows(1);
+      for(int i=0;i<lateComingInfoList.size();i++){
+          cell = new UmsCell(new Phrase(""+mPersonalInformationManager.get(lateComingInfoList.get(i).getEmployeeId()).getName(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
+          lateComingInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+ EmployeeType.get(mEmployeeManager.get(lateComingInfoList.get(i).getEmployeeId()).getEmployeeType()).getLabel(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          lateComingInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+mEmployeeManager.get(lateComingInfoList.get(i).getEmployeeId()).getDepartment().getShortName(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          lateComingInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+lateComingInfoList.get(i).getArrivalTime(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          lateComingInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+lateComingInfoList.get(i).getRemarks(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          lateComingInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+mClassRoomManager.get(lateComingInfoList.get(i).getInvigilatorRoomId()).getRoomNo(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          lateComingInfoTable.addCell(cell);
+      }
+      document.add(lateComingInfoTable);
+      chunk = new Chunk("\n05. Absent information\n");
+      paragraph = new UmsParagraph();
+      paragraph.setAlignment(Element.ALIGN_CENTER);
+      paragraph.setFont(fontTimes10Bold);
+      paragraph.add(chunk);
+      document.add(paragraph);
+      //LateComing Info
+      PdfPTable absentInfoTable = new PdfPTable(5);
+      absentInfoTable.setSpacingBefore(5);
+      absentInfoTable.setSpacingAfter(5);
+      absentInfoTable.setWidthPercentage(100);
+      //Absent Info
+      cell = new UmsCell(new Phrase("Employee Name",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      absentInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Faculty/Staff",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      absentInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Dept",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      absentInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Remarks",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      absentInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Invigilation Room",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      absentInfoTable.addCell(cell);
+      absentInfoTable.setHeaderRows(1);
+      for(int i=0;i<absentInfoList.size();i++){
+          cell = new UmsCell(new Phrase(""+mPersonalInformationManager.get(absentInfoList.get(i).getEmployeeId()).getName(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
+          absentInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+ EmployeeType.get(mEmployeeManager.get(absentInfoList.get(i).getEmployeeId()).getEmployeeType()).getLabel(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          absentInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+mEmployeeManager.get(absentInfoList.get(i).getEmployeeId()).getDepartment().getShortName(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          absentInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+absentInfoList.get(i).getRemarks(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          absentInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+mClassRoomManager.get(absentInfoList.get(i).getInvigilatorRoomId()).getRoomNo(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          absentInfoTable.addCell(cell);
+      }
+      document.add(absentInfoTable);
+
+
+      document.close();
     baos.writeTo(pOutputStream);
   }
 }

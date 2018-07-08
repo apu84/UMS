@@ -69,18 +69,18 @@ public class AbsLateComingInfoBuilder implements Builder<AbsLateComingInfo, Muta
     if(pJsonObject.containsKey("semesterId"))
       pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
     if(pJsonObject.containsKey("examType"))
-      pMutable.setSemesterId(pJsonObject.getInt("examType"));
+      pMutable.setExamType(pJsonObject.getInt("examType"));
     if(pJsonObject.containsKey("presentType"))
-      pMutable.setSemesterId(pJsonObject.getInt("presentType"));
+      pMutable.setPresentType(pJsonObject.getInt("presentType"));
     if(pJsonObject.containsKey("remarks"))
-      pMutable.setSemesterId(pJsonObject.getInt("remarks"));
+      pMutable.setRemarks(pJsonObject.getString("remarks"));
     if(pJsonObject.containsKey("employeeId"))
-      pMutable.setSemesterId(pJsonObject.getInt("employeeId"));
+      pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     if(pJsonObject.containsKey("invigilatorRoomId"))
-      pMutable.setSemesterId(pJsonObject.getInt("invigilatorRoomId"));
+      pMutable.setInvigilatorRoomId(Long.parseLong(pJsonObject.getString("invigilatorRoomId")));
     if(pJsonObject.containsKey("examDate"))
-      pMutable.setSemesterId(pJsonObject.getInt("examDate"));
+      pMutable.setExamDate(pJsonObject.getString("examDate"));
     if(pJsonObject.containsKey("arrivalTime"))
-      pMutable.setSemesterId(pJsonObject.getInt("arrivalTime"));
+      pMutable.setArrivalTime(pJsonObject.getString("arrivalTime"));
   }
 }
