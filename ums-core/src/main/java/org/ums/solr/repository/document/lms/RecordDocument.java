@@ -102,7 +102,7 @@ public class RecordDocument implements SearchDocument<String> {
       contributors = new ArrayList<String>(Arrays.asList(contributorArray));
     }
 
-    if(pRecord.getImprint().getPublisherId() != null) {
+    if(pRecord.getImprint().getPublisherId() != null && pRecord.getImprint().getPublisherId() != 0) {
       publishers =
           new ArrayList<String>(Arrays.asList((sPublisherManager.get(pRecord.getImprint().getPublisherId()).getName())));
     }
