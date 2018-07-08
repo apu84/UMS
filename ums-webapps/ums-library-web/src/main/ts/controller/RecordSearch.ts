@@ -69,7 +69,7 @@ module ums {
             } else {
                 this.$scope.search.searchType = "basic";
                 this.$scope.choice = "any";
-                this.$scope.choiceType = "Likely";
+                this.$scope.choiceType = "Exact";
             }
 
             this.prepareFilter();
@@ -97,7 +97,6 @@ module ums {
                 filter.basicQueryTerm = this.$scope.search.queryTerm;
 
                 if(this.$scope.choiceType == "Exact"){
-                    console.log("here 1");
                 }
                 else if(this.$scope.choiceType == "Likely"){
                     filter.basicQueryTerm = "*" + this.$scope.search.queryTerm + "*";
