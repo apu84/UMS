@@ -96,8 +96,8 @@ module ums {
       console.log("generating body");
       let weekDays: IConstant[] = [];
       weekDays = this.appConstants.weekday;
-      console.log("week days");
-      console.log(weekDays);
+      this.classRoutineService.weekDayMapWithId = {};
+      weekDays.forEach((w: IConstant) => this.classRoutineService.weekDayMapWithId[w.id] = w.name);
       this.weekDay = [];
       for (var i = 0; i < weekDays.length; i++) {
         if (+weekDays[i].id >= this.routineConfigService.routineConfig.dayFrom && +weekDays[i].id <= this.routineConfigService.routineConfig.dayTo)

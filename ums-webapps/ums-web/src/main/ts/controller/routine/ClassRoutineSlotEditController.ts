@@ -4,6 +4,14 @@ module ums {
     private slotRoutineList: ClassRoutine[];
 
 
+    private selectedCourse: Course;
+    private selectedRoom: ClassRoom;
+    private showCourseInfo: boolean;
+    private showRoomInfo: boolean;
+    private routineBasedOnCourse: ClassRoutine[];
+    private routineBasedOnRoom: ClassRoutine[];
+
+
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'courseService', 'classRoomService', 'classRoutineService', '$timeout', 'userService', 'routineConfigService', '$state'];
 
     constructor(private appConstants: any,
@@ -28,6 +36,8 @@ module ums {
     public init() {
       console.log("in the constructor in routine slot edit");
       this.slotRoutineList = [];
+      this.showCourseInfo = false;
+      this.showRoomInfo = false;
       let slotRoutine: ClassRoutine = <ClassRoutine>{};
       this.slotRoutineList.push(slotRoutine);
     }
@@ -39,8 +49,37 @@ module ums {
     }
 
     public courseSelected(course: Course) {
-      console.log("Course is selected");
+      this.selectedCourse = course;
+      console.log('selected course');
       console.log(course);
+      this.fetchCourseInfo();
+    }
+
+    public fetchCourseInfo() {
+      console.log("fetching course info")
+      this.showCourseInfo = true;
+      this.showRoomInfo = false;
+      this.classRoutineService.getRoutineBySemesterAndCourse(this.classRoutineService.selectedSemester.id, this.selectedCourse.id).then((classRoutineList: ClassRoutine[]) => {
+        console.log("classRoutine list");
+        console.log(classRoutineList);
+        console.log(this.showCourseInfo);
+        this.routineBasedOnCourse = [];
+        this.routineBasedOnCourse = classRoutineList;
+      })
+    }
+
+    public fetchRoomInfo() {
+      this.showCourseInfo = false;
+      this.showRoomInfo = true;
+      this.classRoutineService.getRoomBasedClassRoutine(this.classRoutineService.selectedSemester.id, this.selectedRoom.id).then((classRoutineList: ClassRoutine[]) => {
+        this.routineBasedOnRoom = [];
+        this.routineBasedOnRoom = classRoutineList;
+      })
+    }
+
+    public roomSelected(room: ClassRoom) {
+      this.selectedRoom = room;
+      this.fetchRoomInfo();
     }
 
     public remove(routine: ClassRoutine) {

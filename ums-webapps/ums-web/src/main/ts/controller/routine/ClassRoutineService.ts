@@ -39,6 +39,7 @@ module ums{
     public routineData: ClassRoutine[];
     public tableHeader: ITableHeader[];
     public weekDay: IConstant[];
+    public weekDayMapWithId: any;
     public selectedSemester: Semester;
     public selectedProgram: Program;
     public selectedTheorySection: IParameter;

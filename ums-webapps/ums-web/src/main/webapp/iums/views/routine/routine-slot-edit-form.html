@@ -66,7 +66,7 @@
                         <label class="control-label col-sm-2" for="roomNo">Room No :</label>
                         <div class="col-sm-10">
                             <ui-select id="room" theme="bootstrap"
-                                       data-ng-model="slotRoutine.room"
+                                       data-ng-model="slotRoutine.room" on-select="vm.roomSelected(slotRoutine.room)"
                             >
                                 <ui-select-match placeholder="Select Room No">{{slotRoutine.room.roomNo}}
                                 </ui-select-match>
@@ -84,8 +84,16 @@
     </div>
     <div class="col-md-6">
         <ul class="nav nav-tabs">
-            <li><a ng-click="vm.showCourseInfo()">Course-Routine</a></li>
-            <li><a ng-click="vm.showRoomInfo()">Room-Routine</a></li>
+            <li data-ng-class="vm.showCourseInfo==true?'active':''"><a ng-click="vm.fetchCourseInfo()"
+                                                                       data-toggle="tab">Course Info</a>
+            </li>
+            <li data-ng-class="vm.showRoomInfo==true?'active':''"><a ng-click="vm.fetchRoomInfo()" data-toggle="tab">Room
+                Info</a></li>
         </ul>
+        <div class="tab-content">
+            <div ng-if="vm.showCourseInfo==true"
+                 ng-include="'views/routine/course-routine-info.html'"></div>
+            <div ng-if="vm.showRoomInfo==true" ng-include="'views/routine/room-routine-info.html'"></div>
+        </div>
     </div>
 </div>
