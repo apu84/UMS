@@ -34,6 +34,11 @@ module ums{
     roomId: number;
     }
 
+  export interface IRoutineTableHeader {
+    startTime: string;
+    endTime: string;
+  }
+
   export class ClassRoutineService{
 
     public routineData: ClassRoutine[];
@@ -50,6 +55,7 @@ module ums{
     public courseList: Course[];
     public roomList: ClassRoom[];
     public teacherList: Employee[];
+    public selectedHeader: IRoutineTableHeader;
     public routineUrl: string = 'academic/routine';
     public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
     constructor(private appConstants: any, private httpClient: HttpClient,

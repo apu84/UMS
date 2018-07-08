@@ -39,12 +39,16 @@ module ums {
       this.showCourseInfo = false;
       this.showRoomInfo = false;
       let slotRoutine: ClassRoutine = <ClassRoutine>{};
+      slotRoutine.startTime = this.classRoutineService.selectedHeader.startTime;
+      slotRoutine.endTime = this.classRoutineService.selectedHeader.endTime;
       this.slotRoutineList.push(slotRoutine);
     }
 
     public add() {
       console.log("in the add section");
       let slotRoutine: ClassRoutine = <ClassRoutine>{};
+      slotRoutine.startTime = this.classRoutineService.selectedHeader.startTime;
+      slotRoutine.endTime = this.classRoutineService.selectedHeader.endTime;
       this.slotRoutineList.push(slotRoutine);
     }
 

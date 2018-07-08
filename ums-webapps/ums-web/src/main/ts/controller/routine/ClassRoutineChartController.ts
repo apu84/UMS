@@ -6,10 +6,6 @@ module ums {
     programs: Program[];
   }
 
-  interface ITableHeader {
-    startTime: string;
-    endTime: string;
-  }
 
   interface IConstant {
     id: string;
@@ -18,7 +14,7 @@ module ums {
 
   export class ClassRoutineChartController {
     private routineData: ClassRoutine[];
-    private tableHeader: ITableHeader[];
+    private tableHeader: IRoutineTableHeader[];
     private weekDay: IConstant[];
     private counter: number = 0;
 
@@ -80,7 +76,8 @@ module ums {
       });
     }
 
-    public edit() {
+    public edit(header: IRoutineTableHeader) {
+      this.classRoutineService.selectedHeader = header;
       console.log("in the edit");
       $("#routineConfigModal").modal('show');
       this.counter += 2;
@@ -112,7 +109,7 @@ module ums {
       let endTime = moment(this.routineConfigService.routineConfig.endTime, 'hh:mm A');
       this.tableHeader = [];
       while (startTime < endTime) {
-        let tableHeaderTmp: ITableHeader = <ITableHeader>{};
+        let tableHeaderTmp: IRoutineTableHeader = <IRoutineTableHeader>{};
         tableHeaderTmp.startTime = moment(startTime).format('hh:mm A');
         startTime = moment(startTime).add(this.routineConfigService.routineConfig.duration, 'm').toDate();
         tableHeaderTmp.endTime = moment(startTime).format('hh:mm A');

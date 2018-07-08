@@ -614,7 +614,20 @@ module ums {
           url: "/classRoutineSlotEditForm",
           controller: 'ClassRoutineSlotEditController',
           templateUrl: 'views/routine/routine-slot-edit-form.html',
-          controllerAs: 'vm'
+          controllerAs: 'vm',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-daterangepicker/daterangepicker.js',
+                  'vendors/moment/moment.js',
+                  'vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+                  'vendors/bootstrap-timepicker/js/bootstrap-timepicker.js'
+                ]
+              });
+            }]
+          }
         })
         .state('classRoutineConfig', {
           url: "/classRoutineConfig",

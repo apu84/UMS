@@ -5,10 +5,6 @@ module ums {
       programs: Program[];
   }
 
-  interface ITableHeader {
-    startTime: string;
-    endTime: string;
-  }
 
   interface IConstant {
     id: string;
@@ -42,7 +38,7 @@ module ums {
     private showRoutineSection:boolean;
     private loggedUser: User;
     private routineData: ClassRoutine[];
-    private tableHeader: ITableHeader[];
+    private tableHeader: IRoutineTableHeader[];
     private weekDay: IConstant[];
     private state: any;
     private searchButtonClicked: boolean;
