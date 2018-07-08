@@ -8,6 +8,7 @@ module ums {
         recordIdList: Array<String>;
         search: any;
         choice: string;
+        choiceType: string;
 
         doSearch: Function;
 
@@ -57,16 +58,18 @@ module ums {
                 yearTo: ''
             };
 
+            console.log("updated");
+
             $scope.recordDetails = this.recordDetails.bind(this);
 
             if ($stateParams["1"] == null || $stateParams["1"] == "old") {
                 var filter: IFilter = JSON.parse(localStorage.getItem("lms_search_filter"));
                 this.$scope.search.queryTerm = filter.basicQueryTerm;
                 this.$scope.choice = filter.basicQueryField;
-
             } else {
                 this.$scope.search.searchType = "basic";
                 this.$scope.choice = "any";
+                this.$scope.choiceType = "Likely";
             }
 
             this.prepareFilter();
@@ -92,6 +95,14 @@ module ums {
             if (this.$scope.search.searchType == 'basic') {
                 filter.basicQueryField = this.$scope.choice;
                 filter.basicQueryTerm = this.$scope.search.queryTerm;
+
+                if(this.$scope.choiceType == "Exact"){
+                    console.log("here 1");
+                }
+                else if(this.$scope.choiceType == "Likely"){
+                    filter.basicQueryTerm = "*" + this.$scope.search.queryTerm + "*";
+                    console.log("here 2");
+                }
             }
             else if (this.$scope.search.searchType == 'advanced') {
                 // filter.advancedQueryMap = <IAdvancedSearchMap>();

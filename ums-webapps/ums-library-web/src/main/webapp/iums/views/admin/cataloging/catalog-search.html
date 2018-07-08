@@ -88,15 +88,22 @@
 
     <div class="row" id="generalSearchDiv"
          style="padding-top: 8px;padding-left: 2%;position: absolute;width: 100%;clear: both;">
-        <div class="col-md-12" id="squareRadio">
+        <div class="col-md-4" id="squareRadio">
             <input type="radio" id="square-radio-1" name="choice" ng-model="choice" value="subjects_txt"
                    autocomplete="off"/>&nbsp;<label for="square-radio-1">Subject</label>&nbsp;&nbsp;
-            <input type="radio" id="square-radio-2" name="choice" ng-model="choice" value="title_txt"
+            <input type="radio" id="square-radio-2" name="choice" ng-model="choice" value="title_t"
                    autocomplete="off"/>&nbsp;<label for="square-radio-2">Title</label>&nbsp;&nbsp;
             <input type="radio" id="square-radio-3" name="choice" ng-model="choice" value="contributors_txt"
                    autocomplete="off"/>&nbsp;<label for="square-radio-3">Author</label>&nbsp;&nbsp;
             <input type="radio" id="square-radio-4" name="choice" ng-model="choice" value="any" checked="checked"
-                   autocomplete="off"/>&nbsp;<label for="square-radio-3">Any Field</label>&nbsp;&nbsp;
+                   autocomplete="off"/>&nbsp;<label for="square-radio-4">Any Field</label>&nbsp;&nbsp;
+        </div>
+
+        <div class="col-md-4">
+            <input type="radio" id="square-radio-5" name="choiceType" ng-model="choiceType" value="Exact"
+                   autocomplete="off"/>&nbsp;<label for="square-radio-5">Exact</label>&nbsp;&nbsp;
+            <input type="radio" id="square-radio-6" name="choiceType" ng-model="choiceType" value="Likely"
+                   autocomplete="off"/>&nbsp;<label for="square-radio-6">Likely</label>&nbsp;&nbsp;
         </div>
 
         <div class="col-md-12">
