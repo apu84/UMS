@@ -48,6 +48,21 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <div class="control-label col-md-3" for="section">Section :</div>
+                        <div class="col-md-9" ng-if="slotRoutine.course==undefined || slotRoutine.course.type_value==1">
+                            <input type="text" class="form-control"
+                                   id="section" ng-model="slotRoutine.section.id"
+                                   disabled="true"/>
+                        </div>
+                        <div class="col-md-9" ng-if="slotRoutine.course.type_value==2">
+                            <select
+                                    class="form-control required"
+                                    name="section"
+                                    ng-options="s.name for s in vm.sectionList"
+                                    ng-model="slotRoutine.sessionalSection"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <div class="control-label col-md-3" for="startTime">Start Time :</div>
                         <div class="col-md-9">
                             <input type="text" class="form-control" id="startTime" ng-model="slotRoutine.startTime"

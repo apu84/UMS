@@ -13,6 +13,7 @@ module ums {
     private THEORY_TYPE: number = 1;
     private SESSIONAL_TYPE: number = 2;
     private courseTeacher: Employee = <Employee>{};
+    private sectionList: any = {};
 
 
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'courseService', 'classRoomService', 'classRoutineService', '$timeout', 'userService', 'routineConfigService', '$state'];
@@ -44,11 +45,11 @@ module ums {
       let slotRoutine: ClassRoutine = <ClassRoutine>{};
       slotRoutine = this.initialzeRoutine(slotRoutine);
       this.slotRoutineList.push(slotRoutine);
+      this.setSessionalSection();
     }
 
     private initialzeRoutine(slotRoutine: ClassRoutine): ClassRoutine {
       slotRoutine.startTime = this.classRoutineService.selectedHeader.startTime;
-
       slotRoutine.endTime = this.classRoutineService.selectedHeader.endTime;
       slotRoutine.semesterId = this.classRoutineService.selectedSemester.id;
       slotRoutine.semester = this.classRoutineService.selectedSemester;
@@ -57,6 +58,7 @@ module ums {
       slotRoutine.duration = this.routineConfigService.routineConfig.duration.toString();
       slotRoutine.academicYear = +this.classRoutineService.studentsYear;
       slotRoutine.academicSemester = +this.classRoutineService.studentsSemester;
+      slotRoutine.section = this.classRoutineService.selectedTheorySection.id;
       slotRoutine.day = this.classRoutineService.selectedDay;
       return slotRoutine;
     }
@@ -69,18 +71,29 @@ module ums {
     }
 
     public courseSelected(slotRoutine: ClassRoutine) {
-
       this.selectedCourse = slotRoutine.course;
       let startTime: any = {};
       startTime = moment(slotRoutine.startTime, 'hh:mm A');
       if (slotRoutine.course.type_value == this.SESSIONAL_TYPE) {
         let endTime: any = moment(startTime).add(this.routineConfigService.routineConfig.duration * 3, 'm').toDate();
         slotRoutine.endTime = moment(endTime).format('hh:mm A');
+        slotRoutine.sessionalSection = this.sectionList[0];
       } else {
         let endTime: any = moment(startTime).add(this.routineConfigService.routineConfig.duration, 'm').toDate();
         slotRoutine.endTime = moment(endTime).format('hh:mm A');
       }
       this.fetchCourseInfo();
+    }
+
+    public setSessionalSection() {
+      if (this.classRoutineService.selectedTheorySection.id == 'A')
+        this.sectionList = this.appConstants.sessionalSectionsA;
+      else if (this.classRoutineService.selectedTheorySection.id == 'B')
+        this.sectionList = this.appConstants.sessionalSectionsB;
+      else if (this.classRoutineService.selectedTheorySection.id == 'C')
+        this.sectionList = this.appConstants.sessionalSectionsC;
+      else
+        this.sectionList = this.appConstants.sessionalSectionsD;
     }
 
 

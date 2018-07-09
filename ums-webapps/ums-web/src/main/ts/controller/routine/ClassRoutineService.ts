@@ -25,6 +25,7 @@ module ums{
     course: Course;
     day: string;
     section: string;
+    sessionalSection: IConstant;
     academicYear: number;
     academicSemester: number;
     startTime: string;
