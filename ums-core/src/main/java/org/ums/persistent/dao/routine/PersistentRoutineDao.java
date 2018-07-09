@@ -29,7 +29,7 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   static String DELETE_ONE = "DELETE FROM CLASS_ROUTINE ";
   static String INSERT_ONE =
       "INSERT INTO CLASS_ROUTINE(ROUTINE_ID, SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_ID,LAST_MODIFIED) "
-          + "VALUES(:routineId, :semesterId, :programId, :courseId, :day, :section, :year, :semester, :startTime, :endTime, :duration, :roomId,:lastModified ";
+          + "VALUES(:routineId, :semesterId, :programId, :courseId, :day, :section, :year, :semester, :startTime, :endTime, :duration, :roomId,:lastModified )";
 
   static String ORDER_BY = "ORDER BY SEMESTER_ID ";
   static String SELECT_ALL_FOR_TEACHER = "SELECT " + "  CLASS_ROUTINE.ROUTINE_ID, " + "  CLASS_ROUTINE.SEMESTER_ID, "

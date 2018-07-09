@@ -1,8 +1,6 @@
 module ums {
   export class ClassRoutineSlotEditController {
 
-    private slotRoutineList: ClassRoutine[];
-
 
     private selectedCourse: Course;
     private selectedRoom: ClassRoom;
@@ -33,18 +31,18 @@ module ums {
                 private routineConfigService: RoutineConfigService,
                 private $state: any) {
 
-      this.slotRoutineList = [];
+      this.classRoutineService.slotRoutineList = [];
       this.init();
     }
 
     public init() {
       console.log("in the constructor in routine slot edit");
-      this.slotRoutineList = [];
+      this.classRoutineService.slotRoutineList = [];
       this.showCourseInfo = false;
       this.showRoomInfo = false;
       let slotRoutine: ClassRoutine = <ClassRoutine>{};
       slotRoutine = this.initialzeRoutine(slotRoutine);
-      this.slotRoutineList.push(slotRoutine);
+      this.classRoutineService.slotRoutineList.push(slotRoutine);
       this.setSessionalSection();
     }
 
@@ -59,15 +57,16 @@ module ums {
       slotRoutine.academicYear = +this.classRoutineService.studentsYear;
       slotRoutine.academicSemester = +this.classRoutineService.studentsSemester;
       slotRoutine.section = this.classRoutineService.selectedTheorySection.id;
-      slotRoutine.day = this.classRoutineService.selectedDay;
+      slotRoutine.day = this.classRoutineService.selectedDay.id;
+      console.log("Initialized slot routine");
+      console.log(slotRoutine);
       return slotRoutine;
     }
 
     public add() {
-      console.log("in the add section");
       let slotRoutine: ClassRoutine = <ClassRoutine>{};
       slotRoutine = this.initialzeRoutine(slotRoutine);
-      this.slotRoutineList.push(slotRoutine);
+      this.classRoutineService.slotRoutineList.push(slotRoutine);
     }
 
     public courseSelected(slotRoutine: ClassRoutine) {
@@ -82,6 +81,7 @@ module ums {
         let endTime: any = moment(startTime).add(this.routineConfigService.routineConfig.duration, 'm').toDate();
         slotRoutine.endTime = moment(endTime).format('hh:mm A');
       }
+      slotRoutine.courseId = slotRoutine.course.id;
       this.fetchCourseInfo();
     }
 
@@ -118,7 +118,6 @@ module ums {
     }
 
     public fetchCourseInfo() {
-      console.log("fetching course info")
       this.showCourseInfo = true;
       this.showRoomInfo = false;
       this.classRoutineService.getRoutineBySemesterAndCourse(this.classRoutineService.selectedSemester.id, this.selectedCourse.id).then((classRoutineList: ClassRoutine[]) => {
@@ -137,24 +136,23 @@ module ums {
       })
     }
 
-    public roomSelected(room: ClassRoom) {
-      this.selectedRoom = room;
+    public roomSelected(slotRoutine: ClassRoutine) {
+      this.selectedRoom = slotRoutine.room;
+      slotRoutine.roomId = slotRoutine.room.id;
       this.fetchRoomInfo();
     }
 
     public save() {
-      this.classRoutineService.saveOrUpdateClassRoutine(this.slotRoutineList).then((updatedRoutineList: ClassRoutine[]) => {
+      this.classRoutineService.saveOrUpdateClassRoutine(this.classRoutineService.slotRoutineList).then((updatedRoutineList: ClassRoutine[]) => {
         this.classRoutineService.routineData = [];
         this.classRoutineService.routineData = updatedRoutineList;
-        console.log("Updated routine list");
-        console.log(updatedRoutineList);
       })
     }
 
     public remove(routine: ClassRoutine) {
-      for (var i = 0; i < this.slotRoutineList.length; i++) {
-        if (routine == this.slotRoutineList[i]) {
-          this.slotRoutineList.splice(i, 1);
+      for (var i = 0; i < this.classRoutineService.slotRoutineList.length; i++) {
+        if (routine == this.classRoutineService.slotRoutineList[i]) {
+          this.classRoutineService.slotRoutineList.splice(i, 1);
           break;
         }
       }

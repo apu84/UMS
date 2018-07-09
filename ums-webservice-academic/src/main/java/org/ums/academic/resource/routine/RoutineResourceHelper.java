@@ -69,33 +69,27 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
   @Autowired
   private IdGenerator mIdGenerator;
 
-
   public JsonArray saveOrUpdateRoutine(JsonArray pJsonArray, UriInfo pUriInfo) {
     List<MutableRoutine> newRoutineList = new ArrayList<>();
     List<MutableRoutine> updatableRoutineList = new ArrayList<>();
     LocalCache localCache = new LocalCache();
-    for (int i = 0; i < pJsonArray.size(); i++) {
+    for(int i = 0; i < pJsonArray.size(); i++) {
       MutableRoutine routine = new PersistentRoutine();
       getBuilder().build(routine, pJsonArray.getJsonObject(i), localCache);
-      if (routine.getId() == null)
+      if(routine.getId() == null)
         newRoutineList.add(routine);
       else
         updatableRoutineList.add(routine);
     }
-    if (newRoutineList.size() > 0)
+    if(newRoutineList.size() > 0)
       getContentManager().create(newRoutineList);
-    if (updatableRoutineList.size() > 0)
+    if(updatableRoutineList.size() > 0)
       getContentManager().update(updatableRoutineList);
     newRoutineList.addAll(updatableRoutineList);
     Routine firstRoutine = newRoutineList.get(0);
-    return getRoutine(firstRoutine.getSemesterId(),
-        firstRoutine.getProgramId(),
-        firstRoutine.getAcademicYear(),
-        firstRoutine.getAcademicSemester(),
-        firstRoutine.getSection().substring(0, 1),
-        pUriInfo);
+    return getRoutine(firstRoutine.getSemesterId(), firstRoutine.getProgramId(), firstRoutine.getAcademicYear(),
+        firstRoutine.getAcademicSemester(), firstRoutine.getSection().substring(0, 1), pUriInfo);
   }
-
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {

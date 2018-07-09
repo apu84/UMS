@@ -7,6 +7,7 @@ import org.ums.resource.Resource;
 import javax.json.JsonArray;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 
 public class MutableRoutineResource extends Resource {
@@ -15,7 +16,8 @@ public class MutableRoutineResource extends Resource {
   RoutineResourceHelper mRoutineResourceHelper;
 
   @PUT
-  @PutLog(message = "Saveing or updating routine data")
+  @Path("/saveOrUpdate")
+  @PutLog(message = "Saving or updating routine data")
   public JsonArray createOrUpdateRoutine(@Context HttpServletRequest pHttpServletRequest, final JsonArray pJsonArray) {
     return mRoutineResourceHelper.saveOrUpdateRoutine(pJsonArray, mUriInfo);
   }

@@ -1,5 +1,6 @@
 module ums {
   import ClassRoom = ums.ClassRoom;
+  import ClassRoutine = ums.ClassRoutine;
 
   interface DeptProgram {
     deptId: string;
@@ -17,8 +18,11 @@ module ums {
     private tableHeader: IRoutineTableHeader[];
     private weekDay: IConstant[];
     private counter: number = 0;
+    private showProgressBar: boolean = false;
+    private progress: number = 0;
+    private courseTeacherList: CourseTeacherInterface[] = [];
 
-    public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'courseService', 'classRoomService', 'classRoutineService', '$timeout', 'userService', 'routineConfigService', '$state', 'employeeService'];
+    public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'courseService', 'classRoomService', 'classRoutineService', '$timeout', 'userService', 'routineConfigService', '$state', 'employeeService', 'courseTeacherService'];
 
     constructor(private appConstants: any,
                 private httpClient: HttpClient,
@@ -34,7 +38,8 @@ module ums {
                 private userService: UserService,
                 private routineConfigService: RoutineConfigService,
                 private $state: any,
-                private employeeService: EmployeeService) {
+                private employeeService: EmployeeService,
+                private courseTeacherService: CourseTeacherService) {
 
       this.init();
     }
@@ -76,7 +81,7 @@ module ums {
       });
     }
 
-    public edit(day: string, header: IRoutineTableHeader) {
+    public edit(day: IConstant, header: IRoutineTableHeader) {
       this.classRoutineService.selectedDay = day;
       this.classRoutineService.selectedHeader = header;
       console.log("in the edit");
@@ -88,6 +93,63 @@ module ums {
       /*$('#myModal').modal('toggle');
       $('#myModal').modal('show');
       $('#myModal').modal('hide');*/
+    }
+
+    public save() {
+      this.showProgressBar = true;
+      this.progress = 0;
+      this.assignSectionsForSessionalCourse().then((routine: ClassRoutine[]) => {
+        this.progress = 10;
+        this.saveRoutineData().then((updatedRoutineList: ClassRoutine[]) => {
+          this.classRoutineService.routineData = [];
+          this.classRoutineService.routineData = updatedRoutineList;
+          this.progress = 50;
+          this.extractCourseTeacher().then((courseTeacherlist: CourseTeacherInterface[]) => {
+            this.progress = 70;
+            this.courseTeacherService.saveOrUpdateCourseTeacher(courseTeacherlist).then((updatedCourseTeacherList: CourseTeacherInterface[]) => {
+              this.progress = 100;
+              this.courseTeacherList = [];
+              this.courseTeacherList = updatedCourseTeacherList;
+              $("#routineConfigModal").modal('toggle');
+            });
+          });
+        });
+      });
+    }
+
+    public extractCourseTeacher(): ng.IPromise<CourseTeacherInterface[]> {
+      let defer: ng.IDeferred<CourseTeacherInterface[]> = this.$q.defer();
+      this.courseTeacherList = [];
+      this.classRoutineService.slotRoutineList.forEach((routine: ClassRoutine) => {
+        if (routine.courseTeacher != undefined && routine.courseTeacher.length != 0) {
+          this.courseTeacherList.concat(routine.courseTeacher);
+        }
+      })
+      defer.resolve(this.courseTeacherList);
+      return defer.promise;
+    }
+
+    public saveRoutineData(): ng.IPromise<ClassRoutine[]> {
+      let defer: ng.IDeferred<ClassRoutine[]> = this.$q.defer();
+      this.classRoutineService.saveOrUpdateClassRoutine(this.classRoutineService.slotRoutineList).then((updatedRoutineList: ClassRoutine[]) => {
+        this.classRoutineService.routineData = [];
+        this.classRoutineService.routineData = updatedRoutineList;
+        console.log("Updated routine list");
+        console.log(updatedRoutineList);
+        defer.resolve(this.classRoutineService.routineData);
+      })
+      return defer.promise;
+    }
+
+    private assignSectionsForSessionalCourse(): ng.IPromise<ClassRoutine[]> {
+      let defer: ng.IDeferred<ClassRoutine[]> = this.$q.defer();
+      this.classRoutineService.slotRoutineList.forEach((r: ClassRoutine) => {
+        if (r.course.type_value == CourseType.sessional) {
+          r.section = r.sessionalSection.id;
+        }
+      });
+      defer.resolve(this.classRoutineService.slotRoutineList);
+      return defer.promise;
     }
 
     public generateBody() {
@@ -102,6 +164,7 @@ module ums {
           this.weekDay.push(weekDays[i]);
       }
     }
+
 
     public generateHeader() {
       console.log("Generating empty routine");

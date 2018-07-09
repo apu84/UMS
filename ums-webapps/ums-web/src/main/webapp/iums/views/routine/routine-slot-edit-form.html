@@ -24,7 +24,7 @@
             <br/>
             <div class="row">
 
-                <form class="form-horizontal" ng-repeat="slotRoutine in vm.slotRoutineList">
+                <form class="form-horizontal" ng-repeat="slotRoutine in vm.classRoutineService.slotRoutineList">
                     <hr/>
                     <div class="form-group" align="right">
                         <div class="col-sm-12">
@@ -51,7 +51,7 @@
                         <div class="control-label col-md-3" for="section">Section :</div>
                         <div class="col-md-9" ng-if="slotRoutine.course==undefined || slotRoutine.course.type_value==1">
                             <input type="text" class="form-control"
-                                   id="section" ng-model="slotRoutine.section.id"
+                                   id="section" ng-model="slotRoutine.section"
                                    disabled="true"/>
                         </div>
                         <div class="col-md-9" ng-if="slotRoutine.course.type_value==2">
@@ -81,7 +81,7 @@
                         <label class="control-label col-md-3" for="roomNo">Room No :</label>
                         <div class="col-md-9">
                             <ui-select id="room" theme="bootstrap"
-                                       data-ng-model="slotRoutine.room" on-select="vm.roomSelected(slotRoutine.room)"
+                                       data-ng-model="slotRoutine.room" on-select="vm.roomSelected(slotRoutine)"
                             >
                                 <ui-select-match placeholder="Select Room No">{{slotRoutine.room.roomNo}}
                                 </ui-select-match>

@@ -8,6 +8,17 @@
             </div>
             <div class="modal-body">
                 <div ui-view></div>
+                <div class="row" ng-if="vm.showProgressBar">
+                    <div class="col-md-12">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar"
+                                 aria-valuenow="{{vm.progress}}"
+                                 aria-valuemin="0" aria-valuemax="100" style="width:40%">
+                                {{vm.progress}}% Complete (success)
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" ng-click="vm.save()">Save</button>

@@ -45,6 +45,7 @@ module ums{
   export class ClassRoutineService{
 
     public routineData: ClassRoutine[];
+    public slotRoutineList: ClassRoutine[];
     public tableHeader: ITableHeader[];
     public weekDay: IConstant[];
     public weekDayMapWithId: any;
@@ -59,13 +60,13 @@ module ums{
     public roomList: ClassRoom[];
     public teacherList: Employee[];
     public selectedHeader: IRoutineTableHeader;
-    public selectedDay: string;
-    public routineUrl: string = 'academic/routine';
+    public selectedDay: IConstant;
+    public routineUrl: string = '/ums-webservice-academic/academic/routine';
     public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
     constructor(private appConstants: any, private httpClient: HttpClient,
                 private $q:ng.IQService, private notify: Notify,
                 private $sce:ng.ISCEService,private $window:ng.IWindowService) {
-
+      this.routineUrl = 'academic/routine';
     }
 
 
@@ -188,7 +189,7 @@ module ums{
 
     public saveOrUpdateClassRoutine(classRoutineList: ClassRoutine[]): ng.IPromise<ClassRoutine[]> {
       var defer: ng.IDeferred<ClassRoutine[]> = this.$q.defer();
-      this.httpClient.put(this.routineUrl, classRoutineList, 'application/json')
+      this.httpClient.put(this.routineUrl + "/saveOrUpdate", classRoutineList, 'application/json')
           .success((response: ClassRoutine[]) => {
             defer.resolve(response);
           }).error((data)=>{

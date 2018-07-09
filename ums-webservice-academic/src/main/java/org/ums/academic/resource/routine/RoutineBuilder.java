@@ -75,15 +75,15 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
       pMutable.setId(Long.parseLong("id"));
     pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
     pMutable.setCourseId(pJsonObject.getString("courseId"));
-    pMutable.setSection(pJsonObject.getString("section'"));
+    pMutable.setSection(pJsonObject.getString("section"));
     pMutable.setAcademicYear(pJsonObject.getInt("academicYear"));
     pMutable.setAcademicSemester(pJsonObject.getInt("academicSemester"));
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
     pMutable.setStartTime(LocalTime.parse(pJsonObject.getString("startTime"), formatter));
     pMutable.setEndTime(LocalTime.parse(pJsonObject.getString("endTime"), formatter));
-    pMutable.setDuration(pJsonObject.getInt("duration"));
-    pMutable.setRoomId(Long.parseLong(pJsonObject.getString("roomId")));
-    pMutable.setDay(pJsonObject.getInt("day"));
-    pMutable.setProgramId(pJsonObject.getInt("programId"));
+    pMutable.setDuration(Integer.parseInt(pJsonObject.getString("duration")));
+    pMutable.setRoomId(Long.parseLong(pJsonObject.getInt("roomId") + ""));
+    pMutable.setDay(Integer.parseInt(pJsonObject.getString("day")));
+    pMutable.setProgramId(Integer.parseInt(pJsonObject.getString("programId")));
   }
 }
