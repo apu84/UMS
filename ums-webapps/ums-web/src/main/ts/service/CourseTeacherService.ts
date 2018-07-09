@@ -21,13 +21,14 @@ module ums {
   export class CourseTeacherService {
     public courseMapWithCourseTeachers: any = {};
     public courseTeacherList: CourseTeacherInterface[] = [];
-    public courseTeacherUrl: string = 'academic/courseTeacher';
+    public courseTeacherUrl: string;
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window'];
 
     constructor(private appConstants: any, private httpClient: HttpClient,
                 private $q: ng.IQService, private notify: Notify,
                 private $sce: ng.ISCEService, private $window: ng.IWindowService) {
 
+      this.courseTeacherUrl = '/ums-webservice-academic/academic/courseTeacher';
     }
 
     public getCourseTeacherBySemesterAndCourseAndSection(semesterId: number, courseId: string, section: string): ng.IPromise<CourseTeacherInterface[]> {
@@ -50,7 +51,7 @@ module ums {
 
     public saveOrUpdateCourseTeacher(courseTeacherList: CourseTeacherInterface[]): ng.IPromise<CourseTeacherInterface[]> {
       let defer: ng.IDeferred<CourseTeacherInterface[]> = this.$q.defer();
-      this.httpClient.put(courseTeacherList + "/saveOrUpdate", courseTeacherList, HttpClient.MIME_TYPE_JSON)
+      this.httpClient.put(this.courseTeacherUrl + "/saveOrUpdate", courseTeacherList, HttpClient.MIME_TYPE_JSON)
           .success((response: CourseTeacherInterface[]) => defer.resolve(response))
           .error((response) => {
             this.notify.error("Error in saving data");

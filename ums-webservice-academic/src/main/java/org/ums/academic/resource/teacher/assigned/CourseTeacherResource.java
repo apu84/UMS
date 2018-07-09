@@ -125,7 +125,7 @@ public class CourseTeacherResource extends Resource {
     return mResourceHelper.post(pJsonObject, mUriInfo);
   }
 
-  @POST
+  @PUT
   @PostLog(message = "Save or update course teacher information from routine")
   @Path("/saveOrUpdate")
   public JsonArray saveOrUpdateCourseTeacher(final JsonArray pJsonArray) {
