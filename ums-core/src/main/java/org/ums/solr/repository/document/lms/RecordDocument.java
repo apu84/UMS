@@ -35,11 +35,17 @@ public class RecordDocument implements SearchDocument<String> {
   @Field
   private String id;
 
+  @Field("language_s")
+  private String language;
+
   @Field("title_t")
   private ArrayList<String> title;
 
   @Field("alphaNumericTitle_s")
   private String alphaNumericTitle;
+
+  @Field("subTitle_t")
+  private ArrayList<String> subTitle;
 
   @Field("type_s")
   private String type = DOCUMENT_TYPE;
@@ -48,9 +54,9 @@ public class RecordDocument implements SearchDocument<String> {
   private String materialType;
 
   @Field("seriesTitle_t")
-  private String seriesTitle;
+  private ArrayList<String> seriesTitle;
 
-  @Field("corpAuthorMain_t")
+  @Field("corpAuthorMain_s")
   private String corpAuthorMain;
 
   @Field("callNo_s")
@@ -81,10 +87,18 @@ public class RecordDocument implements SearchDocument<String> {
 
   public RecordDocument(final Record pRecord) {
     id = pRecord.getId().toString();
+    if(pRecord.getLanguage() != null) {
+      language = pRecord.getLanguage().getLabel();
+    }
     title = new ArrayList<String>(Arrays.asList(pRecord.getTitle()));
     alphaNumericTitle = pRecord.getTitle().replaceAll("[^a-zA-Z0-9]+", "");
+    if(pRecord.getSubTitle() != null) {
+      subTitle = new ArrayList<String>(Arrays.asList(pRecord.getSubTitle()));
+    }
     materialType = MaterialType.get(pRecord.getMaterialType().getId()).getLabel();
-    seriesTitle = pRecord.getSeriesTitle() == null ? "" : pRecord.getSeriesTitle();
+    if(pRecord.getSeriesTitle() != null) {
+      seriesTitle = new ArrayList<String>(Arrays.asList(pRecord.getSeriesTitle()));
+    }
     corpAuthorMain = pRecord.getCorpAuthorMain() == null ? "" : pRecord.getCorpAuthorMain();
     callNo = pRecord.getCallNo();
     status = pRecord.getRecordStatus().getLabel();
