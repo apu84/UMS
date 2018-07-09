@@ -73,8 +73,6 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
   public void build(MutableRoutine pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     if(pJsonObject.containsKey("id"))
       pMutable.setId(Long.parseLong("id"));
-    else
-      pMutable.setId(mIdGenerator.getNumericId());
     pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
     pMutable.setCourseId(pJsonObject.getString("courseId"));
     pMutable.setSection(pJsonObject.getString("section'"));

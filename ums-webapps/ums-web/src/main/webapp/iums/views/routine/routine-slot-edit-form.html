@@ -32,11 +32,11 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="course">Course :</label>
-                        <div class="col-sm-10">
+                        <label class="control-label col-md-3" for="course">Course :</label>
+                        <div class="col-md-9">
                             <ui-select id="courseNo" theme="bootstrap"
                                        data-ng-model="slotRoutine.course"
-                                       on-select="vm.courseSelected(slotRoutine.course)">
+                                       on-select="vm.courseSelected(slotRoutine)">
                                 <ui-select-match placeholder="Select Course">{{slotRoutine.course.title}}
                                 </ui-select-match>
                                 <ui-select-choices id="course"
@@ -48,23 +48,23 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="control-label col-sm-2" for="startTime">Start Time :</div>
-                        <div class="col-sm-10">
+                        <div class="control-label col-md-3" for="startTime">Start Time :</div>
+                        <div class="col-md-9">
                             <input type="text" class="form-control" id="startTime" ng-model="slotRoutine.startTime"
                                    placeholder="HH:MM AM/PM"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="control-label col-sm-2" for="endTime">End Time :</div>
-                        <div class="col-sm-10">
+                        <div class="control-label col-md-3" for="endTime">End Time :</div>
+                        <div class="col-md-9">
                             <input type="text" class="form-control" id="endTime" ng-model="slotRoutine.endTime"
                                    placeholder="HH:MM AM/PM" ng-click="vm.assignEndTime(slotRoutine)"
                                    ng-focus="vm.assignEndTime(slotRoutine)"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="roomNo">Room No :</label>
-                        <div class="col-sm-10">
+                        <label class="control-label col-md-3" for="roomNo">Room No :</label>
+                        <div class="col-md-9">
                             <ui-select id="room" theme="bootstrap"
                                        data-ng-model="slotRoutine.room" on-select="vm.roomSelected(slotRoutine.room)"
                             >
@@ -75,6 +75,50 @@
                                     <small ng-bind-html="g.roomNo | highlight:$select.search"></small>
                                 </ui-select-choices>
                             </ui-select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="courseTeacher">Course Teacher :</label>
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <ui-select theme="bootstrap"
+                                               data-ng-model="slotRoutine.employee"
+
+                                    >
+                                        <ui-select-match placeholder="Select Course Teacher">
+                                            {{slotRoutine.employee.employeeName}}
+                                        </ui-select-match>
+                                        <ui-select-choices id="courseTeacher"
+                                                           repeat="g in vm.classRoutineService.teacherList | filter:$select.search">
+                                            <small ng-bind-html="g.employeeName | highlight:$select.search"></small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="col-md-1">
+                                    <i class="fa fa-plus-square-o" aria-hidden="true" style="cursor: pointer"
+                                       ng-click="vm.addSelectedTeacher(slotRoutine)"></i>
+                                </div>
+
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <ul class="list-group">
+                                        <li class="list-group-item" ng-repeat="t in slotRoutine.courseTeacher">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    {{t.teacher.name}}
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <i class="fa fa-trash" aria-hidden="true"
+                                                       style="cursor: pointer"></i>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>

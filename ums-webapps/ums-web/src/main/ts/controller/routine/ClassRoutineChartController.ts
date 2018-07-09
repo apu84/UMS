@@ -76,7 +76,8 @@ module ums {
       });
     }
 
-    public edit(header: IRoutineTableHeader) {
+    public edit(day: string, header: IRoutineTableHeader) {
+      this.classRoutineService.selectedDay = day;
       this.classRoutineService.selectedHeader = header;
       console.log("in the edit");
       $("#routineConfigModal").modal('show');

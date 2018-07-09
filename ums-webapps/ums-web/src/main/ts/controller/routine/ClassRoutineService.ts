@@ -32,6 +32,8 @@ module ums{
     duration: string;
     room: ClassRoom;
     roomId: number;
+    courseTeacher: CourseTeacherInterface[];
+    employee: Employee;
     }
 
   export interface IRoutineTableHeader {
@@ -56,6 +58,7 @@ module ums{
     public roomList: ClassRoom[];
     public teacherList: Employee[];
     public selectedHeader: IRoutineTableHeader;
+    public selectedDay: string;
     public routineUrl: string = 'academic/routine';
     public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
     constructor(private appConstants: any, private httpClient: HttpClient,
@@ -182,13 +185,13 @@ module ums{
       return defer.promise;
     }
 
-    public saveClassRoutine(json:any):ng.IPromise<any>{
-      var defer=this.$q.defer();
-      this.httpClient.post(this.routineUrl,json,'application/json')
-          .success(()=>{
-            defer.resolve("success");
+    public saveOrUpdateClassRoutine(classRoutineList: ClassRoutine[]): ng.IPromise<ClassRoutine[]> {
+      var defer: ng.IDeferred<ClassRoutine[]> = this.$q.defer();
+      this.httpClient.put(this.routineUrl, classRoutineList, 'application/json')
+          .success((response: ClassRoutine[]) => {
+            defer.resolve(response);
           }).error((data)=>{
-        defer.resolve("error");
+        defer.resolve(undefined);
       });
 
       return defer.promise;
