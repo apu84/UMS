@@ -122,8 +122,6 @@ module ums {
             $scope.bulkItemList = Array<IItem>();
             $scope.recordList = Array<IRecord>();
 
-            console.log("updated 1");
-
             $scope.data = {
                 languageOptions: libConstants.languages,
                 bindingTypeOptions: libConstants.bindingTypes,
@@ -161,7 +159,7 @@ module ums {
             $scope.record = <IRecord>{};
             $scope.record.classNo = "";
             $scope.record.authorMark = "";
-            $scope.record.callYear = "";
+            $scope.record.callYear = 0;
             $scope.record.callEdition = "";
             $scope.record.callVolume = "";
             $scope.record.imprint = <IImprint>{};
@@ -854,7 +852,7 @@ module ums {
             this.$scope.record.callNo = "";
             this.$scope.record.callNo += this.$scope.record.classNo != "" ? this.$scope.record.classNo : "";
             this.$scope.record.callNo += this.$scope.record.authorMark != "" ? "/" + this.$scope.record.authorMark : "";
-            this.$scope.record.callNo += this.$scope.record.callYear != "" ? "/" + this.$scope.record.callYear : "";
+            this.$scope.record.callNo += this.$scope.record.callYear != 0 ? "/" + this.$scope.record.callYear : "";
             this.$scope.record.callNo += this.$scope.record.callEdition != "" ? "/" + this.$scope.record.callEdition : "";
             this.$scope.record.callNo += this.$scope.record.callVolume != "" ? "/" + this.$scope.record.callVolume : "";
         }

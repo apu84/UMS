@@ -16,7 +16,6 @@ import org.ums.persistent.model.library.PersistentRecord;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -84,9 +83,9 @@ public class PersistentRecordDao extends RecordDaoDecorator {
         .getSerialNumber(), pRecord.getSerialSpecial(), pRecord.getLibraryLacks(), pRecord.getChangedTitle(), pRecord
         .getIsbn(), pRecord.getIssn(), pRecord.getCorpAuthorMain(), pRecord.getCorpSubBody(), pRecord
         .getCorpCityCountry(), pRecord.getEdition(), pRecord.getTranslateTitleEdition(),
-        pRecord.getFrequency() == null ? Types.NULL : pRecord.getFrequency().getId(), pRecord.getCallNo(), pRecord
+        pRecord.getFrequency() == null ? null : pRecord.getFrequency().getId(), pRecord.getCallNo(), pRecord
             .getClassNo(), pRecord.getCallYear(), pRecord.getCallEdition(), pRecord.getCallVolume(), pRecord
-            .getAuthorMark(), pRecord.getImprint().getPublisher() == null ? Types.NULL : pRecord.getImprint()
+            .getAuthorMark(), pRecord.getImprint().getPublisher() == null ? null : pRecord.getImprint()
             .getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord.getImprint()
             .getYearOfPublication(), pRecord.getImprint().getYearOfCopyRight(),
         pRecord.getMaterialType() == null ? null : pRecord.getMaterialType().getId(),
@@ -109,9 +108,9 @@ public class PersistentRecordDao extends RecordDaoDecorator {
         .getVolumeTitle(), pRecord.getSerialIssueNo(), pRecord.getSerialNumber(), pRecord.getSerialSpecial(), pRecord
         .getLibraryLacks(), pRecord.getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord
         .getCorpAuthorMain(), pRecord.getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord
-        .getTranslateTitleEdition(), pRecord.getFrequency() == null ? Types.NULL : pRecord.getFrequency().getId(),
+        .getTranslateTitleEdition(), pRecord.getFrequency() == null ? null : pRecord.getFrequency().getId(),
         pRecord.getCallNo(), pRecord.getClassNo(), pRecord.getCallYear(), pRecord.getCallEdition(), pRecord
-            .getCallVolume(), pRecord.getAuthorMark(), pRecord.getImprint().getPublisher() == null ? Types.NULL
+            .getCallVolume(), pRecord.getAuthorMark(), pRecord.getImprint().getPublisher() == null ? null
             : pRecord.getImprint().getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord
             .getImprint().getYearOfPublication(), pRecord.getImprint().getYearOfCopyRight(), pRecord.getMaterialType()
             .getId(), pRecord.getRecordStatus().getId(), pRecord.getKeyWords(), pRecord.getDocumentalist(), pRecord
