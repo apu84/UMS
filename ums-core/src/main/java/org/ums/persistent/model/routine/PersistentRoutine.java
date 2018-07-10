@@ -13,7 +13,10 @@ import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.routine.MutableRoutine;
-import org.ums.manager.*;
+import org.ums.manager.ClassRoomManager;
+import org.ums.manager.CourseManager;
+import org.ums.manager.ProgramManager;
+import org.ums.manager.SemesterManager;
 import org.ums.manager.routine.RoutineManager;
 import org.ums.serializer.UmsTimeDeserializer;
 import org.ums.serializer.UmsTimeSerializer;
@@ -134,7 +137,7 @@ public class PersistentRoutine implements MutableRoutine {
 
   @Override
   public void setDuration(int pDuration) {
-    mDuration = 0;
+    mDuration = pDuration;
   }
 
   @Override

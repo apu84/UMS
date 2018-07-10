@@ -36,7 +36,6 @@ module ums {
     }
 
     public init() {
-      console.log("in the constructor in routine slot edit");
       this.classRoutineService.slotRoutineList = [];
       this.showCourseInfo = false;
       this.showRoomInfo = false;
@@ -45,6 +44,7 @@ module ums {
       this.classRoutineService.slotRoutineList.push(slotRoutine);
       this.setSessionalSection();
     }
+
 
     private initialzeRoutine(slotRoutine: ClassRoutine): ClassRoutine {
       slotRoutine.startTime = this.classRoutineService.selectedHeader.startTime;
@@ -58,8 +58,6 @@ module ums {
       slotRoutine.academicSemester = +this.classRoutineService.studentsSemester;
       slotRoutine.section = this.classRoutineService.selectedTheorySection.id;
       slotRoutine.day = this.classRoutineService.selectedDay.id;
-      console.log("Initialized slot routine");
-      console.log(slotRoutine);
       return slotRoutine;
     }
 
@@ -77,9 +75,11 @@ module ums {
         let endTime: any = moment(startTime).add(this.routineConfigService.routineConfig.duration * 3, 'm').toDate();
         slotRoutine.endTime = moment(endTime).format('hh:mm A');
         slotRoutine.sessionalSection = this.sectionList[0];
+        slotRoutine.duration = (this.routineConfigService.routineConfig.duration * 3).toString();
       } else {
         let endTime: any = moment(startTime).add(this.routineConfigService.routineConfig.duration, 'm').toDate();
         slotRoutine.endTime = moment(endTime).format('hh:mm A');
+        slotRoutine.duration = this.routineConfigService.routineConfig.duration.toString();
       }
       slotRoutine.courseId = slotRoutine.course.id;
       this.fetchCourseInfo();

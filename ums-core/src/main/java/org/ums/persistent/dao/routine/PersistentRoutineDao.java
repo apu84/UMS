@@ -194,6 +194,7 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
       persistentRoutine.setDay(pResultSet.getInt("DAY"));
       persistentRoutine.setSection(pResultSet.getString("SECTION"));
       persistentRoutine.setAcademicYear(pResultSet.getInt("YEAR"));
+      persistentRoutine.setDuration(pResultSet.getInt("DURATION"));
       persistentRoutine.setAcademicSemester(pResultSet.getInt("SEMESTER"));
       persistentRoutine.setStartTime(pResultSet.getTime("START_TIME").toLocalTime());
       persistentRoutine.setEndTime(pResultSet.getTime("END_TIME").toLocalTime());

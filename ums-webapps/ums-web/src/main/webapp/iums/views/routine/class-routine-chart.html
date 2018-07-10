@@ -5,7 +5,8 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th>Time/<br/>Day</th>
+            <th>Time <i class="fa fa-arrow-right" aria-hidden="true"></i><br/>Day <i class="fa fa-arrow-down"
+                                                                                     aria-hidden="true"></i></th>
             <th ng-repeat="header in vm.tableHeader">
                 {{header.startTime}} -<br>{{header.endTime}}
             </th>
@@ -14,12 +15,22 @@
         <tbody>
         <tr ng-repeat="day in vm.weekDay">
             <td>{{day.name}}</td>
-            <td ng-repeat="header in vm.tableHeader">
+            <td ng-repeat="header in vm.getDayWiseTableHeader(day.id)"
+                colspan="{{vm.getColSpan(day.id, header.startTime)}}">
                 <div align="right">
                     <i ng-if="vm.classRoutineService.enableEdit" class="fa fa-pencil-square-o" aria-hidden="true"
                        style="cursor: pointer"
                        ng-click="vm.edit(day,header)"></i>
                 </div>
+                <table class="table table-bordered">
+                    <tr ng-repeat="routine in vm.getDayAndTimeMapWithRoutine(day.id,header.startTime)">
+                        <td align="center">
+                            {{routine.course.no}}({{routine.section}})<br>
+                            {{routine.room.roomNo}}<br>
+                            {{routine.duration}}
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
         </tbody>

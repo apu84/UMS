@@ -21,6 +21,8 @@ module ums {
     private showProgressBar: boolean = false;
     private progress: number = 0;
     private courseTeacherList: CourseTeacherInterface[] = [];
+    private dayAndTimeMapWithRoutine: any;
+    private colSpanWithRoutine: any;
 
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'courseService', 'classRoomService', 'classRoutineService', '$timeout', 'userService', 'routineConfigService', '$state', 'employeeService', 'courseTeacherService'];
 
@@ -52,6 +54,70 @@ module ums {
         this.getClassRoomList();
         this.getTeacherList();
       }
+      this.createDayAndTimeMapWithRoutine();
+    }
+
+    public createDayAndTimeMapWithRoutine() {
+      this.dayAndTimeMapWithRoutine = {};
+      this.colSpanWithRoutine = {};
+      this.classRoutineService.routineData.forEach((routine: ClassRoutine) => {
+        let routineTmp = angular.copy(routine);  //modified routine (only duration is going to be modified)
+        routineTmp.duration = (routineTmp.duration / this.routineConfigService.routineConfig.duration);  //this simplified duration will help in determining the col-span.
+        this.colSpanWithRoutine[routine.day.toString() + routine.startTime] = routineTmp.duration;
+        if (this.dayAndTimeMapWithRoutine[routine.day + routine.startTime] == null) {
+          let routineList: ClassRoutine[] = [];
+          routineList.push(routineTmp);
+          this.dayAndTimeMapWithRoutine[routine.day + routine.startTime] = routineList;
+        } else {
+          let routineList: ClassRoutine[] = this.dayAndTimeMapWithRoutine[routine.day.toString() + routine.startTime];
+          routineList.push(routineTmp);
+          this.dayAndTimeMapWithRoutine[routine.day + routine.startTime] = routineList;
+        }
+      });
+    }
+
+    public getDayAndTimeMapWithRoutine(day: string, startTime: string): ClassRoutine[] {
+      return this.dayAndTimeMapWithRoutine[day + startTime];
+    }
+
+    public getColSpan(day: string, startTime: string): number {
+      return this.colSpanWithRoutine[day + startTime];
+    }
+
+    public getNextStartTime(day: string, startTime: string, endTime: string): string {
+      let nextStartTime: string = "";
+
+      if (this.dayAndTimeMapWithRoutine[day + startTime] != null) {
+        let routine: ClassRoutine[] = this.dayAndTimeMapWithRoutine[day + startTime];
+        nextStartTime = routine[0].endTime;
+      }
+      else if (startTime == this.routineConfigService.routineConfig.startTime) {
+        nextStartTime = endTime;
+      }
+      else {
+        nextStartTime = endTime;
+      }
+      return nextStartTime;
+    }
+
+    public getDayWiseTableHeader(day: string): IRoutineTableHeader[] {
+      let modifiedTableHeader: IRoutineTableHeader[] = [];
+      let nextStartTime: string = '';
+      for (var i = 0; i < this.tableHeader.length; i++) {
+        if (i == 0) {
+          nextStartTime = this.getNextStartTime(day, this.tableHeader[i].startTime, this.tableHeader[i].endTime);
+          modifiedTableHeader.push(this.tableHeader[i]);
+        }
+        //let nextStartTimeTmp = this.getNextStartTime(day, this.tableHeader[i].startTime, this.tableHeader[i].endTime);
+        else if (nextStartTime == this.tableHeader[i].startTime) {
+          modifiedTableHeader.push(this.tableHeader[i]);
+          nextStartTime = this.getNextStartTime(day, this.tableHeader[i].startTime, this.tableHeader[i].endTime);
+        } else {
+          //do nothing
+        }
+      }
+      
+      return modifiedTableHeader;
     }
 
     public getCourseList() {
