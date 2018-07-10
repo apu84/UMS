@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
+import org.ums.generator.IdGenerator;
 import org.ums.manager.CourseTeacherManager;
 import org.ums.persistent.model.PersistentCourseTeacher;
 
@@ -21,6 +22,9 @@ public class CourseTeacherResourceHelper extends
   @Autowired
   @Qualifier("courseTeacherManager")
   CourseTeacherManager mCourseTeacherManager;
+
+  @Autowired
+  IdGenerator mIdGenerator;
 
   @Autowired
   private CourseTeacherBuilder mBuilder;
@@ -40,17 +44,19 @@ public class CourseTeacherResourceHelper extends
       JsonObject jsonObject = pJsonArray.getJsonObject(i);
       MutableCourseTeacher courseTeacher = new PersistentCourseTeacher();
       getBuilder().build(courseTeacher, jsonObject, localCache);
-      if(courseTeacher.getId() == null)
+      if (courseTeacher.getId() == null) {
+        courseTeacher.setId(mIdGenerator.getNumericId());
         newCourseTeacherList.add(courseTeacher);
-      else
+      } else {
         existingCourseTeacherList.add(courseTeacher);
+      }
     }
     if(newCourseTeacherList.size() > 0)
       getContentManager().create(newCourseTeacherList);
     if(existingCourseTeacherList.size() > 0)
       getContentManager().update(existingCourseTeacherList);
 
-    return getCourseTeacher(newCourseTeacherList.get(0).getSemesterId(), newCourseTeacherList.get(0).getCourseId(),
+    return getCourseTeacher(newCourseTeacherList.get(0).getSemester().getId(), newCourseTeacherList.get(0).getCourse().getId(),
         newCourseTeacherList.get(0).getSection(), pUriInfo);
   }
 

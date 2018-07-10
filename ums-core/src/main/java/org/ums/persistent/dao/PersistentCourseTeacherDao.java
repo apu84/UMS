@@ -2,6 +2,7 @@ package org.ums.persistent.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.domain.model.immutable.ApplicationTES;
 import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
@@ -9,11 +10,16 @@ import org.ums.generator.IdGenerator;
 import org.ums.manager.CourseTeacherManager;
 import org.ums.persistent.model.PersistentApplicationTES;
 import org.ums.persistent.model.PersistentCourseTeacher;
+import org.ums.util.UmsUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<CourseTeacher, MutableCourseTeacher, Long>
     implements CourseTeacherManager {
@@ -43,9 +49,13 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
   String ALL_SECTIONS_FOR_A_COURSE =
       "select COURSE_ID,\"SECTION\" from COURSE_TEACHER WHERE COURSE_ID=? AND SEMESTER_ID=? AND TEACHER_ID=? ORDER BY \"SECTION\"";
 
-  public PersistentCourseTeacherDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
+  private NamedParameterJdbcTemplate mNamedParameterJdbcTemplate;
+
+  public PersistentCourseTeacherDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate,
+                                    IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mIdGenerator = pIdGenerator;
+    mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
   }
 
   @Override
@@ -82,6 +92,25 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
     mJdbcTemplate.update(INSERT_ONE, id, pMutable.getSemester().getId(), pMutable.getTeacher().getId(), pMutable
         .getCourse().getId(), pMutable.getSection());
     return id;
+  }
+
+  @Override
+  public List<Long> create(List<MutableCourseTeacher> pMutableList) {
+    String query = "INSERT INTO COURSE_TEACHER(ID, SEMESTER_ID, TEACHER_ID, COURSE_ID, SECTION, LAST_MODIFIED) VALUES" +
+        "      (:id, :semesterId, :teacherId, :courseId, :section, :lastModified)";
+    Map<String, Object>[] parameters = getParameterObjects(pMutableList);
+    mNamedParameterJdbcTemplate.batchUpdate(query, parameters);
+    return pMutableList.stream()
+        .map(p -> p.getId())
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public int update(List<MutableCourseTeacher> pMutableList) {
+    String query =
+        "UPDATE COURSE_TEACHER SET SEMESTER_ID = :semesterId, TEACHER_ID = :teacherId, COURSE_ID = :courseId, SECTION = :section, LAST_MODIFIED = :lastModified";
+    Map<String, Object>[] parameters = getParameterObjects(pMutableList);
+    return mNamedParameterJdbcTemplate.batchUpdate(query, parameters).length;
   }
 
   @Override
@@ -126,6 +155,25 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
   public List<CourseTeacher> getCourseTeacher(int pSemesterId, String pCourseId, String pSection) {
     String query = SELECT_ALL + " WHERE SEMESTER_ID=? AND COURSE_ID=? AND SECTION LIKE '" + pSection + "%'";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId}, getRowMapper());
+  }
+
+  private Map<String, Object>[] getParameterObjects(List<MutableCourseTeacher> pMutableCourseTeachers) {
+    Map<String, Object>[] parameterMaps = new HashMap[pMutableCourseTeachers.size()];
+    for (int i = 0; i < pMutableCourseTeachers.size(); i++) {
+      parameterMaps[i] = getInsertOrUpdateParameters(pMutableCourseTeachers.get(i));
+    }
+    return parameterMaps;
+  }
+
+  private Map getInsertOrUpdateParameters(MutableCourseTeacher pMutableCourseTeacher) {
+    Map parameter = new HashMap();
+    parameter.put("id", pMutableCourseTeacher.getId());
+    parameter.put("courseId", pMutableCourseTeacher.getCourse().getId());
+    parameter.put("semesterId", pMutableCourseTeacher.getSemester().getId());
+    parameter.put("section", pMutableCourseTeacher.getSection());
+    parameter.put("teacherId", pMutableCourseTeacher.getTeacher().getId());
+    parameter.put("lastModified", UmsUtils.formatDate(new Date(), "YYYYMMDDHHMMSS"));
+    return parameter;
   }
 
   class CourseTeacherRowMapper implements RowMapper<CourseTeacher> {

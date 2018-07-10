@@ -106,12 +106,19 @@ module ums {
           this.progress = 50;
           this.extractCourseTeacher().then((courseTeacherlist: CourseTeacherInterface[]) => {
             this.progress = 70;
-            this.courseTeacherService.saveOrUpdateCourseTeacher(courseTeacherlist).then((updatedCourseTeacherList: CourseTeacherInterface[]) => {
+            if (courseTeacherlist.length > 0) {
+              this.courseTeacherService.saveOrUpdateCourseTeacher(courseTeacherlist).then((updatedCourseTeacherList: CourseTeacherInterface[]) => {
+                this.progress = 100;
+                this.courseTeacherList = [];
+                this.courseTeacherList = updatedCourseTeacherList;
+                $("#routineConfigModal").modal('toggle');
+              });
+            } else {
               this.progress = 100;
               this.courseTeacherList = [];
-              this.courseTeacherList = updatedCourseTeacherList;
               $("#routineConfigModal").modal('toggle');
-            });
+            }
+
           });
         });
       });
@@ -120,9 +127,13 @@ module ums {
     public extractCourseTeacher(): ng.IPromise<CourseTeacherInterface[]> {
       let defer: ng.IDeferred<CourseTeacherInterface[]> = this.$q.defer();
       this.courseTeacherList = [];
+      console.log("Slot routine list");
+      console.log(this.classRoutineService.slotRoutineList);
       this.classRoutineService.slotRoutineList.forEach((routine: ClassRoutine) => {
         if (routine.courseTeacher != undefined && routine.courseTeacher.length != 0) {
-          this.courseTeacherList.concat(routine.courseTeacher);
+          console.log("Found one");
+          console.log(routine.courseTeacher);
+          this.courseTeacherList = this.courseTeacherList.concat(routine.courseTeacher);
         }
       })
       defer.resolve(this.courseTeacherList);

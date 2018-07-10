@@ -106,6 +106,7 @@ module ums {
       courseTeacher.semesterId = slotRoutine.semesterId.toString();
       courseTeacher.teacher = <Teacher>{};
       courseTeacher.teacher.id = slotRoutine.employee.id;
+      courseTeacher.teacherId = slotRoutine.employee.id;
       courseTeacher.teacher.name = slotRoutine.employee.employeeName;
       courseTeacher.teacher.departmentId = slotRoutine.employee.deptOfficeId;
       courseTeacher.teacher.departmentName = slotRoutine.employee.deptOfficeName;
