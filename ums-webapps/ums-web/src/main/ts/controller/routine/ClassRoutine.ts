@@ -6,7 +6,7 @@ module ums {
   }
 
 
-  interface IConstant {
+  export interface IConstant {
     id: string;
     name: string;
   }

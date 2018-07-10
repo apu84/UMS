@@ -61,6 +61,7 @@ module ums{
     public teacherList: Employee[];
     public selectedHeader: IRoutineTableHeader;
     public selectedDay: IConstant;
+    public sessionalSectionMap: any;
     public routineUrl: string = '/ums-webservice-academic/academic/routine';
     public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
     constructor(private appConstants: any, private httpClient: HttpClient,

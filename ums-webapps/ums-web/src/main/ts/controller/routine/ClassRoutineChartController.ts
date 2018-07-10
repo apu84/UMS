@@ -116,7 +116,7 @@ module ums {
           //do nothing
         }
       }
-      
+
       return modifiedTableHeader;
     }
 
@@ -150,7 +150,13 @@ module ums {
     public edit(day: IConstant, header: IRoutineTableHeader) {
       this.classRoutineService.selectedDay = day;
       this.classRoutineService.selectedHeader = header;
-      console.log("in the edit");
+
+      if (this.dayAndTimeMapWithRoutine[day.id + header.startTime] == null) {
+        this.classRoutineService.slotRoutineList = [];
+      } else {
+        this.classRoutineService.slotRoutineList = this.dayAndTimeMapWithRoutine[day.id + header.startTime];
+      }
+
       $("#routineConfigModal").modal('show');
       this.counter += 2;
       this.$state.go('classRoutine.classRoutineChart.classRoutineSlotEditForm', {}, {reload: 'classRoutine.classRoutineChart.classRoutineSlotEditForm'}

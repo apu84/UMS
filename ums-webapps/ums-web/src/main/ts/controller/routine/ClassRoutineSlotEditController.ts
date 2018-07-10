@@ -11,7 +11,8 @@ module ums {
     private THEORY_TYPE: number = 1;
     private SESSIONAL_TYPE: number = 2;
     private courseTeacher: Employee = <Employee>{};
-    private sectionList: any = {};
+    private sectionList: IConstant[] = [];
+    private sessionalSectionMap: any = {};
 
 
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'courseService', 'classRoomService', 'classRoutineService', '$timeout', 'userService', 'routineConfigService', '$state'];
@@ -31,18 +32,22 @@ module ums {
                 private routineConfigService: RoutineConfigService,
                 private $state: any) {
 
-      this.classRoutineService.slotRoutineList = [];
       this.init();
     }
 
     public init() {
-      this.classRoutineService.slotRoutineList = [];
       this.showCourseInfo = false;
       this.showRoomInfo = false;
-      let slotRoutine: ClassRoutine = <ClassRoutine>{};
-      slotRoutine = this.initialzeRoutine(slotRoutine);
-      this.classRoutineService.slotRoutineList.push(slotRoutine);
-      this.setSessionalSection();
+      if (this.classRoutineService.slotRoutineList.length == 0) {
+        let slotRoutine: ClassRoutine = <ClassRoutine>{};
+        slotRoutine = this.initialzeRoutine(slotRoutine);
+        this.classRoutineService.slotRoutineList.push(slotRoutine);
+      }
+      console.log("Slot routine list");
+      console.log(this.classRoutineService.slotRoutineList);
+      this.setSessionalSection().then((sectionList: any) => {
+        this.assignSectionsToSessionalCourses();
+      });
     }
 
 
@@ -53,7 +58,8 @@ module ums {
       slotRoutine.semester = this.classRoutineService.selectedSemester;
       slotRoutine.programId = this.classRoutineService.selectedProgram.id;
       slotRoutine.program = this.classRoutineService.selectedProgram;
-      slotRoutine.duration = this.routineConfigService.routineConfig.duration.toString();
+      if (slotRoutine.duration == null)
+        slotRoutine.duration = this.routineConfigService.routineConfig.duration.toString();
       slotRoutine.academicYear = +this.classRoutineService.studentsYear;
       slotRoutine.academicSemester = +this.classRoutineService.studentsSemester;
       slotRoutine.section = this.classRoutineService.selectedTheorySection.id;
@@ -85,7 +91,8 @@ module ums {
       this.fetchCourseInfo();
     }
 
-    public setSessionalSection() {
+    public setSessionalSection(): ng.IPromise<any> {
+      let defer: ng.IDeferred<any> = this.$q.defer();
       if (this.classRoutineService.selectedTheorySection.id == 'A')
         this.sectionList = this.appConstants.sessionalSectionsA;
       else if (this.classRoutineService.selectedTheorySection.id == 'B')
@@ -94,8 +101,21 @@ module ums {
         this.sectionList = this.appConstants.sessionalSectionsC;
       else
         this.sectionList = this.appConstants.sessionalSectionsD;
+
+      defer.resolve(this.sectionList);
+      return defer.promise;
     }
 
+    public assignSectionsToSessionalCourses() {
+      this.sessionalSectionMap = {};
+      this.sectionList.forEach((s) => {
+        this.sessionalSectionMap[s.id] = s;
+      });
+
+      this.classRoutineService.slotRoutineList.forEach((routine: ClassRoutine) => {
+        routine.sessionalSection = this.sessionalSectionMap[routine.section];
+      })
+    }
 
     public addSelectedTeacher(slotRoutine: ClassRoutine) {
       let courseTeacher: CourseTeacherInterface = <CourseTeacherInterface>{};
