@@ -23,7 +23,7 @@ module ums {
         private serviceContractIntervals: ICommon[] = [];
         private departments: IDepartment[] = [];
         private enableEdit: boolean[] = [false];
-        private enableServiceDetailEdit: boolean[][] = [[false],[false]];
+        private enableServiceDetailEdit: boolean[][] = [[false]];
         private enableEditButton: boolean = false;
         private showLoader: boolean = true;
 
@@ -55,6 +55,12 @@ module ums {
             this.get();
         }
 
+        private initEnableEditServiceDetails(): void {
+            for (let i = 0; i < this.service.length; i++) {
+                this.enableServiceDetailEdit.push([false]);
+            }
+        }
+
         private getServiceIntervals(): void {
             this.serviceRegularIntervals.push(this.registrarConstants.servicePeriods[0]);
             this.serviceRegularIntervals.push(this.registrarConstants.servicePeriods[1]);
@@ -62,13 +68,13 @@ module ums {
             this.serviceContractIntervals.push(this.registrarConstants.servicePeriods[3]);
         }
 
-        public filterDesignationSelection(index: number): void{
+        public filterDesignationSelection(index: number): void {
             this.filteredDesignation[index] = [];
             this.employeeService.getDesignation(this.service[index].department.id.toString()).then((response: any) => {
                 if (response.length < 1) {
                     this.notify.error("No designation found");
                 }
-                else{
+                else {
                     for (let i = 0; i < response.length; i++) {
                         for (let j = 0; j < this.designations.length; j++) {
                             if (response[i].designationId == this.designations[j].id) {
@@ -158,6 +164,7 @@ module ums {
                 if (serviceInformation) {
                     this.service = serviceInformation;
                     this.setInitialDesignation();
+                    this.initEnableEditServiceDetails();
                 }
                 else {
                     this.service = [];
@@ -177,37 +184,17 @@ module ums {
                 this.enableEdit[index] = canEdit;
             }
             else if (type === 'serviceDetails') {
-                console.log(index + " " + parentIndex);
                 this.enableServiceDetailEdit[parentIndex][index] = canEdit;
             }
         }
 
         private addNew(type: string, index?: number): void {
             if (type == "service") {
-                if (this.service.length == 0) {
-                    this.addNewService();
-                }
-                else {
-                    if (this.service[this.service.length - 1].resignDate == "") {
-                        this.notify.error("Please fill up the resign date first");
-                    }
-                    else {
-                        this.addNewService();
-                    }
-                }
+                this.addNewService();
+                this.enableServiceDetailEdit.push([false]);
             }
             else if (type == "serviceDetails") {
-                if (this.service[index].intervalDetails.length == 0) {
-                    this.addNewServiceDetails(index);
-                }
-                else {
-                    if (this.service[index].intervalDetails[this.service[index].intervalDetails.length - 1].endDate == "") {
-                        this.notify.error("Please fill up the end date first");
-                    }
-                    else {
-                        this.addNewServiceDetails(index);
-                    }
-                }
+                this.addNewServiceDetails(index);
             }
         }
 
