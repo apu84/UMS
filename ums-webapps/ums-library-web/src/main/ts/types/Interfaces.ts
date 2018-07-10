@@ -30,6 +30,7 @@ module ums {
         placeOfPublication: string;
         yearOfPublication: number;
         yearOfCopyRight: number;
+        yearOfReprint: number;
     }
 
     export interface IPhysicalDescription {

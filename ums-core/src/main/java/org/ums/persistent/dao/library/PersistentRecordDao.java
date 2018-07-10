@@ -28,7 +28,7 @@ public class PersistentRecordDao extends RecordDaoDecorator {
           + "   SERIAL_NUMBER, SERIAL_SPECIAL, LIBRARY_LACKS, CHANGED_TITLE, ISBN, ISSN,  "
           + "   CORP_AUTH_MAIN, CORP_SUB_BODY, CORP_CITY_COUNTRY, EDITION, TRANS_TITLE_EDITION, FREQUENCY,  "
           + "   CALL_NO, CLASS_NO, CALL_YEAR, CALL_EDITION, CALL_VOLUME, AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,  "
-          + "   YEAR_OF_PUBLICATION, YEAR_OF_COPY_RIGHT, MATERIAL_TYPE, STATUS,  "
+          + "   YEAR_OF_PUBLICATION, YEAR_OF_COPY_RIGHT, YEAR_OF_REPRINT, MATERIAL_TYPE, STATUS,  "
           + "   KEYWORDS, DOCUMENTALIST, ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY, CONTRIBUTORS,PHYSICAL_DESC, SUBJECTS, "
           + " NOTES, TOTAL_ITEMS, TOTAL_AVAILABLE, TOTAL_CHECKED_OUT, TOTAL_ON_HOLD, LAST_MODIFIED " + "FROM RECORDS ";
 
@@ -36,7 +36,7 @@ public class PersistentRecordDao extends RecordDaoDecorator {
       "UPDATE RECORDS SET LANGUAGE = ?, TITLE=?,  SUB_TITLE=?, GMD=?, SERIES_TITLE=?, VOLUME_NO=?, VOLUME_TITLE=?, SERIAL_ISSUE_NO=?, SERIAL_NUMBER=?, "
           + "   SERIAL_SPECIAL=?, LIBRARY_LACKS=?, CHANGED_TITLE=?, ISBN=?, ISSN=?, CORP_AUTH_MAIN=?, CORP_SUB_BODY=?, CORP_CITY_COUNTRY=?, EDITION=?, TRANS_TITLE_EDITION=?, "
           + "   FREQUENCY=?, CALL_NO=?, CLASS_NO=?, CALL_YEAR=?, CALL_EDITION=?, CALL_VOLUME=?, AUTHOR_MARK=?, PUBLISHER=?, PLACE_OF_PUBLICATION=?,YEAR_OF_PUBLICATION=?, "
-          + "  YEAR_OF_COPY_RIGHT=?, MATERIAL_TYPE=?, "
+          + "  YEAR_OF_COPY_RIGHT=?, YEAR_OF_REPRINT=?, MATERIAL_TYPE=?, "
           + "  STATUS=?, KEYWORDS=?, CONTRIBUTORS=?, SUBJECTS=?, PHYSICAL_DESC = ?, NOTES=?, TOTAL_ITEMS = ?, TOTAL_AVAILABLE = ?,"
           + " TOTAL_CHECKED_OUT = ?, TOTAL_ON_HOLD = ?, LAST_UPDATED_ON=sysdate"
           + ",  "
@@ -45,10 +45,10 @@ public class PersistentRecordDao extends RecordDaoDecorator {
   static String INSERT_ONE =
       "INSERT INTO RECORDS(MFN, LANGUAGE, TITLE, SUB_TITLE, GMD, SERIES_TITLE,  VOLUME_NO, VOLUME_TITLE, SERIAL_ISSUE_NO,SERIAL_NUMBER, "
           + "   SERIAL_SPECIAL, LIBRARY_LACKS, CHANGED_TITLE, ISBN, ISSN, CORP_AUTH_MAIN, CORP_SUB_BODY, CORP_CITY_COUNTRY, EDITION, TRANS_TITLE_EDITION, "
-          + "   FREQUENCY, CALL_NO, CLASS_NO, CALL_YEAR, CALL_EDITION, CALL_VOLUME,  AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,YEAR_OF_PUBLICATION, YEAR_OF_COPY_RIGHT, MATERIAL_TYPE, "
+          + "   FREQUENCY, CALL_NO, CLASS_NO, CALL_YEAR, CALL_EDITION, CALL_VOLUME,  AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,YEAR_OF_PUBLICATION, YEAR_OF_COPY_RIGHT, YEAR_OF_REPRINT, MATERIAL_TYPE, "
           + "    STATUS, KEYWORDS, DOCUMENTALIST,CONTRIBUTORS, SUBJECTS,PHYSICAL_DESC, NOTES, TOTAL_ITEMS, TOTAL_AVAILABLE, TOTAL_CHECKED_OUT, TOTAL_ON_HOLD,  ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY, LAST_MODIFIED)  "
           + "  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
-          + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
+          + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
           + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
           + " ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0,"
           + " "
@@ -85,9 +85,9 @@ public class PersistentRecordDao extends RecordDaoDecorator {
         .getCorpCityCountry(), pRecord.getEdition(), pRecord.getTranslateTitleEdition(),
         pRecord.getFrequency() == null ? null : pRecord.getFrequency().getId(), pRecord.getCallNo(), pRecord
             .getClassNo(), pRecord.getCallYear(), pRecord.getCallEdition(), pRecord.getCallVolume(), pRecord
-            .getAuthorMark(), pRecord.getImprint().getPublisher() == null ? null : pRecord.getImprint()
-            .getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord.getImprint()
-            .getYearOfPublication(), pRecord.getImprint().getYearOfCopyRight(),
+            .getAuthorMark(), pRecord.getImprint().getPublisher() == null ? null : pRecord.getImprint().getPublisher()
+            .getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord.getImprint().getYearOfPublication(),
+        pRecord.getImprint().getYearOfCopyRight(), pRecord.getImprint().getYearOfReprint(),
         pRecord.getMaterialType() == null ? null : pRecord.getMaterialType().getId(),
         pRecord.getRecordStatus() == null ? null : pRecord.getRecordStatus().getId(), pRecord.getKeyWords(), pRecord
             .getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord.getPhysicalDescriptionString(),
@@ -108,14 +108,15 @@ public class PersistentRecordDao extends RecordDaoDecorator {
         .getVolumeTitle(), pRecord.getSerialIssueNo(), pRecord.getSerialNumber(), pRecord.getSerialSpecial(), pRecord
         .getLibraryLacks(), pRecord.getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord
         .getCorpAuthorMain(), pRecord.getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord
-        .getTranslateTitleEdition(), pRecord.getFrequency() == null ? null : pRecord.getFrequency().getId(),
-        pRecord.getCallNo(), pRecord.getClassNo(), pRecord.getCallYear(), pRecord.getCallEdition(), pRecord
-            .getCallVolume(), pRecord.getAuthorMark(), pRecord.getImprint().getPublisher() == null ? null
-            : pRecord.getImprint().getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord
-            .getImprint().getYearOfPublication(), pRecord.getImprint().getYearOfCopyRight(), pRecord.getMaterialType()
-            .getId(), pRecord.getRecordStatus().getId(), pRecord.getKeyWords(), pRecord.getDocumentalist(), pRecord
-            .getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord.getPhysicalDescriptionString(),
-        pRecord.getNoteJsonString(), pRecord.getLastUpdatedBy());
+        .getTranslateTitleEdition(), pRecord.getFrequency() == null ? null : pRecord.getFrequency().getId(), pRecord
+        .getCallNo(), pRecord.getClassNo(), pRecord.getCallYear(), pRecord.getCallEdition(), pRecord.getCallVolume(),
+        pRecord.getAuthorMark(), pRecord.getImprint().getPublisher() == null ? null : pRecord.getImprint()
+            .getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord.getImprint()
+            .getYearOfPublication(), pRecord.getImprint().getYearOfCopyRight(),
+        pRecord.getImprint().getYearOfReprint(), pRecord.getMaterialType().getId(), pRecord.getRecordStatus().getId(),
+        pRecord.getKeyWords(), pRecord.getDocumentalist(), pRecord.getContributorJsonString(), pRecord
+            .getSubjectJsonString(), pRecord.getPhysicalDescriptionString(), pRecord.getNoteJsonString(), pRecord
+            .getLastUpdatedBy());
 
     return pRecord.getId();
   }
@@ -169,6 +170,7 @@ public class PersistentRecordDao extends RecordDaoDecorator {
       imprintDto.setPlaceOfPublication(resultSet.getString("PLACE_OF_PUBLICATION"));
       imprintDto.setYearOfPublication(resultSet.getInt("YEAR_OF_PUBLICATION"));
       imprintDto.setYearOfCopyRight(resultSet.getInt("YEAR_OF_COPY_RIGHT"));
+      imprintDto.setYearOfReprint(resultSet.getInt("YEAR_OF_REPRINT"));
       record.setImprint(imprintDto);
       record.setPhysicalDescriptionString(resultSet.getString("PHYSICAL_DESC"));
       record.setMaterialType(MaterialType.get(resultSet.getInt("MATERIAL_TYPE")));

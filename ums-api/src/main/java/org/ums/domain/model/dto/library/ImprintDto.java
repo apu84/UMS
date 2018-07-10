@@ -14,6 +14,7 @@ public class ImprintDto implements Serializable {
   private String placeOfPublication;
   private Integer yearOfPublication;
   private Integer yearOfCopyRight;
+  private Integer yearOfReprint;
 
   public Publisher getPublisher() {
     return publisher;
@@ -53,6 +54,14 @@ public class ImprintDto implements Serializable {
 
   public void setPublisherId(Long publisherId) {
     this.publisherId = publisherId;
+  }
+
+  public Integer getYearOfReprint() {
+    return yearOfReprint;
+  }
+
+  public void setYearOfReprint(Integer yearOfReprint) {
+    this.yearOfReprint = yearOfReprint;
   }
 
   public String toString() {

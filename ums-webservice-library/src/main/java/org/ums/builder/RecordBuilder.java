@@ -78,6 +78,8 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     object.add("yearOfCopyRight",
         (pReadOnly.getImprint() == null || pReadOnly.getImprint().getYearOfCopyRight() == null) ? 0 : pReadOnly
             .getImprint().getYearOfCopyRight());
+    object.add("yearOfReprint", pReadOnly.getImprint() == null || pReadOnly.getImprint().getYearOfReprint() == null ? 0
+        : pReadOnly.getImprint().getYearOfReprint());
     object.add("publisher", (pReadOnly.getImprint() == null || pReadOnly.getImprint().getPublisherId() == null) ? ""
         : pReadOnly.getImprint().getPublisherId().toString());
     object.add("publisherName", (pReadOnly.getImprint() == null || pReadOnly.getImprint().getPublisher() == null) ? ""
@@ -140,8 +142,9 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
 
     pMutable.setCallNo(pJsonObject.getString("callNo"));
     pMutable.setClassNo(pJsonObject.getString("classNo"));
-    if(pJsonObject.containsKey("callYear"))
-      pMutable.setCallYear(pJsonObject.getInt("callYear"));
+    if(pJsonObject.containsKey("callYear")) {
+      pMutable.setCallYear(pJsonObject.getInt("callYear", 0));
+    }
     pMutable.setAuthorMark(pJsonObject.getString("authorMark"));
     if(pJsonObject.containsKey("callEdition"))
       pMutable.setCallEdition(pJsonObject.getString("callEdition"));
@@ -157,9 +160,11 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     if(imprintObject.containsKey("placeOfPublication"))
       imprintDto.setPlaceOfPublication(imprintObject.getString("placeOfPublication"));
     if(imprintObject.containsKey("yearOfPublication"))
-      imprintDto.setYearOfPublication(imprintObject.getInt("yearOfPublication"));
+      imprintDto.setYearOfPublication(imprintObject.getInt("yearOfPublication", 0));
     if(imprintObject.containsKey("yearOfCopyRight"))
-      imprintDto.setYearOfCopyRight(imprintObject.getInt("yearOfCopyRight"));
+      imprintDto.setYearOfCopyRight(imprintObject.getInt("yearOfCopyRight", 0));
+    if(imprintObject.containsKey("yearOfReprint"))
+      imprintDto.setYearOfReprint(imprintObject.getInt("yearOfReprint", 0));
 
     pMutable.setImprint(imprintDto);
     if(pJsonObject.containsKey("materialType"))

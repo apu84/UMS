@@ -58,8 +58,6 @@ module ums {
                 yearTo: ''
             };
 
-            console.log("updated");
-
             $scope.recordDetails = this.recordDetails.bind(this);
 
             if ($stateParams["1"] == null || $stateParams["1"] == "old") {
@@ -100,7 +98,6 @@ module ums {
                 }
                 else if(this.$scope.choiceType == "Likely"){
                     filter.basicQueryTerm = "*" + this.$scope.search.queryTerm + "*";
-                    console.log("here 2");
                 }
             }
             else if (this.$scope.search.searchType == 'advanced') {

@@ -852,7 +852,7 @@ module ums {
             this.$scope.record.callNo = "";
             this.$scope.record.callNo += this.$scope.record.classNo != "" ? this.$scope.record.classNo : "";
             this.$scope.record.callNo += this.$scope.record.authorMark != "" ? "/" + this.$scope.record.authorMark : "";
-            this.$scope.record.callNo += this.$scope.record.callYear != 0 ? "/" + this.$scope.record.callYear : "";
+            this.$scope.record.callNo += (this.$scope.record.callYear != 0 && this.$scope.record.callYear != null) ? "/" + this.$scope.record.callYear : "";
             this.$scope.record.callNo += this.$scope.record.callEdition != "" ? "/" + this.$scope.record.callEdition : "";
             this.$scope.record.callNo += this.$scope.record.callVolume != "" ? "/" + this.$scope.record.callVolume : "";
         }

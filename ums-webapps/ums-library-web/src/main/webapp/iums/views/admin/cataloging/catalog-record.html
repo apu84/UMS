@@ -579,6 +579,17 @@
                        maxlength="4"
                        ng-readonly="data.readOnlyMode"/>
             </div>
+            <label class="col-md-1 control-label" for="yearOfReprint">YoRP
+                <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
+                     style="float: right;cursor: pointer;margin-left: 5px;" data-toggle="tooltip" data-placement="top"
+                     title="Year of Reprint"/></label>
+            <div class="col-md-2">
+                <input type="number"
+                       class="form-control dottedInput"
+                       data-ng-model="record.imprint.yearOfReprint" id="yearOfReprint" name="yearOfReprint"
+                       maxlength="4"
+                       ng-readonly="data.readOnlyMode"/>
+            </div>
         </div>
     </fieldset>
 
