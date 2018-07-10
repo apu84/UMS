@@ -28,10 +28,9 @@ public class AdditionalInformationResourceHelper extends
     LocalCache localCache = new LocalCache();
     MutableAdditionalInformation mutableAdditionalInformation = new PersistentAdditionalInformation();
     mBuilder.build(mutableAdditionalInformation, pJsonObject.getJsonObject("entries"), localCache);
-    if(mManager.exists((pJsonObject.getJsonObject("entries").getString(
-            "employeeId")))) {
-      MutableAdditionalInformation mutableAdditionalInformation1 = (MutableAdditionalInformation) mManager.get(pJsonObject.getJsonObject("entries").getString(
-              "employeeId"));
+    if(mManager.exists((pJsonObject.getJsonObject("entries").getString("employeeId")))) {
+      MutableAdditionalInformation mutableAdditionalInformation1 =
+          (MutableAdditionalInformation) mManager.get(pJsonObject.getJsonObject("entries").getString("employeeId"));
       mManager.delete(mutableAdditionalInformation1);
     }
     mManager.create(mutableAdditionalInformation);
