@@ -178,7 +178,7 @@
                                         <option value="">Select Gender</option>
                                     </select>
                                     <label data-ng-show="nGeneralForm.nGender.$invalid && !nGeneralForm.nGender.$pristine"
-                                           class="help-block control-label">Are you male or female?</label>
+                                           class="help-block control-label">Please select a gender.</label>
                                 </div>
                                 <div data-ng-show="vm.generalReadOnly">
                                     <div class="underlineBox">
@@ -203,7 +203,7 @@
                                         <option value="">Select Blood Group</option>
                                     </select>
                                     <label data-ng-show="nGeneralForm.nBloodGroup.$invalid && !nGeneralForm.nBloodGroup.$pristine"
-                                           class="help-block control-label">What is your blood group?</label>
+                                           class="help-block control-label">Please select a blood group.</label>
                                 </div>
 
                                 <div data-ng-show="vm.generalReadOnly">
@@ -231,7 +231,7 @@
                                     </select>
                                 </div>
                                 <label data-ng-show="nGeneralForm.nNationality.$invalid && !nGeneralForm.nNationality.$pristine"
-                                       class="help-block control-label">Where you belong to?</label>
+                                       class="help-block control-label">Please select a nationality.</label>
 
                                 <div data-ng-show="vm.generalReadOnly">
                                     <div class="underlineBox">
@@ -257,7 +257,7 @@
                                     </select>
 
                                     <label data-ng-show="nGeneralForm.nReligion.$invalid && !nGeneralForm.nReligion.$pristine"
-                                           class="help-block control-label">Your religion?</label>
+                                           class="help-block control-label">Please select a religion.</label>
                                 </div>
                                 <div data-ng-show="vm.generalReadOnly">
                                     <div class="underlineBox">
@@ -288,7 +288,7 @@
                                            class="form-control" required>
                                     <label data-ng-show="nGeneralForm.nBirthDate.$invalid && !nGeneralForm.nBirthDate.$pristine"
                                            class="help-block control-label">
-                                        When is your birthday?</label>
+                                        Please provide us your DoB.</label>
                                 </div>
                                 <div data-ng-show="vm.generalReadOnly">
                                     <div class="underlineBox">
@@ -298,8 +298,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nGeneralForm.nNationalId.$invalid && !nGeneralForm.nNationalId.$pristine}">
+                            <div class="form-group">
                                 <label for="iNationalId" class="control-label">National
                                     Id Card No.</label>
 
@@ -310,9 +309,6 @@
                                            class="form-control"
                                            ng-readonly="vm.generalReadOnly"
                                            data-ng-model="vm.entry.general.nidNo">
-                                    <label data-ng-show="nGeneralForm.nNationalId.$invalid && !nGeneralForm.nNationalId.$pristine"
-                                           class="help-block control-label">
-                                        Please provide us you national identity.</label>
                                 </div>
 
                                 <div data-ng-show="vm.generalReadOnly">
@@ -340,7 +336,7 @@
                                     </select>
 
                                     <label data-ng-show="nGeneralForm.nMaritalStatus.$invalid && !nGeneralForm.nMaritalStatus.$pristine"
-                                           class="help-block control-label">Single or Married?</label>
+                                           class="help-block control-label">Please select a marital status.</label>
                                 </div>
                                 <div data-ng-show="vm.generalReadOnly">
                                     <div class="underlineBox">
@@ -370,7 +366,7 @@
                                                class="form-control" required>
                                         <label data-ng-show="nGeneralForm.nSpouseName.$invalid && !nGeneralForm.nSpouseName.$pristine"
                                                class="help-block control-label">
-                                            What is you spouse's name?</label>
+                                            Please provide spouse's name</label>
                                     </div>
                                     <div data-ng-show="vm.generalReadOnly">
                                         <div class="underlineBox">
@@ -381,8 +377,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <div class="form-group"
-                                     ng-class="{ 'has-error' : nGeneralForm.nSpouseNationalId.$invalid && !nGeneralForm.nSpouseNationalId.$pristine}">
+                                <div class="form-group">
                                     <label for="iSpouseNationalId" class="control-label">Spouse's National Id Card
                                         No</label>
                                     <div data-ng-show="!vm.generalReadOnly">
@@ -393,9 +388,6 @@
                                                placeholder="Spouse's National Id Card Number"
                                                ng-readonly="vm.generalReadOnly"
                                                class="form-control">
-                                        <label data-ng-show="nGeneralForm.nSpouseNationalId.$invalid && !nGeneralForm.nSpouseNationalId.$pristine"
-                                               class="help-block control-label">
-                                            Your spouses's national identity?</label>
                                     </div>
                                     <div data-ng-show="vm.generalReadOnly">
                                         <div class="underlineBox">
@@ -409,16 +401,20 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nGeneralForm.nPersonalWebsite.$invalid && !nGeneralForm.nPersonalWebsite.$pristine}">
                                 <label for="iPersonalWebsite" class="control-label">Personal Website</label>
                                 <div data-ng-show="!vm.generalReadOnly">
                                     <input type="url"
                                            name="nPersonalWebsite"
                                            id="iPersonalWebsite"
                                            data-ng-model="vm.entry.general.website"
-                                           placeholder="Personal Website"
+                                           placeholder="Personal Website (ex: https://www.aust.edu)"
                                            ng-readonly="vm.generalReadOnly"
                                            class="form-control">
+                                    <label data-ng-show="nGeneralForm.nPersonalWebsite.$invalid && !nGeneralForm.nPersonalWebsite.$pristine"
+                                           class="help-block control-label">
+                                        Not a website</label>
                                 </div>
                                 <div data-ng-show="vm.generalReadOnly">
                                     <div class="underlineBox">
@@ -548,8 +544,7 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nContactForm.nPhone.$invalid && !nContactForm.nPhone.$pristine}">
+                            <div class="form-group">
                                 <label for="iPhone" class="control-label">Phone</label>
                                 <div data-ng-show="!vm.contactReadOnly">
                                     <input type="text"
@@ -559,9 +554,6 @@
                                            placeholder="Phone"
                                            ng-readonly="vm.contactReadOnly"
                                            class="form-control">
-                                    <label data-ng-show="nContactForm.nPhone.$invalid && !nContactForm.nPhone.$pristine"
-                                           class="help-block control-label">
-                                        Any more phn numbers?</label>
                                 </div>
                                 <div data-ng-show="vm.contactReadOnly">
                                     <div class="underlineBox">
@@ -621,7 +613,7 @@
                                         <option value="">Select Country</option>
                                     </select>
                                     <label data-ng-show="nContactForm.nPresentAddressCountry.$invalid && !nContactForm.nPresentAddressCountry.$pristine"
-                                           class="help-block control-label">Yougender is required.</label>
+                                           class="help-block control-label">Please select a country.</label>
                                 </div>
                                 <div data-ng-show="vm.contactReadOnly">
                                     <div class="underlineBox">
@@ -651,7 +643,7 @@
                                             <option value="">Select Division</option>
                                         </select>
                                         <label data-ng-show="nContactForm.nPresentAddressDivision.$invalid && !nContactForm.nPresentAddressDivision.$pristine"
-                                               class="help-block control-label">Yougender is required.</label>
+                                               class="help-block control-label">Please select a division.</label>
                                     </div>
                                     <div data-ng-show="vm.contactReadOnly">
                                         <div class="underlineBox">
@@ -676,7 +668,7 @@
                                             <option value="">Select District</option>
                                         </select>
                                         <label data-ng-show="nContactForm.nPresentAddressDistrict.$invalid && !nContactForm.nPresentAddressDistrict.$pristine"
-                                               class="help-block control-label">Yougender is required.</label>
+                                               class="help-block control-label">Please select a district.</label>
                                     </div>
                                     <div data-ng-show="vm.contactReadOnly">
                                         <div class="underlineBox">
@@ -700,7 +692,7 @@
                                             <option value="">Select Thana</option>
                                         </select>
                                         <label data-ng-show="nContactForm.nPresentAddressPoliceStation.$invalid && !nContactForm.nPresentAddressPoliceStation.$pristine"
-                                               class="help-block control-label">Yougender is required.</label>
+                                               class="help-block control-label">Please select a thana.</label>
                                     </div>
                                     <div data-ng-show="vm.contactReadOnly">
                                         <div class="underlineBox">
@@ -710,8 +702,7 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="form-group"
-                                     ng-class="{ 'has-error' : nContactForm.nPresentAddressPostOffice.$invalid && !nContactForm.nPresentAddressPostOffice.$pristine}">
+                                <div class="form-group">
                                     <label for="iPresentAddressPostOffice" class="control-label">Post Code</label>
                                     <div data-ng-show="!vm.contactReadOnly">
                                         <input type="text"
@@ -722,9 +713,6 @@
                                                value=""
                                                ng-readonly="vm.contactReadOnly"
                                                class="form-control">
-                                        <label data-ng-show="nContactForm.nPresentAddressPostOffice.$invalid && !nContactForm.nPresentAddressPostOffice.$pristine"
-                                               class="help-block control-label">
-                                            Youname is required.</label>
                                     </div>
                                     <div data-ng-show="vm.contactReadOnly">
                                         <div class="underlineBox">
@@ -790,7 +778,7 @@
                                         <option value="">Select Country</option>
                                     </select>
                                     <label data-ng-show="nContactForm.nPermanentAddressCountry.$invalid && !nContactForm.nPermanentAddressCountry.$pristine"
-                                           class="help-block control-label">Select a country.</label>
+                                           class="help-block control-label">Please select a country.</label>
                                 </div>
                                 <div data-ng-show="vm.contactReadOnly">
                                     <div class="underlineBox">
@@ -820,7 +808,7 @@
                                             <option value="">Select Division</option>
                                         </select>
                                         <label data-ng-show="nContactForm.nPermanentAddressDivision.$invalid && !nContactForm.nPermanentAddressDivision.$pristine"
-                                               class="help-block control-label">Yougender is required.</label>
+                                               class="help-block control-label">Please select a division.</label>
                                     </div>
                                     <div data-ng-show="vm.contactReadOnly">
                                         <div class="underlineBox">
@@ -845,7 +833,7 @@
                                             <option value="">Select District</option>
                                         </select>
                                         <label data-ng-show="nContactForm.nPermanentAddressDistrict.$invalid && !nContactForm.nPermanentAddressDistrict.$pristine"
-                                               class="help-block control-label">Yougender is required.</label>
+                                               class="help-block control-label">Please select a district.</label>
                                     </div>
                                     <div data-ng-show="vm.contactReadOnly">
                                         <div class="underlineBox">
@@ -870,7 +858,7 @@
                                             <option value="">Select Thana</option>
                                         </select>
                                         <label data-ng-show="nContactForm.nPermanentAddressPoliceStation.$invalid && !nContactForm.nPermanentAddressPoliceStation.$pristine"
-                                               class="help-block control-label">Yougender is required.</label>
+                                               class="help-block control-label">Please select a thana.</label>
                                     </div>
                                     <div data-ng-show="vm.contactReadOnly">
                                         <div class="underlineBox">
@@ -880,8 +868,7 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="form-group"
-                                     ng-class="{ 'has-error' : nContactForm.nPermanentAddressPostOffice.$invalid && !nContactForm.nPermanentAddressPostOffice.$pristine}">
+                                <div class="form-group">
                                     <label for="iPermanentAddressPostOffice" class="control-label">Post Code</label>
                                     <div data-ng-show="!vm.contactReadOnly">
                                         <input type="text"
@@ -892,9 +879,6 @@
                                                value=""
                                                ng-readonly="vm.contactReadOnly"
                                                class="form-control">
-                                        <label data-ng-show="nContactForm.nPermanentAddressPostOffice.$invalid && !nContactForm.nPermanentAddressPostOffice.$pristine"
-                                               class="help-block control-label">
-                                            Youname is required.</label>
                                     </div>
                                     <div data-ng-show="vm.contactReadOnly">
                                         <div class="underlineBox">
