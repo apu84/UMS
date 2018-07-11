@@ -1,7 +1,6 @@
 package org.ums.builder;
 
 import org.springframework.stereotype.Component;
-import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.ClassRoom;
 import org.ums.domain.model.mutable.MutableClassRoom;
@@ -15,7 +14,7 @@ import javax.ws.rs.core.UriInfo;
 public class ClassRoomBuilder implements Builder<ClassRoom, MutableClassRoom> {
   @Override
   public void build(JsonObjectBuilder pBuilder, ClassRoom pReadOnly, UriInfo pUriInfo, final LocalCache pLocalCache) {
-    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("roomNo", pReadOnly.getRoomNo());
     pBuilder.add("description", pReadOnly.getDescription() == null ? "" : pReadOnly.getDescription());
     pBuilder.add("totalRow", pReadOnly.getTotalRow());

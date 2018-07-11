@@ -11,6 +11,7 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.manager.CourseManager;
+import org.ums.manager.EmployeeManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.TeacherManager;
 
@@ -34,6 +35,8 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
   private SemesterBuilder mSemesterBuilder;
   @Autowired
   private TeacherBuilder mTeacherBuilder;
+  @Autowired
+  private EmployeeManager mEmployeeManager;
 
   @Override
   public void build(JsonObjectBuilder pBuilder, CourseTeacher pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
@@ -63,6 +66,7 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
 
       pBuilder.add("teacherId", teacher.getId());
       pBuilder.add("teacherName", teacher.getName());
+      pBuilder.add("shortName", mEmployeeManager.get(teacher.getId()).getShortName());
       JsonObjectBuilder teacherJsonObject = Json.createObjectBuilder();
       mTeacherBuilder.build(teacherJsonObject, teacher, pUriInfo, pLocalCache);
       pBuilder.add("teacher", teacherJsonObject);

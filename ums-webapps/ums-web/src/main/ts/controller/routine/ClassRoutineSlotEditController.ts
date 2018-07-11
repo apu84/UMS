@@ -15,7 +15,7 @@ module ums {
     private sessionalSectionMap: any = {};
 
 
-    public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'courseService', 'classRoomService', 'classRoutineService', '$timeout', 'userService', 'routineConfigService', '$state'];
+    public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'courseService', 'classRoomService', 'classRoutineService', '$timeout', 'userService', 'routineConfigService', '$state', 'courseTeacherService'];
 
     constructor(private appConstants: any,
                 private httpClient: HttpClient,
@@ -30,7 +30,8 @@ module ums {
                 private $timeout: ng.ITimeoutService,
                 private userService: UserService,
                 private routineConfigService: RoutineConfigService,
-                private $state: any) {
+                private $state: any,
+                private courseTeacherService: CourseTeacherService) {
 
       this.init();
     }
@@ -56,10 +57,12 @@ module ums {
       slotRoutine.endTime = this.classRoutineService.selectedHeader.endTime;
       slotRoutine.semesterId = this.classRoutineService.selectedSemester.id;
       slotRoutine.semester = this.classRoutineService.selectedSemester;
-      slotRoutine.programId = this.classRoutineService.selectedProgram.id;
+      slotRoutine.programId = this.classRoutineService.selectedProgram.id.toString();
       slotRoutine.program = this.classRoutineService.selectedProgram;
       if (slotRoutine.duration == null)
         slotRoutine.duration = this.routineConfigService.routineConfig.duration.toString();
+      else
+        slotRoutine.duration = slotRoutine.duration.toString();
       slotRoutine.academicYear = +this.classRoutineService.studentsYear;
       slotRoutine.academicSemester = +this.classRoutineService.studentsSemester;
       slotRoutine.section = this.classRoutineService.selectedTheorySection.id;
@@ -89,6 +92,19 @@ module ums {
       }
       slotRoutine.courseId = slotRoutine.course.id;
       this.fetchCourseInfo();
+    }
+
+    public removeCourseTeacher(routine: ClassRoutine, courseTeacher: CourseTeacherInterface) {
+      for (var i = 0; i < routine.courseTeacher.length; i++) {
+        if (routine.courseTeacher[i] == courseTeacher) {
+          routine.courseTeacher.splice(i, 1);
+
+          if (courseTeacher.id != null) {
+            this.courseTeacherService.delete(courseTeacher.id);
+          }
+          break;
+        }
+      }
     }
 
     public setSessionalSection(): ng.IPromise<any> {
@@ -123,7 +139,7 @@ module ums {
       courseTeacher.courseId = slotRoutine.courseId;
       courseTeacher.courseType = slotRoutine.course.type_value;
       courseTeacher.section = slotRoutine.section;
-      courseTeacher.semesterId = slotRoutine.semesterId.toString();
+      courseTeacher.semesterId = this.classRoutineService.selectedSemester.id.toString();
       courseTeacher.teacher = <Teacher>{};
       courseTeacher.teacher.id = slotRoutine.employee.id;
       courseTeacher.teacherId = slotRoutine.employee.id;

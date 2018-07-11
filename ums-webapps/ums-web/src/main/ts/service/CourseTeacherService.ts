@@ -16,6 +16,7 @@ module ums {
     semesterId: string;
     teacher: Teacher;
     section: string;
+    shortName: string;
   }
 
   export class CourseTeacherService {
@@ -40,9 +41,9 @@ module ums {
       return defer.promise;
     }
 
-    public getCourseTeacherByProgramAndSemesterAndYearAndAcademicSemester(semesterId: number, courseId: string, section: string): ng.IPromise<CourseTeacherInterface[]> {
+    public getCourseTeacherByProgramAndSemesterAndYearAndAcademicSemester(semesterId: number, programId: number, section: string, year: number, semester: number): ng.IPromise<CourseTeacherInterface[]> {
       let defer: ng.IDeferred<CourseTeacherInterface[]> = this.$q.defer();
-      this.httpClient.get(this.courseTeacherUrl + "/semesterId/" + semesterId + "/courseId/" + courseId + "/section/" + section, HttpClient.MIME_TYPE_JSON,
+      this.httpClient.get(this.courseTeacherUrl + "/programId/" + programId + "/semesterId/" + semesterId + "/section/" + section + "/year/" + year + "/semester/" + semester, HttpClient.MIME_TYPE_JSON,
           (response: CourseTeacherInterface[]) => {
             defer.resolve(response);
           });
@@ -59,6 +60,14 @@ module ums {
             defer.resolve(undefined);
           })
       return defer.promise;
+    }
+
+    public delete(id: string) {
+      this.httpClient.doDelete(this.courseTeacherUrl + "/id/" + id)
+          .success((response: CourseTeacherInterface[]) => '')
+          .error((response) => {
+            this.notify.error("Error in deleting data");
+          });
     }
   }
 

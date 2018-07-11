@@ -53,16 +53,16 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
     pBuilder.add("course", course);
     JsonObjectBuilder program = Json.createObjectBuilder();
     mProgramBuilder.build(program, pReadOnly.getProgram(), pUriInfo, pLocalCache);
-    pBuilder.add("programId", pReadOnly.getProgramId());
+    pBuilder.add("programId", pReadOnly.getProgramId().toString());
     pBuilder.add("program", program);
-    pBuilder.add("day", pReadOnly.getDay());
+    pBuilder.add("day", pReadOnly.getDay() + "");
     pBuilder.add("section", pReadOnly.getSection());
     pBuilder.add("academicYear", pReadOnly.getAcademicYear());
     pBuilder.add("academicSemester", pReadOnly.getAcademicSemester());
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
     pBuilder.add("startTime", formatter.format(pReadOnly.getStartTime()));
     pBuilder.add("endTime", formatter.format(pReadOnly.getEndTime()));
-    pBuilder.add("duration", pReadOnly.getDuration());
+    pBuilder.add("duration", pReadOnly.getDuration() + "");
     JsonObjectBuilder room = Json.createObjectBuilder();
     mClassRoomBuilder.build(room, pReadOnly.getRoom(), pUriInfo, pLocalCache);
     pBuilder.add("room", room);
@@ -72,7 +72,7 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
   @Override
   public void build(MutableRoutine pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     if(pJsonObject.containsKey("id"))
-      pMutable.setId(Long.parseLong("id"));
+      pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
     pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
     pMutable.setCourseId(pJsonObject.getString("courseId"));
     pMutable.setSection(pJsonObject.getString("section"));
@@ -82,7 +82,7 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
     pMutable.setStartTime(LocalTime.parse(pJsonObject.getString("startTime"), formatter));
     pMutable.setEndTime(LocalTime.parse(pJsonObject.getString("endTime"), formatter));
     pMutable.setDuration(Integer.parseInt(pJsonObject.getString("duration")));
-    pMutable.setRoomId(Long.parseLong(pJsonObject.getInt("roomId") + ""));
+    pMutable.setRoomId(Long.parseLong(pJsonObject.getString("roomId")));
     pMutable.setDay(Integer.parseInt(pJsonObject.getString("day")));
     pMutable.setProgramId(Integer.parseInt(pJsonObject.getString("programId")));
   }

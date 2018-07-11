@@ -46,4 +46,8 @@ public class CourseTeacherCache extends
     return CacheUtil.getCacheKey(CourseTeacher.class, pId);
   }
 
+  @Override
+  public List<CourseTeacher> getCourseTeacher(int pProgramId, int pSemesterId, String pSection, int pYear, int pSemester) {
+    return getManager().getCourseTeacher(pProgramId, pSemesterId, pSection, pYear, pSemester);
+  }
 }

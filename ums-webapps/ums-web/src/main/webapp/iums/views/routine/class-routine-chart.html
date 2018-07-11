@@ -2,7 +2,7 @@
 
 </style>
 <div class="col-md-12" ng-if="vm.classRoutineService.routineData">
-    <table class="table table-bordered">
+    <table class="table table-bordered" ng-if="vm.showRoutineChart">
         <thead>
         <tr>
             <th>Time <i class="fa fa-arrow-right" aria-hidden="true"></i><br/>Day <i class="fa fa-arrow-down"
@@ -16,7 +16,7 @@
         <tr ng-repeat="day in vm.weekDay">
             <td>{{day.name}}</td>
             <td ng-repeat="header in vm.getDayWiseTableHeader(day.id)"
-                colspan="{{vm.getColSpan(day.id, header.startTime)}}">
+                colspan="{{vm.getColSpan(day.id, header.startTime)/vm.routineConfigService.routineConfig.duration}}">
                 <div align="right">
                     <i ng-if="vm.classRoutineService.enableEdit" class="fa fa-pencil-square-o" aria-hidden="true"
                        style="cursor: pointer"
@@ -27,7 +27,7 @@
                         <td align="center">
                             {{routine.course.no}}({{routine.section}})<br>
                             {{routine.room.roomNo}}<br>
-                            {{routine.duration}}
+                            {{vm.getCourseTeacherByCourseAndSection(routine.courseId, routine.section)}}
                         </td>
                     </tr>
                 </table>

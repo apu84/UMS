@@ -16,10 +16,10 @@ module ums{
   }
 
   export interface ClassRoutine {
-    id: number;
+    id: string;
     semesterId: number;
     semester: Semester;
-    programId: number;
+    programId: string;
     program: Program;
     courseId: string;
     course: Course;
@@ -61,8 +61,10 @@ module ums{
     public teacherList: Employee[];
     public selectedHeader: IRoutineTableHeader;
     public selectedDay: IConstant;
-    public sessionalSectionMap: any;
-    public dayAndTimeMapWithRoutine: any;
+    public sessionalSectionMap: { [key: string]: IConstant };
+    public dayAndTimeMapWithRoutine: { [key: string]: ClassRoutine[] }; // map[day+startTime] = ClassRoutine[];
+    public courseTeacherMap: { [key: string]: CourseTeacherInterface[] }; // map[courseId]= CourseTeacher[];
+    public courseTeacherWithSectionMap: { [key: string]: CourseTeacherInterface[] }; // map[courseId+section]= CourseTeacher[];
     public routineUrl: string = '/ums-webservice-academic/academic/routine';
     public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
     constructor(private appConstants: any, private httpClient: HttpClient,

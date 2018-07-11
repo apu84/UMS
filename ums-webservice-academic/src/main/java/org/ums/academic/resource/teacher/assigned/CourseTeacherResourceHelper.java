@@ -13,8 +13,7 @@ import org.ums.persistent.model.PersistentCourseTeacher;
 import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class CourseTeacherResourceHelper extends
@@ -37,31 +36,51 @@ public class CourseTeacherResourceHelper extends
   }
 
   public JsonArray createOrUpdateCourseTeacher(JsonArray pJsonArray, UriInfo pUriInfo) {
-    List<MutableCourseTeacher> newCourseTeacherList = new ArrayList<>();
-    List<MutableCourseTeacher> existingCourseTeacherList = new ArrayList<>();
+    List<MutableCourseTeacher> courseTeacherList = new ArrayList<>();
+    Set<MutableCourseTeacher> newCourseTeacherDistinctList = new HashSet<>();
+    Set<MutableCourseTeacher> existingCourseTeacherDistinctList = new HashSet<>();
     for(int i = 0; i < pJsonArray.size(); i++) {
       LocalCache localCache = new LocalCache();
       JsonObject jsonObject = pJsonArray.getJsonObject(i);
       MutableCourseTeacher courseTeacher = new PersistentCourseTeacher();
       getBuilder().build(courseTeacher, jsonObject, localCache);
-      if (courseTeacher.getId() == null) {
+      if(courseTeacher.getId() == null) {
         courseTeacher.setId(mIdGenerator.getNumericId());
-        newCourseTeacherList.add(courseTeacher);
-      } else {
-        existingCourseTeacherList.add(courseTeacher);
+        newCourseTeacherDistinctList.add(courseTeacher);
+      }
+      else {
+        existingCourseTeacherDistinctList.add(courseTeacher);
       }
     }
-    if(newCourseTeacherList.size() > 0)
-      getContentManager().create(newCourseTeacherList);
-    if(existingCourseTeacherList.size() > 0)
-      getContentManager().update(existingCourseTeacherList);
+    if(newCourseTeacherDistinctList.size() > 0)
+      getContentManager().create(Collections.list(Collections.enumeration(newCourseTeacherDistinctList)));
+    if(existingCourseTeacherDistinctList.size() > 0)
+      getContentManager().update(Collections.list(Collections.enumeration(existingCourseTeacherDistinctList)));
 
-    return getCourseTeacher(newCourseTeacherList.get(0).getSemester().getId(), newCourseTeacherList.get(0).getCourse().getId(),
-        newCourseTeacherList.get(0).getSection(), pUriInfo);
+    newCourseTeacherDistinctList.addAll(existingCourseTeacherDistinctList);
+    courseTeacherList.addAll(newCourseTeacherDistinctList);
+
+    return getCourseTeacher(courseTeacherList.get(0).getCourse().getOfferedToProgramId(), courseTeacherList.get(0)
+        .getSemester().getId(), courseTeacherList.get(0).getSection(), courseTeacherList.get(0).getCourse().getYear(),
+        courseTeacherList.get(0).getCourse().getSemester(), pUriInfo);
   }
 
   public JsonArray getCourseTeacher(Integer pSemesterId, String pCourseId, String pSection, UriInfo pUriInfo) {
     List<CourseTeacher> courseTeacherList = getContentManager().getCourseTeacher(pSemesterId, pCourseId, pSection);
+    JsonArrayBuilder courseTeacherArrayBuilder = Json.createArrayBuilder();
+    for(CourseTeacher courseTeacher : courseTeacherList) {
+      LocalCache localCache = new LocalCache();
+      JsonObjectBuilder courseTeacherObjectBuilder = Json.createObjectBuilder();
+      getBuilder().build(courseTeacherObjectBuilder, courseTeacher, pUriInfo, localCache);
+      courseTeacherArrayBuilder.add(courseTeacherObjectBuilder);
+    }
+    return courseTeacherArrayBuilder.build();
+  }
+
+  public JsonArray getCourseTeacher(Integer pProgramId, Integer pSemesterId, String pSection, int pYear, int pSemester,
+      UriInfo pUriInfo) {
+    List<CourseTeacher> courseTeacherList =
+        getContentManager().getCourseTeacher(pProgramId, pSemesterId, pSection, pYear, pSemester);
     JsonArrayBuilder courseTeacherArrayBuilder = Json.createArrayBuilder();
     for(CourseTeacher courseTeacher : courseTeacherList) {
       LocalCache localCache = new LocalCache();

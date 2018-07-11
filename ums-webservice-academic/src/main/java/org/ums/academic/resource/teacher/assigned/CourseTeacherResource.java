@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.enums.CourseCategory;
+import org.ums.logs.DeleteLog;
 import org.ums.logs.GetLog;
 import org.ums.logs.PostLog;
 import org.ums.manager.CourseTeacherManager;
@@ -113,6 +114,16 @@ public class CourseTeacherResource extends Resource {
   }
 
   @GET
+  @GetLog(message = "Requested for program, semester, section, year and academic semester based course teacher")
+  @Path("/programId/{program-id}/semesterId/{semester-id}/section/{section}/year/{year}/semester/{semester}")
+  public JsonArray get(@Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("program-id") Integer pProgramId,
+      final @PathParam("section") String pSection, final @PathParam("year") int pYear,
+      final @PathParam("semester") int pSemester) {
+    return mResourceHelper.getCourseTeacher(pProgramId, pSemesterId, pSection, pYear, pSemester, mUriInfo);
+  }
+
+  @GET
   @Path("/{semester-id}/{teacher-id}/course")
   @GetLog(message = "Accessed assigned course list for a teacher of a semester")
   public JsonObject getByCourse(@Context HttpServletRequest pHttpServletRequest, final @Context Request pRequest,
@@ -131,4 +142,12 @@ public class CourseTeacherResource extends Resource {
   public JsonArray saveOrUpdateCourseTeacher(final JsonArray pJsonArray) {
     return mResourceHelper.createOrUpdateCourseTeacher(pJsonArray, mUriInfo);
   }
+
+  @DELETE
+  @DeleteLog(message = "Requested for deleting by id")
+  @Path("/id/{id}")
+  public Response delete(final @PathParam("id") String pId) throws Exception {
+    return mResourceHelper.delete(Long.parseLong(pId));
+  }
+
 }
