@@ -2,7 +2,6 @@
 module ums {
     export interface ICatalogingScope extends ng.IScope {
         data: any;
-        fillSampleData: Function;
         showRecordInfo: boolean;
         showItemInfo: boolean;
         addNewRow: Function;
@@ -91,7 +90,6 @@ module ums {
             $scope.saveItem = this.saveItem.bind(this);
             $scope.saveBulkItems = this.saveBulkItems.bind(this);
             $scope.setBulkItemsValue = this.setBulkItemsValue.bind(this);
-            $scope.fillSampleData = this.fillSampleData.bind(this);
             $scope.reloadSuppliers = this.reloadSuppliers.bind(this);
             $scope.reloadPublishers = this.reloadPublishers.bind(this);
             $scope.reloadContributors = this.reloadContributors.bind(this);
@@ -124,7 +122,6 @@ module ums {
             $scope.bulkItemList = Array<IItem>();
             $scope.recordList = Array<IRecord>();
 
-
             $scope.data = {
                 languageOptions: libConstants.languages,
                 bindingTypeOptions: libConstants.bindingTypes,
@@ -134,6 +131,7 @@ module ums {
                 itemOptions: libConstants.itemStatus,
                 materialTypeOptions: libConstants.materialTypes,
                 journalFrequencyOptions: libConstants.journalFrequency,
+                gmdOptions: libConstants.gmdOptions,
                 currencies: libConstants.currencyTypes,
                 readOnlyMode: false,
                 supplierReadOnlyMode: false,
@@ -161,13 +159,14 @@ module ums {
             $scope.record = <IRecord>{};
             $scope.record.classNo = "";
             $scope.record.authorMark = "";
-            $scope.record.callDate = "";
+            $scope.record.callYear = 0;
             $scope.record.callEdition = "";
             $scope.record.callVolume = "";
             $scope.record.imprint = <IImprint>{};
             $scope.record.physicalDescription = <IPhysicalDescription>{};
 
             $scope.record.language = Utils.NUMBER_SELECT;
+            $scope.record.gmd = Utils.NUMBER_SELECT;
             $scope.record.materialType = 1;
             this.setMaterialTypeName(1);
             $scope.record.status = 0;
@@ -275,7 +274,7 @@ module ums {
                 this.$scope.record.subjectList = Array<ISubjectEntry>();
                 this.$scope.record.noteList = Array<INoteEntry>();
 
-                this.setMaterialTypeName(this.$scope.record.materialType);
+                // this.setMaterialTypeName(this.$scope.record.materialType);
 
                 var jsonObj = $.parseJSON(this.$scope.record.contributorJsonString);
 
@@ -849,76 +848,11 @@ module ums {
             this.$scope.data.readOnlyMode = false;
         }
 
-        private fillSampleData() {
-            this.enableEdit();
-            this.$scope.record.mfnNo = undefined;
-            this.$scope.record.language = 1;
-            this.$scope.record.status = 0;
-            this.$scope.record.language = 1;
-            let offSet = (new Date).getMilliseconds();
-            this.$scope.record.title = "Material Title " + offSet;
-            this.$scope.record.subTitle = "Sub Title " + offSet;
-
-            if ($("#gmd"))
-                this.$scope.record.gmd = "General Material Description " + offSet;
-            if ($("#seriesTitle"))
-                this.$scope.record.seriesTitle = "Series " + offSet;
-            if ($("#volumeNo"))
-                this.$scope.record.volumeNo = "Volume No " + offSet;
-            if ($("#volumeTitle"))
-                this.$scope.record.volumeTitle = "Volume Title " + offSet;
-            if ($("#serialIssueNo"))
-                this.$scope.record.serialIssueNo = "Serial Issue No " + offSet;
-            if ($("#serialNumber"))
-                this.$scope.record.serialNumber = "Serial No " + offSet;
-            if ($("#serialSpecial"))
-                this.$scope.record.serialSpecial = "Serial Special " + offSet;
-            if ($("#libraryLacks"))
-                this.$scope.record.libraryLacks = "Library Lacks " + offSet;
-            if ($("#changedTitle"))
-                this.$scope.record.changedTitle = "Changed Title " + offSet;
-            if ($("#isbn"))
-                this.$scope.record.isbn = "ISBN " + offSet;
-            if ($("#corpAuthorMain"))
-                this.$scope.record.corpAuthorMain = "Corporate Author Main " + offSet;
-            if ($("#corpSubBody"))
-                this.$scope.record.corpSubBody = "Corporate Sub Body " + offSet;
-            if ($("#corpCityCountry"))
-                this.$scope.record.corpCityCountry = "City, Country " + offSet;
-            if ($("#edition"))
-                this.$scope.record.edition = "Edition " + offSet;
-            if ($("#corpSubBody"))
-                this.$scope.record.translateTitleEdition = "Translate Title Edition " + offSet;
-            if ($("#issn"))
-                this.$scope.record.issn = "ISSN " + offSet;
-            if ($("#callNo"))
-                this.$scope.record.callNo = "Call No " + offSet;
-            if ($("#classNo"))
-                this.$scope.record.classNo = "Class No " + offSet;
-            if ($("#callDate"))
-                this.$scope.record.callDate = "11-11-2017";
-            if ($("#authorMark"))
-                this.$scope.record.authorMark = "Author Mark " + offSet;
-
-            this.$scope.record.imprint.placeOfPublication = "Publication Place " + offSet;
-            this.$scope.record.imprint.yearDateOfPublication = "Year of Publication " + offSet;
-            this.$scope.record.imprint.copyRightDate = "09-09-2016";
-
-            this.$scope.record.physicalDescription.pagination = "Pagination " + offSet;
-            this.$scope.record.physicalDescription.illustrations = "Illustrations " + offSet;
-            this.$scope.record.physicalDescription.accompanyingMaterials = "Materials " + offSet;
-            this.$scope.record.physicalDescription.dimensions = "Dimensions " + offSet;
-
-            this.$scope.record.noteList[0].note = "Note 0";
-            this.$scope.record.subjectList[0].subject = "Subject 0";
-            this.$scope.record.keywords = "Keyword1, ";
-        }
-
         private makeCallNo(): void {
             this.$scope.record.callNo = "";
             this.$scope.record.callNo += this.$scope.record.classNo != "" ? this.$scope.record.classNo : "";
             this.$scope.record.callNo += this.$scope.record.authorMark != "" ? "/" + this.$scope.record.authorMark : "";
-            this.$scope.record.callNo += this.$scope.record.callDate != "" ? "/" + this.$scope.record.callDate : "";
+            this.$scope.record.callNo += (this.$scope.record.callYear != 0 && this.$scope.record.callYear != null) ? "/" + this.$scope.record.callYear : "";
             this.$scope.record.callNo += this.$scope.record.callEdition != "" ? "/" + this.$scope.record.callEdition : "";
             this.$scope.record.callNo += this.$scope.record.callVolume != "" ? "/" + this.$scope.record.callVolume : "";
         }

@@ -8,6 +8,7 @@ module ums {
         recordIdList: Array<String>;
         search: any;
         choice: string;
+        choiceType: string;
 
         doSearch: Function;
 
@@ -63,10 +64,10 @@ module ums {
                 var filter: IFilter = JSON.parse(localStorage.getItem("lms_search_filter"));
                 this.$scope.search.queryTerm = filter.basicQueryTerm;
                 this.$scope.choice = filter.basicQueryField;
-
             } else {
                 this.$scope.search.searchType = "basic";
                 this.$scope.choice = "any";
+                this.$scope.choiceType = "Exact";
             }
 
             this.prepareFilter();
@@ -92,6 +93,12 @@ module ums {
             if (this.$scope.search.searchType == 'basic') {
                 filter.basicQueryField = this.$scope.choice;
                 filter.basicQueryTerm = this.$scope.search.queryTerm;
+
+                if(this.$scope.choiceType == "Exact"){
+                }
+                else if(this.$scope.choiceType == "Likely"){
+                    filter.basicQueryTerm = "*" + this.$scope.search.queryTerm + "*";
+                }
             }
             else if (this.$scope.search.searchType == 'advanced') {
                 // filter.advancedQueryMap = <IAdvancedSearchMap>();

@@ -1,15 +1,19 @@
 package org.ums.solr.repository.document.lms;
 
-import com.google.common.collect.Lists;
 import org.apache.solr.client.solrj.beans.Field;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.SolrDocument;
+import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.library.Record;
 import org.ums.enums.library.MaterialType;
+import org.ums.manager.library.ContributorManager;
+import org.ums.manager.library.PublisherManager;
 import org.ums.solr.repository.document.SearchDocument;
 import org.ums.util.UmsUtils;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Ifti on 15-Apr-17.
@@ -17,84 +21,63 @@ import java.util.List;
 @SolrDocument(solrCoreName = "ums")
 public class RecordDocument implements SearchDocument<String> {
   public static final String DOCUMENT_TYPE = "Record";
-  // @Autowired
-  // PublisherManager mPublisherManager;
+
+  private static PublisherManager sPublisherManager;
+  private static ContributorManager sContributorManager;
+
+  static {
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sPublisherManager = applicationContext.getBean("publisherManager", PublisherManager.class);
+    sContributorManager = applicationContext.getBean("contributorManager", ContributorManager.class);
+  }
 
   @Id
   @Field
   private String id;
 
-  @Field("title_txt")
-  private List<String> title;
+  @Field("language_s")
+  private String language;
 
-  @Field("cTitle_s")
-  private String cTitle;
+  @Field("title_t")
+  private ArrayList<String> title;
 
-  @Field("whitespaceRemovedTitle_s")
-  private String whitespaceRemovedTitle;
+  @Field("alphaNumericTitle_s")
+  private String alphaNumericTitle;
 
-  @Field("onlyAlphaNumericTitle_s")
-  private String onlyAlphaNumericTitle;
-
-  @Field("onlyAlphaTitle_s")
-  private String onlyAlphaTitle;
+  @Field("subTitle_t")
+  private ArrayList<String> subTitle;
 
   @Field("type_s")
   private String type = DOCUMENT_TYPE;
 
-  @Field("materialType_txt")
-  private List<String> materialType;
+  @Field("materialType_s")
+  private String materialType;
 
-  @Field("seriesTitle_txt")
-  private List<String> seriesTitle;
+  @Field("seriesTitle_t")
+  private ArrayList<String> seriesTitle;
 
-  @Field("volumeNo_txt")
-  private List<String> volumeNo;
+  @Field("corpAuthorMain_s")
+  private String corpAuthorMain;
 
-  @Field("volumeTitle_txt")
-  private List<String> volumeTitle;
-
-  @Field("changedTitle_txt")
-  private List<String> changedTitle;
-
-  @Field("isbn_txt")
-  private List<String> isbn;
-
-  @Field("issn_txt")
-  private List<String> issn;
-
-  @Field("corpAuthorMain_txt")
-  private List<String> corpAuthorMain;
-
-  @Field("corpAuthorBody_txt")
-  private List<String> corpAuthorBody;
-
-  @Field("corpCityCountry_txt")
-  private List<String> corpCityCountry;
-
-  @Field("callNo_txt")
-  private List<String> callNo;
-
-  @Field("cCallNo_s")
-  private String cCallNo;
+  @Field("callNo_s")
+  private String callNo;
 
   @Field("publisher_txt")
-  private List<String> publisher;
+  private ArrayList<String> publishers;
 
-  @Field("status_txt")
-  private List<String> status;
-
-  @Field("bindingType_txt")
-  private List<String> bindingType;
-
-  @Field("keywords_txt")
-  private List<String> keywords;
+  @Field("status_s")
+  private String status;
 
   @Field("contributors_txt")
-  private List<String> contributors;
+  private ArrayList<String> contributors;
 
   @Field("subjects_txt")
-  private String[] subjects;
+  private ArrayList<String> subjects;
+
+  @Field("yearOfPublication_i")
+  private int yearOfPublication;
+
+  private String[] contributorArray;
 
   /*
    * @Field(child = true) private List<ContributorDocument> contributorDocument;
@@ -103,39 +86,44 @@ public class RecordDocument implements SearchDocument<String> {
   public RecordDocument() {}
 
   public RecordDocument(final Record pRecord) {
-    id = pRecord.getMfn().toString();
-    title = Lists.newArrayList(pRecord.getTitle());
-    cTitle = pRecord.getTitle();
-    whitespaceRemovedTitle = pRecord.getTitle().replaceAll(" ", "");
-    onlyAlphaNumericTitle = pRecord.getTitle().replaceAll("[^a-zA-Z0-9]+", "");
-    onlyAlphaTitle = pRecord.getTitle().replaceAll("[^a-zA-Z]+", "");
-    materialType = Lists.newArrayList(MaterialType.get(pRecord.getMaterialType().getId()).getLabel());
-    seriesTitle = Lists.newArrayList(pRecord.getSeriesTitle());
-    volumeTitle = Lists.newArrayList(pRecord.getVolumeTitle());
-    volumeNo = Lists.newArrayList(pRecord.getVolumeNo());
-    changedTitle = Lists.newArrayList(pRecord.getChangedTitle());
-    isbn = Lists.newArrayList(pRecord.getIsbn());
-    issn = Lists.newArrayList(pRecord.getIssn());
-    corpAuthorMain = Lists.newArrayList(pRecord.getCorpAuthorMain());
-    corpAuthorBody = Lists.newArrayList(pRecord.getCorpSubBody());
-    corpCityCountry = Lists.newArrayList(pRecord.getCorpCityCountry());
-    callNo = Lists.newArrayList(pRecord.getCallNo());
-    cCallNo = pRecord.getCallNo();
-    // publisher = mPublisherManager.get(pRecord.getPublisherId()).getName();
-    status = Lists.newArrayList(pRecord.getRecordStatus().getLabel());
-    keywords = Lists.newArrayList(pRecord.getKeyWords());
+    id = pRecord.getId().toString();
+    if(pRecord.getLanguage() != null) {
+      language = pRecord.getLanguage().getLabel();
+    }
+    title = new ArrayList<String>(Arrays.asList(pRecord.getTitle()));
+    alphaNumericTitle = pRecord.getTitle().replaceAll("[^a-zA-Z0-9]+", "");
+    if(pRecord.getSubTitle() != null) {
+      subTitle = new ArrayList<String>(Arrays.asList(pRecord.getSubTitle()));
+    }
+    materialType = MaterialType.get(pRecord.getMaterialType().getId()).getLabel();
+    if(pRecord.getSeriesTitle() != null) {
+      seriesTitle = new ArrayList<String>(Arrays.asList(pRecord.getSeriesTitle()));
+    }
+    corpAuthorMain = pRecord.getCorpAuthorMain() == null ? "" : pRecord.getCorpAuthorMain();
+    callNo = pRecord.getCallNo();
+    status = pRecord.getRecordStatus().getLabel();
+    subjects =
+        new ArrayList<String>(Arrays.asList(UmsUtils.convertJsonStringToStringArray(pRecord.getSubjectJsonString(),
+            "subject")));
 
-    subjects = UmsUtils.convertJsonStringToStringArray(pRecord.getSubjectJsonString(), "subject");
+    if(pRecord.getContributorJsonString() != null) {
+      contributorArray = UmsUtils.convertJsonStringToStringArray(pRecord.getContributorJsonString(), "id");
 
-    /*
-     * aa.add(new ContributorDocument("Co-Author", "morshed")); aa.add(new
-     * ContributorDocument("Author", "kawsur")); List<ContributorDocument> aa = new ArrayList<>();
-     * // String contributorString = "[{\"viewOrder\":1,\"id\":\"2\",\"role\":\"2\"}]";
-     * contributorDocument = aa;
-     * 
-     * // contributors = Lists.newArrayList(pRecord.getContributorJsonString()); contributors =
-     * Arrays.asList(new String[] {"kawsur", "morshed"});// Lists.newArrayList({""});
-     */
+      for(int i = 0; i < contributorArray.length; i++) {
+        contributorArray[i] = (sContributorManager.get(Long.parseLong(contributorArray[i])).getFullName());
+      }
+
+      contributors = new ArrayList<String>(Arrays.asList(contributorArray));
+    }
+
+    if(pRecord.getImprint().getPublisherId() != null && pRecord.getImprint().getPublisherId() != 0) {
+      publishers =
+          new ArrayList<String>(Arrays.asList((sPublisherManager.get(pRecord.getImprint().getPublisherId()).getName())));
+    }
+
+    yearOfPublication =
+        pRecord.getImprint().getYearOfPublication() == null ? 0 : pRecord.getImprint().getYearOfPublication();
+
   }
 
   @Override

@@ -38,7 +38,6 @@ module ums {
             record.physicalDescriptionString = JSON.stringify(record.physicalDescription);
             record.imprint.publisher = record.imprint.publisher + '';
 
-
             if (record.mfnNo != undefined) {
                 this.httpClient.put(resourceUrl + '/' + record.mfnNo, record, 'application/json')
                     .success(() => {
