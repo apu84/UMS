@@ -1,12 +1,13 @@
-package org.ums.academic.resource;
+package org.ums.academic.resource.routine;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.logs.GetLog;
-import org.ums.manager.RoutineManager;
+import org.ums.manager.routine.RoutineManager;
 import org.ums.resource.Resource;
 
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -38,6 +39,14 @@ public class RoutineResource extends MutableRoutineResource {
   @GetLog(message = "Accessed teacher's class routine")
   public JsonObject getRoutineForTeachers(final @Context HttpServletRequest pHttpServletRequest) {
     return mRoutineResourceHelper.getRoutineForTeacher(mUriInfo);
+  }
+
+  @GET
+  @Path("/semester/{semesterId}/course/{courseId}")
+  @GetLog(message = "Requested for semester and course wise routine")
+  public JsonArray getRoutine(final @Context HttpServletRequest pHttpServletRequest,
+      @PathParam("semesterId") Integer pSemesterId, @PathParam("courseId") String pCourseId) {
+    return mRoutineResourceHelper.getRoutine(pSemesterId, pCourseId, mUriInfo);
   }
 
   @GET
@@ -86,13 +95,13 @@ public class RoutineResource extends MutableRoutineResource {
   }
 
   @GET
-  @Path("/routineForEmployee/semester/{semesterId}/year/{year}/semester/{semester}/section/{section}")
+  @Path("/semester/{semesterId}/program/{programId}/year/{year}/semester/{semester}/section/{section}")
   @GetLog(message = "Accessed class routine report for employee")
-  public JsonObject getRoutineForEmployee(final @Context HttpServletRequest pHttpServletRequest,
-      final @PathParam("semesterId") String semesterId, final @PathParam("year") String year,
-      final @PathParam("semester") String semester, final @PathParam("section") String section) {
-    return mRoutineResourceHelper.getRoutineForEmployee(Integer.parseInt(semesterId), Integer.parseInt(year),
-        Integer.parseInt(semester), section, mUriInfo);
+  public JsonArray getRoutineForEmployee(final @Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("semesterId") int semesterId, final @PathParam("programId") int programId,
+      final @PathParam("year") int year, final @PathParam("semester") int semester,
+      final @PathParam("section") String section) {
+    return mRoutineResourceHelper.getRoutine(semesterId, programId, year, semester, section, mUriInfo);
   }
 
   @GET

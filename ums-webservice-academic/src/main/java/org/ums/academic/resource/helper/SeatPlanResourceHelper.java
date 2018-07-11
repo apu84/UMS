@@ -153,8 +153,9 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
     /*
      * action will be of two types-> createOrView and -->createNew. createOrView: it will check, if
      * there is a seatPlan already, if there is, then it just responds positively. Else, it will
-     * create new seatPlan and then will assure. create: it will create only. If there is a seatPlan
-     * already, then, it will first delete the whole seatPlan and then will create a new one. :)
+     * createOrUpdate new seatPlan and then will assure. createOrUpdate: it will createOrUpdate
+     * only. If there is a seatPlan already, then, it will first delete the whole seatPlan and then
+     * will createOrUpdate a new one. :)
      */
 
     GenericResponse<Map> genericResponse = null, previousResponse = null;

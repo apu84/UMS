@@ -1,23 +1,33 @@
-package org.ums.domain.model.immutable;
+package org.ums.domain.model.immutable.routine;
 
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
-import org.ums.domain.model.mutable.MutableRoutine;
+import org.ums.domain.model.immutable.ClassRoom;
+import org.ums.domain.model.immutable.Course;
+import org.ums.domain.model.immutable.Program;
+import org.ums.domain.model.immutable.Semester;
+import org.ums.domain.model.mutable.routine.MutableRoutine;
 
 import java.io.Serializable;
+import java.time.LocalTime;
 
 /**
  * Created by My Pc on 3/5/2016.
  */
 public interface Routine extends Serializable, LastModifier, EditType<MutableRoutine>, Identifier<Long> {
+
+  Integer getSemesterId();
+
   Semester getSemester();
+
+  Integer getProgramId();
 
   Program getProgram();
 
   String getCourseId();
 
-  String getCourseNo();
+  Course getCourse();
 
   int getDay();
 
@@ -27,13 +37,15 @@ public interface Routine extends Serializable, LastModifier, EditType<MutableRou
 
   int getAcademicSemester();
 
-  String getStartTime();
+  LocalTime getStartTime();
 
-  String getEndTime();
+  LocalTime getEndTime();
 
   int getDuration();
 
-  Integer getRoomId();
+  Long getRoomId();
+
+  ClassRoom getRoom();
 
   String getStatus();
 }

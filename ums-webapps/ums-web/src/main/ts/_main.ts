@@ -94,6 +94,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/model/User.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/AdditionalRolePermissions.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/Employee.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/model/Teacher.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/AdmissionStudent.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/Semester.ts'/>
 /// <reference path='./model/leaveManagement/LmsApplication.ts'/>
@@ -126,11 +127,15 @@
 /// <reference path='service/SeatPlanService.ts'/>
 /// <reference path='service/CommonService.ts'/>
 /// <reference path='service/FacultyService.ts'/>
-/// <reference path='service/ClassRoutineService.ts'/>
+/// <reference path='controller/routine/ClassRoutineService.ts'/>
+/// <reference path='controller/routine/ClassRoutineSlotEditController.ts'/>
+/// <reference path='controller/routine/RoutineConfigController.ts'/>
+/// <reference path='controller/routine/RoutineConfigService.ts'/>
 /// <reference path='service/ExamGradeService.ts'/>
 /// <reference path='service/ClassRoomService.ts'/>
 /// <reference path='service/AttachmentService.ts'/>
 /// <reference path='service/ProgramService.ts'/>
+/// <reference path='service/ProgramTypeService.ts'/>
 /// <reference path='service/AdmissionTotalSeatService.ts'/>
 /// <reference path='service/DepartmentSelectionDeadlineService.ts'/>
 /// <reference path='service/CourseServices.ts'/>
@@ -140,6 +145,7 @@
 /// <reference path='service/StudentService.ts'/>
 /// <reference path='service/TeacherService.ts'/>
 /// <reference path='service/AdmissionCertificateVerificationService.ts'/>
+/// <reference path='service/CourseTeacherService.ts'/>
 
 /// <reference path='controller/student/NewStudent.ts'/>
 
@@ -150,6 +156,8 @@
 /// <reference path='controller/semester/ModifySeatPlan.ts'/>
 /// <reference path='controller/semester/AppCCI.ts'/>
 /// <reference path='controller/semester/SeatPlanReports.ts'/>
+/// <reference path='controller/semester/SemesterConfig.ts'/>
+
 
 /// <reference path='controller/course/NewCourseUg.ts'/>
 /// <reference path='controller/course/NewCoursePg.ts'/>
@@ -170,7 +178,8 @@
 /// <reference path='controller/dept/AdvisingStudents.ts'/>
 /// <reference path='controller/dept/OptionalCoursesOffer.ts'/>
 /// <reference path='controller/semester/SemesterSettingParameter.ts'/>
-/// <reference path='controller/dept/ClassRoutine.ts'/>
+/// <reference path='controller/routine/ClassRoutine.ts'/>
+/// <reference path='controller/routine/ClassRoutineChartController.ts'/>
 /// <reference path='controller/dept/ClassAttendance.ts'/>
 /// <reference path='controller/logger/LoggerGrid.ts'/>
 /// <reference path='controller/course-material/CourseMaterial.ts'/>

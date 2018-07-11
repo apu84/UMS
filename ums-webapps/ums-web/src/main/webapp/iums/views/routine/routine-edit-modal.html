@@ -1,0 +1,31 @@
+
+<div class="modal fade" id="routineConfigModal" role="dialog">
+    <div class="modal-dialog" style="width: 85%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit Slot</h4>
+            </div>
+            <div class="modal-body">
+                <div ui-view></div>
+                <div class="row" ng-if="vm.showProgressBar">
+                    <div class="col-md-12">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar"
+                                 aria-valuenow="{{vm.progress}}"
+                                 aria-valuemin="0" aria-valuemax="100" style="width:{{vm.progress}}%">
+                                {{vm.progress}}% Complete (success)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" ng-click="vm.save()">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.createRoutineBody()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

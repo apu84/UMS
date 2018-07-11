@@ -1,20 +1,25 @@
 package org.ums.academic.resource.teacher.assigned;
 
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonValue;
-import javax.ws.rs.core.UriInfo;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.ums.academic.resource.teacher.TeacherBuilder;
 import org.ums.builder.Builder;
+import org.ums.builder.CourseBuilder;
+import org.ums.builder.SemesterBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.manager.CourseManager;
+import org.ums.manager.EmployeeManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.TeacherManager;
+
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonValue;
+import javax.ws.rs.core.UriInfo;
 
 @Component
 public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCourseTeacher> {
@@ -24,6 +29,14 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
   private TeacherManager mTeacherManager;
   @Autowired
   private SemesterManager mSemesterManager;
+  @Autowired
+  private CourseBuilder mCourseBuilder;
+  @Autowired
+  private SemesterBuilder mSemesterBuilder;
+  @Autowired
+  private TeacherBuilder mTeacherBuilder;
+  @Autowired
+  private EmployeeManager mEmployeeManager;
 
   @Override
   public void build(JsonObjectBuilder pBuilder, CourseTeacher pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
@@ -41,6 +54,9 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
     pBuilder.add("courseCrHr", course.getCrHr());
     pBuilder.add("year", course.getYear());
     pBuilder.add("semester", course.getSemester());
+    JsonObjectBuilder courseJsonObject = Json.createObjectBuilder();
+    mCourseBuilder.build(courseJsonObject, course, pUriInfo, pLocalCache);
+    pBuilder.add("course", courseJsonObject);
     //pBuilder.add("syllabusId", course.getSyllabusId());
 
 
@@ -50,6 +66,10 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
 
       pBuilder.add("teacherId", teacher.getId());
       pBuilder.add("teacherName", teacher.getName());
+      pBuilder.add("shortName", mEmployeeManager.get(teacher.getId()).getShortName());
+      JsonObjectBuilder teacherJsonObject = Json.createObjectBuilder();
+      mTeacherBuilder.build(teacherJsonObject, teacher, pUriInfo, pLocalCache);
+      pBuilder.add("teacher", teacherJsonObject);
     }
     if (pReadOnly.getSection() != null) {
       pBuilder.add("section", pReadOnly.getSection());

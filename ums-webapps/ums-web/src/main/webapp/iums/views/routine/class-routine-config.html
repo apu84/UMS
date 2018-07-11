@@ -1,0 +1,123 @@
+<div class="row">
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
+    </div>
+
+    <div class="panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select </h3>
+        </div>
+        <div class="panel-body pan">
+            <form action="" class="form-horizontal" data-validate="" data-onvalidate="submit"
+                  data-ng-hide="response.status">
+                <div class="form-body pal">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Type</label>
+                        <div class="col-md-9">
+                            <select
+                                    class="form-control required"
+                                    name="programType"
+                                    data-ng-options="programType.name for programType in vm.programTypeList"
+                                    data-ng-model="vm.selectedProgramType"
+                                    data-ng-change="vm.getSemesterList()">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Semester</label>
+                        <div class="col-md-9">
+                            <select
+                                    class="form-control required"
+                                    name="semesterType"
+                                    data-ng-options="semesterType.name for semesterType in vm.semesterList"
+                                    data-ng-model="vm.selectedSemester"
+                            >
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" class="btn btn-success" data-ng-click="vm.getRoutineConfigData()">Search
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div id="rightDiv">
+
+        <div class="panel" style="min-height: 490px;">
+            <div class="panel-heading" style="font-size: 14px;">
+                <b>Academic Semester:</b> {{vm.selectedSemester.name}}<span style="margin-left: 15px;"></span>
+                <b>Program Type:</b> {{vm.selectedProgramType.name}}<span style="margin-left: 15px;"></span>
+                <span
+                        class="subtitle"></span></div>
+            <div class="panel-body">
+                <form action="" class="form-horizontal" data-validate="" data-onvalidate="vm.saveOrUpdate">
+                    <div class="form-body pal">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Day From</label>
+                            <div class="col-md-8">
+                                <select name="dayFrom" class="form-control required"
+                                        ng-model="vm.routineConfigData.dayFrom">
+                                    <option value="">Select a day</option>
+                                    <option ng-repeat="d in vm.weekDays" value="{{d.id}}">{{d.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Day To</label>
+                            <div class="col-md-8">
+                                <select name="dayTo" class="form-control required"
+                                        ng-model="vm.routineConfigData.dayTo">
+                                    <option value="">Select a day</option>
+                                    <option ng-repeat="d in vm.weekDays" value="{{d.id}}">{{d.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Start Time (HH:mm AM/PM)</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control required"
+                                       ng-model="vm.routineConfigData.startTime"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">End Time (HH:mm AM/PM)</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control required"
+                                       ng-model="vm.routineConfigData.endTime"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Duration</label>
+                            <div class="col-md-8">
+                                <input type="number" class="form-control required"
+                                       ng-model="vm.routineConfigData.duration"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="well" align="right">
+                        <button type="button" class="btn btn-primary" ng-click="vm.saveOrUpdate()">Save/Update</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div ng-include="'views/routine/routine-config-modal.html'"></div>
+
+<script type="text/javascript">
+    //    setTimeout(function () {$(".fa+.fa-chevron-down").tooltip({placement : 'top', trigger : 'hover', title : "Download Promotion List"});}, 100);
+    $(".tooltips").tooltip();
+</script>
+
+
+
+
+
+
+
