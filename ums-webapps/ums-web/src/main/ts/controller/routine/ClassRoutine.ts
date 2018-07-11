@@ -105,16 +105,12 @@ module ums {
                   this.classRoutineService.selectedSemester = semesterList[i];
                 this.semesterList.push(semesterList[i]);
             }
-            console.log(this.semesterList);
         });
     }
 
     public fetchRoutineConfig(): ng.IPromise<any> {
       let defer = this.$q.defer();
-      console.log(this.classRoutineService.selectedSemester);
       this.routineConfigService.getBySemesterAndProgramType(this.classRoutineService.selectedSemester.id, +this.classRoutineService.selectedSemester.programTypeId).then((routineConfig: RoutineConfig) => {
-        console.log('fetched routine config');
-        console.log(routineConfig);
         if (routineConfig.id == null)
           this.notify.error("Routine configuration is not yet set for the semester, please contact with registrar office")
         this.routineConfigService.routineConfig = routineConfig;
@@ -123,28 +119,32 @@ module ums {
       return defer.promise;
     }
 
-    public fetchRoutineData() {
+    public fetchRoutineData(): ng.IPromise<ClassRoutine[]> {
+      let defer: ng.IDeferred<ClassRoutine[]> = this.$q.defer();
       this.fetchRoutineConfig().then((routineConfig: RoutineConfig) => {
         if (this.routineConfig == null || this.routineConfig == undefined) {
           this.notify.error("Routine of the semester is not yet configured, please contact with the registrar office");
+          defer.resolve(undefined);
         }
         else {
-
           this.classRoutineService.getClassRoutineForEmployee(this.classRoutineService.selectedSemester.id, this.classRoutineService.selectedProgram.id, +this.classRoutineService.studentsYear, +this.classRoutineService.studentsSemester, this.classRoutineService.selectedTheorySection.id).then((routineData: ClassRoutine[]) => {
             this.classRoutineService.routineData = [];
+            this.classRoutineService.dayAndTimeMapWithRoutine = {};
             this.classRoutineService.routineData = routineData;
+            defer.resolve(routineData);
           });
         }
       });
+      return defer.promise;
     }
 
     public searchForRoutineData(){
       Utils.expandRightDiv();
-
       this.counter += 1;
-      this.$state.go('classRoutine.classRoutineChart', {}, {reload: 'classRoutine.classRoutineChart'});
       this.searchButtonClicked = true;
-      this.fetchRoutineData();
+      this.fetchRoutineData().then((routineData) => {
+        this.$state.go('classRoutine.classRoutineChart', {}, {reload: 'classRoutine.classRoutineChart'});
+      });
     }
 
   }

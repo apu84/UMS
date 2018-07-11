@@ -62,6 +62,7 @@ module ums{
     public selectedHeader: IRoutineTableHeader;
     public selectedDay: IConstant;
     public sessionalSectionMap: any;
+    public dayAndTimeMapWithRoutine: any;
     public routineUrl: string = '/ums-webservice-academic/academic/routine';
     public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
     constructor(private appConstants: any, private httpClient: HttpClient,
