@@ -168,6 +168,10 @@ module ums {
         private downloadPdf(userId: string) {
             this.employeeInformationService.getEmployeeCV(userId);
         }
+
+        private downloadEmployeeList(){
+            this.employeeInformationService.getEmployeeListPdf();
+        }
     }
 
     UMS.controller("EmployeeInformation", EmployeeInformation);

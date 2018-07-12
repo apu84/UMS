@@ -2,6 +2,7 @@ package org.ums.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.employee.cv.EmployeeListGenerator;
 import org.ums.logs.GetLog;
 import org.ums.manager.EmployeeManager;
 
@@ -11,6 +12,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
+import java.io.IOException;
+import java.io.OutputStream;
 
 @Component
 @Path("academic/employee")
@@ -19,6 +23,9 @@ import javax.ws.rs.core.Response;
 public class EmployeeResource extends MutableEmployeeResource {
   @Autowired
   EmployeeManager mManager;
+
+  @Autowired
+  EmployeeListGenerator mEmployeeListGenerator;
 
   @GET
   @Path("/all")
@@ -92,5 +99,22 @@ public class EmployeeResource extends MutableEmployeeResource {
   @Path("/validate/{short-name}")
   public boolean validate(final @Context Request pRequest, final @PathParam("short-name") String pShortName) {
     return mEmployeeResourceHelper.validateShortName(pShortName);
+  }
+
+  @GET
+  @Path("/report/employeeList")
+  @Produces("application/pdf")
+  @GetLog(message = "Download Employee List")
+  public StreamingOutput getEmployeeCV(@Context HttpServletRequest httpServletRequest, final @Context Request pRequest) {
+    return new StreamingOutput() {
+      @Override
+      public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
+        try {
+          mEmployeeListGenerator.printEmployeeList(pOutputStream);
+        } catch(Exception e) {
+          throw new WebApplicationException(e);
+        }
+      }
+    };
   }
 }

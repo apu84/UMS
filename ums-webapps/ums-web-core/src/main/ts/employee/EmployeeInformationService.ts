@@ -557,6 +557,23 @@ module ums{
                     console.error(response);
                 }, 'arraybuffer');
         }
+
+        public getEmployeeListPdf(): void {
+            let contentType: string = UmsUtil.getFileContentType("pdf");
+            let fileName = "List of Employees";
+
+            this.httpClient.get("academic/employee/report/employeeList", 'application/pdf', (data: any, etag: string) => {
+
+                    // var file = new Blob([data], {type: 'application/pdf'});
+                    // var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
+                    // this.$window.open(fileURL);
+
+                    UmsUtil.writeFileContent(data, contentType, fileName);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                }, 'arraybuffer');
+        }
     }
 
     UMS.service("employeeInformationService", EmployeeInformationService);
