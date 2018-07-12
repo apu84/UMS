@@ -32,7 +32,7 @@ module ums{
     endTime: string;
     duration: string;
     room: ClassRoom;
-    roomId: number;
+    roomId: string;
     courseTeacher: CourseTeacherInterface[];
     employee: Employee;
     }
@@ -200,6 +200,18 @@ module ums{
         defer.resolve(undefined);
       });
 
+      return defer.promise;
+    }
+
+    public deleteRoutineById(id: string): ng.IPromise<any> {
+      let defer = this.$q.defer();
+      this.httpClient.doDelete(this.routineUrl + "/id/" + id)
+          .success((response) => defer.resolve(response))
+          .error((response) => {
+            console.error(response);
+            this.notify.error("Error in removing routine data");
+            defer.resolve(undefined);
+          })
       return defer.promise;
     }
 

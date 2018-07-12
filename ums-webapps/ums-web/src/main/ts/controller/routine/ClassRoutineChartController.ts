@@ -191,8 +191,11 @@ module ums {
           r.courseTeacher = this.classRoutineService.courseTeacherWithSectionMap[r.courseId + r.section];
         }
         else {
-          if (this.classRoutineService.courseTeacherMap[r.courseId])
-            r.courseTeacher = this.classRoutineService.courseTeacherMap[r.courseId];
+          if (this.classRoutineService.courseTeacherMap[r.courseId]) {
+            let courseTeacherList = angular.copy(this.classRoutineService.courseTeacherMap[r.courseId]);
+            courseTeacherList.forEach((c: CourseTeacherInterface) => c.id = undefined);
+            r.courseTeacher = courseTeacherList;
+          }
           else
             r.courseTeacher = [];
         }
@@ -208,7 +211,9 @@ module ums {
       * 3. Extract course teacher from class routine data
       * 4. Save and update course teacher information.
       * */
-    public save() {
+
+    public saveSlotData() {
+
       this.showProgressBar = true;
       this.progress = 0;
 
@@ -236,9 +241,21 @@ module ums {
               $("#routineConfigModal").modal('toggle');
               this.createRoutineBody();
             }
+            this.$timeout.apply(() => {
+              this.showProgressBar = false;
+            }, 1000);
           });
         });
       });
+    }
+
+    public save() {
+      if (this.classRoutineService.slotRoutineList.length == 0) {
+        this.createRoutineBody();
+      } else {
+        this.saveSlotData();
+      }
+
     }
 
     public createCourseTeacherMap() {
@@ -278,8 +295,7 @@ module ums {
       console.log(this.classRoutineService.slotRoutineList);
       this.classRoutineService.slotRoutineList.forEach((routine: ClassRoutine) => {
         if (routine.courseTeacher != undefined && routine.courseTeacher.length != 0) {
-          console.log("Found one");
-          console.log(routine.courseTeacher);
+          routine.courseTeacher.forEach((c: CourseTeacherInterface) => c.section = routine.section);
           this.courseTeacherList = this.courseTeacherList.concat(routine.courseTeacher);
         }
       })

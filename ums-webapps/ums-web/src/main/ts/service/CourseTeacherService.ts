@@ -69,6 +69,23 @@ module ums {
             this.notify.error("Error in deleting data");
           });
     }
+
+    public deleteTeacherList(courseTeacherList: CourseTeacherInterface[]): ng.IPromise<any> {
+      let defer: ng.IDeferred<any> = this.$q.defer();
+      let teacherList: CourseTeacherInterface[] = [];
+      courseTeacherList.forEach((c: CourseTeacherInterface) => {
+        if (c.id != undefined)
+          teacherList.push(c);
+      })
+      this.httpClient.put(this.courseTeacherUrl + "/delete", teacherList, HttpClient.MIME_TYPE_JSON)
+          .success((response) => defer.resolve(response))
+          .error((response) => {
+            console.error(response);
+            this.notify.error("Error in deleting teacher list");
+            defer.resolve(undefined);
+          })
+      return defer.promise;
+    }
   }
 
   UMS.service("courseTeacherService", CourseTeacherService);

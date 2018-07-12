@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.ums.enums.CourseCategory;
 import org.ums.logs.DeleteLog;
 import org.ums.logs.GetLog;
-import org.ums.logs.PostLog;
+import org.ums.logs.PutLog;
 import org.ums.manager.CourseTeacherManager;
 import org.ums.manager.SemesterSyllabusMapManager;
 import org.ums.resource.Resource;
@@ -43,7 +43,7 @@ public class CourseTeacherResource extends Resource {
   @GET
   @Path("/programId/{program-id}/semesterId/{semester-id}")
   public JsonObject get(final @Context Request pRequest, final @PathParam("program-id") Integer pProgramId,
-      final @PathParam("semester-id") Integer pSemesterId) {
+                        final @PathParam("semester-id") Integer pSemesterId) {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId, user.getDepartment().getId(), mUriInfo);
   }
@@ -51,7 +51,7 @@ public class CourseTeacherResource extends Resource {
   @GET
   @Path("/programId/{program-id}/semesterId/{semester-id}/year/{year}")
   public JsonObject get(final @Context Request pRequest, final @PathParam("program-id") Integer pProgramId,
-      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("year") Integer pYear) {
+                        final @PathParam("semester-id") Integer pSemesterId, final @PathParam("year") Integer pYear) {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId, pYear, user.getDepartment().getId(), mUriInfo);
   }
@@ -59,8 +59,8 @@ public class CourseTeacherResource extends Resource {
   @GET
   @Path("/programId/{program-id}/semesterId/{semester-id}/year/{year}/semester/{semester}")
   public JsonObject get(final @Context Request pRequest, final @PathParam("program-id") Integer pProgramId,
-      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("year") Integer pYear,
-      final @PathParam("semester") Integer pSemester) {
+                        final @PathParam("semester-id") Integer pSemesterId, final @PathParam("year") Integer pYear,
+                        final @PathParam("semester") Integer pSemester) {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester, user.getDepartment().getId(),
         mUriInfo);
@@ -69,7 +69,7 @@ public class CourseTeacherResource extends Resource {
   @GET
   @Path("/programId/{program-id}/semesterId/{semester-id}/category/{category}")
   public JsonObject get(final @Context Request pRequest, final @PathParam("program-id") Integer pProgramId,
-      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("category") String pCategory) {
+                        final @PathParam("semester-id") Integer pSemesterId, final @PathParam("category") String pCategory) {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId,
         CourseCategory.get(Integer.parseInt(pCategory)), user.getDepartment().getId(), mUriInfo);
@@ -78,8 +78,8 @@ public class CourseTeacherResource extends Resource {
   @GET
   @Path("/programId/{program-id}/semesterId/{semester-id}/year/{year}/category/{category}")
   public JsonObject get(final @Context Request pRequest, final @PathParam("program-id") Integer pProgramId,
-      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("year") Integer pYear,
-      final @PathParam("category") String pCategory) {
+                        final @PathParam("semester-id") Integer pSemesterId, final @PathParam("year") Integer pYear,
+                        final @PathParam("category") String pCategory) {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId, pYear,
         CourseCategory.get(Integer.parseInt(pCategory)), user.getDepartment().getId(), mUriInfo);
@@ -88,8 +88,8 @@ public class CourseTeacherResource extends Resource {
   @GET
   @Path("/programId/{program-id}/semesterId/{semester-id}/year/{year}/semester/{semester}/category/{category}")
   public JsonObject get(final @Context Request pRequest, final @PathParam("program-id") Integer pProgramId,
-      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("year") Integer pYear,
-      final @PathParam("semester") Integer pSemester, final @PathParam("category") String pCategory) {
+                        final @PathParam("semester-id") Integer pSemesterId, final @PathParam("year") Integer pYear,
+                        final @PathParam("semester") Integer pSemester, final @PathParam("category") String pCategory) {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester,
         CourseCategory.get(Integer.parseInt(pCategory)), user.getDepartment().getId(), mUriInfo);
@@ -98,7 +98,7 @@ public class CourseTeacherResource extends Resource {
   @GET
   @Path("/programId/{program-id}/semesterId/{semester-id}/courseId/{courseId}")
   public JsonObject getByCourse(final @Context Request pRequest, final @PathParam("program-id") Integer pProgramId,
-      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("courseId") String pCourseId) {
+                                final @PathParam("semester-id") Integer pSemesterId, final @PathParam("courseId") String pCourseId) {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId, pCourseId, user.getDepartment().getId(),
         mUriInfo);
@@ -108,8 +108,8 @@ public class CourseTeacherResource extends Resource {
   @GetLog(message = "Requested for course and section based course teacher")
   @Path("/semesterId/{semester-id}/courseId/{course-id}/section/{section}")
   public JsonArray get(@Context HttpServletRequest pHttpServletRequest,
-      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("course-id") String pCourseId,
-      final @PathParam("section") String pSection) {
+                       final @PathParam("semester-id") Integer pSemesterId, final @PathParam("course-id") String pCourseId,
+                       final @PathParam("section") String pSection) {
     return mResourceHelper.getCourseTeacher(pSemesterId, pCourseId, pSection, mUriInfo);
   }
 
@@ -117,9 +117,9 @@ public class CourseTeacherResource extends Resource {
   @GetLog(message = "Requested for program, semester, section, year and academic semester based course teacher")
   @Path("/programId/{program-id}/semesterId/{semester-id}/section/{section}/year/{year}/semester/{semester}")
   public JsonArray get(@Context HttpServletRequest pHttpServletRequest,
-      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("program-id") Integer pProgramId,
-      final @PathParam("section") String pSection, final @PathParam("year") int pYear,
-      final @PathParam("semester") int pSemester) {
+                       final @PathParam("semester-id") Integer pSemesterId, final @PathParam("program-id") Integer pProgramId,
+                       final @PathParam("section") String pSection, final @PathParam("year") int pYear,
+                       final @PathParam("semester") int pSemester) {
     return mResourceHelper.getCourseTeacher(pProgramId, pSemesterId, pSection, pYear, pSemester, mUriInfo);
   }
 
@@ -127,7 +127,7 @@ public class CourseTeacherResource extends Resource {
   @Path("/{semester-id}/{teacher-id}/course")
   @GetLog(message = "Accessed assigned course list for a teacher of a semester")
   public JsonObject getByCourse(@Context HttpServletRequest pHttpServletRequest, final @Context Request pRequest,
-      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("teacher-id") String pTeacherId) {
+                                final @PathParam("semester-id") Integer pSemesterId, final @PathParam("teacher-id") String pTeacherId) {
     return mResourceHelper.getAssignedCourses(pSemesterId, pTeacherId, mUriInfo);
   }
 
@@ -137,7 +137,7 @@ public class CourseTeacherResource extends Resource {
   }
 
   @PUT
-  @PostLog(message = "Save or update course teacher information from routine")
+  @PutLog(message = "Save or update course teacher information from routine")
   @Path("/saveOrUpdate")
   public JsonArray saveOrUpdateCourseTeacher(final JsonArray pJsonArray) {
     return mResourceHelper.createOrUpdateCourseTeacher(pJsonArray, mUriInfo);
@@ -146,8 +146,16 @@ public class CourseTeacherResource extends Resource {
   @DELETE
   @DeleteLog(message = "Requested for deleting by id")
   @Path("/id/{id}")
-  public Response delete(final @PathParam("id") String pId) throws Exception {
+  public Response delete(@Context HttpServletRequest pHttpServletRequest, final @PathParam("id") String pId)
+      throws Exception {
     return mResourceHelper.delete(Long.parseLong(pId));
+  }
+
+  @PUT
+  @PutLog(message = "Requested for removing a list of course teachers")
+  @Path("/delete")
+  public Response delete(@Context HttpServletRequest pHttpServletRequest, JsonArray pJsonArray) throws Exception {
+    return mResourceHelper.delete(pJsonArray, mUriInfo);
   }
 
 }

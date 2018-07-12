@@ -91,8 +91,20 @@ module ums {
         slotRoutine.duration = this.routineConfigService.routineConfig.duration.toString();
       }
       slotRoutine.courseId = slotRoutine.course.id;
+      this.assignExistingTeacher(slotRoutine);
       this.fetchCourseInfo();
     }
+
+    private assignExistingTeacher(slotRoutine: ClassRoutine) {
+      if (this.classRoutineService.courseTeacherMap[slotRoutine.course.id] != undefined) {
+        let courseTeacherList: CourseTeacherInterface[] = angular.copy(this.classRoutineService.courseTeacherMap[slotRoutine.course.id]);
+        courseTeacherList.forEach((c: CourseTeacherInterface) => c.id = undefined);
+        slotRoutine.courseTeacher = courseTeacherList;
+      } else {
+        slotRoutine.courseTeacher = [];
+      }
+    }
+
 
     public removeCourseTeacher(routine: ClassRoutine, courseTeacher: CourseTeacherInterface) {
       for (var i = 0; i < routine.courseTeacher.length; i++) {
@@ -152,6 +164,20 @@ module ums {
         slotRoutine.courseTeacher = [];
       slotRoutine.courseTeacher.push(courseTeacher);
       slotRoutine.employee = <Employee>{};
+      this.createCourseTeacherMapForSlot(courseTeacher);
+
+    }
+
+    private createCourseTeacherMapForSlot(courseTeacher: CourseTeacherInterface) {
+      let courseTeacherList: CourseTeacherInterface[] = [];
+      if (this.classRoutineService.courseTeacherWithSectionMap[courseTeacher.courseId + courseTeacher.section] == undefined) {
+        courseTeacherList.push(courseTeacher);
+        this.classRoutineService.courseTeacherWithSectionMap[courseTeacher.courseId + courseTeacher.section] = courseTeacherList;
+      } else {
+        courseTeacherList = this.classRoutineService.courseTeacherWithSectionMap[courseTeacher.courseId + courseTeacher.section];
+        courseTeacherList.push(courseTeacher);
+        this.classRoutineService.courseTeacherWithSectionMap[courseTeacher.courseId + courseTeacher.section] = courseTeacherList;
+      }
     }
 
     public fetchCourseInfo() {
@@ -167,7 +193,7 @@ module ums {
     public fetchRoomInfo() {
       this.showCourseInfo = false;
       this.showRoomInfo = true;
-      this.classRoutineService.getRoomBasedClassRoutine(this.classRoutineService.selectedSemester.id, this.selectedRoom.id).then((classRoutineList: ClassRoutine[]) => {
+      this.classRoutineService.getRoomBasedClassRoutine(this.classRoutineService.selectedSemester.id, +this.selectedRoom.id).then((classRoutineList: ClassRoutine[]) => {
         this.routineBasedOnRoom = [];
         this.routineBasedOnRoom = classRoutineList;
       })
@@ -187,9 +213,40 @@ module ums {
     }
 
     public remove(routine: ClassRoutine) {
+      if (routine.courseTeacher != undefined && routine.courseTeacher.length > 0) {
+        routine.courseTeacher.forEach((t: CourseTeacherInterface) => {
+          t.semesterId = this.classRoutineService.selectedSemester.id.toString();
+          t.section = this.classRoutineService.selectedTheorySection.id;
+        })
+        this.courseTeacherService.deleteTeacherList(routine.courseTeacher).then((response) => {
+          if (response != undefined)
+            this.removeSlotRoutine(routine);
+        })
+      } else {
+        this.removeSlotRoutine(routine);
+      }
+
+    }
+
+    private removeFromMainRoutineData(routine: ClassRoutine) {
+      for (var i = 0; i < this.classRoutineService.routineData.length; i++) {
+        if (this.classRoutineService.routineData[i] = routine) {
+          this.classRoutineService.routineData.splice(i, 1);
+          break;
+        }
+      }
+    }
+
+    private removeSlotRoutine(routine: ClassRoutine) {
       for (var i = 0; i < this.classRoutineService.slotRoutineList.length; i++) {
         if (routine == this.classRoutineService.slotRoutineList[i]) {
-          this.classRoutineService.slotRoutineList.splice(i, 1);
+          if (routine.id != null) {
+            this.classRoutineService.deleteRoutineById(routine.id);
+            this.removeFromMainRoutineData(routine);
+            this.classRoutineService.slotRoutineList.splice(i, 1);
+          }
+          else
+            this.classRoutineService.slotRoutineList.splice(i, 1);
           break;
         }
       }

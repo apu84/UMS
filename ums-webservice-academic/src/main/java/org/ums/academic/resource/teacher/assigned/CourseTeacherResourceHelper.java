@@ -65,6 +65,19 @@ public class CourseTeacherResourceHelper extends
         courseTeacherList.get(0).getCourse().getSemester(), pUriInfo);
   }
 
+  public Response delete(JsonArray pJsonArray, UriInfo pUriInfo) throws Exception {
+    List<MutableCourseTeacher> teacherList = new ArrayList<>();
+    for(int i = 0; i < pJsonArray.size(); i++) {
+      LocalCache localCache = new LocalCache();
+      JsonObject jsonObject = pJsonArray.getJsonObject(i);
+      MutableCourseTeacher courseTeacher = new PersistentCourseTeacher();
+      getBuilder().build(courseTeacher, jsonObject, localCache);
+      teacherList.add(courseTeacher);
+    }
+    getContentManager().delete(teacherList);
+    return Response.ok().build();
+  }
+
   public JsonArray getCourseTeacher(Integer pSemesterId, String pCourseId, String pSection, UriInfo pUriInfo) {
     List<CourseTeacher> courseTeacherList = getContentManager().getCourseTeacher(pSemesterId, pCourseId, pSection);
     JsonArrayBuilder courseTeacherArrayBuilder = Json.createArrayBuilder();
