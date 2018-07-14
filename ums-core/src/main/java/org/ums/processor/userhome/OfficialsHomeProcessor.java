@@ -47,6 +47,11 @@ public class OfficialsHomeProcessor extends AbstractUserHomeProcessor {
     designation.put("value", designationName);
     profileContent.add(designation);
 
+    Map<String, String> employeeId = new HashMap<>();
+    employeeId.put("key", "Employee ID");
+    employeeId.put("value", employeeManager.getByShortName(user.getId()).getId());
+    profileContent.add(employeeId);
+
     userInfo.setInfoList(profileContent);
     userInfo.setUserRole(user.getPrimaryRole().getName());
 
