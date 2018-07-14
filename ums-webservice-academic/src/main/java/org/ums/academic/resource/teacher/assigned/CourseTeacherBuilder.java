@@ -95,19 +95,20 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
 
   @Override
   public void build(MutableCourseTeacher pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    if (pJsonObject.containsKey("id") && !pJsonObject.get("id").equals(null)) {
+    if(pJsonObject.containsKey("id") && !pJsonObject.get("id").equals(null)) {
       pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
     }
     pMutable.setCourse(mCourseManager.get(pJsonObject.getString("courseId")));
     pMutable.setTeacher(mTeacherManager.get(pJsonObject.getString("teacherId")));
     JsonValue semesterIdObject = pJsonObject.get("semesterId");
 
-    if (semesterIdObject.getValueType().toString().equalsIgnoreCase("integer")) {
+    if(semesterIdObject.getValueType().toString().equalsIgnoreCase("integer")) {
       pMutable.setSemester(mSemesterManager.get(pJsonObject.getInt("semesterId")));
-    } else if (semesterIdObject.getValueType().toString().equalsIgnoreCase("string")) {
+    }
+    else if(semesterIdObject.getValueType().toString().equalsIgnoreCase("string")) {
       pMutable.setSemester(mSemesterManager.get(Integer.parseInt(pJsonObject.getString("semesterId"))));
     }
-    if (pJsonObject.containsKey("section") && !StringUtils.isEmpty(pJsonObject.getString("section"))) {
+    if(pJsonObject.containsKey("section") && !StringUtils.isEmpty(pJsonObject.getString("section"))) {
       pMutable.setSection(pJsonObject.getString("section"));
     }
 

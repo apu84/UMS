@@ -52,7 +52,7 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
   private NamedParameterJdbcTemplate mNamedParameterJdbcTemplate;
 
   public PersistentCourseTeacherDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate,
-                                    IdGenerator pIdGenerator) {
+      IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mIdGenerator = pIdGenerator;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
@@ -61,7 +61,7 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
   @Override
   public List<ApplicationTES> getAllSectionForSelectedCourse(String pCourseId, String pTeacherId, Integer pSemesterId) {
     String query = ALL_SECTIONS_FOR_A_COURSE;
-    return mJdbcTemplate.query(query, new Object[]{pCourseId, pSemesterId, pTeacherId},
+    return mJdbcTemplate.query(query, new Object[] {pCourseId, pSemesterId, pTeacherId},
         new CourseTeacherRowMapperForAllSection());
   }
 
@@ -123,13 +123,13 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
   @Override
   public List<CourseTeacher> getCourseTeacher(int pSemesterId, String pCourseId) {
     String query = SELECT_ALL + " where semester_id=? and course_id=?";
-    return mJdbcTemplate.query(query, new Object[]{pSemesterId, pCourseId}, new CourseTeacherRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId}, new CourseTeacherRowMapper());
   }
 
   @Override
   public List<CourseTeacher> getCourseTeacher(int pSemesterId) {
     String query = SELECT_ALL + " where semester_id=?";
-    return mJdbcTemplate.query(query, new Object[]{pSemesterId}, new CourseTeacherRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId}, new CourseTeacherRowMapper());
   }
 
   @Override
@@ -142,20 +142,20 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
   @Override
   public List<CourseTeacher> getAssignedCourses(Integer pSemesterId, String pTeacherId) {
     String query = SELECT_ALL + " WHERE SEMESTER_ID = ? AND TEACHER_ID = ?";
-    return mJdbcTemplate.query(query, new Object[]{pSemesterId, pTeacherId}, getRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pTeacherId}, getRowMapper());
   }
 
   @Override
   public CourseTeacher getAssignedCourse(Integer pSemesterId, String pTeacherId, String pCourseId, String pSectionId) {
     String query = SELECT_ALL + " WHERE SEMESTER_ID = ? AND TEACHER_ID = ? and Course_Id=? and Section=?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pSemesterId, pTeacherId, pCourseId, pSectionId},
+    return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterId, pTeacherId, pCourseId, pSectionId},
         getRowMapper());
   }
 
   @Override
   public List<CourseTeacher> getAssignedSections(Integer pSemesterId, String pCourseId, String pTeacherId) {
     String query = SELECT_ALL + " WHERE SEMESTER_ID = ? AND COURSE_ID = ? AND TEACHER_ID = ?";
-    return mJdbcTemplate.query(query, new Object[]{pSemesterId, pCourseId, pTeacherId}, getRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pTeacherId}, getRowMapper());
   }
 
   @Override
@@ -170,19 +170,19 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
             + "  FROM COURSE_SYLLABUS_MAP, SEMESTER_SYLLABUS_MAP "
             + "  WHERE SEMESTER_SYLLABUS_MAP.SEMESTER_ID = ? AND SEMESTER_SYLLABUS_MAP.PROGRAM_ID=? AND SEMESTER_SYLLABUS_MAP.YEAR=? AND SEMESTER_SYLLABUS_MAP.SEMESTER=? AND SEMESTER_SYLLABUS_MAP.SYLLABUS_ID = COURSE_SYLLABUS_MAP.SYLLABUS_ID "
             + ")";
-    return mJdbcTemplate.query(query, new Object[]{pSemesterId, pSemesterId, pProgramId, pYear, pSemester},
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pSemesterId, pProgramId, pYear, pSemester},
         getRowMapper());
   }
 
   @Override
   public List<CourseTeacher> getCourseTeacher(int pSemesterId, String pCourseId, String pSection) {
     String query = SELECT_ALL + " WHERE SEMESTER_ID=? AND COURSE_ID=? AND SECTION LIKE '" + pSection + "%'";
-    return mJdbcTemplate.query(query, new Object[]{pSemesterId, pCourseId}, getRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId}, getRowMapper());
   }
 
   private Map<String, Object>[] getParameterObjects(List<MutableCourseTeacher> pMutableCourseTeachers) {
     Map<String, Object>[] parameterMaps = new HashMap[pMutableCourseTeachers.size()];
-    for (int i = 0; i < pMutableCourseTeachers.size(); i++) {
+    for(int i = 0; i < pMutableCourseTeachers.size(); i++) {
       parameterMaps[i] = getInsertOrUpdateParameters(pMutableCourseTeachers.get(i));
     }
     return parameterMaps;
