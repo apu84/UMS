@@ -35,82 +35,83 @@ public class EmployeeListGeneratorImpl implements EmployeeListGenerator {
   private PersonalInformationManager mPersonalInformationManager;
 
   @Override
-  public void printEmployeeList(OutputStream pOutputStream) throws IOException, DocumentException {
+    public void printEmployeeList(String pDeptList, String pEmpTypeList, OutputStream pOutputStream) throws IOException, DocumentException {
 
-    List<Employee> employeeList = mEmployeeManager.getAll();
+        List<Employee> employeeList = mEmployeeManager.downloadEmployeeList(pDeptList, pEmpTypeList);
 
-    List<Department> departmentList = mDepartmentManager.getAll();
+        List<Department> departmentList = mDepartmentManager.getAll();
 
-    departmentList.sort(Comparator.comparing(Department::getId));
+        departmentList.sort(Comparator.comparing(Department::getId));
 
-    Document document = new Document();
-    document.addTitle("Meeting Minutes");
+        Document document = new Document();
+        document.addTitle("Meeting Minutes");
 
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    PdfWriter writer = PdfWriter.getInstance(document, baos);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PdfWriter writer = PdfWriter.getInstance(document, baos);
 
-    Font fontTimes11Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11);
-    Font fontTimes11Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 12);
-    Font fontTimes14Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 14);
+        Font fontTimes11Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11);
+        Font fontTimes11Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 12);
+        Font fontTimes14Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 14);
 
-    document.open();
-    document.setPageSize(PageSize.A4);
+        document.open();
+        document.setPageSize(PageSize.A4);
 
-    Paragraph paragraph = null;
-    Chunk chunk = null;
+        Paragraph paragraph = null;
+        Chunk chunk = null;
 
-    int k = 0;
+        int k = 0;
 
-    for(int i = 0; i < departmentList.size(); i++) {
-      PdfPTable table = new PdfPTable(4);
-      table.setWidthPercentage(100);
-      table.setTotalWidth(new float[] {30, 50, 120, 120});
-      chunk = new Chunk("Department: " + departmentList.get(i).getLongName());
-      paragraph = new Paragraph(chunk);
-      document.add(paragraph);
+        PdfPTable table = new PdfPTable(5);
+        table.setWidthPercentage(100);
+        table.setTotalWidth(new float[]{30, 50, 150, 120, 100});
 
-      paragraph = new Paragraph();
-      emptyLine(paragraph, 1);
-      document.add(paragraph);
-      k = 0;
+        paragraph = new Paragraph();
+        emptyLine(paragraph, 1);
+        document.add(paragraph);
+        k = 0;
 
-      PdfPCell cell = new PdfPCell(new Phrase("#"));
+        PdfPCell cell = new PdfPCell(new Phrase("#"));
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Employee Id"));
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Employee Name"));
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Designation"));
+        table.addCell(cell);
+
+      cell = new PdfPCell(new Phrase("Department"));
       table.addCell(cell);
 
-      cell = new PdfPCell(new Phrase("Employee Id"));
-      table.addCell(cell);
+        for (int j = 0; j < employeeList.size(); j++) {
+            k++;
+            cell = new PdfPCell(new Phrase(k + "."));
+            table.addCell(cell);
 
-      cell = new PdfPCell(new Phrase("Employee Name"));
-      table.addCell(cell);
+            cell = new PdfPCell(new Phrase(employeeList.get(j).getId()));
+            table.addCell(cell);
 
-      cell = new PdfPCell(new Phrase("Designation"));
-      table.addCell(cell);
+            cell = new PdfPCell(new Phrase(mPersonalInformationManager.get(employeeList.get(j).getId()).getName()));
+            table.addCell(cell);
 
-      for(int j = 0; j < employeeList.size(); j++) {
-        if(departmentList.get(i).getId().equals(employeeList.get(j).getDepartment().getId()) && employeeList.get(j).getEmployeeType() != 1) {
-          k++;
-          cell = new PdfPCell(new Phrase(k + "."));
-          table.addCell(cell);
+            cell =
+                    new PdfPCell(new Phrase(mDesignationManager.get(employeeList.get(j).getDesignationId())
+                            .getDesignationName()));
+            table.addCell(cell);
 
-          cell = new PdfPCell(new Phrase(employeeList.get(j).getId()));
-          table.addCell(cell);
+            cell =
+                    new PdfPCell(new Phrase(mDepartmentManager.get(employeeList.get(j).getDepartment().getId())
+                            .getShortName()));
+            table.addCell(cell);
 
-          cell = new PdfPCell(new Phrase(mPersonalInformationManager.get(employeeList.get(j).getId()).getName()));
-          table.addCell(cell);
-
-          cell =
-              new PdfPCell(new Phrase(mDesignationManager.get(employeeList.get(j).getDesignationId())
-                  .getDesignationName()));
-          table.addCell(cell);
         }
-      }
-      document.add(table);
-      document.newPage();
-    }
+        document.add(table);
 
-    document.close();
-    baos.writeTo(pOutputStream);
-  }
+        document.close();
+        baos.writeTo(pOutputStream);
+    }
 
   void emptyLine(Paragraph p, int number) {
     for(int i = 0; i < number; i++) {

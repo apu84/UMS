@@ -1,17 +1,16 @@
 package org.ums.persistent.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.EmployeeDaoDecorator;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.mutable.MutableEmployee;
 import org.ums.persistent.model.PersistentEmployee;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentEmployeeDao extends EmployeeDaoDecorator {
 
@@ -109,6 +108,30 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
   public boolean validateShortName(String pShortName) {
     String query = EXISTS + " WHERE SHORT_NAME = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pShortName}, Boolean.class);
+  }
+
+  @Override
+  public List<Employee> downloadEmployeeList(String pDeptList, String pEmployeeTypeList) {
+
+    /*
+     * String dept = ""; for(int i = 0; i < pDeptList.size(); i++){
+     * System.out.println(pDeptList.get(i)); dept = pDeptList.get(i);
+     * 
+     * if(pDeptList.size() - 1 == i){ dept += ""; } else{ dept += ","; } System.out.println(dept); }
+     * 
+     * String empType = "";
+     * 
+     * for(int i = 0; i < pEmployeeTypeList.size(); i++){
+     * System.out.println(pEmployeeTypeList.get(i)); empType = pEmployeeTypeList.get(i) + "";
+     * 
+     * if(pEmployeeTypeList.size() - 1 == i){ empType += ""; } else{ empType += ","; }
+     * System.out.println(empType); }
+     */
+
+    String query =
+        "SELECT * FROM EMPLOYEES WHERE DEPT_OFFICE IN (" + pDeptList + ") AND EMPLOYEE_TYPE IN ( " + pEmployeeTypeList
+            + " ) ORDER BY DEPT_OFFICE ASC, DESIGNATION ASC ";
+    return mJdbcTemplate.query(query, new EmployeeRowMapper());
   }
 
   class EmployeeRowMapper implements RowMapper<Employee> {

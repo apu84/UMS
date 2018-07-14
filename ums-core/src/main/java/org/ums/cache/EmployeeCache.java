@@ -6,7 +6,6 @@ import org.ums.manager.CacheManager;
 import org.ums.manager.EmployeeManager;
 
 import java.util.List;
-import java.util.Optional;
 
 public class EmployeeCache extends ContentCache<Employee, MutableEmployee, String, EmployeeManager> implements
     EmployeeManager {
@@ -55,6 +54,11 @@ public class EmployeeCache extends ContentCache<Employee, MutableEmployee, Strin
   @Override
   public boolean validateShortName(String pShortName) {
     return getManager().validateShortName(pShortName);
+  }
+
+  @Override
+  public List<Employee> downloadEmployeeList(String pDeptList, String pEmployeeTypeList) {
+    return getManager().downloadEmployeeList(pDeptList, pEmployeeTypeList);
   }
 
 }

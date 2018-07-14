@@ -7,5 +7,6 @@ import java.io.OutputStream;
 
 public interface EmployeeListGenerator {
 
-  void printEmployeeList(OutputStream pOutputStream) throws IOException, DocumentException;
+  void printEmployeeList(String pDeptList, String pEmpTypeList, OutputStream pOutputStream) throws IOException,
+      DocumentException;
 }

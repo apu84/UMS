@@ -26,6 +26,11 @@ module ums {
         private enablePreviousButton: boolean = false;
         private enableNextButton: boolean = false;
         private state: any;
+        private deptList: IDepartment[];
+        private empTypeList: any;
+        private printType: any;
+        private finalListOfDept: string[] = [];
+        private finalListOfEmpType: number[] = [];
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeInformation,
@@ -169,8 +174,42 @@ module ums {
             this.employeeInformationService.getEmployeeCV(userId);
         }
 
-        private downloadEmployeeList(){
-            this.employeeInformationService.getEmployeeListPdf();
+        private downloadEmployeeList() {
+            console.log(this.deptList);
+            if (!this.printType) {
+                this.notify.error("Please select a dept/Office category");
+            }
+            else if (this.printType == 1 && !this.empTypeList) {
+                this.notify.error("Please select employee types");
+            }
+            else if (this.printType == 2 && (!this.empTypeList || !this.deptList)) {
+                this.notify.error("Please select deptList and employee types");
+            }
+            else {
+                if (this.printType == 1) {
+                    this.deptList = [];
+                    for (let i = 0; i < this.departments.length; i++) {
+                        this.deptList.push(this.departments[i]);
+                    }
+                }
+                this.prepareList();
+                    this.employeeInformationService.getEmployeeListPdf(this.finalListOfDept, this.finalListOfEmpType);
+
+            }
+        }
+
+        private prepareList(): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.finalListOfDept = [];
+            this.finalListOfEmpType = [];
+            for (let i = 0; i < this.deptList.length; i++) {
+                this.finalListOfDept[i] = (this.deptList[i].id);
+            }
+
+            for (let j = 0; j < this.empTypeList.length; j++) {
+                this.finalListOfEmpType[j] = (+this.empTypeList[j]);
+            }
+            return defer.promise;
         }
     }
 
