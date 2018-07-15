@@ -2,7 +2,10 @@ package org.ums.domain.model.mutable.routine;
 
 import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
-import org.ums.domain.model.immutable.*;
+import org.ums.domain.model.immutable.ClassRoom;
+import org.ums.domain.model.immutable.Course;
+import org.ums.domain.model.immutable.Program;
+import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.routine.Routine;
 import org.ums.domain.model.mutable.MutableLastModifier;
 
@@ -43,4 +46,6 @@ public interface MutableRoutine extends Routine, Editable<Long>, MutableLastModi
   void setDuration(final int mDuration);
 
   void setStatus(final String pStatus);
+
+  void setSlotGroup(final int pSlotGroup);
 }

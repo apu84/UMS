@@ -22,14 +22,14 @@ import java.util.stream.Collectors;
 
 public class PersistentRoutineDao extends RoutineDaoDecorator {
   static String SELECT_ALL =
-      "SELECT ROUTINE_ID,SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_ID,LAST_MODIFIED FROM CLASS_ROUTINE ";
+      "SELECT ROUTINE_ID,SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_ID,LAST_MODIFIED, SLOT_GROUP FROM CLASS_ROUTINE ";
   static String UPDATE_ONE =
       "UPDATE CLASS_ROUTINE SET SEMESTER_ID=:semesterId,PROGRAM_ID=:programId,COURSE_ID=:courseId,DAY=:day,SECTION=:section,YEAR=:year,SEMESTER=:semester,START_TIME=:startTime,"
-          + "END_TIME=:endTime,DURATION=:duration,ROOM_ID=:roomId,LAST_MODIFIED=:lastModified ";
+          + "END_TIME=:endTime,DURATION=:duration,ROOM_ID=:roomId,LAST_MODIFIED=:lastModified, SLOT_GROUP=:slotGroup ";
   static String DELETE_ONE = "DELETE FROM CLASS_ROUTINE ";
   static String INSERT_ONE =
-      "INSERT INTO CLASS_ROUTINE(ROUTINE_ID, SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_ID,LAST_MODIFIED) "
-          + "VALUES(:routineId, :semesterId, :programId, :courseId, :day, :section, :year, :semester, :startTime, :endTime, :duration, :roomId,:lastModified )";
+      "INSERT INTO CLASS_ROUTINE(ROUTINE_ID, SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_ID,LAST_MODIFIED,SLOT_GROUP) "
+          + "VALUES(:routineId, :semesterId, :programId, :courseId, :day, :section, :year, :semester, :startTime, :endTime, :duration, :roomId,:lastModified ,:slotGroup)";
 
   static String ORDER_BY = "ORDER BY SEMESTER_ID ";
   static String SELECT_ALL_FOR_TEACHER = "SELECT " + "  CLASS_ROUTINE.ROUTINE_ID, " + "  CLASS_ROUTINE.SEMESTER_ID, "
@@ -179,7 +179,7 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
     parameter.put("duration", pMutableRoutine.getDuration());
     parameter.put("roomId", pMutableRoutine.getRoom().getId());
     parameter.put("lastModified", UmsUtils.formatDate(new Date(), "YYYYMMDDHHMMSS"));
-
+    parameter.put("slotGroup", pMutableRoutine.getSlotGroup());
     return parameter;
   }
 
@@ -200,6 +200,7 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
       persistentRoutine.setEndTime(pResultSet.getTime("END_TIME").toLocalTime());
       persistentRoutine.setRoomId(pResultSet.getLong("ROOM_ID"));
       persistentRoutine.setLastModified(pResultSet.getString("LAST_MODIFIED"));
+      persistentRoutine.setSlotGroup(pResultSet.getInt("slot_group"));
       return persistentRoutine;
     }
   }

@@ -35,7 +35,8 @@ module ums{
     roomId: string;
     courseTeacher: CourseTeacherInterface[];
     employee: Employee;
-    }
+    slotGroup: number;
+  }
 
   export interface IRoutineTableHeader {
     startTime: string;

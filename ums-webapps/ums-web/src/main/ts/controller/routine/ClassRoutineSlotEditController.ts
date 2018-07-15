@@ -13,6 +13,7 @@ module ums {
     private courseTeacher: Employee = <Employee>{};
     private sectionList: IConstant[] = [];
     private sessionalSectionMap: any = {};
+    private slotGroupNo: number;
 
 
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'courseService', 'classRoomService', 'classRoutineService', '$timeout', 'userService', 'routineConfigService', '$state', 'courseTeacherService'];
@@ -40,12 +41,12 @@ module ums {
       this.showCourseInfo = false;
       this.showRoomInfo = false;
       if (this.classRoutineService.slotRoutineList.length == 0) {
+        this.slotGroupNo = Math.floor((Math.random() * 10000) + 1);
         let slotRoutine: ClassRoutine = <ClassRoutine>{};
+        slotRoutine.slotGroup = this.slotGroupNo;
         slotRoutine = this.initialzeRoutine(slotRoutine);
         this.classRoutineService.slotRoutineList.push(slotRoutine);
       }
-      console.log("Slot routine list");
-      console.log(this.classRoutineService.slotRoutineList);
       this.setSessionalSection().then((sectionList: any) => {
         this.assignSectionsToSessionalCourses();
       });
@@ -72,6 +73,7 @@ module ums {
 
     public add() {
       let slotRoutine: ClassRoutine = <ClassRoutine>{};
+      slotRoutine.slotGroup = this.slotGroupNo;
       slotRoutine = this.initialzeRoutine(slotRoutine);
       this.classRoutineService.slotRoutineList.push(slotRoutine);
     }
@@ -173,6 +175,7 @@ module ums {
       if (this.classRoutineService.courseTeacherWithSectionMap[courseTeacher.courseId + courseTeacher.section] == undefined) {
         courseTeacherList.push(courseTeacher);
         this.classRoutineService.courseTeacherWithSectionMap[courseTeacher.courseId + courseTeacher.section] = courseTeacherList;
+        this.classRoutineService.courseTeacherMap[courseTeacher.courseId] = courseTeacherList;
       } else {
         courseTeacherList = this.classRoutineService.courseTeacherWithSectionMap[courseTeacher.courseId + courseTeacher.section];
         courseTeacherList.push(courseTeacher);

@@ -234,16 +234,20 @@ module ums {
                 this.createRoutineBody();
                 this.createCourseTeacherMap();
                 this.createCourseTeacherWithSectionMap();
+                this.$timeout.apply(() => {
+                  this.showProgressBar = false;
+                }, 100);
               });
             } else {
               this.progress = 100;
               this.courseTeacherList = [];
               $("#routineConfigModal").modal('toggle');
               this.createRoutineBody();
+              this.$timeout.apply(() => {
+                this.showProgressBar = false;
+              }, 100);
             }
-            this.$timeout.apply(() => {
-              this.showProgressBar = false;
-            }, 1000);
+
           });
         });
       });

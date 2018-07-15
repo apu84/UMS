@@ -67,6 +67,17 @@ public class PersistentRoutine implements MutableRoutine {
   private ClassRoom mClassRoom;
   private int mDay;
   private String mStatus;
+  private int mSlotGroup;
+
+  @Override
+  public int getSlotGroup() {
+    return mSlotGroup;
+  }
+
+  @Override
+  public void setSlotGroup(int pSlotGroup) {
+    mSlotGroup = pSlotGroup;
+  }
 
   public PersistentRoutine() {
 

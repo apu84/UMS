@@ -67,6 +67,7 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
     mClassRoomBuilder.build(room, pReadOnly.getRoom(), pUriInfo, pLocalCache);
     pBuilder.add("room", room);
     pBuilder.add("roomId", pReadOnly.getRoomId().toString());
+    pBuilder.add("slotGroup", pReadOnly.getSlotGroup());
   }
 
   @Override
@@ -85,5 +86,6 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
     pMutable.setRoomId(Long.parseLong(pJsonObject.getString("roomId")));
     pMutable.setDay(Integer.parseInt(pJsonObject.getString("day")));
     pMutable.setProgramId(Integer.parseInt(pJsonObject.getString("programId")));
+    pMutable.setSlotGroup(pJsonObject.getInt("slotGroup"));
   }
 }

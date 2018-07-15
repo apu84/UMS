@@ -48,4 +48,6 @@ public interface Routine extends Serializable, LastModifier, EditType<MutableRou
   ClassRoom getRoom();
 
   String getStatus();
+
+  int getSlotGroup();
 }
