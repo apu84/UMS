@@ -210,7 +210,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
       lmsAppStatus.setActionStatus(LeaveApplicationApprovalStatus.WAITING_FOR_HEAD_APPROVAL);
       pApplication.setLeaveApplicationStatus(LeaveApplicationApprovalStatus.WAITING_FOR_HEAD_APPROVAL);
 
-      mLeaveManagementService.setNotification(rolePermissionsStream.get(0).getUserId(), message);
+    //  mLeaveManagementService.setNotification(rolePermissionsStream.get(0).getUserId(), message);
     }
     pApplication.setTotalDays(UmsUtils.differenceBetweenTwoDayes(pApplication.getFromDate(), pApplication.getToDate())+1);
     pAppId = getContentManager().create(pApplication);

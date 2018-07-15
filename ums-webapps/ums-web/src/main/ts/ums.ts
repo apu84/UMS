@@ -949,9 +949,30 @@ module ums {
         })
         .state('leaveApplication', {
           url: "/leaveApplication",
-          controller: 'LeaveApplicationManagement',
+          controller: 'LeaveApplicationController',
           controllerAs: 'vm',
           templateUrl: 'views/leave-management/leave-application.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+
+              return $ocLazyLoad.load({
+                files: [
+
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                  'vendors/bootstrap-daterangepicker/daterangepicker.js'
+                ]
+              });
+            }]
+          }
+        })
+        .state('leaveApplication.leaveApplicationManagement', {
+          url: "/leaveApplicationManagement",
+          controller: 'LeaveApplicationManagement',
+          controllerAs: 'vm',
+          templateUrl: 'views/leave-management/leave-application-management.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
 

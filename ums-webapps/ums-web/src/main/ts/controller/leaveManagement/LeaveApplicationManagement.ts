@@ -83,7 +83,6 @@ module ums {
       this.getLeaveTypes();
       this.getRemainingLeaves();
       this.getPendingApplications();
-      this.getUsersInformation();
 
       $("#leaveType").focus();
     }
@@ -115,14 +114,7 @@ module ums {
     }
 
 
-    private getUsersInformation() {
-      this.userService.fetchCurrentUserInfo().then((user) => {
-        this.user = user;
-        this.employeeId = this.employeeId;
-        console.log("Users....");
-        console.log(user);
-      });
-    }
+
 
     private saveAttachments(id: string) {
       for (var i = 0; i < this.files.length; i++) {
@@ -155,7 +147,7 @@ module ums {
 
     private getAllLeaveApplicationsForHistory() {
       this.pendingApplications = [];
-      this.leaveApplicationStatusService.fetchAllLeaveApplicationsOfEmployeeWithPagination(this.user.employeeId, this.leaveApprovalStatus.id, this.pageNumber, this.itemsPerPage).then((leaveApplications) => {
+      this.leaveApplicationStatusService.fetchAllLeaveApplicationsOfEmployeeWithPagination(this.leaveApplicationService.user.employeeId, this.leaveApprovalStatus.id, this.pageNumber, this.itemsPerPage).then((leaveApplications) => {
         this.pendingApplications = leaveApplications.statusList;
         this.totalItems = leaveApplications.totalSize;
         console.log(this.pendingApplications);
@@ -258,7 +250,7 @@ module ums {
         console.log("Pending leaves...");
         console.log(pendingLeaves);
         this.totalItems = pendingLeaves.length;
-        //this.employeeId = angular.copy(this.pendingApplications[0].applicantsId);
+        //this.leaveApplicationService.employeeId = angular.copy(this.pendingApplications[0].applicantsId);
       });
     }
 
