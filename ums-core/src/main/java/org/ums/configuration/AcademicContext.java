@@ -241,6 +241,15 @@ public class AcademicContext {
   }
 
   @Bean
+  QuestionCorrectionManager questionCorrectionManager() {
+    QuestionCorrectionInfoCache questionCorrectionInfoCache =
+        new QuestionCorrectionInfoCache(mCacheFactory.getCacheManager());
+    questionCorrectionInfoCache.setManager(new PersistentQuestionCorrectionDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
+    return questionCorrectionInfoCache;
+  }
+
+  @Bean
   CourseTeacherManager courseTeacherManager() {
     CourseTeacherCache courseTeacherCache = new CourseTeacherCache(mCacheFactory.getCacheManager());
     courseTeacherCache.setManager(new PersistentCourseTeacherDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));

@@ -85,7 +85,6 @@
                                     <input type="text"
                                            class="form-control required"
                                            style="width: 70%";
-                                           placeholder="Remarks"
                                            data-ng-model="vm.remarks"
                                     />
                                 </div>
@@ -154,7 +153,12 @@
                                 <div class="form-group">
                                     <label  class="control-label"> </label>
                                     <div class="input-icon left" align="center">
-                                        <button type="button" class="btn btn-success" style="width:40%;" data-ng-click="vm.save()">submit</button>
+                                        <button type="button"
+                                                class="btn btn-success"
+                                                data-toggle="modal"
+                                                data-ng-click="vm.isEligibleForSubmitData()"
+                                                data-target="#myModal"
+                                                style="width:40%;">submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -166,3 +170,72 @@
         </div>
 </div>
 </div>
+
+
+<div data-ng-if="vm.isSubmitEligible">
+    <div class="modal fade" id="myModal" role="dialog">
+        <!--   <div class="modal-backdrop"> --->
+        <div class="modal-dialog  modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" >
+                    <button type="button"  data-ng-click="vm.reset()" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Cofirmation of  Information</h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <td width="30%"><b>{{'Employee Name'}}</b></td>
+                                <td>{{vm.selectedEmployeeName}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Faculty/Satff'}}</b></td>
+                                <td>{{vm.selectedEmployeeType}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Dept'}}</b></td>
+                                <td>{{vm.selectedDeptName}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Exam Type'}}</b></td>
+                                <td>{{vm.selectedExamTypeName}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Present Type'}}</b></td>
+                                <td>{{vm.selectedAbsPreStatusName}}</td>
+                            </tr>
+                            <tr data-ng-show="vm.isArrivalTimeEligible">
+                                <td width="30%"><b>{{'Arrival Time'}}</b></td>
+                                <td>{{vm.arrivalTime+" "+vm.amPmValue}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Remarks'}}</b></td>
+                                <td >{{vm.remarks}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Invigilation Room'}}</b></td>
+                                <td >{{vm.selectedClassRoomNo}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Exam Date'}}</b></td>
+                                <td >{{vm.selectedExamDate}}</td>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info"  data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" data-ng-click="vm.save()" data-dismiss="modal">Confirm</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

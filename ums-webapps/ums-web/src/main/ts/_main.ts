@@ -206,6 +206,10 @@
 /// <reference path='controller/daily-exam-attendance-report/dailyExamAttendanceReportService.ts'/>
 /// <reference path='controller/absent-late-coming-info/absentLateComingInfo.ts'/>
 /// <reference path='controller/absent-late-coming-info/absLateComingService.ts'/>
+/// <reference path='controller/absent-late-coming-info/absentLateComingView.ts'/>
+/// <reference path='controller/dailyExamReport/dailyExamReport.ts'/>
+/// <reference path='controller/question-correction-info/questionCorrectionInfo.ts'/>
+/// <reference path='controller/question-correction-info/questionCorrectionInfoService.ts'/>
 
 /// <reference path='dummy/DummyController.ts'/>
 /// <reference path='twofatest/two.fa.test.controller.ts'/>

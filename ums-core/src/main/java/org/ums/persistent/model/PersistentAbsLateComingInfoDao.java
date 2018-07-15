@@ -10,6 +10,7 @@ import org.ums.persistent.dao.PersistentAbsLateComingInfo;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +34,7 @@ public class PersistentAbsLateComingInfoDao extends AbsLateComingInfoDaoDecorato
   String SEM_EXAM_TYPE_DATE_WISE_RECORDS =
       "select  SEMESTER_ID,EXAM_TYPE,PRESENT_TYPE,REMARKS,EMPLOYEE_ID,INVIGILATOR_ROOM_ID,to_char(EXAM_DATE,'DD-MM-YYYY') EXAM_DATE,ARRIVAL_TIME from DER_ABSENT_LATE_COMING_INFO WHERE  SEMESTER_ID=? AND EXAM_TYPE=? "
           + " AND EXAM_DATE = TO_DATE(?,'DD-MM-YYYY')";
+  String DELETE_ALL = "DELETE FROM DER_ABSENT_LATE_COMING_INFO";
 
   @Override
   public List<AbsLateComingInfo> getAll() {
@@ -47,17 +49,27 @@ public class PersistentAbsLateComingInfoDao extends AbsLateComingInfoDaoDecorato
   }
 
   @Override
-  public int delete(List<MutableAbsLateComingInfo> pMutableList) {
-    return super.delete(pMutableList);
-  }
-
-  @Override
   public Long create(MutableAbsLateComingInfo pMutable) {
     Long id = mIdGenerator.getNumericId();
     mJdbcTemplate.update(INSERT_ALL, id, pMutable.getSemesterId(), pMutable.getExamType(), pMutable.getPresentType(),
         pMutable.getRemarks(), pMutable.getEmployeeId(), pMutable.getInvigilatorRoomId(), pMutable.getExamDate(),
         pMutable.getArrivalTime() == "null" ? null : pMutable.getArrivalTime());
     return id;
+  }
+
+  public int delete(List<MutableAbsLateComingInfo> pMutableList) {
+    String query =
+        DELETE_ALL + " WHERE  SEMESTER_ID=? AND EXAM_TYPE=? AND EMPLOYEE_ID=? AND EXAM_DATE=TO_DATE(?,'DD-MM-YYYY')";
+    List<Object[]> parameters = deleteParamList(pMutableList);
+    return mJdbcTemplate.batchUpdate(query, parameters).length;
+  }
+
+  private List<Object[]> deleteParamList(List<MutableAbsLateComingInfo> pMutableApplicationTES) {
+    List<Object[]> params = new ArrayList<>();
+    for(AbsLateComingInfo app : pMutableApplicationTES) {
+      params.add(new Object[] {app.getSemesterId(), app.getExamType(), app.getEmployeeId(), app.getExamDate()});
+    }
+    return params;
   }
 
   class AbsLateComingRowMapper implements RowMapper<AbsLateComingInfo> {

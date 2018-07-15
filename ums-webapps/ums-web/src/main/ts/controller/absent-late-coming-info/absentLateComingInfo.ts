@@ -27,13 +27,19 @@ module ums{
         public amPm:IConstants;
         public selectedDepartmentId:string;
         public selectedAbsPreStatusId:number;
+        public selectedAbsPreStatusName:string;
         public remarks:string;
-        public selectedClassRoomId:string;
-        public selectedEmployeeId:number;
+        public selectedClassRoomId:number;
+        public selectedEmployeeId:string;
         public arrivalTime: string;
         public amPmValue:string;
         public isArrivalTimeEligible:boolean;
         public absent:number;
+        public selectedEmployeeName:string;
+        public selectedEmployeeType:string;
+        public selectedClassRoomNo:string;
+        public selectedDeptName:string;
+        public isSubmitEligible:boolean;
         public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService',
             'programService','DailyExamAttendanceReportService','examRoutineService','classRoomService','employeeService','absLateComingService'];
 
@@ -55,11 +61,13 @@ module ums{
             this.examTypeList=this.appConstants.examType;
             this.examType=this.examTypeList[0];
             this.selectedExamTypeId=this.examType.id;
+            this.selectedExamTypeName=this.examType.name;
             this.absPreStatusList=[];
             this.absPreStatusList=this.appConstants.absentPresentStatus;
             this.absPreStatus=this.absPreStatusList[0];
             this.selectedAbsPreStatusId=this.absPreStatus.id;
-            this.remarks="";
+            this.selectedAbsPreStatusName=this.absPreStatus.name;
+            this.remarks="Didn't Informed";
             this.deptList = [];
             this.deptList = this.appConstants.deptShort;
             this.deptName=this.deptList[0];
@@ -71,10 +79,13 @@ module ums{
             this.amPmValue=this.amPmList[0].name;
             this.isArrivalTimeEligible=false;
             this.absent=1;
-            this.getSemesters()
+            this.isSubmitEligible=true;
+            this.selectedClassRoomId=0;
+            this.getSemesters();
             this.initializeDatePickers();
-            this.getClassRoomInfo();
+            this.getClassRoomInfo();;
         }
+
         private changeStatus(val:any){
             console.log(val);
             this.amPmValue=val.name;
@@ -90,12 +101,30 @@ module ums{
                 }
                 console.log(this.employees);
             })
+            this.selectedEmployeeId=""
         }
         private employeeChanged(value:any){
             console.log(value);
             this.selectedEmployeeId=value.id;
+            this.selectedEmployeeName=value.employeeName;
+            this.selectedEmployeeType=value.employeeType;
+            this.selectedDeptName=value.deptOfficeName;
+            this.getEmployeeType(value);
 
         }
+
+        private getEmployeeType(value: any) {
+            if (value.employeeType == 1) {
+                this.selectedEmployeeType = EmployeeType.TEACHER;
+            } else if (value.employeeType == 2) {
+                this.selectedEmployeeType = EmployeeType.OFFICER;
+            } else if (value.employeeType == 3) {
+                this.selectedEmployeeType = EmployeeType.STAFF;
+            } else {
+                this.selectedEmployeeType = EmployeeType.MANAGEMENT;
+            }
+        }
+
         private getClassRoomInfo(){
             this.classRoomService.getClassRooms().then((data:Array<ClassRoom>)=>{
                console.log("Class Room Info");
@@ -104,12 +133,15 @@ module ums{
             });
         }
         public classRoomChanged(value:any){
+            this.selectedClassRoomId=0;
             if(value.id==null){
-                this.selectedClassRoomId="0";
-            }else{
-                this.selectedClassRoomId=value.id;
+                this.selectedClassRoomId=null;
+            }else {
+                this.selectedClassRoomId = value.id;
+                this.selectedClassRoomNo = value.roomNo;
             }
-            console.log(this.selectedClassRoomId);
+
+            console.log("**"+this.selectedClassRoomId);
         }
         private dateChanged(arrivalTime: any) {
             this.arrivalTime=arrivalTime;
@@ -153,6 +185,7 @@ module ums{
         private changeAbsPreStatus(value:any) {
             console.log(value.id + "  " + value.name);
             this.selectedAbsPreStatusId = value.id;
+            this.selectedAbsPreStatusName=value.name;
             this.arrivalTime="";
            this.isArrivalTimeEligible= this.selectedAbsPreStatusId ==this.absent ? false:true;
         }
@@ -189,8 +222,37 @@ module ums{
          this.absLateComingService.addAbsLateComingInfo(json).then((data)=>{
             console.log(data);
          });
-
         }
+        public isEligibleForSubmitData() {
+            if(this.selectedDepartmentId=="" || this.selectedDepartmentId==null){
+                this.isSubmitEligible=false;
+                this.notify.warn("Select Department");
+            } else if(this.selectedEmployeeId=="" || this.selectedDepartmentId==null){
+                this.isSubmitEligible=false;
+                this.notify.warn("Select Employee Id");
+            }else if(this.remarks=="" || this.remarks==null || this.remarks.length>100){
+                this.isSubmitEligible=false;
+                this.notify.warn("Remarks can not be empty to max 100 characters");
+            }else if(this.selectedClassRoomId==0 || this.selectedDepartmentId==null){
+                this.isSubmitEligible=false;
+                this.notify.warn("Select Class Room");
+            } else if(this.selectedExamDate=="" || this.selectedExamDate==null){
+                this.isSubmitEligible=false;
+                this.notify.warn("Select Exam Date");
+            }else {
+                this.isSubmitEligible=true;
+            }
+
+            if(this.isArrivalTimeEligible){
+                if(this.arrivalTime=="" || this.arrivalTime==null){
+                    this.isSubmitEligible=false;
+                    this.notify.warn("Select ArrivalTime");
+                }else{
+                    this.isSubmitEligible=true;
+                }
+            }
+        }
+
         public convertToJson(): any {
             var completeJson = {};
             console.log("result");
@@ -211,4 +273,10 @@ module ums{
     }
 
     UMS.controller("AbsentLateComingInfo",AbsentLateComingInfo);
+}
+enum EmployeeType{
+    TEACHER="TEACHER",
+    OFFICER="OFFICER",
+    STAFF="STAFF",
+    MANAGEMENT="MANAGEMENT",
 }
