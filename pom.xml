@@ -366,7 +366,7 @@
     </dependency>
 
     <!--Reporting-->
-    <dependency>
+    <!--dependency>
       <groupId>pentaho-reporting-engine</groupId>
       <artifactId>pentaho-reporting-engine-classic-core</artifactId>
       <version>${pentaho-version}</version>
@@ -448,7 +448,7 @@
       <artifactId>flute</artifactId>
       <version>${pentaho-version}</version>
       <scope>provided</scope>
-    </dependency>
+    </dependency-->
 
     <dependency>
       <groupId>org.springframework</groupId>
