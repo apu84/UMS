@@ -1,6 +1,7 @@
 package org.ums.usermanagement.user;
 
 import org.ums.decorator.ContentDaoDecorator;
+import org.ums.enums.common.RoleType;
 import org.ums.usermanagement.role.Role;
 
 import java.util.List;
@@ -53,5 +54,10 @@ public class UserDaoDecorator extends ContentDaoDecorator<User, MutableUser, Str
   @Override
   public Optional<User> getByEmail(String pEmail) {
     return getManager().getByEmail(pEmail);
+  }
+
+  @Override
+  public List<User> getUsers(RoleType pRoleType) {
+    return getManager().getUsers(pRoleType);
   }
 }

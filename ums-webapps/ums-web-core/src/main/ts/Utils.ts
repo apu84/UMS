@@ -75,19 +75,27 @@ module ums {
     /*
      * Role Types
      * */
-    static REGISTRAR: number = 81;
-    static STUDENT: number = 11;
-    static S_ADMIN: number = 999;
-    static COE: number = 71;
-    static IUMS_SECRATARY: number = 31;
-    static TEACHER: number = 21;
-    static DEPT_OFFICE: number = 41;
-    static DEPUTY_REGISTRAR: number = 82;
-    static DEPT_HEAD: number = 22;
-    static VC: number = 99;
-    static DP_COE: number = 72;
-    static UG_ADMISSION_CHAIRMAN: number = 10101;
-    static LIBRARIAN: number = 3000;
+    static REGISTRAR: number = 7201;
+    static STUDENT: number = 1011;
+    static S_ADMIN: number = 9999;
+    static COE: number = 7301;
+    static IUMS_SECRETARY: number = 9011;
+    static TEACHER: number = 1021;
+    static ASSISTANT_ADMINISTRATIVE_OFFICER: number = 1041;
+    static ASSISTANT_ADMINISTRATIVE_OFFICER_COE: number = 7303;
+    static ASSISTANT_ADMINISTRATIVE_OFFICER_REG: number = 7204;
+    static ASSISTANT_ADMINISTRATIVE_OFFICER_LIB: number = 7403;
+    static ASSISTANT_ADMINISTRATIVE_OFFICER_SW: number = 7602;
+    static DP_REGISTRAR: number = 1022;
+    static DEPT_HEAD: number = 1022;
+    static VC: number = 7001;
+    static DP_COE: number = 7302;
+    static UG_ADMISSION_CHAIRMAN: number = 9961;
+    static DEAN: number = 1023;
+    static PROCTOR: number = 7401;
+    static TREASURER: number = 7101;
+    static UNIVERSITY_ENGINEER: number = 7801;
+    static LIBRARIAN: number = 7701;
 
 
     /*

@@ -30,4 +30,5 @@ public interface MutableLmsApplication extends LmsApplication, Editable<Long>, M
 
   void setLeaveApplicationStatus(LeaveApplicationApprovalStatus pLeaveApplicationStatus);
 
+  void setSubmittedBy(String pSubmittedBy);
 }

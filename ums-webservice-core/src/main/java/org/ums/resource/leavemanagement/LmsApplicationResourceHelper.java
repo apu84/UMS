@@ -34,6 +34,7 @@ import org.ums.resource.ResourceHelper;
 import org.ums.services.leave.management.LeaveManagementService;
 import org.ums.usermanagement.permission.AdditionalRolePermissions;
 import org.ums.usermanagement.permission.AdditionalRolePermissionsManager;
+import org.ums.usermanagement.user.PersistentUser;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 import org.ums.util.UmsUtils;
@@ -54,7 +55,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -112,6 +112,8 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     JsonObject jsonObject = entries.getJsonObject(0);
     PersistentLmsApplication application = new PersistentLmsApplication();
     getBuilder().build(application, jsonObject, localCache);
+    User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
+    application.setSubmittedBy(user.getEmployeeId());
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
@@ -185,6 +187,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     return builder.build();
   }
 
+  @Transactional
   public Long inserIntoLeaveApplicationStatus(PersistentLmsApplication pApplication) {
     Long pAppId = new Long(0);
     MutableLmsAppStatus lmsAppStatus = new PersistentLmsAppStatus();
@@ -207,16 +210,41 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
       pApplication.setLeaveApplicationStatus(LeaveApplicationApprovalStatus.WAITING_FOR_VC_APPROVAL);
       mLeaveManagementService.setNotification("vc", message);
     } else {
+
       lmsAppStatus.setActionStatus(LeaveApplicationApprovalStatus.WAITING_FOR_HEAD_APPROVAL);
       pApplication.setLeaveApplicationStatus(LeaveApplicationApprovalStatus.WAITING_FOR_HEAD_APPROVAL);
+      mLeaveManagementService.setNotification(getDeptHead(employee).getId(), message);
 
-    //  mLeaveManagementService.setNotification(rolePermissionsStream.get(0).getUserId(), message);
     }
     pApplication.setTotalDays(UmsUtils.differenceBetweenTwoDayes(pApplication.getFromDate(), pApplication.getToDate())+1);
     pAppId = getContentManager().create(pApplication);
     lmsAppStatus.setLmsApplicationId(pAppId);
     mLmsAppStatusManager.create(lmsAppStatus);
     return pAppId;
+  }
+
+  private User getDeptHead(Employee pEmployee) {
+    AdditionalRolePermissions additionalRolePermissions =
+        mAdditionalRolePermissionsManager.getAdditionalRole(pEmployee.getDepartment().getId(), RoleType.DEPT_HEAD);
+    if(additionalRolePermissions != null) {
+      return additionalRolePermissions.getUser();
+    }
+    else {
+      User user = new PersistentUser();
+      if(pEmployee.getDepartment().getId().equals(DepartmentType.COE))
+        user = mUserManager.getUsers(RoleType.COE).get(0);
+      if(pEmployee.getDepartment().getId().equals(DepartmentType.RO))
+        user = mUserManager.getUsers(RoleType.REGISTRAR).get(0);
+      if(pEmployee.getDepartment().getId().equals(DepartmentType.PO))
+        user = mUserManager.getUsers(RoleType.PROCTOR).get(0);
+      if(pEmployee.getDepartment().getId().equals(DepartmentType.TO))
+        user = mUserManager.getUsers(RoleType.TREASURER).get(0);
+      if(pEmployee.getDepartment().getId().equals(DepartmentType.KFRL))
+        user = mUserManager.getUsers(RoleType.LIBRARIAN).get(0);
+      if(pEmployee.getDepartment().getId().equals(DepartmentType.UE))
+        user = mUserManager.getUsers(RoleType.UNIVERSITY_ENGINEER).get(0);
+      return user;
+    }
   }
 
   public JsonObject getPendingLeavesOfEmployee(UriInfo pUriInfo) {

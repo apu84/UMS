@@ -415,6 +415,7 @@ module ums {
       let completeJson = {};
       let jsonObject = [];
       console.log("Lms application");
+      console.log(this.leaveApplicationService.employeeId);
       let item: any = {};
       item['id'] = application.id;
       item['employeeId'] = application.employeeId;
@@ -423,6 +424,7 @@ module ums {
       item['toDate'] = application.toDate;
       item['reason'] = application.reason;
       item['appStatus'] = appType;
+      item['employeeId'] = this.leaveApplicationService.employeeId;
       jsonObject.push(item);
       completeJson["entries"] = jsonObject;
 

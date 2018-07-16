@@ -1,6 +1,11 @@
 module ums {
   export class EmployeeLeaveApplicationController {
-    public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'userService', 'attachmentService'];
+
+    private employeeList: Employee[];
+    private selectedEmployee: Employee;
+
+
+    public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'userService', 'attachmentService', 'employeeService'];
 
     constructor(private appConstants: any,
                 private httpClient: HttpClient,
@@ -16,8 +21,30 @@ module ums {
                 private leaveApplicationService: LeaveApplicationService,
                 private leaveApplicationStatusService: LeaveApplicationStatusService,
                 private userService: UserService,
-                private attachmentService: AttachmentService) {
+                private attachmentService: AttachmentService,
+                private employeeService: EmployeeService) {
 
+
+    }
+
+    private init() {
+
+    }
+
+
+    public employeeSelected() {
+      this.userService.getUser(this.selectedEmployee.shortName).then((user: User) => {
+        this.leaveApplicationService.user = user;
+        this.leaveApplicationService.employeeId = user.employeeId;
+      })
+    }
+
+    private fetchDeptEmployeeList(deptId: string) {
+      this.userService.fetchCurrentUserInfo().then((user: User) => {
+        this.employeeService.getEmployees(user.departmentId).then((employeeList: Employee[]) => {
+          this.employeeList = employeeList;
+        });
+      })
     }
   }
 

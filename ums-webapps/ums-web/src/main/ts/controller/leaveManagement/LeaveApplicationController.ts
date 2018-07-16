@@ -28,7 +28,7 @@ module ums {
     private getUsersInformation() {
       this.userService.fetchCurrentUserInfo().then((user) => {
         this.leaveApplicationService.user = user;
-        this.leaveApplicationService.employeeId = this.leaveApplicationService.employeeId;
+        this.leaveApplicationService.employeeId = this.leaveApplicationService.user.employeeId;
         this.$state.go('leaveApplication.leaveApplicationManagement', {}, {reload: 'leaveApplication.leaveApplicationManagement'});
       });
     }
