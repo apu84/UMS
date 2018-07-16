@@ -1,15 +1,12 @@
 package org.ums.persistent.dao;
 
-import javafx.application.Application;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.ApplicationCCIDaoDecorator;
 import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
-import org.ums.enums.ApplicationStatus;
 import org.ums.enums.ApplicationType;
 import org.ums.fee.payment.MutableStudentPayment;
-import org.ums.fee.payment.StudentPaymentDao;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentApplicationCCI;
 
