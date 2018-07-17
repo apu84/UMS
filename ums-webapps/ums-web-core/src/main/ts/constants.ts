@@ -120,7 +120,7 @@ module ums {
                     {id: 'AB–', name: 'AB-'}
                 ],
                 ugDept: [
-                    {id: '', name: 'Select Dept./School'},
+                    {   id: '', name: 'Select Dept./School'},
                     {id: '01', name: 'ARC'},
                     {id: '02', name: 'BBA'},
                     {id: '03', name: 'CE'},
@@ -372,6 +372,16 @@ module ums {
                     '110707': ['BSc in IPE'],
                     '110708': ['BSc in ME']
                 },
+                programs:[
+                    {id: 110100, name: 'Bsc in ARC'},
+                    {id: 110200, name: 'BBA'},
+                    {id: 110300, name: 'Bsc in CE'},
+                    {id: 110400, name: 'Bsc in CSE'},
+                    {id: 110500, name: 'Bsc in EEE'},
+                    {id: 110600, name: 'Bsc in TE'},
+                    {id: 110707, name: 'Bsc in IPE'},
+                    {id: 110708, name: 'Bsc in ME'}
+                ],
                 optionalCourseYearSemester: {
                     '110200':[{'year':'4','semester':'1'},{'year':'4','semester':'2'}],
                     '110400':[{'year':'4','semester':'2'}],

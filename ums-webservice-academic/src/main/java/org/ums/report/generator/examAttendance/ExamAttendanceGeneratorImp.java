@@ -7,10 +7,12 @@ import com.itextpdf.text.pdf.PdfWriter;
 import org.jvnet.hk2.internal.Collector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.ums.academic.resource.helper.QuestionCorrectionResourceHelper;
 import org.ums.domain.model.immutable.AbsLateComingInfo;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.ExpelledInformation;
 import org.ums.domain.model.immutable.StudentsExamAttendantInfo;
+import org.ums.domain.model.mutable.MutableQuestionCorrectionInfo;
 import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
@@ -55,6 +57,8 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
   ClassRoomManager mClassRoomManager;
   @Autowired
   EmployeeManager mEmployeeManager;
+  @Autowired
+  QuestionCorrectionResourceHelper mQuestionCorrectionResourceHelper;
 
   @Override
   public void createTestimonial(Integer pSemesterId, Integer pExamType, String pExamDate, OutputStream pOutputStream)
@@ -66,12 +70,12 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PdfWriter writer = PdfWriter.getInstance(document, baos);
 
-    Font fontTimes11Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11);
-    Font fontTimes8Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 8);
-    Font fontTimes6Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 6);
+    Font fontTimes11Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 9);
+    Font fontTimes8Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 5);
+    Font fontTimes6Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 5);
     Font fontTimes8Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 8);
-    Font fontTimes10Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 10);
-    Font fontTimes9Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 9);
+    Font fontTimes10Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 9);
+    Font fontTimes9Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 8);
 
     document.open();
     document.setPageSize(PageSize.A4.rotate());
@@ -123,6 +127,7 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
       List<AbsLateComingInfo> absLateComingInfoList = mAbsLateComingInfoManager.getInfoBySemesterExamTypeAndExamDate(pSemesterId,pExamType,pExamDate);
       List<AbsLateComingInfo> lateComingInfoList=absLateComingInfoList.stream().filter(a->a.getPresentType()==2).collect(Collectors.toList());
       List<AbsLateComingInfo> absentInfoList=absLateComingInfoList.stream().filter(a->a.getPresentType()==1).collect(Collectors.toList());
+      List<MutableQuestionCorrectionInfo> questionCorrectionInfo=mQuestionCorrectionResourceHelper.getMutableQuestionCorrectionInfo(pSemesterId, pExamType);
 
     //
 
@@ -240,7 +245,7 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
     cell.setHorizontalAlignment(UmsCell.ALIGN_RIGHT);
     totalInfoTable.addCell(cell);
     document.add(totalInfoTable);
-      chunk = new Chunk("\n02. Expelled information\n");
+      chunk = new Chunk("02. Expelled information\n");
       paragraph = new UmsParagraph();
       paragraph.setAlignment(Element.ALIGN_CENTER);
       paragraph.setFont(fontTimes10Bold);
@@ -303,7 +308,64 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
           expelledInfoTable.addCell(cell);
       }
       document.add(expelledInfoTable);
-      chunk = new Chunk("\n04. Late Coming information\n");
+
+      //Question Correction
+      chunk = new Chunk("03. Question Correction information\n");
+      paragraph = new UmsParagraph();
+      paragraph.setAlignment(Element.ALIGN_CENTER);
+      paragraph.setFont(fontTimes10Bold);
+      paragraph.add(chunk);
+      document.add(paragraph);
+      //LateComing Info
+      PdfPTable QuestionCorrectionInfoTable = new PdfPTable(6);
+      QuestionCorrectionInfoTable.setSpacingBefore(5);
+      QuestionCorrectionInfoTable.setSpacingAfter(5);
+      QuestionCorrectionInfoTable.setWidthPercentage(100);
+      //table creation for Info
+      // program cell
+      cell = new UmsCell(new Phrase("program",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      QuestionCorrectionInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Year/Sem",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      QuestionCorrectionInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Course No",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      QuestionCorrectionInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Incorrect Question No",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      QuestionCorrectionInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Type of Mistake",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      QuestionCorrectionInfoTable.addCell(cell);
+      cell = new UmsCell(new Phrase("Course Teacher",fontTimes9Bold));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      QuestionCorrectionInfoTable.addCell(cell);
+      QuestionCorrectionInfoTable.setHeaderRows(1);
+      for(int i=0;i<questionCorrectionInfo.size();i++){
+          cell = new UmsCell(new Phrase(""+questionCorrectionInfo.get(i).getProgramName(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          QuestionCorrectionInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+questionCorrectionInfo.get(i).getYear()+"/"+questionCorrectionInfo.get(i).getSemester(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          QuestionCorrectionInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+questionCorrectionInfo.get(i).getCourseTitle()+"("+questionCorrectionInfo.get(i).getCourseNo()+")",fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          QuestionCorrectionInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+questionCorrectionInfo.get(i).getIncorrectQuestionNo(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          QuestionCorrectionInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+questionCorrectionInfo.get(i).getTypeOfMistake(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          QuestionCorrectionInfoTable.addCell(cell);
+          cell = new UmsCell(new Phrase(""+questionCorrectionInfo.get(i).getEmployeeName(),fontTimes8Normal));
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          QuestionCorrectionInfoTable.addCell(cell);
+      }
+      document.add(QuestionCorrectionInfoTable);
+
+      //
+      chunk = new Chunk("04. Late Coming information\n");
       paragraph = new UmsParagraph();
       paragraph.setAlignment(Element.ALIGN_CENTER);
       paragraph.setFont(fontTimes10Bold);
@@ -356,7 +418,7 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
           lateComingInfoTable.addCell(cell);
       }
       document.add(lateComingInfoTable);
-      chunk = new Chunk("\n05. Absent information\n");
+      chunk = new Chunk("05. Absent information\n");
       paragraph = new UmsParagraph();
       paragraph.setAlignment(Element.ALIGN_CENTER);
       paragraph.setFont(fontTimes10Bold);

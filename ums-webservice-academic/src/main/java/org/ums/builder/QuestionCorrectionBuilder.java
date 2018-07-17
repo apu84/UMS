@@ -33,7 +33,7 @@ public class QuestionCorrectionBuilder implements Builder<QuestionCorrectionInfo
       pBuilder.add("courseId", pReadOnly.getCourseId());
     }
     if(pReadOnly.getCourseNo() != null) {
-      pBuilder.add("courseNo", pReadOnly.getCourseId());
+      pBuilder.add("courseNo", pReadOnly.getCourseNo());
     }
     if(pReadOnly.getCourseTitle() != null) {
       pBuilder.add("courseTitle", pReadOnly.getCourseTitle());
@@ -41,20 +41,23 @@ public class QuestionCorrectionBuilder implements Builder<QuestionCorrectionInfo
     if(pReadOnly.getYear() != null) {
       pBuilder.add("year", pReadOnly.getYear());
     }
-    if(pReadOnly.getSemesterId() != null) {
+    if(pReadOnly.getSemester() != null) {
       pBuilder.add("semester", pReadOnly.getSemester());
     }
     if(pReadOnly.getEmployeeId() != null) {
       pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     }
     if(pReadOnly.getEmployeeName() != null) {
-      pBuilder.add("employeeName", pReadOnly.getEmployeeId());
+      pBuilder.add("employeeName", pReadOnly.getEmployeeName());
     }
     if(pReadOnly.getIncorrectQuestionNo() != null) {
       pBuilder.add("incorrectQuestionNo", pReadOnly.getIncorrectQuestionNo());
     }
     if(pReadOnly.getTypeOfMistake() != null) {
       pBuilder.add("mistakeType", pReadOnly.getTypeOfMistake());
+    }
+    if(pReadOnly.getExamDate() != null) {
+      pBuilder.add("examDate", pReadOnly.getExamDate());
     }
 
   }
@@ -77,6 +80,8 @@ public class QuestionCorrectionBuilder implements Builder<QuestionCorrectionInfo
       pMutable.setIncorrectQuestionNo(pJsonObject.getString("incorrectQuestionNo"));
     if(pJsonObject.containsKey("mistakeType"))
       pMutable.setTypeOfMistake(pJsonObject.getString("mistakeType"));
+    if(pJsonObject.containsKey("examDate"))
+      pMutable.setExamDate(pJsonObject.getString("examDate"));
 
   }
 }

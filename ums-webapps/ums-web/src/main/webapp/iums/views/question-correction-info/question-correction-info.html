@@ -20,14 +20,14 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="leaveTypejj" class="control-label"><span class="glyphicon glyphicon-list-alt"><b> Select Dept</b></span></label>
+                                    <label for="deptType" class="control-label"><span class="glyphicon glyphicon-list-alt"><b> Select Dept</b></span></label>
                                     <div class="input-icon left">
                                         <select
                                                 class="form-control required"
-                                                name="leaveType"
-                                                id="leaveTypejj"
+                                                name="deptType"
+                                                id="deptType"
                                                 style="width: 70%";
-                                                data-ng-options="dept.name for dept in vm.deptList track by dept.id"
+                                                data-ng-options="dept.name for dept in vm.deptList"
                                                 data-ng-model="vm.deptName"
                                                 data-ng-change="vm.deptChanged(vm.deptName)"
                                         ></select>
@@ -36,13 +36,14 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="leaveTypejj" class="control-label"><span class="glyphicon glyphicon-list-alt"><b> Year</b></span></label>
+                                    <label for="year" class="control-label"><span class="glyphicon glyphicon-list-alt"><b> Year</b></span></label>
                                     <div class="input-icon left">
                                         <select
                                                 class="form-control required"
-                                                name="leaveType1"
-                                                id="leaveType1"
-                                                data-ng-options=" L.name for L in vm.yearList track by L.id"
+                                                name="year"
+                                                id="year"
+                                                style="width: 70%";
+                                                data-ng-options=" L.name for L in vm.yearList"
                                                 data-ng-model="vm.yearName"
                                                 data-ng-change="vm.yearChanged(vm.yearName)"
                                         ></select>
@@ -50,13 +51,14 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <label for="meritType" class="control-label"><span class="glyphicon glyphicon-list-alt"><b> Semester</b></span></label>
+                                <label for="semester" class="control-label"><span class="glyphicon glyphicon-list-alt"><b> Semester</b></span></label>
                                 <div class="input-icon left">
                                     <select
                                             class="form-control required"
-                                            name="leaveType1"
-                                            id="leaveType98"
-                                            data-ng-options=" L.name for L in vm.academicSemesterList track by L.id"
+                                            name="semester"
+                                            id="semester"
+                                            style="width: 70%";
+                                            data-ng-options=" L.name for L in vm.academicSemesterList"
                                             data-ng-model="vm.academicSemesterName"
                                             data-ng-change="vm.academicSemester(vm.academicSemesterName)"
                                     ></select>
@@ -95,10 +97,10 @@
                                             name="meritType"
                                             id="meritType3"
                                             style="width: 70%;"
-                                            data-ng-options="examType.name for examType in vm.examTypeList track by examType.id"
-                                            data-ng-model="vm.examType"
-                                            data-ng-change="vm.changeExamType(vm.examType)"
-                                    >
+                                            data-ng-options="course.courseNo for course in vm.courseList"
+                                            data-ng-model="vm.courses"
+                                            data-ng-change="vm.changeCourse(vm.courses)"
+                                    ><option value="">Select Course</option>
                                     </select>
                                 </div>
                             </div>
@@ -108,6 +110,7 @@
                                     <input type="text"
                                            class="form-control required"
                                            style="width: 70%";
+                                           placeholder="Enter Incorrect Question No"
                                            data-ng-model="vm.incorrectQuestionNo"
                                     />
                                 </div>
@@ -127,6 +130,7 @@
                                     <input type="text"
                                            class="form-control required"
                                            style="width: 70%";
+                                           placeholder="Enter Type of Mistake"
                                            data-ng-model="vm.mistakeType"
                                     />
                                 </div>
@@ -178,7 +182,7 @@
                                             name="leaveType"
                                             id="leaveTypejj"
                                             style="width: 70%";
-                                            data-ng-options="dept.name for dept in vm.deptList track by dept.id"
+                                            data-ng-options="dept.name for dept in vm.deptList"
                                             data-ng-model="vm.deptName"
                                             data-ng-change="vm.deptChanged(vm.deptName)"
                                     ></select>
@@ -211,16 +215,16 @@
                             </tr>
                             </thead>
                             <thead>
-                            <tr data-ng-repeat="app in vm.absLateComeInfo | orderBy:'deptId'| filter:{deptId:vm.selectedDepartmentId,examDate:vm.examDate,presentType:vm.selectedAbsPreStatusId} ">
+                            <tr data-ng-repeat="app in vm.questionCorrectionInfo | orderBy:'programId'">
                                 <td>{{$index+1}}</td>
+                                <td>{{app.programName}}</td>
+                                <td>{{app.year+'/'+app.semester}}</td>
+                                <td>{{app.courseTitle+'('+app.courseNo+')'}}</td>
+                                <td>{{app.incorrectQuestionNo}}</td>
+                                <td>{{app.mistakeType}}</td>
                                 <td>{{app.employeeName}}</td>
-                                <td>{{app.employeeType}}</td>
-                                <td>{{app.deptName}}</td>
-                                <td data-ng-show="vm.isArrivalTimeAllowed">{{app.arrivalTime}}</td>
-                                <td>{{app.remarks}}</td>
-                                <td>{{app.invigilatorRoomName}}</td>
                                 <td>{{app.examDate}}</td>
-                                <td data-ng-show="vm.showDeleteColumn"><input
+                                <td><input
                                         type="checkbox"
                                         data-ng-model="app.apply"
                                         data-ng-click="vm.checkMoreThanOneSelectionSubmit(app)"
@@ -262,31 +266,31 @@
                             <thead>
                             <tr>
                                 <td width="30%"><b>{{'Program'}}</b></td>
-                                <td>{{vm.selectedEmployeeName}}</td>
+                                <td>{{vm.programName}}</td>
                             </tr>
                             <tr>
                                 <td width="30%"><b>{{'Year/Sem'}}</b></td>
-                                <td>{{vm.selectedEmployeeType}}</td>
+                                <td>{{vm.selectedYear+'/'+vm.selectedSemester}}</td>
                             </tr>
                             <tr>
                                 <td width="30%"><b>{{'Exam Type'}}</b></td>
-                                <td>{{vm.selectedDeptName}}</td>
-                            </tr>
-                            <tr>
-                                <td width="30%"><b>{{'Course No'}}</b></td>
                                 <td>{{vm.selectedExamTypeName}}</td>
                             </tr>
                             <tr>
+                                <td width="30%"><b>{{'Course No'}}</b></td>
+                                <td>{{vm.courseNo}}</td>
+                            </tr>
+                            <tr>
                                 <td width="30%"><b>{{'Incorrect Question No'}}</b></td>
-                                <td>{{vm.selectedAbsPreStatusName}}</td>
+                                <td>{{vm.incorrectQuestionNo}}</td>
                             </tr>
                             <tr>
                                 <td width="30%"><b>{{'Type of Mistake'}}</b></td>
-                                <td>{{vm.arrivalTime+" "+vm.amPmValue}}</td>
+                                <td>{{vm.mistakeType}}</td>
                             </tr>
                             <tr>
                                 <td width="30%"><b>{{'Exam Date'}}</b></td>
-                                <td >{{vm.remarks}}</td>
+                                <td >{{vm.selectedExamDate}}</td>
                             </tr>
 
                             </thead>
@@ -305,3 +309,55 @@
 </div>
 
 
+<div class="modal fade" id="myModalViewInfo" role="dialog"  >
+    <!--   <div class="modal-backdrop"> -->
+    <div class="modal-dialog  modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" >
+                <button type="button"  class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Absent/Late Coming Information</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr role="row" class="heading">
+                            <th>#</th>
+                            <th>Program</th>
+                            <th>Year/Sem</th>
+                            <th>Course No</th>
+                            <th>Incorrect Question No</th>
+                            <th>Type Of Mistake</th>
+                            <th>Course Teacher</th>
+                            <th>Exam Date</th>
+                        </tr>
+                        </thead>
+                        <thead>
+                        <tr data-ng-repeat="app in  vm.questionCorrectionInfo |filter:{apply:true}| orderBy:'examDate'">
+                            <td>{{$index+1}}</td>
+                            <td>{{app.programName}}</td>
+                            <td>{{app.year+'/'+app.semester}}</td>
+                            <td>{{app.courseTitle+'('+app.courseNo+')'}}</td>
+                            <td>{{app.incorrectQuestionNo}}</td>
+                            <td>{{app.mistakeType}}</td>
+                            <td>{{app.employeeName}}</td>
+                            <td>{{app.examDate}}</td>
+                        </tr>
+                        </tr>
+                        </thead>
+                    </table>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success"  data-ng-click="vm.deleteExpelInfo()"  data-dismiss="modal">Confirm</button>
+                <button type="button" class="btn btn-info" data-ng-click="vm.close()"  data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>

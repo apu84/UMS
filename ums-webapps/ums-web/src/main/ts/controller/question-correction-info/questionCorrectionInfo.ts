@@ -3,6 +3,11 @@ module ums{
         id: any;
         name: string;
     }
+    interface ICourses{
+        courseId:string;
+        courseNo:string;
+        courseTitle:string;
+    }
     class QuestionCorrectionInfo{
         public semesters:Array<Semester>;
         public semester:Semester;
@@ -24,15 +29,23 @@ module ums{
         public selectedSemester:number;
         public year:string;
         public acaSemester:string;
-        public selectedDepartmentId:string;
+        public selectedProgramId:number;
+        public programName:string;
         public examRoutineArr:any;
         public selectedExamDate:string;
         public incorrectQuestionNo:string;
         public mistakeType:string;
         public selectedCourseId:string;
         public courseNo:string;
+        public courseTitle:string;
+        private courseList:Array<ICourses>;
+        public courses:ICourses;
+        public questionCorrectionInfo:Array<IQuestionCorrectionInfo>;
+        public showDeleteColumn:boolean;
+        public submit_Button_Disable:boolean;
+        public checkBoxCounter:number;
         public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService',
-            'programService','DailyExamAttendanceReportService','examRoutineService','classRoomService','employeeService','absLateComingService'];
+            'programService','DailyExamAttendanceReportService','examRoutineService','classRoomService','employeeService','questionCorrectionInfoService','courseService'];
 
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -47,11 +60,16 @@ module ums{
                     private examRoutineService: ExamRoutineService,
                     private classRoomService:ClassRoomService,
                     private employeeService:EmployeeService,
-                    private absLateComingService:AbsLateComingService) {
+                    private questionCorrectionInfoService:QuestionCorrectionInfoService,
+                    private courseService:CourseService) {
             this.isInsertAvailable=false;
             this.deptList = [];
-            this.deptList = this.appConstants.deptShort;
+            this.deptList = this.appConstants.programs;
             this.deptName=this.deptList[0];
+            this.selectedProgramId=this.deptName.id;
+            this.programName=this.deptName.name;
+            console.log("Department: "+this.selectedProgramId);
+            console.log(this.deptList);
             this.yearList=[];
             this.yearList=this.appConstants.academicYear;
             this.yearName=this.yearList[0];
@@ -68,14 +86,48 @@ module ums{
             this.selectedExamTypeId=this.examType.id;
             this.selectedExamTypeName=this.examType.name;
             this.selectedExamDate="";
-        this.incorrectQuestionNo="";
-        this.mistakeType="";
-        this.selectedCourseId="";
-        this.courseNo="";
+            this.incorrectQuestionNo="";
+            this.mistakeType="";
+            this.selectedCourseId="";
+            this.courseNo="";
+            this.courseTitle="";
+            this.submit_Button_Disable=true;
+            this.checkBoxCounter=0;
             console.log("year:"+this.selectedYear+" Semester:"+this.selectedSemester);
             this.getSemesters();
             this.getExamDates();
+            this.getQcInfo();
 
+        }
+        private getQcInfo(){
+            var app:Array<IQuestionCorrectionInfo>=[];
+            this.questionCorrectionInfoService.getQuestionCorrectionInfo(11012017,1).then((data)=>{
+                console.log("AUST CSE PICNIC FALL 2013");
+                console.log("*********");
+                app=data;
+                this.questionCorrectionInfo=app;
+                console.log(this.questionCorrectionInfo);
+            })
+        }
+        private changeCourse(value:any):void{
+            console.log(value);
+            this.selectedCourseId=value.courseId;
+            this.courseNo=value.courseNo;
+            this.courseTitle=value.courseTitle;
+        }
+
+        private getCourse():void{
+            this.courseList=[];
+            var course:Array<ICourses>=[];
+            this.questionCorrectionInfoService.getCourses(this.selectedProgramId,this.selectedYear,this.selectedSemester).then((data)=>{
+                course=data;
+                console.log("********")
+                this.courseList=course;
+                for(let i=0;i<this.courseList.length;i++){
+                    this.courseList[i].courseNo=this.courseList[i].courseTitle+"("+this.courseList[i].courseNo+")";
+                }
+                 console.log(this.courseList);
+            })
         }
         private getSemesters():void{
             this.semesterService.fetchSemesters(11,5).then((semesters:Array<Semester>)=>{
@@ -120,20 +172,22 @@ module ums{
 
         }
 
-        private deptChanged(deptId:any){
-            this.selectedDepartmentId=deptId.id;
-            console.log("id: "+this.selectedDepartmentId);
+        private deptChanged(programs:any){
+            this.selectedProgramId=programs.id;
+            this.programName=programs.name;
+            console.log("id: "+this.selectedProgramId);
+            this.getCourse();
         }
         private yearChanged(value:any){
             console.log(value.name);
             this.year=value.name;
             this.selectedYear=value.id;
-
         }
         private academicSemester(value:any){
             console.log(value.name);
             this.acaSemester=value.name;
             this.selectedSemester=value.id;
+            this.getCourse();
         }
         private doSomething():void{
             alert('hell from another side');
@@ -143,7 +197,81 @@ module ums{
         }
         private hideInsert():void{
             this.isInsertAvailable=false;
+        }
+        private save():void{
+            var json:any=this.convertToJson();
+            console.log(json);
+            this.questionCorrectionInfoService.addQuestionCorrectionInfo(json).then((data)=>{
+                console.log(data);
+                this.getQcInfo();
+            })
+        }
+        private checkMoreThanOneSelectionSubmit(result:any) {
+            if(result.apply){
+                this.checkBoxCounter++;
+                this.enableOrDisableSubmitButton();
+            }
+            else{
+                this.checkBoxCounter--;
+                this.enableOrDisableSubmitButton();
+            }
 
+            console.log("value:"+this.submit_Button_Disable);
+
+        }
+        private enableOrDisableSubmitButton(): void{
+            if( this.checkBoxCounter > 0){
+                this.submit_Button_Disable=false;
+            }else{
+                this.submit_Button_Disable=true;
+            }
+        }
+        private deleteExpelInfo(){
+            var json= this.convertToJsonToDelete(this.questionCorrectionInfo);
+            this.questionCorrectionInfoService.deleteQuestionCorrectionInfo(json).then((data)=>{
+                this.getQcInfo();
+                console.log(data);
+            });
+            this.checkBoxCounter=0;
+            this.submit_Button_Disable=true;
+            console.log("Rumi");
+        }
+        private convertToJsonToDelete(result: Array<IQuestionCorrectionInfo>): any {
+            var completeJson = {};
+            console.log("result");
+            console.log(result);
+            var jsonObj = [];
+            for (var i = 0; i < result.length; i++) {
+                var item = {};
+                if (result[i].apply == true) {
+                    item["examType"] =result[i].examType;
+                    item["courseId"] =result[i].courseId;
+                    item["programId"] =result[i].programId;
+                    item["examDate"] =result[i].examDate;
+                    jsonObj.push(item);
+                }
+            }
+            completeJson["entries"] = jsonObj;
+            console.log(completeJson);
+            return completeJson;
+        }
+        public convertToJson(): any {
+            var completeJson = {};
+            console.log("result");
+            var jsonObj = [];
+            var item = {};
+            item["programId"] =this.selectedProgramId;
+            item["examType"] =this.selectedExamTypeId;
+            item["year"]=+this.selectedYear;
+            item["semester"]=+this.selectedSemester;
+            item["courseId"]=this.selectedCourseId;
+            item["incorrectQuestionNo"]=this.incorrectQuestionNo;
+            item["mistakeType"]=this.mistakeType;
+            item["examDate"]=this.selectedExamDate;
+            jsonObj.push(item);
+            completeJson["entries"] = jsonObj;
+            console.log(completeJson);
+            return completeJson;
         }
 
     }
