@@ -22,19 +22,19 @@ import java.util.List;
 @Component
 public class EmployeeListGeneratorImpl implements EmployeeListGenerator {
 
-  @Autowired
-  private EmployeeManager mEmployeeManager;
+    @Autowired
+    private EmployeeManager mEmployeeManager;
 
-  @Autowired
-  private DesignationManager mDesignationManager;
+    @Autowired
+    private DesignationManager mDesignationManager;
 
-  @Autowired
-  private DepartmentManager mDepartmentManager;
+    @Autowired
+    private DepartmentManager mDepartmentManager;
 
-  @Autowired
-  private PersonalInformationManager mPersonalInformationManager;
+    @Autowired
+    private PersonalInformationManager mPersonalInformationManager;
 
-  @Override
+    @Override
     public void printEmployeeList(String pDeptList, String pEmpTypeList, OutputStream pOutputStream) throws IOException, DocumentException {
 
         List<Employee> employeeList = mEmployeeManager.downloadEmployeeList(pDeptList, pEmpTypeList);
@@ -50,14 +50,38 @@ public class EmployeeListGeneratorImpl implements EmployeeListGenerator {
         PdfWriter writer = PdfWriter.getInstance(document, baos);
 
         Font fontTimes11Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11);
-        Font fontTimes11Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 12);
+        Font fontTimes11Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 11);
         Font fontTimes14Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 14);
+        Font fontTimes16Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 16);
 
         document.open();
         document.setPageSize(PageSize.A4);
 
         Paragraph paragraph = null;
         Chunk chunk = null;
+
+        chunk = new Chunk("Ahsanullah University of Science & Technology", fontTimes16Bold);
+        paragraph = new Paragraph(chunk);
+        paragraph.setAlignment(Element.ALIGN_CENTER);
+        document.add(paragraph);
+        chunk = new Chunk("141-142, Love Road, Tejgaon I/A, Dhaka-1208", fontTimes11Bold);
+        paragraph = new Paragraph(chunk);
+        paragraph.setAlignment(Element.ALIGN_CENTER);
+        document.add(paragraph);
+
+        paragraph = new Paragraph();
+        emptyLine(paragraph, 1);
+        document.add(paragraph);
+
+        chunk = new Chunk("List of Employees", fontTimes14Bold);
+        chunk.setUnderline(1.0f, -2.3f);
+        paragraph = new Paragraph(chunk);
+        paragraph.setAlignment(Element.ALIGN_CENTER);
+        document.add(paragraph);
+
+        paragraph = new Paragraph();
+        emptyLine(paragraph, 1);
+        document.add(paragraph);
 
         int k = 0;
 
@@ -82,8 +106,8 @@ public class EmployeeListGeneratorImpl implements EmployeeListGenerator {
         cell = new PdfPCell(new Phrase("Designation"));
         table.addCell(cell);
 
-      cell = new PdfPCell(new Phrase("Department"));
-      table.addCell(cell);
+        cell = new PdfPCell(new Phrase("Department"));
+        table.addCell(cell);
 
         for (int j = 0; j < employeeList.size(); j++) {
             k++;
@@ -113,9 +137,9 @@ public class EmployeeListGeneratorImpl implements EmployeeListGenerator {
         baos.writeTo(pOutputStream);
     }
 
-  void emptyLine(Paragraph p, int number) {
-    for(int i = 0; i < number; i++) {
-      p.add(new Paragraph(" "));
+    void emptyLine(Paragraph p, int number) {
+        for (int i = 0; i < number; i++) {
+            p.add(new Paragraph(" "));
+        }
     }
-  }
 }
