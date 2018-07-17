@@ -13,7 +13,6 @@ import org.ums.manager.FCMTokenManager;
 import org.ums.persistent.model.PersistentFCMToken;
 
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 
 @Component
 public class FirebaseMessagingImpl {
@@ -23,7 +22,7 @@ public class FirebaseMessagingImpl {
   @Autowired
   FCMTokenManager mFCMTokenManager;
 
-  public void send(String receiverId, String title, String body) throws InterruptedException, ExecutionException {
+    public void send(String receiverId, String title, String body) {
 
     if(mFCMTokenManager.exists(receiverId)) {
       FCMToken fcmToken = mFCMTokenManager.get(receiverId);
@@ -34,10 +33,15 @@ public class FirebaseMessagingImpl {
         }
       }
       else {
-        Notification notification = new Notification(title, body);
-        Message message = Message.builder().setNotification(notification).setToken(fcmToken.getToken()).build();
-        String response = FirebaseMessaging.getInstance().sendAsync(message).get();
-        mLogger.info("Sent message: " + response);
+          try {
+              Notification notification = new Notification(title, body);
+              Message message = Message.builder().setNotification(notification).setToken(fcmToken.getToken()).build();
+              String response = FirebaseMessaging.getInstance().sendAsync(message).get();
+              mLogger.info("Sent message: " + response);
+          } catch (Exception e) {
+              mLogger.error("Error in sending message: " + e.getMessage());
+              mLogger.error("" + e);
+          }
       }
     }
     else {
