@@ -75,7 +75,7 @@
                                 <select class="form-control required"
                                         name="nDepartment"
                                         id="iDepartment"
-                                        data-ng-options="department.longName for department in vm.departments track by department.id"
+                                        data-ng-options="depts.longName group by depts.category for depts in vm.departments | orderBy: 'id' track by depts.id"
                                         data-ng-change="vm.showSearchByField()"
                                         data-ng-model="vm.changedDepartment"
                                 >
