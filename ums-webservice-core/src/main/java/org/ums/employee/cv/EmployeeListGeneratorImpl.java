@@ -4,7 +4,6 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.manager.DepartmentManager;
@@ -14,8 +13,10 @@ import org.ums.manager.EmployeeManager;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class EmployeeListGeneratorImpl implements EmployeeListGenerator {
@@ -34,14 +35,22 @@ public class EmployeeListGeneratorImpl implements EmployeeListGenerator {
 
     Font mBoldFont = new Font(Font.FontFamily.TIMES_ROMAN, 10f, Font.BOLD, BaseColor.BLACK);
 
+    public static final Integer CREATE_NEW_PAGE_FOR_EACH_DEPT = 1;
+    public static final Integer CREATE_CONTINUOUS_PRINTING = 2;
+
     @Override
-    public void printEmployeeList(String pDeptList, String pEmpTypeList, OutputStream pOutputStream) throws IOException, DocumentException {
+    public void printEmployeeList(String pDeptList, String pEmpTypeList, Integer pChoice, OutputStream pOutputStream) throws IOException, DocumentException {
 
         List<Employee> employeeList = mEmployeeManager.downloadEmployeeList(pDeptList, pEmpTypeList);
 
-        List<Department> departmentList = mDepartmentManager.getAll();
+        Map<String, List<Employee>> employeeGroupByDept =
+                employeeList.stream()
+                        .collect(Collectors.groupingBy(w -> w.getDepartment().getId()));
 
-        departmentList.sort(Comparator.comparing(Department::getId));
+        Map<String, List<Employee>> employeeSortedGroupByDept = employeeGroupByDept.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 
         Document document = new Document();
         document.addTitle("Meeting Minutes");
@@ -89,53 +98,61 @@ public class EmployeeListGeneratorImpl implements EmployeeListGenerator {
 
         int k = 0;
 
-        PdfPTable table = new PdfPTable(5);
-        table.setWidthPercentage(100);
-        table.setTotalWidth(new float[]{30, 50, 150, 120, 100});
+        for (Map.Entry<String, List<Employee>> map : employeeSortedGroupByDept.entrySet()) {
 
-        paragraph = new Paragraph();
-        emptyLine(paragraph, 1);
-        document.add(paragraph);
-        k = 0;
+            chunk = new Chunk("Department: ", fontTimes11Normal);
+            Chunk chunk1 = new Chunk(mDepartmentManager.get(map.getKey()).getLongName(), fontTimes11Bold).setUnderline(1.0f, -2.3f);
+            paragraph = new Paragraph(chunk);
+            paragraph.add(chunk1);
+            document.add(paragraph);
 
-        PdfPCell cell = new PdfPCell(new Phrase("#"));
-        table.addCell(cell);
+            PdfPTable table = new PdfPTable(4);
+            table.setWidthPercentage(100);
+            table.setTotalWidth(new float[]{30, 70, 180, 110});
 
-        cell = new PdfPCell(new Phrase("Employee Id"));
-        table.addCell(cell);
+            paragraph = new Paragraph();
+            emptyLine(paragraph, 1);
+            document.add(paragraph);
+            k = 0;
 
-        cell = new PdfPCell(new Phrase("Employee Name"));
-        table.addCell(cell);
-
-        cell = new PdfPCell(new Phrase("Designation"));
-        table.addCell(cell);
-
-        cell = new PdfPCell(new Phrase("Department"));
-        table.addCell(cell);
-
-        for (int j = 0; j < employeeList.size(); j++) {
-            k++;
-            cell = new PdfPCell(new Phrase(k + "."));
+            PdfPCell cell = new PdfPCell(new Phrase("#"));
             table.addCell(cell);
 
-            cell = new PdfPCell(new Phrase(employeeList.get(j).getId()));
+            cell = new PdfPCell(new Phrase("Employee Id"));
             table.addCell(cell);
 
-            cell = new PdfPCell(new Phrase(mPersonalInformationManager.get(employeeList.get(j).getId()).getName()));
+            cell = new PdfPCell(new Phrase("Employee Name"));
             table.addCell(cell);
 
-            cell =
-                    new PdfPCell(new Phrase(mDesignationManager.get(employeeList.get(j).getDesignationId())
-                            .getDesignationName()));
+            cell = new PdfPCell(new Phrase("Designation"));
             table.addCell(cell);
 
-            cell =
-                    new PdfPCell(new Phrase(mDepartmentManager.get(employeeList.get(j).getDepartment().getId())
-                            .getShortName()));
-            table.addCell(cell);
+            for (Employee employee : map.getValue()) {
+                k++;
+                cell = new PdfPCell(new Phrase(k + "."));
+                table.addCell(cell);
 
+                cell = new PdfPCell(new Phrase(employee.getId()));
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(mPersonalInformationManager.get(employee.getId()).getName()));
+                table.addCell(cell);
+
+                cell =
+                        new PdfPCell(new Phrase(mDesignationManager.get(employee.getDesignationId())
+                                .getDesignationName()));
+                table.addCell(cell);
+
+            }
+            document.add(table);
+            if (pChoice.equals(CREATE_NEW_PAGE_FOR_EACH_DEPT)) {
+                document.newPage();
+            } else {
+                paragraph = new Paragraph();
+                emptyLine(paragraph, 4);
+                document.add(paragraph);
+            }
         }
-        document.add(table);
 
         document.close();
         baos.writeTo(pOutputStream);

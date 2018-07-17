@@ -31,6 +31,7 @@ module ums {
         private printType: any;
         private finalListOfDept: string[] = [];
         private finalListOfEmpType: number[] = [];
+        private choice: number = 1;
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeInformation,
@@ -193,7 +194,7 @@ module ums {
                     }
                 }
                 this.prepareList();
-                    this.employeeInformationService.getEmployeeListPdf(this.finalListOfDept, this.finalListOfEmpType);
+                this.employeeInformationService.getEmployeeListPdf(this.finalListOfDept, this.finalListOfEmpType, this.choice);
 
             }
         }
