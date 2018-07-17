@@ -1,9 +1,7 @@
 package org.ums.employee.cv;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.Department;
@@ -34,6 +32,8 @@ public class EmployeeListGeneratorImpl implements EmployeeListGenerator {
     @Autowired
     private PersonalInformationManager mPersonalInformationManager;
 
+    Font mBoldFont = new Font(Font.FontFamily.TIMES_ROMAN, 10f, Font.BOLD, BaseColor.BLACK);
+
     @Override
     public void printEmployeeList(String pDeptList, String pEmpTypeList, OutputStream pOutputStream) throws IOException, DocumentException {
 
@@ -48,14 +48,18 @@ public class EmployeeListGeneratorImpl implements EmployeeListGenerator {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PdfWriter writer = PdfWriter.getInstance(document, baos);
+        EmployeeListFooter footer = new EmployeeListFooter();
+        writer.setPageEvent(footer);
 
         Font fontTimes11Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11);
         Font fontTimes11Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 11);
         Font fontTimes14Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 14);
         Font fontTimes16Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 16);
 
-        document.open();
         document.setPageSize(PageSize.A4);
+        document.setMargins(50, 45, 50, 60);
+        document.setMarginMirroring(false);
+        document.open();
 
         Paragraph paragraph = null;
         Chunk chunk = null;
@@ -140,6 +144,18 @@ public class EmployeeListGeneratorImpl implements EmployeeListGenerator {
     void emptyLine(Paragraph p, int number) {
         for (int i = 0; i < number; i++) {
             p.add(new Paragraph(" "));
+        }
+    }
+
+    class EmployeeListFooter extends PdfPageEventHelper {
+
+        @Override
+        public void onEndPage(PdfWriter writer, Document pDocument) {
+            PdfContentByte cb = writer.getDirectContent();
+            String text = String.format("Page %s", writer.getCurrentPageNumber());
+            Paragraph paragraph = new Paragraph(text, mBoldFont);
+            ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, new Phrase(paragraph),
+                    (pDocument.right() - pDocument.left()) / 2 + pDocument.leftMargin(), pDocument.bottom() - 25, 0);
         }
     }
 }
