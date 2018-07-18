@@ -21,24 +21,24 @@ import java.util.stream.Collectors;
 @Component
 public class EmployeeListGeneratorImpl implements EmployeeListGenerator {
 
-    @Autowired
-    private EmployeeManager mEmployeeManager;
+  @Autowired
+  private EmployeeManager mEmployeeManager;
 
-    @Autowired
-    private DesignationManager mDesignationManager;
+  @Autowired
+  private DesignationManager mDesignationManager;
 
-    @Autowired
-    private DepartmentManager mDepartmentManager;
+  @Autowired
+  private DepartmentManager mDepartmentManager;
 
-    @Autowired
-    private PersonalInformationManager mPersonalInformationManager;
+  @Autowired
+  private PersonalInformationManager mPersonalInformationManager;
 
-    Font mBoldFont = new Font(Font.FontFamily.TIMES_ROMAN, 10f, Font.BOLD, BaseColor.BLACK);
+  Font mBoldFont = new Font(Font.FontFamily.TIMES_ROMAN, 10f, Font.BOLD, BaseColor.BLACK);
 
-    public static final Integer CREATE_NEW_PAGE_FOR_EACH_DEPT = 1;
-    public static final Integer CREATE_CONTINUOUS_PRINTING = 2;
+  public static final Integer CREATE_NEW_PAGE_FOR_EACH_DEPT = 1;
+  public static final Integer CREATE_CONTINUOUS_PRINTING = 2;
 
-    @Override
+  @Override
     public void printEmployeeList(String pDeptList, String pEmpTypeList, Integer pChoice, OutputStream pOutputStream) throws IOException, DocumentException {
 
         List<Employee> employeeList = mEmployeeManager.downloadEmployeeList(pDeptList, pEmpTypeList);
@@ -158,21 +158,21 @@ public class EmployeeListGeneratorImpl implements EmployeeListGenerator {
         baos.writeTo(pOutputStream);
     }
 
-    void emptyLine(Paragraph p, int number) {
-        for (int i = 0; i < number; i++) {
-            p.add(new Paragraph(" "));
-        }
+  void emptyLine(Paragraph p, int number) {
+    for(int i = 0; i < number; i++) {
+      p.add(new Paragraph(" "));
     }
+  }
 
-    class EmployeeListFooter extends PdfPageEventHelper {
+  class EmployeeListFooter extends PdfPageEventHelper {
 
-        @Override
-        public void onEndPage(PdfWriter writer, Document pDocument) {
-            PdfContentByte cb = writer.getDirectContent();
-            String text = String.format("Page %s", writer.getCurrentPageNumber());
-            Paragraph paragraph = new Paragraph(text, mBoldFont);
-            ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, new Phrase(paragraph),
-                    (pDocument.right() - pDocument.left()) / 2 + pDocument.leftMargin(), pDocument.bottom() - 25, 0);
-        }
+    @Override
+    public void onEndPage(PdfWriter writer, Document pDocument) {
+      PdfContentByte cb = writer.getDirectContent();
+      String text = String.format("Page %s", writer.getCurrentPageNumber());
+      Paragraph paragraph = new Paragraph(text, mBoldFont);
+      ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, new Phrase(paragraph),
+          (pDocument.right() - pDocument.left()) / 2 + pDocument.leftMargin(), pDocument.bottom() - 25, 0);
     }
+  }
 }

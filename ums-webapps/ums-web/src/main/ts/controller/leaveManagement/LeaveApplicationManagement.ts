@@ -245,7 +245,7 @@ module ums {
 
     private getPendingApplications() {
       this.pendingApplications = [];
-      this.leaveApplicationStatusService.fetchPendingLeaves().then((pendingLeaves) => {
+      this.leaveApplicationStatusService.fetchPendingLeaves(this.leaveApplicationService.employeeId).then((pendingLeaves) => {
         this.pendingApplications = pendingLeaves;
         console.log("Pending leaves...");
         console.log(pendingLeaves);
