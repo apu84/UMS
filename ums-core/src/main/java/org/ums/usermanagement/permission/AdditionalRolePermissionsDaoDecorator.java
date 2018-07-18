@@ -1,6 +1,7 @@
 package org.ums.usermanagement.permission;
 
 import org.ums.decorator.ContentDaoDecorator;
+import org.ums.enums.common.RoleType;
 import org.ums.usermanagement.role.Role;
 import org.ums.usermanagement.user.User;
 
@@ -60,5 +61,10 @@ public class AdditionalRolePermissionsDaoDecorator
   @Override
   public int addPermissions(String pUserId, Set<String> pPermissions) {
     return getManager().addPermissions(pUserId, pPermissions);
+  }
+
+  @Override
+  public AdditionalRolePermissions getAdditionalRole(String pDepartmentId, RoleType pRoleType) {
+    return getManager().getAdditionalRole(pDepartmentId, pRoleType);
   }
 }

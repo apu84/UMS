@@ -6,6 +6,7 @@ module ums {
     id: string;
     employeeId: string;
     employeeName: string;
+    employee: Employee;
     leaveType: number;
     leaveTypeName: string;
     appliedOn: string;
@@ -14,5 +15,7 @@ module ums {
     duration: number;
     reason: string;
     applicationStatus: number;
+    submittedBy: string;
+    submittedByEmp: Employee;
   }
 }

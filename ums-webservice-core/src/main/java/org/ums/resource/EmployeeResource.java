@@ -106,13 +106,13 @@ public class EmployeeResource extends MutableEmployeeResource {
   @Produces("application/pdf")
   @GetLog(message = "Download Employee List")
   public StreamingOutput getEmployeeCV(@Context HttpServletRequest httpServletRequest, final @Context Request pRequest,
-                                       final @PathParam("dept-list") String deptList, final @PathParam("emp-type") String empType,
-                                       final @PathParam("choice") Integer choice) {
+      final @PathParam("dept-list") String deptList, final @PathParam("emp-type") String empType,
+      final @PathParam("choice") Integer choice) {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
         try {
-            mEmployeeListGenerator.printEmployeeList(deptList, empType, choice, pOutputStream);
+          mEmployeeListGenerator.printEmployeeList(deptList, empType, choice, pOutputStream);
         } catch(Exception e) {
           throw new WebApplicationException(e);
         }

@@ -8,6 +8,7 @@ module ums {
     departmentId: string;
     name: string;
     id: string;
+    shortName: string;
   }
 
   export interface UserView{

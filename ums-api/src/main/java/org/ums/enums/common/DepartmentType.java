@@ -15,14 +15,15 @@ public enum DepartmentType {
   CSE("05", "Department of Computer Science and Engineering"),
   SCHOOL_OF_BUSINESS("02", "School of Business"),
   ARC("01", "Department of Architecture"),
-  COE("81", "Office of the Comtroller of Examinations"),
-  RO("80", "Office of the Registrar"),
-  TO("82", "Office of the Treasurer"),
-  EO("83", "Engineering Office"),
-  AoSW("84", "Office of the Advisor of Student's Welfare"),
-  PO("85", "Proctor Office"),
-  AS("AS", "Department of Arts and Sciences"),
-  OVC("99", "Office of VC"),
+  COE("73", "Office of the Controller of Examinations"),
+  RO("72", "Office of the Registrar"),
+  TO("71", "Office of the Treasurer"),
+  AoSW("76", "Office of the Advisor of Student's Welfare"),
+  KFRL("74", "Kazi Fazlur RahmanLibrary"),
+  UE("77", "Office of the University Engineer"),
+  PO("75", "Proctor Office"),
+  AS("15", "Department of Arts and Sciences"),
+  OVC("70", "Office of VC"),
   ALL("9999", "All Departments");
 
   private String label;

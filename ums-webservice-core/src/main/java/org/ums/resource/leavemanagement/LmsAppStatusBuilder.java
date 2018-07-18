@@ -12,6 +12,7 @@ import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
 import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.usermanagement.user.UserManager;
 
+import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -27,13 +28,18 @@ public class LmsAppStatusBuilder implements Builder<LmsAppStatus, MutableLmsAppS
 
   @Autowired
   private UserManager mUserManager;
+  @Autowired
+  private LmsApplicationBuilder mLmsApplicationBuilder;
 
   private static final Logger mLogger = LoggerFactory.getLogger(LmsAppStatusBuilder.class);
 
   @Override
   public void build(JsonObjectBuilder pBuilder, LmsAppStatus pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
-    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("appId", pReadOnly.getLmsApplication().getId().toString());
+    JsonObjectBuilder leaveApplication = Json.createObjectBuilder();
+    mLmsApplicationBuilder.build(leaveApplication, pReadOnly.getLmsApplication(), pUriInfo, pLocalCache);
+    pBuilder.add("leaveApplication", leaveApplication);
     pBuilder.add("applicantsId", pReadOnly.getLmsApplication().getEmployee().getId());
     pBuilder.add("deptName", pReadOnly.getLmsApplication().getEmployee().getDepartment().getShortName());
     pBuilder.add("applicantsName", pReadOnly.getLmsApplication().getEmployee().getPersonalInformation().getName());

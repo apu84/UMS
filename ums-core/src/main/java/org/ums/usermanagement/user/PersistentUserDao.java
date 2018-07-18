@@ -1,5 +1,12 @@
 package org.ums.usermanagement.user;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.ums.enums.common.RoleType;
+import org.ums.usermanagement.role.Role;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -7,12 +14,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.ums.usermanagement.role.Role;
 
 public class PersistentUserDao extends UserDaoDecorator {
   static String SELECT_ALL =
@@ -54,6 +55,12 @@ public class PersistentUserDao extends UserDaoDecorator {
   public User getByEmployeeId(String pEmployeeId) {
     String query = SELECT_ALL + "WHERE EMPLOYEE_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pEmployeeId}, new UserRowMapper());
+  }
+
+  @Override
+  public List<User> getUsers(RoleType pRoleType) {
+    String query = SELECT_ALL + " WHERE ROLE_ID=?";
+    return mJdbcTemplate.query(query, new Object[] {pRoleType.getId()}, new UserRowMapper());
   }
 
   @Override

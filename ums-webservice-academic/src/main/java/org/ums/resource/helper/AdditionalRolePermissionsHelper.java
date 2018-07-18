@@ -6,12 +6,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.AdditionalRolePermissionsBuilder;
 import org.ums.cache.LocalCache;
-import org.ums.usermanagement.permission.AdditionalRolePermissions;
-import org.ums.usermanagement.permission.MutableAdditionalRolePermissions;
-import org.ums.usermanagement.permission.AdditionalRolePermissionsManager;
-import org.ums.manager.NavigationManager;
-import org.ums.usermanagement.permission.PersistentAdditionalRolePermissions;
 import org.ums.resource.ResourceHelper;
+import org.ums.usermanagement.permission.AdditionalRolePermissions;
+import org.ums.usermanagement.permission.AdditionalRolePermissionsManager;
+import org.ums.usermanagement.permission.MutableAdditionalRolePermissions;
+import org.ums.usermanagement.permission.PersistentAdditionalRolePermissions;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -90,4 +89,5 @@ public class AdditionalRolePermissionsHelper extends
     localCache.invalidate();
     return object.build();
   }
+
 }
