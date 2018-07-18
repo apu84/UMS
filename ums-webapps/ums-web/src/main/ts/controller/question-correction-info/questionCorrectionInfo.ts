@@ -44,6 +44,15 @@ module ums{
         public showDeleteColumn:boolean;
         public submit_Button_Disable:boolean;
         public checkBoxCounter:number;
+        public programList: Array<IConstants>;
+        public programs: IConstants;
+        public programIdForFilter:number;
+        public examDateForFilter:string;
+        public examRoutineForFilter:any;
+        public checkProgramId:boolean;
+        public checkYear:boolean;
+        public checkSemester:boolean;
+        public isSubmitEligible:boolean;
         public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService',
             'programService','DailyExamAttendanceReportService','examRoutineService','classRoomService','employeeService','questionCorrectionInfoService','courseService'];
 
@@ -66,10 +75,6 @@ module ums{
             this.deptList = [];
             this.deptList = this.appConstants.programs;
             this.deptName=this.deptList[0];
-            this.selectedProgramId=this.deptName.id;
-            this.programName=this.deptName.name;
-            console.log("Department: "+this.selectedProgramId);
-            console.log(this.deptList);
             this.yearList=[];
             this.yearList=this.appConstants.academicYear;
             this.yearName=this.yearList[0];
@@ -93,11 +98,42 @@ module ums{
             this.courseTitle="";
             this.submit_Button_Disable=true;
             this.checkBoxCounter=0;
-            console.log("year:"+this.selectedYear+" Semester:"+this.selectedSemester);
+            console.log("year:"+this.selectedYear+" Semester:"+this.selectedSemester+" Program"+this.selectedProgramId);
+            this.programList = [];
+            this.programList = this.appConstants.programs;
+            this.programs=this.deptList[0];
+            this.checkProgramId=false;
+            this.checkYear=false;
+            this.checkSemester=false;
+            this.isSubmitEligible=true;
+            this.showDeleteColumn=true;
+            this.initialization();
+
+        }
+        private initialization():void{
             this.getSemesters();
             this.getExamDates();
+            this.getExamDatesForFilter();
             this.getQcInfo();
-
+        }
+        private changeDateForFilter(value:any){
+            this.examDateForFilter=value;
+            console.log("Exam Date: "+this.examDateForFilter);
+        }
+        private getExamDatesForFilter(){
+            let examTypeId=this.selectedExamTypeId == ExamType.REGULAR ? ExamType.REGULAR:ExamType.CARRY_CLEARANCE_IMPROVEMENT;
+            console.log("examTypeId: "+examTypeId);
+            this.examRoutineForFilter=null;
+            this.examRoutineService.getExamRoutineDates(11012017,1).then((examDateArr: any) =>{
+                this.examRoutineForFilter={};
+                console.log("****Exam Dates***");
+                this.examRoutineForFilter=examDateArr;
+                console.log(this.examRoutineArr);
+            })
+        }
+        private programChanged(programs:any){
+            this.programIdForFilter=programs.id;
+            console.log("Id: "+this.programIdForFilter);
         }
         private getQcInfo(){
             var app:Array<IQuestionCorrectionInfo>=[];
@@ -117,17 +153,20 @@ module ums{
         }
 
         private getCourse():void{
-            this.courseList=[];
-            var course:Array<ICourses>=[];
-            this.questionCorrectionInfoService.getCourses(this.selectedProgramId,this.selectedYear,this.selectedSemester).then((data)=>{
-                course=data;
-                console.log("********")
-                this.courseList=course;
-                for(let i=0;i<this.courseList.length;i++){
-                    this.courseList[i].courseNo=this.courseList[i].courseTitle+"("+this.courseList[i].courseNo+")";
-                }
-                 console.log(this.courseList);
-            })
+            console.log("P->"+this.checkProgramId+" Y->"+this.checkYear+" S->"+this.checkSemester);
+            if(this.checkProgramId==true && this.checkYear==true && this.checkSemester==true){
+                this.courseList=[];
+                var course:Array<ICourses>=[];
+                this.questionCorrectionInfoService.getCourses(this.selectedProgramId,this.selectedYear,this.selectedSemester).then((data)=>{
+                    course=data;
+                    console.log("********")
+                    this.courseList=course;
+                    for(let i=0;i<this.courseList.length;i++){
+                        this.courseList[i].courseNo=this.courseList[i].courseTitle+"("+this.courseList[i].courseNo+")";
+                    }
+                    console.log(this.courseList);
+                })
+            }
         }
         private getSemesters():void{
             this.semesterService.fetchSemesters(11,5).then((semesters:Array<Semester>)=>{
@@ -173,17 +212,21 @@ module ums{
         }
 
         private deptChanged(programs:any){
+            this.checkProgramId=true;
             this.selectedProgramId=programs.id;
             this.programName=programs.name;
             console.log("id: "+this.selectedProgramId);
             this.getCourse();
         }
         private yearChanged(value:any){
+             this.checkYear=true;
             console.log(value.name);
             this.year=value.name;
             this.selectedYear=value.id;
+            this.getCourse();
         }
         private academicSemester(value:any){
+            this.checkSemester=true;
             console.log(value.name);
             this.acaSemester=value.name;
             this.selectedSemester=value.id;
@@ -205,6 +248,32 @@ module ums{
                 console.log(data);
                 this.getQcInfo();
             })
+        }
+        public isEligibleForSubmitData() {
+            if(this.checkProgramId==false){
+                this.isSubmitEligible=false;
+                this.notify.warn("Select Program");
+            } else if(this.checkYear==false){
+                this.isSubmitEligible=false;
+                this.notify.warn("Select Year");
+            }else if(this.checkSemester==false){
+                this.isSubmitEligible=false;
+                this.notify.warn("Select Semester");
+            } else if(this.selectedCourseId=="" || this.selectedCourseId==null || this.selectedCourseId.length>100){
+                this.isSubmitEligible=false;
+                this.notify.warn("Select Course");
+            }else if(this.incorrectQuestionNo=="" || this.incorrectQuestionNo==null || this.incorrectQuestionNo.length>100){
+                this.isSubmitEligible=false;
+                this.notify.warn("Incorrect Question can not be empty to max 100 characters");
+            }else if(this.mistakeType=="" || this.mistakeType==null || this.mistakeType.length>100){
+                this.isSubmitEligible=false;
+                this.notify.warn("Type of Mistake can not be empty to max 100 characters");
+            } else if(this.selectedExamDate=="" || this.selectedExamDate==null){
+                this.isSubmitEligible=false;
+                this.notify.warn("Select Exam Date");
+            }else {
+                this.isSubmitEligible=true;
+            }
         }
         private checkMoreThanOneSelectionSubmit(result:any) {
             if(result.apply){

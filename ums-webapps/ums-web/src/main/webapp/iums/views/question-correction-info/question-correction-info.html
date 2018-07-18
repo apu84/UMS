@@ -20,7 +20,6 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="deptType" class="control-label"><span class="glyphicon glyphicon-list-alt"><b> Select Dept</b></span></label>
                                     <div class="input-icon left">
                                         <select
                                                 class="form-control required"
@@ -36,7 +35,6 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="year" class="control-label"><span class="glyphicon glyphicon-list-alt"><b> Year</b></span></label>
                                     <div class="input-icon left">
                                         <select
                                                 class="form-control required"
@@ -51,7 +49,6 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <label for="semester" class="control-label"><span class="glyphicon glyphicon-list-alt"><b> Semester</b></span></label>
                                 <div class="input-icon left">
                                     <select
                                             class="form-control required"
@@ -74,12 +71,10 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label  class="control-label"><span class="glyphicon glyphicon-apple"><b> Exam Type</b></span></label>
                                     <div class="input-icon left">
                                         <select
                                                 class="form-control required"
                                                 name="meritType"
-                                                id="meritType3"
                                                 style="width: 70%;"
                                                 data-ng-options="examType.name for examType in vm.examTypeList track by examType.id"
                                                 data-ng-model="vm.examType"
@@ -91,11 +86,9 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="control-label"><span class="glyphicon glyphicon-apple"><b> Course No</b></span></label>
                                     <select
                                             class="form-control required"
                                             name="meritType"
-                                            id="meritType3"
                                             style="width: 70%;"
                                             data-ng-options="course.courseNo for course in vm.courseList"
                                             data-ng-model="vm.courses"
@@ -106,7 +99,6 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="control-label"><span class="glyphicon glyphicon-apple"><b> Incorrect Question No</b></span></label>
                                     <input type="text"
                                            class="form-control required"
                                            style="width: 70%";
@@ -126,7 +118,6 @@
 
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="control-label"><span class="glyphicon glyphicon-apple"><b> Type of Mistake</b></span></label>
                                     <input type="text"
                                            class="form-control required"
                                            style="width: 70%";
@@ -138,7 +129,6 @@
 
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="examDate" class="control-label"><span class="glyphicon glyphicon-calendar"><b> Exam Date</b></span></label>
                                     <div class="input-icon left">
                                         <div>
                                             <select class="form-control" id="examDate" name="examDate" style="width: 70%"; data-ng-model="vm.examDate" data-ng-change="vm.ExamDateChange(vm.examDate)">
@@ -179,20 +169,21 @@
                                 <div class="input-icon left">
                                     <select
                                             class="form-control required"
-                                            name="leaveType"
-                                            id="leaveTypejj"
+                                            name="programs"
+                                            id="programs"
                                             style="width: 70%";
-                                            data-ng-options="dept.name for dept in vm.deptList"
-                                            data-ng-model="vm.deptName"
-                                            data-ng-change="vm.deptChanged(vm.deptName)"
-                                    ></select>
+                                            data-ng-options="dept.name for dept in vm.programList"
+                                            data-ng-model="vm.programs"
+                                            data-ng-change="vm.programChanged(vm.programs)"
+                                    >
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div>
-                                    <select class="form-control" name="examDate" style="width: 70%"; data-ng-model="vm.examDate" data-ng-change="vm.ExamDateChange(vm.examDate)">
+                                    <select class="form-control" name="examDate" style="width: 70%"; data-ng-model="vm.examDateForFilter" data-ng-change="vm.changeDateForFilter(vm.examDateForFilter)">
                                         <option value="">Select an Exam Date </option>
-                                        <option data-ng-repeat="examRoutine in vm.examRoutineArr">{{examRoutine.examDate}}</option>
+                                        <option data-ng-repeat="examRoutine in vm.examRoutineForFilter">{{examRoutine.examDate}}</option>
                                     </select>
                                 </div>
 
@@ -215,7 +206,7 @@
                             </tr>
                             </thead>
                             <thead>
-                            <tr data-ng-repeat="app in vm.questionCorrectionInfo | orderBy:'programId'">
+                            <tr data-ng-repeat="app in vm.questionCorrectionInfo | orderBy:['programId','examDate'] | filter:{programId:vm.programIdForFilter,examDate:vm.examDateForFilter}">
                                 <td>{{$index+1}}</td>
                                 <td>{{app.programName}}</td>
                                 <td>{{app.year+'/'+app.semester}}</td>
@@ -249,7 +240,7 @@
 </div>
 
 
-<div>
+<div data-ng-if="vm.isSubmitEligible">
     <div class="modal fade" id="myModal" role="dialog">
         <!--   <div class="modal-backdrop"> --->
         <div class="modal-dialog  modal-lg">

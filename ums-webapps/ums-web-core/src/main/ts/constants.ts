@@ -373,6 +373,7 @@ module ums {
                     '110708': ['BSc in ME']
                 },
                 programs:[
+                    {id: 0, name: 'Select Program'},
                     {id: 110100, name: 'Bsc in ARC'},
                     {id: 110200, name: 'BBA'},
                     {id: 110300, name: 'Bsc in CE'},
