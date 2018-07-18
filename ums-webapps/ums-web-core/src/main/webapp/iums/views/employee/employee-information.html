@@ -75,7 +75,7 @@
                                 <select class="form-control required"
                                         name="nDepartment"
                                         id="iDepartment"
-                                        data-ng-options="department.longName for department in vm.departments track by department.id"
+                                        data-ng-options="depts.longName group by depts.category for depts in vm.departments | orderBy: 'id' track by depts.id"
                                         data-ng-change="vm.showSearchByField()"
                                         data-ng-model="vm.changedDepartment"
                                 >
@@ -85,8 +85,26 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-actions text-right pal">
-                    <button type="submit" class="btn btn-success">Search</button>
+
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="col-md-12">
+                                <button type="button" data-tooltip="toggle" title="Print Employee List"
+                                        data-target="#printOptions" data-toggle="modal"
+                                        class="btn btn-default"><i class="fa fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="col-md-12">
+                                <div align="right">
+                                    <button type="submit" class="btn btn-success">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -126,13 +144,7 @@
 
 
                         <div class="row">
-                            <div class="col-md-2">
-                                <button type="button" data-tooltip="toggle" title="Print Employee List"
-                                        data-target="#printOptions" data-toggle="modal"
-                                        class="btn btn-default"><i class="fa fa-download"></i>
-                                </button>
-                            </div>
-                            <div class="col-md-10" align="right">
+                            <div class="col-md-12" align="right">
                                 <pagination total-items="filterd.length" ng-model="vm.currentPageNumber" max-size="7"
                                             class="pagination-sm" boundary-links="true" rotate="false"
                                             class="pagination-page"
@@ -205,7 +217,7 @@
                 </div>
 
                 <div data-ng-if="vm.printType=='2'">
-                    <br />
+                    <br/>
                     <div class="row">
                         <div class="col-md-12">
                             <b>Departments/Offices:</b>
@@ -227,7 +239,7 @@
                         </div>
                     </div>
                 </div>
-                <br />
+                <br/>
                 <div class="row">
                     <div class="col-md-12">
                         <b>Employee Types:</b>
@@ -252,6 +264,18 @@
                             <span data-ng-if="empType=='2'">Officer,</span>
                             <span data-ng-if="empType=='3'">Staff,</span>
                         </span>
+                    </div>
+                </div>
+
+                <br/>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <b>Create new page for each department: </b>&nbsp;&nbsp;
+                        <input type="radio" name="choice1" data-ng-model="vm.choice" value="1"
+                               autocomplete="off"/>&nbsp;<label for="square-radio-1">Yes</label>&nbsp;&nbsp;
+                        <input type="radio" name="choice1" data-ng-model="vm.choice" value="2"
+                               autocomplete="off"/>&nbsp;<label for="square-radio-1">No</label>&nbsp;&nbsp;
                     </div>
                 </div>
             </div>

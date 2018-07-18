@@ -558,11 +558,11 @@ module ums{
                 }, 'arraybuffer');
         }
 
-        public getEmployeeListPdf(deptList: string[], employeeTypeList: number[]): void {
+        public getEmployeeListPdf(deptList: string[], employeeTypeList: number[], choice: number): void {
             let contentType: string = UmsUtil.getFileContentType("pdf");
             let fileName = "List of Employees";
 
-            this.httpClient.get("academic/employee/report/employeeList/deptList/" + deptList + "/empTypeList/" + employeeTypeList, 'application/pdf', (data: any, etag: string) => {
+            this.httpClient.get("academic/employee/report/employeeList/deptList/" + deptList + "/empTypeList/" + employeeTypeList + "/choice/" + choice, 'application/pdf', (data: any, etag: string) => {
 
                     // var file = new Blob([data], {type: 'application/pdf'});
                     // var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
