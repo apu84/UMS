@@ -51,77 +51,8 @@
         <div class="panel-heading">Leave Application<span
                 class="subtitle"></span></div>
         <div class="panel-body shadowPanel" style="min-height: 490px;">
-            <div data-ng-if="vm.showStatusSection==false && vm.showHistorySection==false && vm.showApplicationSection==true"
-                 class="animate-if">
-                <div class="row">
-                    <div class="col-md-12" align="right">
-                        <span class="label label-info" style="cursor: pointer"
-                              data-ng-click="vm.showHistory()">Histories</span>
-                    </div>
-                </div>
-                <br/>
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="panel panel-grey">
-                            <div class="panel-heading">Application Form</div>
-                            <div class="panel-body pan">
-                                <div style="padding: 2%;" data-ng-include=""
-                                     src="'views/leave-management/leave-application-form.html'">
-                                </div>
-                                <div style="padding: 2%;" data-ng-include=""
-                                     src="'views/leave-management/file-attachment.html'">
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="well" align="right">
-                                        <button class="btn btn-success" data-ng-click="vm.applyLeave()">Apply For Leave
-                                        </button>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="col-md-4" data-ng-include="" src="'views/leave-management/remaining-leaves.html'"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12"><h2>Pending Leaves</h2></div>
-                    <div class="col-md-12" data-ng-include=""
-                         src="'views/leave-management/pending-leave-application.html'"></div>
-                </div>
-            </div>
-            <div data-ng-if="vm.showStatusSection && vm.showApplicationSection==false" class="animate-if">
-                <div class="row" data-ng-include="'views/leave-management/leave-application-status.html'">
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="well" align="right">
-                            <button class="btn btn-danger" data-ng-click="vm.closeStatusSection()">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div data-toggle="dropdown" data-value="fadeIn"
-                 data-ng-if="vm.showHistorySection==true && vm.showStatusSection==false && vm.showApplicationSection==false"
-                 class="animate-if">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h2>Histories</h2>
-                    </div>
-                </div>
-                <div class="row"
-                     data-ng-include="'views/leave-management/leave-applications-with-status-selection.html'"></div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="well" align="right">
-                            <button class="btn btn-dangeR" data-ng-click="vm.closeHistory()">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            <div ng-if="vm.showLeaveApplicationSection" lms-app-dir></div>
         </div>
-
     </div>
 
 </div>

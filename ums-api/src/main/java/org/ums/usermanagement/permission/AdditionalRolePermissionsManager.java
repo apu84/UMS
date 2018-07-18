@@ -1,5 +1,6 @@
 package org.ums.usermanagement.permission;
 
+import org.ums.enums.common.RoleType;
 import org.ums.manager.ContentManager;
 import org.ums.usermanagement.role.Role;
 import org.ums.usermanagement.user.User;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 public interface AdditionalRolePermissionsManager extends
     ContentManager<AdditionalRolePermissions, MutableAdditionalRolePermissions, Long> {
+
   List<AdditionalRolePermissions> getPermissionsByUser(final String pUserId);
 
   List<AdditionalRolePermissions> getUserPermissionsByAssignedUser(final String pUserId, final String pAssignedBy);
@@ -30,4 +32,6 @@ public interface AdditionalRolePermissionsManager extends
   int removeExistingAdditionalPermissions(final String pUserId);
 
   List<AdditionalRolePermissions> getAdditionalRole(String pDepartmentId);
+
+  AdditionalRolePermissions getAdditionalRole(String pDepartmentId, RoleType pRoleType);
 }

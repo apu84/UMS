@@ -110,9 +110,8 @@ public class LmsAppStatusResourceHelper extends ResourceHelper<LmsAppStatus, Mut
     return getJsonObjectWithTotalSize(pUriInfo, appStatuses, totalSize);
   }
 
-  public JsonObject getPendingApplicationsOfEmployee(UriInfo pUriInfo) {
-    User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
-    List<LmsAppStatus> appStatuses = getContentManager().getPendingApplications(user.getEmployeeId());
+  public JsonObject getPendingApplicationsOfEmployee(String pEmployeeId, UriInfo pUriInfo) {
+    List<LmsAppStatus> appStatuses = getContentManager().getPendingApplications(pEmployeeId);
     return getJsonObject(pUriInfo, appStatuses);
   }
 

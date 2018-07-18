@@ -4,6 +4,7 @@
 module ums {
   export interface  LmsApplicationStatus {
     id: string;
+    leaveApplication: LmsApplication;
     appId: string;
     applicantsId: string;
     applicantsName: string;

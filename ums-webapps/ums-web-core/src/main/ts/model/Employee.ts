@@ -18,6 +18,7 @@ module ums{
     mobileNumber:string;
     phoneNumber:string;
     emailAddress:string;
+    shortName: string;
     joiningDate:string;
     jobPermanentDate:string;
     status:number;

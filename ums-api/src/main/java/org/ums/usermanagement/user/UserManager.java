@@ -1,12 +1,10 @@
 package org.ums.usermanagement.user;
 
+import org.ums.enums.common.RoleType;
 import org.ums.manager.ContentManager;
 import org.ums.usermanagement.role.Role;
-import org.ums.usermanagement.user.MutableUser;
-import org.ums.usermanagement.user.User;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserManager extends ContentManager<User, MutableUser, String>, UserEmail<User> {
 
@@ -21,4 +19,6 @@ public interface UserManager extends ContentManager<User, MutableUser, String>, 
   List<User> getUsers();
 
   List<User> getUsers(List<Role> pRoles);
+
+  List<User> getUsers(RoleType pRoleType);
 }

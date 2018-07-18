@@ -54,6 +54,8 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/mailbox/MailCompose.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/mailbox/MailView.ts'/>
 /// <reference path='./controller/leaveManagement/LeaveApplicationManagement.ts'/>
+/// <reference path='./controller/leaveManagement/LeaveApplicationController.ts'/>
+/// <reference path='./controller/leaveManagement/EmployeeLeaveApplicationController.ts'/>
 /// <reference path='./controller/leaveManagement/LeaveApplicationApproval.ts'/>
 /// <reference path='./controller/holidays/PublicHolidays.ts'/>
 

@@ -1,12 +1,10 @@
 package org.ums.usermanagement.permission;
 
 import org.ums.cache.ContentCache;
-import org.ums.usermanagement.permission.AdditionalRolePermissions;
+import org.ums.enums.common.RoleType;
+import org.ums.manager.CacheManager;
 import org.ums.usermanagement.role.Role;
 import org.ums.usermanagement.user.User;
-import org.ums.usermanagement.permission.MutableAdditionalRolePermissions;
-import org.ums.usermanagement.permission.AdditionalRolePermissionsManager;
-import org.ums.manager.CacheManager;
 
 import java.util.Date;
 import java.util.List;
@@ -74,5 +72,10 @@ public class AdditionalRolePermissionsCache extends
   @Override
   public int addPermissions(String pUserId, Set<String> pPermissions) {
     return getManager().addPermissions(pUserId, pPermissions);
+  }
+
+  @Override
+  public AdditionalRolePermissions getAdditionalRole(String pDepartmentId, RoleType pRoleType) {
+    return getManager().getAdditionalRole(pDepartmentId, pRoleType);
   }
 }

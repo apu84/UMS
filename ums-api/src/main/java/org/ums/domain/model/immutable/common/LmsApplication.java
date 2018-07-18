@@ -33,4 +33,6 @@ public interface LmsApplication extends Serializable, LastModifier, EditType<Mut
   Integer getTotalDays();
 
   LeaveApplicationApprovalStatus getApplicationStatus();
+
+  String getSubmittedBy();
 }

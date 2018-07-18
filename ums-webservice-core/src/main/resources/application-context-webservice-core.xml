@@ -16,7 +16,7 @@
   <aop:aspectj-autoproxy proxy-target-class="true"/>
   <context:spring-configured/>
   <context:component-scan
-      base-package="org.ums.navigation,org.ums.logs,org.ums.resource,org.ums.resource.helper,org.ums.builder,org.ums.services,org.ums.validator,org.ums.payment,org.ums.employee,org.ums.twofa"/>
+      base-package="org.ums.navigation,org.ums.logs, org.ums.resource,org.ums.resource.helper,org.ums.builder,org.ums.services,org.ums.validator,org.ums.payment,org.ums.employee,org.ums.twofa"/>
 
   <task:annotation-driven executor="asynExecutor"/>
   <task:executor id="asynExecutor" pool-size="25" />

@@ -40,6 +40,7 @@ public class PersistentLmsApplication implements MutableLmsApplication {
   private Integer mTotalDays;
   private LeaveApplicationApprovalStatus mLeaveApplicationStatus;
   private String mLastModified;
+  private String mSubmittedBy;
 
   public PersistentLmsApplication() {
 
@@ -57,6 +58,16 @@ public class PersistentLmsApplication implements MutableLmsApplication {
     mReason = pPersistentLmsApplication.getReason();
     mLastModified = pPersistentLmsApplication.getLastModified();
     mLeaveApplicationStatus = pPersistentLmsApplication.getApplicationStatus();
+  }
+
+  @Override
+  public String getSubmittedBy() {
+    return mSubmittedBy;
+  }
+
+  @Override
+  public void setSubmittedBy(String pSubmittedBy) {
+    mSubmittedBy = pSubmittedBy;
   }
 
   @Override
