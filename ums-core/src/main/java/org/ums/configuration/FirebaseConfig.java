@@ -19,20 +19,43 @@ public class FirebaseConfig {
   @Value("${fcm.config}")
   private String config;
 
+  private String mDefaultAppName = "";
+
   @PostConstruct
   private void init() {
     config();
   }
 
+  private void setDefaultAppName(final String pDefaultAppName) {
+    mDefaultAppName = pDefaultAppName;
+  }
+
+  private String getDefaultAppName() {
+    return mDefaultAppName;
+  }
+
   private void config() {
     try {
+
+      mLogger.info("--------------------- Getting before setting default app-----------------------------");
+      mLogger.info(getDefaultAppName().isEmpty() ? "Yes, Its Empty" : "No it is not empty");
+      mLogger.info(getDefaultAppName());
+
       FileInputStream serviceAccount = new FileInputStream(config);
 
       FirebaseOptions options =
-              new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
+          new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
 
-      FirebaseApp.initializeApp(options);
-    } catch (Exception e) {
+      FirebaseApp defaultApp = FirebaseApp.initializeApp(options);
+      mLogger.info("------------------------- Printing Default App -------------------------------");
+      mLogger.info(defaultApp.getName());
+
+      this.setDefaultAppName(defaultApp.getName());
+
+      mLogger.info("--------------------- Getting after setting default app-----------------------------");
+      mLogger.info(getDefaultAppName());
+
+    } catch(Exception e) {
       mLogger.error("Error in initializing firebase configuration: " + e.getMessage());
       mLogger.error("" + e);
     }
