@@ -1,5 +1,8 @@
 module ums {
   export class LeaveApplicationController {
+
+    private showLeaveApplicationSection: boolean;
+
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'userService', 'attachmentService', '$state'];
 
     constructor(private appConstants: any,
@@ -22,14 +25,16 @@ module ums {
     }
 
     private init() {
+      this.showLeaveApplicationSection = true;
       this.getUsersInformation();
     }
 
     private getUsersInformation() {
       this.userService.fetchCurrentUserInfo().then((user) => {
+        console.log("User--->");
+        console.log(user);
         this.leaveApplicationService.user = user;
         this.leaveApplicationService.employeeId = this.leaveApplicationService.user.employeeId;
-        this.$state.go('leaveApplication.leaveApplicationManagement', {}, {reload: 'leaveApplication.leaveApplicationManagement'});
       });
     }
   }

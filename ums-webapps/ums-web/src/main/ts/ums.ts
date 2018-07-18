@@ -947,6 +947,28 @@ module ums {
             }]
           }
         })
+        .state('empLeaveApplication', {
+          url: "/empLeaveApplication",
+          controller: 'employeeLeaveApplicationController',
+          controllerAs: 'vm',
+          templateUrl: 'views/leave-management/employee-leave-application.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+
+              return $ocLazyLoad.load({
+                files: [
+
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                  'vendors/bootstrap-daterangepicker/daterangepicker.js'
+                ]
+              });
+            }]
+          }
+        })
+
         .state('leaveApplication', {
           url: "/leaveApplication",
           controller: 'LeaveApplicationController',
@@ -968,27 +990,27 @@ module ums {
             }]
           }
         })
-        .state('leaveApplication.leaveApplicationManagement', {
-          url: "/leaveApplicationManagement",
-          controller: 'LeaveApplicationManagement',
-          controllerAs: 'vm',
-          templateUrl: 'views/leave-management/leave-application-management.html',
-          resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+        /* .state('leaveApplication.leaveApplicationManagement', {
+           url: "/leaveApplicationManagement",
+           controller: 'LeaveApplicationManagement',
+           controllerAs: 'vm',
+           templateUrl: 'views/leave-management/leave-application-management.html',
+           resolve: {
+             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
 
-              return $ocLazyLoad.load({
-                files: [
+               return $ocLazyLoad.load({
+                 files: [
 
-                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                  'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                  'vendors/bootstrap-daterangepicker/daterangepicker.js'
-                ]
-              });
-            }]
-          }
-        })
+                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                   'vendors/bootstrap-datepicker/css/datepicker.css',
+                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                   'vendors/bootstrap-daterangepicker/daterangepicker.js'
+                 ]
+               });
+             }]
+           }
+         })*/
         .state('leaveApproval', {
           url: "/leaveApproval",
           controller: 'LeaveApplicationApproval',

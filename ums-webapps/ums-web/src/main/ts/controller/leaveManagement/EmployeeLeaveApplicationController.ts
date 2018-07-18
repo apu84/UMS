@@ -3,9 +3,10 @@ module ums {
 
     private employeeList: Employee[];
     private selectedEmployee: Employee;
+    private showApplicationSection: boolean;
 
 
-    public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'userService', 'attachmentService', 'employeeService'];
+    public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'userService', 'attachmentService', '$state', 'employeeService'];
 
     constructor(private appConstants: any,
                 private httpClient: HttpClient,
@@ -21,25 +22,31 @@ module ums {
                 private leaveApplicationService: LeaveApplicationService,
                 private leaveApplicationStatusService: LeaveApplicationStatusService,
                 private userService: UserService,
-                private attachmentService: AttachmentService,
-                private employeeService: EmployeeService) {
+                private attachmentService: AttachmentService, private $state: any, private employeeService: EmployeeService) {
 
-
+      this.init();
     }
 
     private init() {
-
+      this.showApplicationSection = false;
+      this.fetchDeptEmployeeList();
     }
 
 
     public employeeSelected() {
-      this.userService.getUser(this.selectedEmployee.shortName).then((user: User) => {
+
+      this.showApplicationSection = false;
+      this.leaveApplicationService.employeeId = this.selectedEmployee.id;
+      this.userService.getUser(this.selectedEmployee.id).then((user: User) => {
+        console.log("Fetched user");
+        console.log(user);
         this.leaveApplicationService.user = user;
-        this.leaveApplicationService.employeeId = user.employeeId;
+        this.leaveApplicationService.user.employeeId = this.selectedEmployee.id;
+        this.showApplicationSection = true;
       })
     }
 
-    private fetchDeptEmployeeList(deptId: string) {
+    private fetchDeptEmployeeList() {
       this.userService.fetchCurrentUserInfo().then((user: User) => {
         this.employeeService.getEmployees(user.departmentId).then((employeeList: Employee[]) => {
           this.employeeList = employeeList;
@@ -48,5 +55,5 @@ module ums {
     }
   }
 
-  UMS.controller("employeeLeaveApplication", EmployeeLeaveApplicationController);
+  UMS.controller("employeeLeaveApplicationController", EmployeeLeaveApplicationController);
 }

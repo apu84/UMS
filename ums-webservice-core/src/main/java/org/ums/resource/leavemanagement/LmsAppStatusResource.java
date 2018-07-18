@@ -4,8 +4,10 @@ import org.springframework.stereotype.Component;
 import org.ums.enums.common.DepartmentType;
 import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.enums.common.LeaveCategories;
+import org.ums.logs.GetLog;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -35,9 +37,11 @@ public class LmsAppStatusResource extends MutableLmsAppStatusResource {
   }
 
   @GET
-  @Path("/pendingLeaves")
-  public JsonObject getPendingLeaves(final @Context Request pRequest) {
-    return mHelper.getPendingApplicationsOfEmployee(mUriInfo);
+  @Path("/pendingLeaves/employee/{employee-id}")
+  @GetLog(message = "Requested for pending leaves")
+  public JsonObject getPendingLeaves(final @Context HttpServletRequest pHttpServletRequest,
+      @PathParam("employee-id") String pEmployeeId) {
+    return mHelper.getPendingApplicationsOfEmployee(pEmployeeId, mUriInfo);
   }
 
   @GET

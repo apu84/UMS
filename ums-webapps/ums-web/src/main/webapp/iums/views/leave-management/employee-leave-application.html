@@ -52,23 +52,28 @@
                 class="subtitle"></span></div>
         <div class="panel-body shadowPanel" style="min-height: 490px;">
             <div class="row">
-                <form class="form-horizontal">
-                    <label class="control-label col-md-3" for="roomNo">Employee :</label>
-                    <div class="col-md-9">
-                        <ui-select id="room" theme="bootstrap"
-                                   data-ng-model="vm.selectedEmployee" on-select="vm.employeeSelected()"
-                        >
-                            <ui-select-match placeholder="Select Employee">{{vm.selectedEmployee.employeeName}}
-                            </ui-select-match>
-                            <ui-select-choices id="employee"
-                                               repeat="g in vm.employeeList | filter:$select.search">
-                                <small ng-bind-html="g.employeeName | highlight:$select.search"></small>
-                            </ui-select-choices>
-                        </ui-select>
-                    </div>
-                </form>
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <form class="form-horizontal">
+                        <label class="control-label col-md-3" for="roomNo">Employee :</label>
+                        <div class="col-md-9">
+                            <ui-select id="room" theme="bootstrap"
+                                       data-ng-model="vm.selectedEmployee" on-select="vm.employeeSelected()"
+                            >
+                                <ui-select-match placeholder="Select Employee">{{vm.selectedEmployee.employeeName}}
+                                </ui-select-match>
+                                <ui-select-choices id="employee"
+                                                   repeat="g in vm.employeeList | filter:$select.search">
+                                    <small ng-bind-html="g.employeeName | highlight:$select.search"></small>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-3"></div>
+
             </div>
-            <div ui-view></div>
+            <div ng-if="vm.showApplicationSection" lms-app-dir></div>
         </div>
     </div>
 
