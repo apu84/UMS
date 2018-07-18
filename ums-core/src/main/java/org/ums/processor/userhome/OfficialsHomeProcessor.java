@@ -35,7 +35,7 @@ public class OfficialsHomeProcessor extends AbstractUserHomeProcessor {
     }
     else {
       deptOffice = user.getDepartment().getLongName();
-        designationName = employeeManager.get(user.getId()).getDesignation().getDesignationName();
+      designationName = employeeManager.get(user.getId()).getDesignation().getDesignationName();
     }
     Map<String, String> department = new HashMap<>();
     department.put("key", "Department/ Office");
@@ -49,7 +49,7 @@ public class OfficialsHomeProcessor extends AbstractUserHomeProcessor {
 
     Map<String, String> employeeId = new HashMap<>();
     employeeId.put("key", "Employee ID");
-    employeeId.put("value", employeeManager.getByShortName(user.getId()).getId());
+    employeeId.put("value", user.getId());
     profileContent.add(employeeId);
 
     userInfo.setInfoList(profileContent);
