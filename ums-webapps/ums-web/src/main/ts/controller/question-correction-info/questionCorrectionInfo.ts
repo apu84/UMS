@@ -53,8 +53,10 @@ module ums{
         public checkYear:boolean;
         public checkSemester:boolean;
         public isSubmitEligible:boolean;
+        private stateParams: any;
         public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService',
-            'programService','DailyExamAttendanceReportService','examRoutineService','classRoomService','employeeService','questionCorrectionInfoService','courseService'];
+            'programService','DailyExamAttendanceReportService','examRoutineService','classRoomService','employeeService',
+            'questionCorrectionInfoService','courseService','$stateParams'];
 
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -70,7 +72,12 @@ module ums{
                     private classRoomService:ClassRoomService,
                     private employeeService:EmployeeService,
                     private questionCorrectionInfoService:QuestionCorrectionInfoService,
-                    private courseService:CourseService) {
+                    private courseService:CourseService,
+                    private $stateParams: any) {
+            this.stateParams = $stateParams;
+            console.log("----State Params---");
+            console.log($stateParams);
+            console.log("semesterId: "+this.stateParams.semesterId+"\nexamType: "+this.stateParams.examType+"\nexamDate: "+this.stateParams.examDate)
             this.isInsertAvailable=false;
             this.deptList = [];
             this.deptList = this.appConstants.programs;

@@ -9,7 +9,6 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="leaveTypejj" class="control-label"><span class="glyphicon glyphicon-list-alt"><b> Select Department</b></span></label>
                                     <div class="input-icon left">
                                         <select
                                                 class="form-control required"
@@ -25,7 +24,6 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="leaveTypejj" class="control-label"><span class="glyphicon glyphicon-user"><b> Empoyee Name</b></span></label>
                                     <div class="input-icon left">
                                         <select
                                                 class="form-control required"
@@ -40,12 +38,10 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <label for="meritType" class="control-label"><span class="glyphicon glyphicon-apple"><b> Exam Type</b></span></label>
                                 <div class="input-icon left">
                                     <select
                                             class="form-control required"
                                             name="meritType"
-                                            id="meritType"
                                             style="width: 70%;"
                                             data-ng-options="examType.name for examType in vm.examTypeList track by examType.id"
                                             data-ng-model="vm.examType"
@@ -64,7 +60,6 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="meritType3" class="control-label"><span class="glyphicon glyphicon-apple"><b> Absent/Late Status</b></span></label>
                                     <div class="input-icon left">
                                         <select
                                                 class="form-control required"
@@ -81,7 +76,6 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="control-label"><span class="glyphicon glyphicon-apple"><b> Remarks</b></span></label>
                                     <input type="text"
                                            class="form-control required"
                                            style="width: 70%";
@@ -90,7 +84,6 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <label for="leaveTypejj" class="control-label"><span class="glyphicon glyphicon-list-alt"><b> Invigilation Room</b></span></label>
                                 <div class="input-icon left">
                                     <select
                                             class="form-control required"
@@ -112,7 +105,6 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="examDate" class="control-label"><span class="glyphicon glyphicon-calendar"><b> Exam Date</b></span></label>
                                     <div class="input-icon left">
                                         <div>
                                             <select class="form-control" id="examDate" name="examDate" style="width: 70%"; data-ng-model="vm.examDate" data-ng-change="vm.ExamDateChange(vm.examDate)">
@@ -126,20 +118,18 @@
                             <div class="col-md-4" data-ng-show="vm.isArrivalTimeEligible">
                                 <div class="form-group">
                                     <label class="col-md-6 control-label">
-                                        <span class="glyphicon glyphicon-calendar"><b> Arrival Time</b></span>
                                         <input type="text"
                                                class="form-control required"
-                                               placeholder="  time "
+                                               placeholder="  00 : 00 "
                                                data-ng-model="vm.arrivalTime"
                                         />
                                     </label>
                                     <div class="col-md-6">
-                                        <span><b><br> </b></span>
                                         <select
                                                 class="form-control required"
                                                 name="meritType"
                                                 id="meritType"
-                                                style="width:50%;"
+                                                style="width:40%;"
                                                 data-ng-options="examType.name for examType in vm.amPmList track by examType.id"
                                                 data-ng-model="vm.amPm"
                                                 data-ng-change="vm.changeStatus(vm.amPm)"

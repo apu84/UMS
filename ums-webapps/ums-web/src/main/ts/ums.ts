@@ -919,7 +919,7 @@ module ums {
               });
             }]
           }
-        }).state('expelledInformation', {
+        }).state('dailyExamReport.expelledInformation', {
         url: "/expelledInformation",
         controller: 'ExpelledInformation',
         controllerAs: 'vm',
@@ -949,7 +949,6 @@ module ums {
 
                 return $ocLazyLoad.load({
                     files: [
-
                         'vendors/bootstrap-switch/css/bootstrap-switch.css',
                         'vendors/bootstrap-datepicker/css/datepicker.css',
                         'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
@@ -959,7 +958,7 @@ module ums {
                 });
             }]
         }
-    }).state('dailyExamAttendanceReport', {
+    }).state('dailyExamReport.dailyExamAttendanceReport', {
           url: "/dailyExamAttendanceReport",
           controller: 'DailyExamAttendanceReport',
           controllerAs: 'vm',
@@ -998,7 +997,7 @@ module ums {
                 });
             }]
         }
-    }).state('questionCorrectionInfo', {
+    }).state('dailyExamReport.questionCorrectionInfo', {
         url: "/questionCorrectionInfo",
         controller: 'QuestionCorrectionInfo',
         controllerAs: 'vm',
@@ -1017,7 +1016,7 @@ module ums {
                 });
             }]
         }
-    }).state('absentLateComingInfo', {
+    }).state('dailyExamReport.absentLateComingInfo', {
           url: "/absentLateComingInfo",
           controller: 'AbsentLateComingInfo',
           controllerAs: 'vm',

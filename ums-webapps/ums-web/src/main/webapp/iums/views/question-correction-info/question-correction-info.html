@@ -8,7 +8,7 @@
             </div>
             <div align="right" data-ng-show="vm.isInsertAvailable">
                 <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.hideInsert()">
-                    <span class="glyphicon glyphicon-plus"></span> Hide Insert
+                    <span class="glyphicon glyphicon-list-alt"></span> View
                 </button>
             </div>
         </div>
@@ -161,7 +161,7 @@
         </div>
 
             <div>
-                <div>
+                <div data-ng-hide="vm.isInsertAvailable">
                     <div style="padding-top: 10px;padding-bottom:20px;"  >
                         <span class="label label-success badge-success">Filter Operations</span><p></p>
                         <div class="row">

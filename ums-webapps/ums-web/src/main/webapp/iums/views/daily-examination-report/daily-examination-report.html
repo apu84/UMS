@@ -1,44 +1,120 @@
-<div class="row">
-    <div class="col-lg-12">
-        <div class="panel">
-            <div class="panel-heading"><b>Daily Examination Report</b>
-                <div align="right">
-                    <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.doSomething()">
-                        <span class="glyphicon glyphicon-download"></span> Download Report
-                    </button>
-                </div>
-            </div>
-            <div class="panel-body">
-                <ul id="myTab" class="nav nav-tabs">
-                    <li  class="active" ng-class="{'active': tabName=='tab1',active: vm.state.current.url === '/dailyExamAttendanceReport'}" ng-click="tabName='tab1'" ng-init="tabName='tab1'"><a data-toggle="tab">Student's Attendant Info</a></li>
-                    <li ng-class="{'active': tabName=='tab2'}" ng-click="tabName='tab2'"><a data-toggle="tab">Expelled Info</a></li>
-                    <li ng-class="{'active': tabName=='tab3'}" ng-click="tabName='tab3'"><a data-toggle="tab">Question Correction Info</a></li>
-                    <li ng-class="{'active': tabName=='tab4'}" ng-click="tabName='tab4'"><a data-toggle="tab">Absent/Late Coming Info</a></li>
-                </ul>
+<style>
+    .require {
+        content: "*";
+        color: red;
+        font-size: large;
+    }
+    .form-control {
+        border-radius: 5px !important;
+    }
+    .btn{
+        border-radius: 5px !important;
+    }
+    .underlineBox{
+        border-bottom: 1px dashed #808080a3;
+    }
+    .panel > .panel-heading {
+        font-size: 15px;
 
-                <div id="myTabContent" class="tab-content">
-                    <div ng-switch="tabName">
-                        <div ng-switch-when="tab1">
-                            <div
-                                    data-ng-include="'views/daily-examination-report/student-exam-attendant-info.html'">
+    }
+</style>
+<div class="row" >
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
+    </div>
+    <div class="panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select </h3>
+        </div>
+        <div class="panel-body pan">
+            <form action="" class="form-horizontal">
+                <div class="form-body pal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Semester</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="semester"
+                                    id="semester"
+                                    data-ng-options="semester.name for semester in vm.semesters track by semester.id"
+                                    data-ng-model="vm.semester"
+                                    data-ng-change="vm.semesterChanged(vm.semester)"
+                            >
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Exam Type</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="meritType"
+                                    id="meritType"
+                                    data-ng-options="examType.name for examType in vm.examTypeList track by examType.id"
+                                    data-ng-model="vm.examType"
+                                    data-ng-change="vm.changeExamType(vm.examType)"
+                            >
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Exam Date</label>
+                        <div class="col-md-8">
+                            <select class="form-control" name="examDate"  data-ng-model="vm.examDate" data-ng-change="vm.ExamDateChange(vm.examDate)">
+                                <option value="">Select an Exam Date</option>
+                                <option data-ng-repeat="examRoutine in vm.examRoutineArr">{{examRoutine.examDate}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" data-ng-click="vm.search()" class="btn btn-success">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="rightDiv">
+        <div class="panel">
+            <div class="panel-heading">Student's Attendance-> Semester: <b>{{vm.semesterName}}</b> Exam Type: <b>{{vm.selectedExamTypeName}}</b> Exam Date: <b>
+                {{vm.selectedExamDate}}
+            </b></div>
+            <div class="panel-body">
+                <div data-ng-show="vm.isRightDivAvailable">
+
+
+                <!--  Start of Daily Exam Report-->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel">
+                            <div class="panel-heading"><b>Daily Examination Report</b>
+                                <div align="right">
+                                    <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.doSomething()">
+                                        <span class="glyphicon glyphicon-download"></span> Download Report
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        <div ng-switch-when="tab2">
-                            <div
-                                    data-ng-include="'views/expelled-information/add-expelled-information.html'">
-                            </div>
-                        </div>
-                        <div ng-switch-when="tab3">
-                            <div  class="tab-pane fade in active"><p>C For Cat</p></div>
-                        </div>
-                        <div ng-switch-when="tab4">
-                            <div
-                                    data-ng-include="'views/absent-late-coming-info/absent-late-coming-info.html'">
+                            <div class="panel-body">
+                                <div>
+                                    <ul id="iTab" class="nav nav-tabs nav-justified">
+                                        <li ng-class="{active: vm.state.current.url === '/dailyExamAttendanceReport'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('dailyExamAttendanceReport')" data-toggle="tab"><b>Student's Attendant Info</b></a></li>
+                                        <li ng-class="{active: vm.state.current.url === '/expelledInformation'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('expelledInformation')" data-toggle="tab"><b>Expelled Info</b></a></li>
+                                        <li ng-class="{active: vm.state.current.url === '/questionCorrectionInfo'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('questionCorrectionInfo')" data-toggle="tab"><b>Question Correction Info</b></a></li>
+                                        <li ng-class="{active: vm.state.current.url === '/absentLateComingInfo'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('absentLateComingInfo')" data-toggle="tab"><b>Absent/Late Coming Info</b></a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-content responsive">
+                                    <div ui-view></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                </div>
+                <!--  End of Daily Exam Report -->
             </div>
         </div>
     </div>
 </div>
+
+<!--   -->
