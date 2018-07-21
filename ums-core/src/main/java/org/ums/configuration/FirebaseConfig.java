@@ -25,7 +25,7 @@ public class FirebaseConfig {
       mLogger.info("Initializing FirebaseApp instance ...");
       config();
     }
-    else{
+    else {
       mLogger.info("Trying to re-initialize FirebaseApp instance");
       mLogger.info("FirebaseApp already exists with app name: " + FirebaseApp.getInstance().getName());
     }
