@@ -1,5 +1,6 @@
 package org.ums.solr.repository.lms;
 
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
