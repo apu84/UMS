@@ -33,6 +33,7 @@ public class CacheWarmerManagerImpl extends AbstractService implements CacheWarm
       mLogger.info("Cache warm up finish");
     } catch(Exception e) {
       mLogger.error("Failed to warm up cache properly, will now fallback to initial state", e);
+      System.exit(0);
     }
   }
 
