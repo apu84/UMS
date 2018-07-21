@@ -1,5 +1,6 @@
 package org.ums.solr.repository.lms;
 
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -46,6 +47,7 @@ public class RecordRepositoryImpl extends SimpleSolrRepository<RecordDocument, L
   }
 
   List<RecordDocument> search(SimpleQuery query) {
+    System.out.println("Solr client:" + ((HttpSolrClient)this.getSolrOperations().getSolrClient()).getBaseURL());
     Page<RecordDocument> results = this.getSolrOperations().queryForPage(query, RecordDocument.class);
     return results.getContent();
   }
