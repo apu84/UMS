@@ -8,7 +8,7 @@ module ums {
             'notify',
             'countryService',
             'employeeInformationService',
-            '$stateParams'];
+            '$stateParams', 'bibtexParserService'];
 
 
         private publication: IPublicationInformationModel[] = [];
@@ -19,13 +19,17 @@ module ums {
         private enableEdit: boolean[] = [false];
         private enableEditButton: boolean = false;
         private showLoader: boolean = true;
+        private showLoaderWhileBibParsing: boolean = false;
+        private bibInput: string = "";
+        private parsedBib: any;
 
         constructor(private registrarConstants: any,
                     private $q: ng.IQService,
                     private notify: Notify,
                     private countryService: CountryService,
                     private employeeInformationService: EmployeeInformationService,
-                    private $stateParams: any) {
+                    private $stateParams: any,
+                    private bibtexParserService: BibtexParserService) {
 
             this.publication = [];
             this.stateParams = $stateParams;
@@ -93,7 +97,7 @@ module ums {
             }
         }
 
-        public activeEditButton(index: number, canEdit: boolean): void{
+        public activeEditButton(index: number, canEdit: boolean): void {
             this.enableEdit[index] = canEdit;
         }
 
@@ -128,6 +132,13 @@ module ums {
             JsonObject['entries'] = object;
             defer.resolve(JsonObject);
             return defer.promise;
+        }
+
+
+        private parseBib(): void {
+            this.showLoaderWhileBibParsing = true;
+            this.parsedBib = this.bibtexParserService.toJSON(this.bibInput);
+            this.showLoaderWhileBibParsing = false;
         }
     }
 

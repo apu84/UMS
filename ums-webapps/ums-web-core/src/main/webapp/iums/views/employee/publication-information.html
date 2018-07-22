@@ -6,6 +6,10 @@
     .panel-group .panel .panel-title {
         font-size: 15px !important;
     }
+
+    textarea {
+        resize: vertical;
+    }
 </style>
 
 <div data-ng-if="vm.showLoader" align="center">
@@ -13,6 +17,8 @@
 </div>
 
 <div data-ng-if="!vm.showLoader">
+
+    <!--<a data-toggle="modal" data-target="#importBibtex" style="cursor: pointer;"><u><b>Import Bibtex</b></u></a>-->
 
     <accordion close-others="true">
         <div data-ng-repeat="publication in vm.publication track by $index">
@@ -405,4 +411,152 @@
         </div>
     </div>
 
+</div>
+
+
+<div id="importBibtex" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
+     aria-hidden="true" class="modal fade">
+    <div class="modal-dialog modal-wide-width">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true"
+                        class="close" style="opacity: 1;margin-top: 0px;">&times
+                </button>
+                <h5 id="modal-default-label" class="modal-title">Import Bibtex</h5></div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="comment">Paste <b>(.bib)</b> content here:</label>
+                            <textarea class="form-control" rows="10" data-ng-model="vm.bibInput"
+                                      id="comment"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-success"
+                                data-ng-click="vm.parseBib()">Parse
+                        </button>
+                    </div>
+                </div>
+
+                <!--<div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-hover">
+                            <thead class="heading well">
+                            <tr>
+                                <th>Sl.</th>
+                                <th>Title</th>
+                                <th>Publication Type</th>
+                                <th>Country</th>
+                                <th>Year of Publication</th>
+                                <th>Journal/Conference Name</th>
+                                <th>ISSN</th>
+                                <th>Volume</th>
+                                <th>Issue</th>
+                                <th>Publisher Name</th>
+                                <th>Pages</th>
+                                <th>Genre</th>
+                                <th>Web Link</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="bib in vm.parsedBib track by $index">
+                                <td>{{$index + 1}}</td>
+                                <td>{{bib.entryTags.title}}</td>
+                                <td>{{bib.entryType}}</td>
+                                <td></td>
+                                <td>{{bib.entryTags.year}}</td>
+                                <td>{{bib.entryTags.journal}}</td>
+                                <td>{{bib.entryTags.issn}}</td>
+                                <td>{{bib.entryTags.volume}}</td>
+                                <td>{{bib.entryTags.pages}}</td>
+                                <td></td>
+                                <td>{{bib.entryTags.pages}}</td>
+                                <td></td>
+                                <td>{{bib.entryTags.url}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>-->
+
+                <div class="row">
+                    <div data-ng-if="vm.showLoaderWhileBibParsing" align="center">
+                        <div data-spinner=""></div>
+                    </div>
+                    <div data-ng-if="!vm.showLoaderWhileBibParsing">
+                        <br/>
+                        <div class="col-md-12">
+                            <div data-ng-repeat="bib in vm.parsedBib track by $index">
+                                <table class="table table-bordered table-hover">
+                                    <tr>
+                                        <th width="30%">Sl.</th>
+                                        <td width="70%">{{$index + 1}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Title</th>
+                                        <td width="70%">{{bib.entryTags.title}}</td>
+
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Publication Type</th>
+                                        <td width="70%">{{bib.entryType}}</td>
+
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Country</th>
+                                        <td width="70%"></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Year of Publication</th>
+                                        <td width="70%">{{bib.entryTags.year}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Journal/Conference Name</th>
+                                        <td width="70%">{{bib.entryTags.journal}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">ISSN</th>
+                                        <td width="70%">{{bib.entryTags.issn}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Volume</th>
+                                        <td width="70%">{{bib.entryTags.volume}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Issue</th>
+                                        <td width="70%">{{bib.entryTags.pages}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Publisher Name</th>
+                                        <td width="70%"></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Pages</th>
+                                        <td width="30%">{{bib.entryTags.pages}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Genre</th>
+                                        <td width="70%"></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Web Link</th>
+                                        <td width="70%">{{bib.entryTags.url}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+            </div>
+        </div>
+    </div>
 </div>

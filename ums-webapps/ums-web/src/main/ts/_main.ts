@@ -22,6 +22,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/wysihtml5.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap.datepicker.d.ts'/>
 
+
 /// <reference path='../../../../ums-web-core/src/main/ts/root.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/constants.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/Utils.ts'/>
@@ -43,6 +44,7 @@
 /// <reference path='./service/holidayService/HolidayTypeService.ts'/>
 /// <reference path='./service/holidayService/HolidaysService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/EmployeeService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/BibtexParserService.ts'/>
 
 
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
@@ -326,6 +328,5 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/ExperienceInformation.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/AdditionalInformation.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/ServiceInformation.ts'/>
-
 
 /// <reference path='../../../../ums-library-web/src/main/ts/types/Interfaces.ts'/>
