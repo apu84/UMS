@@ -69,6 +69,7 @@
 /// <reference path='directive/MainNavigation.ts'/>
 /// <reference path='directive/BindHtml.ts'/>
 /// <reference path='directive/DatePicker.ts'/>
+/// <reference path='directive/UiDatePicker.ts'/>
 /// <reference path='directive/FileInput.ts'/>
 /// <reference path='directive/TablePaginatorWrapper.ts'/>
 /// <reference path='directive/Spinner.ts'/>

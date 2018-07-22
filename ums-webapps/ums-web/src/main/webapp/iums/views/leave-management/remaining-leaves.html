@@ -1,14 +1,26 @@
-<table class="table table-bordered table-striped">
-    <thead>
-    <tr>
-        <th>Leave Type</th>
-        <th>Days Left</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr data-ng-repeat="remainingLeave in vm.remainingLeaves">
-        <td>{{remainingLeave.leaveName}}</td>
-        <td>{{remainingLeave.daysLeft}}</td>
-    </tr>
-    </tbody>
-</table>
+<div class="row">
+    <div class="col-md-12" align="right">
+                        <span class="label label-info" style="cursor: pointer"
+                              data-ng-click="vm.showHistory()">Histories</span>
+    </div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>Leave Type</th>
+                <th>Days Left</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="remainingLeave in vm.remainingLeaves">
+                <td>{{remainingLeave.leaveName}}</td>
+                <td>{{remainingLeave.daysLeft}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

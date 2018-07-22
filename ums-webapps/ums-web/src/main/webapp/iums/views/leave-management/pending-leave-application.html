@@ -37,7 +37,29 @@
         <td>{{p.fromDate}}</td>
         <td>{{p.toDate}}</td>
         <td>{{p.duration}}(days)</td>
-        <td>{{p.actionStatusLabel}}</td>
+        <td>
+            <div ng-if="p.actionStatus==1">
+                <span class="label label-default">{{p.actionStatusLabel}}</span>
+            </div>
+            <div ng-if="p.actionStatus==2">
+                <span class="label label-primary">{{p.actionStatusLabel}}</span>
+            </div>
+            <div ng-if="p.actionStatus==3">
+                <span class="label label-danger">{{p.actionStatusLabel}}</span>
+            </div>
+            <div ng-if="p.actionStatus==4">
+                <span class="label label-info">{{p.actionStatusLabel}}</span>
+            </div>
+            <div ng-if="p.actionStatus==5">
+                <span class="label label-danger">{{p.actionStatusLabel}}</span>
+            </div>
+            <div ng-if="p.actionStatus==6">
+                <span class="label label-danger">{{p.actionStatusLabel}}</span>
+            </div>
+            <div ng-if="p.actionStatus==7">
+                <span class="label label-success">{{p.actionStatusLabel}}</span>
+            </div>
+        </td>
     </tr>
 
     </tbody>

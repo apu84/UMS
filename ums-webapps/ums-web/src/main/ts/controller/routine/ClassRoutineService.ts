@@ -38,6 +38,20 @@ module ums{
     slotGroup: number;
   }
 
+  export interface RoutineSlot{
+    groupNo: number;
+    day: string;
+    startTime: string;
+    endTime: string;
+    slotBodyList: SlotBody[];
+    routineList: ClassRoutine[];
+  }
+
+  export interface SlotBody{
+    headers: IRoutineTableHeader[];
+    routineList:ClassRoutine[];
+  }
+
   export interface IRoutineTableHeader {
     startTime: string;
     endTime: string;
@@ -64,6 +78,9 @@ module ums{
     public selectedDay: IConstant;
     public sessionalSectionMap: { [key: string]: IConstant };
     public dayAndTimeMapWithRoutine: { [key: string]: ClassRoutine[] }; // map[day+startTime] = ClassRoutine[];
+    public dayAndTimeMapWithRoutineSlot: {[key:string]: RoutineSlot};
+    public groupMapWithRoutineSlot: {[key:string]:RoutineSlot};
+    public groupList: number[];
     public courseTeacherMap: { [key: string]: CourseTeacherInterface[] }; // map[courseId]= CourseTeacher[];
     public courseTeacherWithSectionMap: { [key: string]: CourseTeacherInterface[] }; // map[courseId+section]= CourseTeacher[];
     public routineUrl: string = '/ums-webservice-academic/academic/routine';

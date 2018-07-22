@@ -19,7 +19,7 @@
     <div class="col-md-6">
         <div class="well" style="background-color: #ffeeff">
             <div class="row" align="center">
-                <button class="btn btn-success btn-sm circle-button" ng-click="vm.add()">+</button>
+                <i class="fa fa-plus-circle" aria-hidden="true" ng-click="vm.add()" style="cursor: pointer;"></i>
             </div>
             <br/>
             <div class="row">
@@ -48,38 +48,38 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <div class="control-label col-md-3" for="startTime">Start Time :</div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="startTime" ng-model="slotRoutine.startTime"
+                                   placeholder="HH:MM AM/PM"/>
+                        </div>
+                        <div class="control-label col-md-3" for="endTime">End Time :</div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="endTime" ng-model="slotRoutine.endTime"
+                                   placeholder="HH:MM AM/PM" ng-click="vm.assignEndTime(slotRoutine)"
+                                   ng-focus="vm.assignEndTime(slotRoutine)"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <!--section begin-->
                         <div class="control-label col-md-3" for="section">Section :</div>
-                        <div class="col-md-9" ng-if="slotRoutine.course==undefined || slotRoutine.course.type_value==1">
+                        <div class="col-md-3" ng-if="slotRoutine.course==undefined || slotRoutine.course.type_value==1">
                             <input type="text" class="form-control"
                                    id="section" ng-model="slotRoutine.section"
                                    disabled="true"/>
                         </div>
-                        <div class="col-md-9" ng-if="slotRoutine.course.type_value==2">
+                        <div class="col-md-3" ng-if="slotRoutine.course.type_value==2">
                             <select
                                     class="form-control required"
                                     name="section"
                                     ng-options="s.name for s in vm.sectionList"
                                     ng-model="slotRoutine.sessionalSection"></select>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="control-label col-md-3" for="startTime">Start Time :</div>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control" id="startTime" ng-model="slotRoutine.startTime"
-                                   placeholder="HH:MM AM/PM"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="control-label col-md-3" for="endTime">End Time :</div>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control" id="endTime" ng-model="slotRoutine.endTime"
-                                   placeholder="HH:MM AM/PM" ng-click="vm.assignEndTime(slotRoutine)"
-                                   ng-focus="vm.assignEndTime(slotRoutine)"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
+                        <!--section end-->
+                        <!--room begin-->
                         <label class="control-label col-md-3" for="roomNo">Room No :</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             <ui-select id="room" theme="bootstrap"
                                        data-ng-model="slotRoutine.room" on-select="vm.roomSelected(slotRoutine)"
                             >
@@ -91,7 +91,9 @@
                                 </ui-select-choices>
                             </ui-select>
                         </div>
+                        <!--room end-->
                     </div>
+
                     <div class="form-group">
                         <label class="control-label col-md-3" for="courseTeacher">Course Teacher :</label>
                         <div class="col-md-9">

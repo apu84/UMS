@@ -34,7 +34,8 @@ module ums {
         $('.datepicker-default').on('change', function () {
           $('.datepicker').hide();
         });
-        console.log("------");
+        element('.datepicker-default').datepicker("setDate", new Date());
+
       });
 
 

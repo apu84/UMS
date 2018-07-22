@@ -406,6 +406,24 @@ module ums {
 
     }
 
+    public getStatusLabel(lmsAppStatus: LmsApplicationStatus): string {
+      if (lmsAppStatus.actionStatus == 1)
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i><span class=\"label label-default\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+      else if (lmsAppStatus.actionStatus == 2)
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i><span class=\"label label-primary\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+      else if (lmsAppStatus.actionStatus == 3)
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i><span class=\"label label-danger\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+      else if (lmsAppStatus.actionStatus == 4)
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i><span class=\"label label-info\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+      else if (lmsAppStatus.actionStatus == 5)
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i><span class=\"label label-danger\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+      else if (lmsAppStatus.actionStatus = 6)
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i><span class=\"label label-danger\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+      else
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i> <span class=\"label label-success\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+
+    }
+
     private convertToJson(appType: number): ng.IPromise<any> {
       let application: LmsApplication = this.leaveApplication;
       let defer = this.$q.defer();

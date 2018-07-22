@@ -21,7 +21,7 @@ module ums {
     private showProgressBar: boolean = false;
     private progress: number = 0;
     private courseTeacherList: CourseTeacherInterface[] = [];
-    private colSpanWithRoutine: any;
+    private colSpanWithRoutine: {[key:string]:number};
     private showRoutineChart: boolean;
 
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'courseService', 'classRoomService', 'classRoutineService', '$timeout', 'userService', 'routineConfigService', '$state', 'employeeService', 'courseTeacherService'];
@@ -60,9 +60,72 @@ module ums {
       this.generateHeader();
       this.generateBody();
       this.classRoutineService.dayAndTimeMapWithRoutine = {};
+      this.classRoutineService.dayAndTimeMapWithRoutineSlot = {};
       this.createDayAndTimeMapWithRoutine();
       this.getCourseTeacher();
     }
+
+    public createGroupMapWithRoutineSlot(): ng.IPromise<any>{
+      let defer: ng.IDeferred<any> = this.$q.defer();
+      this.classRoutineService.groupList = [];
+      this.classRoutineService.routineData.forEach((routine:ClassRoutine)=>{
+        if(this.classRoutineService.groupMapWithRoutineSlot[routine.slotGroup]==null){
+          let routineSlot: RoutineSlot=<RoutineSlot>{};
+          routineSlot.startTime = routine.startTime;
+          routineSlot.endTime = routine.endTime;
+          routineSlot.groupNo = routine.slotGroup;
+          routineSlot.day = routine.day;
+          routineSlot.routineList = [];
+          routineSlot.routineList.push(routine);
+          this.classRoutineService.groupList.push(routine.slotGroup);
+          this.classRoutineService.groupMapWithRoutineSlot[routine.slotGroup] = routineSlot;
+        }else{
+          let routineSlot : RoutineSlot = this.classRoutineService.groupMapWithRoutineSlot[routine.slotGroup];
+          let routineStartTime = moment(routine.startTime,'hh:mm A');
+          let routineEndTime = moment(routine.endTime, 'hh:mm A');
+          let slotStartTime = moment(routineSlot.startTime, 'hh:mm A');
+          let slotEndTime = moment(routineSlot.endTime, 'hh:mm A');
+          routineSlot.startTime = routineStartTime<slotStartTime? routine.startTime: routineSlot.startTime;
+          routineSlot.endTime = routineEndTime>slotEndTime? routine.endTime: routineSlot.endTime;
+          routineSlot.routineList.push(routine);
+        }
+      })
+      defer.resolve(this.classRoutineService.groupMapWithRoutineSlot);
+      return defer.promise;
+    }
+
+
+
+    public createDayAndTimeMapWithRoutineSlot() {
+      this.colSpanWithRoutine = {};
+      this.classRoutineService.groupList.forEach((group: number) => {
+        let routineSlot: RoutineSlot = this.classRoutineService.groupMapWithRoutineSlot[group];
+        this.colSpanWithRoutine[routineSlot.day + routineSlot.startTime] = moment(routineSlot.endTime,'hh:mm A').unix()-moment(routineSlot.startTime,'hh:mm A').unix();
+        this.classRoutineService.dayAndTimeMapWithRoutineSlot[routineSlot.day + routineSlot.startTime] = routineSlot;
+      });
+    }
+
+    public updateSlotBody(){
+      this.classRoutineService.groupList.forEach((group:number)=>{
+        let routineSlot: RoutineSlot = this.classRoutineService.groupMapWithRoutineSlot[group];
+        let routineList:ClassRoutine[] = angular.copy(routineSlot.routineList);
+
+
+
+      })
+    }
+
+    private deleteRoutine(routineList: ClassRoutine[], routine): ClassRoutine[]{
+      for(var i=0; i<routineList.length; i++){
+        if(routineList[i]==routine){
+          routineList.splice(i,1);
+          break;
+        }
+      }
+      return routineList;
+    }
+
+
 
     public createDayAndTimeMapWithRoutine() {
       this.colSpanWithRoutine = {};
@@ -70,7 +133,7 @@ module ums {
         let routineTmp = angular.copy(routine);  //modified routine (only duration is going to be modified)
         routineTmp.duration = routineTmp.duration;//(routineTmp.duration / this.routineConfigService.routineConfig.duration);  //this simplified duration will help in determining the col-span.
         this.colSpanWithRoutine[routine.day.toString() + routine.startTime] = routineTmp.duration;
-        if (this.classRoutineService.dayAndTimeMapWithRoutine[routine.day + routine.startTime] == null) {
+        if (this.classRoutineService.dayAndTimeMapWithRoutineSlot[routine.day + routine.startTime] == null) {
           let routineList: ClassRoutine[] = [];
           routineList.push(routineTmp);
           this.classRoutineService.dayAndTimeMapWithRoutine[routine.day + routine.startTime] = routineList;
