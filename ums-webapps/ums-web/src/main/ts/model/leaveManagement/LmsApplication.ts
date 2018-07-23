@@ -10,8 +10,8 @@ module ums {
     leaveType: number;
     leaveTypeName: string;
     appliedOn: string;
-    fromDate: string;
-    toDate: string;
+    fromDate: any;
+    toDate: any;
     duration: number;
     reason: string;
     applicationStatus: number;

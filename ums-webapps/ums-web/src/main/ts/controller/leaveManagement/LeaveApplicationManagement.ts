@@ -203,6 +203,8 @@ module ums {
         console.log(this.leaveApplication.fromDate);
         console.log(this.leaveApplication.toDate);
       let thisScope = this;
+      this.leaveApplication.fromDate = moment(this.leaveApplication.fromDate).format("dd-mm-yyyy");
+      this.leaveApplication.toDate = moment(this.leaveApplication.toDate).format("dd-mm-yyyy");
       setTimeout(function () {
         thisScope.getTotalDuration();
       }, 200);

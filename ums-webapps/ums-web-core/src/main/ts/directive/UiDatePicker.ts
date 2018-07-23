@@ -1,5 +1,5 @@
 module ums {
-  class DatePicker implements ng.IDirective {
+  class UiDatePicker implements ng.IDirective {
     static $inject = ['$timeout'];
 
     constructor(private $timeout: ng.ITimeoutService) {
@@ -31,7 +31,7 @@ module ums {
 
   }
 
-  UMS.directive('uiDatePicker', ['$timeout', ($timeout: ng.ITimeoutService) => new DatePicker($timeout)]);
+  UMS.directive('uiDatePicker', ['$timeout', ($timeout: ng.ITimeoutService) => new UiDatePicker($timeout)]);
 }
 
 

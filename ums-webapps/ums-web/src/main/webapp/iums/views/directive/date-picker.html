@@ -1,5 +1,11 @@
-<input align="center" contenteditable="editable" style="width:100%;text-align: center;"
+<!--<input align="center" contenteditable="editable" style="width:100%;text-align: center;"
        type="text"
        data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY" class="datepicker-default form-control"
-       data-ng-model="model" data-ng-change="dateChanged()">
+       data-ng-model="model" data-ng-change="dateChanged()">-->
 
+<input type="text" class="form-control" datepicker-popup="dd-MM-yyyy" ng-model="model"
+       max-date="date.maxDate" datepicker-options="date.dateOptions"
+       ng-required="true" close-text="Close" show-weeks="true" is-open="date.opened" ng-focus="date.opened=true"
+       uibDateParser="dd-mm-yyyy"
+       ng-disabled="false"
+       ng-change="dateChanged()"/>

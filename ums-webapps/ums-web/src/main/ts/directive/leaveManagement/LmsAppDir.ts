@@ -221,13 +221,8 @@ module ums {
 
     private getTotalDuration() {
       if (this.leaveApplication.toDate != null && this.leaveApplication.fromDate != null) {
-        let fromDateParts: any = this.leaveApplication.fromDate.split('-');
-        let fromDate = new Date(fromDateParts[2], fromDateParts[1], fromDateParts[0]);
 
-        let toDateParts: any = this.leaveApplication.toDate.split('-');
-        let toDate = new Date(toDateParts[2], toDateParts[1], toDateParts[0]);
-
-        let timeDiff: any = Math.abs(toDate.getTime() - fromDate.getTime());
+        let timeDiff: any = Math.abs(this.leaveApplication.toDate.getTime() - this.leaveApplication.fromDate.getTime());
         let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
         this.leaveApplication.duration = diffDays + 1;
         if (this.remainingLeavesMap[this.leaveType.id].daysLeftNumber < this.leaveApplication.duration) {
@@ -435,8 +430,10 @@ module ums {
       item['id'] = application.id;
       item['employeeId'] = application.employeeId;
       item['typeId'] = this.leaveType.id;
-      item['fromDate'] = application.fromDate;
-      item['toDate'] = application.toDate;
+      let momentFromDate = moment(application.fromDate);
+      let momentToDate = moment(application.toDate);
+      item['fromDate'] = moment(application.fromDate).format("DD-MM-YYYY");
+      item['toDate'] = moment(application.toDate).format("DD-MM-YYYY");
       item['reason'] = application.reason;
       item['appStatus'] = appType;
       item['employeeId'] = this.leaveApplicationService.employeeId;
