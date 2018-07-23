@@ -1,69 +1,8 @@
-<div class="row" >
-    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
-        <i class="fa fa-angle-double-right fa-cx"></i></i>
-    </div>
-    <div class="panel panel-green" id="leftDiv">
-        <div class="panel-heading">
-            <h3 class="panel-title">Select </h3>
-        </div>
-        <div class="panel-body pan">
-            <form action="" class="form-horizontal">
-                <div class="form-body pal">
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Semester</label>
-                        <div class="col-md-8">
-                            <select
-                                    class="form-control required"
-                                    name="semester"
-                                    id="semester"
-                                    data-ng-options="semester.name for semester in vm.semesters track by semester.id"
-                                    data-ng-model="vm.semester"
-                                    data-ng-change="vm.semesterChanged(vm.semester)"
-                            >
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Exam Type</label>
-                        <div class="col-md-8">
-                            <select
-                                    class="form-control required"
-                                    name="meritType"
-                                    id="meritType"
-                                    data-ng-options="examType.name for examType in vm.examTypeList track by examType.id"
-                                    data-ng-model="vm.examType"
-                                    data-ng-change="vm.changeExamType(vm.examType)"
-                            >
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Exam Date</label>
-                        <div class="col-md-8">
-                            <select class="form-control" name="examDate"  data-ng-model="vm.examDate" data-ng-change="vm.ExamDateChange(vm.examDate)">
-                                <option value="">Select an Exam Date</option>
-                                <option data-ng-repeat="examRoutine in vm.examRoutineArr">{{examRoutine.examDate}}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-actions text-right pal">
-                    <button type="button" data-ng-click="vm.search()" class="btn btn-success">Search</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div id="rightDiv">
-        <div class="panel">
-            <div class="panel-heading">Student's Attendance-> Semester: <b>{{vm.semesterName}}</b> Exam Type: <b>{{vm.selectedExamTypeName}}</b> Exam Date: <b>
-                {{vm.selectedExamDate}}
-            </b></div>
+<div class="panel">
             <div class="panel-body">
-                <div data-ng-show="vm.enableRightDiv">
                     <table width="100%">
                         <tr ng-repeat="app in vm.examInfo" data-ng-if="$index % 4 == 0" >
-                            <td ng-repeat="app in vm.examInfo.slice($index, $index + 4)">
+                            <td ng-repeat="app in vm.examInfo.slice($index, $index + 4)" style="vertical-align: top">
                                 <div style="padding-right:20px;">
                                     <p><span class="badge badge-success">{{app.programName}}</span></p>
                                     <table class="table table-hover table-bordered table-advanced">
@@ -89,15 +28,10 @@
                             </td>
                         </tr>
                     </table>
-
                 <div  align="right" style="padding-right:20px">
-                    <button type="button" data-ng-click="vm.getPdfVersionReport()"  class="btn btn-info">Download Pdf</button>
-                    <button type="button" data-ng-click="vm.save()"  class="btn btn-success">Submit</button>
+                    <button type="button" data-ng-show="vm.enableSubmitButton" data-ng-click="vm.save()"  class="btn btn-success">Submit</button>
                     <!-- data-ng-show="vm.enableSubmitButton"
                     -->
                 </div>
-                </div>
             </div>
-        </div>
-    </div>
 </div>

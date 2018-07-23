@@ -19,7 +19,9 @@ module  ums{
         public selectedExamDate:string;
         public activeSemesterId:number;
         public semesterName:string;
-        public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService','$state', '$stateParams','examRoutineService'];
+        public isExamDateSelected:boolean;
+        public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService','$state',
+            '$stateParams','examRoutineService','DailyExamAttendanceReportService'];
 
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -30,20 +32,20 @@ module  ums{
                     private semesterService: SemesterService,
                     private $state : any,
                     private $stateParams: any,
-                    private examRoutineService: ExamRoutineService){
+                    private examRoutineService: ExamRoutineService,
+                    private dailyExamAttendanceReportService: DailyExamAttendanceReportService){
 
             this.state = $state;
             this.stateParams = $stateParams;
-            this.stateParams.semesterId=11012017;
-            this.stateParams.examType=1;
-            this.stateParams.examDate="12-09-2017";
             this.isRightDivAvailable=false;
             this.examTypeList=[];
             this.examTypeList=this.appConstants.examType;
             this.examType=this.examTypeList[0];
             this.selectedExamTypeId=this.examType.id;
+            this.stateParams.examType=this.selectedExamTypeId;
             this.selectedExamTypeName=this.examType.name;
             this.selectedExamDate="";
+            this.isExamDateSelected=false;
             this.getSemesters();
             this.getExamDates();
         }
@@ -53,7 +55,8 @@ module  ums{
             this.state.current.url === '/dailyExamReport'
             this.state.go('dailyExamReport' + '.' + 'dailyExamAttendanceReport',
                 {semesterId:this.stateParams.semesterId,examType:this.stateParams.examType,examDate:this.stateParams.examDate});
-
+            console.log("State Change!!");
+            console.log(this.stateParams);
         }
 
         public redirectTo(tab: string): void{
@@ -77,6 +80,7 @@ module  ums{
         private ExamDateChange(value:any){
             this.selectedExamDate=value;
             this.stateParams.examDate=this.selectedExamDate;
+            this.isExamDateSelected=true;
             console.log("Exam Date: "+this.selectedExamDate);
 
         }
@@ -113,6 +117,15 @@ module  ums{
             this.stateParams.semesterId=this.selectedSemesterId;
             console.log("Active Semester id: "+this.activeSemesterId);
             this.getExamDates();
+        }
+        private getPdfVersionReport(){
+            if(this.isExamDateSelected) {
+                this.dailyExamAttendanceReportService.getExamAttendantReport(this.selectedSemesterId, this.selectedExamTypeId, this.selectedExamDate).then((data) => {
+                    console.log("success!!")
+                });
+            }else {
+                this.notify.warn("Select Exam Date");
+            }
         }
     }
     UMS.controller("DailyExamReport",DailyExamReport);

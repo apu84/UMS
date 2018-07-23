@@ -1,70 +1,58 @@
 <div>
     <div class="panel">
-        <div class="panel-heading">Add absent/late coming informations
-        </div>
         <div class="panel-body">
+            <div align="right" data-ng-hide="vm.isInsertAvailable" data-ng-if="vm.hideInsertMode">
+                <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.enableInsert()">
+                    <span class="glyphicon glyphicon-plus"></span> Insert
+                </button>
+            </div>
+            <div align="right" data-ng-show="vm.isInsertAvailable">
+                <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.hideInsert()">
+                    <span class="glyphicon glyphicon-plus"></span> View
+                </button>
+            </div>
+            <div data-ng-show="vm.isInsertAvailable">
             <div class="row ">
                 <div class="col-md-12">
-                    <div class="form-body pal">
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <div class="input-icon left">
+                                <div class="col-md-4 form-group">
                                         <select
                                                 class="form-control required"
-                                                name="leaveType"
-                                                id="leaveTypejj"
                                                 style="width: 70%";
-                                                data-ng-options="dept.name for dept in vm.deptList track by dept.id"
+                                                data-ng-options="dept.name for dept in vm.deptList"
                                                 data-ng-model="vm.deptName"
                                                 data-ng-change="vm.deptChanged(vm.deptName)"
-                                        ></select>
+                                        ><option value="">Select All Dept./Office</option></select>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <div class="input-icon left">
+
+                            <div class="col-md-4 form-group">
                                         <select
                                                 class="form-control required"
-                                                name="leaveType"
-                                                id="leaveTypejj"
-                                                style="width: 70%";
+                                                style="width: 75%";
                                                 data-ng-options="employee.employeeName for employee in vm.employees track by employee.id"
                                                 data-ng-model="vm.employee"
                                                 data-ng-change="vm.employeeChanged(vm.employee)"
                                         ><option value="">Select Employee</option></select>
-                                    </div>
-                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="input-icon left">
+                            <div class="col-md-4 form-group">
                                     <select
                                             class="form-control required"
-                                            name="meritType"
                                             style="width: 70%;"
                                             data-ng-options="examType.name for examType in vm.examTypeList track by examType.id"
                                             data-ng-model="vm.examType"
                                             data-ng-change="vm.changeExamType(vm.examType)"
                                     >
                                     </select>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             <div class="row ">
                 <div class="col-md-12">
-                    <div class="form-body pal">
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <div class="input-icon left">
+                            <div class="col-md-4 form-group">
                                         <select
                                                 class="form-control required"
-                                                name="meritType"
-                                                id="meritType3"
                                                 style="width: 70%;"
                                                 data-ng-options="absPreStatus.name for absPreStatus in vm.absPreStatusList track by absPreStatus.id"
                                                 data-ng-model="vm.absPreStatus"
@@ -72,19 +60,14 @@
                                         >
                                         </select>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
+                            <div class="col-md-4 form-group">
                                     <input type="text"
                                            class="form-control required"
-                                           style="width: 70%";
+                                           style="width: 75%";
                                            data-ng-model="vm.remarks"
                                     />
-                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="input-icon left">
+                            <div class="col-md-4 form-group">
                                     <select
                                             class="form-control required"
                                             name="leaveType"
@@ -93,43 +76,31 @@
                                             data-ng-model="vm.classRoom"
                                             data-ng-change="vm.classRoomChanged(vm.classRoom)"
                                     ><option value="">Select Room No</option></select>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             <div class="row ">
                 <div class="col-md-12">
-                    <div class="form-body pal">
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <div class="input-icon left">
-                                        <div>
+                            <div class="col-md-4 form-group">
                                             <select class="form-control" id="examDate" name="examDate" style="width: 70%"; data-ng-model="vm.examDate" data-ng-change="vm.ExamDateChange(vm.examDate)">
                                                 <option value="">Select an Exam Date</option>
                                                 <option data-ng-repeat="examRoutine in vm.examRoutineArr">{{examRoutine.examDate}}</option>
                                             </select>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
-                            <div class="col-md-4" data-ng-show="vm.isArrivalTimeEligible">
-                                <div class="form-group">
-                                    <label class="col-md-6 control-label">
+                            <div class="col-md-4 " data-ng-show="vm.isArrivalTimeEligible">
+                                    <label class="col-md-5">
                                         <input type="text"
                                                class="form-control required"
-                                               placeholder="  00 : 00 "
+                                               placeholder=" 00 : 00 "
                                                data-ng-model="vm.arrivalTime"
                                         />
                                     </label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-7">
                                         <select
                                                 class="form-control required"
-                                                name="meritType"
-                                                id="meritType"
-                                                style="width:40%;"
+                                                style="width:55%;"
                                                 data-ng-options="examType.name for examType in vm.amPmList track by examType.id"
                                                 data-ng-model="vm.amPm"
                                                 data-ng-change="vm.changeStatus(vm.amPm)"
@@ -137,28 +108,31 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label  class="control-label"> </label>
-                                    <div class="input-icon left" align="center">
-                                        <button type="button"
-                                                class="btn btn-success"
-                                                data-toggle="modal"
-                                                data-ng-click="vm.isEligibleForSubmitData()"
-                                                data-target="#myModal"
-                                                style="width:40%;">submit</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-8 form-group" align="right">
+                </div>
+                <div class="col-md-4 form-group" align="center">
+                    <button type="button"
+                            class="btn btn-success"
+                            data-toggle="modal"
+                            data-ng-click="vm.isEligibleForSubmitData()"
+                            data-target="#myModal"
+                            style="width:40%;">submit</button>
+                </div>
+            </div>
+            </div>
+            <!--View Div   -->
+            <div  data-ng-if="!vm.isInsertAvailable">
+                <div
+                        data-ng-include="'views/absent-late-coming-info/absent-late-coming-view.html'">
+                </div>
+            </div>
+
         </div>
         </div>
-</div>
 </div>
 
 

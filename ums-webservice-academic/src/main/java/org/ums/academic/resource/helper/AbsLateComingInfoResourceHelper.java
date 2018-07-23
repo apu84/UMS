@@ -6,6 +6,7 @@ import org.ums.builder.AbsLateComingInfoBuilder;
 import org.ums.builder.ApplicationCCIBuilder;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.dto.ExamRoutineDto;
 import org.ums.domain.model.immutable.AbsLateComingInfo;
 import org.ums.domain.model.mutable.MutableAbsLateComingInfo;
 import org.ums.employee.personal.PersonalInformationManager;
@@ -106,7 +107,6 @@ public class AbsLateComingInfoResourceHelper extends ResourceHelper<AbsLateComin
       mutableAbsLateComingInfo.setEmployeeType(EmployeeType.get(mEmployeeManager.get(app.getEmployeeId()).getEmployeeType()).getLabel());
       list.add(mutableAbsLateComingInfo);
     }
-
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

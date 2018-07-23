@@ -40,7 +40,8 @@ module ums{
          studentId:string;
          examDate: string;
          examRoutineArr:any;
-        public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService','ExpelledInformationService','examRoutineService'];
+        public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService',
+            'facultyService', 'programService','ExpelledInformationService','examRoutineService'];
 
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -86,6 +87,7 @@ module ums{
                  }
                  this.selectedSemesterId=this.semester.id;
                  console.log("I____Id: "+this.selectedSemesterId);
+
              });
          }
          private semesterChanged(val:any){
@@ -98,7 +100,6 @@ module ums{
              this.selectedExamTypeId=value.id;
              this.selectedExamTypeName=value.name;
              this.getExamDates();
-
          }
         private doSomething(){
             Utils.expandRightDiv();

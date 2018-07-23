@@ -52,8 +52,10 @@ module ums{
         public checkProgramId:boolean;
         public checkYear:boolean;
         public checkSemester:boolean;
+        public checkCourseSelection:boolean;
         public isSubmitEligible:boolean;
         private stateParams: any;
+        public hideInsertMode:boolean;
         public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService',
             'programService','DailyExamAttendanceReportService','examRoutineService','classRoomService','employeeService',
             'questionCorrectionInfoService','courseService','$stateParams'];
@@ -77,7 +79,7 @@ module ums{
             this.stateParams = $stateParams;
             console.log("----State Params---");
             console.log($stateParams);
-            console.log("semesterId: "+this.stateParams.semesterId+"\nexamType: "+this.stateParams.examType+"\nexamDate: "+this.stateParams.examDate)
+            console.log("semesterId: "+this.stateParams.semesterId+"\nexamType: "+this.stateParams.examType+"\nexamDate: "+this.stateParams.examDate);
             this.isInsertAvailable=false;
             this.deptList = [];
             this.deptList = this.appConstants.programs;
@@ -112,6 +114,7 @@ module ums{
             this.checkProgramId=false;
             this.checkYear=false;
             this.checkSemester=false;
+            this.checkCourseSelection=false;
             this.isSubmitEligible=true;
             this.showDeleteColumn=true;
             this.initialization();
@@ -119,7 +122,6 @@ module ums{
         }
         private initialization():void{
             this.getSemesters();
-            this.getExamDates();
             this.getExamDatesForFilter();
             this.getQcInfo();
         }
@@ -139,12 +141,16 @@ module ums{
             })
         }
         private programChanged(programs:any){
-            this.programIdForFilter=programs.id;
-            console.log("Id: "+this.programIdForFilter);
+            try{
+                this.programIdForFilter=programs.id;
+                console.log("Id: "+this.programIdForFilter);
+            }catch {
+                this.programIdForFilter=null;
+            }
         }
         private getQcInfo(){
             var app:Array<IQuestionCorrectionInfo>=[];
-            this.questionCorrectionInfoService.getQuestionCorrectionInfo(11012017,1).then((data)=>{
+            this.questionCorrectionInfoService.getQuestionCorrectionInfo(this.stateParams.semesterId,this.stateParams.examType).then((data)=>{
                 console.log("AUST CSE PICNIC FALL 2013");
                 console.log("*********");
                 app=data;
@@ -153,15 +159,33 @@ module ums{
             })
         }
         private changeCourse(value:any):void{
-            console.log(value);
-            this.selectedCourseId=value.courseId;
-            this.courseNo=value.courseNo;
-            this.courseTitle=value.courseTitle;
+            try{
+                console.log(value);
+                this.selectedCourseId=value.courseId;
+                this.courseNo=value.courseNo;
+                this.courseTitle=value.courseTitle;
+                this.checkCourseSelection=true;
+            }catch {
+                this.selectedCourseId=null;
+            }
+            this.getExamDate();
         }
-
+        private getExamDate():void{
+            if(this.selectedCourseId !=null && this.selectedCourseId !="" && this.checkCourseSelection !=false) {
+                this.questionCorrectionInfoService.getExamDate(11012017, this.selectedExamTypeId, this.selectedCourseId).then((data) => {
+                    console.log("----Exam Date----");
+                    this.selectedExamDate = data;
+                    console.log(this.selectedExamDate);
+                })
+            }
+        }
         private getCourse():void{
-            console.log("P->"+this.checkProgramId+" Y->"+this.checkYear+" S->"+this.checkSemester);
-            if(this.checkProgramId==true && this.checkYear==true && this.checkSemester==true){
+            if(this.checkProgramId !=false &&
+                this.checkYear !=false &&
+                this.checkSemester !=false &&
+                this.selectedProgramId !=null &&
+                this.selectedYear !=null &&
+                this.selectedSemester !=null){
                 this.courseList=[];
                 var course:Array<ICourses>=[];
                 this.questionCorrectionInfoService.getCourses(this.selectedProgramId,this.selectedYear,this.selectedSemester).then((data)=>{
@@ -188,56 +212,56 @@ module ums{
                     }
                 }
                 this.selectedSemesterId=this.semester.id;
-                this.semesterName=this.semester.name;
                 console.log("Selected_Id: "+this.selectedSemesterId);
                 console.log("Active_Semester_Id: "+this.activeSemesterId);
-                this.getExamDates();
+                this.hideInsertMode=this.activeSemesterId==this.stateParams.semesterId ? true:false;
             });
         }
         private changeExamType(value:any){
             console.log(value.id+"  "+value.name);
             this.selectedExamTypeId=value.id;
             this.selectedExamTypeName=value.name;
-            this.getExamDates();
-
-        }
-        private getExamDates(){
-            let examTypeId=this.selectedExamTypeId == ExamType.REGULAR ? ExamType.REGULAR:ExamType.CARRY_CLEARANCE_IMPROVEMENT;
-            console.log("examTypeId: "+examTypeId);
-            this.examRoutineArr=null;
-            this.examRoutineService.getExamRoutineDates(11012017,examTypeId).then((examDateArr: any) =>{
-                this.examRoutineArr={};
-                console.log("****Exam Dates***");
-                this.examRoutineArr=examDateArr;
-                console.log(this.examRoutineArr);
-            })
-        }
-        private ExamDateChange(value:any){
-            this.selectedExamDate=value;
-            console.log("Exam Date: "+this.selectedExamDate);
-
+            this.getExamDate()
         }
 
         private deptChanged(programs:any){
-            this.checkProgramId=true;
-            this.selectedProgramId=programs.id;
-            this.programName=programs.name;
-            console.log("id: "+this.selectedProgramId);
-            this.getCourse();
+            try{
+                this.checkProgramId=true;
+                this.selectedProgramId=programs.id;
+                this.programName=programs.name;
+                console.log("id: "+this.selectedProgramId);
+                this.getCourse();
+            }catch {
+                this.selectedProgramId=null;
+                this.getCourse();
+            }
+
         }
         private yearChanged(value:any){
-             this.checkYear=true;
-            console.log(value.name);
-            this.year=value.name;
-            this.selectedYear=value.id;
-            this.getCourse();
+            try{
+                this.checkYear=true;
+                console.log(value.name);
+                this.year=value.name;
+                this.selectedYear=value.id;
+                this.getCourse();
+            }catch {
+                this.selectedYear=null;
+                this.getCourse();
+            }
+
         }
         private academicSemester(value:any){
-            this.checkSemester=true;
-            console.log(value.name);
-            this.acaSemester=value.name;
-            this.selectedSemester=value.id;
-            this.getCourse();
+            try{
+                this.checkSemester=true;
+                console.log(value.name);
+                this.acaSemester=value.name;
+                this.selectedSemester=value.id;
+                this.getCourse();
+            }catch {
+                this.selectedSemester=null;
+                this.getCourse();
+            }
+
         }
         private doSomething():void{
             alert('hell from another side');
@@ -257,16 +281,16 @@ module ums{
             })
         }
         public isEligibleForSubmitData() {
-            if(this.checkProgramId==false){
+            if(this.checkProgramId==false || this.selectedProgramId==null){
                 this.isSubmitEligible=false;
                 this.notify.warn("Select Program");
-            } else if(this.checkYear==false){
+            } else if(this.checkYear==false || this.selectedYear==null){
                 this.isSubmitEligible=false;
                 this.notify.warn("Select Year");
-            }else if(this.checkSemester==false){
+            }else if(this.checkSemester==false || this.selectedSemester==null){
                 this.isSubmitEligible=false;
                 this.notify.warn("Select Semester");
-            } else if(this.selectedCourseId=="" || this.selectedCourseId==null || this.selectedCourseId.length>100){
+            } else if(this.selectedCourseId=="" || this.selectedCourseId==null){
                 this.isSubmitEligible=false;
                 this.notify.warn("Select Course");
             }else if(this.incorrectQuestionNo=="" || this.incorrectQuestionNo==null || this.incorrectQuestionNo.length>100){

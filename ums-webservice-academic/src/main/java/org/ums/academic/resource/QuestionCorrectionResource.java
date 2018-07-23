@@ -31,4 +31,11 @@ public class QuestionCorrectionResource extends MutableQuestionCorrectionResourc
     return mQuestionCorrectionResourceHelper.getQuestionCorrectionInfo(pSemesterId, pExamType, pRequest, mUriInfo);
   }
 
+  @GET
+  @Path("/getExamDate/semesterId/{semester-id}/examType/{examType}/courseId/{course-id}")
+  public JsonObject getExamDate(@Context Request pRequest, @PathParam("semester-id") Integer pSemesterId,
+      @PathParam("examType") Integer pExamType, @PathParam("course-id") String pCourseId) {
+    return mQuestionCorrectionResourceHelper.getExamDate(pSemesterId, pExamType, pCourseId, pRequest, mUriInfo);
+  }
+
 }

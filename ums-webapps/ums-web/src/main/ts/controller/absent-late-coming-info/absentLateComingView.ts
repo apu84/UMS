@@ -136,8 +136,6 @@ module ums{
         private ExamDateChange(value:any){
             console.log(""+value);
         }
-
-
         private doSomething():void{
             this.showRightDiv=true;
             Utils.expandRightDiv();

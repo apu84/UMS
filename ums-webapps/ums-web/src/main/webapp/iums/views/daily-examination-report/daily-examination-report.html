@@ -76,9 +76,22 @@
 
     <div id="rightDiv">
         <div class="panel">
-            <div class="panel-heading">Student's Attendance-> Semester: <b>{{vm.semesterName}}</b> Exam Type: <b>{{vm.selectedExamTypeName}}</b> Exam Date: <b>
-                {{vm.selectedExamDate}}
-            </b></div>
+            <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-9">
+                    <div>Daily Examination Report-> Semester: <b>{{vm.semesterName}}</b> Exam Type: <b>{{vm.selectedExamTypeName}}</b> Exam Date: <b>
+                        {{vm.selectedExamDate}}
+                    </b></div>
+                </div>
+                <div class="col-md-3">
+                        <div align="right">
+                            <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.getPdfVersionReport()">
+                                <span class="glyphicon glyphicon-download"></span> Download Report
+                            </button>
+                        </div>
+            </div>
+            </div>
+            </div>
             <div class="panel-body">
                 <div data-ng-show="vm.isRightDivAvailable">
 
@@ -86,14 +99,6 @@
                 <!--  Start of Daily Exam Report-->
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="panel">
-                            <div class="panel-heading"><b>Daily Examination Report</b>
-                                <div align="right">
-                                    <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.doSomething()">
-                                        <span class="glyphicon glyphicon-download"></span> Download Report
-                                    </button>
-                                </div>
-                            </div>
                             <div class="panel-body">
                                 <div>
                                     <ul id="iTab" class="nav nav-tabs nav-justified">

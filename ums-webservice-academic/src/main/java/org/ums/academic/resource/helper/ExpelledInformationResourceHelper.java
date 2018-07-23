@@ -94,16 +94,32 @@ public class ExpelledInformationResourceHelper extends
   public JsonObject getCourseList(final String pStudentId, final Integer pRegType, final Request pRequest,
       final UriInfo pUriInfo) {
     Integer examType = getExamType(pRegType);
+    List<MutableExpelledInformation> mutableExpelledInformationList =
+        getExpelledInformation(pStudentId, pRegType, examType);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(MutableExpelledInformation app : mutableExpelledInformationList) {
+      children.add(toJson(app, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+  public List<MutableExpelledInformation> getExpelledInformation(String pStudentId, Integer pRegType, Integer examType) {
     List<ExamRoutineDto> examRoutineList = mExamRoutineManager.getExamRoutine(11012017, examType);
     Map<String, String> examRoutineMapWithCourseId = examRoutineList
             .stream()
             .collect(Collectors.toMap(e->e.getCourseId(), e->e.getExamDate()));
-
     List<ExpelledInformation> expelledInfo=getContentManager().getAll();
-
     List<UGRegistrationResult> registeredTheoryCourseList =
         mUGRegistrationResultManager.getRegisteredTheoryCourseByStudent(pStudentId, 11012017, examType,pRegType);
+    List<MutableExpelledInformation> mutableExpelledInformationList = addDataToList(pStudentId, examType, examRoutineMapWithCourseId, expelledInfo, registeredTheoryCourseList);
+    return mutableExpelledInformationList;
+  }
 
+  public List<MutableExpelledInformation> addDataToList(String pStudentId, Integer examType, Map<String, String> examRoutineMapWithCourseId, List<ExpelledInformation> expelledInfo, List<UGRegistrationResult> registeredTheoryCourseList) {
     List<MutableExpelledInformation> mutableExpelledInformationList = new ArrayList<>();
     for(UGRegistrationResult registrationResult : registeredTheoryCourseList) {
       MutableExpelledInformation expelledInformation =new PersistentExpelledInformation();
@@ -116,15 +132,7 @@ public class ExpelledInformationResourceHelper extends
                && a.getExamType()==examType).collect(Collectors.toList()).size()==1 ? 1:0);
       mutableExpelledInformationList.add(expelledInformation);
     }
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    for(MutableExpelledInformation app : mutableExpelledInformationList) {
-      children.add(toJson(app, pUriInfo, localCache));
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-    return object.build();
+    return mutableExpelledInformationList;
   }
 
   public JsonObject getExpelInfoList(final Integer pSemesterId, final Integer pRegType, final Request pRequest,
@@ -145,15 +153,32 @@ public class ExpelledInformationResourceHelper extends
             .collect(Collectors.toMap(e->e.getCourseId(), e->e.getProgramName()));
     List<ExpelledInformation> expelledInfo=getContentManager().getAll().stream().filter(a->a.getExamType()==examType && a.getRegType()==pRegType).collect(Collectors.toList());
 
+    List<MutableExpelledInformation> expelInfoList = addInfo(pRegType, hideDeleteOption, examRoutineMapWithCourseId, examRoutineMapWithProgramId, expelledInfo);
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(MutableExpelledInformation app : expelInfoList) {
+      children.add(toJson(app, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+  public List<MutableExpelledInformation> addInfo(Integer pRegType, Integer hideDeleteOption,
+      Map<String, String> examRoutineMapWithCourseId, Map<String, String> examRoutineMapWithProgramId,
+      List<ExpelledInformation> expelledInfo) {
     List<MutableExpelledInformation> expelInfoList = new ArrayList<>();
     for(ExpelledInformation exp : expelledInfo) {
-      MutableExpelledInformation expelledInformation =new PersistentExpelledInformation();
+      MutableExpelledInformation expelledInformation = new PersistentExpelledInformation();
       expelledInformation.setStudentId(exp.getStudentId());
       expelledInformation.setStudentName(mStudentManager.get(exp.getStudentId()).getFullName());
       expelledInformation.setSemesterId(exp.getSemesterId());
       expelledInformation.setSemesterName(mSemesterManager.get(exp.getSemesterId()).getName());
       expelledInformation.setDeptId(mStudentManager.get(exp.getStudentId()).getDepartmentId());
-      expelledInformation.setDeptName(mDepartmentManager.get(mStudentManager.get(exp.getStudentId()).getDepartmentId()).getShortName());
+      expelledInformation.setDeptName(mDepartmentManager.get(mStudentManager.get(exp.getStudentId()).getDepartmentId())
+          .getShortName());
       expelledInformation.setExamType(exp.getExamType());
       expelledInformation.setExamTypeName(CourseRegType.get(pRegType).getLabel());
       expelledInformation.setStatus(hideDeleteOption);
@@ -165,16 +190,7 @@ public class ExpelledInformationResourceHelper extends
       expelledInformation.setProgramName(examRoutineMapWithProgramId.get(exp.getCourseId()));
       expelInfoList.add(expelledInformation);
     }
-
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    for(MutableExpelledInformation app : expelInfoList) {
-      children.add(toJson(app, pUriInfo, localCache));
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-    return object.build();
+    return expelInfoList;
   }
 
   @NotNull

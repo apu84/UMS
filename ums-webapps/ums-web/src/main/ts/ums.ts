@@ -924,6 +924,11 @@ module ums {
         controller: 'ExpelledInformation',
         controllerAs: 'vm',
         templateUrl: 'views/expelled-information/add-expelled-information.html',
+        params:{
+            semesterId:null,
+            examType:null,
+            examDate:null
+        },
         resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
 
@@ -963,6 +968,11 @@ module ums {
           controller: 'DailyExamAttendanceReport',
           controllerAs: 'vm',
           templateUrl: 'views/daily-examination-report/student-exam-attendant-info.html',
+        params:{
+            semesterId:null,
+            examType:null,
+            examDate:null
+        },
           resolve: {
               loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
 
@@ -1002,6 +1012,11 @@ module ums {
         controller: 'QuestionCorrectionInfo',
         controllerAs: 'vm',
         templateUrl: 'views/question-correction-info/question-correction-info.html',
+        params:{
+          semesterId:null,
+            examType:null,
+            examDate:null
+        },
         resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
 
@@ -1021,6 +1036,11 @@ module ums {
           controller: 'AbsentLateComingInfo',
           controllerAs: 'vm',
           templateUrl: 'views/absent-late-coming-info/absent-late-coming-info.html',
+        params:{
+            semesterId:null,
+            examType:null,
+            examDate:null
+        },
           resolve: {
               loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                   return $ocLazyLoad.load({

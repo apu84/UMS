@@ -6,10 +6,7 @@ module ums{
         name:string;
     }
     class DailyExamAttendanceReport{
-        examTypeList:Array<IConstants>;
-        examType:IConstants;
         selectedExamTypeId:number;
-        selectedExamTypeName:string;
         public semesters:Array<Semester>;
         public examInfo:Array<IStudentsExamAttendantData>;
         public semester:Semester;
@@ -20,8 +17,9 @@ module ums{
         public semesterName:string;
         public enableSubmitButton:boolean;
         enableRightDiv:boolean;
-        public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService','DailyExamAttendanceReportService',
-            'examRoutineService'];
+        private stateParams: any;
+        public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService',
+            'programService','DailyExamAttendanceReportService', 'examRoutineService','$stateParams'];
 
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -33,36 +31,19 @@ module ums{
                     private facultyService: FacultyService,
                     private programService: ProgramService,
                     private dailyExamAttendanceReportService: DailyExamAttendanceReportService,
-                    private examRoutineService: ExamRoutineService){
-            this.examTypeList=[];
-            this.examTypeList=this.appConstants.examType;
-            this.examType=this.examTypeList[0];
-            this.selectedExamTypeId=this.examType.id;
-            this.selectedExamTypeName=this.examType.name;
-            this.selectedExamDate="";
-            this.enableRightDiv=false;
+                    private examRoutineService: ExamRoutineService,
+                    private $stateParams: any){
+            this.stateParams = $stateParams;
+            console.log("----State Params in Students Attendant Report---");
+            console.log($stateParams);
+            this.selectedSemesterId=this.stateParams.semesterId;
+            this.selectedExamTypeId=this.stateParams.examType;
+            this.selectedExamDate=this.stateParams.examDate;
             this.getSemesters();
-            this.getExamDates();
-            this.enableSubmitButton=this.isEligibleForSubmitData();
+            this.search();
         }
-        private getExamDates(){
-            let examTypeId=this.selectedExamTypeId == ExamType.REGULAR ? ExamType.REGULAR:ExamType.CARRY_CLEARANCE_IMPROVEMENT;
-            console.log("examTypeId: "+examTypeId);
-            this.examRoutineArr={};
-            this.examRoutineService.getExamRoutineDates(this.selectedSemesterId,examTypeId).then((examDateArr: any) =>{
-                this.examRoutineArr={};
-                console.log("****Exam Dates***");
-                this.examRoutineArr=examDateArr;
-                console.log(this.examRoutineArr);
-            })
 
-        }
-        private ExamDateChange(value:any){
-            this.selectedExamDate=value;
-            this.enableRightDiv=false;
-            console.log("Exam Date: "+this.selectedExamDate);
 
-        }
         private getSemesters():void{
             this.semesterService.fetchSemesters(11,5).then((semesters:Array<Semester>)=>{
                 this.semesters=semesters;
@@ -75,45 +56,21 @@ module ums{
                         break;
                     }
                 }
-                this.selectedSemesterId=this.semester.id;
-                this.semesterName=this.semester.name;
                 console.log("Selected_Id: "+this.selectedSemesterId);
                 console.log("Active_Semester_Id: "+this.activeSemesterId);
+                this.enableSubmitButton=this.activeSemesterId==this.selectedSemesterId ? true:false;
             });
         }
-        private semesterChanged(val:any){
-            console.log("Name: "+val.name+"\nsemesterId: "+val.id);
-            this.selectedSemesterId=val.id;
-            this.semesterName=val.name;
-            console.log("Active Semester id: "+this.activeSemesterId);
-            this.enableSubmitButton=this.isEligibleForSubmitData();
-            this.enableRightDiv=false;
-            this.getExamDates();
-        }
 
-        private isEligibleForSubmitData():boolean{
-             return this.activeSemesterId==this.selectedSemesterId ? true:false;
-        }
-
-        private changeExamType(value:any){
-            console.log(value.id+"  "+value.name);
-            this.selectedExamTypeId=value.id;
-            this.selectedExamTypeName=value.name;
-            this.enableRightDiv=false;
-            this.getExamDates();
-
-        }
         private search():void{
-            Utils.expandRightDiv();
-            this.enableRightDiv=true;
             this.getData();
         }
         private getData(){
-            console.log("")
+            console.log("Id:"+this.selectedSemesterId+" Date:"+this.selectedExamDate+" Type:"+this.selectedExamTypeId);
             this.examInfo=[];
             var reg:Array<IStudentsExamAttendantData>=[];
             this.dailyExamAttendanceReportService.getExamAttendantInfo(this.selectedSemesterId,this.selectedExamDate,this.selectedExamTypeId).then((data) => {
-                console.log("Course-List");
+                console.log("get info");
                 reg=data;
                 this.examInfo=reg;
                 console.log(this.examInfo);
@@ -124,14 +81,10 @@ module ums{
             console.log("Convert To Json");
            var json:any = this.convertToJson(this.examInfo);
            this.dailyExamAttendanceReportService.addStudentAttendantInfo(json).then((data)=>{
+               console.log("saveee");
                this.getData();
            })
 
-        }
-        private getPdfVersionReport(){
-            this.dailyExamAttendanceReportService.getExamAttendantReport(this.selectedSemesterId,this.selectedExamTypeId,this.selectedExamDate).then((data)=>{
-               console.log("success!!")
-            });
         }
         public convertToJson(result: Array<IStudentsExamAttendantData>): any {
             var completeJson = {};

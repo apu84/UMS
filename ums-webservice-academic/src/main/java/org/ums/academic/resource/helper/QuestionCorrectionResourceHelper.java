@@ -7,6 +7,7 @@ import org.ums.academic.resource.QuestionCorrectionResource;
 import org.ums.builder.Builder;
 import org.ums.builder.QuestionCorrectionBuilder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.dto.ExamRoutineDto;
 import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.immutable.QuestionCorrectionInfo;
@@ -51,6 +52,8 @@ public class QuestionCorrectionResourceHelper extends
   ProgramManager mProgramManager;
   @Autowired
   CourseTeacherManager mCourseTeacherManager;
+  @Autowired
+  ExamRoutineManager mExamRoutineManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -123,6 +126,21 @@ public class QuestionCorrectionResourceHelper extends
       children.add(toJson(app, pUriInfo, localCache));
     }
     object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+  public JsonObject getExamDate(final Integer pSemesterId, final Integer pExamType, final String pCourseId,
+      final Request pRequest, final UriInfo pUriInfo) {
+    String examDate = "";
+    List<ExamRoutineDto> examDateList =
+        mExamRoutineManager.getExamDatesBySemesterAndTypeAndCourseId(pCourseId, pSemesterId, pExamType);
+    for(ExamRoutineDto app : examDateList) {
+      examDate = app.getExamDate();
+    }
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    LocalCache localCache = new LocalCache();
+    object.add("entries", examDate);
     localCache.invalidate();
     return object.build();
   }

@@ -53,7 +53,14 @@ module  ums{
         }
         public getTeachers(courseId:number):ng.IPromise<any>{
             var defer = this.$q.defer();
-            this.httpClient.get('academic/questionCorrectionInfo/getTeachers/courseId/'+courseId,HttpClient.MIME_TYPE_JSON,
+            this.httpClient.get('academic/questionCorrectionInfo/getTeachers/ courseId/'+courseId,HttpClient.MIME_TYPE_JSON,
+                (response: any) => {
+                    defer.resolve(response.entries);
+                });
+            return defer.promise;
+        }public getExamDate(semesterId:number,examType:number,courseId:string):ng.IPromise<any>{
+            var defer = this.$q.defer();
+            this.httpClient.get('academic/questionCorrectionInfo/getExamDate/semesterId/'+semesterId+'/examType/'+examType+'/courseId/'+courseId,HttpClient.MIME_TYPE_JSON,
                 (response: any) => {
                     defer.resolve(response.entries);
                 });

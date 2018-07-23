@@ -1,96 +1,44 @@
-<div class="row" >
-    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
-        <i class="fa fa-angle-double-right fa-cx"></i></i>
-    </div>
-    <div class="panel panel-green" id="leftDiv">
-        <div class="panel-heading">
-            <h3 class="panel-title">Select </h3>
-        </div>
-        <div class="panel-body pan">
-            <form action="" class="form-horizontal">
-                <div class="form-body pal">
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Semester</label>
-                        <div class="col-md-8">
-                            <select
-                                    class="form-control required"
-                                    name="semester"
-                                    id="semester"
-                                    data-ng-options="semester.name for semester in vm.semesters track by semester.id"
-                                    data-ng-model="vm.semester"
-                                    data-ng-change="vm.semesterChanged(vm.semester)"
-                            >
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Exam Type</label>
-                        <div class="col-md-8">
-                            <select
-                                    class="form-control required"
-                                    name="meritType"
-                                    id="meritType"
-                                    data-ng-options="examType.name for examType in vm.examTypeList track by examType.id"
-                                    data-ng-model="vm.examType"
-                                    data-ng-change="vm.changeExamType(vm.examType)"
-                            >
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Present Type</label>
-                        <div class="col-md-8">
-                            <select
-                                    class="form-control required"
-                                    name="meritType"
-                                    id="meritType3"
-                                    data-ng-options="absPreStatus.name for absPreStatus in vm.absPreStatusList track by absPreStatus.id"
-                                    data-ng-model="vm.absPreStatus"
-                                    data-ng-change="vm.changeAbsPreStatus(vm.absPreStatus)"
-                            >
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-actions text-right pal">
-                    <button type="button" data-ng-click="vm.doSomething()" class="btn btn-success">Search</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
-    <div id="rightDiv">
-        <div class="panel">
-            <div class="panel-heading">Absent/Late coming employees<br>PresentType:<b>{{vm.selectedAbsPreStatusName}}</b>  Semester: <b>{{vm.semesterName}}</b>Exam Type <b>{{vm.selectedExamTypeName}}</b></div>
+<div class="panel">
             <div class="panel-body">
-            <div data-ng-show="vm.showRightDiv">
-                <div style="padding-top: 10px;padding-bottom:20px;"  >
-                    <span class="label label-success badge-success">Filter Operations</span><p></p>
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <select
+                                class="form-control required"
+                                data-ng-options="absPreStatus.name for absPreStatus in vm.absPreStatusListForFilter track by absPreStatus.id"
+                                data-ng-model="vm.absPreStatusForFilter"
+                                data-ng-change="vm.changeAbsPreStatusForFilter(vm.absPreStatusForFilter)"
+                        >
+                        </select>
+                    </div>
+                    <div class="col-md-8 form-group">
+                        <div align="left">
+                            <button type="button" data-ng-click="vm.doSomething()" class="btn btn-success">Search</button>
+                        </div>
+                    </div>
+                </div>
                     <div class="row">
-                        <div class="col-md-4" >
-                            <div class="input-icon left">
+                        <div class="col-md-4 form-group" >
                                 <select
                                         class="form-control required"
-                                        name="leaveType"
-                                        id="leaveTypejj"
+                                        name="deptName"
+                                        id="deptName"
                                         style="width: 70%";
-                                        data-ng-options="dept.name for dept in vm.deptList track by dept.id"
-                                        data-ng-model="vm.deptName"
-                                        data-ng-change="vm.deptChanged(vm.deptName)"
-                                ></select>
-                            </div>
+                                        data-ng-options="dept.name for dept in vm.deptListForFilter track by dept.id"
+                                        data-ng-model="vm.deptNameForFilter"
+                                        data-ng-change="vm.deptChangedForFilter(vm.deptNameForFilter)"
+                                ><option value="">Select All Dept./Office</option></select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 form-group">
                             <div>
-                                <select class="form-control" name="examDate" style="width: 70%"; data-ng-model="vm.examDate" data-ng-change="vm.ExamDateChange(vm.examDate)">
+                                <select class="form-control" name="examDate" style="width: 70%"; data-ng-model="vm.examDateForFilter" data-ng-change="vm.ExamDateChangeForFilter(vm.examDateForFilter)">
                                     <option value="">Select an Exam Date </option>
-                                    <option data-ng-repeat="examRoutine in vm.examRoutineArr">{{examRoutine.examDate}}</option>
+                                    <option data-ng-repeat="examRoutine in vm.examRoutineArrForFilter">{{examRoutine.examDate}}</option>
                                 </select>
                             </div>
 
                         </div>
                     </div>
-                </div><br/>
                 <form>
                     <table class="table table-hover table-bordered table-advanced">
                         <thead>
@@ -99,7 +47,7 @@
                             <th>Employee Name</th>
                             <th>Faculty/Staff</th>
                             <th>Dept</th>
-                            <th data-ng-show="vm.isArrivalTimeAllowed">Arrival Time</th>
+                            <th data-ng-show="vm.isArrivalTimeEligibleForFilter">Arrival Time</th>
                             <th>Remarks</th>
                             <th>Invigilation Room</th>
                             <th>Exam Date</th>
@@ -107,12 +55,12 @@
                         </tr>
                         </thead>
                         <thead>
-                        <tr data-ng-repeat="app in vm.absLateComeInfo | orderBy:'deptId'| filter:{deptId:vm.selectedDepartmentId,examDate:vm.examDate,presentType:vm.selectedAbsPreStatusId} ">
+                        <tr data-ng-repeat="app in vm.absLateComeInfo | orderBy:'deptId'| filter:{deptId:vm.selectedDepartmentIdForFilter,examDate:vm.examDateForFilter,presentType:vm.selectedAbsPreStatusIdForFilter} ">
                             <td>{{$index+1}}</td>
                             <td>{{app.employeeName}}</td>
                             <td>{{app.employeeType}}</td>
                             <td>{{app.deptName}}</td>
-                            <td data-ng-show="vm.isArrivalTimeAllowed">{{app.arrivalTime}}</td>
+                            <td data-ng-show="vm.isArrivalTimeEligibleForFilter">{{app.arrivalTime}}</td>
                             <td>{{app.remarks}}</td>
                             <td>{{app.invigilatorRoomName}}</td>
                             <td>{{app.examDate}}</td>
@@ -134,11 +82,7 @@
                     </div>
                 </form>
             </div>
-            </div>
         </div>
-    </div>
-</div>
-
 
 <div class="modal fade" id="myModalViewInfo" role="dialog"  >
     <!--   <div class="modal-backdrop"> -->
@@ -159,7 +103,7 @@
                             <th>Employee Name</th>
                             <th>Faculty/Staff</th>
                             <th>Dept</th>
-                            <th data-ng-show="vm.isArrivalTimeAllowed">Arrival Time</th>
+                            <th data-ng-show="vm.isArrivalTimeEligibleForFilter">Arrival Time</th>
                             <th>Remarks</th>
                             <th>Invigilation Room</th>
                             <th>Exam Date</th>
@@ -171,7 +115,7 @@
                             <td>{{app.employeeName}}</td>
                             <td>{{app.employeeType}}</td>
                             <td>{{app.deptName}}</td>
-                            <td data-ng-show="vm.isArrivalTimeAllowed">{{app.arrivalTime}}</td>
+                            <td data-ng-show="vm.isArrivalTimeEligibleForFilter">{{app.arrivalTime}}</td>
                             <td>{{app.remarks}}</td>
                             <td>{{app.invigilatorRoomName}}</td>
                             <td>{{app.examDate}}</td>
@@ -189,6 +133,4 @@
             </div>
         </div>
     </div>
-</div>
-</div>
 </div>

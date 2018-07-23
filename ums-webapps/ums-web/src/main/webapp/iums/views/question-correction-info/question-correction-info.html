@@ -1,26 +1,21 @@
 <div>
     <div class="panel">
-        <div class="panel-heading">
-            <div align="right" data-ng-hide="vm.isInsertAvailable">
+        <div class="panel-body">
+            <div align="right" data-ng-hide="vm.isInsertAvailable" data-ng-if="vm.hideInsertMode">
                 <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.enableInsert()">
                     <span class="glyphicon glyphicon-plus"></span> Insert
                 </button>
             </div>
             <div align="right" data-ng-show="vm.isInsertAvailable">
                 <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.hideInsert()">
-                    <span class="glyphicon glyphicon-list-alt"></span> View
+                    <span class="glyphicon glyphicon-plus"></span> View
                 </button>
             </div>
-        </div>
-        <div class="panel-body">
             <div data-ng-show="vm.isInsertAvailable">
-            <div class="row ">
+            <div class="row">
                 <div class="col-md-12">
-                    <div class="form-body pal">
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <div class="input-icon left">
+                            <div class="col-md-4 form-group">
                                         <select
                                                 class="form-control required"
                                                 name="deptType"
@@ -31,11 +26,7 @@
                                                 data-ng-change="vm.deptChanged(vm.deptName)"
                                         ></select>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <div class="input-icon left">
+                            <div class="col-md-4 form-group">
                                         <select
                                                 class="form-control required"
                                                 name="year"
@@ -45,11 +36,8 @@
                                                 data-ng-model="vm.yearName"
                                                 data-ng-change="vm.yearChanged(vm.yearName)"
                                         ></select>
-                                    </div>
-                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="input-icon left">
+                            <div class="col-md-4 form-group">
                                     <select
                                             class="form-control required"
                                             name="semester"
@@ -59,19 +47,15 @@
                                             data-ng-model="vm.academicSemesterName"
                                             data-ng-change="vm.academicSemester(vm.academicSemesterName)"
                                     ></select>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <!-- End of 1st Row-->
             <div class="row ">
                 <div class="col-md-12">
-                    <div class="form-body pal">
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <div class="input-icon left">
+                            <div class="col-md-4 form-group">
                                         <select
                                                 class="form-control required"
                                                 name="meritType"
@@ -82,10 +66,8 @@
                                         >
                                         </select>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
+                            <div class="col-md-4 form-group">
+
                                     <select
                                             class="form-control required"
                                             name="meritType"
@@ -95,78 +77,61 @@
                                             data-ng-change="vm.changeCourse(vm.courses)"
                                     ><option value="">Select Course</option>
                                     </select>
-                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
+                            <div class="col-md-4 form-group">
                                     <input type="text"
                                            class="form-control required"
                                            style="width: 70%";
-                                           placeholder="Enter Incorrect Question No"
+                                           placeholder="Incorrect Question No"
                                            data-ng-model="vm.incorrectQuestionNo"
                                     />
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <!--  End of 2nd row -->
             <div class="row ">
                 <div class="col-md-12">
-                    <div class="form-body pal">
                         <div class="row">
-
-                            <div class="col-md-4">
-                                <div class="form-group">
+                            <div class="col-md-4 form-group">
                                     <input type="text"
                                            class="form-control required"
                                            style="width: 70%";
-                                           placeholder="Enter Type of Mistake"
+                                           placeholder="Type of Mistake"
                                            data-ng-model="vm.mistakeType"
                                     />
                                 </div>
-                            </div>
 
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <div class="input-icon left">
+                            <div class="col-md-4 form-group">
                                         <div>
-                                            <select class="form-control" id="examDate" name="examDate" style="width: 70%"; data-ng-model="vm.examDate" data-ng-change="vm.ExamDateChange(vm.examDate)">
-                                                <option value="">Select an Exam Date</option>
-                                                <option data-ng-repeat="examRoutine in vm.examRoutineArr">{{examRoutine.examDate}}</option>
+                                            <select class="form-control" id="examDate" name="examDate" style="width: 70%";>
+                                                <option >{{vm.selectedExamDate}}</option>
                                             </select>
                                         </div>
-                                    </div>
-                                </div>
                             </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label  class="control-label"> </label>
-                                    <div class="input-icon left" align="center">
-                                        <button type="button"
-                                                class="btn btn-success"
-                                                data-toggle="modal"
-                                                data-ng-click="vm.isEligibleForSubmitData()"
-                                                data-target="#myModal"
-                                                style="width:40%;">submit</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
-                <hr>
+                <!-- End of 3rd Row -->
+                <div class="row">
+                    <div class="col-md-8 form-group" align="right">
+                    </div>
+                    <div class="col-md-4 form-group" align="center">
+                        <button type="button"
+                                class="btn btn-success"
+                                data-toggle="modal"
+                                data-ng-click="vm.isEligibleForSubmitData()"
+                                style="width: 40%"
+                                data-target="#myModal"
+                        >submit</button>
+                    </div>
+                </div>
+            </div>
         </div>
-
-            <div>
-                <div data-ng-hide="vm.isInsertAvailable">
-                    <div style="padding-top: 10px;padding-bottom:20px;"  >
-                        <span class="label label-success badge-success">Filter Operations</span><p></p>
-                        <div class="row">
-                            <div class="col-md-4" >
-                                <div class="input-icon left">
+    <!-- end of panel body -->
+                <div data-ng-if="!vm.isInsertAvailable">
+                        <div class="row" style="margin-top: -15px">
+                            <div class="col-md-4 form-group">
                                     <select
                                             class="form-control required"
                                             name="programs"
@@ -177,35 +142,33 @@
                                             data-ng-change="vm.programChanged(vm.programs)"
                                     >
                                     </select>
-                                </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 form-group">
                                 <div>
                                     <select class="form-control" name="examDate" style="width: 70%"; data-ng-model="vm.examDateForFilter" data-ng-change="vm.changeDateForFilter(vm.examDateForFilter)">
                                         <option value="">Select an Exam Date </option>
                                         <option data-ng-repeat="examRoutine in vm.examRoutineForFilter">{{examRoutine.examDate}}</option>
                                     </select>
                                 </div>
-
                             </div>
                         </div>
-                    </div><br/>
                     <form>
                         <table class="table table-hover table-bordered table-advanced">
                             <thead>
                             <tr role="row" class="heading">
                                 <th>#</th>
-                                <th>Program</th>
-                                <th>Year/Sem</th>
-                                <th>Course No</th>
-                                <th>Incorrect Question No</th>
-                                <th>Type Of Mistake</th>
-                                <th>Course Teacher</th>
-                                <th>Exam Date</th>
-                                <th>Delete</th>
+                                <th width="10%">Program</th>
+                                <th width="5%">Year/Sem</th>
+                                <th width="20%">Course No</th>
+                                <th width="10%">Incorrect Question No</th>
+                                <th width="15%">Type Of Mistake</th>
+                                <th width="20%">Course Teacher</th>
+                                <th width="10%">Exam Date</th>
+                                <th width="10%"  data-ng-if="vm.hideInsertMode">Delete</th>
                             </tr>
                             </thead>
                             <thead>
+
                             <tr data-ng-repeat="app in vm.questionCorrectionInfo | orderBy:['programId','examDate'] | filter:{programId:vm.programIdForFilter,examDate:vm.examDateForFilter}">
                                 <td>{{$index+1}}</td>
                                 <td>{{app.programName}}</td>
@@ -215,7 +178,7 @@
                                 <td>{{app.mistakeType}}</td>
                                 <td>{{app.employeeName}}</td>
                                 <td>{{app.examDate}}</td>
-                                <td><input
+                                <td data-ng-if="vm.hideInsertMode"><input
                                         type="checkbox"
                                         data-ng-model="app.apply"
                                         data-ng-click="vm.checkMoreThanOneSelectionSubmit(app)"
@@ -233,12 +196,7 @@
                         </div>
                     </form>
                 </div>
-            </div>
         </div>
-    </div>
-</div>
-</div>
-
 
 <div data-ng-if="vm.isSubmitEligible">
     <div class="modal fade" id="myModal" role="dialog">
@@ -349,6 +307,4 @@
             </div>
         </div>
     </div>
-</div>
-</div>
 </div>
