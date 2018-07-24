@@ -300,6 +300,8 @@ module ums {
         }
         else {
           this.convertToJson(Utils.LEAVE_APPLICATION_PENDING).then((json) => {
+            console.log("Jsonsss....");
+            console.log(json);
             this.leaveApplicationService.saveLeaveApplication(json).then((message) => {
 
               console.log("********");
@@ -323,7 +325,9 @@ module ums {
 
     private findIfThereIsAnyOvalapping(foundOccurance: boolean): ng.IPromise<any> {
       let defer = this.$q.defer();
-      this.leaveApplicationService.fetchApprovedLeavesWithDateRange(this.leaveApplication.fromDate, this.leaveApplication.toDate).then((applications: any) => {
+      let fromDate:string = moment(this.leaveApplication.fromDate).format("DD-MM-YYYY");
+      let toDate: string = moment(this.leaveApplication.toDate).format("DD-MM-YYYY");
+      this.leaveApplicationService.fetchApprovedLeavesWithDateRange(fromDate, toDate).then((applications: any) => {
         if (applications.length > 0)
           foundOccurance = true;
         else
