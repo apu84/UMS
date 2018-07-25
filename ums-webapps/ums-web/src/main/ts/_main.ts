@@ -201,12 +201,10 @@
 /// <reference path='controller/student/StudentProfile.ts'/>
 /// <reference path='controller/expelled-information/ExpelledInformation.ts'/>
 /// <reference path='controller/expelled-information/ExpelledInformationService.ts'/>
-/// <reference path='controller/expelled-information/ViewExpelledInformation.ts'/>
 /// <reference path='controller/daily-exam-attendance-report/dailyExamAttendanceReport.ts'/>
 /// <reference path='controller/daily-exam-attendance-report/dailyExamAttendanceReportService.ts'/>
 /// <reference path='controller/absent-late-coming-info/absentLateComingInfo.ts'/>
 /// <reference path='controller/absent-late-coming-info/absLateComingService.ts'/>
-/// <reference path='controller/absent-late-coming-info/absentLateComingView.ts'/>
 /// <reference path='controller/dailyExamReport/dailyExamReport.ts'/>
 /// <reference path='controller/question-correction-info/questionCorrectionInfo.ts'/>
 /// <reference path='controller/question-correction-info/questionCorrectionInfoService.ts'/>

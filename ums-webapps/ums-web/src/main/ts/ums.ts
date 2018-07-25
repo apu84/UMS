@@ -944,25 +944,6 @@ module ums {
                 });
             }]
         }
-    }).state('viewExpelledInformation', {
-        url: "/viewExpelledInformation",
-        controller: 'ViewExpelledInformation',
-        controllerAs: 'vm',
-        templateUrl: 'views/expelled-information/view-expelled-information.html',
-        resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-
-                return $ocLazyLoad.load({
-                    files: [
-                        'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                        'vendors/bootstrap-datepicker/css/datepicker.css',
-                        'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                        'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                        'vendors/bootstrap-daterangepicker/daterangepicker.js'
-                    ]
-                });
-            }]
-        }
     }).state('dailyExamReport.dailyExamAttendanceReport', {
           url: "/dailyExamAttendanceReport",
           controller: 'DailyExamAttendanceReport',
@@ -1045,28 +1026,6 @@ module ums {
               loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                   return $ocLazyLoad.load({
                       files: [
-                          'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                          'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
-                          'vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-                          'vendors/bootstrap-datepicker/css/datepicker.css',
-                          'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                          'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                          'vendors/bootstrap-daterangepicker/daterangepicker.js'
-                      ]
-                  });
-              }]
-          }
-      }).state('absentLateComingView', {
-          url: "/absentLateComingView",
-          controller: 'AbsentLateComingView',
-          controllerAs: 'vm',
-          templateUrl: 'views/absent-late-coming-info/absent-late-coming-view.html',
-          resolve: {
-              loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-
-                  return $ocLazyLoad.load({
-                      files: [
-
                           'vendors/bootstrap-switch/css/bootstrap-switch.css',
                           'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
                           'vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',

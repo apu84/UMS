@@ -28,7 +28,7 @@ public class PersistentStudentsExamAttendantInfoDao extends StudentsExamAttendan
   }
 
   String INSERT_STUDENT_EXAM_ATTENDANT_INFO =
-      "MERGE INTO EXAM_ATTENDANT_INFORMATION D  "
+      "MERGE INTO DER_EXAM_ATTENDANT_INFO D  "
           + "using (select 1 from DUAL) s  "
           + "      on (D.PROGRAM_ID=? and D.SEMESTER_ID=? and D.YEAR=? and D.SEMESTER=? and D.EXAM_TYPE=? and D.EXAM_DATE = TO_DATE(?,'DD-MM-YYYY')  "
           + " )  "
@@ -38,7 +38,7 @@ public class PersistentStudentsExamAttendantInfoDao extends StudentsExamAttendan
           + "     VALUES (?,?,?,?,?,?,?,?,?,TO_DATE(?,'DD-MM-YYYY'))";
 
   String EXAM_ATTENDANT_INFO =
-      "SELECT PROGRAM_ID,SEMESTER_ID,\"YEAR\",SEMESTER,EXAM_TYPE,PRESENT_STUDENT,ABSENT_STUDENT,REGISTERED_STUDENT,to_char(EXAM_DATE,'DD-MM-YYYY') EXAM_DATE FROM EXAM_ATTENDANT_INFORMATION WHERE  SEMESTER_ID=? AND EXAM_TYPE=? "
+      "SELECT PROGRAM_ID,SEMESTER_ID,\"YEAR\",SEMESTER,EXAM_TYPE,PRESENT_STUDENT,ABSENT_STUDENT,REGISTERED_STUDENT,to_char(EXAM_DATE,'DD-MM-YYYY') EXAM_DATE FROM DER_EXAM_ATTENDANT_INFO WHERE  SEMESTER_ID=? AND EXAM_TYPE=? "
           + " AND EXAM_DATE = TO_DATE(?,'DD-MM-YYYY')";
 
   @Override
