@@ -20,8 +20,6 @@ module ums {
     public leaveApprovalStatus: IConstants;
     public leaveType: LmsType;
     public leaveApplication: LmsApplication;
-    public remainingLeaves: Array<RemainingLmsLeave>;
-    public remainingLeavesMap: any;
     public pendingApplications: Array<LmsApplicationStatus>;
     public pendingApplication: LmsApplicationStatus;
     public applicationStatusList: Array<LmsApplicationStatus>;
@@ -81,7 +79,6 @@ module ums {
 
       this.initializeDatePickers();
       this.getLeaveTypes();
-      this.getRemainingLeaves();
       this.getPendingApplications();
 
       $("#leaveType").focus();
@@ -225,7 +222,7 @@ module ums {
         let timeDiff: any = Math.abs(this.leaveApplication.toDate.getTime() - this.leaveApplication.fromDate.getTime());
         let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
         this.leaveApplication.duration = diffDays + 1;
-        if (this.remainingLeavesMap[this.leaveType.id].daysLeftNumber < this.leaveApplication.duration) {
+        if (this.leaveApplicationService.remainingLeavesMap[this.leaveType.id].daysLeftNumber < this.leaveApplication.duration) {
           this.notify.error("Please select proper duration, you don't have " + this.leaveApplication.duration + " days left for the leave type");
         }
 
@@ -246,20 +243,7 @@ module ums {
       });
     }
 
-    private getRemainingLeaves() {
-      this.remainingLeaves = [];
-      this.remainingLeavesMap = {};
-      this.leaveApplicationService.fetchRemainingLeavesByEmployeeId(this.leaveApplicationService.employeeId).then((leaves: Array<RemainingLmsLeave>) => {
-        for (let i = 0; i < leaves.length; i++) {
-          this.remainingLeaves.push(leaves[i]);
-          this.remainingLeavesMap[leaves[i].leaveTypeId] = this.remainingLeaves[i];
-        }
-        console.log("remaining leave map");
-        console.log("Employee id: " + this.leaveApplicationService.employeeId);
-        console.log(leaves);
-        console.log(this.remainingLeavesMap);
-      });
-    }
+
 
     private save() {
       this.convertToJson(Utils.LEAVE_APPLICATION_SAVED).then((json) => {
@@ -292,7 +276,7 @@ module ums {
         if (this.leaveApplication.fromDate == null || this.leaveApplication.toDate == null || this.leaveApplication.reason == null) {
           this.notify.error("Please fill up all the fields");
         }
-        else if (this.remainingLeavesMap[this.leaveType.id].daysLeftNumber < this.leaveApplication.duration) {
+        else if (this.leaveApplicationService.remainingLeavesMap[this.leaveType.id].daysLeftNumber < this.leaveApplication.duration) {
           this.notify.error("Please select proper duration, you don't have " + this.leaveApplication.duration + " days of the leave type");
         }
         else if (foundOccurance) {
@@ -362,9 +346,9 @@ module ums {
       this.pageNumber = currentPage;
       if (this.showHistorySection) {
         this.getAllLeaveApplicationsForHistory();
-      } else {
+      } /*else {
         this.getRemainingLeaves();
-      }
+      }*/
 
     }
 

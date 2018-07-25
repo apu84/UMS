@@ -6,6 +6,8 @@ module ums {
 
     public user: User;
     public employeeId: string;
+    public remainingLeaves: RemainingLmsLeave[];
+    public remainingLeavesMap: any;
 
 
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window'];

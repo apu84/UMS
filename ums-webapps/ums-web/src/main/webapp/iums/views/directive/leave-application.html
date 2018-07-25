@@ -23,7 +23,17 @@
                         </div>
 
                     </div>
-                    <div class="col-md-4" data-ng-include="" src="'views/leave-management/remaining-leaves.html'"></div>
+                    <!--<div class="col-md-4" data-ng-include="" src="'views/leave-management/remaining-leaves.html'"></div>-->
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-md-12" align="right">
+                        <span class="label label-info" style="cursor: pointer"
+                              data-ng-click="vm.showHistory()">Histories</span>
+                            </div>
+                        </div>
+                        <br/>
+                        <div  lms-remaining-leave-dir></div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12"><h2>Pending Leaves</h2></div>

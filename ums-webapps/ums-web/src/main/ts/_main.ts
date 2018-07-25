@@ -88,6 +88,8 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/Notification.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/ConfirmationDIalog.ts'/>
 /// <reference path='./directive/leaveManagement/LmsAppDir.ts'/>
+/// <reference path='./directive/leaveManagement/LmsRemainingLeaveDir.ts'/>
+/// <reference path='./directive/leaveManagement/LmsPendingLeaveDir.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/interceptor/Unauthorized.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/interceptor/ValidationExceptions.ts'/>

@@ -1,0 +1,27 @@
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>Leave Type</th>
+                <th>Days Left</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="remainingLeave in vm.leaveApplicationService.remainingLeaves" ng-if="remainingLeave.category==1 && !vm.showMore" >
+                <td>{{remainingLeave.leaveName}}</td>
+                <td>{{remainingLeave.daysLeft}}</td>
+            </tr>
+            <tr data-ng-repeat="remainingLeave in vm.leaveApplicationService.remainingLeaves" ng-if="remainingLeave.visibility=='Y' && vm.showMore" >
+                <td>{{remainingLeave.leaveName}}</td>
+                <td>{{remainingLeave.daysLeft}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div ng-if="!vm.showMore" ng-click="vm.showMoreRemainingLeaves()" style="cursor: pointer;" title="Show more leave types"><i class="fa fa-chevron-circle-down" aria-hidden="true"></i></div>
+        <div ng-if="vm.showMore" ng-click="vm.showLessRemainingLeaves()" style="cursor: pointer;" title="Show less leave types"><i class="fa fa-chevron-circle-up" aria-hidden="true"></i></div>
+
+    </div>
+
+</div>
