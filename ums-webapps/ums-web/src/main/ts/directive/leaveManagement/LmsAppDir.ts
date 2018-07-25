@@ -79,7 +79,6 @@ module ums {
 
       this.initializeDatePickers();
       this.getLeaveTypes();
-      this.getPendingApplications();
 
       $("#leaveType").focus();
     }
@@ -141,11 +140,11 @@ module ums {
     }
 
     private getAllLeaveApplicationsForHistory() {
-      this.pendingApplications = [];
+      this.leaveApplicationStatusService.pendingApplications = [];
       this.leaveApplicationStatusService.fetchAllLeaveApplicationsOfEmployeeWithPagination(this.leaveApplicationService.user.employeeId, this.leaveApprovalStatus.id, this.pageNumber, this.itemsPerPage).then((leaveApplications) => {
-        this.pendingApplications = leaveApplications.statusList;
+        this.leaveApplicationStatusService.pendingApplications = leaveApplications.statusList;
         this.totalItems = leaveApplications.totalSize;
-        console.log(this.pendingApplications);
+        console.log(this.leaveApplicationStatusService.pendingApplications);
       });
     }
 
@@ -156,7 +155,6 @@ module ums {
       this.showApplicationSection = true;
       this.fromHistorySection = false;
       this.fromPendingApplicationSection = true;
-      this.getPendingApplications();
     }
 
 
@@ -233,15 +231,7 @@ module ums {
 
     }
 
-    private getPendingApplications() {
-      this.pendingApplications = [];
 
-      this.leaveApplicationStatusService.fetchPendingLeaves(this.leaveApplicationService.employeeId).then((pendingLeaves) => {
-        this.pendingApplications = pendingLeaves;
-        this.totalItems = pendingLeaves.length;
-        //this.leaveApplicationService.employeeId = angular.copy(this.pendingApplications[0].applicantsId);
-      });
-    }
 
 
 
@@ -295,7 +285,6 @@ module ums {
                 this.saveAttachments(message[0].id);
                 this.leaveApplication = <LmsApplication>{};
                 this.leaveType = this.leaveTypes[0];
-                this.getPendingApplications();
               } else {
                 this.leaveApplication = <LmsApplication>{};
               }

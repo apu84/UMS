@@ -31,11 +31,12 @@ module ums{
     }
 
     private getPendingApplications() {
-      this.pendingApplications = [];
+      this.leaveApplicationStatusService.pendingApplications = [];
 
       this.leaveApplicationStatusService.fetchPendingLeaves(this.leaveApplicationService.employeeId).then((pendingLeaves) => {
-        this.pendingApplications = pendingLeaves;
-        //this.leaveApplicationService.employeeId = angular.copy(this.pendingApplications[0].applicantsId);
+        this.leaveApplicationStatusService.pendingApplications = pendingLeaves;
+        //this.totalItems = pendingLeaves.length;
+        //this.leaveApplicationService.employeeId = angular.copy(this.leaveApplicationStatusService.pendingApplications[0].applicantsId);
       });
     }
 
