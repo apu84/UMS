@@ -6,6 +6,7 @@ import org.ums.generator.IdGenerator;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PersistentPublicationInformationDao extends PublicationInformationDaoDecorator {
@@ -43,9 +44,21 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
     Long id = mIdGenerator.getNumericId();
     mJdbcTemplate.update(INSERT_ONE, id, pMutable.getEmployeeId(), pMutable.getTitle(), pMutable.getInterestGenre(),
         pMutable.getPublisherName(), pMutable.getDateOfPublication(), pMutable.getTypeId(), pMutable.getWebLink(),
-        pMutable.getISSN(), pMutable.getIssue(), pMutable.getVolume(), pMutable.getJournalName(), pMutable.getCountry()
-            .getId(), pMutable.getStatus(), pMutable.getPages(), pMutable.getAppliedOn(), pMutable.getActionTakenOn());
+        pMutable.getISSN(), pMutable.getIssue(), pMutable.getVolume(), pMutable.getJournalName(),
+        pMutable.getCountry() == null ? 0 : pMutable.getCountry().getId(), pMutable.getStatus(), pMutable.getPages(),
+        pMutable.getAppliedOn(), pMutable.getActionTakenOn());
     return id;
+  }
+
+  @Override
+  public List<Long> create(List<MutablePublicationInformation> pMutableList) {
+    List<Long> longList = new ArrayList<>();
+    for(MutablePublicationInformation mutablePublicationInformation : pMutableList) {
+      Long id;
+      id = create(mutablePublicationInformation);
+      longList.add(id);
+    }
+    return longList;
   }
 
   @Override
@@ -66,9 +79,10 @@ public class PersistentPublicationInformationDao extends PublicationInformationD
   public int update(MutablePublicationInformation pMutable) {
     String query = UPDATE_ONE + " WHERE ID = ? AND EMPLOYEE_ID = ?";
     return mJdbcTemplate.update(query, pMutable.getTitle(), pMutable.getInterestGenre(), pMutable.getPublisherName(),
-        pMutable.getDateOfPublication(), pMutable.getTypeId(), pMutable.getWebLink(), pMutable.getISSN(),
-        pMutable.getIssue(), pMutable.getVolume(), pMutable.getJournalName(), pMutable.getCountry().getId(),
-        pMutable.getStatus(), pMutable.getPages(), pMutable.getAppliedOn(), pMutable.getId(), pMutable.getEmployeeId());
+        pMutable.getDateOfPublication(), pMutable.getTypeId(), pMutable.getWebLink(), pMutable.getISSN(), pMutable
+            .getIssue(), pMutable.getVolume(), pMutable.getJournalName(), pMutable.getCountry() == null ? 0 : pMutable
+            .getCountry().getId(), pMutable.getStatus(), pMutable.getPages(), pMutable.getAppliedOn(),
+        pMutable.getId(), pMutable.getEmployeeId());
   }
 
   @Override

@@ -23,6 +23,13 @@ public class MutablePublicationInformationResource extends Resource {
     return mHelper.post(pJsonObject, mUriInfo);
   }
 
+  @POST
+  @Path("/bulk")
+  @PostLog(message = "Created bulk publication information through bib import")
+  public Response createBulkPublication(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject) {
+    return mHelper.bulkPost(pJsonObject, mUriInfo);
+  }
+
   @PUT
   @PutLog(message = "Updated an publication information")
   public Response update(@Context HttpServletRequest pHttpServletRequest, final JsonObject pJsonObject) {
