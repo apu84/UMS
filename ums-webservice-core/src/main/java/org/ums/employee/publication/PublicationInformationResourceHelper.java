@@ -15,6 +15,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -46,6 +47,19 @@ public class PublicationInformationResourceHelper extends
     mBuilder.build(objectBuilder, mManager.get(id), pUriInfo, localCache);
     localCache.invalidate();
     return Response.ok(objectBuilder.build()).build();
+  }
+
+  public Response bulkPost(JsonObject pJsonObject, final UriInfo pUriInfo) {
+    LocalCache localCache = new LocalCache();
+    List<MutablePublicationInformation> mutablePublicationInformationList = new ArrayList<>();
+    for(int i = 0; i < pJsonObject.getJsonArray("entries").size(); i++) {
+      MutablePublicationInformation mutablePublicationInformation = new PersistentPublicationInformation();
+      mBuilder.build(mutablePublicationInformation, pJsonObject.getJsonArray("entries").getJsonObject(i), localCache);
+      mutablePublicationInformationList.add(mutablePublicationInformation);
+    }
+    mManager.create(mutablePublicationInformationList);
+    localCache.invalidate();
+    return Response.ok().build();
   }
 
   public JsonObject get(final String pEmployeeId, final UriInfo pUriInfo) {

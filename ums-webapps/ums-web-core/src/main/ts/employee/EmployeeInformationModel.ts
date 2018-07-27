@@ -160,7 +160,7 @@ module ums{
     export interface ICommon{
         id: number;
         name: string;
-        foreign_id: number;
+        foreign_id?: number;
     }
 
     export interface IDegreeLevel{
