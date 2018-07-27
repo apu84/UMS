@@ -226,6 +226,13 @@ module ums {
             if (flag == 0) {
                 this.convertToJson(this.bulkPublication).then((json: any) => {
                     this.employeeInformationService.saveBibPublicationInformation(json).then((resolve: any) => {
+                        this.get();
+                        this.bulkPublication = [];
+                        this.bibInput = "";
+                        this.parsedBib = [];
+                        this.showLoaderWhileBibParsing = false;
+                        this.showSaveButton = false;
+                        $('#importBibtex').modal('hide');
                     });
                 });
             }
