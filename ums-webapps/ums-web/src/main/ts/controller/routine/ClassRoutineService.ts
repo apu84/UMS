@@ -78,6 +78,7 @@ module ums{
     public selectedDay: IConstant;
     public sessionalSectionMap: { [key: string]: IConstant };
     public dayAndTimeMapWithRoutine: { [key: string]: ClassRoutine[] }; // map[day+startTime] = ClassRoutine[];
+    public dayAndTimeMapWithGroup:{[key:string]:number};
     public dayAndTimeMapWithRoutineSlot: {[key:string]: RoutineSlot};
     public groupMapWithRoutineSlot: {[key:string]:RoutineSlot};
     public groupList: number[];
