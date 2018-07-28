@@ -11,10 +11,12 @@
             service-interface="org.ums.integration.FileWriterGateway"
             default-request-channel="ftpChannel"></integration:gateway>
 
-    <bean class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory" id="ftpSessionFactory">
+    <bean class="org.ums.ftp.UMSFtpSessionFactory" id="ftpSessionFactory">
         <property name="host" value="${ftp.localhost}"/>
         <property name="port" value="${ftp.port}"/>
         <property name="clientMode" value="${ftp.clientMode}"/>
+        <property name="minActivePort" value="${ftp.minActivePort}"/>
+        <property name="maxActivePort" value="${ftp.maxActivePort}"/>
         <property name="username" value="${ftp.username}"/>
         <property name="password" value="${ftp.password}"/>
         <property name="connectTimeout" value="${ftp.connectTimeout}"/>
