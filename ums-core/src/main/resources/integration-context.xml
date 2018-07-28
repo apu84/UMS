@@ -16,6 +16,7 @@
 <!--
         <property name="port" value="${ftp.port}"/>
 -->
+        <property name="clientMode" value="${ftp.clientMode}"/>
         <property name="username" value="${ftp.username}"/>
         <property name="password" value="${ftp.password}"/>
         <property name="connectTimeout" value="${ftp.connectTimeout}"/>
