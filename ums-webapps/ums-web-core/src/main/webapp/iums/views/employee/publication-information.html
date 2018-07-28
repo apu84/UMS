@@ -18,13 +18,13 @@
 
 <div data-ng-if="!vm.showLoader">
 
-  <!--  <div align="right">
+    <div align="right">
         <button type="button" data-toggle="modal" data-target="#importBibtex" title="Import from bib file"
                 class="btn btn-success btn-xs"
                 style="cursor:pointer;">Import Bibtex
         </button>
     </div>
-    <br/>-->
+    <br/>
 
     <accordion close-others="true">
         <div data-ng-repeat="publication in vm.publication track by $index">
@@ -111,11 +111,8 @@
                         </div>
 
                         <div class="col-md-3">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nForm[$index].nPublicationCountry.$invalid && !nForm[$index].nPublicationCountry.$pristine }">
-                                <label for="iPublicationCountry" class="control-label">Country<span
-                                        data-ng-show="vm.enableEdit[$index]"
-                                        class='require'>*</span></label>
+                            <div class="form-group">
+                                <label for="iPublicationCountry" class="control-label">Country</label>
                                 <div data-ng-show="vm.enableEdit[$index]">
 
                                     <select name="nPublicationCountry"
@@ -240,11 +237,8 @@
                         </div>
 
                         <div class="col-md-3">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nForm[$index].nPublicationIssue.$invalid && !nForm[$index].nPublicationIssue.$pristine }">
-                                <label for="iPublicationIssue" class="control-label">Issue<span
-                                        data-ng-show="vm.enableEdit[$index]"
-                                        class='require'>*</span></label>
+                            <div class="form-group">
+                                <label for="iPublicationIssue" class="control-label">Issue</label>
                                 <div data-ng-show="vm.enableEdit[$index]">
                                     <input type="text"
                                            name="nPublicationIssue"
@@ -550,9 +544,7 @@
 
                                     <tr>
                                         <th width="30%">
-                                            <label class="control-label">Country<span
-                                                    data-ng-show="vm.editMode[$index]"
-                                                    class='require'>*</span></label>
+                                            <label class="control-label">Country</label>
                                         </th>
                                         <td width="70%">
                                             <div data-ng-show="vm.editMode[$index]">
@@ -603,9 +595,7 @@
                                     <tr>
                                         <th width="30%">
                                             <label class="control-label" for="iPublicationJournalName">Journal/Conference
-                                                Name<span
-                                                        ng-show="bulk.publicationType.id==1 || bulk.publicationType.id==2"><span
-                                                        class='require'>*</span></span>
+                                                Name</span>
                                             </label>
                                         </th>
                                         <td width="70%">
@@ -630,9 +620,7 @@
 
                                     <tr>
                                         <th width="30%">
-                                            <label class="control-label">ISSN<span
-                                                    data-ng-show="vm.editMode[$index]"
-                                                    class='require'>*</span></label>
+                                            <label class="control-label">ISSN</label>
                                         </th>
                                         <td width="70%">
                                             <div data-ng-show="vm.editMode[$index]">
@@ -654,9 +642,7 @@
                                     </tr>
 
                                     <tr>
-                                        <th width="30%"><label class="control-label">Volume<span
-                                                data-ng-show="vm.editMode[$index]"
-                                                class='require'>*</span></label>
+                                        <th width="30%"><label class="control-label">Volume</label>
                                         </th>
                                         <td width="70%">
                                             <div data-ng-show="vm.editMode[$index]">
@@ -679,9 +665,7 @@
 
                                     <tr>
                                         <th width="30%">
-                                            <label class="control-label">Issue<span
-                                                    data-ng-show="vm.editMode[$index]"
-                                                    class='require'>*</span></label>
+                                            <label class="control-label">Issue</label>
                                         </th>
                                         <td width="70%">
                                             <div data-ng-show="vm.editMode[$index]">
@@ -704,9 +688,7 @@
 
                                     <tr>
                                         <th width="30%">
-                                            <label class="control-label">Publisher Name<span
-                                                    ng-show="publication.publicationType.id==1 || publication.publicationType.id==3"><span
-                                                    class='require'>*</span></span></label></label>
+                                            <label class="control-label">Publisher Name</label></label>
                                         </th>
                                         <td width="70%">
                                             <div data-ng-show="vm.editMode[$index]">
@@ -716,7 +698,6 @@
                                                        type="text"
                                                        placeholder="Publisher Name"
                                                        maxlength="100"
-                                                       ng-required="bulk.publicationType.id==1 || bulk.publicationType.id==3"
                                                        class="form-control">
                                             </div>
                                             <div data-ng-show="!vm.editMode[$index]">

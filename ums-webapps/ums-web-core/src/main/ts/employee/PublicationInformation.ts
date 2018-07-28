@@ -83,7 +83,6 @@ module ums {
         }
 
         private updateBib(index: number) {
-            console.log(this.bulkPublication[index]);
             this.activeEditButtonBib(index, false);
         }
 
@@ -122,9 +121,7 @@ module ums {
         }
 
         public activeEditButtonBib(index: number, canEdit: boolean): void {
-            console.log(index + " " + canEdit);
             this.editMode[index] = canEdit;
-            console.log(this.editMode);
         }
 
         public addNew(): void {
@@ -160,9 +157,10 @@ module ums {
                 publicationBibEntry = {
                     id: "",
                     employeeId: this.userId,
-                    publicationTitle: bulkBib[i].entryTags.title,
-                    publicationType: bulkBib[i].entryTags.entryType == 'article' ? this.publicationTypes[1] :
-                        bulkBib[i].entryTags.entryType == 'book' ? this.publicationTypes[2] : this.publicationTypes[3],
+                    publicationTitle: bulkBib[i].entryTags.title.slice(1, -1),
+                    publicationType: bulkBib[i].entryType.toUpperCase() == 'CONFERENCE' ? this.publicationTypes[0] :
+                        bulkBib[i].entryType.toUpperCase() == 'ARTICLE' ? this.publicationTypes[1] :
+                        bulkBib[i].entryType.toUpperCase() == 'BOOK' ? this.publicationTypes[2] : this.publicationTypes[3],
                     publicationInterestGenre: "",
                     publicationWebLink: bulkBib[i].entryTags.url,
                     publisherName: "",
@@ -239,9 +237,11 @@ module ums {
             else {
                 let st = "";
                 for (let j = 0; j < errorIndex.length; j++) {
-                    st = errorIndex[j] + ",";
+                    st += errorIndex[j];
+                    if(errorIndex.length - 1 != j)
+                        st += ", ";
                 }
-                this.notify.error("Found error(s) in Sl [" + st + "], Please fill required fields properly");
+                this.notify.error("Found error(s) in Sl [" + st + "]. Please fill required fields properly");
             }
         }
 
