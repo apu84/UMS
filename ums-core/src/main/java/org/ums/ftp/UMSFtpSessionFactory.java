@@ -11,6 +11,8 @@ public class UMSFtpSessionFactory extends DefaultFtpSessionFactory {
 
   protected void postProcessClientBeforeConnect(FTPClient ftpClient) throws IOException {
     ftpClient.setActivePortRange(mMinActivePort, mMaxActivePort);
+    ftpClient.setRemoteVerificationEnabled(false);
+    ftpClient.setUseEPSVwithIPv4(false);
   }
 
   public int getMinActivePort() {
