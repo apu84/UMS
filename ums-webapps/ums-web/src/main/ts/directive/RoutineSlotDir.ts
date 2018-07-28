@@ -5,12 +5,18 @@ module ums{
       routineSlot: RoutineSlot;
     }
 
+    interface IRoutineRow{
+      id: number;
+      routineList: ClassRoutine[];
+    }
+
     class RoutineSlotDirController {
         private routineList:ClassRoutine[];
         private routineSlot: RoutineSlot;
         private template:any;
         private colSpan:number;
         private routine:ClassRoutine;
+        private routineRows: IRoutineRow[];
 
         public static $inject = ['$scope','classRoomService', 'courseService', 'appConstants', '$timeout', 'semesterService', '$q','routineConfigService'];
 
@@ -31,24 +37,84 @@ module ums{
             console.log("Hello, Form routine slot directive");
         }
 
+        public getColSpan(routine:ClassRoutine):string{
+          console.log("Called");
+          let slotStartTime:any = moment(routine.startTime,'hh:mm A');
+          let slotEndTime:any = moment(routine.endTime, 'hh:mm A');
+          let diff=slotEndTime.diff(slotStartTime,'minutes');
+          let colSpan = diff/this.routineConfigService.routineConfig.duration;
+          return colSpan.toString();
+        }
+
         private createSlot(){
             if(this.routineList==undefined || this.routineList.length==0)
                 this.template='';
             else{
-                this.template=`<table class='table table-bordered' style="width: 100%;">`;
-                while(this.routineList.length>0){
-                    this.routine = this.routineList.pop();
-                    let slotStartTime:any = moment(this.routine.startTime,'hh:mm A');
+              console.log("Routine list from directive");
+              console.log(this.routineList);
+              this.template=`<table class='table table-bordered' style="width: 100%;">`;
+              this.template=this.template+`<tr>`;
+              let groupStartTime:any = moment(this.routineSlot.startTime,'hh:mm A');
+              let groupEndTime: any = moment(this.routineSlot.endTime, 'hh:mm A');
+              let iterationLength:number = (groupEndTime.diff(groupStartTime, 'minutes'))/this.routineConfigService.routineConfig.duration;
+              console.log("Iteration length: "+iterationLength);
+              let iterationStartTime: string = angular.copy(this.routineSlot.startTime);
+              console.log("Iteration start time: "+iterationStartTime);
+              this.routineRows = [];
+              while(this.routineList.length>0){
+                console.log("11111111111111111111");
+                let routineRow: IRoutineRow = <IRoutineRow>{};
+                routineRow.routineList=[];
+
+                for (var i=0; i<iterationLength; i++){
+                  if (this.routineList.length<=0)
+                    break;
+                  console.log("Iteration start time: "+iterationStartTime);
+                  this.routine = angular.copy(this.routineList.shift());
+                  let slotStartTime:any = moment(this.routine.startTime,'hh:mm A');
+                  let breakCondition:boolean = false;
+                  if (iterationStartTime===this.routine.startTime){
+                    routineRow.routineList.push(angular.copy(this.routine));
+                    console.log("OOOOOOOO");
                     let slotEndTime:any = moment(this.routine.endTime, 'hh:mm A');
                     let diff=slotEndTime.diff(slotStartTime,'minutes');
                     this.colSpan = diff/this.routineConfigService.routineConfig.duration;
-                    this.template=this.template+`<tr>`;
-                    this.template = this.template+`<td align="center" colspan='`+this.colSpan+`'>`;
+                    console.log("colspan: "+this.colSpan);
+                    this.template = this.template+'<td align="center" colspan="'+this.colSpan.toString()+'">';
                     this.template = this.template+this.routine.course.no+" ("+this.routine.section+")<br>"+this.routine.room.roomNo;
                     this.template=this.template+`</td>`;
-                    this.template=this.template+`</tr>`;
+                    if (this.routine.endTime==this.routineSlot.endTime){
+                      console.log("Matched end time");
+                      console.log("Routine slot end time: "+this.routineSlot.endTime);
+                      iterationStartTime = angular.copy( this.routineSlot.startTime);
+                      this.template = this.template+'</tr>';
+                      breakCondition = true;
+                    }
+                    else{
+                      /*let iterationStartTimeObj:any = moment(iterationStartTime, 'hh:mm A');
+                      iterationStartTimeObj = moment(iterationStartTimeObj).add(this.routineConfigService.routineConfig.duration,'m').toDate();
+                      iterationStartTime = moment(iterationStartTimeObj).format("hh:mm A");*/
+                      iterationStartTime= this.routine.endTime;
+                    }
+                    if (breakCondition) break;
+
+                  } else{
+                    this.routineList.unshift(this.routine);
+                    let iterationStartTimeObj:any = moment(iterationStartTime, 'hh:mm A');
+                    let emptyRoutine:ClassRoutine=<ClassRoutine>{};
+                    emptyRoutine.startTime=iterationStartTime;
+                    this.template = this.template+`<td></td>`;
+                    iterationStartTimeObj = moment(iterationStartTimeObj).add(this.routineConfigService.routineConfig.duration,'m').toDate();
+                    iterationStartTime = moment(iterationStartTimeObj).format("hh:mm A");
+                    emptyRoutine.endTime = iterationStartTime;
+                    routineRow.routineList.push(emptyRoutine);
+
+                  }
 
                 }
+                this.routineRows.push(routineRow);
+                // this.template = this.template+"</tr>";
+              }
 
                 /*this.template=
                     `

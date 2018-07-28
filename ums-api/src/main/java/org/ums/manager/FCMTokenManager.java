@@ -7,5 +7,7 @@ public interface FCMTokenManager extends ContentManager<FCMToken, MutableFCMToke
 
   boolean hasDuplicate(String pToken);
 
+  boolean isDuplicate(String pUserId, String pToken);
+
   FCMToken getToken(String pToken);
 }

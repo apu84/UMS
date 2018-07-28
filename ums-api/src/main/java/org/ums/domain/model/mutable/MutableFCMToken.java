@@ -10,7 +10,5 @@ public interface MutableFCMToken extends FCMToken, Editable<String>, MutableLast
 
   void setToken(final String pToken);
 
-  void setRefreshedOn(final Date pRefreshedOn);
-
-  void setDeletedOn(final Date pDeletedOn);
+  void setCreatedOn(final Date pSetUpdatedOn);
 }

@@ -10,6 +10,7 @@ var config = {
 firebase.initializeApp(config);
 const messaging = firebase.messaging();
 
+setTokenSentToServer(false);
 requestPermission();
 
 messaging.onTokenRefresh(function() {
@@ -49,7 +50,7 @@ function setTokenSentToServer(sent) {
 }
 
 function isTokenSentToServer() {
-    return window.localStorage.getItem('sentToServer') === 1;
+    return window.localStorage.getItem('sentToServer');
 }
 
 function sendTokenToServer(currentToken) {

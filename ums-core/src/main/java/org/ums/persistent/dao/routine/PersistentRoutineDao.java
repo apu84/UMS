@@ -121,8 +121,8 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   @Override
   public List<Routine> getRoutine(int semesterId, int programId, int year, int semester, String section) {
     String query =
-        "select * FROM CLASS_ROUTINE WHERE SEMESTER_ID=? and PROGRAM_ID=? and YEAR=? and SEMESTER=? and SECTION LIKE '"
-            + section + "%'  order by day,start_time , duration desc";
+        "select CLASS_ROUTINE.* FROM CLASS_ROUTINE, MST_COURSE WHERE  CLASS_ROUTINE.COURSE_ID=MST_COURSE.COURSE_ID AND CLASS_ROUTINE.SEMESTER_ID=? and CLASS_ROUTINE.PROGRAM_ID=? and CLASS_ROUTINE.YEAR=? and CLASS_ROUTINE.SEMESTER=? and CLASS_ROUTINE.SECTION LIKE '"
+            + section + "%'  order by day,start_time , MST_COURSE.COURSE_TYPE desc, duration";
     return mJdbcTemplate.query(query, new Object[] {semesterId, programId, year, semester}, new RoutineRowMapper());
   }
 

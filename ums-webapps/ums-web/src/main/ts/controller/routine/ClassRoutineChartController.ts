@@ -92,6 +92,7 @@ module ums {
           routineSlot.day = routine.day;
           routineSlot.routineList = [];
           routineSlot.routineList.push(routine);
+          console.log(routine);
           this.classRoutineService.groupList.push(routine.slotGroup);
           this.classRoutineService.groupMapWithRoutineSlot[routine.slotGroup] = routineSlot;
         }else{
