@@ -26,29 +26,30 @@ public class PersistentEmployeeEarnedLeaveBalanceDao extends EmployeeEarnedLeave
   private NamedParameterJdbcTemplate mNamedParameterJdbcTemplate;
   private IdGenerator mIdGenerator;
 
+  private String SELECT_ALL = "select * from emp_el_balance";
+  private String INSERT_ONE =
+      "insert into EMP_EL_BALANCE(ID, EMPLOYEE_ID, FULL_PAY, HALF_PAY, CREATED_ON, UPDATED_ON, LAST_MODIFIED) values (:id, :employeeId, :fullPay, :halfPay, :createdOn, :updatedOn, :lastModified)";
+  private String UPDATE_ONE =
+      "update EMP_EL_BALANCE set EMPLOYEE_ID=:employeeId, FULL_PAY=:fullPay, HALF_PAY=:halfPay, CREATED_ON=:createdOn, UPDATED_ON=:updatedOn, LAST_MODIFIED=:lastModified where id=:id";
+  private String DELETE_ONE = "delete from EMP_EL_BALANCE where id=:id";
 
-  private String SELECT_ALL="select * from emp_el_balance";
-  private String INSERT_ONE="insert into EMP_EL_BALANCE(ID, EMPLOYEE_ID, FULL_PAY, HALF_PAY, CREATED_ON, UPDATED_ON, LAST_MODIFIED) values (:id, :employeeId, :fullPay, :halfPay, :createdOn, :updatedOn, :lastModified)";
-  private String UPDATE_ONE="update EMP_EL_BALANCE set EMPLOYEE_ID=:employeeId, FULL_PAY=:fullPay, HALF_PAY=:halfPay, CREATED_ON=:createdOn, UPDATED_ON=:updatedOn, LAST_MODIFIED=:lastModified where id=:id";
-  private String DELETE_ONE="delete from EMP_EL_BALANCE where id=:id";
-
-  public PersistentEmployeeEarnedLeaveBalanceDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
+  public PersistentEmployeeEarnedLeaveBalanceDao(JdbcTemplate pJdbcTemplate,
+      NamedParameterJdbcTemplate pNamedParameterJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
     mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
     mIdGenerator = pIdGenerator;
   }
 
-
   @Override
   public List<EmployeeEarnedLeaveBalance> getAll() {
-    String query=SELECT_ALL;
+    String query = SELECT_ALL;
     return mNamedParameterJdbcTemplate.query(query, new EmployeeEarnedLeaveBalanceRowMapper());
   }
 
   @Override
   public EmployeeEarnedLeaveBalance get(Long pId) {
-    String query=SELECT_ALL+" where id=?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new EmployeeEarnedLeaveBalanceRowMapper());
+    String query = SELECT_ALL + " where id=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new EmployeeEarnedLeaveBalanceRowMapper());
   }
 
   @Override
@@ -58,14 +59,14 @@ public class PersistentEmployeeEarnedLeaveBalanceDao extends EmployeeEarnedLeave
 
   @Override
   public int update(MutableEmployeeEarnedLeaveBalance pMutable) {
-    String query=UPDATE_ONE;
+    String query = UPDATE_ONE;
     Map parameterMap = getInsertOrUpdateParameters(pMutable);
     return mNamedParameterJdbcTemplate.update(query, parameterMap);
   }
 
   @Override
   public int update(List<MutableEmployeeEarnedLeaveBalance> pMutableList) {
-    String query=UPDATE_ONE;
+    String query = UPDATE_ONE;
     Map<String, Object>[] updateParameterList = getParameterObjects(pMutableList);
     return mNamedParameterJdbcTemplate.batchUpdate(query, updateParameterList).length;
   }
@@ -74,7 +75,7 @@ public class PersistentEmployeeEarnedLeaveBalanceDao extends EmployeeEarnedLeave
   public int delete(MutableEmployeeEarnedLeaveBalance pMutable) {
     String query = DELETE_ONE;
     Map parameters = getInsertOrUpdateParameters(pMutable);
-    return mNamedParameterJdbcTemplate.update(query, parameters );
+    return mNamedParameterJdbcTemplate.update(query, parameters);
   }
 
   @Override
@@ -86,7 +87,7 @@ public class PersistentEmployeeEarnedLeaveBalanceDao extends EmployeeEarnedLeave
 
   @Override
   public Long create(MutableEmployeeEarnedLeaveBalance pMutable) {
-    String query=INSERT_ONE;
+    String query = INSERT_ONE;
     Map insertParameters = getInsertOrUpdateParameters(pMutable);
     mNamedParameterJdbcTemplate.update(query, insertParameters);
     return pMutable.getId();
@@ -104,19 +105,19 @@ public class PersistentEmployeeEarnedLeaveBalanceDao extends EmployeeEarnedLeave
 
   @Override
   public boolean exists(Long pId) {
-    return get(pId)==null?false: true;
+    return get(pId) == null ? false : true;
   }
 
-
-  private Map<String, Object>[] getParameterObjects(List<MutableEmployeeEarnedLeaveBalance> pMutableEmployeeEarnedLeaveBalances){
+  private Map<String, Object>[] getParameterObjects(
+      List<MutableEmployeeEarnedLeaveBalance> pMutableEmployeeEarnedLeaveBalances) {
     Map<String, Object>[] parameterMaps = new HashMap[pMutableEmployeeEarnedLeaveBalances.size()];
-    for(int i=0; i<pMutableEmployeeEarnedLeaveBalances.size(); i++){
+    for(int i = 0; i < pMutableEmployeeEarnedLeaveBalances.size(); i++) {
       parameterMaps[i] = getInsertOrUpdateParameters(pMutableEmployeeEarnedLeaveBalances.get(i));
     }
     return parameterMaps;
   }
 
-  private Map getInsertOrUpdateParameters(MutableEmployeeEarnedLeaveBalance pMutableEmployeeEarnedLeaveBalance){
+  private Map getInsertOrUpdateParameters(MutableEmployeeEarnedLeaveBalance pMutableEmployeeEarnedLeaveBalance) {
     Map parameter = new HashMap();
     parameter.put("id", pMutableEmployeeEarnedLeaveBalance.getId());
     parameter.put("employeeId", pMutableEmployeeEarnedLeaveBalance.getEmployeeId());
@@ -128,7 +129,7 @@ public class PersistentEmployeeEarnedLeaveBalanceDao extends EmployeeEarnedLeave
     return parameter;
   }
 
-  class EmployeeEarnedLeaveBalanceRowMapper implements RowMapper<EmployeeEarnedLeaveBalance>{
+  class EmployeeEarnedLeaveBalanceRowMapper implements RowMapper<EmployeeEarnedLeaveBalance> {
     @Override
     public EmployeeEarnedLeaveBalance mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableEmployeeEarnedLeaveBalance balance = new PersistentEmployeeEarnedLeaveBalance();

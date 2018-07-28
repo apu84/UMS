@@ -13,12 +13,8 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 26-Jul-18.
  */
-public interface EmployeeEarnedLeaveBalance
-    extends
-    Serializable,
-    EditType<MutableEmployeeEarnedLeaveBalance>,
-    LastModifier,
-    Identifier<Long> {
+public interface EmployeeEarnedLeaveBalance extends Serializable, EditType<MutableEmployeeEarnedLeaveBalance>,
+    LastModifier, Identifier<Long> {
 
   Employee getEmployee();
 

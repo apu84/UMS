@@ -7,7 +7,6 @@ import org.ums.manager.ContentManager;
 /**
  * Created by Monjur-E-Morshed on 26-Jul-18.
  */
-public interface EmployeeEarnedLeaveBalanceManager
-    extends
+public interface EmployeeEarnedLeaveBalanceManager extends
     ContentManager<EmployeeEarnedLeaveBalance, MutableEmployeeEarnedLeaveBalance, Long> {
 }

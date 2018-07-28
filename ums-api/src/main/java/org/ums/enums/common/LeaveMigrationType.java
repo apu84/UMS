@@ -9,7 +9,6 @@ import java.util.Map;
  */
 public enum LeaveMigrationType {
 
-
   DATA_MIGRATION(1, "DATA MIGRATION"),
   SYSTEM_GENERATED(2, "SYSTEM GENERATED"),
   LEAVE_APPLICATION(3, "LEAVE APPLICATION");
@@ -41,5 +40,5 @@ public enum LeaveMigrationType {
   public int getId() {
     return this.id;
   }
-  
+
 }

@@ -11,6 +11,5 @@ import org.ums.manager.common.EmployeeEarnedLeaveBalanceManager;
 public class EmployeeEarnedLeaveBalanceDaoDecorator
     extends
     ContentDaoDecorator<EmployeeEarnedLeaveBalance, MutableEmployeeEarnedLeaveBalance, Long, EmployeeEarnedLeaveBalanceManager>
-    implements
-    EmployeeEarnedLeaveBalanceManager {
+    implements EmployeeEarnedLeaveBalanceManager {
 }

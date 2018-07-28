@@ -128,6 +128,8 @@ module ums {
         }
         else {
           this.classRoutineService.getClassRoutineForEmployee(this.classRoutineService.selectedSemester.id, this.classRoutineService.selectedProgram.id, +this.classRoutineService.studentsYear, +this.classRoutineService.studentsSemester, this.classRoutineService.selectedTheorySection.id).then((routineData: ClassRoutine[]) => {
+            console.log("Routine data");
+            console.log(routineData);
             this.classRoutineService.routineData = [];
             this.classRoutineService.dayAndTimeMapWithRoutine = {};
             this.classRoutineService.routineData = routineData;

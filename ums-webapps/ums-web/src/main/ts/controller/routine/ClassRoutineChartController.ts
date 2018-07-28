@@ -186,7 +186,7 @@ module ums {
     public getNextStartTime(day: string, startTime: string, endTime: string): string {
       let nextStartTime: string = "";
 
-      if (this.classRoutineService.dayAndTimeMapWithRoutine[day + startTime] != null) {
+      if (this.classRoutineService.dayAndTimeMapWithRoutine[day + startTime] != undefined || this.classRoutineService.dayAndTimeMapWithRoutine[day + startTime] != null) {
         let routine: ClassRoutine[] = this.classRoutineService.dayAndTimeMapWithRoutine[day + startTime];
         nextStartTime = routine[0].endTime;
       }
@@ -256,8 +256,6 @@ module ums {
       this.classRoomService.getClassRooms().then((roomList: ClassRoom[]) => {
         this.classRoutineService.roomList = [];
         this.classRoutineService.roomList = roomList;
-        console.log("Room list");
-        console.log(this.classRoutineService.roomList);
       });
     }
 
@@ -388,8 +386,6 @@ module ums {
     public extractCourseTeacher(): ng.IPromise<CourseTeacherInterface[]> {
       let defer: ng.IDeferred<CourseTeacherInterface[]> = this.$q.defer();
       this.courseTeacherList = [];
-      console.log("Slot routine list");
-      console.log(this.classRoutineService.slotRoutineList);
       this.classRoutineService.slotRoutineList.forEach((routine: ClassRoutine) => {
         if (routine.courseTeacher != undefined && routine.courseTeacher.length != 0) {
           routine.courseTeacher.forEach((c: CourseTeacherInterface) => c.section = routine.section);
@@ -403,8 +399,6 @@ module ums {
 
     public saveRoutineData(): ng.IPromise<ClassRoutine[]> {
       let defer: ng.IDeferred<ClassRoutine[]> = this.$q.defer();
-      console.log("Slot routine list");
-      console.log(this.classRoutineService.slotRoutineList);
       this.classRoutineService.saveOrUpdateClassRoutine(this.classRoutineService.slotRoutineList).then((updatedRoutineList: ClassRoutine[]) => {
         this.classRoutineService.routineData = [];
         this.classRoutineService.routineData = updatedRoutineList;
@@ -462,7 +456,6 @@ module ums {
 
 
     public generateHeader() {
-      console.log("Generating empty routine");
       let startTime: any = {};
       startTime = moment(this.routineConfigService.routineConfig.startTime, 'hh:mm A');
       let endTime = moment(this.routineConfigService.routineConfig.endTime, 'hh:mm A');
@@ -475,8 +468,6 @@ module ums {
         this.tableHeader.push(tableHeaderTmp);
       }
 
-      console.log("table header");
-      console.log(this.tableHeader);
     }
 
   }

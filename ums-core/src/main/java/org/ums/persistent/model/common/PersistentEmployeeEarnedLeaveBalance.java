@@ -13,9 +13,7 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 26-Jul-18.
  */
-public class PersistentEmployeeEarnedLeaveBalance
-    implements
-    MutableEmployeeEarnedLeaveBalance {
+public class PersistentEmployeeEarnedLeaveBalance implements MutableEmployeeEarnedLeaveBalance {
 
   private static EmployeeManager sEmployeeManager;
   private static EmployeeEarnedLeaveBalanceManager sEmployeeEarnedLeaveBalanceManager;
@@ -40,9 +38,7 @@ public class PersistentEmployeeEarnedLeaveBalance
 
   @Override
   public Employee getEmployee() {
-    return mEmployee == null
-        ? sEmployeeManager.get(mEmployeeId)
-        : sEmployeeManager.validate(mEmployee);
+    return mEmployee == null ? sEmployeeManager.get(mEmployeeId) : sEmployeeManager.validate(mEmployee);
   }
 
   @Override
@@ -130,11 +126,9 @@ public class PersistentEmployeeEarnedLeaveBalance
     sEmployeeEarnedLeaveBalanceManager.delete(this);
   }
 
-  public PersistentEmployeeEarnedLeaveBalance() {
-  }
+  public PersistentEmployeeEarnedLeaveBalance() {}
 
-  public PersistentEmployeeEarnedLeaveBalance(
-      MutableEmployeeEarnedLeaveBalance pEmployeeEarnedLeaveBalance) {
+  public PersistentEmployeeEarnedLeaveBalance(MutableEmployeeEarnedLeaveBalance pEmployeeEarnedLeaveBalance) {
     setId(pEmployeeEarnedLeaveBalance.getId());
     setEmployee(pEmployeeEarnedLeaveBalance.getEmployee());
     setEmployeeId(pEmployeeEarnedLeaveBalance.getEmployeeId());
@@ -146,12 +140,9 @@ public class PersistentEmployeeEarnedLeaveBalance
   }
 
   static {
-    ApplicationContext applicationContext = AppContext
-        .getApplicationContext();
-    sEmployeeManager = applicationContext.getBean("employeeManager",
-        EmployeeManager.class);
-    sEmployeeEarnedLeaveBalanceManager = applicationContext.getBean(
-        "employeeEarnedLeaveBalanceManager",
-        EmployeeEarnedLeaveBalanceManager.class);
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sEmployeeManager = applicationContext.getBean("employeeManager", EmployeeManager.class);
+    sEmployeeEarnedLeaveBalanceManager =
+        applicationContext.getBean("employeeEarnedLeaveBalanceManager", EmployeeEarnedLeaveBalanceManager.class);
   }
 }

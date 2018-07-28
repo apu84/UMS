@@ -9,10 +9,14 @@ import org.ums.manager.common.EmployeeEarnedLeaveBalanceManager;
 /**
  * Created by Monjur-E-Morshed on 26-Jul-18.
  */
-public class EmployeeEarnedLeaveBalanceCache extends ContentCache<EmployeeEarnedLeaveBalance, MutableEmployeeEarnedLeaveBalance, Long, EmployeeEarnedLeaveBalanceManager> implements EmployeeEarnedLeaveBalanceManager{
+public class EmployeeEarnedLeaveBalanceCache
+    extends
+    ContentCache<EmployeeEarnedLeaveBalance, MutableEmployeeEarnedLeaveBalance, Long, EmployeeEarnedLeaveBalanceManager>
+    implements EmployeeEarnedLeaveBalanceManager {
   CacheManager<EmployeeEarnedLeaveBalance, Long> mEmployeeEarnedLeaveBalanceLongCacheManager;
 
-  public EmployeeEarnedLeaveBalanceCache(CacheManager<EmployeeEarnedLeaveBalance, Long> pEmployeeEarnedLeaveBalanceLongCacheManager) {
+  public EmployeeEarnedLeaveBalanceCache(
+      CacheManager<EmployeeEarnedLeaveBalance, Long> pEmployeeEarnedLeaveBalanceLongCacheManager) {
     mEmployeeEarnedLeaveBalanceLongCacheManager = pEmployeeEarnedLeaveBalanceLongCacheManager;
   }
 

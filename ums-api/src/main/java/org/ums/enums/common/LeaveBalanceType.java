@@ -9,7 +9,6 @@ import java.util.Map;
  */
 public enum LeaveBalanceType {
 
-
   FULL_PAY(1, "FULL PAY"),
   HALF_PAY(2, "HALF PAY");
 
@@ -40,5 +39,5 @@ public enum LeaveBalanceType {
   public int getId() {
     return this.id;
   }
-  
+
 }

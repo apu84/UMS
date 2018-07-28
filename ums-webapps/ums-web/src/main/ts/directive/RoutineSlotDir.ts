@@ -8,7 +8,9 @@ module ums{
     class RoutineSlotDirController {
         private routineList:ClassRoutine[];
         private routineSlot: RoutineSlot;
-        private template:string;
+        private template:any;
+        private colSpan:number;
+        private routine:ClassRoutine;
 
         public static $inject = ['$scope','classRoomService', 'courseService', 'appConstants', '$timeout', 'semesterService', '$q','routineConfigService'];
 
@@ -33,16 +35,16 @@ module ums{
             if(this.routineList==undefined || this.routineList.length==0)
                 this.template='';
             else{
-                this.template=`<table class='table table-bordered'>`
+                this.template=`<table class='table table-bordered' style="width: 100%;">`;
                 while(this.routineList.length>0){
-                    let routine: ClassRoutine = this.routineList.pop();
-                    let slotStartTime:any = moment(routine.startTime,'hh:mm A');
-                    let slotEndTime:any = moment(routine.endTime, 'hh:mm A');
+                    this.routine = this.routineList.pop();
+                    let slotStartTime:any = moment(this.routine.startTime,'hh:mm A');
+                    let slotEndTime:any = moment(this.routine.endTime, 'hh:mm A');
                     let diff=slotEndTime.diff(slotStartTime,'minutes');
-                    let colSpan = diff/this.routineConfigService.routineConfig.duration;
+                    this.colSpan = diff/this.routineConfigService.routineConfig.duration;
                     this.template=this.template+`<tr>`;
-                    this.template = this.template+`<td align="center" colspan='`+colSpan+`'>`;
-                    this.template = this.template+routine.course.no+" ("+routine.section+")<br>"+routine.room.roomNo;
+                    this.template = this.template+`<td align="center" colspan='`+this.colSpan+`'>`;
+                    this.template = this.template+this.routine.course.no+" ("+this.routine.section+")<br>"+this.routine.room.roomNo;
                     this.template=this.template+`</td>`;
                     this.template=this.template+`</tr>`;
 

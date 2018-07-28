@@ -12,12 +12,8 @@ import java.util.Date;
 /**
  * Created by Monjur-E-Morshed on 26-Jul-18.
  */
-public interface MutableEmployeeEarnedLeaveBalance
-    extends
-    EmployeeEarnedLeaveBalance,
-    Editable<Long>,
-    MutableIdentifier<Long>,
-    MutableLastModifier {
+public interface MutableEmployeeEarnedLeaveBalance extends EmployeeEarnedLeaveBalance, Editable<Long>,
+    MutableIdentifier<Long>, MutableLastModifier {
 
   void setEmployee(Employee pEmployee);
 
