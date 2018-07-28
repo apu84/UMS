@@ -4,9 +4,7 @@ import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.common.LmsType;
 import org.ums.domain.model.mutable.MutableLastModifier;
-import org.ums.enums.common.DurationType;
-import org.ums.enums.common.EmployeeLeaveType;
-import org.ums.enums.common.SalaryType;
+import org.ums.enums.common.*;
 
 /**
  * Created by Monjur-E-Morshed on 03-May-17.
@@ -30,4 +28,10 @@ public interface MutableLmsType extends LmsType, Editable<Integer>, MutableLastM
   void setAuthorizeRoleId(int pAuthorizeRoleId);
 
   void setSpecialAuthorizeRoleId(int pSpecialAuthorizeRoleId);
+
+  void setLeaveTypeCategory(LeaveTypeCategory pLeaveTypeCategory);
+
+  void setViewOrder(int pViewOrder);
+
+  void setVisibilityType(VisibilityType pVisibilityType);
 }

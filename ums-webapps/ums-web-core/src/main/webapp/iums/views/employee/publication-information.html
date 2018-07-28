@@ -6,6 +6,10 @@
     .panel-group .panel .panel-title {
         font-size: 15px !important;
     }
+
+    textarea {
+        resize: vertical;
+    }
 </style>
 
 <div data-ng-if="vm.showLoader" align="center">
@@ -13,6 +17,14 @@
 </div>
 
 <div data-ng-if="!vm.showLoader">
+
+  <!--  <div align="right">
+        <button type="button" data-toggle="modal" data-target="#importBibtex" title="Import from bib file"
+                class="btn btn-success btn-xs"
+                style="cursor:pointer;">Import Bibtex
+        </button>
+    </div>
+    <br/>-->
 
     <accordion close-others="true">
         <div data-ng-repeat="publication in vm.publication track by $index">
@@ -110,7 +122,7 @@
                                             id="iPublicationCountry"
                                             data-ng-model="publication.publicationCountry"
                                             data-ng-options="country.name for country in vm.countries track by country.id"
-                                            class="form-control" required>
+                                            class="form-control">
                                         <option value="">Select Country</option>
                                     </select>
                                 </div>
@@ -405,4 +417,430 @@
         </div>
     </div>
 
+</div>
+
+
+<div id="importBibtex" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
+     aria-hidden="true" class="modal fade">
+    <div class="modal-dialog modal-wide-width">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true"
+                        class="close" style="opacity: 1;margin-top: 0px;">&times
+                </button>
+                <h5 id="modal-default-label" class="modal-title">Import Bibtex</h5></div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="comment">Paste <b>(.bib)</b> content here:</label>
+                            <textarea class="form-control" rows="10" data-ng-model="vm.bibInput"
+                                      id="comment"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-success"
+                                data-ng-click="vm.parseBib()">Parse
+                        </button>
+                    </div>
+                </div>
+
+                <!--<div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-hover">
+                            <thead class="heading well">
+                            <tr>
+                                <th>Sl.</th>
+                                <th>Title</th>
+                                <th>Publication Type</th>
+                                <th>Country</th>
+                                <th>Year of Publication</th>
+                                <th>Journal/Conference Name</th>
+                                <th>ISSN</th>
+                                <th>Volume</th>
+                                <th>Issue</th>
+                                <th>Publisher Name</th>
+                                <th>Pages</th>
+                                <th>Genre</th>
+                                <th>Web Link</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="bulk in vm.parsedBib track by $index">
+                                <td>{{$index + 1}}</td>
+                                <td>{{bulk.entryTags.title}}</td>
+                                <td>{{bulk.entryType}}</td>
+                                <td></td>
+                                <td>{{bulk.entryTags.year}}</td>
+                                <td>{{bulk.entryTags.journal}}</td>
+                                <td>{{bulk.entryTags.issn}}</td>
+                                <td>{{bulk.entryTags.volume}}</td>
+                                <td>{{bulk.entryTags.pages}}</td>
+                                <td></td>
+                                <td>{{bulk.entryTags.pages}}</td>
+                                <td></td>
+                                <td>{{bulk.entryTags.url}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>-->
+
+                <div class="row">
+                    <div data-ng-if="vm.showLoaderWhileBibParsing" align="center">
+                        <div data-spinner=""></div>
+                    </div>
+                    <div data-ng-if="!vm.showLoaderWhileBibParsing">
+                        <br/>
+                        <div class="col-md-12">
+                            <div data-ng-repeat="bulk in vm.bulkPublication track by $index">
+                                <table class="table table-bordered table-hover">
+                                    <tr class="well">
+                                        <th width="30%">Sl.</th>
+                                        <td width="70%">{{$index + 1}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">
+                                            <label class="control-label">Title<span
+                                                    data-ng-show="vm.editMode[$index]"
+                                                    class='require'>*</span></label>
+                                        </th>
+                                        <td width="70%">
+                                            <div data-ng-show="vm.editMode[$index]">
+                                                <input type="text"
+                                                       name="nBibPublicationTitle"
+                                                       id="iBibPublicationTitle"
+                                                       data-ng-model="bulk.publicationTitle"
+                                                       placeholder="Publication Title"
+                                                       maxlength="250"
+                                                       class="form-control" required>
+                                            </div>
+                                            <div data-ng-show="!vm.editMode[$index]">
+                                                <label class="control-label">{{bulk.publicationTitle}}</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th width="30%">
+                                            <label class="control-label">Publication Type<span
+                                                    data-ng-show="vm.editMode[$index]"
+                                                    class='require'>*</span></label>
+                                        </th>
+                                        <td width="70%">
+                                            <div data-ng-show="vm.editMode[$index]">
+
+                                                <select name="nBibPublicationType"
+                                                        id="iBibPublicationType"
+                                                        data-ng-model="bulk.publicationType"
+                                                        data-ng-options="publicationType.name for publicationType in vm.publicationTypes track by publicationType.id"
+                                                        class="form-control" required>
+                                                    <option value="">Select Publication Type</option>
+                                                </select>
+                                            </div>
+                                            <div data-ng-show="!vm.editMode[$index]">
+
+                                                <label class="control-label">{{bulk.publicationType.name}}</label>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th width="30%">
+                                            <label class="control-label">Country<span
+                                                    data-ng-show="vm.editMode[$index]"
+                                                    class='require'>*</span></label>
+                                        </th>
+                                        <td width="70%">
+                                            <div data-ng-show="vm.editMode[$index]">
+
+                                                <select name="nBibPublicationCountry"
+                                                        id="iBibPublicationCountry"
+                                                        data-ng-model="bulk.publicationCountry"
+                                                        data-ng-options="country.name for country in vm.countries track by country.id"
+                                                        class="form-control">
+                                                    <option value="">Select Country</option>
+                                                </select>
+                                            </div>
+
+                                            <div data-ng-show="!vm.editMode[$index]">
+
+                                                <label class="control-label">{{bulk.publicationCountry.name}}</label>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th width="30%">
+                                            <label class="control-label">Year of
+                                                Publication<span
+                                                        data-ng-show="vm.editMode[$index]"
+                                                        class='require'>*</span></label>
+                                        </th>
+                                        <td width="70%">
+                                            <div data-ng-show="vm.editMode[$index]">
+
+                                                <input type="number"
+                                                       name="nBibBibDateOfPublication"
+                                                       id="iBibBibDateOfPublication"
+                                                       data-ng-model="bulk.dateOfPublication"
+                                                       maxlength="4"
+                                                       class="datepicker-default form-control" required>
+                                            </div>
+
+                                            <div data-ng-show="!vm.editMode[$index]">
+
+                                                <label class="control-label">{{bulk.dateOfPublication}}</label>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th width="30%">
+                                            <label class="control-label" for="iPublicationJournalName">Journal/Conference
+                                                Name<span
+                                                        ng-show="bulk.publicationType.id==1 || bulk.publicationType.id==2"><span
+                                                        class='require'>*</span></span>
+                                            </label>
+                                        </th>
+                                        <td width="70%">
+                                            <div data-ng-show="vm.editMode[$index]">
+                                                <input type="text"
+                                                       name="nBibPublicationJournalName"
+                                                       id="iBibPublicationJournalName"
+                                                       data-ng-model="publication.publicationJournalName"
+                                                       placeholder="Journal Name"
+                                                       maxlength="250"
+                                                       class="form-control"
+                                                       ng-required="publication.publicationType.id==1 || publication.publicationType.id==2">
+                                            </div>
+                                            <div data-ng-show="!vm.editMode[$index]">
+
+                                                <label class="control-label">{{bulk.publicationJournalName}}</label>
+
+                                            </div>
+                                        </td>
+
+                                    </tr>
+
+                                    <tr>
+                                        <th width="30%">
+                                            <label class="control-label">ISSN<span
+                                                    data-ng-show="vm.editMode[$index]"
+                                                    class='require'>*</span></label>
+                                        </th>
+                                        <td width="70%">
+                                            <div data-ng-show="vm.editMode[$index]">
+                                                <input type="text"
+                                                       name="nBibPublicationISSN"
+                                                       id="iBibPublicationISSN"
+                                                       data-ng-model="bulk.publicationISSN"
+                                                       placeholder="ISSN No."
+                                                       maxlength="80"
+                                                       class="form-control">
+                                            </div>
+
+                                            <div data-ng-show="!vm.editMode[$index]">
+
+                                                <label class="control-label">{{bulk.publicationISSN}}</label>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th width="30%"><label class="control-label">Volume<span
+                                                data-ng-show="vm.editMode[$index]"
+                                                class='require'>*</span></label>
+                                        </th>
+                                        <td width="70%">
+                                            <div data-ng-show="vm.editMode[$index]">
+                                                <input type="text"
+                                                       name="nBibPublicationVolume"
+                                                       id="iBibPublicationVolume"
+                                                       data-ng-model="bulk.publicationVolume"
+                                                       placeholder="Volume"
+                                                       maxlength="80"
+                                                       class="form-control">
+                                            </div>
+
+                                            <div data-ng-show="!vm.editMode[$index]">
+
+                                                <label class="control-label">{{bulk.publicationVolume}}</label>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th width="30%">
+                                            <label class="control-label">Issue<span
+                                                    data-ng-show="vm.editMode[$index]"
+                                                    class='require'>*</span></label>
+                                        </th>
+                                        <td width="70%">
+                                            <div data-ng-show="vm.editMode[$index]">
+                                                <input type="text"
+                                                       name="nBibPublicationIssue"
+                                                       id="iBibPublicationIssue"
+                                                       data-ng-model="bulk.publicationIssue"
+                                                       placeholder="Issue"
+                                                       maxlength="80"
+                                                       class="form-control">
+                                            </div>
+
+                                            <div data-ng-show="!vm.editMode[$index]">
+
+                                                <label class="control-label">{{bulk.publicationIssue}}</label>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th width="30%">
+                                            <label class="control-label">Publisher Name<span
+                                                    ng-show="publication.publicationType.id==1 || publication.publicationType.id==3"><span
+                                                    class='require'>*</span></span></label></label>
+                                        </th>
+                                        <td width="70%">
+                                            <div data-ng-show="vm.editMode[$index]">
+                                                <input data-ng-model="bulk.publisherName"
+                                                       name="nBibPublisherName"
+                                                       id="iBibPublisherName"
+                                                       type="text"
+                                                       placeholder="Publisher Name"
+                                                       maxlength="100"
+                                                       ng-required="bulk.publicationType.id==1 || bulk.publicationType.id==3"
+                                                       class="form-control">
+                                            </div>
+                                            <div data-ng-show="!vm.editMode[$index]">
+
+                                                <label class="control-label">{{bulk.publisherName}}</label>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th width="30%">
+                                            <label class="control-label">Pages</label>
+
+                                        </th>
+                                        <td width="70%">
+                                            <div data-ng-show="vm.editMode[$index]">
+                                                <input type="text"
+                                                       name="nBibPublicationPage"
+                                                       id="iBibPublicationPage"
+                                                       data-ng-model="bulk.publicationPages"
+                                                       placeholder="Page"
+                                                       maxlength="80"
+                                                       class="form-control">
+                                            </div>
+                                            <div data-ng-show="!vm.editMode[$index]">
+
+                                                <label class="control-label">{{bulk.publicationPages}}</label>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th width="30%"><label class="control-label"
+                                        >Genre</label>
+                                        </th>
+
+                                        <td width="70%">
+                                            <div data-ng-show="vm.editMode[$index]">
+                                                <input type="text"
+                                                       name="nBibPublicationInterestGenre"
+                                                       id="iBibPublicationInterestGenre"
+                                                       data-ng-model="bulk.publicationInterestGenre"
+                                                       placeholder="Genre"
+                                                       maxlength="100"
+                                                       class="form-control">
+                                            </div>
+                                            <div data-ng-show="!vm.editMode[$index]">
+
+                                                <label class="control-label">{{bulk.publicationInterestGenre}}</label>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th width="30%"><label class="control-label"
+                                        >Web Link</label>
+                                        </th>
+                                        <td width="70%">
+                                            <div data-ng-show="vm.editMode[$index]">
+                                                <input type="url"
+                                                       name="nBibEmployeeWebLink"
+                                                       id="iBibEmployeeWebLink"
+                                                       data-ng-model="bulk.publicationWebLink"
+                                                       placeholder="Web Link"
+                                                       maxlength="100"
+                                                       class="form-control">
+                                            </div>
+                                            <div data-ng-show="!vm.editMode[$index]">
+
+                                                <label class="control-label">{{bulk.publicationWebLink}}</label>
+
+                                            </div>
+                                        </td>
+                                </table>
+                                <div data-ng-show="!vm.editMode[$index]">
+                                    <div align="right">
+                                        <button type="button" class="btn btn-blue btn-xs"
+                                                title="Edit {{$index + 1}}"
+                                                data-ng-click="vm.activeEditButtonBib($index, true)"
+                                                style="cursor:pointer;">Edit
+                                        </button>
+
+                                    </div>
+                                </div>
+                                <div data-ng-show="vm.editMode[$index]">
+
+                                    <div align="right">
+                                        <button type="button" class="btn btn-primary btn-xs"
+                                                title="Remove {{$index + 1}}"
+                                                data-ng-click="vm.deleteBib($index)"
+                                                style="cursor:pointer;">Remove
+                                        </button>
+                                        <button type="button" title="Update" class="btn btn-success btn-xs"
+                                                style="cursor:pointer;" data-ng-click="vm.updateBib($index)">Update
+                                        </button>
+                                    </div>
+                                </div>
+                                <br/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div data-ng-if="vm.showSaveButton">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div align="right">
+                                <button type="button" title="Submit" class="btn btn-success btn-xs"
+                                        style="cursor:pointer;" data-ng-click="vm.validateBibInput()">Save All
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+            </div>
+        </div>
+    </div>
 </div>

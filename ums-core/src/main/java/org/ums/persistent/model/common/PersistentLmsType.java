@@ -3,12 +3,12 @@ package org.ums.persistent.model.common;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.common.MutableLmsType;
-import org.ums.enums.common.DurationType;
-import org.ums.enums.common.EmployeeLeaveType;
-import org.ums.enums.common.SalaryType;
+import org.ums.enums.common.*;
 import org.ums.manager.common.LmsTypeManager;
 import org.ums.usermanagement.role.Role;
 import org.ums.usermanagement.role.RoleManager;
+
+import java.beans.Visibility;
 
 /**
  * Created by Monjur-E-Morshed on 03-May-17.
@@ -37,6 +37,9 @@ public class PersistentLmsType implements MutableLmsType {
   private Role mAuthorizeRole;
   private int mSpecialAuthorizeRoleId;
   private Role mSpecialAuthorizeRole;
+  private LeaveTypeCategory mLeaveTypeCategory;
+  private int mViewOrder;
+  private VisibilityType mVisibilityType;
 
   public PersistentLmsType() {
 
@@ -56,6 +59,36 @@ public class PersistentLmsType implements MutableLmsType {
     mAuthorizeRole = pPersistentLmsType.getAuthorizeRole();
     mSpecialAuthorizeRoleId = pPersistentLmsType.getSpecialAuthorizeRoleId();
     mSpecialAuthorizeRole = pPersistentLmsType.getSpecialAuthorizeRole();
+  }
+
+  @Override
+  public LeaveTypeCategory getLeaveTypeCategory() {
+    return mLeaveTypeCategory;
+  }
+
+  @Override
+  public void setLeaveTypeCategory(LeaveTypeCategory pLeaveTypeCategory) {
+    mLeaveTypeCategory = pLeaveTypeCategory;
+  }
+
+  @Override
+  public int getViewOrder() {
+    return mViewOrder;
+  }
+
+  @Override
+  public void setViewOrder(int pViewOrder) {
+    mViewOrder = pViewOrder;
+  }
+
+  @Override
+  public VisibilityType getVisibilityType() {
+    return mVisibilityType;
+  }
+
+  @Override
+  public void setVisibilityType(VisibilityType pVisibilityType) {
+    mVisibilityType = pVisibilityType;
   }
 
   @Override

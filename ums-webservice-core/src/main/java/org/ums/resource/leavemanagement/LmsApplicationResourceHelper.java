@@ -294,7 +294,10 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     for (LmsType lmsType : lmsTypes) {
       JsonObjectBuilder jsonObject = Json.createObjectBuilder();
       jsonObject.add("leaveTypeId", lmsType.getId());
+      jsonObject.add("visibility", lmsType.getVisibilityType().getId());
+      jsonObject.add("category", lmsType.getLeaveTypeCategory().getId());
       jsonObject.add("leaveName", lmsType.getName());
+      jsonObject.add("viewOrder", lmsType.getViewOrder());
       int leavesTaken = getLeavesTaken(applicationMap, lmsType);
 
       jsonObject.add("daysLeft",

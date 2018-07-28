@@ -54,6 +54,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/MaritalStatusService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/AreaOfInterestService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/AcademicDegreeService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/BibtexParserService.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/MainController.ts'/>

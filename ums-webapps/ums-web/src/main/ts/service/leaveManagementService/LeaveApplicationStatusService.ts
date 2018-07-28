@@ -3,6 +3,10 @@
  */
 module ums {
   export class LeaveApplicationStatusService {
+
+    public pendingApplications: Array<LmsApplicationStatus>;
+    public pendingApplication: LmsApplicationStatus;
+
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window'];
 
     constructor(private appConstants: any, private httpClient: HttpClient,

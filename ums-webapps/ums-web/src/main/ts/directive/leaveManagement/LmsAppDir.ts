@@ -20,8 +20,6 @@ module ums {
     public leaveApprovalStatus: IConstants;
     public leaveType: LmsType;
     public leaveApplication: LmsApplication;
-    public remainingLeaves: Array<RemainingLmsLeave>;
-    public remainingLeavesMap: any;
     public pendingApplications: Array<LmsApplicationStatus>;
     public pendingApplication: LmsApplicationStatus;
     public applicationStatusList: Array<LmsApplicationStatus>;
@@ -81,7 +79,6 @@ module ums {
 
       this.initializeDatePickers();
       this.getLeaveTypes();
-      this.getRemainingLeaves();
       this.getPendingApplications();
 
       $("#leaveType").focus();
@@ -221,16 +218,11 @@ module ums {
 
     private getTotalDuration() {
       if (this.leaveApplication.toDate != null && this.leaveApplication.fromDate != null) {
-        let fromDateParts: any = this.leaveApplication.fromDate.split('-');
-        let fromDate = new Date(fromDateParts[2], fromDateParts[1], fromDateParts[0]);
 
-        let toDateParts: any = this.leaveApplication.toDate.split('-');
-        let toDate = new Date(toDateParts[2], toDateParts[1], toDateParts[0]);
-
-        let timeDiff: any = Math.abs(toDate.getTime() - fromDate.getTime());
+        let timeDiff: any = Math.abs(this.leaveApplication.toDate.getTime() - this.leaveApplication.fromDate.getTime());
         let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
         this.leaveApplication.duration = diffDays + 1;
-        if (this.remainingLeavesMap[this.leaveType.id].daysLeftNumber < this.leaveApplication.duration) {
+        if (this.leaveApplicationService.remainingLeavesMap[this.leaveType.id].daysLeftNumber < this.leaveApplication.duration) {
           this.notify.error("Please select proper duration, you don't have " + this.leaveApplication.duration + " days left for the leave type");
         }
 
@@ -251,20 +243,7 @@ module ums {
       });
     }
 
-    private getRemainingLeaves() {
-      this.remainingLeaves = [];
-      this.remainingLeavesMap = {};
-      this.leaveApplicationService.fetchRemainingLeavesByEmployeeId(this.leaveApplicationService.employeeId).then((leaves: Array<RemainingLmsLeave>) => {
-        for (let i = 0; i < leaves.length; i++) {
-          this.remainingLeaves.push(leaves[i]);
-          this.remainingLeavesMap[leaves[i].leaveTypeId] = this.remainingLeaves[i];
-        }
-        console.log("remaining leave map");
-        console.log("Employee id: " + this.leaveApplicationService.employeeId);
-        console.log(leaves);
-        console.log(this.remainingLeavesMap);
-      });
-    }
+
 
     private save() {
       this.convertToJson(Utils.LEAVE_APPLICATION_SAVED).then((json) => {
@@ -297,7 +276,7 @@ module ums {
         if (this.leaveApplication.fromDate == null || this.leaveApplication.toDate == null || this.leaveApplication.reason == null) {
           this.notify.error("Please fill up all the fields");
         }
-        else if (this.remainingLeavesMap[this.leaveType.id].daysLeftNumber < this.leaveApplication.duration) {
+        else if (this.leaveApplicationService.remainingLeavesMap[this.leaveType.id].daysLeftNumber < this.leaveApplication.duration) {
           this.notify.error("Please select proper duration, you don't have " + this.leaveApplication.duration + " days of the leave type");
         }
         else if (foundOccurance) {
@@ -305,6 +284,8 @@ module ums {
         }
         else {
           this.convertToJson(Utils.LEAVE_APPLICATION_PENDING).then((json) => {
+            console.log("Jsonsss....");
+            console.log(json);
             this.leaveApplicationService.saveLeaveApplication(json).then((message) => {
 
               console.log("********");
@@ -328,7 +309,9 @@ module ums {
 
     private findIfThereIsAnyOvalapping(foundOccurance: boolean): ng.IPromise<any> {
       let defer = this.$q.defer();
-      this.leaveApplicationService.fetchApprovedLeavesWithDateRange(this.leaveApplication.fromDate, this.leaveApplication.toDate).then((applications: any) => {
+      let fromDate:string = moment(this.leaveApplication.fromDate).format("DD-MM-YYYY");
+      let toDate: string = moment(this.leaveApplication.toDate).format("DD-MM-YYYY");
+      this.leaveApplicationService.fetchApprovedLeavesWithDateRange(fromDate, toDate).then((applications: any) => {
         if (applications.length > 0)
           foundOccurance = true;
         else
@@ -363,9 +346,9 @@ module ums {
       this.pageNumber = currentPage;
       if (this.showHistorySection) {
         this.getAllLeaveApplicationsForHistory();
-      } else {
+      } /*else {
         this.getRemainingLeaves();
-      }
+      }*/
 
     }
 
@@ -406,6 +389,24 @@ module ums {
 
     }
 
+    public getStatusLabel(lmsAppStatus: LmsApplicationStatus): string {
+      if (lmsAppStatus.actionStatus == 1)
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i><span class=\"label label-default\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+      else if (lmsAppStatus.actionStatus == 2)
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i><span class=\"label label-primary\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+      else if (lmsAppStatus.actionStatus == 3)
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i><span class=\"label label-danger\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+      else if (lmsAppStatus.actionStatus == 4)
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i><span class=\"label label-info\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+      else if (lmsAppStatus.actionStatus == 5)
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i><span class=\"label label-danger\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+      else if (lmsAppStatus.actionStatus = 6)
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i><span class=\"label label-danger\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+      else
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i> <span class=\"label label-success\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+
+    }
+
     private convertToJson(appType: number): ng.IPromise<any> {
       let application: LmsApplication = this.leaveApplication;
       let defer = this.$q.defer();
@@ -417,8 +418,10 @@ module ums {
       item['id'] = application.id;
       item['employeeId'] = application.employeeId;
       item['typeId'] = this.leaveType.id;
-      item['fromDate'] = application.fromDate;
-      item['toDate'] = application.toDate;
+      let momentFromDate = moment(application.fromDate);
+      let momentToDate = moment(application.toDate);
+      item['fromDate'] = moment(application.fromDate).format("DD-MM-YYYY");
+      item['toDate'] = moment(application.toDate).format("DD-MM-YYYY");
       item['reason'] = application.reason;
       item['appStatus'] = appType;
       item['employeeId'] = this.leaveApplicationService.employeeId;

@@ -76,8 +76,10 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     for(int i = 0; i < pJsonArray.size(); i++) {
       MutableRoutine routine = new PersistentRoutine();
       getBuilder().build(routine, pJsonArray.getJsonObject(i), localCache);
-      if(routine.getId() == null)
+      if(routine.getId() == null) {
+        routine.setId(mIdGenerator.getNumericId());
         newRoutineList.add(routine);
+      }
       else
         updatableRoutineList.add(routine);
     }

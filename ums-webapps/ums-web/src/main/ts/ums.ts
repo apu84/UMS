@@ -26,7 +26,9 @@ module ums {
             'js/lib/angular-translate.min.js',
             'css/angular-filemanager.min.css',
             'vendors/bootstrap-datepicker/css/datepicker.css',
-            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
+            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+            'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
+            'vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
           ]
         },
         {
@@ -957,12 +959,12 @@ module ums {
 
               return $ocLazyLoad.load({
                 files: [
-
-                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                  'vendors/bootstrap-daterangepicker/daterangepicker.js'
+                  'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
+                  'vendors/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
+                  'vendors/bootstrap-timepicker/css/bootstrap-timepicker.css',
+                  'vendors/bootstrap-timepicker/js/bootstrap-timepicker.js'
                 ]
               });
             }]
@@ -979,12 +981,12 @@ module ums {
 
               return $ocLazyLoad.load({
                 files: [
-
-                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                  'vendors/bootstrap-daterangepicker/daterangepicker.js'
+                  'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
+                  'vendors/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
+                  'vendors/bootstrap-timepicker/css/bootstrap-timepicker.css',
+                  'vendors/bootstrap-timepicker/js/bootstrap-timepicker.js'
                 ]
               });
             }]
@@ -1020,11 +1022,12 @@ module ums {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
                 files: [
-                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                  'vendors/bootstrap-daterangepicker/daterangepicker.js'
+                  'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
+                  'vendors/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
+                  'vendors/bootstrap-timepicker/css/bootstrap-timepicker.css',
+                  'vendors/bootstrap-timepicker/js/bootstrap-timepicker.js'
                 ]
               });
             }]

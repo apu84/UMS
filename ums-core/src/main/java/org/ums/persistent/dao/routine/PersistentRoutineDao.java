@@ -122,7 +122,7 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   public List<Routine> getRoutine(int semesterId, int programId, int year, int semester, String section) {
     String query =
         "select * FROM CLASS_ROUTINE WHERE SEMESTER_ID=? and PROGRAM_ID=? and YEAR=? and SEMESTER=? and SECTION LIKE '"
-            + section + "%'";
+            + section + "%'  order by day,start_time , duration desc";
     return mJdbcTemplate.query(query, new Object[] {semesterId, programId, year, semester}, new RoutineRowMapper());
   }
 

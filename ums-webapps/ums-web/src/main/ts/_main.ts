@@ -22,6 +22,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/wysihtml5.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap.datepicker.d.ts'/>
 
+
 /// <reference path='../../../../ums-web-core/src/main/ts/root.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/constants.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/Utils.ts'/>
@@ -43,6 +44,7 @@
 /// <reference path='./service/holidayService/HolidayTypeService.ts'/>
 /// <reference path='./service/holidayService/HolidaysService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/EmployeeService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/BibtexParserService.ts'/>
 
 
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
@@ -74,6 +76,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/AutoComplete.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/FileInput.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/DatePicker.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/directive/UiDatePicker.ts'/>
 
 
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/Spinner.ts'/>
@@ -85,6 +88,8 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/Notification.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/ConfirmationDIalog.ts'/>
 /// <reference path='./directive/leaveManagement/LmsAppDir.ts'/>
+/// <reference path='./directive/leaveManagement/LmsRemainingLeaveDir.ts'/>
+/// <reference path='./directive/leaveManagement/LmsPendingLeaveDir.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/interceptor/Unauthorized.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/interceptor/ValidationExceptions.ts'/>
@@ -263,7 +268,10 @@
 /// <reference path='directive/SubGroupSortable.ts'/>
 /// <reference path='directive/TimeLogging.ts'/>
 /// <reference path='directive/ClassRoutineDir.ts'/>
+/// <reference path='directive/RoutineSlotDir.ts'/>
 /// <reference path='directive/date.range.picker.ts'/>
+
+
 
 /// <reference path='student/student.info.service.ts'/>
 
@@ -326,6 +334,5 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/ExperienceInformation.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/AdditionalInformation.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/ServiceInformation.ts'/>
-
 
 /// <reference path='../../../../ums-library-web/src/main/ts/types/Interfaces.ts'/>

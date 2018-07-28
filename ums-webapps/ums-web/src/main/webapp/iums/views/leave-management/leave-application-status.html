@@ -48,18 +48,14 @@
 
                     <p disabled="true"
                        class="white-space-pre">{{s.comments}}</p>
-                    <p align="right"><i> By {{s.actionTakenByName}} on {{s.appliedOn}}, Status <label
-                            class="label label-primary">
-                        {{s.actionStatusLabel}}</label> </i></p>
+                    <p ng-bind-html="vm.getStatusLabel(s)" align="right"></p>
                 </div>
                 <div data-ng-if="s.rowNumber%2!=0" style="background-color: navajowhite; padding:3%">
 
                     <p disabled="true"
                        class="white-space-pre">{{s.comments}}</p>
 
-                    <p align="right"><i> By {{s.actionTakenByName}} on {{s.appliedOn}}, Status <label
-                            class="label label-primary">
-                        {{s.actionStatusLabel}}</label> </i></p>
+                    <p ng-bind-html="vm.getStatusLabel(s)" align="right"></p>
                 </div>
 
             </a>
@@ -67,6 +63,6 @@
     </div>
 </div>
 
-<div class="col-md-4" data-ng-include="" src="'views/leave-management/remaining-leaves.html'"></div>
+<div class="col-md-4" lms-remaining-leave-dir></div>
 
 

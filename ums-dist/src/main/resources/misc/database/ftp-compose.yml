@@ -1,0 +1,18 @@
+version: '2'
+services:
+  filezilla:
+    image: fikipollo/vsftpd
+    container_name: ftp-server
+    environment:
+    - FTP_USER=iums
+    - FTP_PASS=austig100
+    - ONLY_UPLOAD=NO
+    - PASSV_ENABLE=YES
+    - PASSV_ADDRESS=127.0.0.1
+    - PASV_MIN=21200
+    - PASV_MAX=21210
+    ports:
+      - "21:21"
+      - "21200-21210:21200-21210"
+    volumes:
+      - "C:/FTP:/home"

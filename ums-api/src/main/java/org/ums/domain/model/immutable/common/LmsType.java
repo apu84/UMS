@@ -4,9 +4,7 @@ import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.mutable.common.MutableLmsType;
-import org.ums.enums.common.DurationType;
-import org.ums.enums.common.EmployeeLeaveType;
-import org.ums.enums.common.SalaryType;
+import org.ums.enums.common.*;
 import org.ums.usermanagement.role.Role;
 
 import java.io.Serializable;
@@ -37,5 +35,11 @@ public interface LmsType extends Serializable, EditType<MutableLmsType>, LastMod
   int getSpecialAuthorizeRoleId();
 
   Role getSpecialAuthorizeRole();
+
+  LeaveTypeCategory getLeaveTypeCategory();
+
+  int getViewOrder();
+
+  VisibilityType getVisibilityType();
 
 }

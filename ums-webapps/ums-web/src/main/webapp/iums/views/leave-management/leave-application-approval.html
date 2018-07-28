@@ -37,22 +37,17 @@
             </div>
 
             <div data-ng-if="vm.showStatusSection && vm.activeLeaveSection==false" class="animate-if">
-                <div class="col-md-12" align="right">
-                    <span class="label label-info" style="cursor: pointer" data-ng-click="vm.showHistory()">Applicant's History</span>
-                    <br/>
-                    <br/>
-                </div>
                 <div class="col-md-12" data-ng-include="'views/leave-management/leave-application-status.html'">
                 </div>
                 <div class="col-md-12">
                     <div class="well" align="right">
-                        <button class="btn btn-danger" data-ng-disabled="vm.disableApproveAndRejectButton"
+                        <button class="btn btn-success" data-ng-disabled="vm.disableApproveAndRejectButton"
                                 data-toggle="modal" data-target="#actionModal" data-ng-click="vm.approve()">Approve
                         </button>
                         <button class="btn btn-danger" data-ng-disabled="vm.disableApproveAndRejectButton"
                                 data-toggle="modal" data-target="#actionModal" data-ng-click="vm.reject()">Reject
                         </button>
-                        <button class="btn btn-danger" data-ng-click="vm.closeStatusSection()">Close</button>
+                        <button class="btn btn-default" data-ng-click="vm.closeStatusSection()">Close</button>
                     </div>
 
 
