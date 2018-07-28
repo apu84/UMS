@@ -305,6 +305,21 @@ public class CoreContext {
   }
 
   @Bean
+  EmployeeEarnedLeaveBalanceManager employeeEarnedLeaveBalanceManager(){
+    EmployeeEarnedLeaveBalanceCache leaveBalanceCache = new EmployeeEarnedLeaveBalanceCache(mCacheFactory.getCacheManager());
+    leaveBalanceCache.setManager(new PersistentEmployeeEarnedLeaveBalanceDao(mTemplateFactory.getJdbcTemplate(), mNamedParameterJdbcTemplateFactory.getNamedParameterJdbcTemplate(), mIdGenerator));
+    return leaveBalanceCache;
+  }
+
+  @Bean
+  EmployeeEarnedLeaveBalanceHistoryManager employeeEarnedLeaveBalanceHistoryManager(){
+    EmployeeEarnedLeaveBalanceHistoryCache leaveBalanceCache = new EmployeeEarnedLeaveBalanceHistoryCache(mCacheFactory.getCacheManager());
+    leaveBalanceCache.setManager(new PersistentEmployeeEarnedLeaveBalanceHistoryDao(mTemplateFactory.getJdbcTemplate(), mNamedParameterJdbcTemplateFactory.getNamedParameterJdbcTemplate(), mIdGenerator));
+    return leaveBalanceCache;
+  }
+
+
+  @Bean
   AttachmentManager attachmentManager() {
     AttachmentCache attachmentCache = new AttachmentCache(mCacheFactory.getCacheManager());
     attachmentCache.setManager(new PersistentAttachmentDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));

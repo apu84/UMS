@@ -144,7 +144,7 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
     String query = "select count(*) from lms_application " + " where id=:id";
     Map parameterMap = new HashMap();
     parameterMap.put("id", pId);
-    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, Integer.class) == 1 ? true : false;
+    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, Integer.class).equals(1) ? true : false;
   }
 
   @Override

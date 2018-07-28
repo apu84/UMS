@@ -13,6 +13,7 @@ import org.ums.util.UmsUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -108,7 +109,7 @@ public class PersistentEmployeeEarnedLeaveBalanceDao extends EmployeeEarnedLeave
 
 
   private Map<String, Object>[] getParameterObjects(List<MutableEmployeeEarnedLeaveBalance> pMutableEmployeeEarnedLeaveBalances){
-    Map<String, Object>[] parameterMaps = new HashBiMap[pMutableEmployeeEarnedLeaveBalances.size()];
+    Map<String, Object>[] parameterMaps = new HashMap[pMutableEmployeeEarnedLeaveBalances.size()];
     for(int i=0; i<pMutableEmployeeEarnedLeaveBalances.size(); i++){
       parameterMaps[i] = getInsertOrUpdateParameters(pMutableEmployeeEarnedLeaveBalances.get(i));
     }
@@ -116,7 +117,7 @@ public class PersistentEmployeeEarnedLeaveBalanceDao extends EmployeeEarnedLeave
   }
 
   private Map getInsertOrUpdateParameters(MutableEmployeeEarnedLeaveBalance pMutableEmployeeEarnedLeaveBalance){
-    Map parameter = new HashBiMap();
+    Map parameter = new HashMap();
     parameter.put("id", pMutableEmployeeEarnedLeaveBalance.getId());
     parameter.put("employeeId", pMutableEmployeeEarnedLeaveBalance.getEmployeeId());
     parameter.put("fullPay", pMutableEmployeeEarnedLeaveBalance.getFullPay());

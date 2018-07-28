@@ -1,6 +1,6 @@
 {
   "model": {
-    "name": "EmployeeEarnedLeaveBalance",
+    "name": "EmployeeEarnedLeaveBalanceHistory",
     "package": "org.ums.domain.model.immutable",
     "fields": [
       {
@@ -26,16 +26,22 @@
         }
       },
       {
-        "fullPay": "BigDecimal"
+        "leaveMigrationType": "LeaveMigrationType"
       },
       {
-        "halfPay":"BigDecimal"
+        "changedOn":"Date"
       },
       {
-        "createdOn":"Date"
+        "debit":"BigDecimal"
       },
       {
-        "updatedOn":"Date"
+        "credit":"BigDecimal"
+      },
+      {
+        "balance":"BigDecimal"
+      },
+      {
+        "balanceType":"LeaveBalanceType"
       }
     ]
   }
