@@ -268,7 +268,10 @@
 /// <reference path='directive/SubGroupSortable.ts'/>
 /// <reference path='directive/TimeLogging.ts'/>
 /// <reference path='directive/ClassRoutineDir.ts'/>
+/// <reference path='directive/RoutineSlotDir.ts'/>
 /// <reference path='directive/date.range.picker.ts'/>
+
+
 
 /// <reference path='student/student.info.service.ts'/>
 

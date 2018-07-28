@@ -25,5 +25,6 @@ module ums {
     optionalGroupId: string;
     optionalGroupName: string;
     type_value: number;
+    no:string;
   }
 }

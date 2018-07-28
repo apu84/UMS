@@ -84,10 +84,8 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
     pMutable.setVolume(pJsonObject.containsKey("publicationVolume") ? pJsonObject.getString("publicationVolume") : "");
     pMutable.setJournalName(pJsonObject.containsKey("publicationJournalName") ? pJsonObject
         .getString("publicationJournalName") : "");
-    pMutable
-        .setCountry(pJsonObject.containsKey("publicationCountry") ? pJsonObject.getJsonObject("publicationCountry") == null ? null
-            : mCountryManager.get(pJsonObject.getJsonObject("publicationCountry").getInt("id"))
-            : null);
+    pMutable.setCountry(pJsonObject.containsKey("publicationCountry") ? pJsonObject.isNull("publicationCountry") ? null
+        : mCountryManager.get(pJsonObject.getJsonObject("publicationCountry").getInt("id")) : null);
     pMutable.setPages(pJsonObject.containsKey("publicationPages") ? pJsonObject.getString("publicationPages") : "");
 
     pMutable.setDateOfPublication(pJsonObject.getInt("dateOfPublication"));

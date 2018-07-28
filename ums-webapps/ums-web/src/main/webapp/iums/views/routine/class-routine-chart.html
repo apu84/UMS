@@ -22,7 +22,8 @@
                        style="cursor: pointer"
                        ng-click="vm.edit(day,header)"></i>
                 </div>
-                <table class="table table-bordered">
+                <div routine-slot-dir routine-slot="vm.getDayAndTimeMapWithRoutine(day.id,header.startTime)"></div>
+                <!--<table class="table table-bordered">
                     <tr ng-repeat="routine in vm.getDayAndTimeMapWithRoutine(day.id,header.startTime)">
                         <td align="center">
                             {{routine.course.no}}({{routine.section}})<br>
@@ -30,7 +31,7 @@
                             {{vm.getCourseTeacherByCourseAndSection(routine.courseId, routine.section)}}
                         </td>
                     </tr>
-                </table>
+                </table>-->
             </td>
         </tr>
         </tbody>
