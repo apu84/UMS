@@ -109,6 +109,10 @@ module ums {
                 examTime: [
                     {id: '9:30 a.m. to 12:30 p.m', name: '9:30 a.m. to 12:30 p.m'}
                 ],
+                examType: [
+                    {id: 1, name: "Regular"},
+                    {id: 2, name: "Carry/Clearance/Improvement"}
+                ],
                 bloodGroup: [
                     {id: '', name: 'Select Blood Group'},
                     {id: 'O+', name: 'O+'},

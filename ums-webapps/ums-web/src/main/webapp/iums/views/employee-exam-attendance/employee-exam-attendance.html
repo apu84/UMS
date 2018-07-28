@@ -1,0 +1,123 @@
+<div class="row" >
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
+    </div>
+    <div class="panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select </h3>
+        </div>
+        <div class="panel-body pan">
+            <form action="" class="form-horizontal">
+                <div class="form-body pal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Semester</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="semester"
+                                    id="semester"
+                                    data-ng-options="semester.name for semester in vm.semesters track by semester.id"
+                                    data-ng-model="vm.semester"
+                                    data-ng-change="vm.semesterChanged(vm.semester)"
+                            >
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="col-md-4 control-label">Exam Type</label>
+                    <div class="col-md-8">
+                        <select
+                                class="form-control required"
+                                name="meritType"
+                                id="meritType"
+                                data-ng-options="examType.name for examType in vm.examTypeList track by examType.id"
+                                data-ng-model="vm.examType"
+                                data-ng-change="vm.changeExamType(vm.examType)"
+                        >
+                        </select>
+                    </div>
+                </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Employee Type</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="meritType"
+                                    data-ng-options="employeeType.name for employeeType in vm.employeeTypeList track by employeeType.id"
+                                    data-ng-model="vm.employeeType"
+                                    data-ng-change="vm.changeEmployeeType(vm.employeeType)"
+                            >
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Dept</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    data-ng-options="dept.name for dept in vm.deptList"
+                                    data-ng-model="vm.deptName"
+                                    data-ng-change="vm.deptChanged(vm.deptName)"
+                            ><option value="">Select All Dept./Office</option></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Exam Date</label>
+                        <div class="col-md-8">
+                            <select class="form-control" name="examDate"  data-ng-model="vm.examDate" data-ng-change="vm.ExamDateChange(vm.examDate)">
+                                <option value="">Select an Exam Date</option>
+                                <option data-ng-repeat="examRoutine in vm.examRoutineArr">{{examRoutine.examDate}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" data-ng-click="vm.search()" class="btn btn-success">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="rightDiv">
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div>Employee Attendance->
+                            Semester: <b>{{vm.semesterName}}</b>
+                            Exam Type: <b>{{vm.selectedExamTypeName}}</b>
+                            EmployeeType: <b>{{vm.semesterName}}</b>
+                            Dept: <b>{{vm.semesterName}}</b>
+                            Exam Date: <b>{{vm.selectedExamDate}}</b>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div align="right">
+                            <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.getPdfVersionReport()">
+                                <span class="glyphicon glyphicon-download"></span> Attendant
+                            </button>
+                            <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.getPdfVersionReport()">
+                                <span class="glyphicon glyphicon-download"></span> Employee
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div >
+                    <div
+                            data-ng-include="'views/employee-exam-attendance/emp-insert.html'">
+                    </div>
+                </div>
+                <!--  End of Insert -->
+                <hr>
+                <div>
+                    view
+                </div>
+                <!--  End of view -->
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
