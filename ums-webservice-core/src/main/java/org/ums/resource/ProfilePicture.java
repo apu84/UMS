@@ -59,7 +59,7 @@ public class ProfilePicture extends Resource {
   private UserManager mUserManager;
 
   @Autowired
-  private SessionFactory<FTPFile> ftpSessionFactory;
+  private SessionFactory<FTPFile> cachingSessionFactory;
 
   @GET
   @Path("/{image-id}")
@@ -128,7 +128,7 @@ public class ProfilePicture extends Resource {
     Message<File> messageA = MessageBuilder.withPayload(newFile).build();
 
     try {
-      FtpRemoteFileTemplate template = new FtpRemoteFileTemplate(ftpSessionFactory);
+      FtpRemoteFileTemplate template = new FtpRemoteFileTemplate(cachingSessionFactory);
       template.setRemoteDirectoryExpression(new LiteralExpression("files/user-photo"));
       template.setUseTemporaryFileName(false);
       template.execute(session -> {

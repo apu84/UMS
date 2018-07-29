@@ -24,6 +24,12 @@
         <property name="dataTimeout" value="${ftp.dataTimeout}"/>
     </bean>
 
+    <bean id="cachingSessionFactory" class="org.springframework.integration.file.remote.session.CachingSessionFactory">
+        <constructor-arg ref="ftpSessionFactory"/>
+        <constructor-arg value="100"/>
+        <property name="sessionWaitTimeout" value="1000"/>
+    </bean>
+
     <ftp:outbound-gateway
             session-factory="ftpSessionFactory"
             request-channel="ftpChannel"
