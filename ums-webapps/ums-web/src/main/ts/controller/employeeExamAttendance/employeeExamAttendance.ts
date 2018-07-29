@@ -33,8 +33,13 @@ module ums{
          public employeeType:IConstants;
          public employeeTypeId:number;
          public roomInCharge:boolean;
+         public empExamDate:string;
+         public empReserveDate:string;
+         public isStaffSelected:boolean;
+         public staffId:number;
+         public employeeTypeName:string;
         public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService',
-            'programService','examRoutineService','classRoomService','employeeService'];
+            'programService','examRoutineService','classRoomService','employeeService','employeeExamAttendanceService'];
 
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -47,7 +52,8 @@ module ums{
                     private programService: ProgramService,
                     private examRoutineService: ExamRoutineService,
                     private classRoomService:ClassRoomService,
-                    private employeeService:EmployeeService){
+                    private employeeService:EmployeeService,
+                    private employeeExamAttendanceService:EmployeeExamAttendanceService){
             this.examTypeList=[];
             this.examTypeList=this.appConstants.examType;
             this.examType=this.examTypeList[0];
@@ -58,7 +64,8 @@ module ums{
             this.employeeTypeList=this.appConstants.employeeTypes;
             this.employeeType=this.employeeTypeList[0];
             this.employeeTypeId=this.employeeType.id;
-            this.selectedExamTypeName=this.examType.name;
+            this.employeeTypeName=this.employeeType.name;
+            console.log("EmpTypeName: "+this.employeeTypeName);
             this.selectedExamDate="";
             this.deptList = [];
             this.deptList = this.appConstants.departmentOffice;
@@ -68,8 +75,13 @@ module ums{
             this.selectedExamTypeId=this.examType.id;
             this.selectedExamTypeName=this.examType.name
             this.roomInCharge=false;
+            this.empExamDate="";
+            this.empReserveDate="";
+            this.staffId=3;
+            this.isStaffSelected=false;
             this.getSemesters();
             this.getExamDates();
+            this.initializeDatePickers();
         }
         private search():void{
             Utils.expandRightDiv();
@@ -93,9 +105,8 @@ module ums{
          private changeEmployeeType(value:any){
              this.employeeTypeId=value.id;
              this.selectedEmployeeType=value.name;
-             this.isExamDateSelected=true;
-             console.log("EmployeeType: "+this.employeeTypeId+" "+this.selectedEmployeeType);
-
+             this.isStaffSelected=this.employeeTypeId==this.staffId?true:false;
+             console.log("EmployeeType-> "+this.employeeTypeId+" "+this.employeeTypeName);
          }
          private changeExamType(value:any){
              console.log(value.id+"  "+value.name);
@@ -168,11 +179,16 @@ module ums{
          }
          private initializeDatePickers() {
              setTimeout(function () {
-                 $('.datepicker-default').datepicker();
+                 $('.datepicker-default').datepicker({
+                     multidate: true
+                 });
                  $('.datepicker-default').on('change', function () {
-                     $('.datepicker').hide();
                  });
              }, 200);
+         }
+         private dateChanged(examDate: any) {
+             console.log("In date changed"+examDate);
+
          }
          private deptChanged(deptId:any){
              try{
@@ -184,7 +200,29 @@ module ums{
                //  this.getEmployees(this.selectedDepartmentId);
              }
          }
+         private save():void{
+             var json:any=this.convertToJson();
+             this.employeeExamAttendanceService.addEmpExamAttendanceInfo(json).then((data)=>{
+                 console.log(data);
+             });
+         }
 
+         public convertToJson(): any {
+             var completeJson = {};
+             console.log("result");
+             var jsonObj = [];
+             var item = {};
+             item["employeeId"] =this.selectedEmployeeId;
+             item["examType"] =this.selectedExamTypeId;
+             item["roomInCharge"] =this.roomInCharge==true? 1:0;
+             item["invigilatorRoomId"]=this.selectedClassRoomId==null? "0":this.selectedClassRoomId.toString();
+             item["invigilatorDate"]=this.empExamDate;
+             item["reserveDate"]=this.empReserveDate;
+             jsonObj.push(item);
+             completeJson["entries"] = jsonObj;
+             console.log(completeJson);
+             return completeJson;
+         }
     }
     UMS.controller("EmployeeExamAttendance",EmployeeExamAttendance);
 }

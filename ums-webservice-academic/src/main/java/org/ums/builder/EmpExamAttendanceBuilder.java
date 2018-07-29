@@ -62,10 +62,12 @@ public class EmpExamAttendanceBuilder implements Builder<EmpExamAttendance, Muta
     if(pReadOnly.getExamDate() != null) {
       pBuilder.add("examDate", pReadOnly.getExamDate());
     }
-    if(pReadOnly.getReserveDate() != null) {
-      pBuilder.add("examDate", pReadOnly.getReserveDate());
+    if(pReadOnly.getInvigilatorDate() != null) {
+      pBuilder.add("invigilatorDate", pReadOnly.getInvigilatorDate());
     }
-
+    if(pReadOnly.getReserveDate() != null) {
+      pBuilder.add("reserveDate", pReadOnly.getReserveDate());
+    }
   }
 
   @Override
@@ -82,8 +84,10 @@ public class EmpExamAttendanceBuilder implements Builder<EmpExamAttendance, Muta
       pMutable.setInvigilatorRoomId(Long.parseLong(pJsonObject.getString("invigilatorRoomId")));
     if(pJsonObject.containsKey("examDate"))
       pMutable.setExamDate(pJsonObject.getString("examDate"));
+    if(pJsonObject.containsKey("invigilatorDate"))
+      pMutable.setInvigilatorDate(pJsonObject.getString("invigilatorDate"));
     if(pJsonObject.containsKey("reserveDate"))
-      pMutable.setExamDate(pJsonObject.getString("reserveDate"));
+      pMutable.setReserveDate(pJsonObject.getString("reserveDate"));
     if(pJsonObject.containsKey("roomInCharge"))
       pMutable.setRoomInCharge(pJsonObject.getInt("roomInCharge"));
   }

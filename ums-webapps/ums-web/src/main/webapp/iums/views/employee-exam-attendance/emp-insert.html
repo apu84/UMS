@@ -1,6 +1,4 @@
 <div class="row ">
-    <div class="col-md-12">
-        <div class="row">
             <div class="col-md-4 form-group">
                 <select
                         class="form-control required"
@@ -31,33 +29,30 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
+
 <div class="row ">
-    <div class="col-md-12">
-        <div class="row">
             <div class="col-md-4 form-group">
-                <input type="text"
-                       class="form-control required"
-                       style="width: 70%";
-                       placeholder="Invigilation Date"
-                       data-ng-model="vm.invigilationDate"
-                />
+                <input align="center" contenteditable="editable"
+                       ng-disabled="editable"
+                       style="width:70%;text-align: center;"
+                       type="text"
+                       data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY"
+                       class="datepicker-default form-control"
+                       data-ng-model="vm.empExamDate"
+                       data-ng-change="vm.dateChanged(vm.empExamDate)">
             </div>
 
             <div class="col-md-4 form-group">
-                <input type="text"
-                       class="form-control required"
-                       style="width: 70%";
-                       placeholder="Reserve Date"
-                       data-ng-model="vm.reserveDate"
-                />
+                <input align="center" contenteditable="editable"
+                       ng-disabled="editable"
+                       style="width:70%;text-align: center;"
+                       type="text"
+                       data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY"
+                       class="datepicker-default form-control"
+                       data-ng-model="vm.empReserveDate"
+                       data-ng-change="vm.dateChanged(vm.empReserveDate)">
             </div>
         </div>
-    </div>
-</div>
-
-
     <div  align="right">
         <button type="button"
                 class="btn btn-success"
@@ -85,7 +80,7 @@
                             </tr>
                             <tr>
                                 <td width="30%"><b>{{'Faculty/Satff'}}</b></td>
-                                <td>{{vm.selectedEmployeeType}}</td>
+                                <td>{{vm.employeeTypeName}}</td>
                             </tr>
                             <tr>
                                 <td width="30%"><b>{{'Dept'}}</b></td>
@@ -93,24 +88,21 @@
                             </tr>
                             <tr>
                                 <td width="30%"><b>{{'Exam Type'}}</b></td>
-                                <td>{{vm.selectedExamTypeName}}</td>
+                                <td>{{vm.employeeTypeName}}</td>
                             </tr>
                             <tr>
-                                <td width="30%"><b>{{'Invigilation Date'}}</b></td>
-                                <td>{{vm.selectedAbsPreStatusName}}</td>
+                                <td width="30%"><b>{{'Invigilator Date'}}</b></td>
+                                <td >{{vm.empExamDate}}</td>
                             </tr>
                             <tr>
                                 <td width="30%"><b>{{'Reserve Date'}}</b></td>
-                                <td >{{vm.remarks}}</td>
+                                <td >{{vm.empReserveDate}}</td>
                             </tr>
                             <tr>
                                 <td width="30%"><b>{{'Invigilation Room'}}</b></td>
                                 <td >{{vm.selectedClassRoomNo}}</td>
                             </tr>
-                            <tr>
-                                <td width="30%"><b>{{'Exam Date'}}</b></td>
-                                <td >{{vm.selectedExamDate}}</td>
-                            </tr>
+
                             </thead>
                         </table>
                     </div>

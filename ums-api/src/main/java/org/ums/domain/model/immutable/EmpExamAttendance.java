@@ -30,6 +30,8 @@ public interface EmpExamAttendance extends Serializable, LastModifier, EditType<
 
   String getExamDate();
 
+  String getInvigilatorDate();
+
   String getReserveDate();
 
   String getEmployeeId();

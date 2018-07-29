@@ -32,6 +32,7 @@ public class PersistentEmpExamAttendance implements MutableEmpExamAttendance {
   private String mInvigilatorRoomName;
   private String mExamDate;
   private String mReserveDate;
+  private String mInvigilatorDate;
   private Integer mRoomInCharge;
 
   public PersistentEmpExamAttendance() {
@@ -48,6 +49,7 @@ public class PersistentEmpExamAttendance implements MutableEmpExamAttendance {
     mInvigilatorRoomName = pPersistentEmpExamAttendance.getInvigilatorRoomName();
     mExamDate = pPersistentEmpExamAttendance.getExamDate();
     mReserveDate = pPersistentEmpExamAttendance.getReserveDate();
+    mInvigilatorDate = pPersistentEmpExamAttendance.getInvigilatorDate();
     mRoomInCharge = pPersistentEmpExamAttendance.getRoomInCharge();
     mEmployeeId = pPersistentEmpExamAttendance.getEmployeeId();
     mEmployeeName = pPersistentEmpExamAttendance.getEmployeeName();
@@ -97,6 +99,11 @@ public class PersistentEmpExamAttendance implements MutableEmpExamAttendance {
   @Override
   public void setReserveDate(String pReserveDate) {
     mReserveDate = pReserveDate;
+  }
+
+  @Override
+  public void setInvigilatorDate(String pInvigilatorDate) {
+    mInvigilatorDate = pInvigilatorDate;
   }
 
   @Override
@@ -177,6 +184,11 @@ public class PersistentEmpExamAttendance implements MutableEmpExamAttendance {
   @Override
   public String getExamDate() {
     return mExamDate;
+  }
+
+  @Override
+  public String getInvigilatorDate() {
+    return mInvigilatorDate;
   }
 
   @Override

@@ -8,7 +8,7 @@ module ums{
         }
         public addEmpExamAttendanceInfo(json:any):ng.IPromise<any>{
             var defer = this.$q.defer();
-            console.log("Inside-Service")
+            console.log("Inside-Service-add-info")
             console.log(json);
             this.httpClient.post("academic/empExamAttendance/addRecords",json,'application/json')
                 .success(()=>{
