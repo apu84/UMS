@@ -8,7 +8,8 @@ public enum EmploymentPeriod {
   CONTRACTUAL(1, "Contractual"),
   PROBATION(2, "Probation"),
   PERMANENT(3, "Permanent"),
-  CONTRACT(4, "Contract");
+  CONTRACT(4, "Contract"),
+  ADD_HOC(5, "Add-Hoc");
 
   private int id;
   private String label;

@@ -915,7 +915,8 @@ module ums {
                     {id: 1, name: "Contractual"},
                     {id: 2, name: "Probation"},
                     {id: 3, name: "Permanent"},
-                    {id: 4, name: "Contract"}
+                    {id: 4, name: "Contract"},
+                    {id: 5, name: "Add-Hoc"}
                 ],
                 meetingTypes: [
                     {id: 10, name: "Board Of Trustees Meeting"},
