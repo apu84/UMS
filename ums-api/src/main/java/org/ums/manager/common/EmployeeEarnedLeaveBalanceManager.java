@@ -9,4 +9,5 @@ import org.ums.manager.ContentManager;
  */
 public interface EmployeeEarnedLeaveBalanceManager extends
     ContentManager<EmployeeEarnedLeaveBalance, MutableEmployeeEarnedLeaveBalance, Long> {
+  EmployeeEarnedLeaveBalance getEarnedLeaveBalance(String pEmployeeId);
 }

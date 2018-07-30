@@ -12,4 +12,8 @@ public class EmployeeEarnedLeaveBalanceDaoDecorator
     extends
     ContentDaoDecorator<EmployeeEarnedLeaveBalance, MutableEmployeeEarnedLeaveBalance, Long, EmployeeEarnedLeaveBalanceManager>
     implements EmployeeEarnedLeaveBalanceManager {
+  @Override
+  public EmployeeEarnedLeaveBalance getEarnedLeaveBalance(String pEmployeeId) {
+    return getManager().getEarnedLeaveBalance(pEmployeeId);
+  }
 }

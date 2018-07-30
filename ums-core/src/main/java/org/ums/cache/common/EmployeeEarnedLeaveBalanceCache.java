@@ -24,4 +24,9 @@ public class EmployeeEarnedLeaveBalanceCache
   protected CacheManager<EmployeeEarnedLeaveBalance, Long> getCacheManager() {
     return mEmployeeEarnedLeaveBalanceLongCacheManager;
   }
+
+  @Override
+  public EmployeeEarnedLeaveBalance getEarnedLeaveBalance(String pEmployeeId) {
+    return getManager().getEarnedLeaveBalance(pEmployeeId);
+  }
 }

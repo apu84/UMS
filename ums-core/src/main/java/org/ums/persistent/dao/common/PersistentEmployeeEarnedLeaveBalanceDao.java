@@ -53,6 +53,12 @@ public class PersistentEmployeeEarnedLeaveBalanceDao extends EmployeeEarnedLeave
   }
 
   @Override
+  public EmployeeEarnedLeaveBalance getEarnedLeaveBalance(String pEmployeeId) {
+    String query = SELECT_ALL + " WHERE EMPLOYEE_ID=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pEmployeeId}, new EmployeeEarnedLeaveBalanceRowMapper());
+  }
+
+  @Override
   public EmployeeEarnedLeaveBalance validate(EmployeeEarnedLeaveBalance pReadonly) {
     return get(pReadonly.getId());
   }
