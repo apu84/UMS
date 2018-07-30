@@ -41,6 +41,7 @@ module ums {
     public showApplicationSection: boolean;
     public fromPendingApplicationSection: boolean;
     public fromHistorySection: boolean;
+    public showRemainingLeaves:boolean;
 
 
     public static $inject = ['appConstants', '$scope', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'userService', 'attachmentService'];
@@ -68,6 +69,7 @@ module ums {
       this.fromHistorySection = false;
       this.fromPendingApplicationSection = true;
       this.showApplicationSection = true;
+      this.showRemainingLeaves = false;
       this.data = {};
       this.data.totalLeaveDurationInDays = 0;
       this.pageNumber = 1;
@@ -246,6 +248,7 @@ module ums {
 
 
     private save() {
+      this.showRemainingLeaves = false;
       this.convertToJson(Utils.LEAVE_APPLICATION_SAVED).then((json) => {
         this.leaveApplicationService.saveLeaveApplication(json).then((message) => {
 
@@ -255,6 +258,7 @@ module ums {
             this.data.totalLeaveDurationInDays = 0;
           }
 
+          this.showRemainingLeaves = true;
         });
       });
     }
@@ -329,6 +333,7 @@ module ums {
       this.showApplicationSection = false;
       this.pendingApplication = pendingApplication;
       this.applicationStatusList = [];
+      this.showRemainingLeaves=false;
 
       this.attachmentService.fetchAttachments(Utils.APPLICATION_TYPE_LEAVE.toString(), pendingApplication.appId).then((attachments) => {
         this.fileAttachments = [];
@@ -337,6 +342,7 @@ module ums {
 
       this.leaveApplicationStatusService.fetchApplicationStatus(pendingApplication.appId).then((statusList: Array<LmsApplicationStatus>) => {
         this.applicationStatusList = statusList;
+        this.showRemainingLeaves = true;
       });
     }
 

@@ -304,12 +304,14 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
       int leavesTaken = getLeavesTaken(applicationMap, lmsType);
 
       if(lmsType.getId().equals(LeaveCategories.EARNED_LEAVE_ON_FULL_PAY.getId())){
-        jsonObject.add("daysLeft", employeeEarnedLeaveBalance.getFullPay().toString());
-        jsonObject.add("daysLeftNumber", employeeEarnedLeaveBalance.getFullPay()+" Day/s");
+        String dayStr = employeeEarnedLeaveBalance.getFullPay().equals(0) || employeeEarnedLeaveBalance.getFullPay().equals(1)?" Day":" Days";
+        jsonObject.add("daysLeft", employeeEarnedLeaveBalance.getFullPay().toString()+dayStr);
+        jsonObject.add("daysLeftNumber", employeeEarnedLeaveBalance.getFullPay());
       }
       else if(lmsType.getId().equals(LeaveCategories.EARNED_LEAVE_ON_HALF_PAY.getId())){
-        jsonObject.add("daysLeft", employeeEarnedLeaveBalance.getHalfPay().toString());
-        jsonObject.add("daysLeftNumber", employeeEarnedLeaveBalance.getHalfPay()+" Day/s");
+        String dayStr = employeeEarnedLeaveBalance.getHalfPay().equals(0) || employeeEarnedLeaveBalance.getHalfPay().equals(1)?" Day":" Days";
+        jsonObject.add("daysLeft", employeeEarnedLeaveBalance.getHalfPay().toString()+dayStr);
+        jsonObject.add("daysLeftNumber", employeeEarnedLeaveBalance.getHalfPay());
       }
       else{
         jsonObject.add("daysLeft",
