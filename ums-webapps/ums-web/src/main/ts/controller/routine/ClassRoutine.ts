@@ -132,6 +132,10 @@ module ums {
             console.log(routineData);
             this.classRoutineService.routineData = [];
             this.classRoutineService.dayAndTimeMapWithRoutine = {};
+            routineData.forEach((r:ClassRoutine)=>{
+              r.startTimeObj = moment(r.startTime, "hh:mm A").toDate();
+              r.endTimeObj = moment(r.endTime, "hh:mm A").toDate();
+            })
             this.classRoutineService.routineData = routineData;
             defer.resolve(routineData);
           });

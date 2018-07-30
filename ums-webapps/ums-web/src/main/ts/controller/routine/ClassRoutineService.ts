@@ -30,6 +30,8 @@ module ums{
     academicSemester: number;
     startTime: string;
     endTime: string;
+    startTimeObj: Date;
+    endTimeObj: Date;
     duration: string;
     room: ClassRoom;
     roomId: string;

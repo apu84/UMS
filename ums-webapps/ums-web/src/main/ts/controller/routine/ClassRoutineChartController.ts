@@ -92,7 +92,6 @@ module ums {
           routineSlot.day = routine.day;
           routineSlot.routineList = [];
           routineSlot.routineList.push(routine);
-          console.log(routine);
           this.classRoutineService.groupList.push(routine.slotGroup);
           this.classRoutineService.groupMapWithRoutineSlot[routine.slotGroup] = routineSlot;
         }else{
@@ -187,7 +186,7 @@ module ums {
     public getNextStartTime(day: string, startTime: string, endTime: string): string {
       let nextStartTime: string = "";
 
-      if (this.classRoutineService.dayAndTimeMapWithRoutine[day + startTime] != undefined || this.classRoutineService.dayAndTimeMapWithRoutine[day + startTime] != null) {
+      if (this.classRoutineService.dayAndTimeMapWithRoutine[day + startTime] != undefined && this.classRoutineService.dayAndTimeMapWithRoutine[day + startTime].length!=0 ) {
         let routine: ClassRoutine[] = this.classRoutineService.dayAndTimeMapWithRoutine[day + startTime];
         nextStartTime = routine[0].endTime;
       }
@@ -309,7 +308,9 @@ module ums {
       this.showProgressBar = true;
       this.progress = 0;
 
-      this.assignSectionsForSessionalCourse().then((routine: ClassRoutine[]) => {
+      this.assignSectionsForSessionalCourseAndConvertTime().then((routine: ClassRoutine[]) => {
+
+
         this.progress = 10;
         this.saveRoutineData().then((updatedRoutineList: ClassRoutine[]) => {
           this.classRoutineService.routineData = [];
@@ -408,12 +409,17 @@ module ums {
       return defer.promise;
     }
 
-    private assignSectionsForSessionalCourse(): ng.IPromise<ClassRoutine[]> {
+    private assignSectionsForSessionalCourseAndConvertTime(): ng.IPromise<ClassRoutine[]> {
+
       let defer: ng.IDeferred<ClassRoutine[]> = this.$q.defer();
       this.classRoutineService.slotRoutineList.forEach((r: ClassRoutine) => {
         if (r.course.type_value == CourseType.sessional) {
           r.section = r.sessionalSection.id;
         }
+          if(r.startTimeObj)
+              r.startTime = moment(r.startTimeObj).format("hh:mm A");
+          if(r.endTimeObj)
+              r.endTime = moment(r.endTimeObj).format("hh:mm A");
       });
       defer.resolve(this.classRoutineService.slotRoutineList);
       return defer.promise;

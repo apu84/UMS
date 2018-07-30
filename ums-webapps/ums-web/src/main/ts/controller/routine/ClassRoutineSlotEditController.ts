@@ -1,5 +1,7 @@
 module ums {
-  export class ClassRoutineSlotEditController {
+  import ClassRoutine = ums.ClassRoutine;
+
+    export class ClassRoutineSlotEditController {
 
 
     private selectedCourse: Course;
@@ -46,6 +48,14 @@ module ums {
         slotRoutine.slotGroup = this.slotGroupNo;
         slotRoutine = this.initialzeRoutine(slotRoutine);
         this.classRoutineService.slotRoutineList.push(slotRoutine);
+      }else{
+        console.log("Existing slot");
+        console.log(this.classRoutineService.slotRoutineList);
+        this.classRoutineService.slotRoutineList.forEach((c:ClassRoutine)=>{
+          c.startTimeObj = moment(c.startTime,"hh:mm A").toDate();
+          c.endTimeObj = moment(c.endTime,'hh:mm A').toDate();
+          this.slotGroupNo = c.slotGroup;
+        });
       }
       this.setSessionalSection().then((sectionList: any) => {
         this.assignSectionsToSessionalCourses();
@@ -81,15 +91,16 @@ module ums {
     public courseSelected(slotRoutine: ClassRoutine) {
       this.selectedCourse = slotRoutine.course;
       let startTime: any = {};
-      startTime = moment(slotRoutine.startTime, 'hh:mm A');
+      startTime = moment(this.classRoutineService.selectedHeader.startTime,"hh:mm A");
+      slotRoutine.startTimeObj = moment(startTime).toDate();
       if (slotRoutine.course.type_value == this.SESSIONAL_TYPE) {
         let endTime: any = moment(startTime).add(this.routineConfigService.routineConfig.duration * 3, 'm').toDate();
-        slotRoutine.endTime = moment(endTime).format('hh:mm A');
+        slotRoutine.endTimeObj = moment(endTime).toDate();
         slotRoutine.sessionalSection = this.sectionList[0];
         slotRoutine.duration = (this.routineConfigService.routineConfig.duration * 3).toString();
       } else {
         let endTime: any = moment(startTime).add(this.routineConfigService.routineConfig.duration, 'm').toDate();
-        slotRoutine.endTime = moment(endTime).format('hh:mm A');
+        slotRoutine.endTimeObj = moment(endTime).toDate();
         slotRoutine.duration = this.routineConfigService.routineConfig.duration.toString();
       }
       slotRoutine.courseId = slotRoutine.course.id;
@@ -260,9 +271,9 @@ module ums {
       if (classRoutine.course.type_value == Utils.COURSE_TYPE_SESSIONAL)
         duration = duration * 3;
       let startTime: any = {};
-      startTime = moment(classRoutine.startTime, 'hh:mm A');
+      startTime = moment(classRoutine.startTimeObj);
       let endTime: any = moment(startTime).add(duration, 'm').toDate();
-      classRoutine.endTime = moment(endTime).format('hh:mm A');
+      classRoutine.endTimeObj = moment(endTime).toDate();
     }
   }
 
