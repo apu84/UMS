@@ -22,6 +22,7 @@
                    class="form-control required"
                    id="resultsPerPage"
                    data-ng-model="vm.itemsPerPage"
+                   ng-disabled="true"
                    data-ng-change="vm.setResultsPerPage(vm.itemsPerPage)"
             />
         </div>
@@ -32,5 +33,5 @@
 <br/>
 <div class="col-md-12">
     <div class="col-md-12" data-ng-include=""
-         src="'views/leave-management/pending-leave-application.html'"></div>
+         src="'views/leave-management/pending-leave-application.html'" ></div>
 </div>

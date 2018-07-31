@@ -163,7 +163,7 @@ module ums {
 
 
     private setResultsPerPage(itemPerPage: number) {
-      if (itemPerPage > 0 && itemPerPage != null) {
+      if (itemPerPage!=undefined && itemPerPage > 0 && itemPerPage != null) {
         this.itemsPerPage = itemPerPage;
         this.getAllLeaveApplicationsForHistory();
       }

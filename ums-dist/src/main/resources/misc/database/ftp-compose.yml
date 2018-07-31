@@ -15,4 +15,5 @@ services:
       - "21:21"
       - "21200-21210:21200-21210"
     volumes:
-      - "C:/FTP:/home"
+      - "C:/Users/monju/Music/ftp:/home"
+      - "C:/Users/monju/Music/ftp/etc/vsftpd:/etc/vsftpd"

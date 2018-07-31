@@ -67,7 +67,7 @@ module ums {
                 private userService: UserService,
                 private commonservice: CommonService, private attachmentService: AttachmentService) {
 
-      this.resultsPerPage = "3";
+      this.resultsPerPage = "15";
       this.showApprovalSection = true;
       this.backgroundColor = "white";
       this.showHistorySection = false;
@@ -317,8 +317,10 @@ module ums {
 
     }
 
-    private setResultsPerPage(resultsPerPage: number) {
-      if (resultsPerPage >= 1) {
+    private setResultsPerPage(resultsPerPage: any) {
+      console.log("Results per page");
+      console.log(resultsPerPage);
+      if (isNaN(resultsPerPage) && resultsPerPage >= 1) {
         this.itemsPerPage = resultsPerPage;
         if (this.showHistorySection) {
           this.getAllLeaveApplicationsForHistory();
@@ -358,18 +360,19 @@ module ums {
       });
     }
 
-    private setCurrent(currentPage: number) {
+    private setCurrent(currentPage: any) {
       console.log("In set current");
       this.pagination.currentPage = currentPage;
       this.pendingApplications = [];
-      if (this.showHistorySection) {
-        this.getAllLeaveApplicationsForHistory();
-      } else {
-        this.leaveApplicationStatusService.fetchLeaveApplicationsWithPagination(this.leaveApprovalStatus.id, currentPage, this.itemsPerPage).then((apps) => {
-          this.pendingApplications = apps.statusList;
-          this.totalItems = apps.totalSize;
-        });
-      }
+        if (this.showHistorySection) {
+          this.getAllLeaveApplicationsForHistory();
+        } else {
+          this.leaveApplicationStatusService.fetchLeaveApplicationsWithPagination(this.leaveApprovalStatus.id, currentPage, this.itemsPerPage).then((apps) => {
+            this.pendingApplications = apps.statusList;
+            this.totalItems = apps.totalSize;
+          });
+        }
+
     }
 
     private fetchApplicationStatus(pendingApplication: LmsApplicationStatus, currentPage: number) {
