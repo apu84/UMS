@@ -3,6 +3,7 @@ package org.ums.resource.leavemanagement;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.common.LmsAppStatus;
@@ -16,6 +17,7 @@ import org.ums.manager.common.LmsAppStatusManager;
 import org.ums.manager.common.LmsApplicationManager;
 import org.ums.persistent.model.common.PersistentLmsAppStatus;
 import org.ums.resource.ResourceHelper;
+import org.ums.services.leave.management.EarnedLeaveManagementService;
 import org.ums.services.leave.management.LeaveManagementService;
 import org.ums.usermanagement.permission.AdditionalRolePermissions;
 import org.ums.usermanagement.permission.AdditionalRolePermissionsManager;
@@ -61,7 +63,11 @@ public class LmsAppStatusResourceHelper extends ResourceHelper<LmsAppStatus, Mut
   @Autowired
   AdditionalRolePermissionsManager mAdditionalRolePermissionsManager;
 
+  @Autowired
+  EarnedLeaveManagementService mEarnedLeaveManagementService;
+
   @Override
+  @Transactional
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     JsonArray entries = pJsonObject.getJsonArray("entries");
     LocalCache localCache = new LocalCache();
@@ -76,6 +82,12 @@ public class LmsAppStatusResourceHelper extends ResourceHelper<LmsAppStatus, Mut
     LmsAppStatus latestStatusOfTheApplication = mLmsAppStatusManager.getLatestStatusOfTheApplication(lmsAppStatus.getLmsApplication().getId());
     mLeaveManagementService.setApplicationStatus(lmsAppStatus, user, additionalRoleIds, approvalStatus, latestStatusOfTheApplication);
     getContentManager().create(lmsAppStatus);
+
+    if((lmsAppStatus.getLmsApplication().getLmsType().getId().equals(LeaveCategories.EARNED_LEAVE_ON_FULL_PAY.getId()) ||
+        lmsAppStatus.getLmsApplication().getLmsType().getId().equals(LeaveCategories.EARNED_LEAVE_ON_HALF_PAY.getId())) &&
+        lmsAppStatus.getActionStatus().equals(LeaveApplicationApprovalStatus.APPLICATION_APPROVED)){
+      mEarnedLeaveManagementService.updatedEarnedLeave(lmsAppStatus);
+    }
 
     URI contextURI = null;
     Response.ResponseBuilder builder = Response.created(contextURI);
