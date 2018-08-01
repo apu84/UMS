@@ -29,16 +29,20 @@ module ums{
                     private $q: ng.IQService,
                     private routineConfigService: RoutineConfigService) {
 
-            if($scope.routineSlot!=undefined)
-             this.routineList = $scope.routineSlot.routineList;
-            this.routineSlot = $scope.routineSlot;
-            this.createSlot()
 
-            console.log("Hello, Form routine slot directive");
+            this.initialize();
+        }
+
+        private initialize(){
+            if(this.$scope.routineSlot!=undefined){
+                this.routineList = angular.copy(this.$scope.routineSlot.routineList);
+                this.routineSlot = angular.copy(this.$scope.routineSlot);
+            }
+
+            this.createSlot();
         }
 
         public getColSpan(routine:ClassRoutine):string{
-          console.log("Called");
           let slotStartTime:any = moment(routine.startTime,'hh:mm A');
           let slotEndTime:any = moment(routine.endTime, 'hh:mm A');
           let diff=slotEndTime.diff(slotStartTime,'minutes');
@@ -50,42 +54,32 @@ module ums{
             if(this.routineList==undefined || this.routineList.length==0)
                 this.template='';
             else{
-              console.log("Routine list from directive");
-              console.log(this.routineList);
               this.template=`<table class='table table-bordered' style="width: 100%;">`;
               this.template=this.template+`<tr>`;
               let groupStartTime:any = moment(this.routineSlot.startTime,'hh:mm A');
               let groupEndTime: any = moment(this.routineSlot.endTime, 'hh:mm A');
               let iterationLength:number = (groupEndTime.diff(groupStartTime, 'minutes'))/this.routineConfigService.routineConfig.duration;
-              console.log("Iteration length: "+iterationLength);
               let iterationStartTime: string = angular.copy(this.routineSlot.startTime);
-              console.log("Iteration start time: "+iterationStartTime);
               this.routineRows = [];
               while(this.routineList.length>0){
-                console.log("11111111111111111111");
                 let routineRow: IRoutineRow = <IRoutineRow>{};
                 routineRow.routineList=[];
 
                 for (var i=0; i<iterationLength; i++){
                   if (this.routineList.length<=0)
                     break;
-                  console.log("Iteration start time: "+iterationStartTime);
                   this.routine = angular.copy(this.routineList.shift());
                   let slotStartTime:any = moment(this.routine.startTime,'hh:mm A');
                   let breakCondition:boolean = false;
                   if (iterationStartTime===this.routine.startTime){
                     routineRow.routineList.push(angular.copy(this.routine));
-                    console.log("OOOOOOOO");
                     let slotEndTime:any = moment(this.routine.endTime, 'hh:mm A');
                     let diff=slotEndTime.diff(slotStartTime,'minutes');
                     this.colSpan = diff/this.routineConfigService.routineConfig.duration;
-                    console.log("colspan: "+this.colSpan);
                     this.template = this.template+'<td align="center" colspan="'+this.colSpan.toString()+'">';
                     this.template = this.template+this.routine.course.no+" ("+this.routine.section+")<br>"+this.routine.room.roomNo;
                     this.template=this.template+`</td>`;
                     if (this.routine.endTime==this.routineSlot.endTime){
-                      console.log("Matched end time");
-                      console.log("Routine slot end time: "+this.routineSlot.endTime);
                       iterationStartTime = angular.copy( this.routineSlot.startTime);
                       this.template = this.template+'</tr>';
                       breakCondition = true;

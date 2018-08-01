@@ -82,7 +82,7 @@ module ums{
     public dayAndTimeMapWithRoutine: { [key: string]: ClassRoutine[] }; // map[day+startTime] = ClassRoutine[];
     public dayAndTimeMapWithGroup:{[key:string]:number};
     public dayAndTimeMapWithRoutineSlot: {[key:string]: RoutineSlot};
-    public groupMapWithRoutineSlot: {[key:string]:RoutineSlot};
+    public groupMapWithRoutineSlot: {[key:number]:RoutineSlot};
     public groupList: number[];
     public courseTeacherMap: { [key: string]: CourseTeacherInterface[] }; // map[courseId]= CourseTeacher[];
     public courseTeacherWithSectionMap: { [key: string]: CourseTeacherInterface[] }; // map[courseId+section]= CourseTeacher[];

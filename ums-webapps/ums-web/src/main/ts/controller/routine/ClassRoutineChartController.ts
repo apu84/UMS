@@ -72,8 +72,9 @@ module ums {
           this.classRoutineService.groupList.forEach((g:number)=>{
             let routineSlot = this.classRoutineService.groupMapWithRoutineSlot[g];
             this.classRoutineService.dayAndTimeMapWithGroup[routineSlot.day+routineSlot.startTime]=g;
-            this.classRoutineService.dayAndTimeMapWithRoutine[routineSlot.day+routineSlot.startTime] = routineSlot.routineList;
+            //this.classRoutineService.dayAndTimeMapWithRoutine[routineSlot.day+routineSlot.startTime] = routineSlot.routineList;
           });
+          this.createDayAndTimeMapWithRoutine();
       });
 
 
@@ -95,7 +96,7 @@ module ums {
           this.classRoutineService.groupList.push(routine.slotGroup);
           this.classRoutineService.groupMapWithRoutineSlot[routine.slotGroup] = routineSlot;
         }else{
-          let routineSlot : RoutineSlot = this.classRoutineService.groupMapWithRoutineSlot[routine.slotGroup];
+          let routineSlot : RoutineSlot = angular.copy( this.classRoutineService.groupMapWithRoutineSlot[routine.slotGroup]);
           let routineStartTime = moment(routine.startTime,'hh:mm A');
           let routineEndTime = moment(routine.endTime, 'hh:mm A');
           let slotStartTime = moment(routineSlot.startTime, 'hh:mm A');
@@ -103,8 +104,10 @@ module ums {
           routineSlot.startTime = routineStartTime<slotStartTime? routine.startTime: routineSlot.startTime;
           routineSlot.endTime = routineEndTime>slotEndTime? routine.endTime: routineSlot.endTime;
           routineSlot.routineList.push(routine);
+          this.classRoutineService.groupMapWithRoutineSlot[routine.slotGroup] = routineSlot;
         }
       })
+
       defer.resolve(this.classRoutineService.groupMapWithRoutineSlot);
       return defer.promise;
     }
@@ -124,8 +127,6 @@ module ums {
       this.classRoutineService.groupList.forEach((group:number)=>{
         let routineSlot: RoutineSlot = this.classRoutineService.groupMapWithRoutineSlot[group];
         let routineList:ClassRoutine[] = angular.copy(routineSlot.routineList);
-
-
 
       })
     }
@@ -186,9 +187,10 @@ module ums {
     public getNextStartTime(day: string, startTime: string, endTime: string): string {
       let nextStartTime: string = "";
 
-      if (this.classRoutineService.dayAndTimeMapWithRoutine[day + startTime] != undefined && this.classRoutineService.dayAndTimeMapWithRoutine[day + startTime].length!=0 ) {
-        let routine: ClassRoutine[] = this.classRoutineService.dayAndTimeMapWithRoutine[day + startTime];
-        nextStartTime = routine[0].endTime;
+      if ( this.classRoutineService.dayAndTimeMapWithGroup[day + startTime] ) {
+        let group:number = this.classRoutineService.dayAndTimeMapWithGroup[day+startTime];
+        let routineSlot: RoutineSlot = this.classRoutineService.groupMapWithRoutineSlot[group];
+        nextStartTime = routineSlot.endTime;
       }
       else if (startTime == this.routineConfigService.routineConfig.startTime) {
         nextStartTime = endTime;
@@ -262,12 +264,15 @@ module ums {
     public edit(day: IConstant, header: IRoutineTableHeader) {
       this.classRoutineService.selectedDay = day;
       this.classRoutineService.selectedHeader = header;
-
-      if (this.classRoutineService.dayAndTimeMapWithRoutine[day.id + header.startTime] == null) {
-        this.classRoutineService.slotRoutineList = [];
-      } else {
-        this.classRoutineService.slotRoutineList = this.classRoutineService.dayAndTimeMapWithRoutine[day.id + header.startTime];
+      if (this.classRoutineService.dayAndTimeMapWithGroup[day.id + header.startTime]) {
+        console.log("Routine list ----");
+        let routineList: ClassRoutine[] = this.getDayAndTimeMapWithRoutine(day.id, header.startTime).routineList;
+        routineList.forEach((r:ClassRoutine)=>console.log(r));
+        console.log("ENd of experiment");
+        this.classRoutineService.slotRoutineList = this.getDayAndTimeMapWithRoutine(day.id, header.startTime).routineList;
         this.assignCourseTeachersToSlotRoutineList();
+      } else {
+          this.classRoutineService.slotRoutineList = [];
       }
 
       $("#routineConfigModal").modal('show');

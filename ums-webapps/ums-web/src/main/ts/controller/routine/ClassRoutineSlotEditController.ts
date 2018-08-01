@@ -42,6 +42,8 @@ module ums {
     public init() {
       this.showCourseInfo = false;
       this.showRoomInfo = false;
+      console.log("Slot routine list");
+      console.log(this.classRoutineService.slotRoutineList);
       if (this.classRoutineService.slotRoutineList.length == 0) {
         this.slotGroupNo = Math.floor((Math.random() * 10000) + 1);
         let slotRoutine: ClassRoutine = <ClassRoutine>{};
