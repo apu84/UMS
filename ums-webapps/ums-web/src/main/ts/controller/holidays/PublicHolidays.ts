@@ -79,6 +79,8 @@ module ums {
       this.holidays = [];
       this.showLoader = true;
       this.holidaysService.fetchHolidaysByYear(this.year).then((holidays: Array<Holidays>) => {
+        console.log("Holidays");
+        console.log(holidays);
         if (holidays.length == 0)
           this.getHolidayTypes();
         else {
