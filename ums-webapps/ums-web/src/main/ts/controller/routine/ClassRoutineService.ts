@@ -110,10 +110,10 @@ module ums{
       return defer.promise;
     }
 
-    public getRoutineForTeacher():ng.IPromise<any>{
+    public getRoutineForTeacher(employeeId: string):ng.IPromise<any>{
       var defer = this.$q.defer();
       var routines:any={};
-      this.httpClient.get("/ums-webservice-academic/academic/routine/routineForTeacher",'application/json',
+      this.httpClient.get("/ums-webservice-academic/academic/routine/routineForTeacher/employeeId/"+employeeId,'application/json',
           (data:any,etag:string)=>{
             routines = data.entries;
             defer.resolve(routines);

@@ -14,6 +14,13 @@
         font-size: 8px;
         margin: 4px 2px;
     }
+
+    .list-group{
+        max-height: 550px;
+        margin-bottom: 10px;
+        overflow:scroll;
+        -webkit-overflow-scrolling: touch;
+    }
 </style>
 <div class="row">
     <div class="col-md-6">
@@ -22,7 +29,7 @@
                 <i class="fa fa-plus-circle" aria-hidden="true" ng-click="vm.add()" style="cursor: pointer;"></i>
             </div>
             <br/>
-            <div class="row">
+            <div class="row list-group">
 
                 <form class="form-horizontal" ng-repeat="slotRoutine in vm.classRoutineService.slotRoutineList" name="slotForm">
                     <hr/>
@@ -104,7 +111,7 @@
                             <div class="row">
                                 <div class="col-md-11">
                                     <ui-select theme="bootstrap"
-                                               data-ng-model="slotRoutine.employee"
+                                               data-ng-model="slotRoutine.employee" on-select="vm.courseTeacherSelected(slotRoutine.employee)"
 
                                     >
                                         <ui-select-match placeholder="Select Course Teacher">
@@ -150,16 +157,19 @@
     </div>
     <div class="col-md-6">
         <ul class="nav nav-tabs">
-            <li data-ng-class="vm.showCourseInfo==true?'active':''"><a ng-click="vm.fetchCourseInfo()"
+            <li data-ng-class="vm.showCourseInfo==true?'active':''"  style="cursor:pointer"><a ng-click="vm.fetchCourseInfo()"
                                                                        data-toggle="tab">Course Info</a>
             </li>
-            <li data-ng-class="vm.showRoomInfo==true?'active':''"><a ng-click="vm.fetchRoomInfo()" data-toggle="tab">Room
+            <li data-ng-class="vm.showRoomInfo==true?'active':''" style="cursor:pointer"><a ng-click="vm.fetchRoomInfo()" data-toggle="tab">Room
+                Info</a></li>
+            <li data-ng-class="vm.showTeachersInfo==true?'active':''" style="cursor:pointer"><a ng-click="vm.fetchCourseTeacherInfo()" data-toggle="tab">Course Teacher
                 Info</a></li>
         </ul>
         <div class="tab-content">
             <div ng-if="vm.showCourseInfo==true"
                  ng-include="'views/routine/course-routine-info.html'"></div>
             <div ng-if="vm.showRoomInfo==true" ng-include="'views/routine/room-routine-info.html'"></div>
+            <div ng-if="vm.showTeachersInfo==true" ng-include="'views/routine/course-teacher-routine-info.html'"></div>
         </div>
     </div>
 </div>

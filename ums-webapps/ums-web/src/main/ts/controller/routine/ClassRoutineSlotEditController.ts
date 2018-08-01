@@ -6,10 +6,13 @@ module ums {
 
     private selectedCourse: Course;
     private selectedRoom: ClassRoom;
+    private selectedCourseTeacher:Employee;
     private showCourseInfo: boolean;
     private showRoomInfo: boolean;
+    private showTeachersInfo: boolean;
     private routineBasedOnCourse: ClassRoutine[];
     private routineBasedOnRoom: ClassRoutine[];
+    private routineBasedOnCourseTeacher: ClassRoutine[];
     private THEORY_TYPE: number = 1;
     private SESSIONAL_TYPE: number = 2;
     private courseTeacher: Employee = <Employee>{};
@@ -90,6 +93,10 @@ module ums {
       this.classRoutineService.slotRoutineList.push(slotRoutine);
     }
 
+    public courseSearched(){
+        this.fetchCourseInfo();
+    }
+
     public courseSelected(slotRoutine: ClassRoutine) {
       this.selectedCourse = slotRoutine.course;
       let startTime: any = {};
@@ -108,6 +115,28 @@ module ums {
       slotRoutine.courseId = slotRoutine.course.id;
       this.assignExistingTeacher(slotRoutine);
       this.fetchCourseInfo();
+    }
+
+    public courseTeacherSearched(){
+      this.fetchCourseTeacherInfo();
+      console.log('course teacher');
+      console.log(this.selectedCourseTeacher);
+    }
+
+    public courseTeacherSelected(courseTeacher: Employee){
+      this.fetchCourseTeacherInfo();
+    }
+
+    public fetchCourseTeacherInfo(){
+        this.showCourseInfo=false;
+        this.showRoomInfo = false;
+        this.showTeachersInfo = true;
+
+      if(this.selectedCourseTeacher)
+      this.classRoutineService.getRoutineForTeacher(this.selectedCourseTeacher.id).then((routine:ClassRoutine[])=>{
+        this.routineBasedOnCourseTeacher=[];
+        this.routineBasedOnCourseTeacher = routine;
+      });
     }
 
     private assignExistingTeacher(slotRoutine: ClassRoutine) {
@@ -199,6 +228,7 @@ module ums {
     public fetchCourseInfo() {
       this.showCourseInfo = true;
       this.showRoomInfo = false;
+      this.showTeachersInfo = false;
       this.classRoutineService.getRoutineBySemesterAndCourse(this.classRoutineService.selectedSemester.id, this.selectedCourse.id).then((classRoutineList: ClassRoutine[]) => {
 
         this.routineBasedOnCourse = [];
@@ -209,10 +239,17 @@ module ums {
     public fetchRoomInfo() {
       this.showCourseInfo = false;
       this.showRoomInfo = true;
+      this.showTeachersInfo = false;
       this.classRoutineService.getRoomBasedClassRoutine(this.classRoutineService.selectedSemester.id, +this.selectedRoom.id).then((classRoutineList: ClassRoutine[]) => {
         this.routineBasedOnRoom = [];
         this.routineBasedOnRoom = classRoutineList;
+        console.log("In room");
+        console.log(classRoutineList);
       })
+    }
+
+    public roomSearched(){
+        this.fetchRoomInfo();
     }
 
     public roomSelected(slotRoutine: ClassRoutine) {

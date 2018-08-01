@@ -1,6 +1,22 @@
 <div class="row">
     <div class="col-md-12">
         <form class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-md-2" for="course">Course :</label>
+                <div class="col-md-10">
+                    <ui-select id="courseNo" theme="bootstrap"
+                               data-ng-model="vm.selectedCourse"
+                               on-select="vm.courseSearched()" name="course">
+                        <ui-select-match placeholder="Select Course">{{vm.selectedCourse.title}}
+                        </ui-select-match>
+                        <ui-select-choices id="course"
+                                           repeat="g in vm.classRoutineService.courseList|filter:$select.search"
+                        >
+                            <small ng-bind-html="g.title | highlight:$select.search"></small>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
 
             <div class="form-group">
                 <label class=" col-md-3">Course No :</label>
@@ -44,10 +60,10 @@
             </thread>
             <tbody>
             <tr ng-repeat="routine in vm.routineBasedOnCourse">
-                <td>{{vm.classRoutineService.routineMapWithTimeAndDay[routine.day]}}</td>
+                <td>{{vm.classRoutineService.weekDayMapWithId[routine.day]}}</td>
                 <td>{{routine.startTime}}</td>
                 <td>{{routine.endTime}}</td>
-                <td>{{routine.room.roomNumber}}</td>
+                <td>{{routine.room.roomNo}}</td>
                 <td>{{routine.section}}</td>
             </tr>
             </tbody>
