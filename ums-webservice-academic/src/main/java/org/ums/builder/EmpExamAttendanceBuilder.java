@@ -19,7 +19,7 @@ public class EmpExamAttendanceBuilder implements Builder<EmpExamAttendance, Muta
   @Override
   public void build(JsonObjectBuilder pBuilder, EmpExamAttendance pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     if(pReadOnly.getId() != null) {
-      pBuilder.add("id", pReadOnly.getId());
+      pBuilder.add("id", pReadOnly.getId().toString());
     }
     if(pReadOnly.getSemesterId() != null) {
       pBuilder.add("semesterId", pReadOnly.getSemesterId());
@@ -29,12 +29,13 @@ public class EmpExamAttendanceBuilder implements Builder<EmpExamAttendance, Muta
     }
     if(pReadOnly.getRoomInCharge() != null) {
       pBuilder.add("roomInCharge", pReadOnly.getRoomInCharge());
+      pBuilder.add("roomInChargeStatus", pReadOnly.getRoomInCharge() == 1 ? " (Room In Charge)" : " ");
     }
     if(pReadOnly.getEmployeeId() != null) {
       pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     }
-    if(pReadOnly.getEmployeeName() != null) {
-      pBuilder.add("employeeName", pReadOnly.getEmployeeName());
+    if(pReadOnly.getEmployeeType() != null) {
+      pBuilder.add("employeeType", pReadOnly.getEmployeeType());
     }
     if(pReadOnly.getEmployeeId() != null) {
       Employee employee = pReadOnly.getEmployees();
@@ -43,6 +44,9 @@ public class EmpExamAttendanceBuilder implements Builder<EmpExamAttendance, Muta
     }
     if(pReadOnly.getDepartmentId() != null) {
       pBuilder.add("deptId", pReadOnly.getDepartmentId());
+    }
+    if(pReadOnly.getDesignationId() != null) {
+      pBuilder.add("designationId", pReadOnly.getDesignationId());
     }
     if(pReadOnly.getDepartmentId() != null) {
       Department department = pReadOnly.getDepartment();

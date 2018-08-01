@@ -35,7 +35,9 @@ public interface MutableEmpExamAttendance extends EmpExamAttendance, Editable<Lo
 
   void setEmployeeId(final String pEmployeeId);
 
-  void setEmployeeName(final String pEmployeeName);
+  void setDesignationId(final Integer pDesignationId);
+
+  void setEmployeeType(final Integer pEmployeeType);
 
   void setEmployees(final Employee pEmployee);
 }

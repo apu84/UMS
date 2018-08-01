@@ -1,4 +1,21 @@
 module ums{
+    export interface IEmployeeExamAttendance{
+        id:number;
+        semesterId:string
+        examType:number;
+        roomInCharge:number;
+        invigilatorRoomId:number;
+        invigilatorRoomName:string;
+        employeeId:string;
+        employee:Employee;
+        employeeFullName:string;
+        deptId:string;
+        department:IDepartment;
+        invigilatorDate:string;
+        reserveDate:string;
+        departmentShortName:string;
+
+    }
     export class EmployeeExamAttendanceService{
         public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
         constructor(private appConstants: any, private httpClient: HttpClient,
@@ -47,6 +64,50 @@ module ums{
                 });
             return defer.promise;
 
+        }
+        public getMemorandumReport(pSemesterId:number,pExamType:number){
+            var defer = this.$q.defer();
+            let contentType: string = UmsUtil.getFileContentType("pdf");
+            let fileName="MEMORANDUM";
+            this.httpClient.get('/ums-webservice-academic/academic/empExamAttendance/getMemorandumReport/semesterId/'+pSemesterId+'/examType/'+pExamType, 'application/pdf',
+                (data: any, etag: string) => {
+                    console.log("pdf");
+                    UmsUtil.writeFileContent(data, contentType, fileName);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                }, 'arraybuffer');
+            return defer.promise;
+        }
+        public getStaffAttendantReport(pSemesterId:number,pExamType:number,pExamDate:string){
+            console.log("in");
+            var defer = this.$q.defer();
+            let contentType: string = UmsUtil.getFileContentType("pdf");
+            let fileName="Daily Examination Report";
+            this.httpClient.get('/ums-webservice-academic/academic/empExamAttendance/getStaffAttendantReport/semesterId/'+pSemesterId+'/examType/'+pExamType+'/examDate/'+pExamDate, 'application/pdf',
+                (data: any, etag: string) => {
+                    console.log("pdf");
+                    UmsUtil.writeFileContent(data, contentType, fileName);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                }, 'arraybuffer');
+            return defer.promise;
+        }
+        public getEmployeeAttendantReport(pSemesterId:number,pExamType:number,pExamDate:string,pDeptId:string){
+            console.log("in");
+            var defer = this.$q.defer();
+            let contentType: string = UmsUtil.getFileContentType("pdf");
+            let fileName="Daily Examination Report";
+            this.httpClient.get('/ums-webservice-academic/academic/empExamAttendance/getEmployeeAttendantReport/semesterId/'+pSemesterId+'/examType/'+pExamType+'/examDate/'+pExamDate+'/deptId/'+pDeptId, 'application/pdf',
+                (data: any, etag: string) => {
+                    console.log("pdf");
+                    UmsUtil.writeFileContent(data, contentType, fileName);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                }, 'arraybuffer');
+            return defer.promise;
         }
 
     }

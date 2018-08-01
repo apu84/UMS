@@ -26,7 +26,8 @@ public class PersistentEmpExamAttendance implements MutableEmpExamAttendance {
   private Department mDepartment;
   private Employee mEmployee;
   private String mEmployeeId;
-  private String mEmployeeName;
+  private Integer mEmployeeType;
+  private Integer mDesignationId;
   private String mDeptId;
   private Long mInvigilatorRoomId;
   private String mInvigilatorRoomName;
@@ -52,7 +53,8 @@ public class PersistentEmpExamAttendance implements MutableEmpExamAttendance {
     mInvigilatorDate = pPersistentEmpExamAttendance.getInvigilatorDate();
     mRoomInCharge = pPersistentEmpExamAttendance.getRoomInCharge();
     mEmployeeId = pPersistentEmpExamAttendance.getEmployeeId();
-    mEmployeeName = pPersistentEmpExamAttendance.getEmployeeName();
+    mEmployeeType = pPersistentEmpExamAttendance.getEmployeeType();
+    mDesignationId = pPersistentEmpExamAttendance.getDesignationId();
     mEmployee = pPersistentEmpExamAttendance.getEmployees();
   }
 
@@ -112,8 +114,14 @@ public class PersistentEmpExamAttendance implements MutableEmpExamAttendance {
   }
 
   @Override
-  public void setEmployeeName(String pEmployeeName) {
-    mEmployeeName = pEmployeeName;
+  public void setDesignationId(Integer pDesignationId) {
+    mDesignationId = pDesignationId;
+
+  }
+
+  @Override
+  public void setEmployeeType(Integer pEmployeeType) {
+    mEmployeeType = pEmployeeType;
   }
 
   @Override
@@ -202,8 +210,13 @@ public class PersistentEmpExamAttendance implements MutableEmpExamAttendance {
   }
 
   @Override
-  public String getEmployeeName() {
-    return mEmployeeName;
+  public Integer getDesignationId() {
+    return mDesignationId;
+  }
+
+  @Override
+  public Integer getEmployeeType() {
+    return mEmployeeType;
   }
 
   @Override

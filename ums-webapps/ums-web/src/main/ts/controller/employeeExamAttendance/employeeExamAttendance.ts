@@ -38,6 +38,13 @@ module ums{
          public isStaffSelected:boolean;
          public staffId:number;
          public employeeTypeName:string;
+         private isDeleteAvailable:boolean;
+         public upEmpExamInvDate:string;
+         public upEmpExamReserveDate:string;
+         public empExamAttendantInfo:Array<IEmployeeExamAttendance>;
+         public roomNo:string;
+         public empName:string;
+         public empExamAttendantInfoForUpdateDelete:IEmployeeExamAttendance;
         public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService',
             'programService','examRoutineService','classRoomService','employeeService','employeeExamAttendanceService'];
 
@@ -79,14 +86,28 @@ module ums{
             this.empReserveDate="";
             this.staffId=3;
             this.isStaffSelected=false;
+            this.isDeleteAvailable=false;
+            this.selectedEmployeeName="";
+            this.selectedClassRoomNo="";
             this.getSemesters();
             this.getExamDates();
             this.initializeDatePickers();
         }
         private search():void{
             Utils.expandRightDiv();
+            this.initializeData();
             this.getEmployees(this.selectedDepartmentId);
             this.getClassRoomInfo();
+            this.getData();
+        }
+        private getData():void{
+            var info:Array<IEmployeeExamAttendance>=[];
+            this.employeeExamAttendanceService.getEmpExamAttendanceInfo(this.selectedSemesterId,this.selectedExamTypeId).then((data)=>{
+                info=data;
+                this.empExamAttendantInfo=info;
+                console.log("*****List****");
+             console.log(this.empExamAttendantInfo);
+            });
         }
          private getExamDates(){
              this.examRoutineArr={};
@@ -104,7 +125,7 @@ module ums{
          }
          private changeEmployeeType(value:any){
              this.employeeTypeId=value.id;
-             this.selectedEmployeeType=value.name;
+             this.employeeTypeName=value.name;
              this.isStaffSelected=this.employeeTypeId==this.staffId?true:false;
              console.log("EmployeeType-> "+this.employeeTypeId+" "+this.employeeTypeName);
          }
@@ -175,14 +196,18 @@ module ums{
                  this.selectedClassRoomId=null;
              }
 
-             console.log("**"+this.selectedClassRoomId);
+             console.log("ClassRoomId: "+this.selectedClassRoomId);
          }
          private initializeDatePickers() {
              setTimeout(function () {
                  $('.datepicker-default').datepicker({
-                     multidate: true
+                     inputs: undefined,
+                     todayHighlight:true,
+                     multidate: true,
+                     clearBtn: true
                  });
                  $('.datepicker-default').on('change', function () {
+
                  });
              }, 200);
          }
@@ -201,12 +226,97 @@ module ums{
              }
          }
          private save():void{
-             var json:any=this.convertToJson();
-             this.employeeExamAttendanceService.addEmpExamAttendanceInfo(json).then((data)=>{
-                 console.log(data);
-             });
+             if(this.selectedClassRoomId!=null) {
+                 var json: any = this.convertToJson();
+                 this.employeeExamAttendanceService.addEmpExamAttendanceInfo(json).then((data) => {
+                     console.log("I am Changing >>>>>>>>>>>&&&&&&&&&&&&&&&&&&&&&>>>>>>>>>>>>>>>>>>");
+                     this.initializeData();
+                 });
+             }else {
+                 this.notify.warn("Select classroom Id");
+             }
          }
+         public initializeData():void{
+             this.empExamDate="";
+             this.empReserveDate="";
+             this.selectedEmployeeId="";
+             this.selectedEmployeeName="select Employee";
+             this.selectedClassRoomId=null;
+             this.selectedClassRoomNo="select Room No";
+             this.initializeDatePickers();
+         }
+         private updateInfo(value:any):void{
+            console.log("Update p Info");
+             this.upEmpExamInvDate="";
+             this.upEmpExamReserveDate="";
+             this.empExamAttendantInfoForUpdateDelete=null;
+             console.log("See Null: "+this.empExamAttendantInfoForUpdateDelete);
+             this.empExamAttendantInfoForUpdateDelete=value;
+             console.log(this.empExamAttendantInfoForUpdateDelete);
+             this.upEmpExamInvDate=this.empExamAttendantInfoForUpdateDelete.invigilatorDate;
+             this.upEmpExamReserveDate=this.empExamAttendantInfoForUpdateDelete.reserveDate;
+             this.isDeleteAvailable=false;
+         }
+         private deleteInfo(value:any):void{
+             console.log("Inside Delete");
+             this.upEmpExamInvDate="";
+             this.upEmpExamReserveDate="";
+            /* this.empExamAttendantInfoForUpdateDelete=null;
+             console.log("See Null: "+this.empExamAttendantInfoForUpdateDelete);
+             console.log(this.empExamAttendantInfoForUpdateDelete);*/
+             this.empExamAttendantInfoForUpdateDelete=value;
+             this.upEmpExamInvDate=this.empExamAttendantInfoForUpdateDelete.invigilatorDate;
+             this.upEmpExamReserveDate=this.empExamAttendantInfoForUpdateDelete.reserveDate;
+             this.isDeleteAvailable=true;
+         }
+         private delete(){
 
+                var json = this.convertToJsonForDelete(this.empExamAttendantInfoForUpdateDelete);
+                this.employeeExamAttendanceService.deleteEmpExamAttendanceInfo(json).then((data) => {
+                    console.log(data);
+                    this.getData();
+                });
+                console.log("--" + json);
+
+         }
+         public  getClassRoomReport():void{
+            this.employeeExamAttendanceService.getMemorandumReport(this.selectedSemesterId,this.selectedExamTypeId).then((data)=>{
+                console.log("Success");
+            });
+         }
+         public getAttendantReport():void{
+           this.employeeExamAttendanceService.getStaffAttendantReport(
+               this.selectedSemesterId,
+               this.selectedExamTypeId,
+               this.selectedExamDate).then((data)=>{
+               console.log("Staff")
+           });
+         }
+         public getEmployeeReport():void{
+          this.employeeExamAttendanceService.getEmployeeAttendantReport(
+              this.selectedSemesterId,
+              this.selectedExamTypeId,
+              this.selectedExamDate,
+              this.selectedDepartmentId
+          ).then((data)=>{
+              console.log("Employee");
+          });
+         }
+         getReserveEmployeeReport():void{
+
+         }
+         private convertToJsonForDelete(result: IEmployeeExamAttendance): any {
+             var completeJson = {};
+             console.log("result");
+             console.log(result);
+             var jsonObj = [];
+                 var item = {};
+                     item["id"] = result.id.toString();
+                     jsonObj.push(item);
+             completeJson["entries"] = jsonObj;
+             console.log(completeJson);
+             return completeJson;
+         }
          public convertToJson(): any {
              var completeJson = {};
              console.log("result");

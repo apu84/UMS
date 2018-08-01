@@ -82,7 +82,7 @@
         <div class="panel">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-7">
                         <div>Employee Attendance->
                             Semester: <b>{{vm.semesterName}}</b>
                             Exam Type: <b>{{vm.selectedExamTypeName}}</b>
@@ -91,14 +91,21 @@
                             Exam Date: <b>{{vm.selectedExamDate}}</b>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <div align="right">
-                            <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.getPdfVersionReport()">
+                            <button type="button" class="btn btn-default btn-xs" data-ng-click="vm.getClassRoomReport()">
+                                <span class="glyphicon glyphicon-download"></span> Memorandum
+                            </button>
+                            <button type="button" class="btn btn-dark btn-xs" data-ng-click="vm.getReserveEmployeeReport()">
+                                <span class="glyphicon glyphicon-download"></span> Reserve
+                            </button>
+                            <button type="button" class="btn btn-info btn-xs" data-ng-click="vm.getAttendantReport()">
                                 <span class="glyphicon glyphicon-download"></span> Attendant
                             </button>
-                            <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.getPdfVersionReport()">
+                            <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.getEmployeeReport()">
                                 <span class="glyphicon glyphicon-download"></span> Employee
                             </button>
+
                         </div>
                     </div>
                 </div>
@@ -112,7 +119,9 @@
                 <!--  End of Insert -->
                 <hr>
                 <div>
-                    view
+                    <div
+                            data-ng-include="'views/employee-exam-attendance/emp-view.html'">
+                    </div>
                 </div>
                 <!--  End of view -->
             </div>
