@@ -154,23 +154,29 @@ module ums {
             this.bulkPublication = [];
             for (let i = 0; i < bulkBib.length; i++) {
                 let publicationBibEntry: IPublicationInformationModel;
+                let title: string = "";
+                if(bulkBib[i].entryTags.title[0] == "{" && bulkBib[i].entryTags.title[bulkBib[i].entryTags.title.length - 1] == "}") {
+                    title = bulkBib[i].entryTags.title.slice(1, bulkBib[i].entryTags.title.length - 1);
+                }
+                else{
+                    title = bulkBib[i].entryTags.title;
+                }
                 publicationBibEntry = {
                     id: "",
                     employeeId: this.userId,
-                    publicationTitle: bulkBib[i].entryTags.title.slice(1, -1),
+                    publicationTitle: title,
                     publicationType: bulkBib[i].entryType.toUpperCase() == 'CONFERENCE' ? this.publicationTypes[0] :
                         bulkBib[i].entryType.toUpperCase() == 'ARTICLE' ? this.publicationTypes[1] :
                         bulkBib[i].entryType.toUpperCase() == 'BOOK' ? this.publicationTypes[2] : this.publicationTypes[3],
                     publicationInterestGenre: "",
                     publicationWebLink: bulkBib[i].entryTags.url,
-                    publisherName: "",
+                    publisherName: bulkBib[i].entryTags.publisher,
                     dateOfPublication: Number(bulkBib[i].entryTags.year),
                     publicationISSN:
                     bulkBib[i].entryTags.issn,
                     publicationIssue: "",
-                    publicationVolume:
-                    bulkBib[i].entryTags.volume,
-                    publicationJournalName: "",
+                    publicationVolume: bulkBib[i].entryTags.volume,
+                    publicationJournalName: bulkBib[i].entryTags.journal,
                     publicationCountry: null,
                     status: "0",
                     publicationPages: bulkBib[i].entryTags.pages,
