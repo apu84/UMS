@@ -154,7 +154,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
         int capacity = room.getCapacity();
         String[][] roomStructure = new String[room.getTotalRow()][room.getTotalColumn()];
 
-        // **********new Algorithm *************************
+        // ********** create even/odd sub Group *************************
 
         int divider = numberOfSubGroups / 2;
 
@@ -173,7 +173,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
               oddRow, firstGroupWithZeroSize, secondGroupWithZeroSize);
         }
 
-        // *********end of new Algorithm ******************
+        // *********end of even/odd sub Group ******************
 
         Map<Student, String> studentsUsed = new HashMap<>();
 

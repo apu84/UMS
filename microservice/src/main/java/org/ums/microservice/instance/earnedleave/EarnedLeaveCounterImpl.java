@@ -46,4 +46,5 @@ public class EarnedLeaveCounterImpl extends AbstractService implements EarnedLea
   public void countEarnedLeave() {
 
   }
+
 }
