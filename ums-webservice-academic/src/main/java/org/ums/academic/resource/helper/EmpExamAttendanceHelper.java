@@ -184,8 +184,8 @@ public class EmpExamAttendanceHelper extends ResourceHelper<EmpExamAttendance, M
   @NotNull
   public List<MutableEmpExamAttendance> getMutableEmpExamAttendances(Integer pSemesterId, Integer pExamType) {
     List<EmpExamAttendance> empExamAttendances=mManager.getInfoBySemesterAndExamType(pSemesterId,pExamType);
-    List<EmpExamInvigilatorDate> empExamInvigilatorDate=mEmpExamInvigilatorDateManager.getAll();
-    List<EmpExamReserveDate> empExamReserveDate=mEmpExamReserveDateManager.getAll();
+    List<EmpExamInvigilatorDate> empExamInvigilatorDate=mEmpExamInvigilatorDateManager.getBySemesterAndExamType(pSemesterId,pExamType);
+    List<EmpExamReserveDate> empExamReserveDate=mEmpExamReserveDateManager.getBySemesterAndExamType(pSemesterId, pExamType);
     Map<Long,String> empExamInvigilatorDateMap=empExamInvigilatorDate.stream().collect(
                     Collectors.toMap(a->a.getAttendantId(), a->a.getExamDate()==null? "":a.getExamDate(),(oldValue, newValue) -> oldValue=oldValue+","+newValue
                     ));

@@ -5,6 +5,8 @@ import org.ums.domain.model.mutable.MutableEmpExamInvigilatorDate;
 import org.ums.manager.CacheManager;
 import org.ums.manager.EmpExamInvigilatorDateManager;
 
+import java.util.List;
+
 /**
  * Created by Monjur-E-Morshed on 7/27/2018.
  */
@@ -20,5 +22,10 @@ public class EmpExamInvigilatorDateCache extends
 
   public EmpExamInvigilatorDateCache(CacheManager<EmpExamInvigilatorDate, Long> pCacheManager) {
     mCacheManager = pCacheManager;
+  }
+
+  @Override
+  public List<EmpExamInvigilatorDate> getBySemesterAndExamType(Integer pSemesterId, Integer pExamType) {
+    return getManager().getBySemesterAndExamType(pSemesterId, pExamType);
   }
 }

@@ -289,7 +289,7 @@ module ums{
                this.selectedSemesterId,
                this.selectedExamTypeId,
                this.selectedExamDate).then((data)=>{
-               console.log("Staff")
+               console.log("Staff");
            });
          }
          public getEmployeeReport():void{
@@ -299,11 +299,18 @@ module ums{
               this.selectedExamDate,
               this.selectedDepartmentId
           ).then((data)=>{
-              console.log("Employee");
+              console.log("Invigilator Employee");
           });
          }
          getReserveEmployeeReport():void{
-
+             this.employeeExamAttendanceService.getReserveEmployeeAttendantReport(
+                 this.selectedSemesterId,
+                 this.selectedExamTypeId,
+                 this.selectedExamDate,
+                 this.selectedDepartmentId
+             ).then((data)=>{
+                 console.log("Reserve Employee");
+             });
          }
          private convertToJsonForDelete(result: IEmployeeExamAttendance): any {
              var completeJson = {};

@@ -68,6 +68,25 @@ public class EmpExamAttendanceResource extends MutableEmpExamAttendanceResource 
   }
 
   @GET
+  @Path("/getReserveEmployeeAttendantReport/semesterId/{semester-id}/examType/{exam-type}/examDate/{exam-date}/deptId/{dept-id}")
+  @Produces("application/pdf")
+  public StreamingOutput createReserveEmployeeReport(@PathParam("semester-id") Integer pSemesterId,
+      @PathParam("exam-type") Integer pExamType, @PathParam("exam-date") String pExamDate,
+      @PathParam("dept-id") String pDeptId) {
+    return new StreamingOutput() {
+      @Override
+      public void write(OutputStream output) throws IOException, WebApplicationException {
+        try {
+          mEmpExamAttendanceGenerator.createReserveEmployeeAttendantList(pSemesterId, pExamType, pExamDate, pDeptId,
+              output);
+        } catch(Exception e) {
+          throw new WebApplicationException(e);
+        }
+      }
+    };
+  }
+
+  @GET
   @Path("/getStaffAttendantReport/semesterId/{semester-id}/examType/{exam-type}/examDate/{exam-date}")
   @Produces("application/pdf")
   public StreamingOutput createStaffReport(@PathParam("semester-id") Integer pSemesterId,

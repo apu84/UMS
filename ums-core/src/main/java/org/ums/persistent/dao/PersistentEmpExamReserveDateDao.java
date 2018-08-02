@@ -31,6 +31,15 @@ public class PersistentEmpExamReserveDateDao extends EmpExamReserveDateDaoDecora
   String SELECT_ALL =
       "select ATTENDANT_ID,to_char(RESERVE_DATE,'DD-MM-YYYY')RESERVE_DATE from DER_EMP_RESERVE_DATE_MAP";
   String DELETE = "DELETE FROM DER_EMP_RESERVE_DATE_MAP WHERE ATTENDANT_ID=?";
+  String SELECT_BY_SEM_EXAM_TYPE =
+      "SELECT emap.ATTENDANT_ID,to_char(emap.RESERVE_DATE,'DD-MM-YYYY') RESERVE_DATE FROM DER_EMP_ATTENDANT ea,DER_EMP_RESERVE_DATE_MAP emap WHERE "
+          + "ea.ID=emap.ATTENDANT_ID AND ea.SEMESTER_ID=? AND EXAM_TYPE=?";
+
+  @Override
+  public List<EmpExamReserveDate> getBySemesterAndExamType(Integer pSemesterId, Integer pExamType) {
+    return mJdbcTemplate.query(SELECT_BY_SEM_EXAM_TYPE, new Object[] {pSemesterId, pExamType},
+        new EmpExamReserveDateRowMapper());
+  }
 
   @Override
   public int delete(MutableEmpExamReserveDate pMutable) {

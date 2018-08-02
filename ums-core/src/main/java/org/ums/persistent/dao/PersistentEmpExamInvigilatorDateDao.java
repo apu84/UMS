@@ -32,6 +32,16 @@ public class PersistentEmpExamInvigilatorDateDao extends EmpExamInvigilatorDateD
       "select ATTENDANT_ID,to_char(INVIGILATION_DATE,'DD-MM-YYYY')INVIGILATION_DATE from DER_EMP_EXAM_DATE_MAP";
   String DELETE = "DELETE FROM DER_EMP_EXAM_DATE_MAP WHERE ATTENDANT_ID=?";
 
+  String SELECT_BY_SEM_EXAM_TYPE =
+      "SELECT emap.ATTENDANT_ID,to_char(emap.INVIGILATION_DATE,'DD-MM-YYYY') INVIGILATION_DATE FROM DER_EMP_ATTENDANT ea,DER_EMP_EXAM_DATE_MAP emap WHERE "
+          + "ea.ID=emap.ATTENDANT_ID AND ea.SEMESTER_ID=? AND EXAM_TYPE=?";
+
+  @Override
+  public List<EmpExamInvigilatorDate> getBySemesterAndExamType(Integer pSemesterId, Integer pExamType) {
+    return mJdbcTemplate.query(SELECT_BY_SEM_EXAM_TYPE, new Object[] {pSemesterId, pExamType},
+        new EmpExamInvRowMapper());
+  }
+
   @Override
   public int delete(MutableEmpExamInvigilatorDate pMutable) {
     return mJdbcTemplate.update(DELETE, new Object[] {pMutable.getAttendantId()});

@@ -17,6 +17,9 @@ public interface EmpExamAttendanceGenerator {
   void createEmployeeAttendantList(final Integer pSemesterId, final Integer pExamType, final String pExamDate,
       final String pDeptId, OutputStream pOutputStream) throws IOException, DocumentException, ParseException;
 
+  void createReserveEmployeeAttendantList(final Integer pSemesterId, final Integer pExamType, final String pExamDate,
+      final String pDeptId, OutputStream pOutputStream) throws IOException, DocumentException, ParseException;
+
   void createStaffAttendantList(final Integer pSemesterId, final Integer pExamType, final String pExamDate,
       OutputStream pOutputStream) throws IOException, DocumentException, ParseException;
 }

@@ -206,6 +206,8 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
       empExamAttendance=empExamAttendance.stream().filter(
               e->e.getEmployeeType()==EmployeeType.TEACHER.getId() && e.getDepartmentId().equals(pDeptId)
       ).collect(Collectors.toList());
+      String reportName="Invigilators's Reporting Sheet";
+      int invigilator=1;
       Document document = new Document();
 
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -228,82 +230,159 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
     paragraph = new UmsParagraph();
     document.add(paragraph);
 
-    chunk = new Chunk("Ahsanullah University of Science And technology",fontTimes8Bold);
+      getReportingHeader(pSemesterId, pExamType, pExamDate, pDeptId, reportName, document, fontTimes8Normal, fontTimes8Bold,invigilator);
+      getData(pOutputStream, empExamAttendance, document, baos, fontTimes8Normal, fontTimes10Bold, iums,invigilator);
+  }
+
+  private void getData(OutputStream pOutputStream, List<MutableEmpExamAttendance> empExamAttendance, Document document,
+      ByteArrayOutputStream baos, Font fontTimes8Normal, Font fontTimes10Bold, Font iums, Integer isReserve)
+      throws DocumentException, IOException {
+    UmsCell cell;
+    PdfPTable empTable = new PdfPTable(6);
+    empTable.setWidths(new float[] {1, 4, 2, 2, 2, 2});
+    empTable.setSpacingBefore(5);
+    empTable.setSpacingAfter(5);
+    empTable.setWidthPercentage(100);
+    cell = new UmsCell(new Phrase("Serial No", fontTimes8Normal));
+    cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+    empTable.addCell(cell);
+    cell = new UmsCell(new Phrase("Invigilators' Name", fontTimes8Normal));
+    cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+    empTable.addCell(cell);
+    if(isReserve == 1) {
+      cell = new UmsCell(new Phrase("Room", fontTimes8Normal));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      empTable.addCell(cell);
+    }
+    else {
+      cell = new UmsCell(new Phrase("Dept", fontTimes8Normal));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      empTable.addCell(cell);
+    }
+
+    cell = new UmsCell(new Phrase("Reporting Time", fontTimes8Normal));
+    cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+    empTable.addCell(cell);
+    cell = new UmsCell(new Phrase("Signature", fontTimes8Normal));
+    cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+    empTable.addCell(cell);
+    cell = new UmsCell(new Phrase("Remarks", fontTimes8Normal));
+    cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+    empTable.addCell(cell);
+    if(empExamAttendance.size() > 1) {
+      empTable.setHeaderRows(1);
+    }
+    int counter = 0;
+    for(EmpExamAttendance app : empExamAttendance) {
+      counter++;
+      cell = new UmsCell(new Phrase("" + counter, fontTimes8Normal));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      empTable.addCell(cell);
+      cell =
+          new UmsCell(new Phrase("" + mPersonalInformationManager.get(app.getEmployeeId()).getName(), fontTimes8Normal));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
+      empTable.addCell(cell);
+      if(isReserve == 1) {
+        cell =
+            new UmsCell(
+                new Phrase("" + mClassRoomManager.get(app.getInvigilatorRoomId()).getRoomNo(), fontTimes8Normal));
+        cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
+        empTable.addCell(cell);
+      }
+      else {
+        cell =
+            new UmsCell(new Phrase("" + mEmployeeManager.get(app.getEmployeeId()).getDepartment().getShortName(),
+                fontTimes8Normal));
+        cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
+        empTable.addCell(cell);
+      }
+      cell = new UmsCell(new Phrase(" ", fontTimes8Normal));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      empTable.addCell(cell);
+      cell = new UmsCell(new Phrase(" ", fontTimes8Normal));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      empTable.addCell(cell);
+      cell = new UmsCell(new Phrase(" ", fontTimes8Normal));
+      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      empTable.addCell(cell);
+    }
+    document.add(empTable);
+    getFooter(document, fontTimes10Bold, iums);
+    document.close();
+    baos.writeTo(pOutputStream);
+  }
+
+  private void getReportingHeader(Integer pSemesterId, Integer pExamType, String pExamDate, String pDeptId,
+      String reportName, Document document, Font fontTimes8Normal, Font fontTimes8Bold, Integer isReserve)
+      throws DocumentException, ParseException {
+    Chunk chunk;
+    UmsParagraph paragraph;
+    chunk = new Chunk("Ahsanullah University of Science And technology", fontTimes8Bold);
     paragraph = new UmsParagraph();
     paragraph.setAlignment(Element.ALIGN_CENTER);
     paragraph.setFont(fontTimes8Normal);
     paragraph.add(chunk);
     document.add(paragraph);
-    chunk = new Chunk("Office of the Controller of the Examinations\n"+ ExamType.get(pExamType).getLabel()+" Examination "+mSemesterManager.get(pSemesterId).getName()+"\n" +
-            "Invigilators's Reporting Sheet",fontTimes8Normal);
+    chunk =
+        new Chunk("Office of the Controller of the Examinations\n" + ExamType.get(pExamType).getLabel()
+            + " Examination " + mSemesterManager.get(pSemesterId).getName() + "\n" + reportName, fontTimes8Normal);
     paragraph = new UmsParagraph();
     paragraph.setAlignment(Element.ALIGN_CENTER);
     paragraph.setFont(fontTimes8Normal);
     paragraph.add(chunk);
     document.add(paragraph);
-      chunk = new Chunk(""+mDepartmentManager.get(pDeptId).getLongName(),fontTimes8Bold);
+    if(isReserve == 1) {
+      chunk = new Chunk("" + mDepartmentManager.get(pDeptId).getLongName(), fontTimes8Bold);
       paragraph = new UmsParagraph();
       paragraph.setAlignment(Element.ALIGN_CENTER);
       paragraph.setFont(fontTimes8Normal);
       paragraph.add(chunk);
       document.add(paragraph);
-      chunk = new Chunk("Date of Examination: "+parseDate(pExamDate),fontTimes8Bold);
-      paragraph = new UmsParagraph();
-      paragraph.setAlignment(Element.ALIGN_RIGHT);
-      paragraph.setFont(fontTimes8Bold);
-      paragraph.add(chunk);
-      document.add(paragraph);
-      UmsCell cell;
-      PdfPTable empTable = new PdfPTable(6);
-      empTable.setWidths(new float[] { 1,4,2,2,2,2 });
-      empTable.setSpacingBefore(5);
-      empTable.setSpacingAfter(5);
-      empTable.setWidthPercentage(100);
-      cell = new UmsCell(new Phrase("Serial No", fontTimes8Normal));
-      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
-      empTable.addCell(cell);
-      cell = new UmsCell(new Phrase("Invigilators' Name", fontTimes8Normal));
-      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
-      empTable.addCell(cell);
-      cell = new UmsCell(new Phrase("Room", fontTimes8Normal));
-      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
-      empTable.addCell(cell);
-      cell = new UmsCell(new Phrase("Reporting Time", fontTimes8Normal));
-      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
-      empTable.addCell(cell);
-      cell = new UmsCell(new Phrase("Signature", fontTimes8Normal));
-      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
-      empTable.addCell(cell);
-      cell = new UmsCell(new Phrase("Remarks", fontTimes8Normal));
-      cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
-      empTable.addCell(cell);
-      int counter=0;
-      for(EmpExamAttendance app:empExamAttendance){
-          counter++;
-          cell = new UmsCell(new Phrase(""+counter,fontTimes8Normal));
-          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
-          empTable.addCell(cell);
-          cell = new UmsCell(new Phrase(""+mPersonalInformationManager.get(app.getEmployeeId()).getName(), fontTimes8Normal));
-          cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
-          empTable.addCell(cell);
-          cell = new UmsCell(new Phrase(""+mClassRoomManager.get(app.getInvigilatorRoomId()).getRoomNo(), fontTimes8Normal));
-          cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
-          empTable.addCell(cell);
-          cell = new UmsCell(new Phrase(" ", fontTimes8Normal));
-          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
-          empTable.addCell(cell);
-          cell = new UmsCell(new Phrase(" ", fontTimes8Normal));
-          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
-          empTable.addCell(cell);
-          cell = new UmsCell(new Phrase(" ", fontTimes8Normal));
-          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
-          empTable.addCell(cell);
-      }
-      document.add(empTable);
-      getFooter(document, fontTimes10Bold,iums);
-    document.close();
-    baos.writeTo(pOutputStream);
+    }
+    chunk = new Chunk("Date of Examination: " + parseDate(pExamDate), fontTimes8Bold);
+    paragraph = new UmsParagraph();
+    paragraph.setAlignment(Element.ALIGN_RIGHT);
+    paragraph.setFont(fontTimes8Bold);
+    paragraph.add(chunk);
+    document.add(paragraph);
   }
+
+  @Override
+    public void createReserveEmployeeAttendantList(Integer pSemesterId, Integer pExamType, String pExamDate, String pDeptId, OutputStream pOutputStream) throws IOException, DocumentException, ParseException {
+        List<EmpExamAttendance> list =
+                mEmpExamAttendanceManager.getInfoByReserveDate(pSemesterId, pExamType, "23-08-2018");
+        List<MutableEmpExamAttendance> empExamAttendance = getMutableEmpExamAttendance(list);
+        empExamAttendance.sort(Comparator.comparing(EmpExamAttendance::getDepartmentId).thenComparing(EmpExamAttendance::getDesignationId));
+        empExamAttendance=empExamAttendance.stream().filter(
+                e->e.getEmployeeType()==EmployeeType.TEACHER.getId()
+        ).collect(Collectors.toList());
+        String reportName="Reserve's Reporting Sheet";
+        int reserve=2;
+        Document document = new Document();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PdfWriter writer = PdfWriter.getInstance(document, baos);
+
+        Font fontTimes11Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11);
+        Font fontTimes8Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 8);
+        Font fontTimes12Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 12);
+        Font fontTimes8Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 8);
+        Font fontTimes10Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 10);
+        Font fontTimes9Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 9);
+        Font iums = FontFactory.getFont(FontFactory.TIMES_ITALIC, 6);
+        document.open();
+        document.setPageSize(PageSize.A4);
+
+        UmsParagraph paragraph = null;
+        Chunk chunk = null;
+        Chunk chunk1 = null;
+
+        paragraph = new UmsParagraph();
+        document.add(paragraph);
+
+        getReportingHeader(pSemesterId, pExamType, pExamDate, pDeptId, reportName, document, fontTimes8Normal, fontTimes8Bold,reserve);
+        getData(pOutputStream, empExamAttendance, document, baos, fontTimes8Normal, fontTimes10Bold, iums,reserve);
+    }
 
   @Override
   public void createStaffAttendantList(Integer pSemesterId, Integer pExamType, String pExamDate,
@@ -316,7 +395,6 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
               e->e.getEmployeeType()==EmployeeType.STAFF.getId()
       ).collect(Collectors.toList());
       Document document = new Document();
-      document.addTitle("Testimonial");
 
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       PdfWriter writer = PdfWriter.getInstance(document, baos);
@@ -366,7 +444,7 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
       cell = new UmsCell(new Phrase("Serial No", fontTimes8Normal));
       cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
       empTable.addCell(cell);
-      cell = new UmsCell(new Phrase("Invigilators' Name", fontTimes8Normal));
+      cell = new UmsCell(new Phrase("Name", fontTimes8Normal));
       cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
       empTable.addCell(cell);
       cell = new UmsCell(new Phrase("Room", fontTimes8Normal));
@@ -385,22 +463,22 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
       for(EmpExamAttendance app:empExamAttendance){
           counter++;
           cell = new UmsCell(new Phrase(""+counter, fontTimes8Normal));
-          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
           empTable.addCell(cell);
           cell = new UmsCell(new Phrase(""+mPersonalInformationManager.get(app.getEmployeeId()).getName(), fontTimes8Normal));
-          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
           empTable.addCell(cell);
           cell = new UmsCell(new Phrase(""+mClassRoomManager.get(app.getInvigilatorRoomId()).getRoomNo(), fontTimes8Normal));
-          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
           empTable.addCell(cell);
           cell = new UmsCell(new Phrase(" ", fontTimes8Normal));
-          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
           empTable.addCell(cell);
           cell = new UmsCell(new Phrase(" ", fontTimes8Normal));
-          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
           empTable.addCell(cell);
           cell = new UmsCell(new Phrase(" ", fontTimes8Normal));
-          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
           empTable.addCell(cell);
       }
       document.add(empTable);
@@ -410,7 +488,6 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
     baos.writeTo(pOutputStream);
   }
 
-  @NotNull
   public List<MutableEmpExamAttendance> getMutableEmpExamAttendance(List<EmpExamAttendance> list) {
     List<MutableEmpExamAttendance> empExamAttendance = new ArrayList<>();
     for(EmpExamAttendance app : list) {

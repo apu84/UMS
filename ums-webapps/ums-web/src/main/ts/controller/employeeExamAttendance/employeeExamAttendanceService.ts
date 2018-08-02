@@ -83,7 +83,7 @@ module ums{
             console.log("in");
             var defer = this.$q.defer();
             let contentType: string = UmsUtil.getFileContentType("pdf");
-            let fileName="Daily Examination Report";
+            let fileName="Staff Attendant Report";
             this.httpClient.get('/ums-webservice-academic/academic/empExamAttendance/getStaffAttendantReport/semesterId/'+pSemesterId+'/examType/'+pExamType+'/examDate/'+pExamDate, 'application/pdf',
                 (data: any, etag: string) => {
                     console.log("pdf");
@@ -98,8 +98,23 @@ module ums{
             console.log("in");
             var defer = this.$q.defer();
             let contentType: string = UmsUtil.getFileContentType("pdf");
-            let fileName="Daily Examination Report";
+            let fileName="Employee Attendant Report";
             this.httpClient.get('/ums-webservice-academic/academic/empExamAttendance/getEmployeeAttendantReport/semesterId/'+pSemesterId+'/examType/'+pExamType+'/examDate/'+pExamDate+'/deptId/'+pDeptId, 'application/pdf',
+                (data: any, etag: string) => {
+                    console.log("pdf");
+                    UmsUtil.writeFileContent(data, contentType, fileName);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                }, 'arraybuffer');
+            return defer.promise;
+        }
+        public getReserveEmployeeAttendantReport(pSemesterId:number,pExamType:number,pExamDate:string,pDeptId:string){
+            console.log("in");
+            var defer = this.$q.defer();
+            let contentType: string = UmsUtil.getFileContentType("pdf");
+            let fileName="Reserve Attendant Report";
+            this.httpClient.get('/ums-webservice-academic/academic/empExamAttendance/getReserveEmployeeAttendantReport/semesterId/'+pSemesterId+'/examType/'+pExamType+'/examDate/'+pExamDate+'/deptId/'+pDeptId, 'application/pdf',
                 (data: any, etag: string) => {
                     console.log("pdf");
                     UmsUtil.writeFileContent(data, contentType, fileName);
