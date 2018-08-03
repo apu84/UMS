@@ -50,7 +50,7 @@
                 </button>
                 <button type="button"
                         data-toggle="modal"
-                        data-target="#myModalViewInfo"
+                        data-target="#myModalDeleteViewInfo"
                         data-ng-click="vm.deleteInfo(app)"
                         class="btn btn-default btn-sm">
                     <span class="glyphicon glyphicon-trash"></span>
@@ -69,7 +69,7 @@
         <div class="modal-content">
             <div class="modal-header" >
                 <button type="button"  class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Employee Exam Attendant Info</h4>
+                <h4 class="modal-title">Update Employee Exam Attendant Info</h4>
             </div>
             <div class="modal-body">
                 <div>
@@ -77,11 +77,11 @@
                         <thead>
                         <tr>
                             <td width="20%">Name of Invigilators</td>
-                            <td>{{vm.empExamAttendantInfoForUpdateDelete.employeeFullName}}</td>
+                            <td>{{vm.empExamAttendantInfoForUpdate.employeeFullName}}</td>
                         </tr>
                         <tr>
                             <td width="5%">Dept</td>
-                            <td>{{vm.empExamAttendantInfoForUpdateDelete.departmentShortName}}</td>
+                            <td>{{vm.empExamAttendantInfoForUpdate.departmentShortName}}</td>
                         </tr>
                         <tr>
                             <td width="35%">Invigilator Date</td>
@@ -110,7 +110,7 @@
                         </tr>
                         <tr>
                             <td width="5%">Room</td>
-                            <td>{{vm.empExamAttendantInfoForUpdateDelete.invigilatorRoomName}}</td>
+                            <td>{{vm.empExamAttendantInfoForUpdate.invigilatorRoomName}}</td>
                         </tr>
                         </thead>
                     </table>
@@ -119,8 +119,71 @@
             </div>
             <div class="modal-footer">
                 <button type="button"  class="btn btn-default" data-ng-click="vm.close()"  data-dismiss="modal">Close</button>
-                <button type="button" data-ng-if="!vm.isDeleteAvailable" class="btn btn-info"  data-ng-click="vm.update()" data-dismiss="modal">Update</button>
-                <button type="button" data-ng-if="vm.isDeleteAvailable" class="btn btn-success"  data-ng-click="vm.delete()"  data-dismiss="modal">Delete</button>
+                <button type="button"  class="btn btn-info"  data-ng-click="vm.update()" data-dismiss="modal">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModalDeleteViewInfo" role="dialog"  >
+    <!--   <div class="modal-backdrop"> -->
+    <div class="modal-dialog  modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" >
+                <button type="button"  class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Employee Exam Attendant Info</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <table class="table table-hover table-bordered table-advanced">
+                        <thead>
+                        <tr>
+                            <td width="20%">Name of Invigilators</td>
+                            <td>{{vm.empExamAttendantInfoForDelete.employeeFullName}}</td>
+                        </tr>
+                        <tr>
+                            <td width="5%">Dept</td>
+                            <td>{{vm.empExamAttendantInfoForDelete.departmentShortName}}</td>
+                        </tr>
+                        <tr>
+                            <td width="35%">Invigilator Date</td>
+                            <td>
+                                <input align="center"
+                                       style="width:100%;text-align: center;"
+                                       data-ng-disabled="vm.isDeleteAvailable"
+                                       type="text"
+                                       data-date-format="dd-mm-yyyy" placeholder="Invigilator Date"
+                                       class="datepicker-default form-control"
+                                       data-ng-model="vm.upEmpExamInvDate"
+                                       data-ng-change="vm.dateChanged(vm.upEmpExamInvDate)"></td>
+                        </tr>
+                        <tr >
+                            <td width="20%">Reserve Date</td>
+                            <td>
+                                <input align="center"
+                                       style="width:100%;text-align: center;"
+                                       type="text"
+                                       data-ng-disabled="vm.isDeleteAvailable"
+                                       data-date-format="dd-mm-yyyy" placeholder="Reserve Date"
+                                       class="datepicker-default form-control"
+                                       data-ng-init="vm.upEmpExamReserveDate"
+                                       data-ng-model="vm.upEmpExamReserveDate"
+                                       data-ng-change="vm.dateChanged(vm.upEmpExamReserveDate)"></td></td>
+                        </tr>
+                        <tr>
+                            <td width="5%">Room</td>
+                            <td>{{vm.empExamAttendantInfoForDelete.invigilatorRoomName}}</td>
+                        </tr>
+                        </thead>
+                    </table>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button"  class="btn btn-default" data-ng-click="vm.close()"  data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success"  data-ng-click="vm.delete()"  data-dismiss="modal">Delete</button>
             </div>
         </div>
     </div>

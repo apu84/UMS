@@ -8,11 +8,14 @@ module ums{
         invigilatorRoomName:string;
         employeeId:string;
         employee:Employee;
-        employeeFullName:string;
+        employeeType:number;
+        designationId:number;
         deptId:string;
         department:IDepartment;
         invigilatorDate:string;
         reserveDate:string;
+        invigilatorDateForUpdate:string;
+        reserveDateForUpdate:string;
         departmentShortName:string;
 
     }
@@ -28,6 +31,21 @@ module ums{
             console.log("Inside-Service-add-info")
             console.log(json);
             this.httpClient.post("academic/empExamAttendance/addRecords",json,'application/json')
+                .success(()=>{
+                    defer.resolve('success')
+                })
+                .error((data)=>{
+                    console.log(data);
+                    this.notify.error("Problem in saving data");
+                    defer.resolve('failure');
+                });
+            return defer.promise;
+        }
+        public updateEmpExamAttendanceInfo(json:any):ng.IPromise<any>{
+            var defer = this.$q.defer();
+            console.log("Inside-Service-add-info")
+            console.log(json);
+            this.httpClient.post("academic/empExamAttendance/updateRecords",json,'application/json')
                 .success(()=>{
                     this.notify.success("Successfully Saved");
                     defer.resolve('success')
@@ -54,7 +72,6 @@ module ums{
             console.log(json);
             this.httpClient.put("academic/empExamAttendance/deleteRecords",json,'application/json')
                 .success(()=>{
-                    this.notify.success("Successfully Saved");
                     defer.resolve('success')
                 })
                 .error((data)=>{

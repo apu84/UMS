@@ -67,7 +67,7 @@
                 data-ng-click="vm.isEligibleForSubmitData()"
                 data-target="#myModal">submit</button>
     </div>
-<div>
+<div data-ng-if="vm.isSubmitModalAvailable">
     <div class="modal fade" id="myModal" role="dialog">
         <!--   <div class="modal-backdrop"> --->
         <div class="modal-dialog  modal-lg">

@@ -83,16 +83,16 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-md-7">
-                        <div>Employee Attendance->
-                            Semester: <b>{{vm.semesterName}}</b>
-                            Exam Type: <b>{{vm.selectedExamTypeName}}</b>
-                            EmployeeType: <b>{{vm.semesterName}}</b>
-                            Dept: <b>{{vm.semesterName}}</b>
-                            Exam Date: <b>{{vm.selectedExamDate}}</b>
+                        <div style="font-size: 13px;font-family: 'Times New Roman'">
+                            Semester:&nbsp<b>{{vm.semesterName}}</b>&nbsp
+                            Exam Type:&nbsp<b>{{vm.selectedExamTypeName}}</b>&nbsp
+                            EmployeeType:&nbsp<b>{{vm.employeeTypeName}}</b>&nbsp
+                            Dept:&nbsp<b>{{vm.departmentName}}</b>&nbsp
+                            Exam Date:&nbsp<b>{{vm.selectedExamDate}}</b>&nbsp
                         </div>
                     </div>
-                    <div class="col-md-5">
-                        <div align="right">
+                    <div class="col-md-5" data-ng-if="vm.isRightDivAvailable">
+                        <div align="right" style="font-size: 12px;font-family: 'Times New Roman'">
                             <button type="button" class="btn btn-default btn-xs" data-ng-click="vm.getClassRoomReport()">
                                 <span class="glyphicon glyphicon-download"></span> Memorandum
                             </button>
@@ -111,19 +111,31 @@
                 </div>
             </div>
             <div class="panel-body">
-                <div >
+                <div data-ng-if="vm.isRightDivAvailable">
+                    <div align="right" data-ng-hide="vm.isInsertAvailable" data-ng-if="vm.hideInsertMode">
+                        <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.enableInsert()">
+                            <span class="glyphicon glyphicon-plus"></span> Insert
+                        </button>
+                    </div>
+                    <div align="right" data-ng-show="vm.isInsertAvailable">
+                        <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.hideInsert()">
+                            <span class="glyphicon glyphicon-plus"></span> View
+                        </button>
+                    </div>
+
+                <div data-ng-show="vm.isInsertAvailable">
                     <div
                             data-ng-include="'views/employee-exam-attendance/emp-insert.html'">
                     </div>
                 </div>
                 <!--  End of Insert -->
-                <hr>
-                <div>
+                <div  data-ng-if="!vm.isInsertAvailable">
                     <div
                             data-ng-include="'views/employee-exam-attendance/emp-view.html'">
                     </div>
                 </div>
                 <!--  End of view -->
+            </div>
             </div>
 
         </div>

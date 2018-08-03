@@ -72,6 +72,12 @@ public class EmpExamAttendanceBuilder implements Builder<EmpExamAttendance, Muta
     if(pReadOnly.getReserveDate() != null) {
       pBuilder.add("reserveDate", pReadOnly.getReserveDate());
     }
+    if(pReadOnly.getInvigilatorDateForUpdate() != null) {
+      pBuilder.add("invigilatorDateForUpdate", pReadOnly.getInvigilatorDateForUpdate());
+    }
+    if(pReadOnly.getReserveDateForUpdate() != null) {
+      pBuilder.add("reserveDateForUpdate", pReadOnly.getReserveDateForUpdate());
+    }
   }
 
   @Override

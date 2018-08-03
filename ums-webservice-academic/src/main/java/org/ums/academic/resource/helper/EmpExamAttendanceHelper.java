@@ -66,6 +66,8 @@ public class EmpExamAttendanceHelper extends ResourceHelper<EmpExamAttendance, M
   @Transactional
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     Long id = mIdGenerator.getNumericId();
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.created(contextURI);
     JsonArray entries = pJsonObject.getJsonArray("entries");
     LocalCache localCache = new LocalCache();
     JsonObject jsonObject = entries.getJsonObject(0);
@@ -77,13 +79,15 @@ public class EmpExamAttendanceHelper extends ResourceHelper<EmpExamAttendance, M
     String invigilatorDate[] = application.getInvigilatorDate().split(",");
     String reverseDate[] = application.getReserveDate().split(",");
 
-    List<MutableEmpExamInvigilatorDate> invigilatorDateList = new ArrayList<>();
-    for(int i = 0; i < invigilatorDate.length; i++) {
-      PersistentEmpExamInvigilatorDate empExamInvigilatorDate = new PersistentEmpExamInvigilatorDate();
-      empExamInvigilatorDate.setAttendantId(id);
-      empExamInvigilatorDate.setExamDate(invigilatorDate[i]);
-      invigilatorDateList.add(empExamInvigilatorDate);
-    }
+    List<MutableEmpExamInvigilatorDate> invigilatorDateList = getMutableEmpExamInvigilatorDate(id, invigilatorDate);
+    List<MutableEmpExamReserveDate> reserveDateList = getMutableEmpExamReserveDate(id, reverseDate);
+    addInfo(application, invigilatorDateList, reserveDateList);
+
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+  }
+
+  private List<MutableEmpExamReserveDate> getMutableEmpExamReserveDate(Long id, String[] reverseDate) {
     List<MutableEmpExamReserveDate> reserveDateList = new ArrayList<>();
     for(int j = 0; j < reverseDate.length; j++) {
       PersistentEmpExamReserveDate empExamReserveDate = new PersistentEmpExamReserveDate();
@@ -91,7 +95,63 @@ public class EmpExamAttendanceHelper extends ResourceHelper<EmpExamAttendance, M
       empExamReserveDate.setExamDate(reverseDate[j]);
       reserveDateList.add(empExamReserveDate);
     }
+    return reserveDateList;
+  }
 
+  private List<MutableEmpExamInvigilatorDate> getMutableEmpExamInvigilatorDate(Long id, String[] invigilatorDate) {
+    List<MutableEmpExamInvigilatorDate> invigilatorDateList = new ArrayList<>();
+    for(int i = 0; i < invigilatorDate.length; i++) {
+      PersistentEmpExamInvigilatorDate empExamInvigilatorDate = new PersistentEmpExamInvigilatorDate();
+      empExamInvigilatorDate.setAttendantId(id);
+      empExamInvigilatorDate.setExamDate(invigilatorDate[i]);
+      invigilatorDateList.add(empExamInvigilatorDate);
+    }
+    return invigilatorDateList;
+  }
+
+  @Transactional
+  public Response UpdateRecords(JsonObject pJsonObject, UriInfo pUriInfo) {
+    URI contextURI = null;
+    Long id = mIdGenerator.getNumericId();
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+
+    LocalCache localCache = new LocalCache();
+    JsonObject jsonObject = entries.getJsonObject(0);
+    PersistentEmpExamAttendance application = new PersistentEmpExamAttendance();
+    getBuilder().build(application, jsonObject, localCache);
+    PersistentEmpExamInvigilatorDate empExamInvigilatorDate = new PersistentEmpExamInvigilatorDate();
+    empExamInvigilatorDate.setAttendantId(application.getId());
+    PersistentEmpExamReserveDate empExamReserveDate = new PersistentEmpExamReserveDate();
+    empExamReserveDate.setAttendantId(application.getId());
+    try {
+      /*
+       * mEmpExamInvigilatorDateManager.delete(empExamInvigilatorDate);
+       * mEmpExamReserveDateManager.delete(empExamReserveDate); mManager.delete(application);
+       */
+      PersistentEmpExamAttendance app = new PersistentEmpExamAttendance();
+      app.setId(id);
+      app.setSemesterId(11012017);
+      getBuilder().build(app, jsonObject, localCache);
+
+      String invigilatorDate[] = app.getInvigilatorDate().split(",");
+      String reverseDate[] = app.getReserveDate().split(",");
+
+      List<MutableEmpExamInvigilatorDate> invigilatorDateList = getMutableEmpExamInvigilatorDate(id, invigilatorDate);
+      List<MutableEmpExamReserveDate> reserveDateList = getMutableEmpExamReserveDate(id, reverseDate);
+      // addInfo(app, invigilatorDateList, reserveDateList);
+
+      builder.status(Response.Status.ACCEPTED);
+    } catch(Exception e) {
+      e.printStackTrace();
+      builder.status(Response.Status.NOT_FOUND);
+    }
+
+    return builder.build();
+  }
+
+  private void addInfo(PersistentEmpExamAttendance application,
+      List<MutableEmpExamInvigilatorDate> invigilatorDateList, List<MutableEmpExamReserveDate> reserveDateList) {
     try {
       mManager.create(application);
       mEmpExamInvigilatorDateManager.create(invigilatorDateList);
@@ -99,11 +159,6 @@ public class EmpExamAttendanceHelper extends ResourceHelper<EmpExamAttendance, M
     } catch(Exception e) {
       e.printStackTrace();
     }
-
-    URI contextURI = null;
-    Response.ResponseBuilder builder = Response.created(contextURI);
-    builder.status(Response.Status.CREATED);
-    return builder.build();
   }
 
   @Transactional
@@ -124,7 +179,7 @@ public class EmpExamAttendanceHelper extends ResourceHelper<EmpExamAttendance, M
       mEmpExamInvigilatorDateManager.delete(empExamInvigilatorDate);
       mEmpExamReserveDateManager.delete(empExamReserveDate);
       mManager.delete(application);
-      builder.status(Response.Status.CREATED);
+      builder.status(Response.Status.ACCEPTED);
     } catch(Exception e) {
       e.printStackTrace();
       builder.status(Response.Status.NOT_FOUND);
@@ -181,7 +236,6 @@ public class EmpExamAttendanceHelper extends ResourceHelper<EmpExamAttendance, M
     return object.build();
   }
 
-  @NotNull
   public List<MutableEmpExamAttendance> getMutableEmpExamAttendances(Integer pSemesterId, Integer pExamType) {
     List<EmpExamAttendance> empExamAttendances=mManager.getInfoBySemesterAndExamType(pSemesterId,pExamType);
     List<EmpExamInvigilatorDate> empExamInvigilatorDate=mEmpExamInvigilatorDateManager.getBySemesterAndExamType(pSemesterId,pExamType);
@@ -209,6 +263,8 @@ public class EmpExamAttendanceHelper extends ResourceHelper<EmpExamAttendance, M
       innerList.setDesignationId(app.getEmployees().getDesignationId());
       innerList.setInvigilatorDate(parseExamDate(empExamInvigilatorDateMap.get(app.getId())));
       innerList.setReserveDate(parseExamDate(empExamReserveDateMap.get(app.getId())));
+      innerList.setInvigilatorDateForUpdate(empExamInvigilatorDateMap.get(app.getId()));
+      innerList.setReserveDateForUpdate(empExamReserveDateMap.get(app.getId()));
       list.add(innerList);
     }
     return list;

@@ -34,6 +34,8 @@ public class PersistentEmpExamAttendance implements MutableEmpExamAttendance {
   private String mExamDate;
   private String mReserveDate;
   private String mInvigilatorDate;
+  private String mReserveDateForUpdate;
+  private String mInvigilatorDateForUpdate;
   private Integer mRoomInCharge;
 
   public PersistentEmpExamAttendance() {
@@ -56,6 +58,8 @@ public class PersistentEmpExamAttendance implements MutableEmpExamAttendance {
     mEmployeeType = pPersistentEmpExamAttendance.getEmployeeType();
     mDesignationId = pPersistentEmpExamAttendance.getDesignationId();
     mEmployee = pPersistentEmpExamAttendance.getEmployees();
+    mInvigilatorDateForUpdate = pPersistentEmpExamAttendance.getInvigilatorDateForUpdate();
+    mReserveDate = pPersistentEmpExamAttendance.getReserveDateForUpdate();
   }
 
   @Override
@@ -106,6 +110,16 @@ public class PersistentEmpExamAttendance implements MutableEmpExamAttendance {
   @Override
   public void setInvigilatorDate(String pInvigilatorDate) {
     mInvigilatorDate = pInvigilatorDate;
+  }
+
+  @Override
+  public void setReserveDateForUpdate(String pReserveDateForUpdate) {
+    mReserveDateForUpdate = pReserveDateForUpdate;
+  }
+
+  @Override
+  public void setInvigilatorDateForUpdate(String pInvigilatorDateForUpdate) {
+    mInvigilatorDateForUpdate = pInvigilatorDateForUpdate;
   }
 
   @Override
@@ -202,6 +216,16 @@ public class PersistentEmpExamAttendance implements MutableEmpExamAttendance {
   @Override
   public String getReserveDate() {
     return mReserveDate;
+  }
+
+  @Override
+  public String getInvigilatorDateForUpdate() {
+    return mInvigilatorDateForUpdate;
+  }
+
+  @Override
+  public String getReserveDateForUpdate() {
+    return mReserveDateForUpdate;
   }
 
   @Override

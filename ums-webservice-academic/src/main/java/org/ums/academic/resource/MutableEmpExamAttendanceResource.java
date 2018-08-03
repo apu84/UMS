@@ -22,8 +22,15 @@ public class MutableEmpExamAttendanceResource extends Resource {
   @POST
   @Path("/addRecords")
   @Produces({MediaType.APPLICATION_JSON})
-  public Response addExpelRecords(final JsonObject pJsonObject) throws Exception {
+  public Response addRecords(final JsonObject pJsonObject) throws Exception {
     return mHelper.post(pJsonObject, mUriInfo);
+  }
+
+  @POST
+  @Path("/updateRecords")
+  @Produces({MediaType.APPLICATION_JSON})
+  public Response updateRecords(final JsonObject pJsonObject) throws Exception {
+    return mHelper.UpdateRecords(pJsonObject, mUriInfo);
   }
 
   @PUT
