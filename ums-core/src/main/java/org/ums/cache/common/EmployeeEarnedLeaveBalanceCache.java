@@ -6,6 +6,8 @@ import org.ums.domain.model.mutable.common.MutableEmployeeEarnedLeaveBalance;
 import org.ums.manager.CacheManager;
 import org.ums.manager.common.EmployeeEarnedLeaveBalanceManager;
 
+import java.util.List;
+
 /**
  * Created by Monjur-E-Morshed on 26-Jul-18.
  */
@@ -28,5 +30,10 @@ public class EmployeeEarnedLeaveBalanceCache
   @Override
   public EmployeeEarnedLeaveBalance getEarnedLeaveBalance(String pEmployeeId) {
     return getManager().getEarnedLeaveBalance(pEmployeeId);
+  }
+
+  @Override
+  public List<EmployeeEarnedLeaveBalance> getAllEarnedLeaveBalanceOfActiveEmployees() {
+    return getManager().getAllEarnedLeaveBalanceOfActiveEmployees();
   }
 }

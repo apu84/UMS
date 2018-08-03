@@ -51,6 +51,14 @@ public class PersistentEmployeeEarnedLeaveBalanceHistoryDao extends EmployeeEarn
   }
 
   @Override
+  public List<EmployeeEarnedLeaveBalanceHistory> getAllEarnedLeaveBalanceHistoryOfActiveEmployees() {
+    String query =
+        SELECT_ALL + " where EMPLOYEE_ID in ( "
+            + "    select EMPLOYEE_ID from EMPLOYEES where EMPLOYEE_TYPE=1 and status=1 " + "    )";
+    return mNamedParameterJdbcTemplate.query(query, new EmployeeEarnedLeaveBalanceHistoryRowMapper());
+  }
+
+  @Override
   public EmployeeEarnedLeaveBalanceHistory get(Long pId) {
     String query = SELECT_ALL + " where id=?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new EmployeeEarnedLeaveBalanceHistoryRowMapper());

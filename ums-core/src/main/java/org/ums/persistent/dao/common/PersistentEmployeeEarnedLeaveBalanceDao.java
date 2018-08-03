@@ -59,6 +59,14 @@ public class PersistentEmployeeEarnedLeaveBalanceDao extends EmployeeEarnedLeave
   }
 
   @Override
+  public List<EmployeeEarnedLeaveBalance> getAllEarnedLeaveBalanceOfActiveEmployees() {
+    String query =
+        "select * from EMP_EL_BALANCE where EMPLOYEE_ID in ( "
+            + "    select EMPLOYEE_ID from EMPLOYEES where EMPLOYEE_TYPE=1 and status=1 " + "    )";
+    return super.getAllEarnedLeaveBalanceOfActiveEmployees();
+  }
+
+  @Override
   public EmployeeEarnedLeaveBalance validate(EmployeeEarnedLeaveBalance pReadonly) {
     return get(pReadonly.getId());
   }

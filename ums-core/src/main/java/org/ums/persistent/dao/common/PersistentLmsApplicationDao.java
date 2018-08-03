@@ -13,6 +13,7 @@ import org.ums.util.UmsUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +72,14 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
   public List<LmsApplication> getAll() {
     String query = SELECT_ALL;
     return mNamedParameterJdbcTemplate.query(query, new LmsApplicationRowMapper());
+  }
+
+  @Override
+  public List<LmsApplication> getWithinDateRange(Date pStartDate, Date pEndDate,
+      LeaveApplicationApprovalStatus pLeaveApplicationStatus) {
+    String query = "select * from LMS_APPLICATION where (FROM_DATE>=? or TO_DATE<=?) and APP_STATUS=?";
+    return mJdbcTemplate.query(query, new Object[] {pStartDate, pEndDate, pLeaveApplicationStatus.getId()},
+        new LmsApplicationRowMapper());
   }
 
   @Override

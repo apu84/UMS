@@ -6,6 +6,8 @@ import org.ums.domain.model.mutable.common.MutableEmployeeEarnedLeaveBalanceHist
 import org.ums.manager.CacheManager;
 import org.ums.manager.common.EmployeeEarnedLeaveBalanceHistoryManager;
 
+import java.util.List;
+
 public class EmployeeEarnedLeaveBalanceHistoryCache
     extends
     ContentCache<EmployeeEarnedLeaveBalanceHistory, MutableEmployeeEarnedLeaveBalanceHistory, Long, EmployeeEarnedLeaveBalanceHistoryManager>
@@ -23,4 +25,8 @@ public class EmployeeEarnedLeaveBalanceHistoryCache
     return mCacheManager;
   }
 
+  @Override
+  public List<EmployeeEarnedLeaveBalanceHistory> getAllEarnedLeaveBalanceHistoryOfActiveEmployees() {
+    return getManager().getAllEarnedLeaveBalanceHistoryOfActiveEmployees();
+  }
 }

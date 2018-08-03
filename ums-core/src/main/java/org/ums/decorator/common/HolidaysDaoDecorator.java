@@ -5,6 +5,7 @@ import org.ums.domain.model.immutable.common.Holidays;
 import org.ums.domain.model.mutable.common.MutableHolidays;
 import org.ums.manager.common.HolidaysManager;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,5 +17,10 @@ public class HolidaysDaoDecorator extends ContentDaoDecorator<Holidays, MutableH
   @Override
   public List<Holidays> getHolidays(int pYear) {
     return getManager().getHolidays(pYear);
+  }
+
+  @Override
+  public List<Holidays> getHolidays(Date pFromDate, Date pToDate) {
+    return getManager().getHolidays(pFromDate, pToDate);
   }
 }
