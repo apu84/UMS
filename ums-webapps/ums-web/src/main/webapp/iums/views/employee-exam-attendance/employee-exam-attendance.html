@@ -119,7 +119,7 @@
                     </div>
                     <div align="right" data-ng-show="vm.isInsertAvailable">
                         <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.hideInsert()">
-                            <span class="glyphicon glyphicon-plus"></span> View
+                            <span class="glyphicon glyphicon-plus"></span> Hide Insert
                         </button>
                     </div>
 
@@ -127,9 +127,10 @@
                     <div
                             data-ng-include="'views/employee-exam-attendance/emp-insert.html'">
                     </div>
+                    <hr>
                 </div>
                 <!--  End of Insert -->
-                <div  data-ng-if="!vm.isInsertAvailable">
+                <div >
                     <div
                             data-ng-include="'views/employee-exam-attendance/emp-view.html'">
                     </div>

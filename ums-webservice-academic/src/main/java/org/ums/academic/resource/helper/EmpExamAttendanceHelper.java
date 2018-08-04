@@ -118,6 +118,7 @@ public class EmpExamAttendanceHelper extends ResourceHelper<EmpExamAttendance, M
 
     LocalCache localCache = new LocalCache();
     JsonObject jsonObject = entries.getJsonObject(0);
+    JsonObject jsonObjectForAdd = entries.getJsonObject(0);
     PersistentEmpExamAttendance application = new PersistentEmpExamAttendance();
     getBuilder().build(application, jsonObject, localCache);
     PersistentEmpExamInvigilatorDate empExamInvigilatorDate = new PersistentEmpExamInvigilatorDate();
@@ -125,28 +126,28 @@ public class EmpExamAttendanceHelper extends ResourceHelper<EmpExamAttendance, M
     PersistentEmpExamReserveDate empExamReserveDate = new PersistentEmpExamReserveDate();
     empExamReserveDate.setAttendantId(application.getId());
     try {
-      /*
-       * mEmpExamInvigilatorDateManager.delete(empExamInvigilatorDate);
-       * mEmpExamReserveDateManager.delete(empExamReserveDate); mManager.delete(application);
-       */
+
+        mEmpExamInvigilatorDateManager.delete(empExamInvigilatorDate);
+        mEmpExamReserveDateManager.delete(empExamReserveDate);
+         mManager.delete(application);
+
       PersistentEmpExamAttendance app = new PersistentEmpExamAttendance();
+      getBuilder().build(app, jsonObjectForAdd, localCache);
       app.setId(id);
       app.setSemesterId(11012017);
-      getBuilder().build(app, jsonObject, localCache);
 
       String invigilatorDate[] = app.getInvigilatorDate().split(",");
       String reverseDate[] = app.getReserveDate().split(",");
 
       List<MutableEmpExamInvigilatorDate> invigilatorDateList = getMutableEmpExamInvigilatorDate(id, invigilatorDate);
       List<MutableEmpExamReserveDate> reserveDateList = getMutableEmpExamReserveDate(id, reverseDate);
-      // addInfo(app, invigilatorDateList, reserveDateList);
+      addInfo(app, invigilatorDateList, reserveDateList);
 
       builder.status(Response.Status.ACCEPTED);
     } catch(Exception e) {
       e.printStackTrace();
       builder.status(Response.Status.NOT_FOUND);
     }
-
     return builder.build();
   }
 

@@ -11,7 +11,7 @@ import org.ums.domain.model.immutable.Employee;
  */
 public interface MutableEmpExamAttendance extends EmpExamAttendance, Editable<Long>, MutableLastModifier,
     MutableIdentifier<Long> {
-  void setId(final Long pId);
+  void setId(Long pId);
 
   void setSemesterId(final Integer pSemesterId);
 

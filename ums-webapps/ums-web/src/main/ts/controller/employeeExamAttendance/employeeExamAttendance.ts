@@ -105,7 +105,6 @@ module ums{
 
             this.getSemesters();
             this.getExamDates();
-            this.initializeDatePickers();
         }
          private enableInsert(){
              this.isInsertAvailable=true;
@@ -220,6 +219,7 @@ module ums{
          }
          private initializeDatePickers() {
              setTimeout(function () {
+                 $('.datepicker').datepicker('remove');
                  $('.datepicker-default').datepicker({
                      inputs: undefined,
                      todayHighlight:true,
@@ -227,7 +227,6 @@ module ums{
                      clearBtn: true
                  });
                  $('.datepicker-default').on('change', function () {
-
                  });
              }, 200);
          }
@@ -278,17 +277,14 @@ module ums{
              this.initializeDatePickers();
          }
          private updateInfo(value:any):void{
-            console.log("Update p Info");
              this.upEmpExamInvDate="";
              this.upEmpExamReserveDate="";
              this.empExamAttendantInfoForUpdate=value;
              this.upEmpExamInvDate=this. empExamAttendantInfoForUpdate.invigilatorDateForUpdate;
              this.upEmpExamReserveDate=this. empExamAttendantInfoForUpdate.reserveDateForUpdate;
              this.isDeleteAvailable=false;
-             console.log("Inv: "+this.upEmpExamInvDate+"\nRes: "+this.upEmpExamReserveDate);
          }
          private deleteInfo(value:any):void{
-             console.log("Inside Delete");
              this.upEmpExamInvDate="";
              this.upEmpExamReserveDate="";
              this. empExamAttendantInfoForDelete=value;
@@ -306,27 +302,15 @@ module ums{
                 });
          }
          private update():void{
-            console.log("********Update**********");
-             var del = this.convertToJsonForDelete(this. empExamAttendantInfoForUpdate);
-             console.log(del);
              var up = this.convertToJsonForUpdate(this. empExamAttendantInfoForUpdate);
              console.log(up);
-           this.employeeExamAttendanceService.deleteEmpExamAttendanceInfo(del).then((data) => {
-                 if(data=="success" || data.equals("success")){
-                     console.log("After delete");
-                     this.employeeExamAttendanceService.addEmpExamAttendanceInfo(up).then((data)=>{
-                         if(data=="success" || data.equals("success")) {
-                             this.notify.success("Successfully updated");
-                         }
-                     });
-                 }else{
-                    this.notify.error("Error in saving data");
-                 }
-               this.upEmpExamReserveDate="";
-               this.upEmpExamInvDate="";
-               this.initializeDatePickers();
-               this.getData();
-             });
+            this.employeeExamAttendanceService.updateEmpExamAttendanceInfo(up).then((data)=>{
+                this.upEmpExamReserveDate="";
+                this.upEmpExamInvDate="";
+                this.initializeDatePickers();
+                this.getData();
+            });
+
          }
          public  getClassRoomReport():void{
             this.employeeExamAttendanceService.getMemorandumReport(this.selectedSemesterId,this.selectedExamTypeId).then((data)=>{
@@ -377,6 +361,7 @@ module ums{
              console.log("Update Json");
              var jsonObj = [];
              var item = {};
+             item["id"] =result.id.toString();
              item["employeeId"] =result.employeeId;
              item["examType"] =result.examType;
              item["roomInCharge"] =result.roomInCharge;
