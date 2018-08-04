@@ -120,7 +120,20 @@ module ums{
 
       public getFilteredDesignation(pDeptId: string, pEmployeeTypeId: number): ng.IPromise<any>{
           var defer = this.$q.defer();
-          this.httpClient.get("deptDesignationMap/dept/" + pDeptId + "/employeeType/" + pEmployeeTypeId, 'application/json',
+          this.httpClient.get("deptDesignationRoleMap/dept/" + pDeptId + "/employeeType/" + pEmployeeTypeId, 'application/json',
+              (result:any,etag:string)=>{
+                  defer.resolve(result.entries);
+              },
+              (response:ng.IHttpPromiseCallbackArg<any>)=>{
+                  console.error(response);
+              });
+
+          return defer.promise;
+      }
+
+      public getDesignation(pDeptId: string): ng.IPromise<any>{
+          var defer = this.$q.defer();
+          this.httpClient.get("deptDesignationRoleMap/dept/" + pDeptId, 'application/json',
               (result:any,etag:string)=>{
                   defer.resolve(result.entries);
               },

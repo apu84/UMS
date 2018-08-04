@@ -1,6 +1,6 @@
 {
   "model": {
-    "name": "SystemGroupMap",
+    "name": "EmployeeEarnedLeaveBalanceHistory",
     "package": "org.ums.domain.model.immutable",
     "fields": [
       {
@@ -10,23 +10,38 @@
         }
       },
       {
-        "groupType": "GroupType"
-      },
-      {
-        "Group": {
+        "Employee": {
           "type": "Ref",
           "reference": {
-            "name": "Group",
-            "package": "org.ums.domain.model.immutable.accounts",
+            "name": "Employee",
+            "package": "org.ums.domain.model.immutable",
             "id": {
-              "type": "Long"
+              "type": "String"
             },
             "manager": {
-              "name": "GroupManager",
-              "package": "org.ums.manager.accounts"
+              "name": "EmployeeManager",
+              "package": "org.ums.manager"
             }
           }
         }
+      },
+      {
+        "leaveMigrationType": "LeaveMigrationType"
+      },
+      {
+        "changedOn":"Date"
+      },
+      {
+        "debit":"BigDecimal"
+      },
+      {
+        "credit":"BigDecimal"
+      },
+      {
+        "balance":"BigDecimal"
+      },
+      {
+        "balanceType":"LeaveBalanceType"
       }
     ]
   }

@@ -44,6 +44,7 @@ module ums {
     public fromHistory: boolean;
     public activeLeaveSection: boolean;
     public fromActiveLeaveSection: boolean;
+    public showRemainingLeaves:boolean;
 
 
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'employeeService', 'additionalRolePermissionsService', 'userService', 'commonService', 'attachmentService'];
@@ -66,7 +67,7 @@ module ums {
                 private userService: UserService,
                 private commonservice: CommonService, private attachmentService: AttachmentService) {
 
-      this.resultsPerPage = "3";
+      this.resultsPerPage = "15";
       this.showApprovalSection = true;
       this.backgroundColor = "white";
       this.showHistorySection = false;
@@ -83,6 +84,7 @@ module ums {
       this.leaveApprovalStatusList = [];
       this.leaveApprovalStatusList = this.appConstants.leaveApprovalStatus;
       this.leaveApprovalStatus = this.leaveApprovalStatusList[0];
+      this.showRemainingLeaves = false;
 
 
       this.initializeDepartmentOffice = this.initializeDepartmentOffice.bind(this);
@@ -90,7 +92,6 @@ module ums {
       this.getUsersInformation();
       this.getAdditionaPermissions();
       this.getLeaveTypes();
-
     }
 
       private getLeaveTypes() {
@@ -103,6 +104,24 @@ module ums {
 
           });
       }
+
+    public getStatusLabel(lmsAppStatus: LmsApplicationStatus): string {
+      if (lmsAppStatus.actionStatus == 1)
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i><span class=\"label label-default\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+      else if (lmsAppStatus.actionStatus == 2)
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i><span class=\"label label-primary\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+      else if (lmsAppStatus.actionStatus == 3)
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i><span class=\"label label-danger\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+      else if (lmsAppStatus.actionStatus == 4)
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i><span class=\"label label-info\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+      else if (lmsAppStatus.actionStatus == 5)
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i><span class=\"label label-danger\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+      else if (lmsAppStatus.actionStatus = 6)
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i><span class=\"label label-danger\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+      else
+        return "By " + lmsAppStatus.actionTakenByName + " on " + lmsAppStatus.actionTakenOn + " <i> <span class=\"label label-success\">" + lmsAppStatus.actionStatusLabel + "</span></i>";
+
+    }
 
     private showActiveLeaveSection() {
       this.activeLeaveSection = true;
@@ -197,7 +216,7 @@ module ums {
       if (this.pagination.currentPage == null)
         this.pagination.currentPage = 1;
       console.log(this.pagination.currentPage);
-      this.leaveApplicationStatusService.fetchAllLeaveApplicationsOfEmployeeWithPagination(this.applicantsId, this.leaveApprovalStatus.id, this.pagination.currentPage, this.itemsPerPage).then((leaveApplications) => {
+        this.leaveApplicationStatusService.fetchAllLeaveApplicationsOfEmployeeWithPagination(this.applicantsId, this.leaveApprovalStatus.id, this.pagination.currentPage, this.itemsPerPage).then((leaveApplications) => {
         this.pendingApplications = leaveApplications.statusList;
         this.totalItems = leaveApplications.totalSize;
         console.log("Histories...");
@@ -225,9 +244,9 @@ module ums {
     }
 
     private saveAction() {
+      this.showRemainingLeaves=false;
       this.convertToJson().then((json) => {
         this.leaveApplicationStatusService.saveLeaveApplicationStatus(json).then((message) => {
-          this.getRemainingLeaves(this.pendingApplication.applicantsId);
           this.disableApproveAndRejectButton = true;
           this.fetchApplicationStatus(this.pendingApplication, this.pagination.currentPage);
         });
@@ -298,8 +317,10 @@ module ums {
 
     }
 
-    private setResultsPerPage(resultsPerPage: number) {
-      if (resultsPerPage >= 1) {
+    private setResultsPerPage(resultsPerPage: any) {
+      console.log("Results per page");
+      console.log(resultsPerPage);
+      if (isNaN(resultsPerPage) && resultsPerPage >= 1) {
         this.itemsPerPage = resultsPerPage;
         if (this.showHistorySection) {
           this.getAllLeaveApplicationsForHistory();
@@ -318,6 +339,7 @@ module ums {
     private getRemainingLeaves(employeeId: string) {
       this.remainingLeaves = [];
       this.leaveApplicationService.fetchRemainingLeavesByEmployeeId(employeeId).then((remainingLeaves) => {
+        this.showRemainingLeaves=true;
         this.remainingLeaves = remainingLeaves;
       });
     }
@@ -338,21 +360,25 @@ module ums {
       });
     }
 
-    private setCurrent(currentPage: number) {
+    private setCurrent(currentPage: any) {
       console.log("In set current");
       this.pagination.currentPage = currentPage;
       this.pendingApplications = [];
-      if (this.showHistorySection) {
-        this.getAllLeaveApplicationsForHistory();
-      } else {
-        this.leaveApplicationStatusService.fetchLeaveApplicationsWithPagination(this.leaveApprovalStatus.id, currentPage, this.itemsPerPage).then((apps) => {
-          this.pendingApplications = apps.statusList;
-          this.totalItems = apps.totalSize;
-        });
-      }
+        if (this.showHistorySection) {
+          this.getAllLeaveApplicationsForHistory();
+        } else {
+          this.leaveApplicationStatusService.fetchLeaveApplicationsWithPagination(this.leaveApprovalStatus.id, currentPage, this.itemsPerPage).then((apps) => {
+            this.pendingApplications = apps.statusList;
+            this.totalItems = apps.totalSize;
+          });
+        }
+
     }
 
     private fetchApplicationStatus(pendingApplication: LmsApplicationStatus, currentPage: number) {
+      console.log("Fetching application status");
+      console.log(pendingApplication);
+      this.leaveApplicationService.employeeId= pendingApplication.applicantsId;
       if (this.showHistorySection == true) {
         this.fromHistory = true;
       } else {
@@ -374,7 +400,8 @@ module ums {
       this.approveButtonClicked = false;
       this.rejectButtonClicked = false;
 
-      this.getRemainingLeaves(pendingApplication.applicantsId);
+      if (pendingApplication!=undefined)
+       this.getRemainingLeaves(pendingApplication.applicantsId);
 
       this.attachmentService.fetchAttachments(Utils.APPLICATION_TYPE_LEAVE.toString(), pendingApplication.appId).then((attachments) => {
         this.fileAttachments = [];
@@ -422,8 +449,11 @@ module ums {
       console.log(this.approveButtonClicked);
       if (this.approveButtonClicked) {
         item['leaveApprovalStatus'] = Utils.LEAVE_APPLICATION_ACCEPTED;
+        item['comments'] = this.data.comment == null ? "Approved" : this.data.comment;
       } else {
         item['leaveApprovalStatus'] = Utils.LEAVE_APPLICATION_REJECTED;
+        item['comments'] = this.data.comment == null ? "Rejected" : this.data.comment;
+
       }
       jsonObject.push(item);
       completeJson['entries'] = jsonObject;

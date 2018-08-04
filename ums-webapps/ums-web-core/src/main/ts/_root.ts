@@ -51,6 +51,7 @@
 /// <reference path='service/DivisionService.ts'/>
 /// <reference path='service/DistrictService.ts'/>
 /// <reference path='service/ThanaService.ts'/>
+/// <reference path='service/BibtexParserService.ts'/>
 
 /// <reference path='controller/AppController.ts'/>
 /// <reference path='controller/MainController.ts'/>
@@ -68,6 +69,7 @@
 /// <reference path='directive/MainNavigation.ts'/>
 /// <reference path='directive/BindHtml.ts'/>
 /// <reference path='directive/DatePicker.ts'/>
+/// <reference path='directive/UiDatePicker.ts'/>
 /// <reference path='directive/FileInput.ts'/>
 /// <reference path='directive/TablePaginatorWrapper.ts'/>
 /// <reference path='directive/Spinner.ts'/>

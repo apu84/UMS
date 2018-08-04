@@ -6,7 +6,6 @@ import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableSeatPlanGroup;
 import org.ums.manager.ProgramManager;
-import org.ums.manager.RoutineManager;
 import org.ums.manager.SeatPlanGroupManager;
 import org.ums.manager.SemesterManager;
 

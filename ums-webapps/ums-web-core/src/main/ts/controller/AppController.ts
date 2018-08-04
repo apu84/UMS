@@ -1,13 +1,17 @@
 module ums {
   export class AppController {
-    public static $inject = ['$scope', '$rootScope', '$window', '$http', '$templateCache','HttpClient'];
+    public static $inject = ['$scope', '$rootScope', '$window', '$http', '$templateCache','HttpClient', '$transitions'];
 
+    private transition: any;
     constructor(private $scope:any,
                 private $rootScope:any,
                 private $window: ng.IWindowService,
                 private $http: ng.IHttpService,
                 private $templateCache: ng.ITemplateCacheService,
-                private httpClient: HttpClient) {
+                private httpClient: HttpClient,
+                private $transition: any) {
+
+      this.transition = $transition;
       $scope.downloadUserGuide = this.downloadUserGuide.bind(this);
 
       this.$rootScope.style = 'style1';
@@ -67,7 +71,7 @@ module ums {
         }
       };
 
-      this.$scope.$on('$stateChangeSuccess', (event, toState, toParams, fromState, fromParams) => {
+      this.transition.onSuccess({}, ($transition$) => {
         /*
         //Commented by Ifti
         this.$scope.header.animation = 'fadeInUp';
@@ -78,15 +82,15 @@ module ums {
         */
 
         var breadcrumb="";
-        if(toState.url =="/gradeSheetSelectionTeacher/:1")
+        if($transition$.promise.$$state.value["url"] =="/gradeSheetSelectionTeacher/:1")
           breadcrumb="/gradeSheetSelectionTeacher/T";
         else
-          breadcrumb =toState.url;
+          breadcrumb =$transition$.promise.$$state.value["url"];
         this.$scope.data = $.fn.Data.get(breadcrumb);
 
 
         $('.sidebar-collapse').removeClass('in').addClass('collapse');
-        if (-1 == $.inArray(toState.url, ['/extra-500', '/extra-404', '/extra-lock-screen', '/extra-signup', '/extra-signin'])) {
+        if (-1 == $.inArray($transition$.promise.$$state.value["url"], ['/extra-500', '/extra-404', '/extra-lock-screen', '/extra-signup', '/extra-signin'])) {
           $('body').removeClass('bounceInLeft');
           $("body>.default-page").show();
           $("body>.extra-page").hide();

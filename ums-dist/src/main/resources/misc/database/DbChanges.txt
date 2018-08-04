@@ -1191,11 +1191,13 @@ CREATE TABLE DB_IUMS.MEETING_AGENDA_RESOLUTION
   AGENDA_NO          VARCHAR2(20 BYTE),
   AGENDA             CLOB,
   AGENDA_EDITOR      VARCHAR2(1 BYTE),
+  PLAIN_AGENDA       CLOB,
   RESOLUTION         CLOB,
   RESOLUTION_EDITOR  VARCHAR2(1 BYTE),
+  PLAIN_RESOLUTION   CLOB,
   SCHEDULE_ID        NUMBER,
   LAST_MODIFIED      VARCHAR2(18 BYTE)
-);
+)
 
 
 //********************************************************************************************************************
@@ -1578,3 +1580,79 @@ ALTER TABLE RECORDS
     DROP COLUMN BINDING_TYPE;
 
 -----------------------------------------------------------------------------------------------------------
+
+----------------------------------- Library Moving Paper Quality -------------------------------------------
+
+alter table items
+ add PAPER_QUALITY VARCHAR2(100 BYTE);
+
+update items item set PAPER_QUALITY = ( select substr(
+physical_desc,
+INSTR(physical_desc,'paperQuality')+15,
+length(physical_desc)-
+(INSTR(physical_desc,'paperQuality')+16)
+) as paper_quality from records rec where physical_desc is not null and REC.MFN = ITEM.MFN)
+
+
+Update records set physical_desc=replace(physical_desc,',"paperQuality":"'||substr(
+physical_desc,
+INSTR(physical_desc,'paperQuality')+15,
+length(physical_desc)-
+(INSTR(physical_desc,'paperQuality')+16)
+)||'"') where physical_desc is not null;
+
+------------------------------------------------------------------------------------------------------------
+
+
+----------------------------------------- AOI Table Altered -------------------------------------------
+
+ALTER TABLE EMP_AOI_INFO
+    ADD AOI VARCHAR2(50 BYTE);
+
+
+ALTER TABLE EMP_AOI_INFO
+    DROP COLUMN AOI_ID;
+
+-------------------------------------------------------------------------------------------------------------
+
+
+----------------------------------------------------------------------------------------------------------
+
+
+SELECT MFN,COUNT(MFN) FROM RECORDS GROUP BY MFN HAVING COUNT(MFN)>1
+
+UPDATE RECORDS SET NEW_MFN=MFN;
+
+UPDATE RECORDS SET MFN=NEW_MFN;
+
+SELECT * FROM RECORDS ORDER BY MFN_ORG DESC;
+
+
+
+
+
+CREATE SEQUENCE SQN_RECORD
+  START WITH 1
+  MAXVALUE 9999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+
+declare
+  type ridlist is table of NUMBER index by pls_integer;
+      l_rowid ridlist;
+    begin
+      select MFN_ORG
+      bulk collect into l_rowid
+      from RECORDS
+      order by TITLE;
+
+     forall i in 1 .. l_rowid.count
+       update RECORDS set NEW_MFN = SQN_RECORD.nextval
+       where MFN_ORG = l_rowid(i);
+   end;
+   /
+
+ ------------------------------------------------------------------------------------------------

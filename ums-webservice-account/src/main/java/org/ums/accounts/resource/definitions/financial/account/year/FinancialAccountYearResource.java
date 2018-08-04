@@ -6,6 +6,7 @@ import org.ums.enums.accounts.definitions.financial.account.year.FinancialAccoun
 import org.ums.logs.GetLog;
 import org.ums.resource.Resource;
 import org.ums.util.UmsUtils;
+import org.ums.util.Utils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -25,7 +26,7 @@ public class FinancialAccountYearResource extends MutableFinancialAccountyearRes
   @GetLog(message = "Requested for fetching all financial account year")
   @Path("/all")
   public List<FinancialAccountYear> getAll(@Context HttpServletRequest pHttpServletRequest) {
-    List<FinancialAccountYear> years = mFinancialAccountYearManager.getAll();
+    List<FinancialAccountYear> years = mFinancialAccountYearManager.getAll(Utils.getCompany());
     return years;
   }
 
@@ -33,7 +34,7 @@ public class FinancialAccountYearResource extends MutableFinancialAccountyearRes
   @GetLog(message = "Requested for fetching the opened financial account year")
   @Path("/openedYear")
   public FinancialAccountYear getOpenedFinancialAccountYear(@Context HttpServletRequest pHttpServletRequest) {
-    return mHelper.getContentManager().getOpenedFinancialAccountYear();
+    return mHelper.getContentManager().getOpenedFinancialAccountYear(Utils.getCompany());
   }
 
   @GET

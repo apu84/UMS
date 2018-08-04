@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="col-md-12">
+        <form class="form-horizontal">
+
+            <div class="form-group">
+                <label class="control-label col-md-2" for="roomNo">Room No :</label>
+                <div class="col-md-4">
+                    <ui-select id="room" theme="bootstrap"
+                               data-ng-model="vm.selectedRoom" on-select="vm.roomSearched()"
+                    >
+                        <ui-select-match placeholder="Select Room No">{{vm.selectedRoom.roomNo}}
+                        </ui-select-match>
+                        <ui-select-choices id="roomNo"
+                                           repeat="g in vm.classRoutineService.roomList | filter:$select.search">
+                            <small ng-bind-html="g.roomNo | highlight:$select.search"></small>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+
+            <p>Room No : <b>{{vm.selectedRoom.roomNo}}</b></p>
+            <p>Capacity : <b>{{vm.selectedRoom.capacity}}</b></p>
+
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <p><b>Course in routine</b></p>
+    </div>
+    <div class="col-md-12">
+        <table class="table table-bordered table-striped">
+            <thread>
+                <th>Day</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Course No</th>
+                <th>Course Title</th>
+                <th>Section</th>
+            </thread>
+            <tbody>
+            <tr ng-repeat="routine in vm.routineBasedOnRoom">
+
+                <td>{{vm.classRoutineService.weekDayMapWithId[routine.day]}}</td>
+                <td>{{routine.startTime}}</td>
+                <td>{{routine.endTime}}</td>
+                <td>{{routine.course.courseNumber}}</td>
+                <td>{{routine.course.courseTitle}}</td>
+                <td>{{routine.section}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

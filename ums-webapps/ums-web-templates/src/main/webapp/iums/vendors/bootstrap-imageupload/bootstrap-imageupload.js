@@ -267,7 +267,7 @@ if (typeof jQuery === 'undefined') {
                         var imgHeight = this.height;
                         var imgWidth = this.width;
                         if (imgHeight >= options.height || imgWidth >= options.width) {
-                            $fileTab.prepend(getAlertHtml("Image height and width should be: " + options.height + " and " + options.width));
+                            $fileTab.prepend(getAlertHtml("Image height and width should be: " + (options.height - 1) + " and " + (options.width - 1)));
                             $browseFileButton.find('span').text('Browse');
                             $fileInput.val('');
                         }

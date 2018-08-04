@@ -87,7 +87,24 @@ module ums {
             })
             .state('cataloging', {
                 url: "/cataloging",
-                templateUrl: 'views/admin/cataloging/catalog-home.html'
+                templateUrl: 'views/admin/cataloging/catalog-home.html',
+                resolve: {
+                    contributor: ['contributorService', function(contributorService){
+                        return contributorService.fetchAllContributors().then((contributors) =>{
+                            return contributors.entries;
+                        });
+                    }],
+                    publisher: ['publisherService', function(publisherService){
+                        return publisherService.fetchAllPublishers().then((publishers) =>{
+                            return publishers.entries;
+                        });
+                    }],
+                    supplier: ['supplierService', function(supplierService){
+                        return supplierService.fetchAllSuppliers().then((suppliers) =>{
+                            return suppliers.entries;
+                        });
+                    }]
+                }
             })
             .state('cataloging.thesis', {
                 url: "/thesis",
@@ -232,7 +249,8 @@ module ums {
             .state('employeeProfile.personal', {
                 url: "/personal",
                 params : {
-                    'id1': null
+                    'id': null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/personal-information.html',
                 controller: 'PersonalInformation',
@@ -241,16 +259,18 @@ module ums {
             .state('employeeProfile.academic', {
                 url: "/academic",
                 params : {
-                    'id2': null
+                    'id': null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/academic-information.html',
-                controller: 'EducationInformation',
+                controller: 'AcademicInformation',
                 controllerAs: 'vm'
             })
             .state('employeeProfile.publication', {
                 url: "/publication",
                 params : {
-                    'id3': null
+                    'id': null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/publication-information.html',
                 controller: 'PublicationInformation',
@@ -259,7 +279,8 @@ module ums {
             .state('employeeProfile.training', {
                 url: "/training",
                 params : {
-                    'id4': null
+                    'id': null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/training-information.html',
                 controller: 'TrainingInformation',
@@ -268,7 +289,8 @@ module ums {
             .state('employeeProfile.award', {
                 url: "/award",
                 params : {
-                    'id5': null
+                    'id': null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/award-information.html',
                 controller: 'AwardInformation',
@@ -277,7 +299,8 @@ module ums {
             .state('employeeProfile.experience', {
                 url: "/experience",
                 params : {
-                    'id6': null
+                    'id': null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/experience-information.html',
                 controller: 'ExperienceInformation',
@@ -286,7 +309,8 @@ module ums {
             .state('employeeProfile.additional', {
                 url: "/additional",
                 params : {
-                    'id7': null
+                    'id': null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/additional-information.html',
                 controller: 'AdditionalInformation',
@@ -295,20 +319,12 @@ module ums {
             .state('employeeProfile.service', {
                 url: "/service",
                 params : {
-                    'id8': null
+                    'id': null,
+                    'edit': null
                 },
                 templateUrl: 'views/employee/service-information.html',
                 controller: 'ServiceInformation',
                 controllerAs: 'vm'
-            })
-            .state('changePassword', {
-                url: "/changePassword",
-                controller: 'ChangePassword',
-                templateUrl: 'views/common/change-password.html'
-            })
-            .state('logout', {
-                url: "/logout",
-                controller: 'Logout'
             })
             .state('searchLibrary', {
                 url: "/searchLibrary",
@@ -325,12 +341,15 @@ module ums {
                     }]
                 }
             })
-
             .state('borrow', {
                 url: "/borrow",
                 controller: 'BorrowHistory',
                 templateUrl: 'views/borrow-history.html',
                 controllerAs: 'vm'
+            })
+            .state('logout', {
+                url: "/logout",
+                controller: 'Logout'
             })
     });
 }

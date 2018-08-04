@@ -13,7 +13,7 @@ import java.util.List;
 
 public class PersistentDegreeTitleDao extends DegreeTitleDaoDecorator {
 
-  static String GET_ALL = "SELECT ID, TITLE, DEGREE_LEVEL, LAST_MODIFIED FROM MST_DEGREE_TITLE";
+  static String GET_ALL = "SELECT ID, TITLE, DEGREE_LEVEL, LAST_MODIFIED FROM MST_DEGREE_TITLE ORDER BY ID ASC";
 
   static String INSERT_ONE = "INSERT INTO MST_DEGREE_TITLE(ID, TITLE, DEGREE_LEVEL, LAST_MODIFIED) VALUES "
       + " (?, ?, ?, " + getLastModifiedSql() + " )";

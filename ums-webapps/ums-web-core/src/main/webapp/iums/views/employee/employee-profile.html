@@ -4,30 +4,43 @@
         color: red;
         font-size: large;
     }
+
     .form-control {
         border-radius: 5px !important;
     }
-    .btn{
+
+    .btn {
         border-radius: 5px !important;
     }
-    .underlineBox{
+
+    .underlineBox {
         border-bottom: 1px dashed #808080a3;
     }
+
     .panel > .panel-heading {
         font-size: 15px;
 
     }
 </style>
+
 <div>
     <ul id="iTab" class="nav nav-tabs nav-justified">
-        <li ng-class="{active: vm.state.current.url === '/personal'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('personal')" data-toggle="tab">Personal</a></li>
-        <li ng-class="{active: vm.state.current.url === '/academic'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('academic')" data-toggle="tab">Education</a></li>
-        <li ng-class="{active: vm.state.current.url === '/publication'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('publication')" data-toggle="tab">Publication</a></li>
-        <li ng-class="{active: vm.state.current.url === '/training'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('training')" data-toggle="tab">Training</a></li>
-        <li ng-class="{active: vm.state.current.url === '/award'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('award')" data-toggle="tab">Award/Honor</a></li>
-        <li ng-class="{active: vm.state.current.url === '/experience'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('experience')" data-toggle="tab">Experience</a></li>
-        <li ng-class="{active: vm.state.current.url === '/additional'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('additional')" data-toggle="tab">Additional</a></li>
-        <li ng-class="{active: vm.state.current.url === '/service'}" style="cursor: pointer"><a data-ng-click="vm.redirectTo('service')" data-toggle="tab">Service</a></li>
+        <li ng-class="{active: vm.state.current.url === '/personal'}" style="cursor: pointer"><a
+                data-ng-click="vm.redirectTo('personal')" data-toggle="tab">Personal</a></li>
+        <li ng-class="{active: vm.state.current.url === '/academic'}" style="cursor: pointer"><a
+                data-ng-click="vm.redirectTo('academic')" data-toggle="tab">Education</a></li>
+        <li ng-class="{active: vm.state.current.url === '/publication'}" style="cursor: pointer"><a
+                data-ng-click="vm.redirectTo('publication')" data-toggle="tab">Publication</a></li>
+        <li ng-class="{active: vm.state.current.url === '/training'}" style="cursor: pointer"><a
+                data-ng-click="vm.redirectTo('training')" data-toggle="tab">Training</a></li>
+        <li ng-class="{active: vm.state.current.url === '/award'}" style="cursor: pointer"><a
+                data-ng-click="vm.redirectTo('award')" data-toggle="tab">Award/Honor</a></li>
+        <li ng-class="{active: vm.state.current.url === '/experience'}" style="cursor: pointer"><a
+                data-ng-click="vm.redirectTo('experience')" data-toggle="tab">Experience</a></li>
+        <li ng-class="{active: vm.state.current.url === '/additional'}" style="cursor: pointer"><a
+                data-ng-click="vm.redirectTo('additional')" data-toggle="tab">Additional</a></li>
+        <li ng-class="{active: vm.state.current.url === '/service'}" style="cursor: pointer"><a
+                data-ng-click="vm.redirectTo('service')" data-toggle="tab">Service</a></li>
     </ul>
 </div>
 

@@ -21,6 +21,7 @@ module ums {
 
     UMS.constant("appConstants", Constants.Default());
     UMS.constant("registrarConstants", Constants.RegistrarConstant());
+    UMS.constant("libConstants", Constants.LibConstant());
 
     UMS.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
         $urlRouterProvider.otherwise("/userHome");
@@ -336,8 +337,12 @@ module ums {
                     loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                         return $ocLazyLoad.load({
                             files: [
+                                'vendors/bootstrap-datepicker/css/datepicker.css',
+                                'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                                 'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
-                                'vendors/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js'
+                                'vendors/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
+                                'vendors/bootstrap-timepicker/css/bootstrap-timepicker.css',
+                                'vendors/bootstrap-timepicker/js/bootstrap-timepicker.js'
                             ]
                         });
                     }]

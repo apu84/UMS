@@ -6,6 +6,7 @@ module ums{
     designation:number;
     designationName?:string;
     employmentType:string;
+    employeeType:number;
     deptOfficeId:string;
     deptOfficeName?: string;
     fatherName:string;
@@ -18,6 +19,7 @@ module ums{
     mobileNumber:string;
     phoneNumber:string;
     emailAddress:string;
+    shortName: string;
     joiningDate:string;
     jobPermanentDate:string;
     status:number;

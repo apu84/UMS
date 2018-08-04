@@ -49,4 +49,8 @@ public interface UGRegistrationResultManager extends
       Integer pSemester);
 
   List<StudentsExamAttendantInfo> getExamAttendantInfo(Integer pSemesterId, String pExamDate, Integer pExamType);
+  
+  Integer getTotalRegisteredStudentForCourse(final String pCourseId, final List<String> pSection,
+      final Integer pSemesterId);
+
 }

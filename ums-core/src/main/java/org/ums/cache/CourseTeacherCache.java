@@ -1,5 +1,6 @@
 package org.ums.cache;
 
+import org.ums.domain.model.immutable.ApplicationTES;
 import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.manager.CacheManager;
@@ -11,6 +12,10 @@ import java.util.List;
 public class CourseTeacherCache extends
     AssignedTeacherCache<CourseTeacher, MutableCourseTeacher, Long, CourseTeacherManager> implements
     CourseTeacherManager {
+  @Override
+  public List<ApplicationTES> getAllSectionForSelectedCourse(String pCourseId, String pTeacherId, Integer pSemesterId) {
+    return getManager().getAllSectionForSelectedCourse(pCourseId, pTeacherId, pSemesterId);
+  }
 
   public CourseTeacherCache(final CacheManager<CourseTeacher, Long> pCacheManager) {
     super(pCacheManager);
@@ -34,6 +39,10 @@ public class CourseTeacherCache extends
   @Override
   public List<CourseTeacher> getDistinctCourseTeacher(int pSemesterId) {
     return getManager().getDistinctCourseTeacher(pSemesterId);
+
+  @Override
+  public List<CourseTeacher> getCourseTeacher(int pSemesterId, String pCourseId, String pSection) {
+    return getManager().getCourseTeacher(pSemesterId, pCourseId, pSection);
   }
 
   @Override
@@ -41,4 +50,8 @@ public class CourseTeacherCache extends
     return CacheUtil.getCacheKey(CourseTeacher.class, pId);
   }
 
+  @Override
+  public List<CourseTeacher> getCourseTeacher(int pProgramId, int pSemesterId, String pSection, int pYear, int pSemester) {
+    return getManager().getCourseTeacher(pProgramId, pSemesterId, pSection, pYear, pSemester);
+  }
 }

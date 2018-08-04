@@ -1,6 +1,7 @@
 package org.ums.academic.resource.fee.certificate;
 
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -34,10 +35,11 @@ public class CertificateFeeResource extends Resource {
 
   @POST
   @Path("/apply/semester/{semesterId}/category/{categoryId}")
-  public Response applyForCertificate(final @PathParam("semesterId") Integer pSemesterId,
-      final @PathParam("categoryId") String pCategoryId) throws Exception {
-    mCertificateFeeHelper.applyForCertificate(pCategoryId, getLoggedInUserId(), pSemesterId);
-    return Response.ok().build();
+  public Response applyForCertificate(@Context HttpServletRequest pHttpServletRequest,
+      final @PathParam("semesterId") Integer pSemesterId, final @PathParam("categoryId") String pCategoryId)
+      throws Exception {
+    return mCertificateFeeHelper
+        .applyForCertificate(pHttpServletRequest, pCategoryId, getLoggedInUserId(), pSemesterId);
   }
 
   @POST

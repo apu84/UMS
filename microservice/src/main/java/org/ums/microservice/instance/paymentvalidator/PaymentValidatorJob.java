@@ -33,18 +33,15 @@ public class PaymentValidatorJob extends AbstractService implements PaymentValid
   @Scheduled(fixedDelay = 120000, initialDelay = 0)
   @Transactional
   public void validatePayments() {
-    if(login(mServiceConfiguration.getPaymentValidatorAppId(), mServiceConfiguration.getPaymentValidatorAppToken())) {
       List<StudentPayment> payments = mStudentPaymentManager.getToExpirePayments();
-      if(mLogger.isDebugEnabled()) {
-        mLogger.debug(String.format("Found total %d payments to expire", payments.size()));
-      }
+      if(payments.size()>0)
+          mLogger.debug(String.format("Found total {} payments to expire", payments.size()));
       List<MutableStudentPayment> mutablePayments =
           payments.stream().map(payment -> payment.edit()).collect(Collectors.toList());
       mutablePayments.forEach(payment -> payment.setStatus(StudentPayment.Status.EXPIRED));
       if(!mutablePayments.isEmpty()) {
         mStudentPaymentManager.update(mutablePayments);
       }
-    }
   }
 
   @Override

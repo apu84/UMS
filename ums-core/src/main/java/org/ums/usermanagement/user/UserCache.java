@@ -1,11 +1,12 @@
 package org.ums.usermanagement.user;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.ums.cache.ContentCache;
+import org.ums.enums.common.RoleType;
 import org.ums.manager.CacheManager;
 import org.ums.usermanagement.role.Role;
+
+import java.util.List;
+import java.util.Optional;
 
 public class UserCache extends ContentCache<User, MutableUser, String, UserManager> implements UserManager {
   private CacheManager<User, String> mCacheManager;
@@ -64,5 +65,10 @@ public class UserCache extends ContentCache<User, MutableUser, String, UserManag
   @Override
   public Optional<User> getByEmail(String pEmail) {
     return getManager().getByEmail(pEmail);
+  }
+
+  @Override
+  public List<User> getUsers(RoleType pRoleType) {
+    return getManager().getUsers(pRoleType);
   }
 }

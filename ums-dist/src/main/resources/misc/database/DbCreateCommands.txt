@@ -1,10 +1,10 @@
 sqlplus /nolog
 connect / as sysdba
 
-drop user DB_IUMS_ACCOUNT cascade;
+drop user DB_IUMS_ cascade;
 
-create user DB_IUMS_ACCOUNT identified by ig100;
-grant all privileges to DB_IUMS_ACCOUNT;
+create user DB_IUMS identified by ig100;
+grant all privileges to DB_IUMS;
 
 Ifti
 -----
@@ -23,6 +23,11 @@ Munna
 exp DB_IUMS/ig100@XE  STATISTICS=NONE FILE='H:\IUMS-Source3\UMS\ums-dist\src\main\resources\misc\database\DB_IUMS.dmp' LOG=H:\backuplog.txt
 imp  DB_IUMS/ig100@XE  STATISTICS=NONE FILE='H:\IUMS-Source3\UMS\ums-dist\src\main\resources\misc\database\DB_IUMS.dmp' LOG=H:\backuplog.txt
 
+Rumi
+-----
+imp  DB_IUMS/ig100@XE   STATISTICS=NONE FILE='E:\IUMS-Source\Database\DB_IUMS.dmp' log=E:\IUMS-Source\Database\backlog.txt
+exp  DB_IUMS_LIBRARY/ig100@XE   STATISTICS=NONE FILE='E:\Database\DB_IUMS_LIBRARY.dmp' log=E:\Database\backlog.txt
+
 
 exp DB_IUMS/ig100@XE  STATISTICS=NONE FILE='I:\DB_IUMS79.dmp' LOG=H:\backuplog.txt
 
@@ -30,6 +35,8 @@ exp DB_IUMS/ig100@XE  STATISTICS=NONE FILE='I:\DB_IUMS79.dmp' LOG=H:\backuplog.t
 imp  DB_IUMS_PRIVATE/ig100@XE  STATISTICS=NONE FILE='/home/DB_IUMS_PRIVATE.dmp'
 imp  DB_IUMS/ig100@XE  STATISTICS=NONE FILE='/home/DB_IUMS.dmp'
 imp  DB_IUMS_ACCOUNT/ig100@XE  STATISTICS=NONE FILE='/home/DB_IUMS_ACCOUNT.dmp'
+
+alter database datafile 'C:/oraclexe/app/oracle/oradata/XE/system.dbf' autoextend on next 128m maxsize 8192m;
 
 
 

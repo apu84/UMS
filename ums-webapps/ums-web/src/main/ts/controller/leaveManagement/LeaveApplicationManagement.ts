@@ -83,7 +83,6 @@ module ums {
       this.getLeaveTypes();
       this.getRemainingLeaves();
       this.getPendingApplications();
-      this.getUsersInformation();
 
       $("#leaveType").focus();
     }
@@ -115,14 +114,7 @@ module ums {
     }
 
 
-    private getUsersInformation() {
-      this.userService.fetchCurrentUserInfo().then((user) => {
-        this.user = user;
-        this.employeeId = this.employeeId;
-        console.log("Users....");
-        console.log(user);
-      });
-    }
+
 
     private saveAttachments(id: string) {
       for (var i = 0; i < this.files.length; i++) {
@@ -155,7 +147,7 @@ module ums {
 
     private getAllLeaveApplicationsForHistory() {
       this.pendingApplications = [];
-      this.leaveApplicationStatusService.fetchAllLeaveApplicationsOfEmployeeWithPagination(this.user.employeeId, this.leaveApprovalStatus.id, this.pageNumber, this.itemsPerPage).then((leaveApplications) => {
+      this.leaveApplicationStatusService.fetchAllLeaveApplicationsOfEmployeeWithPagination(this.leaveApplicationService.user.employeeId, this.leaveApprovalStatus.id, this.pageNumber, this.itemsPerPage).then((leaveApplications) => {
         this.pendingApplications = leaveApplications.statusList;
         this.totalItems = leaveApplications.totalSize;
         console.log(this.pendingApplications);
@@ -211,6 +203,8 @@ module ums {
         console.log(this.leaveApplication.fromDate);
         console.log(this.leaveApplication.toDate);
       let thisScope = this;
+      this.leaveApplication.fromDate = moment(this.leaveApplication.fromDate).format("dd-mm-yyyy");
+      this.leaveApplication.toDate = moment(this.leaveApplication.toDate).format("dd-mm-yyyy");
       setTimeout(function () {
         thisScope.getTotalDuration();
       }, 200);
@@ -253,12 +247,12 @@ module ums {
 
     private getPendingApplications() {
       this.pendingApplications = [];
-      this.leaveApplicationStatusService.fetchPendingLeaves().then((pendingLeaves) => {
+      this.leaveApplicationStatusService.fetchPendingLeaves(this.leaveApplicationService.employeeId).then((pendingLeaves) => {
         this.pendingApplications = pendingLeaves;
         console.log("Pending leaves...");
         console.log(pendingLeaves);
         this.totalItems = pendingLeaves.length;
-        //this.employeeId = angular.copy(this.pendingApplications[0].applicantsId);
+        //this.leaveApplicationService.employeeId = angular.copy(this.pendingApplications[0].applicantsId);
       });
     }
 
@@ -423,6 +417,7 @@ module ums {
       let completeJson = {};
       let jsonObject = [];
       console.log("Lms application");
+      console.log(this.leaveApplicationService.employeeId);
       let item: any = {};
       item['id'] = application.id;
       item['employeeId'] = application.employeeId;
@@ -431,6 +426,7 @@ module ums {
       item['toDate'] = application.toDate;
       item['reason'] = application.reason;
       item['appStatus'] = appType;
+      item['employeeId'] = this.leaveApplicationService.employeeId;
       jsonObject.push(item);
       completeJson["entries"] = jsonObject;
 

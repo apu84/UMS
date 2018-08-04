@@ -1,0 +1,152 @@
+<style>
+
+    thead {
+        background-color: #efefef;
+    }
+
+    .grid {
+        width: 750px;
+        height: 500px;
+    }
+
+    tbody {
+        overflow-y: scroll;
+        height: 450px;
+    }
+
+    #header-fixed {
+        position: fixed;
+        top: 15px;
+    }
+
+    .sample-show-hide {
+        transition: all linear 0.5s;
+    }
+
+    .sample-show-hide.ng-hide {
+        opacity: 0;
+    }
+    .score {
+        color: deeppink;
+    }
+    .selected {
+        background-color:#FAFAFA;
+        color:deeppink;
+        font-weight:bold;
+    }
+
+</style>
+
+<div class="row">
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
+    </div>
+    <div class="panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select Parameters </h3>
+        </div>
+        <div class="panel-body pan">
+            <form class="form-horizontal">
+                <div class="form-body pal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Department</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="leaveType"
+                                    id="leaveTypejj"
+                                    data-ng-options="dept.name for dept in vm.deptList track by dept.id"
+                                    data-ng-model="vm.deptName"
+                                    data-ng-change="vm.deptChanged(vm.deptName)"
+                            ></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Semester</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="leaveType"
+                                    id="leaveType"
+                                    data-ng-options="semester.name for semester in vm.semesters track by semester.id"
+                                    data-ng-model="vm.semester"
+                                    data-ng-change="vm.semesterChanged(vm.semester)"
+                            ></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Faculty</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="leaveType1"
+                                    id="leaveType1"
+                                    data-ng-options=" L.fullName for L in vm.facultyListResultEvaluation track by L.teacherId"
+                                    data-ng-model="vm.selectedTeacherName"
+                                    data-ng-change="vm.teacherChanged(vm.selectedTeacherName)"
+                            ></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions text-right pal">
+
+                    <button type="button" class="btn btn-success" data-ng-click="vm.getAssignedCoursesForReview()">
+                        Search
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="rightDiv">
+        <div class="panel">
+            <div class="panel-heading">Evaluation Eligible Course List</b><span
+                    class="subtitle"></span></div>
+            <div class="panel-body shadowPanel" style="min-height: 253px;">
+                <div class="row" style="padding: 10px;">
+                    <table class="table table-bordered" style="cursor: pointer;">
+                        <thead>
+                        <th style="background-color: #FAFAFA;width: 2%; ">SL</th>
+                        <th style="background-color: #FAFAFA;width: 15%;">Course No</th>
+                        <th style="background-color: #FAFAFA;">Course Title</th>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="app in vm.assignedCoursesForReview"
+                            ng-class="{'selected':$index == vm.selectRow}"
+                            data-ng-click="vm.getInfo(app.teacherId,app.courseName,$index,app.semesterId,app.courseNo,app.courseTitle,app.deptName)">
+                            <td>{{$index+1}}</td>
+                            <td>{{app.courseNo}}</td>
+                            <td>{{app.courseTitle}}</td>
+                        </tr>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="modal-body" data-ng-hide="vm.checkEvaluationResult">
+
+                        <div style="padding-left: 18px;">
+                            <p align="center" ><strong style="font-size: 18px">Evaluation Report<br>
+                                Ahsanullah University of Science and Technology</strong></p>
+                            <p>Semester:<strong>{{" "+vm.staticSessionName}}</strong></p>
+                            <p>Course Title:<strong>{{" "+vm.selectedCourseTitle+"("+vm.selectedCourseNo+")"}}</strong></p>
+                            <p>Teacher Name:<strong>{{" "+vm.staticTeacherName}}</strong></p>
+                            <p>Number of Student Registered For This Course:<strong>{{" "+vm.registeredStudents+"( "+vm.sectionForReview+")"}}</strong></p>
+                            <p>Number of Student Eligible For Evaluation:<strong>{{" "+vm.selectedRegisteredStudents+"( "+vm.selectedSectionForReview+")"}}</strong></p>
+                            <p>Student Reviewed:<strong>{{" "+vm.studentReviewed+" ("+vm.percentage+"%)"}}</strong></p>
+                            <p>Department:<strong>{{" "+vm.departmentName}}</strong></p>
+                        </div>
+
+                        <div
+                                data-ng-include="'views/teachers-Evaluation-System/evaluation-result.html'">
+                        </div>
+                        <p align="left" ><strong style="font-size: 18px;padding-left: 18px;">Students Opinion</strong></p>
+                        <div
+                                data-ng-include="'views/teachers-Evaluation-System/students-opinion.html'">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

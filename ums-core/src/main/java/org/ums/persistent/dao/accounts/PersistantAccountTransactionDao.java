@@ -1,6 +1,5 @@
 package org.ums.persistent.dao.accounts;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -31,9 +30,9 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
   private IdGenerator mIdGenerator;
 
   String INSERT_ONE =
-      "insert INTO DT_TRANSACTION(ID, COMP_CODE, VOUCHER_NO, VOUCHER_DATE, SERIAL_NO, ACCOUNT_ID, VOUCHER_ID, AMOUNT, BALANCE_TYPE,RECEIPT_ID, NARRATION, F_CURRENCY, CURRENCY_ID, CONV_FACTOR, TYPE, MODIFIED_BY, MODIFIED_DATE,POST_DATE,LAST_MODIFIED) VALUES "
+      "insert INTO DT_TRANSACTION(ID, COMP_CODE, VOUCHER_NO, VOUCHER_DATE, SERIAL_NO, ACCOUNT_ID, VOUCHER_ID, AMOUNT, BALANCE_TYPE,RECEIPT_ID, NARRATION, F_CURRENCY, CURRENCY_ID, CONV_FACTOR, TYPE, MODIFIED_BY, MODIFIED_DATE,POST_DATE,LAST_MODIFIED, INVOICE_NO, INVOICE_DATE, PAID_AMOUNT) VALUES "
           + "             (:id, :compCode, :voucherNo, :voucherDate, :serialNo, :accountId, :voucherId, :amount, :balanceType,:receiptId, :narration, :foreignCurrency, :currencyId, :conversionFactor, :type, :modifiedBy, :modifiedDate, :postDate,"
-          + getLastModifiedSql() + ")";
+          + getLastModifiedSql() + ",:invoiceNo, :invoiceDate, :paidAmount)";
   String UPDATE_ONE = "UPDATE DT_TRANSACTION " + "SET " + "  COMP_CODE     = :compCode, "
       + "  DIVISION_CODE = :divisionCode, " + "  VOUCHER_NO    = :voucherNo, " + "  VOUCHER_DATE  = :voucherDate, "
       + "  SERIAL_NO     = :serialNo, " + "  ACCOUNT_ID    = :accountId, " + "  VOUCHER_ID    = :voucherId, "
@@ -41,7 +40,8 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
       + "  F_CURRENCY    = :foreignCurrency, " + "  CURRENCY_ID   = :currencyId, "
       + "  CONV_FACTOR   = :conversionFactor, " + "  PROJ_NO       = :projNo, " + "  STAT_FLAG     = :statFlag, "
       + "  STAT_UP_FLAG  = :statUpFlag, " + "  RECEIPT_ID    = :receiptId, " + "  POST_DATE     = :postDate, "
-      + "  MODIFIED_BY   = :modifiedBy, " + "  MODIFIED_DATE = :modifiedDate, "
+      + "  MODIFIED_BY   = :modifiedBy, "
+      + "  MODIFIED_DATE = :modifiedDate, INVOICE_NO=:invoiceNo, INVOICE_DATE=:invoiceDate, PAID_AMOUNT=:paidAmount,"
       + "  TYPE          = :type , last_modified=" + getLastModifiedSql() + "  WHERE ID = :id";
 
   public PersistantAccountTransactionDao(JdbcTemplate pJdbcTemplate,
@@ -301,6 +301,9 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
     parameters.put("receiptId", pMutableAccountTransaction.getReceiptId());
     parameters.put("modifiedDate", pMutableAccountTransaction.getModifiedDate());
     parameters.put("postDate", pMutableAccountTransaction.getPostDate());
+    parameters.put("invoiceNo", pMutableAccountTransaction.getInvoiceNo());
+    parameters.put("invoiceDate", pMutableAccountTransaction.getInvoiceDate());
+    parameters.put("paidAmount", pMutableAccountTransaction.getPaidAmount());
     return parameters;
   }
 
@@ -330,6 +333,9 @@ public class PersistantAccountTransactionDao extends AccountTransactionDaoDecora
       transaction.setAccountTransactionType(AccountTransactionType.get(pResultSet.getString("type")));
       transaction.setModifiedBy(pResultSet.getString("modified_by"));
       transaction.setModifiedDate(pResultSet.getDate("modified_date"));
+      transaction.setInvoiceNo(pResultSet.getString("invoice_no"));
+      transaction.setInvoiceDate(pResultSet.getDate("invoice_date"));
+      transaction.setPaidAmount(pResultSet.getBigDecimal("paid_amount"));
       return transaction;
     }
   }

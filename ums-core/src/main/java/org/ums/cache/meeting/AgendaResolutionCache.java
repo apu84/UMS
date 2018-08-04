@@ -2,7 +2,6 @@ package org.ums.cache.meeting;
 
 import org.ums.cache.ContentCache;
 import org.ums.domain.model.immutable.meeting.AgendaResolution;
-import org.ums.domain.model.immutable.meeting.Schedule;
 import org.ums.domain.model.mutable.meeting.MutableAgendaResolution;
 import org.ums.manager.CacheManager;
 import org.ums.manager.meeting.AgendaResolutionManager;
@@ -25,22 +24,7 @@ public class AgendaResolutionCache extends
   }
 
   @Override
-  public Long saveAgendaResolution(MutableAgendaResolution pMutableAgendaResolution) {
-    return getManager().saveAgendaResolution(pMutableAgendaResolution);
-  }
-
-  @Override
   public List<AgendaResolution> getAgendaResolution(Long pScheduleId) {
     return getManager().getAgendaResolution(pScheduleId);
-  }
-
-  @Override
-  public int updateAgendaResolution(MutableAgendaResolution pMutableAgendaResolution) {
-    return getManager().updateAgendaResolution(pMutableAgendaResolution);
-  }
-
-  @Override
-  public int deleteAgendaResolution(Long pId) {
-    return getManager().deleteAgendaResolution(pId);
   }
 }

@@ -8,21 +8,24 @@ module ums {
             '$stateParams',
             'employmentTypeService',
             'departmentService',
-            'designationService'
+            'designationService',
+            'employeeService'
         ];
 
         private service: IServiceInformationModel[] = [];
         readonly userId: string = "";
         private stateParams: any;
         private designations: ICommon[] = [];
+        private filteredDesignation: any = [];
         private employmentTypes: ICommon[] = [];
         private serviceIntervals: ICommon[] = [];
         private serviceRegularIntervals: ICommon[] = [];
         private serviceContractIntervals: ICommon[] = [];
         private departments: IDepartment[] = [];
         private enableEdit: boolean[] = [false];
-        private enableServiceDetailEdit: boolean[] = [false];
+        private enableServiceDetailEdit: boolean[][] = [[false]];
         private enableEditButton: boolean = false;
+        private showLoader: boolean = true;
 
         constructor(private registrarConstants: any,
                     private $q: ng.IQService,
@@ -31,7 +34,8 @@ module ums {
                     private $stateParams: any,
                     private employmentTypeService: EmploymentTypeService,
                     private departmentService: DepartmentService,
-                    private designationService: DesignationService) {
+                    private designationService: DesignationService,
+                    private employeeService: EmployeeService) {
 
             this.service = [];
             this.stateParams = $stateParams;
@@ -51,11 +55,36 @@ module ums {
             this.get();
         }
 
+        private initEnableEditServiceDetails(): void {
+            for (let i = 0; i < this.service.length; i++) {
+                this.enableServiceDetailEdit.push([false]);
+            }
+        }
+
         private getServiceIntervals(): void {
             this.serviceRegularIntervals.push(this.registrarConstants.servicePeriods[0]);
             this.serviceRegularIntervals.push(this.registrarConstants.servicePeriods[1]);
             this.serviceRegularIntervals.push(this.registrarConstants.servicePeriods[2]);
             this.serviceContractIntervals.push(this.registrarConstants.servicePeriods[3]);
+            this.serviceContractIntervals.push(this.registrarConstants.servicePeriods[4]);
+        }
+
+        public filterDesignationSelection(index: number): void {
+            this.filteredDesignation[index] = [];
+            this.employeeService.getDesignation(this.service[index].department.id.toString()).then((response: any) => {
+                if (response.length < 1) {
+                    this.notify.error("No designation found");
+                }
+                else {
+                    for (let i = 0; i < response.length; i++) {
+                        for (let j = 0; j < this.designations.length; j++) {
+                            if (response[i].designationId == this.designations[j].id) {
+                                this.filteredDesignation[index].push(this.designations[j]);
+                            }
+                        }
+                    }
+                }
+            });
         }
 
         public submit(type: string, index: number, parentIndex?: number): void {
@@ -103,9 +132,9 @@ module ums {
             else if (type === 'serviceDetails') {
                 this.employeeInformationService.saveServiceDetailInformation(json).then((data: any) => {
                     this.service[parentIndex].intervalDetails[index] = data;
-                    this.enableServiceDetailEdit[index] = false;
+                    this.enableServiceDetailEdit[parentIndex][index] = false;
                 }).catch((reason: any) => {
-                    this.enableServiceDetailEdit[index] = true;
+                    this.enableServiceDetailEdit[parentIndex][index] = true;
                 });
             }
         }
@@ -122,60 +151,51 @@ module ums {
             else if (type === 'serviceDetails') {
                 this.employeeInformationService.updateServiceDetailInformation(json).then((data: any) => {
                     this.service[parentIndex].intervalDetails[index] = data;
-                    this.enableServiceDetailEdit[index] = false;
+                    this.enableServiceDetailEdit[parentIndex][index] = false;
                 }).catch((reason: any) => {
-                    this.enableServiceDetailEdit[index] = true;
+                    this.enableServiceDetailEdit[parentIndex][index] = true;
                 });
             }
         }
 
         private get(): void {
+            this.showLoader = true;
             this.service = [];
             this.employeeInformationService.getServiceInformation(this.userId).then((serviceInformation: any) => {
                 if (serviceInformation) {
                     this.service = serviceInformation;
+                    this.setInitialDesignation();
+                    this.initEnableEditServiceDetails();
                 }
                 else {
                     this.service = [];
                 }
+                this.showLoader = false;
             });
         }
 
-        public activeEditButton(type: string, index: number, canEdit: boolean): void {
+        private setInitialDesignation() {
+            for (let i = 0; i < this.service.length; i++) {
+                this.filterDesignationSelection(i);
+            }
+        }
+
+        public activeEditButton(type: string, index: number, canEdit: boolean, parentIndex?: number): void {
             if (type === 'service') {
                 this.enableEdit[index] = canEdit;
             }
             else if (type === 'serviceDetails') {
-                this.enableServiceDetailEdit[index] = canEdit;
+                this.enableServiceDetailEdit[parentIndex][index] = canEdit;
             }
         }
 
         private addNew(type: string, index?: number): void {
             if (type == "service") {
-                if (this.service.length == 0) {
-                    this.addNewService();
-                }
-                else {
-                    if (this.service[this.service.length - 1].resignDate == "") {
-                        this.notify.error("Please fill up the resign date first");
-                    }
-                    else {
-                        this.addNewService();
-                    }
-                }
+                this.addNewService();
+                this.enableServiceDetailEdit.push([false]);
             }
             else if (type == "serviceDetails") {
-                if (this.service[index].intervalDetails.length == 0) {
-                    this.addNewServiceDetails(index);
-                }
-                else {
-                    if (this.service[index].intervalDetails[this.service[index].intervalDetails.length - 1].endDate == "") {
-                        this.notify.error("Please fill up the end date first");
-                    }
-                    else {
-                        this.addNewServiceDetails(index);
-                    }
-                }
+                this.addNewServiceDetails(index);
             }
         }
 

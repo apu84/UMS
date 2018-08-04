@@ -61,8 +61,7 @@
   </bean>
 
   <bean id="officialsHomeProcessor" class="org.ums.processor.userhome.OfficialsHomeProcessor">
-    <property name="allowedRole" value="sadmin,registrar,iums-secratary,teacher,librarian,coe,registrar,dpRegistrar,dpCoE,deputy_director_finance,assistant_director_accounts,
-    coordinator_accounts,senior_accounts_officer,assistant_accounts_officer,assistant_admin_officer_acc,accountant,lower_division_assistant"/>
+    <property name="allowedRole" value="accountant,advisor_of_students_welfare,aps_to_treasurer,aps_to_vice_chancellor,assistant_accounts_officer,assistant_admin_officer,assistant_administrative_officer,assistant_controller_of_examinations,assistant_director_accounts,assistant_public_relations_officer,assistant_registrar,cataloguer,computer_composer,computer_compositor,controller_of_examinations,coordinator_accounts,deputy_director_finance,deputy_registrar,iums_secratary,lab_attendant,librarian,library_attendant,lower_division_assistant,maintenance_engineer,medical_officer,registrar,sadmin,security_officer,senior_accounts_officer,senior_sub_assistant_engineer,senior_work_sarker,teacher,treasurer,university_engineer,upper_division_assistant,vice_chancellor"/>
   </bean>
 
   <bean id="userHomeService" class="org.ums.services.UserHomeServiceImpl">

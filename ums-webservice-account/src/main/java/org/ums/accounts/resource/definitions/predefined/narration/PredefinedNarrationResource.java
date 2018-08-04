@@ -3,6 +3,7 @@ package org.ums.accounts.resource.definitions.predefined.narration;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.accounts.PredefinedNarration;
 import org.ums.resource.Resource;
+import org.ums.util.Utils;
 
 import javax.json.JsonArray;
 import javax.ws.rs.*;
@@ -22,7 +23,7 @@ public class PredefinedNarrationResource extends MutablePredefinedNarrationResou
   @GET
   @Path("/all")
   public List<PredefinedNarration> getAll(final @Context Request pRequest) {
-    return mHelper.getContentManager().getAll();
+    return mHelper.getContentManager().getAll(Utils.getCompany());
   }
 
   @POST

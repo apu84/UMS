@@ -38,7 +38,6 @@ module ums {
             record.physicalDescriptionString = JSON.stringify(record.physicalDescription);
             record.imprint.publisher = record.imprint.publisher + '';
 
-
             if (record.mfnNo != undefined) {
                 this.httpClient.put(resourceUrl + '/' + record.mfnNo, record, 'application/json')
                     .success(() => {
@@ -130,6 +129,7 @@ module ums {
                 if (config.internalNote != "") {
                     item.internalNote = config.internalNote;
                 }
+                item.paperQuality = config.paperQuality;
                 item.status = config.status;
                 item.bindingType = config.bindingType;
                 item.acqType = config.acqType;
@@ -150,7 +150,7 @@ module ums {
         /**
          * Fetch Record List
          */
-        public fetchRecords(page: number, itemPerPage: number, orderBy: string, filter: any): ng.IPromise<any> {
+        public fetchRecords(page: number, itemPerPage: number, orderBy: string, filter: any): ng.IPromise<any>{
 
             var defer = this.$q.defer();
             var tPage = page - 1;

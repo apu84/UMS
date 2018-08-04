@@ -82,6 +82,7 @@
         '/absentLateComingView': {title: 'Absent/Late Coming View', 'breadcrumb': ['Absent/Late Coming']},
         '/dailyExamReport': {title: 'Daily Examination Report', 'breadcrumb': ['Daily Examination Report']},
         '/questionCorrectionInfo': {title: 'Question Correction Info', 'breadcrumb': ['Question Correction Info']},
+        '/employeeExamAttendance': {title: 'Employee Exam Attendance', 'breadcrumb': ['Employee Exam Attendance']},
         '/publicHolidays': {title: 'Public Holidays', 'breadcrumb': ['Public Holidays  ']},
         '/search': {title: 'Library:Search', 'breadcrumb': ['Search']},
         '/employeeProfile': {title: 'Profile', 'breadcrumb': ['Profile']},

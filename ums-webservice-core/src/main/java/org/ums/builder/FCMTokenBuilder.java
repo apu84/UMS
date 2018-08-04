@@ -20,17 +20,8 @@ public class FCMTokenBuilder implements Builder<FCMToken, MutableFCMToken> {
   private DateFormat mDateFormat;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, FCMToken pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
-
-    pBuilder.add("id", pReadOnly.getId());
-    pBuilder.add("token", pReadOnly.getToken());
-    pBuilder.add("tokenLastRefreshedOn", mDateFormat.format(pReadOnly.getRefreshedOn()));
-    pBuilder.add("tokenDeletedOn", mDateFormat.format(pReadOnly.getDeleteOn()));
-    pBuilder.add("lastModified", pReadOnly.getLastModified());
-  }
+  public void build(JsonObjectBuilder pBuilder, FCMToken pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {}
 
   @Override
-  public void build(MutableFCMToken pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
-    pMutable.setToken(pJsonObject.getString("fcmToken"));
-  }
+  public void build(MutableFCMToken pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {}
 }

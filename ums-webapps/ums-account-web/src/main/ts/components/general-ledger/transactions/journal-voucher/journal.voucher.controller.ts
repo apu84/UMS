@@ -1,4 +1,6 @@
 module ums {
+  import IAccount = ums.IAccount;
+
   enum SubmissionType {
     save = "Save",
     post = "Post"
@@ -25,6 +27,7 @@ module ums {
     private customerAccounts: IAccount[];
     private vendorAccounts: IAccount[];
     private customerAccountMapWithId: any;
+    private studentAccountMapWithId: any;
     private vendorAccountMapWithId: any;
     private totalDebit: number;
     private totalCredit: number;
@@ -275,12 +278,23 @@ module ums {
         this.vendorAccounts = accountListForAddModal;
         this.vendorAccounts.forEach((v: IAccount) => this.vendorAccountMapWithId[v.id] = v);
       });
+      this.customerAccounts = [];
+      this.customerAccountMapWithId = {};
 
       this.accountService.getCustomerAccounts().then((accountListForAddModal: IAccount[]) => {
-        this.customerAccounts = [];
-        this.customerAccountMapWithId = {};
-        this.customerAccounts = accountListForAddModal;
-        this.customerAccounts.forEach((v: IAccount) => this.customerAccountMapWithId[v.id] = v);
+        accountListForAddModal.forEach((a: IAccount) => {
+          this.customerAccounts.push(a);
+          this.customerAccountMapWithId[a.id] = a;
+        });
+      });
+
+      this.accountService.getStudentAccounts().then((accountListForAddModal: IAccount[]) => {
+        this.studentAccountMapWithId = {};
+        accountListForAddModal.forEach((a: IAccount) => {
+          this.customerAccounts.push(a);
+          this.customerAccountMapWithId[a.id] = a;
+          this.studentAccountMapWithId[a.id] = a;
+        });
       });
     }
 

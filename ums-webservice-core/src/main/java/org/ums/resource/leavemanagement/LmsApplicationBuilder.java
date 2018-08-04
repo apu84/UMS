@@ -1,18 +1,19 @@
 package org.ums.resource.leavemanagement;
 
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
+import org.ums.builder.EmployeeBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.common.LmsApplication;
 import org.ums.domain.model.mutable.common.MutableLmsApplication;
 import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.formatter.DateFormat;
-import org.ums.usermanagement.user.User;
+import org.ums.manager.EmployeeManager;
 import org.ums.usermanagement.user.UserManager;
 
+import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -29,6 +30,11 @@ public class LmsApplicationBuilder implements Builder<LmsApplication, MutableLms
   private UserManager mUserManager;
 
   @Autowired
+  private EmployeeBuilder mEmployeeBuilder;
+  @Autowired
+  private EmployeeManager mEmployeeManager;
+
+  @Autowired
   @Qualifier("genericDateFormat")
   DateFormat mDateFormat;
 
@@ -38,6 +44,9 @@ public class LmsApplicationBuilder implements Builder<LmsApplication, MutableLms
     pBuilder.add("secondId", pReadOnly.getId());
     pBuilder.add("employeeId", pReadOnly.getEmployee().getId());
     pBuilder.add("employeeName", pReadOnly.getEmployee().getPersonalInformation().getName());
+    JsonObjectBuilder employee = Json.createObjectBuilder();
+    mEmployeeBuilder.build(employee, pReadOnly.getEmployee(), pUriInfo, pLocalCache);
+    pBuilder.add("employee", employee);
     pBuilder.add("leaveType", pReadOnly.getLeaveTypeId());
     pBuilder.add("leaveTypeName", pReadOnly.getLmsType().getName());
     Format formatter = new SimpleDateFormat("dd/MM/YYYY");
@@ -50,6 +59,10 @@ public class LmsApplicationBuilder implements Builder<LmsApplication, MutableLms
     pBuilder.add("reason", pReadOnly.getReason());
     pBuilder.add("status", pReadOnly.getApplicationStatus().getId());
     pBuilder.add("statusName", pReadOnly.getApplicationStatus().getLabel());
+    pBuilder.add("submittedBy", pReadOnly.getSubmittedBy());
+    JsonObjectBuilder submittedByEmp = Json.createObjectBuilder();
+    mEmployeeBuilder.build(submittedByEmp, mEmployeeManager.get(pReadOnly.getSubmittedBy()), pUriInfo, pLocalCache);
+    pBuilder.add("submittedByEmp", submittedByEmp);
   }
 
   @Override
@@ -57,15 +70,9 @@ public class LmsApplicationBuilder implements Builder<LmsApplication, MutableLms
     if(pJsonObject.containsKey("id")) {
       pMutable.setId(Long.valueOf(pJsonObject.getInt("id")));
     }
-    if(pJsonObject.containsKey("employeeId")) {
-      pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
-    }
-    else {
-      User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
-      pMutable.setEmployeeId(user.getEmployeeId());
-    }
-    if(pJsonObject.containsKey("typeId"))
-      pMutable.setLeaveTypeId(pJsonObject.getInt("typeId"));
+    pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+
+    pMutable.setLeaveTypeId(pJsonObject.getInt("typeId"));
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
     try {
 

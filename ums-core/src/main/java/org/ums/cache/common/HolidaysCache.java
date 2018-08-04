@@ -6,6 +6,7 @@ import org.ums.domain.model.mutable.common.MutableHolidays;
 import org.ums.manager.CacheManager;
 import org.ums.manager.common.HolidaysManager;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,5 +29,10 @@ public class HolidaysCache extends ContentCache<Holidays, MutableHolidays, Long,
   @Override
   public List<Holidays> getHolidays(int pYear) {
     return getManager().getHolidays(pYear);
+  }
+
+  @Override
+  public List<Holidays> getHolidays(Date pFromDate, Date pToDate) {
+    return getManager().getHolidays(pFromDate, pToDate);
   }
 }

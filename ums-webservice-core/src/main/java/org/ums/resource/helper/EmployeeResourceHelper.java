@@ -2,7 +2,6 @@ package org.ums.resource.helper;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.credential.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
@@ -12,7 +11,6 @@ import org.ums.builder.Builder;
 import org.ums.builder.EmployeeBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Department;
-import org.ums.domain.model.immutable.DesignationRoleMap;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.mutable.MutableEmployee;
 import org.ums.employee.personal.MutablePersonalInformation;
@@ -22,7 +20,10 @@ import org.ums.employee.service.*;
 import org.ums.enums.common.EmploymentPeriod;
 import org.ums.enums.common.EmploymentType;
 import org.ums.formatter.DateFormat;
-import org.ums.manager.*;
+import org.ums.manager.DepartmentManager;
+import org.ums.manager.DesignationManager;
+import org.ums.manager.EmployeeManager;
+import org.ums.manager.EmploymentTypeManager;
 import org.ums.persistent.model.PersistentEmployee;
 import org.ums.resource.EmployeeResource;
 import org.ums.resource.ResourceHelper;
@@ -85,9 +86,6 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   EmploymentTypeManager mEmploymentTypeManager;
 
   @Autowired
-  DesignationRoleMapManager mDesignationRoleMapManager;
-
-  @Autowired
   RoleManager mRoleManager;
 
   @Autowired
@@ -117,16 +115,15 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     mServiceInformationDetailManager.create(mutableServiceInformationDetail);
 
     if(pJsonObject.getJsonObject("entries").containsKey("IUMSAccount")
-        && pJsonObject.getJsonObject("entries").getBoolean("IUMSAccount")) {
+        && pJsonObject.getJsonObject("entries").getBoolean("IUMSAccount")
+        && pJsonObject.getJsonObject("entries").getJsonObject("designation").getInt("roleId") != 0) {
 
       tempPassword = RandomStringUtils.random(6, true, true);
       MutableUser mutableUser = new PersistentUser();
       prepareUserInformation(mutableUser, pJsonObject.getJsonObject("entries"));
-      DesignationRoleMap designationRoleMap =
-          mDesignationRoleMapManager
-              .get(pJsonObject.getJsonObject("entries").getJsonObject("designation").getInt("id"));
 
-      mutableUser.setPrimaryRole(mRoleManager.get(designationRoleMap.getRoleId()));
+      mutableUser.setPrimaryRole(mRoleManager.get(pJsonObject.getJsonObject("entries").getJsonObject("designation")
+          .getInt("roleId")));
       mutableUser.setTemporaryPassword(tempPassword.toCharArray());
       mUserManager.create(mutableUser);
 
@@ -257,6 +254,10 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   }
 
   private void preparePersonalInformation(MutablePersonalInformation pMutablePersonalInformation, JsonObject pJsonObject) {
+    String email = pJsonObject.containsKey("email") ? pJsonObject.getString("email") : "-";
+    if(email == null || email.equals("")) {
+      email = "-";
+    }
     pMutablePersonalInformation.setId(pJsonObject.getString("id"));
     pMutablePersonalInformation.setName(pJsonObject.getString("name"));
     pMutablePersonalInformation.setFatherName(" ");
@@ -266,13 +267,13 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     pMutablePersonalInformation.setNationalityId(0);
     pMutablePersonalInformation.setReligionId(0);
     pMutablePersonalInformation.setMaritalStatusId(0);
-    pMutablePersonalInformation.setSpouseName(" ");
-    pMutablePersonalInformation.setNidNo(" ");
+    pMutablePersonalInformation.setSpouseName(null);
+    pMutablePersonalInformation.setNidNo(null);
     pMutablePersonalInformation.setBloodGroupId(0);
-    pMutablePersonalInformation.setSpouseNidNo(" ");
-    pMutablePersonalInformation.setWebsite(" ");
-    pMutablePersonalInformation.setOrganizationalEmail(" ");
-    pMutablePersonalInformation.setPersonalEmail(pJsonObject.getString("email"));
+    pMutablePersonalInformation.setSpouseNidNo(null);
+    pMutablePersonalInformation.setWebsite(null);
+    pMutablePersonalInformation.setOrganizationalEmail(null);
+    pMutablePersonalInformation.setPersonalEmail(email);
     pMutablePersonalInformation.setMobileNumber(" ");
     pMutablePersonalInformation.setPhoneNumber(" ");
     pMutablePersonalInformation.setPresentAddressLine1(" ");
@@ -325,7 +326,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
         .setEmploymentPeriod(pJsonObject.getJsonObject("employmentType").getInt("id") == EmploymentType.REGULAR.getId() ? EmploymentPeriod.CONTRACTUAL
             : EmploymentPeriod.CONTRACT);
     pMutableServiceInformationDetail.setStartDate(mDateFormat.parse(pJsonObject.getString("joiningDate")));
-    pMutableServiceInformationDetail.setEndDate(mDateFormat.parse(pJsonObject.getString("endDate")));
+    pMutableServiceInformationDetail.setEndDate(null);
     pMutableServiceInformationDetail.setComment(" ");
   }
 

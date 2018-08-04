@@ -53,33 +53,33 @@ public class ConsumeIndexJobImpl extends AbstractService implements ConsumeIndex
   @Override
   @Scheduled(fixedDelay = 30000, initialDelay = 0)
   public void consume() {
-    if(login(mServiceConfiguration.getIndexerAppId(), mServiceConfiguration.getIndexerAppToken())) {
-      // acquire lock
-      // MutableLock lock = new PersistentLock();
-      // lock.setId("indexLock");
-      // mLockManager.create(lock);
-      String host = "microservice";
-      String port = "8000";
-      MutableIndexConsumer consumer;
-      if(!mIndexConsumerManager.exists(host, port)) {
-        createNewIndexConsumer(host, port);
-      }
-      IndexConsumer indexConsumer = mIndexConsumerManager.get(host, port);
-      consumer = indexConsumer.edit();
-      List<Index> indexList = mIndexManager.after(consumer.getHead());
-      if(indexList.size() > 0) {
-        // SOLR index
-        for(Index index : indexList) {
-          if(mLogger.isDebugEnabled()) {
-            mLogger.debug("Indexing doc: {}, type {}", index.getEntityId(), index.getEntityType());
-          }
-          mEntityResolverFactory.resolve(index);
-        }
-        consumer.setHead(indexList.get(indexList.size() - 1).getModified());
-      }
-      consumer.update();
-      // mLockManager.delete(lock);
+    // acquire lock
+    // MutableLock lock = new PersistentLock();
+    // lock.setId("indexLock");
+    // mLockManager.create(lock);
+    // mLogger.debug("Index consumer scheduler started....{}",new Date());
+
+    String host = "microservice";
+    String port = "8000";
+    MutableIndexConsumer consumer;
+    if(!mIndexConsumerManager.exists(host, port)) {
+      createNewIndexConsumer(host, port);
     }
+    IndexConsumer indexConsumer = mIndexConsumerManager.get(host, port);
+    consumer = indexConsumer.edit();
+    // mLogger.debug("Head : {}",consumer.getHead());
+    List<Index> indexList = mIndexManager.after(consumer.getHead());
+    if(indexList.size() > 0) {
+      mLogger.info("Index Size: {}", indexList.size());
+      // SOLR index
+      for(Index index : indexList) {
+        mLogger.debug("Indexing doc: {}, type {}", index.getEntityId(), index.getEntityType());
+        mEntityResolverFactory.resolve(index);
+      }
+      consumer.setHead(indexList.get(indexList.size() - 1).getModified());
+    }
+    consumer.update();
+    // mLockManager.delete(lock);
   }
 
   private void createNewIndexConsumer(String pHost, String pPort) {

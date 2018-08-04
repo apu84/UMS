@@ -8,6 +8,7 @@ module ums {
         recordIdList: Array<String>;
         search: any;
         choice: string;
+        choiceType: string;
 
         doSearch: Function;
 
@@ -20,12 +21,14 @@ module ums {
     }
 
     export class RecordSearch {
-        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'catalogingService', '$stateParams', 'supplierService', 'publisherService', 'contributorService'];
+        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'catalogingService', '$stateParams', 'supplierService', 'publisherService', 'contributorService',
+            'contributor', 'supplier', 'publisher'];
 
         constructor(private $scope: IRecordSearchScope,
                     private $q: ng.IQService, private notify: Notify, private libConstants: any,
                     private catalogingService: CatalogingService, private $stateParams: any,
-                    private supplierService: SupplierService, private publisherService: PublisherService, private contributorService: ContributorService) {
+                    private supplierService: SupplierService, private publisherService: PublisherService, private contributorService: ContributorService,
+                    private contributor: any, private supplier: any, private publisher: any) {
 
             $scope.recordList = Array<IRecord>();
             $scope.recordIdList = Array<String>();
@@ -61,10 +64,10 @@ module ums {
                 var filter: IFilter = JSON.parse(localStorage.getItem("lms_search_filter"));
                 this.$scope.search.queryTerm = filter.basicQueryTerm;
                 this.$scope.choice = filter.basicQueryField;
-
             } else {
                 this.$scope.search.searchType = "basic";
                 this.$scope.choice = "any";
+                this.$scope.choiceType = "Exact";
             }
 
             this.prepareFilter();
@@ -78,9 +81,9 @@ module ums {
                 this.fetchRecords(1);
             }
 
-            this.getAllSuppliers();
-            this.getAllContributors();
-            this.getAllPublishers();
+            this.$scope.contributorList = contributor;
+            this.$scope.supplierList = supplier;
+            this.$scope.publisherList = publisher;
         }
 
         private prepareFilter() {
@@ -90,6 +93,12 @@ module ums {
             if (this.$scope.search.searchType == 'basic') {
                 filter.basicQueryField = this.$scope.choice;
                 filter.basicQueryTerm = this.$scope.search.queryTerm;
+
+                if(this.$scope.choiceType == "Exact"){
+                }
+                else if(this.$scope.choiceType == "Likely"){
+                    filter.basicQueryTerm = "*" + this.$scope.search.queryTerm + "*";
+                }
             }
             else if (this.$scope.search.searchType == 'advanced') {
                 // filter.advancedQueryMap = <IAdvancedSearchMap>();
@@ -119,8 +128,10 @@ module ums {
 
 
         // common
-        private pageChanged(pageNumber) {
-            this.fetchRecords(pageNumber);
+        private pageChanged(pageNumber, randomValue) {
+            if(randomValue == 1) {
+                this.fetchRecords(pageNumber);
+            }
         }
 
         private fetchRecords(pageNumber: number): void {
@@ -201,8 +212,7 @@ module ums {
                         pagination: jsonObj.pagination,
                         illustrations: jsonObj.illustrations,
                         accompanyingMaterials: jsonObj.accompanyingMaterials,
-                        dimensions: jsonObj.dimensions,
-                        paperQuality: jsonObj.paperQuality
+                        dimensions: jsonObj.dimensions
                     };
                     this.$scope.recordList[index].physicalDescription = physicalDescription;
                 }

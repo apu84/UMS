@@ -4,19 +4,17 @@ import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.dto.library.ImprintDto;
-import org.ums.domain.model.dto.library.PhysicalDescriptionDto;
 import org.ums.domain.model.mutable.library.MutableRecord;
 import org.ums.enums.common.Language;
+import org.ums.enums.library.GeneralMaterialDescription;
 import org.ums.enums.library.JournalFrequency;
 import org.ums.enums.library.MaterialType;
 import org.ums.enums.library.RecordStatus;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Date;
 
 public interface Record extends Serializable, EditType<MutableRecord>, LastModifier, Identifier<Long> {
-
-  Long getMfn();
 
   Language getLanguage();
 
@@ -24,7 +22,7 @@ public interface Record extends Serializable, EditType<MutableRecord>, LastModif
 
   String getSubTitle();
 
-  String getGmd();
+  GeneralMaterialDescription getGmd();
 
   String getSeriesTitle();
 
@@ -62,21 +60,17 @@ public interface Record extends Serializable, EditType<MutableRecord>, LastModif
 
   String getClassNo();
 
-  String getCallDate();
+  String getAuthorMark();
+
+  Integer getCallYear();
 
   String getCallEdition();
 
   String getCallVolume();
 
-  String getAuthorMark();
-
-  List<MaterialContributor> getContributorList();
-
   String getContributorJsonString();
 
   ImprintDto getImprint();
-
-  PhysicalDescriptionDto getPhysicalDescription();
 
   String getPhysicalDescriptionString();
 
@@ -86,29 +80,23 @@ public interface Record extends Serializable, EditType<MutableRecord>, LastModif
 
   String getKeyWords();
 
-  List<Subject> getSubjectList();
-
   String getSubjectJsonString();
-
-  List<Note> getNoteList();
 
   String getNoteJsonString();
 
+  Integer getTotalItems();
+
+  Integer getTotalAvailable();
+
+  Integer getTotalCheckedOut();
+
+  Integer getTotalOnHold();
+
   String getDocumentalist();
 
-  String getEntryDate();
+  Date getEntryDate();
 
-  String getLastUpdatedOn();
-
-  Long getPublisherId();
+  Date getLastUpdatedOn();
 
   String getLastUpdatedBy();
-
-  int getTotalItems();
-
-  int getTotalAvailable();
-
-  int getTotalCheckedOut();
-
-  int getTotalOnHold();
 }

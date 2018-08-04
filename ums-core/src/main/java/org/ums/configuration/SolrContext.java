@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.solr.core.SolrTemplate;
@@ -59,9 +60,12 @@ public class SolrContext {
   @Autowired
   UMSConfiguration mUMSConfiguration;
 
+  @Value("${solr.url}")
+  String mSolrUrl;
+
   @Bean
   public SolrClient solrClient() {
-    return new HttpSolrClient("http://localhost:8983/solr");
+    return new HttpSolrClient(mSolrUrl);
   }
 
   @Bean

@@ -33,6 +33,11 @@ module ums {
     private dateFormat: string;
     private searchVoucherNo: string;
     maximumTransaferableAmount: number;
+    private customerAccounts: IAccount[];
+    private vendorAccounts: IAccount[];
+    private customerAccountMapWithId: any;
+    private vendorAccountMapWithId: any;
+    private studentAccountMapWithId: any;
 
     constructor($scope: ng.IScope,
                 private $modal: any,
@@ -111,6 +116,34 @@ module ums {
     public showListView() {
       this.initialize();
     }
+
+    private getVendorAndCustomerAccounts() {
+      this.accountService.getVendorAccounts().then((accountListForAddModal: IAccount[]) => {
+        this.vendorAccounts = [];
+        this.vendorAccountMapWithId = {};
+        this.vendorAccounts = accountListForAddModal;
+        this.vendorAccounts.forEach((v: IAccount) => this.vendorAccountMapWithId[v.id] = v);
+      });
+      this.customerAccounts = [];
+      this.customerAccountMapWithId = {};
+
+      this.accountService.getCustomerAccounts().then((accountListForAddModal: IAccount[]) => {
+        accountListForAddModal.forEach((a: IAccount) => {
+          this.customerAccounts.push(a);
+          this.customerAccountMapWithId[a.id] = a;
+        });
+      });
+
+      this.accountService.getStudentAccounts().then((accountListForAddModal: IAccount[]) => {
+        this.studentAccountMapWithId = {};
+        accountListForAddModal.forEach((a: IAccount) => {
+          this.customerAccounts.push(a);
+          this.customerAccountMapWithId[a.id] = a;
+          this.studentAccountMapWithId[a.id] = a;
+        });
+      });
+    }
+
 
     public getPaginatedVouchers() {
       this.receiptVoucherService.getAllVouchersPaginated(this.itemsPerPage, this.pageNumber, this.searchVoucherNo).then((paginatedVouchers: IPaginatedReceiptVoucher) => {

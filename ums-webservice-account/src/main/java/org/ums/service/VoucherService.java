@@ -9,6 +9,7 @@ import org.ums.enums.accounts.definitions.voucher.number.control.VoucherType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.VoucherManager;
 import org.ums.manager.accounts.VoucherNumberControlManager;
+import org.ums.util.Utils;
 
 import java.math.BigDecimal;
 
@@ -23,7 +24,7 @@ public class VoucherService {
 
   public boolean checkWhetherTheBalanceExceedsVoucherLimit(VoucherType pVoucherType, BigDecimal pBalance) {
     Voucher voucher = mVoucherManager.get(pVoucherType.getId());
-    Company company = mCompanyManager.getDefaultCompany();
+    Company company = Utils.getCompany();
     VoucherNumberControl voucherNumberControl = mVoucherNumberControlmanager.getByVoucher(voucher, company);
     if(voucherNumberControl.getVoucherLimit() != null && voucherNumberControl.getVoucherLimit().compareTo(pBalance) < 0)
       return false;

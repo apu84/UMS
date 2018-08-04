@@ -39,6 +39,7 @@ public class PersistentItem implements MutableItem {
   private Long mCurrencyId;
   private AcquisitionType mAcquisitionType;
   private BookBindingType mBookBindingType;
+  private String mPaperQuality;
   private String mLastModified;
 
   static {
@@ -70,6 +71,7 @@ public class PersistentItem implements MutableItem {
     mLastUpdatedBy = pPersistentItem.getLastUpdatedBy();
     mCirculationStatus = pPersistentItem.getCirculationStatus();
     mBookBindingType = pPersistentItem.getBookBindingType();
+    mPaperQuality = pPersistentItem.getPaperQuality();
     mLastUpdatedOn = pPersistentItem.getLastUpdatedOn();
   }
 
@@ -299,8 +301,18 @@ public class PersistentItem implements MutableItem {
   }
 
   @Override
+  public String getPaperQuality() {
+    return mPaperQuality;
+  }
+
+  @Override
   public void setBookBindingType(BookBindingType pBookBindingType) {
     mBookBindingType = pBookBindingType;
+  }
+
+  @Override
+  public void setPaperQuality(String pPaperQuality) {
+    mPaperQuality = pPaperQuality;
   }
 
 }

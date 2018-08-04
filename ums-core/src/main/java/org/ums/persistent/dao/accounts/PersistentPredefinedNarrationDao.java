@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.accounts.PredefinedNarrationDaoDecorator;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.PredefinedNarration;
 import org.ums.domain.model.mutable.accounts.MutablePredefinedNarration;
 import org.ums.generator.IdGenerator;
@@ -34,6 +35,12 @@ public class PersistentPredefinedNarrationDao extends PredefinedNarrationDaoDeco
   public List<PredefinedNarration> getAll() {
     String query = "select * from DT_PREDEFINED_NARATION";
     return mJdbcTemplate.query(query, new PersistentPredefinedNarrationRowMapper());
+  }
+
+  @Override
+  public List<PredefinedNarration> getAll(Company pCompany) {
+    String query = "select * from DT_PREDEFINED_NARATION where comp_code=?";
+    return mJdbcTemplate.query(query, new Object[] {pCompany.getId()}, new PersistentPredefinedNarrationRowMapper());
   }
 
   @Override
@@ -74,14 +81,15 @@ public class PersistentPredefinedNarrationDao extends PredefinedNarrationDaoDeco
     for(PredefinedNarration predefinedNarration : pMutablePredefinedNarrations) {
       params.add(new Object[] {predefinedNarration.getId(), predefinedNarration.getVoucher().getId(),
           predefinedNarration.getNarration(), predefinedNarration.getStatFlag(), predefinedNarration.getStatUpFlag(),
-          predefinedNarration.getModifiedDate(), predefinedNarration.getModifiedBy()});
+          predefinedNarration.getModifiedDate(), predefinedNarration.getModifiedBy(),
+          predefinedNarration.getCompany().getId()});
     }
     return params;
   }
 
   @Override
   public List<Long> create(List<MutablePredefinedNarration> pMutableList) {
-    String query = "insert into DT_PREDEFINED_NARATION(ID, VOUCHER_ID, NARRATION, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY) VALUES (?,?,?,?,?,?,?)";
+    String query = "insert into DT_PREDEFINED_NARATION(ID, VOUCHER_ID, NARRATION, STAT_FLAG, STAT_UP_FLAG, MODIFIED_DATE, MODIFIED_BY, COMP_CODE) VALUES (?,?,?,?,?,?,?, ?)";
     mJdbcTemplate.batchUpdate(query, getCreateParams(pMutableList));
     return pMutableList.stream().map(pMutablePredefinedNarration -> pMutablePredefinedNarration.getId()).collect(Collectors.toList());
   }
@@ -102,6 +110,7 @@ public class PersistentPredefinedNarrationDao extends PredefinedNarrationDaoDeco
       narration.setStatUpFlag(pResultSet.getString("stat_up_flag"));
       narration.setModifiedDate(pResultSet.getDate("modified_date"));
       narration.setModifiedBy(pResultSet.getString("modified_by"));
+      narration.setCompanyId(pResultSet.getString("comp_code"));
       return narration;
     }
   }

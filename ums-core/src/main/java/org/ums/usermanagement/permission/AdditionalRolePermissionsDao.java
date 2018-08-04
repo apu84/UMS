@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.StringUtils;
+import org.ums.enums.common.RoleType;
 import org.ums.generator.IdGenerator;
 import org.ums.usermanagement.role.Role;
 import org.ums.usermanagement.user.User;
@@ -104,6 +105,15 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
     String query =
         "select * from ADDITIONAL_ROLE_PERMISSIONS where USER_ID in (select SHORT_NAME from EMPLOYEES where DEPT_OFFICE=?)";
     return mJdbcTemplate.query(query, new Object[] {pDepartmentId}, new RolePermissionsMapper());
+  }
+
+  @Override
+  public AdditionalRolePermissions getAdditionalRole(String pDepartmentId, RoleType pRoleType) {
+    String query =
+        "select * from ADDITIONAL_ROLE_PERMISSIONS where USER_ID in ( "
+            + " select SHORT_NAME  from EMPLOYEES where DEPT_OFFICE=? " + ") and ROLE_ID=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pDepartmentId, pRoleType.getId()},
+        new RolePermissionsMapper());
   }
 
   @Override

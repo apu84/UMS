@@ -1,0 +1,51 @@
+<div class="panel-body">
+    <div align="right">
+        <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.getReport()">
+            <span class="glyphicon glyphicon-download"></span> Download pdf
+        </button>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+        <th style="background-color: #FAFAFA; ">SL</th>
+        <th style="background-color: #FAFAFA; ">Questions</th>
+        <th style="background-color: #FAFAFA; ">Total poins</th>
+        <th style="background-color: #FAFAFA; ">Total Students</th>
+        <th style="background-color: #FAFAFA; ">Average</th>
+        </thead>
+        <tbody>
+        <tr>
+            <td colspan="5"><span  style="font-size: 14px" class="label label-success badge-success">ClassRoom Observation</span></td></tr>
+        <tr data-ng-repeat="app in vm.studentResult" data-ng-if="app.observationType==1">
+            <td>{{$index+1}}</td>
+            <td>{{app.questionDetails}}</td>
+            <td>{{app.totalScore}}</td>
+            <td>{{app.studentNo}}</td>
+            <td>{{app.averageScore}}</td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td><strong class="score">{{vm.classObservationTotalSPoints}}</strong></td>
+            <td><strong class="score">{{vm.classObservationTotalStudent}}</strong></td>
+            <td><strong class="score">{{vm.classObservationAverage}}</strong></td>
+        </tr>
+        <tr>
+            <td  colspan="5"><span  style="font-size: 14px" class="label label-success badge-success">Non ClassRoom Observation</span></td></tr>
+        <tr data-ng-repeat="app in vm.studentResult" data-ng-if="app.observationType==2">
+            <td>{{$index+1}}</td>
+            <td>{{app.questionDetails}}</td>
+            <td>{{app.totalScore}}</td>
+            <td>{{app.studentNo}}</td>
+            <td>{{app.averageScore}}</td>
+        </tr>
+        <td colspan="2"></td>
+        <td><strong class="score">{{vm.nonClassObservationTotalSPoints}}</strong></td>
+        <td><strong class="score">{{vm.nonClassObservationTotalStudent}}</strong></td>
+        <td><strong class="score">{{vm.nonClassObservationAverage}}</strong></td>
+        <tr><td colspan="5"><span  style="font-size: 14px" class="label label-success badge-success">Grand Result</span></td></tr>
+        <td colspan="2"></td>
+        <td><strong style="font-size: 16px">{{vm.classObservationTotalSPoints+vm.nonClassObservationTotalSPoints}}</strong></td>
+        <td><strong style="font-size: 16px">{{vm.classObservationTotalStudent+vm.nonClassObservationTotalStudent}}</strong></td>
+        <td><strong style="font-size: 16px">{{vm.finalScore}}</strong></td>
+        </tbody>
+    </table>
+</div>

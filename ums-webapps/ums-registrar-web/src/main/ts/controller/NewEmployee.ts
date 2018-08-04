@@ -28,6 +28,7 @@ module ums {
         private isNotUniqueShortName: boolean = false;
         private similarUsers = [];
         private showSimilarUsersPortion: boolean = false;
+        private isStaff: boolean = false;
 
         constructor(private appConstants: any,
                     private registrarConstants: any,
@@ -49,6 +50,7 @@ module ums {
             this.allDesignations = designations;
             this.allEmploymentTypes = employmentTypes;
             this.allRoles = roles;
+            this.isStaff = false;
         }
 
         public submitNewEmployeeForm(form: ng.IFormController): void {
@@ -105,9 +107,11 @@ module ums {
                         this.notify.error("No designation found");
                     }
                     else {
+                        this.newEmployee.employeeType["id"] == 3 ? this.isStaff = true : this.isStaff = false;
                         for (let i = 0; i < response.length; i++) {
                             for (let j = 0; j < this.allDesignations.length; j++) {
                                 if (response[i].designationId == this.allDesignations[j].id) {
+                                    this.allDesignations[j].roleId = response[i].roleId;
                                     this.changedDesignationTypes.push(this.allDesignations[j]);
                                 }
                             }

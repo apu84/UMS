@@ -5,6 +5,7 @@ import org.ums.domain.model.mutable.common.MutableLmsApplication;
 import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.manager.ContentManager;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,5 +18,8 @@ public interface LmsApplicationManager extends ContentManager<LmsApplication, Mu
 
   int updateApplicationStatus(Long pApplicationid, LeaveApplicationApprovalStatus pLeaveApplicationStatus);
 
-  List<LmsApplication> getApprovedApplicationsWithinDateRange(String pEmployeeId, String startDate, String endDate);
+  List<LmsApplication> getApplicationsWithinRange(String pEmployeeId, String startDate, String endDate);
+
+  List<LmsApplication> getWithinDateRange(Date pStartDate, Date pEndDate,
+      LeaveApplicationApprovalStatus pLeaveApplicationStatus);
 }

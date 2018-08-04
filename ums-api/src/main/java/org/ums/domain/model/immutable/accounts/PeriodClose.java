@@ -3,6 +3,7 @@ package org.ums.domain.model.immutable.accounts;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.mutable.accounts.MutablePeriodClose;
 import org.ums.enums.accounts.definitions.OpenCloseFlag;
 
@@ -17,6 +18,10 @@ public interface PeriodClose extends Serializable, EditType<MutablePeriodClose>,
   Month getMonth();
 
   Long getMonthId();
+
+  Company getCompany();
+
+  String getCompanyId();
 
   FinancialAccountYear getFinancialAccountYear();
 

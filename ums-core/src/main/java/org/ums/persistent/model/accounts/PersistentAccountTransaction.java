@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.NumberDeserializers;
-import com.fasterxml.jackson.databind.deser.std.StringDeserializer;
-import com.fasterxml.jackson.databind.ser.std.NumberSerializer;
-import com.fasterxml.jackson.databind.ser.std.StringSerializer;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
@@ -175,7 +172,7 @@ public class PersistentAccountTransaction implements MutableAccountTransaction {
   }
 
   @Override
-  @JsonDeserialize(using = NumberDeserializers.NumberDeserializer.class)
+  @JsonDeserialize(as = BigDecimal.class)
   public void setPaidAmount(BigDecimal pPaidAmount) {
     paidAmount = pPaidAmount;
   }

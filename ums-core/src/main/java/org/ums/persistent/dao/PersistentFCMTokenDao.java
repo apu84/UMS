@@ -13,14 +13,13 @@ import java.util.List;
 
 public class PersistentFCMTokenDao extends FCMTokenDaoDecorator {
 
-  static String SELECT_ONE = "SELECT ID, TOKEN, REFRESHED_ON, DELETED_ON, LAST_MODIFIED FROM FCM_TOKEN";
+  static String SELECT_ONE = "SELECT ID, TOKEN, CREATED_ON, LAST_MODIFIED FROM FCM_TOKEN";
 
-  static String INSERT_ONE =
-      "INSERT INTO FCM_TOKEN (ID, TOKEN, REFRESHED_ON, DELETED_ON, LAST_MODIFIED) VALUES (?, ?, ?, ?,"
-          + getLastModifiedSql() + " ) ";
+  static String INSERT_ONE = "INSERT INTO FCM_TOKEN (ID, TOKEN, CREATED_ON, LAST_MODIFIED) VALUES (?, ?, ?,"
+      + getLastModifiedSql() + " ) ";
 
-  static String UPDATE_ONE = "UPDATE FCM_TOKEN SET TOKEN = ?, REFRESHED_ON = ?, DELETED_ON = ?, LAST_MODIFIED = "
-      + getLastModifiedSql() + " ";
+  static String UPDATE_ONE = "UPDATE FCM_TOKEN SET TOKEN = ?, CREATED_ON = ?, LAST_MODIFIED = " + getLastModifiedSql()
+      + " ";
 
   static String EXISTS_ONE = "SELECT COUNT(ID) FROM FCM_TOKEN ";
 
@@ -38,23 +37,21 @@ public class PersistentFCMTokenDao extends FCMTokenDaoDecorator {
 
   @Override
   public FCMToken get(String pId) {
-    String query = SELECT_ONE + " WHERE ID = ?";
+    String query = SELECT_ONE + " WHERE CREATED_ON = (SELECT CREATED_ON FROM FCM_TOKEN WHERE ID = ?)";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new FCMTokenRowMapper());
   }
 
   @Override
   public String create(MutableFCMToken pMutable) {
     String query = INSERT_ONE;
-    mJdbcTemplate.update(query, pMutable.getId(), pMutable.getToken(), pMutable.getRefreshedOn(),
-        pMutable.getDeleteOn());
+    mJdbcTemplate.update(query, pMutable.getId(), pMutable.getToken(), pMutable.getCreatedOn());
     return pMutable.getId();
   }
 
   @Override
   public int update(MutableFCMToken pMutable) {
     String query = UPDATE_ONE + " WHERE ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getToken(), pMutable.getRefreshedOn(), pMutable.getDeleteOn(),
-        pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getToken(), pMutable.getCreatedOn(), pMutable.getId());
   }
 
   @Override
@@ -70,6 +67,12 @@ public class PersistentFCMTokenDao extends FCMTokenDaoDecorator {
   }
 
   @Override
+  public boolean isDuplicate(String pUserId, String pToken) {
+    String query = EXISTS_ONE + " WHERE ID = ? AND TOKEN = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pUserId, pToken}, Boolean.class);
+  }
+
+  @Override
   public FCMToken getToken(String pToken) {
     String query = SELECT_ONE + " WHERE TOKEN = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pToken}, new PersistentFCMTokenDao.FCMTokenRowMapper());
@@ -82,8 +85,7 @@ public class PersistentFCMTokenDao extends FCMTokenDaoDecorator {
       PersistentFCMToken persistentFCMToken = new PersistentFCMToken();
       persistentFCMToken.setId(resultSet.getString("ID"));
       persistentFCMToken.setToken(resultSet.getString("TOKEN"));
-      persistentFCMToken.setRefreshedOn(resultSet.getTimestamp("REFRESHED_ON"));
-      persistentFCMToken.setDeletedOn(resultSet.getDate("DELETED_ON"));
+      persistentFCMToken.setCreatedOn(resultSet.getTimestamp("CREATED_ON"));
       persistentFCMToken.setLastModified(resultSet.getString("LAST_MODIFIED"));
       return persistentFCMToken;
     }

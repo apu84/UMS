@@ -13,7 +13,7 @@ module ums{
       var defer = this.$q.defer();
       var courses:any={};
       this.httpClient.get("/ums-webservice-academic/academic/course/semester/"+
-          semesterId+"/program/"+programId+"/year/"+year+"/semester/"+semester,
+          semesterId + "/program/" + programId + "/year/" + year + "/academicSemester/" + semester,
           'application/json',
           (json:any,etag:string)=>{
             courses = json.entries;

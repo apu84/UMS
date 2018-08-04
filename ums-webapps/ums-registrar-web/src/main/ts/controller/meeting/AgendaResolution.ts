@@ -35,6 +35,7 @@ module ums{
         private agendaNo: string = "";
         private agenda: string = "";
         private resolution: string = "";
+        private printType: number = 1;
         private meetingNumber: IMeetingScheduleModel = <IMeetingScheduleModel>{};
 
         constructor(private registrarConstants: any,
@@ -163,9 +164,11 @@ module ums{
                 showExpandButton: true
             };
             this.convertToJson(agendaResolutionEntry).then((json: any) => {
-                this.meetingService.saveAgendaResolution(json).then(() =>{
-                    this.getAgendaResolution();
-                    this.reset();
+                this.meetingService.saveAgendaResolution(json).then((data: any) =>{
+                    if(data == "Saved") {
+                        this.getAgendaResolution();
+                        this.reset();
+                    }
                 });
             });
         }
@@ -248,6 +251,15 @@ module ums{
             this.agendaAndResolutions.push(this.tempAgendaAndResolution[0]);
             this.tempAgendaAndResolution = [];
             this.reset();
+        }
+
+        public print(): void{
+            if(this.printType) {
+                this.meetingService.getMeetingMinutes(this.meetingType.id, this.meetingNumber.meetingNo, +this.printType);
+            }
+            else{
+                this.meetingService.getMeetingMinutes(this.meetingType.id, this.meetingNumber.meetingNo, 1);
+            }
         }
 
         private convertToJson(convertingObject: IAgendaResolutionModel): ng.IPromise<any>{

@@ -2,7 +2,6 @@ package org.ums.employee.additional;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.immutable.AreaOfInterest;
 
 public class PersistentAreaOfInterestInformation implements MutableAreaOfInterestInformation {
 
@@ -15,15 +14,13 @@ public class PersistentAreaOfInterestInformation implements MutableAreaOfInteres
   }
 
   private String mId;
-  private AreaOfInterest mAreaOfInterest;
-  private int mAreaOfInterestId;
+  private String mAreaOfInterest;
   private String mLastModified;
 
   public PersistentAreaOfInterestInformation() {};
 
   public PersistentAreaOfInterestInformation(PersistentAreaOfInterestInformation pPersistentAreaOfInterestInformation) {
     mAreaOfInterest = pPersistentAreaOfInterestInformation.getAreaOfInterest();
-    mAreaOfInterestId = pPersistentAreaOfInterestInformation.getAreaOfInterestId();
     mLastModified = pPersistentAreaOfInterestInformation.getLastModified();
   }
 
@@ -68,22 +65,12 @@ public class PersistentAreaOfInterestInformation implements MutableAreaOfInteres
   }
 
   @Override
-  public AreaOfInterest getAreaOfInterest() {
-    return mAreaOfInterest;
-  }
-
-  @Override
-  public Integer getAreaOfInterestId() {
-    return mAreaOfInterestId;
-  }
-
-  @Override
-  public void setAreaOfInterest(AreaOfInterest pAreaOfInterest) {
+  public void setAreaOfInterest(String pAreaOfInterest) {
     mAreaOfInterest = pAreaOfInterest;
   }
 
   @Override
-  public void setAreaOfInterestId(Integer pAreaOfInterestId) {
-    mAreaOfInterestId = pAreaOfInterestId;
+  public String getAreaOfInterest() {
+    return mAreaOfInterest;
   }
 }

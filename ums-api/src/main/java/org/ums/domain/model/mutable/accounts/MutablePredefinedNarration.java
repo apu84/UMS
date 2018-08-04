@@ -2,13 +2,19 @@ package org.ums.domain.model.mutable.accounts;
 
 import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
-import org.ums.domain.model.mutable.MutableLastModifier;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.PredefinedNarration;
-import java.util.Date;
 import org.ums.domain.model.immutable.accounts.Voucher;
+import org.ums.domain.model.mutable.MutableLastModifier;
+
+import java.util.Date;
 
 public interface MutablePredefinedNarration extends PredefinedNarration, Editable<Long>, MutableIdentifier<Long>,
     MutableLastModifier {
+
+  void setCompany(Company pCompany);
+
+  void setCompanyId(String pCompanyId);
 
   void setVoucher(Voucher pVoucher);
 

@@ -53,8 +53,8 @@
                 <include>com.oracle:ojdbc6</include>
                 <include>com.jolbox:bonecp</include>
                 <include>com.google.guava:guava</include>
-                <include>pentaho-reporting-engine:pentaho-reporting-engine-classic-core</include>
-                <include>pentaho-library:*</include>
+                <!--include>pentaho-reporting-engine:pentaho-reporting-engine-classic-core</include>
+                <include>pentaho-library:*</include-->
                 <include>com.lowagie:itext</include>
                 <include>com.lowagie:itext-rtf</include>
                 <include>commons-lang:commons-lang</include>
@@ -78,6 +78,7 @@
                 <include>org.mapdb:mapdb</include>
                 <include>org.apache.commons:commons-text</include>
                 <include>com.google.firebase:firebase-admin</include>
+                <include>org.jsoup:jsoup</include>
             </includes>
             <outputDirectory>lib</outputDirectory>
             <useTransitiveDependencies>true</useTransitiveDependencies>

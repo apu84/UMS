@@ -303,11 +303,16 @@
                  title="General Material Description"/>
         </label>
         <div class="col-md-3">
-            <select style="width: 98%" data-ng-model="record.gmd" id="gmd" name="gmd" cRequired=" "
-                    ng-disabled="data.readOnlyMode" ng-class="{'disabledElement': data.readOnlyMode}">
-                <option value="">Select Category</option>
-                <option value="GMD">GMD</option>
-                <option value="SMD">SMD</option>
+            <select style="width: 98%"
+                    data-ng-model="record.gmd"
+                    id="gmd"
+                    name="gmd"
+                    cRequired=" "
+                    ng-disabled="data.readOnlyMode"
+                    ng-class="{'disabledElement': data.readOnlyMode}" data-convert-to-number>
+                <option data-ng-repeat="gmd in data.gmdOptions" value="{{gmd.id}}">
+                    {{gmd.name}}
+                </option>
             </select>
         </div>
     </div>
@@ -356,12 +361,13 @@
         <div class="form-group" data-ng-if="record.materialTypeName=='Book' || record.materialTypeName=='Journal'">
             <label class="col-md-1 control-label">Year</label>
             <div class="col-md-3">
-                <input type="text"
+                <input type="number"
                        class="form-control dottedInput"
-                       data-ng-model="record.callDate"
+                       data-ng-model="record.callYear"
                        data-ng-change="makeCallNo()"
-                       id="callDate"
-                       name="callDate"
+                       id="callYear"
+                       name="callYear"
+                       maxlength="4"
                        ng-readonly="data.readOnlyMode"/>
             </div>
 
@@ -544,7 +550,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-1 control-label" for="yearDateOfPublication">YoP
+            <label class="col-md-1 control-label" for="yearOfPublication">YoP
                 <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png"
                      height="16" width="16"
                      style="float: right;cursor: pointer;margin-left: 5px;"
@@ -553,22 +559,35 @@
                      title="Year of Publication"/>
             </label>
             <div class="col-md-2">
-                <input type="text"
+                <input type="number"
                        placeholder=""
                        class="form-control dottedInput"
-                       data-ng-model="record.imprint.yearDateOfPublication"
-                       id="yearDateOfPublication"
-                       name="yearDateOfPublication"
+                       data-ng-model="record.imprint.yearOfPublication"
+                       id="yearOfPublication"
+                       name="yearOfPublication"
+                       maxlength="4"
                        ng-readonly="data.readOnlyMode"/>
             </div>
-            <label class="col-md-1 control-label" for="copyRightDate">YoC
+            <label class="col-md-1 control-label" for="yearOfCopyRight">YoC
                 <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
                      style="float: right;cursor: pointer;margin-left: 5px;" data-toggle="tooltip" data-placement="top"
                      title="Year of Copyright"/></label>
             <div class="col-md-2">
-                <input type="text"
+                <input type="number"
                        class="form-control dottedInput"
-                       data-ng-model="record.imprint.copyRightDate" id="copyRightDate" name="copyRightDate"
+                       data-ng-model="record.imprint.yearOfCopyRight" id="yearOfCopyRight" name="yearOfCopyRight"
+                       maxlength="4"
+                       ng-readonly="data.readOnlyMode"/>
+            </div>
+            <label class="col-md-1 control-label" for="yearOfReprint">YoRP
+                <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
+                     style="float: right;cursor: pointer;margin-left: 5px;" data-toggle="tooltip" data-placement="top"
+                     title="Year of Reprint"/></label>
+            <div class="col-md-2">
+                <input type="number"
+                       class="form-control dottedInput"
+                       data-ng-model="record.imprint.yearOfReprint" id="yearOfReprint" name="yearOfReprint"
+                       maxlength="4"
                        ng-readonly="data.readOnlyMode"/>
             </div>
         </div>
@@ -607,12 +626,6 @@
                        data-ng-model="record.physicalDescription.dimensions" name="dimensions" id="dimensions"
                        ng-readonly="data.readOnlyMode"/>
 
-            </div>
-            <label class="col-md-1 control-label" for="paperQuality">Paper Quality</label>
-            <div class="col-md-3">
-                <input type="text" placeholder="" class="form-control dottedInput"
-                       data-ng-model="record.physicalDescription.paperQuality" name="paperQuality" id="paperQuality"
-                       ng-readonly="data.readOnlyMode"/>
             </div>
         </div>
     </fieldset>

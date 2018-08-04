@@ -13,6 +13,11 @@ public class FCMTokenDaoDecorator extends ContentDaoDecorator<FCMToken, MutableF
   }
 
   @Override
+  public boolean isDuplicate(String pUserId, String pToken) {
+    return getManager().isDuplicate(pUserId, pToken);
+  }
+
+  @Override
   public FCMToken getToken(String pToken) {
     return getManager().getToken(pToken);
   }

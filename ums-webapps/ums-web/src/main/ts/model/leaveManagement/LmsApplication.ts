@@ -6,13 +6,16 @@ module ums {
     id: string;
     employeeId: string;
     employeeName: string;
+    employee: Employee;
     leaveType: number;
     leaveTypeName: string;
     appliedOn: string;
-    fromDate: string;
-    toDate: string;
+    fromDate: any;
+    toDate: any;
     duration: number;
     reason: string;
     applicationStatus: number;
+    submittedBy: string;
+    submittedByEmp: Employee;
   }
 }

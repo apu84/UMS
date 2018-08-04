@@ -29,14 +29,20 @@ public class AreaOfInterestInformationResourceHelper extends
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     LocalCache localCache = new LocalCache();
     List<MutableAreaOfInterestInformation> mutableAreaOfInterestInformationList = new ArrayList<>();
-    mManager.delete((MutableAreaOfInterestInformation) mManager.getAll(pJsonObject.getJsonObject("entries").getString(
-        "id")));
-    for(int i = 0; i < pJsonObject.getJsonObject("entries").size(); i++) {
-      MutableAreaOfInterestInformation mutableAreaOfInterestInformation = new PersistentAreaOfInterestInformation();
-      mBuilder.build(mutableAreaOfInterestInformation, pJsonObject.getJsonObject("entries"), localCache);
-      mutableAreaOfInterestInformationList.add(mutableAreaOfInterestInformation);
+    if(pJsonObject.getJsonArray("entries").size() > 0) {
+      List<AreaOfInterestInformation> areaOfInterestInformations =
+          mManager.getAll(pJsonObject.getJsonArray("entries").getJsonObject(0).getString("employeeId"));
+      if(!areaOfInterestInformations.isEmpty()) {
+        mManager.delete((MutableAreaOfInterestInformation) areaOfInterestInformations.get(0));
+      }
+      for(int i = 0; i < pJsonObject.getJsonArray("entries").size(); i++) {
+        MutableAreaOfInterestInformation mutableAreaOfInterestInformation = new PersistentAreaOfInterestInformation();
+        mBuilder.build(mutableAreaOfInterestInformation, pJsonObject.getJsonArray("entries").getJsonObject(i),
+            localCache);
+        mutableAreaOfInterestInformationList.add(mutableAreaOfInterestInformation);
+      }
+      mManager.create(mutableAreaOfInterestInformationList);
     }
-    mManager.create(mutableAreaOfInterestInformationList);
     localCache.invalidate();
     return Response.ok().build();
   }

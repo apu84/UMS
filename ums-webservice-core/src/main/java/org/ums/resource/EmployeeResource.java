@@ -1,14 +1,20 @@
 package org.ums.resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.ums.employee.cv.EmployeeListGenerator;
+import org.ums.logs.GetLog;
+import org.ums.manager.EmployeeManager;
+
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.ums.manager.EmployeeManager;
+import javax.ws.rs.core.StreamingOutput;
+import java.io.IOException;
+import java.io.OutputStream;
 
 @Component
 @Path("academic/employee")
@@ -18,9 +24,13 @@ public class EmployeeResource extends MutableEmployeeResource {
   @Autowired
   EmployeeManager mManager;
 
+  @Autowired
+  EmployeeListGenerator mEmployeeListGenerator;
+
   @GET
   @Path("/all")
-  public JsonObject getAll() throws Exception {
+  @GetLog(message = "Get all employees")
+  public JsonObject getAll(@Context HttpServletRequest httpServletRequest) throws Exception {
     return mEmployeeResourceHelper.getAll(mUriInfo);
   }
 
@@ -71,14 +81,17 @@ public class EmployeeResource extends MutableEmployeeResource {
 
   @GET
   @Path("/employeeById/departmentId/{department-id}")
-  public JsonObject getEmployees(final @Context Request pRequest, final @PathParam("department-id") String pDepartmentId) {
+  @GetLog(message = "Get employees by department")
+  public JsonObject getEmployees(@Context HttpServletRequest httpServletRequest, final @Context Request pRequest,
+      final @PathParam("department-id") String pDepartmentId) {
     return mEmployeeResourceHelper.getEmployees(pDepartmentId, mUriInfo);
   }
 
   @GET
   @Path("/newId/deptId/{dept-id}/employeeType/{employee-type}")
-  public JsonObject getNewEmployeeId(final @Context Request pRequest, final @PathParam("dept-id") String pDeptId,
-      final @PathParam("employee-type") int pEmployeeType) {
+  @GetLog(message = "Get new employee id")
+  public JsonObject getNewEmployeeId(@Context HttpServletRequest httpServletRequest, final @Context Request pRequest,
+      final @PathParam("dept-id") String pDeptId, final @PathParam("employee-type") int pEmployeeType) {
     return mEmployeeResourceHelper.getCurrentMaxEmployeeId(pDeptId, pEmployeeType);
   }
 
@@ -86,5 +99,24 @@ public class EmployeeResource extends MutableEmployeeResource {
   @Path("/validate/{short-name}")
   public boolean validate(final @Context Request pRequest, final @PathParam("short-name") String pShortName) {
     return mEmployeeResourceHelper.validateShortName(pShortName);
+  }
+
+  @GET
+  @Path("/report/employeeList/deptList/{dept-list}/empTypeList/{emp-type}/choice/{choice}")
+  @Produces("application/pdf")
+  @GetLog(message = "Download Employee List")
+  public StreamingOutput getEmployeeCV(@Context HttpServletRequest httpServletRequest, final @Context Request pRequest,
+      final @PathParam("dept-list") String deptList, final @PathParam("emp-type") String empType,
+      final @PathParam("choice") Integer choice) {
+    return new StreamingOutput() {
+      @Override
+      public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
+        try {
+          mEmployeeListGenerator.printEmployeeList(deptList, empType, choice, pOutputStream);
+        } catch(Exception e) {
+          throw new WebApplicationException(e);
+        }
+      }
+    };
   }
 }

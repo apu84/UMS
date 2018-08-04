@@ -11,6 +11,7 @@ import org.ums.enums.SemesterStatus;
  * Created by Ifti on 27-Dec-15.
  */
 public interface SemesterManager extends ContentManager<Semester, MutableSemester, Integer> {
+
   List<Semester> getSemesters(final Integer pProgramType, final Integer pLimit);
 
   Semester getPreviousSemester(final Integer pSemesterId, final Integer pProgramTypeId);

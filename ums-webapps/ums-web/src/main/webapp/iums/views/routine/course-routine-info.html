@@ -1,0 +1,72 @@
+<div class="row">
+    <div class="col-md-12">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-md-2" for="course">Course :</label>
+                <div class="col-md-10">
+                    <ui-select id="courseNo" theme="bootstrap"
+                               data-ng-model="vm.selectedCourse"
+                               on-select="vm.courseSearched()" name="course">
+                        <ui-select-match placeholder="Select Course">{{vm.selectedCourse.title}}
+                        </ui-select-match>
+                        <ui-select-choices id="course"
+                                           repeat="g in vm.classRoutineService.courseList|filter:$select.search"
+                        >
+                            <small ng-bind-html="g.title | highlight:$select.search"></small>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class=" col-md-3">Course No :</label>
+                <div class="col-md-9">
+                    <label><b>{{vm.selectedCourse.no}}</b></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class=" col-md-3">Course Name :</label>
+                <div class="col-md-9">
+                    <label><b>{{vm.selectedCourse.title}}</b></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class=" col-md-3">Credit Hour :</label>
+                <div class="col-md-9">
+                    <label><b>{{vm.selectedCourse.crhr}}</b></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class=" col-md-3">Type :</label>
+                <div class="col-md-9">
+                    <p><b>{{vm.selectedCourse.type_value==1?'Theory':'Sessional'}}</b></p>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <p><b>Course in routine</b></p>
+    </div>
+    <div class="col-md-12">
+        <table class="table table-bordered table-striped">
+            <thread>
+                <th>Day</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Room No</th>
+                <th>Section</th>
+            </thread>
+            <tbody>
+            <tr ng-repeat="routine in vm.routineBasedOnCourse">
+                <td>{{vm.classRoutineService.weekDayMapWithId[routine.day]}}</td>
+                <td>{{routine.startTime}}</td>
+                <td>{{routine.endTime}}</td>
+                <td>{{routine.room.roomNo}}</td>
+                <td>{{routine.section}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

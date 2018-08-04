@@ -13,6 +13,10 @@ import org.ums.tabulation.TabulationCourseModel;
 public class UGRegistrationResultDaoDecorator extends
     ContentDaoDecorator<UGRegistrationResult, MutableUGRegistrationResult, Long, UGRegistrationResultManager> implements
     UGRegistrationResultManager {
+  @Override
+  public Integer getTotalRegisteredStudentForCourse(String pCourseId, List<String> pSection, Integer pSemesterId) {
+    return getManager().getTotalRegisteredStudentForCourse(pCourseId, pSection, pSemesterId);
+  }
 
   @Override
   public List<UGRegistrationResult> getBySemesterAndExamTYpeAndGrade(int pSemesterId, int pExamType, String pGrade) {

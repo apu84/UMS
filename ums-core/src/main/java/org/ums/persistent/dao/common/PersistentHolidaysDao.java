@@ -12,6 +12,7 @@ import org.ums.persistent.model.common.PersistentHolidays;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,6 +40,12 @@ public class PersistentHolidaysDao extends HolidaysDaoDecorator {
   public List<Holidays> getHolidays(int pYear) {
     String query = SELECT_ALL + " where year=? order by holiday_type_id";
     return mJdbcTemplate.query(query, new Object[] {pYear}, new HolidaysRowMapper());
+  }
+
+  @Override
+  public List<Holidays> getHolidays(Date pFromDate, Date pToDate) {
+    String query = SELECT_ALL + " where fromDate>=? or toDate<=? order by holiday_type_id";
+    return mJdbcTemplate.query(query, new Object[] {pFromDate, pToDate}, new HolidaysRowMapper());
   }
 
   @Override

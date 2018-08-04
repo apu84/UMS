@@ -28,6 +28,7 @@ import org.ums.manager.SemesterManager;
 import org.ums.message.MessageResource;
 import org.ums.services.NotificationGenerator;
 import org.ums.statistics.JdbcTemplateFactory;
+import org.ums.statistics.NamedParameterJdbcTemplateFactory;
 import org.ums.usermanagement.role.RoleManager;
 import org.ums.usermanagement.user.UserManager;
 
@@ -60,6 +61,9 @@ public class FeeContext {
 
   @Autowired
   UMSConfiguration mUMSConfiguration;
+
+  @Autowired
+  NamedParameterJdbcTemplateFactory mNamedParameterJdbcTemplateFactory;
 
   @Bean
   FeeCategoryManager feeCategoryManager() {
@@ -118,7 +122,9 @@ public class FeeContext {
   StudentPaymentManager studentPaymentManager() {
     PostStudentPaymentActions postPaymentActions =
         new PostStudentPaymentActions(studentDuesManager(), installmentStatusManager());
-    StudentPaymentDao studentPaymentDao = new StudentPaymentDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+    StudentPaymentDao studentPaymentDao =
+        new StudentPaymentDao(mTemplateFactory.getJdbcTemplate(),
+            mNamedParameterJdbcTemplateFactory.getNamedParameterJdbcTemplate(), mIdGenerator);
     studentPaymentDao.setManager(postPaymentActions);
     return studentPaymentDao;
   }

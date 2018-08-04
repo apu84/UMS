@@ -11,11 +11,13 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.FCMToken;
 import org.ums.domain.model.immutable.Notification;
 import org.ums.domain.model.mutable.MutableFCMToken;
+import org.ums.domain.model.mutable.MutableNotification;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.ContentManager;
 import org.ums.manager.FCMTokenManager;
 import org.ums.manager.NotificationManager;
 import org.ums.persistent.model.PersistentFCMToken;
+import org.ums.persistent.model.PersistentNotification;
 import org.ums.resource.ResourceHelper;
 import org.ums.services.FirebaseMessagingImpl;
 import org.ums.usermanagement.user.User;
@@ -24,9 +26,9 @@ import org.ums.usermanagement.user.UserManager;
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @Component
 public class FCMTokenResourceHelper extends ResourceHelper<FCMToken, MutableFCMToken, String> {
@@ -50,106 +52,52 @@ public class FCMTokenResourceHelper extends ResourceHelper<FCMToken, MutableFCMT
   @Qualifier("genericDateFormat")
   private DateFormat mDateFormat;
 
-  public JsonObject getToken(String pId, UriInfo mUriInfo) {
-    LocalCache localCache = new LocalCache();
-    FCMToken fcmToken = new PersistentFCMToken();
-    if(mManager.exists(pId)) {
-      fcmToken = mManager.get(pId);
-      return toJson(fcmToken, mUriInfo, localCache);
-    }
-    else {
-      return null;
-    }
-  }
-
-  private void update(String consumerId, String token, Date pTokenLastRefreshedOn, Date pTokenDeletedOn,
-      UriInfo pUriInfo) {
-    MutableFCMToken mutableFCMToken = new PersistentFCMToken();
-    LocalCache localeCache = new LocalCache();
-    mutableFCMToken.setId(consumerId);
-    mutableFCMToken.setToken(token);
-    mutableFCMToken.setRefreshedOn(pTokenLastRefreshedOn);
-    mutableFCMToken.setDeletedOn(pTokenDeletedOn);
-    mManager.update(mutableFCMToken);
-    localeCache.invalidate();
-  }
-
   @Override
   @Transactional
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    JsonObject jsonObject = (JsonObject) pJsonObject.getJsonObject("entries");
+    String token = pJsonObject.getJsonObject("entries").getString("fcmToken");
+    User user = getCurrentLoggedInUser();
 
+    if(!mManager.isDuplicate(user.getId(), token)) {
+      LocalCache localCache = new LocalCache();
+      MutableFCMToken mutableFCMToken = new PersistentFCMToken();
+      mutableFCMToken.setId(user.getId());
+      mutableFCMToken.setToken(token);
+      mutableFCMToken.setCreatedOn(new Date());
+      mManager.create(mutableFCMToken);
+      localCache.invalidate();
+    }
+    sendQueuedMessages(user.getId());
+    Response.ResponseBuilder builder = Response.created(null);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+  }
+
+  private User getCurrentLoggedInUser() {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
-    User user = mUserManager.get(userId);
+    return mUserManager.get(userId);
+  }
 
-    if(mManager.exists(user.getId())) {
-      FCMToken fcmToken = mManager.get(user.getId());
-      return operationForExistingUser(pUriInfo, jsonObject, user, fcmToken);
+  private void sendQueuedMessages(String sendTo) {
+    List<Notification> notifications = mNotificationManager.getNotifications(sendTo);
+    if(notifications.size() > 3) {
+      mFirebaseMessaging
+          .send(sendTo, sendTo, "IUMS", "You have " + notifications.size() + " new notifications.", false);
     }
     else {
-      operationForNonExistingUser(pUriInfo, jsonObject, user);
+      for(Notification notification : notifications) {
+        mFirebaseMessaging.send(sendTo, sendTo, notification.getNotificationType(), notification.getPayload(), false);
+      }
     }
-    return null;
-  }
 
-  private void operationForNonExistingUser(UriInfo pUriInfo, JsonObject jsonObject, User user) {
-    if(mManager.hasDuplicate(jsonObject.getString("fcmToken"))) {
-      FCMToken duplicateFcmToken = mManager.getToken(jsonObject.getString("fcmToken"));
-      update(duplicateFcmToken.getId(), null, new Date(duplicateFcmToken.getRefreshedOn().getTime()), new Date(),
-          pUriInfo);
-      doPost(jsonObject, user);
-    }
-    else {
-      doPost(jsonObject, user);
-    }
-  }
-
-  private Response operationForExistingUser(UriInfo pUriInfo, JsonObject jsonObject, User user, FCMToken fcmToken)
-      throws ExecutionException, InterruptedException {
-    if(mManager.hasDuplicate(jsonObject.getString("fcmToken"))) {
-      FCMToken duplicateFcmToken = mManager.getToken(jsonObject.getString("fcmToken"));
-      update(duplicateFcmToken.getId(), null, new Date(duplicateFcmToken.getRefreshedOn().getTime()), new Date(),
-          pUriInfo);
-      update(user.getId(), jsonObject.getString("fcmToken"), new Date(), null, pUriInfo);
-      messageSendingProcess(fcmToken);
-    }
-    else {
-      update(user.getId(), jsonObject.getString("fcmToken"), new Date(), null, pUriInfo);
-      messageSendingProcess(fcmToken);
-    }
-    Response.ResponseBuilder builder = Response.created(null);
-    builder.status(Response.Status.CREATED);
-    return builder.build();
-  }
-
-  private void messageSendingProcess(FCMToken fcmToken) throws ExecutionException, InterruptedException {
-    if(fcmToken.getDeleteOn() == null) {
-      sendQueuedMessages(fcmToken.getId(), fcmToken.getDeleteOn());
-    }
-    else {
-      sendQueuedMessages(fcmToken.getId(), new Date(fcmToken.getRefreshedOn().getTime()));
-    }
-  }
-
-  private Response doPost(JsonObject jsonObject, User user) {
-    MutableFCMToken mutableFCMToken = new PersistentFCMToken();
-    LocalCache localCache = new LocalCache();
-    mutableFCMToken.setId(user.getId());
-    mutableFCMToken.setRefreshedOn(new Date());
-    mutableFCMToken.setDeletedOn(null);
-    mBuilder.build(mutableFCMToken, jsonObject, localCache);
-    mManager.create(mutableFCMToken);
-    localCache.invalidate();
-    Response.ResponseBuilder builder = Response.created(null);
-    builder.status(Response.Status.CREATED);
-    return builder.build();
-  }
-
-  private void sendQueuedMessages(String sendTo, Date pQueuedFrom) throws ExecutionException, InterruptedException {
-    List<Notification> notifications = mNotificationManager.getNotifications(sendTo, pQueuedFrom);
+    List<MutableNotification> mutableNotifications = new ArrayList<>();
     for(Notification notification : notifications) {
-      mFirebaseMessaging.send(sendTo, notification.getNotificationType(), notification.getPayload());
+      MutableNotification mutableNotification = new PersistentNotification();
+      mutableNotification = (MutableNotification) notification;
+      mutableNotifications.add(mutableNotification);
     }
+
+    mNotificationManager.update(mutableNotifications);
   }
 
   @Override

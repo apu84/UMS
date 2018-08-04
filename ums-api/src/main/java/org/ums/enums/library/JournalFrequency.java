@@ -8,10 +8,11 @@ import java.util.Map;
  * Created by Ifti on 17-Feb-17.
  */
 public enum JournalFrequency {
-  WEEKLY(1, "Author"),
-  BI_WEEKLY(15, "Co-Author"),
-  MONTHLY(30, "Editor"),
-  YEARLY(360, "Editor");
+  SELECT_FREQUENCY(101101, "Select Frequency"),
+  WEEKLY(1, "Weekly"),
+  BI_WEEKLY(15, "Bi-Weekly"),
+  MONTHLY(30, "Monthly"),
+  YEARLY(360, "Yearly");
 
   private String label;
   private int id;

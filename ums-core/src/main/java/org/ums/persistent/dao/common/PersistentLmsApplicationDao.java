@@ -1,6 +1,5 @@
 package org.ums.persistent.dao.common;
 
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -12,11 +11,9 @@ import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.common.PersistentLmsApplication;
 import org.ums.util.UmsUtils;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +28,9 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
   private String SELECT_ONE = "select * from lms_application ";
   private String DELETE_ONE = "delete from lms_application ";
   private String UPDATE_ONE =
-      "update lms_application set employee_id=:employeeId, type_id=:typeId, applied_on=:appliedOn, from_date=:fromDate, to_date=:toDate, reason=:reason,  app_status=:appStatus, total_days=:totalDays, last_modified=:lastModified";
+      "update lms_application set employee_id=:employeeId, type_id=:typeId, applied_on=:appliedOn, from_date=:fromDate, to_date=:toDate, reason=:reason,  app_status=:appStatus, total_days=:totalDays, submitted_by=:submittedBy, last_modified=:lastModified";
   private String INSERT_ONE =
-      "INSERT INTO LMS_APPLICATION (ID,EMPLOYEE_ID, TYPE_ID, APPLIED_ON, FROM_DATE, TO_DATE, REASON,APP_STATUS, TOTAL_DAYS, LAST_MODIFIED) VALUES (:id,:employeeId,:typeId,:appliedOn,:fromDate,:toDate,:reason,:appStatus, :totalDays,:lastModified)";
+      "INSERT INTO LMS_APPLICATION (ID,EMPLOYEE_ID, TYPE_ID, APPLIED_ON, FROM_DATE, TO_DATE, REASON,APP_STATUS, TOTAL_DAYS, SUBMITTED_BY, LAST_MODIFIED) VALUES (:id,:employeeId,:typeId,:appliedOn,:fromDate,:toDate,:reason,:appStatus, :totalDays, :submittedBy,:lastModified)";
 
   private JdbcTemplate mJdbcTemplate;
   private NamedParameterJdbcTemplate mNamedParameterJdbcTemplate;
@@ -66,6 +63,7 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
     parameter.put("reason", pMutableLmsApplication.getReason());
     parameter.put("totalDays", pMutableLmsApplication.getTotalDays());
     parameter.put("appStatus", pMutableLmsApplication.getApplicationStatus().getId());
+    parameter.put("submittedBy", pMutableLmsApplication.getSubmittedBy());
     parameter.put("lastModified", UmsUtils.formatDate(new java.util.Date(), "YYYYMMDDHHMMSS"));
     return parameter;
   }
@@ -74,6 +72,14 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
   public List<LmsApplication> getAll() {
     String query = SELECT_ALL;
     return mNamedParameterJdbcTemplate.query(query, new LmsApplicationRowMapper());
+  }
+
+  @Override
+  public List<LmsApplication> getWithinDateRange(Date pStartDate, Date pEndDate,
+      LeaveApplicationApprovalStatus pLeaveApplicationStatus) {
+    String query = "select * from LMS_APPLICATION where (FROM_DATE>=? or TO_DATE<=?) and APP_STATUS=?";
+    return mJdbcTemplate.query(query, new Object[] {pStartDate, pEndDate, pLeaveApplicationStatus.getId()},
+        new LmsApplicationRowMapper());
   }
 
   @Override
@@ -147,7 +153,7 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
     String query = "select count(*) from lms_application " + " where id=:id";
     Map parameterMap = new HashMap();
     parameterMap.put("id", pId);
-    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, Integer.class) == 1 ? true : false;
+    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, Integer.class).equals(1) ? true : false;
   }
 
   @Override
@@ -171,13 +177,12 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
   }
 
   @Override
-  public List<LmsApplication> getApprovedApplicationsWithinDateRange(String pEmployeeId, String startDate,
-      String endDate) {
+  public List<LmsApplication> getApplicationsWithinRange(String pEmployeeId, String startDate, String endDate) {
     String query =
         "SELECT * "
             + "FROM LMS_APPLICATION "
             + "WHERE "
-            + "  EMPLOYEE_ID = :employeeId AND APP_STATUS = 7 AND :startDate>= FROM_DATE AND :modifiedStartDate<= TO_DATE "
+            + "  EMPLOYEE_ID = :employeeId AND (APP_STATUS!=3 or APP_STATUS!=5 OR APP_STATUS!=6) AND :startDate>= FROM_DATE AND :modifiedStartDate<= TO_DATE "
             + "  AND :endDate >= FROM_DATE AND :endDate <= TO_DATE";
     Map parameterMap = new HashMap();
     parameterMap.put("employeeId", pEmployeeId);
@@ -208,6 +213,7 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
       application.setReason(rs.getString("reason"));
       application.setLastModified(rs.getString("last_modified"));
       application.setTotalDays(rs.getInt("total_days"));
+      application.setSubmittedBy(rs.getString("submitted_by"));
       if(rs.getInt("app_status") != 0)
         application.setLeaveApplicationStatus(LeaveApplicationApprovalStatus.get(rs.getInt("app_status")));
       return application;

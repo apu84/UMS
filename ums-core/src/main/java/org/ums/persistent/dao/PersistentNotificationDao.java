@@ -11,7 +11,6 @@ import org.ums.persistent.model.PersistentNotification;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -23,7 +22,7 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
       "INSERT INTO NOTIFICATION (ID, PRODUCER_ID, CONSUMER_ID, NOTIFICATION_TYPE, PAYLOAD, PRODUCED_ON, LAST_MODIFIED) "
           + "VALUES (?, ?, ?, ?, ?, SYSDATE, " + getLastModifiedSql() + ")";
   String UPDATE_ALL = "UPDATE NOTIFICATION SET PRODUCER_ID = ?, CONSUMER_ID = ?, NOTIFICATION_TYPE = ?, PAYLOAD = ?,"
-      + "CONSUMED_ON = SYSDATE, LAST_MODIFIED = " + getLastModifiedSql() + " ";
+      + " CONSUMED_ON = SYSDATE, LAST_MODIFIED = " + getLastModifiedSql() + " ";
 
   String DELETE_ALL = "DELETE FROM NOTIFICATION ";
 
@@ -98,10 +97,9 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
   }
 
   @Override
-  public List<Notification> getNotifications(String consumerId, Date pProducedOn) {
-    String query =
-        SELECT_ALL + " WHERE CONSUMER_ID = ? AND PRODUCED_ON >= ? AND CONSUMED_ON IS NULL ORDER BY PRODUCED_ON DESC";
-    return mJdbcTemplate.query(query, new Object[] {consumerId, pProducedOn}, new NotificationRowMapper());
+  public List<Notification> getNotifications(String consumerId) {
+    String query = SELECT_ALL + " WHERE CONSUMER_ID = ? AND CONSUMED_ON IS NULL ORDER BY PRODUCED_ON DESC";
+    return mJdbcTemplate.query(query, new Object[] {consumerId}, new NotificationRowMapper());
   }
 
   @Override

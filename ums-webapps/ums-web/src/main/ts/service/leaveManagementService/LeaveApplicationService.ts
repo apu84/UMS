@@ -3,6 +3,13 @@
  */
 module ums {
   export class LeaveApplicationService {
+
+    public user: User;
+    public employeeId: string;
+    public remainingLeaves: RemainingLmsLeave[];
+    public remainingLeavesMap: any;
+
+
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window'];
 
     constructor(private appConstants: any, private httpClient: HttpClient,

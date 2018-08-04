@@ -7,6 +7,11 @@ import org.ums.decorator.ContentDaoDecorator;
 public class UGFeeDaoDecorator extends ContentDaoDecorator<UGFee, MutableUGFee, Long, UGFeeManager> implements
     UGFeeManager {
   @Override
+  public UGFee getFee(Integer pFacultyId, Integer pSemesterId, FeeCategory pFeeCategory) {
+    return getManager().getFee(pFacultyId, pSemesterId, pFeeCategory);
+  }
+
+  @Override
   public List<UGFee> getFee(Integer pFacultyId, Integer pSemesterId) {
     return getManager().getFee(pFacultyId, pSemesterId);
   }
@@ -25,4 +30,5 @@ public class UGFeeDaoDecorator extends ContentDaoDecorator<UGFee, MutableUGFee, 
   public List<Integer> getDistinctSemesterIds(Integer pFacultyId) {
     return getManager().getDistinctSemesterIds(pFacultyId);
   }
+
 }

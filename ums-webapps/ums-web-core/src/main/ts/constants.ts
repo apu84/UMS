@@ -57,7 +57,7 @@ module ums {
                     {id: '22', name: 'Postgraduate'}
                 ],
                 deptShort: [
-                    {id: '', name: 'Select Dept./School'},
+                    {id: '',   name: 'Select Dept./School'},
                     {id: '01', name: 'ARC'},
                     {id: '02', name: 'BBA'},
                     {id: '03', name: 'CE'},
@@ -83,7 +83,8 @@ module ums {
                     {id: "3", name: 'Monday'},
                     {id: "4", name: 'Tuesday'},
                     {id: "5", name: 'Wednesday'},
-                    {id: "6", name: 'Thursday'}
+                  {id: "6", name: 'Thursday'},
+                  {id: "7", name: 'Friday'}
                 ],
                 officeShort: {
                     '80': 'RO',
@@ -107,6 +108,10 @@ module ums {
                 },
                 examTime: [
                     {id: '9:30 a.m. to 12:30 p.m', name: '9:30 a.m. to 12:30 p.m'}
+                ],
+                examType: [
+                    {id: 1, name: "Regular"},
+                    {id: 2, name: "Carry/Clearance/Improvement"}
                 ],
                 bloodGroup: [
                     {id: '', name: 'Select Blood Group'},
@@ -250,28 +255,32 @@ module ums {
                 ],
                 weekDays: [
                     {
-                        id: '01',
-                        day: 'Saturday'
+                        id: '1',
+                        name: 'Saturday'
                     },
                     {
-                        id: '02',
-                        day: 'Sunday'
+                        id: '2',
+                        name: 'Sunday'
                     },
                     {
-                        id: '03',
-                        day: 'Monday'
+                        id: '3',
+                        name: 'Monday'
                     },
                     {
-                        id: '04',
-                        day: 'Tuesday'
+                        id: '4',
+                        name: 'Tuesday'
                     },
                     {
-                        id: '05',
-                        day: 'Wednesday'
+                        id: '5',
+                        name: 'Wednesday'
                     },
                     {
-                        id: '06',
-                        day: 'Thursday'
+                        id: '6',
+                        name: 'Thursday'
+                    },
+                    {
+                        id:'7',
+                        name:'Friday'
                     }
                 ],
                 ugPrograms: [
@@ -563,6 +572,17 @@ module ums {
                     {id: "41", name: "4-1"},
                     {id: "42", name: "4-2"}
                 ],
+                semester: [
+                    {id: 1, name: "1st Semester"},
+                    {id: 2, name: "2nd Semester"}
+                ],
+                year: [
+                    {id: 1, name: "1st Year"},
+                    {id: 2, name: "2nd Year"},
+                    {id: 3, name: "3rd Year"},
+                    {id: 4, name: "4th Year"},
+                    {id: 5, name: "5th Year"}
+                ],
                 leaveApprovalStatus: [
                     {id: 1, name: "Waiting for head's approval"},
                     {id: 2, name: "Waiting For Registrar's Approval"},
@@ -572,6 +592,54 @@ module ums {
                     {id: 6, name: "Rejected by VC"},
                     {id: 7, name: "Application Approved"},
                     {id: 8, name: "All"}
+                ],
+                carryApprovalStatus: [
+                    {id: 1, name: "Waiting for head's approval"},
+                    {id: 2, name: "Approved By Head"},
+                    {id: 3, name: "Rejected By Head"},
+                    {id: 4, name: "All"}
+                ],
+                courseTypeTES: [
+                    {id: 1, name: "Theory"}
+                ],observationTypeTes: [
+                    {id: 1, name: "Class Room Observation"},
+                    {id: 2, name: "Non-Class Room Observation"},
+                    {id: 3, name: "Non Teaching Observation"}
+                ],deptForTes: [
+                    {id: '01', name: 'ARC'},
+                    {id: '02', name: 'BBA'},
+                    {id: '03', name: 'CE'},
+                    {id: '04', name: 'CSE'},
+                    {id: '05', name: 'EEE'},
+                    {id: '06', name: 'TE'},
+                    {id: '07', name: 'MPE'},
+                    {id: '15', name: 'ARS'},
+                    {id: '08', name: 'All Department Teacher Evaluation List'},
+                    {id: '09', name: 'Maximum Score Holder of All Dept'},
+                    {id: '10', name: 'Minimum Score Holder of All Dept'},
+                    {id: '11', name: 'Faculty of Engineering'},
+                    {id: '12', name: 'Faculty of Business And Social Science'},
+                    {id: '13', name: 'Faculty of Architecture'}
+                ],deptShortName: [
+                    {id: '01', name: 'ARC'},
+                    {id: '02', name: 'BBA'},
+                    {id: '03', name: 'CE'},
+                    {id: '04', name: 'CSE'},
+                    {id: '05', name: 'EEE'},
+                    {id: '06', name: 'TE'},
+                    {id: '07', name: 'MPE'},
+                    {id: '15', name: 'ARS'}
+                ],facultyEngineering: [
+                    {id: '03', name: 'CE'},
+                    {id: '04', name: 'CSE'},
+                    {id: '05', name: 'EEE'},
+                    {id: '06', name: 'TE'},
+                    {id: '07', name: 'MPE'}
+                ],facultyBusinessAndSocial: [
+                    {id: '02', name: 'BBA'},
+                    {id: '15', name: 'ARS'}
+                ],facultyArchitecture: [
+                    {id: '01', name: 'ARC'}
                 ],
                 departmentOffice: [
                     {id: '01', name: 'Department of Architecture'},
@@ -611,8 +679,7 @@ module ums {
                 ],
                 officialEmployeeTypes: [
                     {id: 2, name: "Officer"},
-                    {id: 3, name: "Staff"},
-                    {id: 9, name: "Top Management"}
+                    {id: 3, name: "Staff"}
                 ],
                 MARKS_SUBMISSION_STATUS: {
                     NOT_SUBMITTED: 0,
@@ -696,7 +763,15 @@ module ums {
               {id:"6", name:"Cash in hand"},
               {id:"7", name:"Sundry Debtor"},
               {id:"8", name:"Sundry Creditor"},
-              {id:"9", name:"Current Liabilities"}
+              {id: "9", name: "Current Liabilities"},
+              {id: "10", name: "Tution Fees & Other Student Fees"}
+            ],
+            accountTypes: [
+              {id: 1, name: "Engineering Program Account"},
+              {id: 2, name: "Business Program Account"},
+              {id: 3, name: "Convocation Program Account"},
+              {id: 4, name: "Provident Fund Account"},
+              {id: 5, name: "Student Welfare Fund Account"}
             ],
             financialYearCloseTransferType:[
                 {id:1, name:'All accounts closing'},
@@ -711,7 +786,7 @@ module ums {
                 languages: [
                     {id: 101101, name: 'Select a Language'},
                     {id: 1, name: 'English'},
-                    {id: 2, name: 'Bangla'},
+                    {id: 2, name: 'Bengali'},
                     {id: 3, name: 'French'},
                     {id: 4, name: 'Chinese'},
                     {id: 5, name: 'Russian'},
@@ -721,8 +796,7 @@ module ums {
                     {id: 9, name: 'Hindi'},
                     {id: 10, name: 'Urdu'},
                     {id: 11, name: 'Arabic'},
-                    {id: 12, name: 'Chinese'},
-                    {id: 13, name: 'Sanskrit'}
+                    {id: 12, name: 'Sanskrit'}
                 ],
                 bindingTypes: [
                     {id: 101101, name: 'Select Binding Type'},
@@ -781,6 +855,18 @@ module ums {
                     {id: 15, name: 'Bi-Weekly'},
                     {id: 30, name: 'Monthly '},
                     {id: 360, name: 'Yearly'}
+                ],
+                gmdOptions: [
+                    {id: 101101, name: "Select Category"},
+                    {id: 1, name: "GMD"},
+                    {id: 2, name: "SMD"}
+                ],
+                currencyTypes: [
+                    {id: 1, name: 'BDT'},
+                    {id: 2, name: 'INR'},
+                    {id: 3, name: 'USD'},
+                    {id: 4, name: 'EUR'},
+                    {id: 5, name: 'GBP'}
                 ]
             }
         }
@@ -864,7 +950,8 @@ module ums {
                     {id: 1, name: "Contractual"},
                     {id: 2, name: "Probation"},
                     {id: 3, name: "Permanent"},
-                    {id: 4, name: "Contract"}
+                    {id: 4, name: "Contract"},
+                    {id: 5, name: "Add-Hoc"}
                 ],
                 meetingTypes: [
                     {id: 10, name: "Board Of Trustees Meeting"},

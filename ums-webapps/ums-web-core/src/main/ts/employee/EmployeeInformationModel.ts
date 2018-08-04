@@ -130,8 +130,7 @@ module ums{
 
     export interface IAreaOfInterestInformationModel {
         employeeId: string;
-        areaOfInterest: ICommon;
-        areaOfInterestId: number;
+        areaOfInterest: string;
     }
 
     export interface IServiceInformationModel{
@@ -161,7 +160,7 @@ module ums{
     export interface ICommon{
         id: number;
         name: string;
-        foreign_id: number;
+        foreign_id?: number;
     }
 
     export interface IDegreeLevel{

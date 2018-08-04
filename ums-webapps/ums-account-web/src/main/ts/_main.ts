@@ -36,6 +36,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/HttpClient.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/FileUpload.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CookieService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/CompanyService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/EmployeeService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/UserService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Settings.ts'/>
@@ -53,6 +54,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/MaritalStatusService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/AreaOfInterestService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/AcademicDegreeService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/BibtexParserService.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/MainController.ts'/>
@@ -68,6 +70,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/Image.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/UITab.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/MainNavigation.ts'/>
+/// <reference path='./components/directives/CompanyName.ts'  />
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/BindHtml.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/DatePicker.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/AutoComplete.ts'/>
@@ -101,7 +104,28 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/token.model.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/refresh.token.service.ts'/>
 
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeProfile.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformationService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformationModel.ts' />
+/// <reference path='../../../../ums-web-core/src/main/ts/service/CountryService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/DivisionService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/DistrictService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/ThanaService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/EmploymentTypeService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/DesignationService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/DepartmentService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/AcademicDegreeService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/PersonalInformation.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/AcademicInformation.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/PublicationInformation.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/AwardInformation.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/TrainingInformation.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/ExperienceInformation.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/AdditionalInformation.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/employee/ServiceInformation.ts'/>
+
 /// <reference path='data.ts'/>
+/// <reference path='components/AccountsMainController.ts'/>
 /// <reference path='components/definitions/group/group.controller.ts'/>
 /// <reference path='components/definitions/group/group.service.ts'/>
 /// <reference path='components/definitions/account/account.controller.ts'/>
@@ -109,6 +133,7 @@
 /// <reference path='components/definitions/account/account.balance.service.ts'/>
 /// <reference path='components/definitions/currency/currency.service.ts'/>
 /// <reference path='components/definitions/currency/currency.conversion.service.ts'/>
+/// <reference path='components/definitions/company/company.controller.ts'/>
 /// <reference path='components/definitions/financial.account.year/financial.account.year.controller.ts'/>
 /// <reference path='components/definitions/financial.account.year/financial.account.year.closing.controller.ts'/>
 /// <reference path='components/definitions/financial.account.year/financial.account.year.service.ts'/>
@@ -117,6 +142,8 @@
 /// <reference path='components/definitions/period-close/period.close.controller.ts'/>
 /// <reference path='components/definitions/period-close/period.close.service.ts'/>
 /// <reference path='components/definitions/period-close/month.service.ts'/>
+/// <reference path='components/definitions/system.account.map/system.account.map.controller.ts'/>
+/// <reference path='components/definitions/system.account.map/system.account.map.service.ts'/>
 /// <reference path='components/definitions/voucher/voucher.service.ts'/>
 /// <reference path='components/definitions/voucher/voucher.number.control.controller.ts'/>
 /// <reference path='components/definitions/voucher/voucher.number.control.service.ts'/>
@@ -124,8 +151,9 @@
 /// <reference path='components/definitions/narration/narration.service.ts'/>
 /// <reference path='components/definitions/system.group.map/system.group.map.service.ts'/>
 /// <reference path='components/definitions/system.group.map/system.group.map.controller.ts'/>
-
 /// <reference path='components/common/receipt/receipt.service.ts'/>
+/// <reference path='components/common/user.company.map/user.company.map.service.ts'/>
+
 
 /// <reference path='components/balance-sheet/balance.sheet.report.controller.ts'/>
 /// <reference path='components/balance-sheet/balance.sheet.report.service.ts'/>
@@ -141,8 +169,6 @@
 /// <reference path='components/general-ledger/transactions/common/cheque.register.service.ts'/>
 /// <reference path='components/general-ledger/reports/general.ledger.report.controller.ts'/>
 /// <reference path='components/general-ledger/reports/general.ledger.report.service.ts'/>
-
-
 
 /// <reference path="components/directives/balance.type.directive.ts"/>
 

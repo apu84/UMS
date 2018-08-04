@@ -1,0 +1,175 @@
+<style>
+    .circle-button {
+        border-radius: 12px;
+    }
+
+    .button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 8px;
+        margin: 4px 2px;
+    }
+
+    .list-group{
+        max-height: 550px;
+        margin-bottom: 10px;
+        overflow:scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+</style>
+<div class="row">
+    <div class="col-md-6">
+        <div class="well" style="background-color: #ffeeff">
+            <div class="row" align="center">
+                <i class="fa fa-plus-circle" aria-hidden="true" ng-click="vm.add()" style="cursor: pointer;"></i>
+            </div>
+            <br/>
+            <div class="row list-group">
+
+                <form class="form-horizontal" ng-repeat="slotRoutine in vm.classRoutineService.slotRoutineList" name="slotForm">
+                    <hr/>
+                    <div class="form-group" align="right">
+                        <div class="col-sm-12">
+                            <i class="fa fa-minus-circle" ng-click="vm.remove(slotRoutine)" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="course">Course :</label>
+                        <div class="col-md-10">
+                            <ui-select id="courseNo" theme="bootstrap"
+                                       data-ng-model="slotRoutine.course"
+                                       on-select="vm.courseSelected(slotRoutine)" name="course">
+                                <ui-select-match placeholder="Select Course">{{slotRoutine.course.title}}
+                                </ui-select-match>
+                                <ui-select-choices id="course"
+                                                   repeat="g in vm.classRoutineService.courseList|filter:$select.search"
+                                >
+                                    <small ng-bind-html="g.title | highlight:$select.search"></small>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <span ng-show="slotForm.course.$touched && slotForm.course.$invalid">Course is required</span>
+                    <div class="form-group">
+                        <div class="control-label col-md-2" for="startTime">Start Time :</div>
+                        <div class="col-md-4">
+                            <timepicker ng-model="slotRoutine.startTimeObj" ng-change="vm.assignEndTime(slotRoutine)">Start Time</timepicker>
+                           <!-- <div uib-timepicker ng-model="slotRoutine.startTime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></div>-->
+                            <!--<input type="text" class="form-control" id="startTime" ng-model="slotRoutine.startTime"
+                                   placeholder="HH:MM AM/PM"/>-->
+                        </div>
+                        <div class="control-label col-md-2" for="endTime">End Time :</div>
+                        <div class="col-md-4">
+                            <timepicker ng-model="slotRoutine.endTimeObj"></timepicker>
+                            <!--<input type="text" class="form-control" id="endTime" ng-model="slotRoutine.endTime"
+                                   placeholder="HH:MM AM/PM" ng-click="vm.assignEndTime(slotRoutine)"
+                                   ng-focus="vm.assignEndTime(slotRoutine)"/>-->
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <!--section begin-->
+                        <div class="control-label col-md-2" for="section">Section :</div>
+                        <div class="col-md-3" ng-if="slotRoutine.course==undefined || slotRoutine.course.type_value==1">
+                            <input type="text" class="form-control"
+                                   id="section" ng-model="slotRoutine.section"
+                                   disabled="true"/>
+                        </div>
+                        <div class="col-md-4" ng-if="slotRoutine.course.type_value==2">
+                            <select
+                                    class="form-control required"
+                                    name="section"
+                                    ng-options="s.name for s in vm.sectionList"
+                                    ng-model="slotRoutine.sessionalSection"></select>
+                        </div>
+                        <!--section end-->
+                        <!--room begin-->
+                        <label class="control-label col-md-2" for="roomNo">Room No :</label>
+                        <div class="col-md-4">
+                            <ui-select id="room" theme="bootstrap"
+                                       data-ng-model="slotRoutine.room" on-select="vm.roomSelected(slotRoutine)"
+                            >
+                                <ui-select-match placeholder="Select Room No">{{slotRoutine.room.roomNo}}
+                                </ui-select-match>
+                                <ui-select-choices id="roomNo"
+                                                   repeat="g in vm.classRoutineService.roomList | filter:$select.search">
+                                    <small ng-bind-html="g.roomNo | highlight:$select.search"></small>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <!--room end-->
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="courseTeacher">Course Teacher :</label>
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <ui-select theme="bootstrap"
+                                               data-ng-model="slotRoutine.employee" on-select="vm.courseTeacherSelected(slotRoutine.employee)"
+
+                                    >
+                                        <ui-select-match placeholder="Select Course Teacher">
+                                            {{slotRoutine.employee.employeeName}}
+                                        </ui-select-match>
+                                        <ui-select-choices id="courseTeacher"
+                                                           repeat="g in vm.classRoutineService.teacherList | filter:$select.search">
+                                            <small ng-bind-html="g.employeeName | highlight:$select.search"></small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="col-md-1">
+                                    <i class="fa fa-plus-square-o" aria-hidden="true" style="cursor: pointer"
+                                       ng-click="vm.addSelectedTeacher(slotRoutine)"></i>
+                                </div>
+
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <ul class="list-group">
+                                        <li class="list-group-item" ng-repeat="t in slotRoutine.courseTeacher">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    {{t.teacher.name}}
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <i class="fa fa-trash" aria-hidden="true"
+                                                       ng-click="vm.removeCourseTeacher(slotRoutine, t)"
+                                                       style="cursor: pointer"></i>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-6">
+        <ul class="nav nav-tabs">
+            <li data-ng-class="vm.showCourseInfo==true?'active':''"  style="cursor:pointer"><a ng-click="vm.fetchCourseInfo()"
+                                                                       data-toggle="tab">Course Info</a>
+            </li>
+            <li data-ng-class="vm.showRoomInfo==true?'active':''" style="cursor:pointer"><a ng-click="vm.fetchRoomInfo()" data-toggle="tab">Room
+                Info</a></li>
+            <li data-ng-class="vm.showTeachersInfo==true?'active':''" style="cursor:pointer"><a ng-click="vm.fetchCourseTeacherInfo()" data-toggle="tab">Course Teacher
+                Info</a></li>
+        </ul>
+        <div class="tab-content">
+            <div ng-if="vm.showCourseInfo==true"
+                 ng-include="'views/routine/course-routine-info.html'"></div>
+            <div ng-if="vm.showRoomInfo==true" ng-include="'views/routine/room-routine-info.html'"></div>
+            <div ng-if="vm.showTeachersInfo==true" ng-include="'views/routine/course-teacher-routine-info.html'"></div>
+        </div>
+    </div>
+</div>

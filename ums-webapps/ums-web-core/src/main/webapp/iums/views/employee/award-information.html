@@ -1,169 +1,175 @@
-<div data-ng-repeat="award in vm.award track by $index">
-    <form name="nForm[$index]" ng-submit="vm.submit($index)" novalidate>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-md-9">{{$index + 1}}. {{award.awardName}}</div>
-                    <div class="col-md-3">
-                        <div data-ng-show="vm.enableEditButton">
-                            <div data-ng-show="!vm.enableEdit[$index]">
-                                <div align="right">
-                                    <a data-ng-click="vm.activeEditButton($index, true)"
-                                       style="cursor: pointer;">
-                                        <i style="color: blue;" class="fa fa-edit"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div data-ng-if="vm.showLoader" align="center">
+    <div data-spinner=""></div>
+</div>
 
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nForm[$index].nAwardName.$invalid && !nForm[$index].nAwardName.$pristine }">
-                            <label for="iAwardName" class="control-label">Award Title<span
-                                    data-ng-show="vm.enableEdit[$index]"
-                                    class='require'>*</span></label>
-
-                            <div data-ng-show="vm.enableEdit[$index]">
-                                <input type="text"
-                                       name="nAwardName"
-                                       id="iAwardName"
-                                       data-ng-model="award.awardName"
-                                       placeholder="Award/Honor Name"
-                                       maxlength="100"
-                                       class="form-control" required>
-                                <label data-ng-show="nForm[$index].nAwardName.$invalid && !nForm[$index].nAwardName.$pristine"
-                                       class="help-block control-label">Please specify award title.</label>
-                            </div>
-                            <div data-ng-show="!vm.enableEdit[$index]">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{award.awardName}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-2">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nForm[$index].nAwardedYear.$invalid && !nForm[$index].nAwardedYear.$pristine }">
-                            <label for="iAwardedYear" class="control-label">Awarded Year<span
-                                    data-ng-show="vm.enableEdit[$index]"
-                                    class='require'>*</span></label>
-                            <div data-ng-show="vm.enableEdit[$index]">
-                                <input type="number"
-                                       name="nAwardedYear"
-                                       id="iAwardedYear"
-                                       data-ng-model="award.awardedYear"
-                                       placeholder="YYYY"
-                                       autocomplete="off"
-                                       maxlength="4"
-                                       class="form-control" required>
-                                <label data-ng-show="nForm[$index].nAwardedYear.$invalid && !nForm[$index].nAwardedYear.$pristine"
-                                       class="help-block control-label">Please provide your awarded year.</label>
-                            </div>
-                            <div data-ng-show="!vm.enableEdit[$index]">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{award.awardedYear}}</label>
+<div data-ng-if="!vm.showLoader">
+    <div data-ng-repeat="award in vm.award track by $index">
+        <form name="nForm[$index]" ng-submit="vm.submit($index)" novalidate>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-9">{{$index + 1}}. {{award.awardName}}</div>
+                        <div class="col-md-3">
+                            <div data-ng-show="vm.enableEditButton">
+                                <div data-ng-show="!vm.enableEdit[$index]">
+                                    <div align="right">
+                                        <a data-ng-click="vm.activeEditButton($index, true)"
+                                           style="cursor: pointer;">
+                                            <i style="color: blue;" class="fa fa-edit"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nForm[$index].nAwardName.$invalid && !nForm[$index].nAwardName.$pristine }">
+                                <label for="iAwardName" class="control-label">Award Title<span
+                                        data-ng-show="vm.enableEdit[$index]"
+                                        class='require'>*</span></label>
 
-                <div class="row">
-                    <div class="col-md-10">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nForm[$index].nAwardInstitute.$invalid && !nForm[$index].nAwardInstitute.$pristine }">
-                            <label for="iAwardInstitute" class="control-label">Awarded Year<span
-                                    data-ng-show="vm.enableEdit[$index]"
-                                    class='require'>*</span></label>
-                            <div data-ng-show="vm.enableEdit[$index]">
-                                <input type="text"
-                                       name="nAwardInstitute"
-                                       id="iAwardInstitute"
-                                       data-ng-model="award.awardInstitute"
-                                       placeholder="Institution"
-                                       maxlength="150"
-                                       class="form-control">
-                                <label data-ng-show="nForm[$index].nAwardInstitute.$invalid && !nForm[$index].nAwardInstitute.$pristine"
-                                       class="help-block control-label">Please provide Institution name.</label>
+                                <div data-ng-show="vm.enableEdit[$index]">
+                                    <input type="text"
+                                           name="nAwardName"
+                                           id="iAwardName"
+                                           data-ng-model="award.awardName"
+                                           placeholder="Award/Honor Name"
+                                           maxlength="100"
+                                           class="form-control" required>
+                                    <label data-ng-show="nForm[$index].nAwardName.$invalid && !nForm[$index].nAwardName.$pristine"
+                                           class="help-block control-label">Please specify award title.</label>
+                                </div>
+                                <div data-ng-show="!vm.enableEdit[$index]">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{award.awardName}}</label>
+                                    </div>
+                                </div>
                             </div>
-                            <div data-ng-show="!vm.enableEdit[$index]">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{award.awardInstitute}}</label>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nForm[$index].nAwardedYear.$invalid && !nForm[$index].nAwardedYear.$pristine }">
+                                <label for="iAwardedYear" class="control-label">Awarded Year<span
+                                        data-ng-show="vm.enableEdit[$index]"
+                                        class='require'>*</span></label>
+                                <div data-ng-show="vm.enableEdit[$index]">
+                                    <input type="number"
+                                           name="nAwardedYear"
+                                           id="iAwardedYear"
+                                           data-ng-model="award.awardedYear"
+                                           placeholder="YYYY"
+                                           autocomplete="off"
+                                           maxlength="4"
+                                           class="form-control" required>
+                                    <label data-ng-show="nForm[$index].nAwardedYear.$invalid && !nForm[$index].nAwardedYear.$pristine"
+                                           class="help-block control-label">Please provide your awarded year.</label>
+                                </div>
+                                <div data-ng-show="!vm.enableEdit[$index]">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{award.awardedYear}}</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-10">
-                        <div class="form-group">
-                            <label for="iShortDescription" class="control-label">Description</label>
-                            <div data-ng-show="vm.enableEdit[$index]">
-                                <input type="text"
-                                       name="nShortDescription"
-                                       id="iShortDescription"
-                                       data-ng-model="award.awardShortDescription"
-                                       placeholder="Short Description"
-                                       maxlength="300"
-                                       class="form-control">
-                            </div>
-                            <div data-ng-show="!vm.enableEdit[$index]">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{award.awardShortDescription}}</label>
+
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nForm[$index].nAwardInstitute.$invalid && !nForm[$index].nAwardInstitute.$pristine }">
+                                <label for="iAwardInstitute" class="control-label">Awarded Year<span
+                                        data-ng-show="vm.enableEdit[$index]"
+                                        class='require'>*</span></label>
+                                <div data-ng-show="vm.enableEdit[$index]">
+                                    <input type="text"
+                                           name="nAwardInstitute"
+                                           id="iAwardInstitute"
+                                           data-ng-model="award.awardInstitute"
+                                           placeholder="Institution"
+                                           maxlength="150"
+                                           class="form-control">
+                                    <label data-ng-show="nForm[$index].nAwardInstitute.$invalid && !nForm[$index].nAwardInstitute.$pristine"
+                                           class="help-block control-label">Please provide Institution name.</label>
+                                </div>
+                                <div data-ng-show="!vm.enableEdit[$index]">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{award.awardInstitute}}</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label for="iShortDescription" class="control-label">Description</label>
+                                <div data-ng-show="vm.enableEdit[$index]">
+                                    <input type="text"
+                                           name="nShortDescription"
+                                           id="iShortDescription"
+                                           data-ng-model="award.awardShortDescription"
+                                           placeholder="Short Description"
+                                           maxlength="300"
+                                           class="form-control">
+                                </div>
+                                <div data-ng-show="!vm.enableEdit[$index]">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{award.awardShortDescription}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
 
-                <div class="row">
-                    <div data-ng-show="vm.enableEdit[$index]">
-                        <div class="col-md-4">
+                    <div class="row">
+                        <div data-ng-show="vm.enableEdit[$index]">
+                            <div class="col-md-4">
                            <span data-ng-show="award.id">
                                <button type="button" class="btn btn-primary btn-xs"
                                        data-ng-click="vm.activeEditButton($index, false)"
                                        style="cursor:pointer;">Cancel
                             </button>
                            </span>
-                        </div>
-                        <div class="col-md-8">
-                            <div align="right">
-                                <button type="button" class="btn btn-primary btn-xs"
-                                        title="Remove Row {{$index + 1}}"
-                                        data-ng-click="vm.delete($index)"
-                                        style="cursor:pointer;"><span data-ng-show="!award.id">Remove</span><span
-                                        data-ng-show="award.id">Delete</span>
-                                </button>
-                                <button type="submit" title="Submit" class="btn btn-success btn-xs"
-                                        data-ng-disabled="nForm[$index].$invalid"
-                                        style="cursor:pointer;"><span data-ng-show="!award.id">Save</span><span
-                                        data-ng-show="award.id">Update</span>
-                                </button>
+                            </div>
+                            <div class="col-md-8">
+                                <div align="right">
+                                    <button type="button" class="btn btn-primary btn-xs"
+                                            title="Remove Row {{$index + 1}}"
+                                            data-ng-click="vm.delete($index)"
+                                            style="cursor:pointer;"><span data-ng-show="!award.id">Remove</span><span
+                                            data-ng-show="award.id">Delete</span>
+                                    </button>
+                                    <button type="submit" title="Submit" class="btn btn-success btn-xs"
+                                            data-ng-disabled="nForm[$index].$invalid"
+                                            style="cursor:pointer;"><span data-ng-show="!award.id">Save</span><span
+                                            data-ng-show="award.id">Update</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
 
-<div class="row">
-    <div class="col-md-12">
-        <div data-ng-show="vm.enableEditButton">
-            <button title="Add New Row" type="button" class="btn btn-success btn-xs"
-                    data-ng-click="vm.addNew(); vm.activeEditButton(vm.award.length - 1, true)"
-                    style="cursor: pointer">Add new
-            </button>
+    <div class="row">
+        <div class="col-md-12">
+            <div data-ng-show="vm.enableEditButton">
+                <button title="Add New Row" type="button" class="btn btn-success btn-xs"
+                        data-ng-click="vm.addNew(); vm.activeEditButton(vm.award.length - 1, true)"
+                        style="cursor: pointer">Add new
+                </button>
+            </div>
         </div>
     </div>
 </div>

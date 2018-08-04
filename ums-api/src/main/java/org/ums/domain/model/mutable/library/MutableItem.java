@@ -52,4 +52,6 @@ public interface MutableItem extends Item, Editable<Long>, MutableLastModifier, 
   void setCurrencyId(Long pCurrencyId);
 
   void setBookBindingType(BookBindingType pBookBindingType);
+
+  void setPaperQuality(String pPaperQuality);
 }

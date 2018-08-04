@@ -91,6 +91,13 @@ public class PersistentUGFeeDao extends UGFeeDaoDecorator {
   }
 
   @Override
+  public UGFee getFee(Integer pFacultyId, Integer pSemesterId, FeeCategory pFeeCategory) {
+    String query = "SELECT * from fee where FACULTY_ID=? AND SEMESTER_ID=? AND FEE_CATEGORY_ID=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pFacultyId, pSemesterId, pFeeCategory.getId()},
+        new FeeRowMapper());
+  }
+
+  @Override
   public List<UGFee> getLatestFee(Integer pFacultyId, Integer pSemesterId) {
     String query = SELECT_ALL + "WHERE (FACULTY_ID = ? OR FACULTY_ID IS NULL) AND SEMESTER_ID = ?";
     return mJdbcTemplate.query(query,

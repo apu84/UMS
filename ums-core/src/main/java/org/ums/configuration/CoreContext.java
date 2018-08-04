@@ -129,7 +129,8 @@ public class CoreContext {
   @Bean
   CompanyManager companyManager() {
     CompanyCache companyCache = new CompanyCache(mCacheFactory.getCacheManager());
-    companyCache.setManager(new PersistentCompanyDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    companyCache.setManager(new PersistentCompanyDao(mTemplateFactory.getJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getNamedParameterJdbcTemplate(), mIdGenerator));
     return companyCache;
   }
 
@@ -301,6 +302,24 @@ public class CoreContext {
     LmsTypeCache lmsTypeCache = new LmsTypeCache(mCacheFactory.getCacheManager());
     lmsTypeCache.setManager(new PersistentLmsTypeDao(mTemplateFactory.getJdbcTemplate()));
     return lmsTypeCache;
+  }
+
+  @Bean
+  EmployeeEarnedLeaveBalanceManager employeeEarnedLeaveBalanceManager() {
+    EmployeeEarnedLeaveBalanceCache leaveBalanceCache =
+        new EmployeeEarnedLeaveBalanceCache(mCacheFactory.getCacheManager());
+    leaveBalanceCache.setManager(new PersistentEmployeeEarnedLeaveBalanceDao(mTemplateFactory.getJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getNamedParameterJdbcTemplate(), mIdGenerator));
+    return leaveBalanceCache;
+  }
+
+  @Bean
+  EmployeeEarnedLeaveBalanceHistoryManager employeeEarnedLeaveBalanceHistoryManager() {
+    EmployeeEarnedLeaveBalanceHistoryCache leaveBalanceCache =
+        new EmployeeEarnedLeaveBalanceHistoryCache(mCacheFactory.getCacheManager());
+    leaveBalanceCache.setManager(new PersistentEmployeeEarnedLeaveBalanceHistoryDao(mTemplateFactory.getJdbcTemplate(),
+        mNamedParameterJdbcTemplateFactory.getNamedParameterJdbcTemplate(), mIdGenerator));
+    return leaveBalanceCache;
   }
 
   @Bean
@@ -541,4 +560,5 @@ public class CoreContext {
   FCMTokenManager fcmTokenManager() {
     return new PersistentFCMTokenDao(mTemplateFactory.getJdbcTemplate());
   }
+
 }

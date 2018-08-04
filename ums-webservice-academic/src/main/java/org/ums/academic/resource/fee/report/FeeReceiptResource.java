@@ -10,6 +10,7 @@ import javax.ws.rs.core.StreamingOutput;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.fee.payment.StudentPaymentManager;
 
 @Component

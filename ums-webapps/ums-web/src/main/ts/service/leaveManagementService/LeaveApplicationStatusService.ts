@@ -3,6 +3,10 @@
  */
 module ums {
   export class LeaveApplicationStatusService {
+
+    public pendingApplications: Array<LmsApplicationStatus>;
+    public pendingApplication: LmsApplicationStatus;
+
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window'];
 
     constructor(private appConstants: any, private httpClient: HttpClient,
@@ -29,8 +33,8 @@ module ums {
       return defer.promise;
     }
 
-    public fetchPendingLeaves(): ng.IPromise<any> {
-      var url = "lmsAppStatus/pendingLeaves";
+    public fetchPendingLeaves(employeeId: string): ng.IPromise<any> {
+      var url = "lmsAppStatus/pendingLeaves/employee/" + employeeId;
       var defer = this.$q.defer();
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,

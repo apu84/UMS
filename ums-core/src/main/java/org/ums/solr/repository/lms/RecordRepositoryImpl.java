@@ -1,5 +1,6 @@
 package org.ums.solr.repository.lms;
 
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -38,7 +39,7 @@ public class RecordRepositoryImpl extends SimpleSolrRepository<RecordDocument, L
 
     basicSearch.setPageRequest(pageable);
     if(enableSort) {
-      basicSearch.addSort(sort("cTitle_s"));
+      basicSearch.addSort(sort("alphaNumericTitle_s"));
     }
 
     return search(basicSearch);
@@ -51,7 +52,7 @@ public class RecordRepositoryImpl extends SimpleSolrRepository<RecordDocument, L
   }
 
   private Criteria createSearchConditions(String term) {
-    return new Criteria("type_s").is(RecordDocument.DOCUMENT_TYPE).and(new Criteria("title_txt").contains(term));
+    return new Criteria("type_s").is(RecordDocument.DOCUMENT_TYPE).and(new Criteria("title_t").contains(term));
   }
 
   @Override

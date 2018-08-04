@@ -1,0 +1,81 @@
+<style>
+
+    thead {
+        background-color: #efefef;
+    }
+
+    .grid {
+        width: 750px;
+        height: 500px;
+    }
+
+    tbody {
+        overflow-y: scroll;
+        height: 450px;
+    }
+
+    #header-fixed {
+        position: fixed;
+        top: 15px;
+    }
+
+    .sample-show-hide {
+        transition: all linear 0.5s;
+    }
+
+    .sample-show-hide.ng-hide {
+        opacity: 0;
+    }
+
+    /*.animate-if {
+        background: white;
+    }*/
+
+    .animate-if.ng-enter, .animate-if.ng-leave {
+        transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    }
+
+    .animate-if.ng-enter,
+    .animate-if.ng-leave.ng-leave-active {
+        opacity: 0;
+    }
+
+    .animate-if.ng-leave,
+    .animate-if.ng-enter.ng-enter-active {
+        opacity: 1;
+    }
+
+</style>
+<div class="row" ng-cloak="" id="change-transitions">
+    <div class="panel">
+        <div class="panel-heading">Leave Application<span
+                class="subtitle"></span></div>
+        <div class="panel-body shadowPanel" style="min-height: 490px;">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <form class="form-horizontal">
+                        <label class="control-label col-md-3" for="roomNo">Employee :</label>
+                        <div class="col-md-9">
+                            <ui-select id="room" theme="bootstrap"
+                                       data-ng-model="vm.selectedEmployee" on-select="vm.employeeSelected()"
+                            >
+                                <ui-select-match placeholder="Select Employee">{{vm.selectedEmployee.employeeName}}
+                                </ui-select-match>
+                                <ui-select-choices id="employee"
+                                                   repeat="g in vm.employeeList | filter:$select.search">
+                                    <small ng-bind-html="g.employeeName | highlight:$select.search"></small>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-3"></div>
+
+            </div>
+            <br/>
+            <div ng-if="vm.showApplicationSection" lms-app-dir></div>
+        </div>
+    </div>
+
+</div>

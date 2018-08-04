@@ -9,6 +9,7 @@ import java.util.Map;
  */
 public enum RecordStatus {
 
+  SELECT_STATUS(101101, "Select Status"),
   ENTRY_MODE(0, "Entry Mode"),
   AVAILABLE(2, "Available");
 

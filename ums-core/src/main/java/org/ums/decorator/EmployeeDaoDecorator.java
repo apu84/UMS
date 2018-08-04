@@ -5,7 +5,6 @@ import org.ums.domain.model.mutable.MutableEmployee;
 import org.ums.manager.EmployeeManager;
 
 import java.util.List;
-import java.util.Optional;
 
 public class EmployeeDaoDecorator extends ContentDaoDecorator<Employee, MutableEmployee, String, EmployeeManager>
     implements EmployeeManager {
@@ -43,6 +42,11 @@ public class EmployeeDaoDecorator extends ContentDaoDecorator<Employee, MutableE
   @Override
   public boolean validateShortName(String pShortName) {
     return getManager().validateShortName(pShortName);
+  }
+
+  @Override
+  public List<Employee> downloadEmployeeList(String pDeptList, String pEmployeeTypeList) {
+    return getManager().downloadEmployeeList(pDeptList, pEmployeeTypeList);
   }
 
 }

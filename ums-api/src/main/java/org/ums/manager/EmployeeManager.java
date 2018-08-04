@@ -2,10 +2,8 @@ package org.ums.manager;
 
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.mutable.MutableEmployee;
-import org.ums.usermanagement.user.UserEmail;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface EmployeeManager extends ContentManager<Employee, MutableEmployee, String> {
   List<Employee> getByDesignation(final String pDesignationId);
@@ -21,4 +19,6 @@ public interface EmployeeManager extends ContentManager<Employee, MutableEmploye
   String getLastEmployeeId(String pDepartmentId, int pEmployeeType);
 
   boolean validateShortName(String pShortName);
+
+  List<Employee> downloadEmployeeList(String pDeptList, String pEmployeeTypeList);
 }

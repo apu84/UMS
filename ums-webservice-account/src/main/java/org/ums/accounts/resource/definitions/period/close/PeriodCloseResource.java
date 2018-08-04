@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.accounts.PeriodClose;
 import org.ums.domain.model.mutable.accounts.MutablePeriodClose;
 import org.ums.resource.Resource;
+import org.ums.util.Utils;
 
 import javax.json.JsonArray;
 import javax.ws.rs.*;
@@ -26,9 +27,9 @@ public class PeriodCloseResource extends MutablePeriodCloseResource {
   public List<PeriodClose> getPeriodCloseList(final @Context Request pRequest, @PathParam("year-type") String pYearTYpe)
       throws Exception {
     List<PeriodClose> periodCloseList =
-        pYearTYpe.equals("current") ? mHelper.getContentManager().getByCurrentYear() : mHelper.getContentManager()
-            .getByPreviousYear();
-    
+        pYearTYpe.equals("current") ? mHelper.getContentManager().getByCurrentYear(Utils.getCompany()) : mHelper.getContentManager()
+            .getByPreviousYear(Utils.getCompany());
+
     periodCloseList.sort((o1, o2) -> o1.getMonthId().compareTo(o2.getMonthId()));
     ObjectMapper mapper = new ObjectMapper();
     return periodCloseList;

@@ -1,3 +1,4 @@
+<br/>
 <div align="right">
     <dir-pagination-controls boundary-links="true"
                              pagination-id="leaveApplication"
@@ -12,6 +13,7 @@
         <th>#</th>
         <th>Applied On</th>
         <th>Applicant's Name</th>
+        <th>Submitted By</th>
         <th>Department</th>
         <th>Leave Type</th>
         <th>From</th>
@@ -23,19 +25,42 @@
     <tbody>
     <tr dir-paginate="p in vm.pendingApplications | itemsPerPage: vm.itemsPerPage"
         current-page="vm.pagination.currentPage"
-        total-items="totalItems"
+        total-items="vm.totalItems"
         pagination-id="leaveApplication"
         data-ng-click="vm.fetchApplicationStatus(p, pagination.currentPage)"
         style="cursor: pointer;">
         <td>{{p.rowNumber}}</td>
         <td>{{p.appliedOn}}</td>
         <td>{{p.applicantsName}}</td>
+        <td>{{p.leaveApplication.submittedByEmp.employeeName}}</td>
         <td>{{p.deptName}}</td>
         <td>{{p.leaveTypeName}}</td>
         <td>{{p.fromDate}}</td>
         <td>{{p.toDate}}</td>
         <td>{{p.duration}}(days)</td>
-        <td>{{p.actionStatusLabel}}</td>
+        <td>
+            <div ng-if="p.actionStatus==1">
+                <span class="label label-default">{{p.actionStatusLabel}}</span>
+            </div>
+            <div ng-if="p.actionStatus==2">
+                <span class="label label-primary">{{p.actionStatusLabel}}</span>
+            </div>
+            <div ng-if="p.actionStatus==3">
+                <span class="label label-danger">{{p.actionStatusLabel}}</span>
+            </div>
+            <div ng-if="p.actionStatus==4">
+                <span class="label label-info">{{p.actionStatusLabel}}</span>
+            </div>
+            <div ng-if="p.actionStatus==5">
+                <span class="label label-danger">{{p.actionStatusLabel}}</span>
+            </div>
+            <div ng-if="p.actionStatus==6">
+                <span class="label label-danger">{{p.actionStatusLabel}}</span>
+            </div>
+            <div ng-if="p.actionStatus==7">
+                <span class="label label-success">{{p.actionStatusLabel}}</span>
+            </div>
+        </td>
     </tr>
 
     </tbody>

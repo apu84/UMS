@@ -1,11 +1,13 @@
 package org.ums.academic.resource;
 
+import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.manager.ApplicationCCIManager;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -28,6 +30,13 @@ public class ApplicationCCIResource extends MutableApplicationCCIResource {
     return mHelper.getApplicationCCIInfoForStudent(pRequest, mUriInfo);
   }
 
+  // getImprovementLimit
+  @GET
+  @Path("/getImprovementLimit")
+  public Integer getApplicationCCIForImprovementLimit(@Context Request pRequest) {
+    return mHelper.getApplicationCCIForImprovementLimit(pRequest, mUriInfo);
+  }
+
   @GET
   @Path("/semester/{semester-id}/examDate/{exam-date}")
   public JsonObject getApplicationCCIForSeatPlan(@Context Request pRequest,
@@ -36,8 +45,51 @@ public class ApplicationCCIResource extends MutableApplicationCCIResource {
   }
 
   @GET
+  @Path("/studentId/{student-id}/semesterId/{semester-id}")
+  public JsonObject getTotalcarry(final @Context Request pRequest, final @PathParam("student-id") String pStudentId,
+      final @PathParam("semester-id") Integer pSemesterid) {
+    return mHelper.getTotalCarry(pStudentId, pSemesterid, pRequest, mUriInfo);
+  }
+
+  @GET
   @Path("/seatPlanView")
   public JsonObject getApplicationCCIForSeatPlanView(@Context Request pRequest) {
     return mHelper.getApplicationCCIForSeatPlanViewingOfStudent(mUriInfo);
   }
+
+  @GET
+  @Path("/approvalStatus/{approval-status}/currentPage/{current-page}/itemPerPage/{itemPer-page}")
+  public JsonObject getApplicationCarryForHeadsApproval(@Context Request pRequest,
+      final @PathParam("approval-status") String pApprovalStatus,
+      final @PathParam("current-page") Integer pCurrentpage, final @PathParam("itemPer-page") Integer pItemPerPage) {
+    return mHelper.getApplicationCarryForHeadsApproval(pApprovalStatus, pCurrentpage, pItemPerPage, pRequest, mUriInfo);
+  }
+
+  @GET
+  @Path("/carryLastDate")
+  @Produces(Resource.MIME_TYPE_JSON)
+  public JsonObject getCarryLastdate() throws Exception {
+    return mHelper.getcarryLastdate().build();
+  }
+
+  @GET
+  @Path("/searchByStudentId/approvalStatus/{approval-status}/studentId/{student-id}")
+  public JsonObject getByStudentId(@Context Request pRequest,
+      final @PathParam("approval-status") String pApprovalStatus, final @PathParam("student-id") String pStudentId) {
+    return mHelper.getByStudentId(pApprovalStatus, pStudentId, pRequest, mUriInfo);
+  }
+
+  @GET
+  @Path("/ApprovedImprovementInfo")
+  public JsonObject getApprovedImprovemntInfo(@Context Request pRequest) {
+    return mHelper.getApprovedImprovemntInfo(pRequest, mUriInfo);
+  }
+
+  @GET
+  @Path("/getAllcarryInfo/studentId/{student-id}/semesterId/{semester-id}")
+  public JsonObject getApplicationCarryForHeadsApprovalAndAppiled(@Context Request pRequest,
+      final @PathParam("student-id") String pStudentId, final @PathParam("semester-id") Integer pSemesterid) {
+    return mHelper.getApplicationCarryForHeadsApprovalAndAppiled(pStudentId, pSemesterid, pRequest, mUriInfo);
+  }
+
 }

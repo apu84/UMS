@@ -7,17 +7,21 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.immutable.accounts.PredefinedNarration;
-import java.util.Date;
+import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.Voucher;
 import org.ums.domain.model.mutable.accounts.MutablePredefinedNarration;
+import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.PredefinedNarrationManager;
 import org.ums.manager.accounts.VoucherManager;
+
+import java.util.Date;
 
 public class PersistentPredefinedNarration implements MutablePredefinedNarration {
 
   @JsonIgnore
   private static VoucherManager sVoucherManager;
+  @JsonIgnore
+  private static CompanyManager sCompanyManager;
   @JsonIgnore
   private static PredefinedNarrationManager sPredefinedNarrationManager;
   @JsonProperty("id")
@@ -25,6 +29,9 @@ public class PersistentPredefinedNarration implements MutablePredefinedNarration
   @JsonIgnore
   @JsonProperty("voucher")
   private Voucher mVoucher;
+  @JsonIgnore
+  private Company mCompany;
+  private String mCompanyId;
   @JsonProperty("voucherId")
   @JsonIgnore
   private Long mVoucherId;
@@ -40,6 +47,28 @@ public class PersistentPredefinedNarration implements MutablePredefinedNarration
   private String mNarration;
   @JsonIgnore
   private String mLastModified;
+
+  @Override
+  @JsonProperty("company")
+  public Company getCompany() {
+    return mCompany == null ? sCompanyManager.get(mCompanyId) : mCompany;
+  }
+
+  @Override
+  @JsonIgnore
+  public void setCompany(Company pCompany) {
+    mCompany = pCompany;
+  }
+
+  @Override
+  public String getCompanyId() {
+    return mCompanyId;
+  }
+
+  @Override
+  public void setCompanyId(String pCompanyId) {
+    mCompanyId = pCompanyId;
+  }
 
   @Override
   @JsonSerialize(using = ToStringSerializer.class)
@@ -171,6 +200,7 @@ public class PersistentPredefinedNarration implements MutablePredefinedNarration
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sVoucherManager = applicationContext.getBean("voucherManager", VoucherManager.class);
+    sCompanyManager = applicationContext.getBean("companyManager", CompanyManager.class);
     sPredefinedNarrationManager =
         applicationContext.getBean("predefinedNarrationManager", PredefinedNarrationManager.class);
   }

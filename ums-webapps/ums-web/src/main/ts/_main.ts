@@ -22,6 +22,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/wysihtml5.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap.datepicker.d.ts'/>
 
+
 /// <reference path='../../../../ums-web-core/src/main/ts/root.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/constants.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/Utils.ts'/>
@@ -43,6 +44,7 @@
 /// <reference path='./service/holidayService/HolidayTypeService.ts'/>
 /// <reference path='./service/holidayService/HolidaysService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/EmployeeService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/BibtexParserService.ts'/>
 
 
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
@@ -54,6 +56,8 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/mailbox/MailCompose.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/mailbox/MailView.ts'/>
 /// <reference path='./controller/leaveManagement/LeaveApplicationManagement.ts'/>
+/// <reference path='./controller/leaveManagement/LeaveApplicationController.ts'/>
+/// <reference path='./controller/leaveManagement/EmployeeLeaveApplicationController.ts'/>
 /// <reference path='./controller/leaveManagement/LeaveApplicationApproval.ts'/>
 /// <reference path='./controller/holidays/PublicHolidays.ts'/>
 
@@ -72,6 +76,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/AutoComplete.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/FileInput.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/DatePicker.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/directive/UiDatePicker.ts'/>
 
 
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/Spinner.ts'/>
@@ -83,6 +88,8 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/Notification.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/ConfirmationDIalog.ts'/>
 /// <reference path='./directive/leaveManagement/LmsAppDir.ts'/>
+/// <reference path='./directive/leaveManagement/LmsRemainingLeaveDir.ts'/>
+/// <reference path='./directive/leaveManagement/LmsPendingLeaveDir.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/interceptor/Unauthorized.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/interceptor/ValidationExceptions.ts'/>
@@ -94,6 +101,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/model/User.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/AdditionalRolePermissions.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/Employee.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/model/Teacher.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/AdmissionStudent.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/Semester.ts'/>
 /// <reference path='./model/leaveManagement/LmsApplication.ts'/>
@@ -126,11 +134,15 @@
 /// <reference path='service/SeatPlanService.ts'/>
 /// <reference path='service/CommonService.ts'/>
 /// <reference path='service/FacultyService.ts'/>
-/// <reference path='service/ClassRoutineService.ts'/>
+/// <reference path='controller/routine/ClassRoutineService.ts'/>
+/// <reference path='controller/routine/ClassRoutineSlotEditController.ts'/>
+/// <reference path='controller/routine/RoutineConfigController.ts'/>
+/// <reference path='controller/routine/RoutineConfigService.ts'/>
 /// <reference path='service/ExamGradeService.ts'/>
 /// <reference path='service/ClassRoomService.ts'/>
 /// <reference path='service/AttachmentService.ts'/>
 /// <reference path='service/ProgramService.ts'/>
+/// <reference path='service/ProgramTypeService.ts'/>
 /// <reference path='service/AdmissionTotalSeatService.ts'/>
 /// <reference path='service/DepartmentSelectionDeadlineService.ts'/>
 /// <reference path='service/CourseServices.ts'/>
@@ -140,6 +152,7 @@
 /// <reference path='service/StudentService.ts'/>
 /// <reference path='service/TeacherService.ts'/>
 /// <reference path='service/AdmissionCertificateVerificationService.ts'/>
+/// <reference path='service/CourseTeacherService.ts'/>
 
 /// <reference path='controller/student/NewStudent.ts'/>
 
@@ -150,6 +163,8 @@
 /// <reference path='controller/semester/ModifySeatPlan.ts'/>
 /// <reference path='controller/semester/AppCCI.ts'/>
 /// <reference path='controller/semester/SeatPlanReports.ts'/>
+/// <reference path='controller/semester/SemesterConfig.ts'/>
+
 
 /// <reference path='controller/course/NewCourseUg.ts'/>
 /// <reference path='controller/course/NewCoursePg.ts'/>
@@ -170,7 +185,8 @@
 /// <reference path='controller/dept/AdvisingStudents.ts'/>
 /// <reference path='controller/dept/OptionalCoursesOffer.ts'/>
 /// <reference path='controller/semester/SemesterSettingParameter.ts'/>
-/// <reference path='controller/dept/ClassRoutine.ts'/>
+/// <reference path='controller/routine/ClassRoutine.ts'/>
+/// <reference path='controller/routine/ClassRoutineChartController.ts'/>
 /// <reference path='controller/dept/ClassAttendance.ts'/>
 /// <reference path='controller/logger/LoggerGrid.ts'/>
 /// <reference path='controller/course-material/CourseMaterial.ts'/>
@@ -193,6 +209,24 @@
 /// <reference path='controller/admission/AdmissionCertificateVerification.ts'/>
 /// <reference path='controller/admission/AdmissionTotalSeatAssignment.ts'/>
 /// <reference path='controller/sectionAssign/sectionAssignment.ts'/>
+
+/// <reference path='controller/cciManagement/cciApproval.ts'/>
+/// <reference path='controller/tesController/headTes.ts'/>
+/// <reference path='controller/tesController/studentTes.ts'/>
+/// <reference path='controller/tesController/adminVcTes.ts'/>
+/// <reference path='controller/tesController/AdminVcTesComparison.ts'/>
+/// <reference path='controller/tesController/questionsAdmin.ts'/>
+/// <reference path='controller/tesController/individualQuestionTesReport.ts'/>
+/// <reference path='controller/tesController/facultyEngineering/DeanEngineeringTes.ts'/>
+/// <reference path='controller/tesController/facultyEngineering/DeanEngineeringComparison.ts'/>
+/// <reference path='controller/tesController/facultyEngineering/DeanEngineeringIndividualQuestion.ts'/>
+/// <reference path='controller/tesController/facultyBusinessAndSocialScience/DeanBusinessAndSocialTes.ts'/>
+/// <reference path='controller/tesController/facultyBusinessAndSocialScience/DeanBusinessAndSocialComparison.ts'/>
+/// <reference path='controller/tesController/facultyBusinessAndSocialScience/DeanBusinessAndSocialIndividualQuestion.ts'/>
+/// <reference path='controller/tesController/facultyArchitecture/DeanArchitectureTes.ts'/>
+/// <reference path='controller/tesController/facultyArchitecture/DeanArchitectureIndividualQuestion.ts'/>
+/// <reference path='controller/employeeExamAttendance/employeeExamAttendance.ts'/>
+/// <reference path='controller/employeeExamAttendance/employeeExamAttendanceService.ts'/>
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>
@@ -245,7 +279,10 @@
 /// <reference path='directive/SubGroupSortable.ts'/>
 /// <reference path='directive/TimeLogging.ts'/>
 /// <reference path='directive/ClassRoutineDir.ts'/>
+/// <reference path='directive/RoutineSlotDir.ts'/>
 /// <reference path='directive/date.range.picker.ts'/>
+
+
 
 /// <reference path='student/student.info.service.ts'/>
 
@@ -308,6 +345,5 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/ExperienceInformation.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/AdditionalInformation.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/ServiceInformation.ts'/>
-
 
 /// <reference path='../../../../ums-library-web/src/main/ts/types/Interfaces.ts'/>

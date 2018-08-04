@@ -37,4 +37,5 @@ public interface UGBaseRegistration extends Serializable, Identifier<Long>, Last
   String getExamDate(); // is required for getting exam date for clearance exam.
 
   String getMessage();
+
 }

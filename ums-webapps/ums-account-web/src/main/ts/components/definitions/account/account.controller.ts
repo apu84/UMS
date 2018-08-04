@@ -3,7 +3,7 @@ module ums {
 
     export class AccountController {
 
-    public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'employeeService', 'AccountBalanceService'];
+      public static $inject = ['$scope', '$modal', 'notify', 'AccountService', 'GroupService', '$timeout', 'employeeService', 'AccountBalanceService', 'UserCompanyMapService', '$state'];
 
     private groups: IGroup[];
     private selectedGroup: IGroup;
@@ -17,6 +17,7 @@ module ums {
     private currentPage: number;
     private searchBar: boolean;
     private searchValue: string;
+    private ascendingOrDescendingType: AscendingOrDescendingType;
 
     constructor($scope: ng.IScope,
                 private $modal: any,
@@ -25,7 +26,9 @@ module ums {
                 private groupService: GroupService,
                 private $timeout: ng.ITimeoutService,
                 private employeeService: EmployeeService,
-                private accountBalanceService: AccountBalanceService) {
+                private accountBalanceService: AccountBalanceService,
+                private userCompanyMapService: UserCompanyMapService,
+                private $state: any) {
 
       this.initialize();
 
@@ -39,14 +42,22 @@ module ums {
     }
 
     public initialize() {
-      this.searchBar = false;
-      this.itemsPerPage = 15;
-      this.pageNumber = 1;
-      this.searchValue = "";
-      this.currentPage = 1;
-      this.loadAllGroups();
-      this.getTotalAccountSize();
-      this.selectedGroup = <IGroup>{};
+      console.log("*******");
+      console.log(this.userCompanyMapService.companyName);
+      if (this.userCompanyMapService.companyName == '' || this.userCompanyMapService.companyName == null)
+        this.$state.go('userHome');
+      else {
+        this.searchBar = false;
+        this.itemsPerPage = 15;
+        this.pageNumber = 1;
+        this.searchValue = "";
+        this.currentPage = 1;
+        this.ascendingOrDescendingType = AscendingOrDescendingType.DESC;
+        this.loadAllGroups();
+        this.getTotalAccountSize();
+        this.selectedGroup = <IGroup>{};
+      }
+
     }
 
     public loadAllGroups() {
@@ -103,6 +114,17 @@ module ums {
       });
     }
 
+    public fetchAccountsInAscendingOrder(){
+        this.ascendingOrDescendingType = AscendingOrDescendingType.ASC;
+        this.getPaginatedAccounts();
+    }
+
+    public fetchAccountsInDescendingOrder(){
+        this.ascendingOrDescendingType = AscendingOrDescendingType.DESC;
+        this.getPaginatedAccounts();
+    }
+
+
     public showListView() {
       this.searchValue = "";
       this.searchBar = false;
@@ -121,17 +143,19 @@ module ums {
       accountBalance.yearOpenBalanceType = this.account.yearClosingBalanceType;
       accountBalance.yearOpenBalance = this.account.yearOpenBalance;
       accountBalance.yearOpenBalanceType = this.account.yearOpenBalanceType;
-      console.log("account balance");
-      console.log(accountBalance);
+      if (this.account.id == null)
+        $("#addButton").focus();
+      console.log("Page number");
+      console.log(this.pageNumber);
       //todo configure account balance information
-      this.accountService.saveAccountPaginated(this.account, accountBalance, this.itemsPerPage, 1).then((accounts: IAccount[]) => {
+      this.accountService.saveAccountPaginated(this.account, accountBalance, this.itemsPerPage, this.pageNumber, this.ascendingOrDescendingType).then((accounts: IAccount[]) => {
         if (accounts != undefined) {
           this.existingAccounts = [];
           accounts.forEach((a: IAccount) => a.accGroupName = this.groupMapWithGroupid[a.accGroupCode].groupName);
           this.existingAccounts = accounts;
           this.getTotalAccountSize();
         }
-        $("#addButton").focus();
+
       });
     }
 
@@ -147,14 +171,17 @@ module ums {
     }
 
     public getPaginatedAccounts() {
-      this.accountService.getAllPaginated(this.itemsPerPage>0?this.itemsPerPage: 15, this.pageNumber).then((accounts: IAccount[]) => {
+        console.log("Getting all paginated accounts");
+        console.log(this.ascendingOrDescendingType);
+      this.accountService.getAllPaginated(this.itemsPerPage>0?this.itemsPerPage: 15, this.pageNumber, this.ascendingOrDescendingType).then((accounts: IAccount[]) => {
         if (accounts == undefined)
           this.notify.error("Error in fetching data");
         else {
           this.existingAccounts = [];
-          console.log("Accounts");
-          console.log(accounts);
-          accounts.forEach((a: IAccount) => a.accGroupName = this.groupMapWithGroupid[a.accGroupCode].groupName);
+          accounts.forEach((a: IAccount) => {
+            console.log(a.accGroupCode);
+            a.accGroupName = this.groupMapWithGroupid[a.accGroupCode].groupName
+          });
           this.existingAccounts = accounts;
         }
       })

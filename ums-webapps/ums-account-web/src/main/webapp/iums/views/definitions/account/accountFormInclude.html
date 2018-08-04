@@ -27,7 +27,7 @@
                            data-ng-model="vm.selectedGroup"
                 >
                     <ui-select-match placeholder="Select Main Group">{{vm.selectedGroup.groupName}}</ui-select-match>
-                    <ui-select-choices repeat="g in vm.groups|filter:$select.search">
+                    <ui-select-choices repeat="g in vm.groups|filter:$select.search | limitTo:100">
                         <small ng-bind-html="g.groupName | highlight:$select.search"></small>
                     </ui-select-choices>
                 </ui-select>

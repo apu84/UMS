@@ -3,19 +3,16 @@ package org.ums.persistent.model.library;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.dto.library.ImprintDto;
-import org.ums.domain.model.dto.library.PhysicalDescriptionDto;
-import org.ums.domain.model.immutable.library.MaterialContributor;
-import org.ums.domain.model.immutable.library.Note;
-import org.ums.domain.model.immutable.library.Subject;
 import org.ums.domain.model.mutable.library.MutableRecord;
 import org.ums.enums.common.Language;
+import org.ums.enums.library.GeneralMaterialDescription;
 import org.ums.enums.library.JournalFrequency;
 import org.ums.enums.library.MaterialType;
 import org.ums.enums.library.RecordStatus;
 import org.ums.manager.library.PublisherManager;
 import org.ums.manager.library.RecordManager;
 
-import java.util.List;
+import java.util.Date;
 
 /**
  * Created by Ifti on 19-Feb-17.
@@ -26,11 +23,10 @@ public class PersistentRecord implements MutableRecord {
   private static PublisherManager sPublisherManager;
 
   private Long mId;
-  private Long mMfn;
   private Language mLanguage;
   private String mTitle;
   private String mSubTitle;
-  private String mGmd;
+  private GeneralMaterialDescription mGmd;
   private String mSeriesTitle;
   private String mVolumeNo;
   private String mVolumeTitle;
@@ -49,34 +45,27 @@ public class PersistentRecord implements MutableRecord {
   private JournalFrequency mFrequency;
   private String mCallNo;
   private String mClassNo;
-  private String mCallDate;
+  private String mAuthorMark;
+  private Integer mCallYear;
   private String mCallEdition;
   private String mCallVolume;
-  private String mAuthorMark;
-  private List<MaterialContributor> mContributorList;
+  private String mContributorJsonString;
   private ImprintDto mImprint;
-  private Long mPublisherId;
-  private PhysicalDescriptionDto mPhysicalDescription;
+  private String mPhysicalDescriptionString;
   private MaterialType mMaterialType;
   private RecordStatus mRecordStatus;
   private String mKeywords;
-  private List<Subject> mSubjectList;
-  private List<Note> mNoteList;
-  private String mLastModified;
-  private String mDocumentalist;
-  private String mEntryDate;
-  private String mLastUpdatedOn;
-  private String mLastUpdatedBy;
-
-  private String mContributorJsonString;
-  private String mNoteJsonString;
   private String mSubjectJsonString;
-  private String mPhysicalDescriptionString;
-
-  private int mTotalItems;
-  private int mTotalAvailable;
-  private int mTotalCheckedOut;
-  private int mTotalOnHold;
+  private String mNoteJsonString;
+  private Integer mTotalItems;
+  private Integer mTotalAvailable;
+  private Integer mTotalCheckedOut;
+  private Integer mTotalOnHold;
+  private String mDocumentalist;
+  private Date mEntryDate;
+  private Date mLastUpdatedOn;
+  private String mLastUpdatedBy;
+  private String mLastModified;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
@@ -88,7 +77,6 @@ public class PersistentRecord implements MutableRecord {
 
   public PersistentRecord(final PersistentRecord pPersistentRecord) {
     mId = pPersistentRecord.getId();
-    mMfn = pPersistentRecord.getMfn();
     mLanguage = pPersistentRecord.getLanguage();
     mTitle = pPersistentRecord.getTitle();
     mSubTitle = pPersistentRecord.getSubTitle();
@@ -111,23 +99,26 @@ public class PersistentRecord implements MutableRecord {
     mFrequency = pPersistentRecord.getFrequency();
     mCallNo = pPersistentRecord.getCallNo();
     mClassNo = pPersistentRecord.getClassNo();
-    mCallDate = pPersistentRecord.getCallDate();
+    mAuthorMark = pPersistentRecord.getAuthorMark();
+    mCallYear = pPersistentRecord.getCallYear();
     mCallEdition = pPersistentRecord.getCallEdition();
     mCallVolume = pPersistentRecord.getCallVolume();
-    mAuthorMark = pPersistentRecord.getAuthorMark();
-    mContributorList = pPersistentRecord.getContributorList();
+    mContributorJsonString = pPersistentRecord.getContributorJsonString();
     mImprint = pPersistentRecord.getImprint();
-    mPublisherId = pPersistentRecord.getPublisherId();
-    mPhysicalDescription = pPersistentRecord.getPhysicalDescription();
+    mPhysicalDescriptionString = pPersistentRecord.getPhysicalDescriptionString();
     mMaterialType = pPersistentRecord.getMaterialType();
     mRecordStatus = pPersistentRecord.getRecordStatus();
     mKeywords = pPersistentRecord.getKeyWords();
-    mSubjectList = pPersistentRecord.getSubjectList();
-    mNoteList = pPersistentRecord.getNoteList();
+    mSubjectJsonString = pPersistentRecord.getSubjectJsonString();
+    mNoteJsonString = pPersistentRecord.getNoteJsonString();
     mTotalItems = pPersistentRecord.getTotalItems();
     mTotalAvailable = pPersistentRecord.getTotalAvailable();
     mTotalCheckedOut = pPersistentRecord.getTotalCheckedOut();
     mTotalOnHold = pPersistentRecord.getTotalOnHold();
+    mDocumentalist = pPersistentRecord.getDocumentalist();
+    mEntryDate = pPersistentRecord.getEntryDate();
+    mLastUpdatedOn = pPersistentRecord.getLastUpdatedOn();
+    mLastUpdatedBy = pPersistentRecord.getLastUpdatedBy();
     mLastModified = pPersistentRecord.getLastModified();
 
   }
@@ -145,7 +136,6 @@ public class PersistentRecord implements MutableRecord {
   @Override
   public MutableRecord edit() {
     return new PersistentRecord(this);
-
   }
 
   @Override
@@ -174,17 +164,6 @@ public class PersistentRecord implements MutableRecord {
   }
 
   @Override
-  public Long getMfn() {
-    return mMfn;
-  }
-
-  @Override
-  public void setMfn(Long pMfn) {
-    mId = pMfn;
-    mMfn = pMfn;
-  }
-
-  @Override
   public Language getLanguage() {
     return mLanguage;
   }
@@ -210,7 +189,7 @@ public class PersistentRecord implements MutableRecord {
   }
 
   @Override
-  public String getGmd() {
+  public GeneralMaterialDescription getGmd() {
     return mGmd;
   }
 
@@ -225,7 +204,7 @@ public class PersistentRecord implements MutableRecord {
   }
 
   @Override
-  public void setGmd(String pGmd) {
+  public void setGmd(GeneralMaterialDescription pGmd) {
     mGmd = pGmd;
   }
 
@@ -375,8 +354,8 @@ public class PersistentRecord implements MutableRecord {
   }
 
   @Override
-  public String getCallDate() {
-    return mCallDate;
+  public Integer getCallYear() {
+    return mCallYear;
   }
 
   @Override
@@ -405,28 +384,15 @@ public class PersistentRecord implements MutableRecord {
   }
 
   @Override
-  public List<MaterialContributor> getContributorList() {
-    return mContributorList;
-  }
-
-  @Override
   public void setTranslateTitleEdition(String pTranslateTitleEdition) {
     mTranslateTitleEdition = pTranslateTitleEdition;
   }
 
   @Override
   public ImprintDto getImprint() {
-
     if(mImprint.getPublisher() == null && (mImprint.getPublisherId() != null && mImprint.getPublisherId() != 0))
       mImprint.setPublisher(sPublisherManager.get(mImprint.getPublisherId()));
-
     return mImprint;
-
-  }
-
-  @Override
-  public PhysicalDescriptionDto getPhysicalDescription() {
-    return mPhysicalDescription;
   }
 
   @Override
@@ -455,8 +421,8 @@ public class PersistentRecord implements MutableRecord {
   }
 
   @Override
-  public void setCallDate(String pCallDate) {
-    mCallDate = pCallDate;
+  public void setCallYear(Integer pCallYear) {
+    mCallYear = pCallYear;
   }
 
   @Override
@@ -480,28 +446,8 @@ public class PersistentRecord implements MutableRecord {
   }
 
   @Override
-  public void setContributorList(List<MaterialContributor> pContributorList) {
-    setContributorList(pContributorList);
-  }
-
-  @Override
-  public List<Subject> getSubjectList() {
-    return mSubjectList;
-  }
-
-  @Override
-  public List<Note> getNoteList() {
-    return mNoteList;
-  }
-
-  @Override
   public void setImprint(ImprintDto pImprint) {
     mImprint = pImprint;
-  }
-
-  @Override
-  public void setPhysicalDescription(PhysicalDescriptionDto pPhysicalDescription) {
-    mPhysicalDescription = pPhysicalDescription;
   }
 
   @Override
@@ -520,27 +466,17 @@ public class PersistentRecord implements MutableRecord {
   }
 
   @Override
-  public void setSubjectList(List<Subject> pSubjectList) {
-    mSubjectList = pSubjectList;
-  }
-
-  @Override
-  public void setNoteList(List<Note> pNoteList) {
-    mNoteList = pNoteList;
-  }
-
-  @Override
   public String getDocumentalist() {
     return mDocumentalist;
   }
 
   @Override
-  public String getEntryDate() {
+  public Date getEntryDate() {
     return mEntryDate;
   }
 
   @Override
-  public String getLastUpdatedOn() {
+  public Date getLastUpdatedOn() {
     return mLastUpdatedOn;
   }
 
@@ -550,12 +486,12 @@ public class PersistentRecord implements MutableRecord {
   }
 
   @Override
-  public void setEntryDate(String pEntryDate) {
+  public void setEntryDate(Date pEntryDate) {
     mEntryDate = pEntryDate;
   }
 
   @Override
-  public void setLastUpdatedOn(String pLastUpdatedOn) {
+  public void setLastUpdatedOn(Date pLastUpdatedOn) {
     mLastUpdatedOn = pLastUpdatedOn;
   }
 
@@ -565,22 +501,22 @@ public class PersistentRecord implements MutableRecord {
   }
 
   @Override
-  public int getTotalItems() {
+  public Integer getTotalItems() {
     return mTotalItems;
   }
 
   @Override
-  public int getTotalAvailable() {
+  public Integer getTotalAvailable() {
     return mTotalAvailable;
   }
 
   @Override
-  public int getTotalCheckedOut() {
+  public Integer getTotalCheckedOut() {
     return mTotalCheckedOut;
   }
 
   @Override
-  public int getTotalOnHold() {
+  public Integer getTotalOnHold() {
     return mTotalOnHold;
   }
 
@@ -627,31 +563,23 @@ public class PersistentRecord implements MutableRecord {
     mNoteJsonString = pNoteJsonString;
   }
 
-  public Long getPublisherId() {
-    return mPublisherId;
-  }
-
-  public void setPublisherId(Long pPublisherId) {
-    this.mPublisherId = pPublisherId;
-  }
-
   @Override
-  public void setTotalItems(int pTotalItems) {
+  public void setTotalItems(Integer pTotalItems) {
     mTotalItems = pTotalItems;
   }
 
   @Override
-  public void setTotalAvailable(int pTotalAvailable) {
+  public void setTotalAvailable(Integer pTotalAvailable) {
     mTotalAvailable = pTotalAvailable;
   }
 
   @Override
-  public void setTotalCheckedOut(int pTotalCheckedOut) {
+  public void setTotalCheckedOut(Integer pTotalCheckedOut) {
     mTotalCheckedOut = pTotalCheckedOut;
   }
 
   @Override
-  public void setTotalOnHold(int pTotalOnHold) {
+  public void setTotalOnHold(Integer pTotalOnHold) {
     mTotalOnHold = pTotalOnHold;
   }
 }

@@ -1,0 +1,130 @@
+<div class="row">
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
+    </div>
+
+    <div class="panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select </h3>
+        </div>
+        <div class="panel-body pan">
+            <form action="" class="form-horizontal" data-validate="" data-onvalidate="vm.searchForRoutineData">
+                <div class="form-body pal">
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Program Type</label>
+                        <div class="col-md-8">
+                            <select name="programType" class="form-control required" data-ng-model="vm.programType"
+                                    ng-change="vm.fetchSemesters()">
+                                <option value="">Select Program Type</option>
+                                <option value="11">Undergraduate</option>
+                                <option value="22">PostGraduate</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Semester</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="semester"
+                                    id="semester"
+                                    ng-options="semester.name for semester in vm.semesterList track by semester.id"
+                                    ng-model="vm.classRoutineService.selectedSemester"></select>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Department</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="department"
+                                    id="department"
+                                    ng-options="department.name for department in vm.deptList"
+                                    ng-model="vm.selectedDept" ng-change="vm.selectPrograms()"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Program</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="program"
+                                    id="program"
+                                    ng-options="program.shortName for program in vm.programList"
+                                    ng-model="vm.classRoutineService.selectedProgram"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Year</label>
+                        <div class="col-md-8">
+                            <select name="year" class="form-control required"
+                                    data-ng-model="vm.classRoutineService.studentsYear">
+                                <option value="">Select Year</option>
+                                <option value="1">1st year</option>
+                                <option value="2">2nd year</option>
+                                <option value="3">3rd year</option>
+                                <option value="4">4th year</option>
+                                <option value="5">5th year</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Semester</label>
+                        <div class="col-md-8">
+                            <select name="semester" class="form-control required"
+                                    data-ng-model="vm.classRoutineService.studentsSemester">
+                                <option value="">Select Semester</option>
+                                <option value="1">1st semester</option>
+                                <option value="2">2nd semester</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Theory Section</label>
+                        <div class="col-md-8">
+                            <select class="form-control required"
+                                    name="theorySection"
+                                    id="theorySection"
+                                    ng-options="theorySection.name for theorySection in vm.theorySectionList"
+                                    ng-model="vm.classRoutineService.selectedTheorySection">
+                            </select>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" class="btn btn-success" ng-click="vm.searchForRoutineData()">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="rightDiv">
+
+        <div class="panel" style="min-height: 490px;">
+            <div class="panel-heading" style="font-size: 14px;">
+                <b>Academic Semester:</b> {{vm.classRoutineService.selectedSemester.name}}<span
+                    style="margin-left: 15px;"></span>
+                <b>Year:</b> {{vm.classRoutineService.studentsYear}}<span style="margin-left: 15px;"></span>
+                <b>Semester:</b> {{vm.classRoutineService.studentsSemester}}<span style="margin-left: 15px;"></span>
+                <b>Section:</b>{{vm.classRoutineService.selectedTheorySection.name}}
+                <span
+                        class="subtitle"></span></div>
+            <div class="panel-body">
+                <div class="row" ng-if="vm.classRoutineService.routineData">
+                    <div ui-view></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //    setTimeout(function () {$(".fa+.fa-chevron-down").tooltip({placement : 'top', trigger : 'hover', title : "Download Promotion List"});}, 100);
+    $(".tooltips").tooltip();
+</script>

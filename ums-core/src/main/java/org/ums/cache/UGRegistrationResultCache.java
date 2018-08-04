@@ -14,6 +14,10 @@ import org.ums.tabulation.TabulationCourseModel;
 public class UGRegistrationResultCache extends
     ContentCache<UGRegistrationResult, MutableUGRegistrationResult, Long, UGRegistrationResultManager> implements
     UGRegistrationResultManager {
+  @Override
+  public Integer getTotalRegisteredStudentForCourse(String pCourseId, List<String> pSection, Integer pSemesterId) {
+    return getManager().getTotalRegisteredStudentForCourse(pCourseId, pSection, pSemesterId);
+  }
 
   CacheManager<UGRegistrationResult, Long> mCacheManager;
 

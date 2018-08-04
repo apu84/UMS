@@ -12,6 +12,7 @@ import org.ums.manager.accounts.VoucherNumberControlManager;
 import org.ums.resource.ResourceHelper;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
+import org.ums.util.Utils;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
@@ -45,8 +46,9 @@ public class VoucherNumberControlResourceHelper extends
     pVoucherNumberControls.forEach(v -> {
       v.setModifiedBy(user.getEmployeeId());
       v.setModifiedDate(new Date());
+      v.setCompanyCode(Utils.getCompany().getId());
       if (v.getId() == null) {
-        FinancialAccountYear financialAccountYear = financialAccountYearManager.getOpenedFinancialAccountYear();
+        FinancialAccountYear financialAccountYear = financialAccountYearManager.getOpenedFinancialAccountYear(Utils.getCompany());
         v.setFinAccountYearId(financialAccountYear.getId());
         newVoucherNumberControls.add(v);
       } else
@@ -58,7 +60,7 @@ public class VoucherNumberControlResourceHelper extends
     if (voucherNumberControlsForUpdate.size() > 0)
       getContentManager().update(voucherNumberControlsForUpdate);
 
-    return getContentManager().getByCurrentFinancialYear();
+    return getContentManager().getByCurrentFinancialYear(Utils.getCompany());
   }
 
   @Override

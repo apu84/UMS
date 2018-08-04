@@ -1,0 +1,261 @@
+<fieldset>
+    <legend><i style="cursor: pointer" title="Go Back" class="fa fa-arrow-circle-left fa-lg"
+               data-ng-click="vm.hidePreviousMeetings()"></i></legend>
+</fieldset>
+
+<div class="row">
+    <div class="col-md-6">
+        <h4><u>Upcoming Meetings ...</u></h4>
+    </div>
+    <div class="col-md-4">
+        <div data-ng-show="vm.showUpcomingFilterFields">
+            <select id="iUpcomingFilterType"
+                    name="nUpcomingFilterType"
+                    data-ng-model="vm.upcomingMeetingType"
+                    data-ng-options="meetingType.name for meetingType in vm.meetingTypes track by meetingType.id"
+                    data-ng-change="vm.doFilter('upcoming')"
+                    class="form-control">
+                <option value="">Select Meeting Type</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div align="right" data-ng-show="!vm.showUpcomingFilterFields">
+            <button data-toggle="tooltip" title="Filter" data-ng-click="vm.modifyFilterFields('upcoming', true)"
+                    class="btn btn-blue">
+                <i style="cursor: pointer" class="fa fa-filter"></i>
+            </button>
+        </div>
+        <div align="right" data-ng-show="vm.showUpcomingFilterFields">
+            <button data-toggle="tooltip" title="Undo Filter" data-ng-click="vm.undoFilter('upcoming')"
+                    class="btn btn-info">
+                <i style="cursor: pointer" class="fa fa-undo"></i>
+            </button>
+            <button data-toggle="tooltip" title="Close Filter" data-ng-click="vm.modifyFilterFields('upcoming', false)"
+                    class="btn btn-danger">
+                <i style="cursor: pointer" class="fa fa-close"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Meeting Type</th>
+        <th>Meeting No.</th>
+        <th>Ref No.</th>
+        <th>Date & Time</th>
+        <th>Room / Place</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <!--<tbody data-ng-repeat="(k, v) in vm.upcomingMeetingScheduleList">-->
+    <tbody data-ng-repeat="meetingUpcoming in (filterdUpcoming = (vm.upcomingMeetingScheduleList)) | filter: {type: vm.upcomingMeetingType} | limitTo:vm.itemsPerPageOfUpcoming:vm.itemsPerPageOfUpcoming*(vm.currentPageNumberOfUpcoming - 1)">
+    <tr>
+        <td>{{(vm.currentPageNumberOfUpcoming - 1) * vm.itemsPerPageOfUpcoming + $index + 1}}</td>
+        <td>{{meetingUpcoming.type.name}}</td>
+        <td>{{meetingUpcoming.meetingNo}}</td>
+        <td>{{meetingUpcoming.refNo}}</td>
+        <td>{{meetingUpcoming.datetime}}</td>
+        <td>{{meetingUpcoming.room}}</td>
+        <td><a data-toggle="modal" data-target="#editSchedule"
+               data-ng-click="vm.selectedScheduleToEdit(filterdUpcoming[(vm.currentPageNumberOfUpcoming - 1) * vm.itemsPerPageOfUpcoming + $index], (vm.currentPageNumberOfUpcoming - 1) * vm.itemsPerPageOfUpcoming + $index)"
+               style="cursor: pointer;"><i
+                class="fa fa-edit" style="cursor: pointer; color: blue;"></i>
+        </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-md-4">
+        <b><u>Total :</u></b> {{filterdUpcoming.length}}
+    </div>
+    <div class="col-md-8">
+        <div align="right">
+            <pagination total-items="filterdUpcoming.length" ng-model="vm.currentPageNumberOfUpcoming"
+                        class="pagination-sm pagination-page" boundary-links="true" rotate="false"
+                        items-per-page="vm.itemsPerPageOfUpcoming"></pagination>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h4><u>Previous Meetings ...</u></h4>
+    </div>
+    <div class="col-md-4">
+        <div data-ng-show="vm.showPreviousFilterFields">
+            <select id="iFilterType"
+                    name="nFilterType"
+                    data-ng-model="vm.previousMeetingType"
+                    data-ng-options="meetingType.name for meetingType in vm.meetingTypes track by meetingType.id"
+                    data-ng-change="vm.doFilter('previous')"
+                    class="form-control">
+                <option value="">Select Meeting Type</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div align="right" data-ng-show="!vm.showPreviousFilterFields">
+            <button data-toggle="tooltip" title="Filter" data-ng-click="vm.modifyFilterFields('previous', true)"
+                    class="btn btn-blue">
+                <i style="cursor: pointer" title="Filter" class="fa fa-filter"></i>
+            </button>
+        </div>
+        <div align="right" data-ng-show="vm.showPreviousFilterFields">
+            <button data-toggle="tooltip" title="Undo Filter" data-ng-click="vm.undoFilter('previous')"
+                    class="btn btn-info">
+                <i style="cursor: pointer" title="Undo Filter" class="fa fa-undo"></i>
+            </button>
+            <button data-toggle="tooltip" title="Close Filter" data-ng-click="vm.modifyFilterFields('previous', false)"
+                    class="btn btn-danger">
+                <i style="cursor: pointer" class="fa fa-close"></i>
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Meeting Type</th>
+        <th>Meeting No.</th>
+        <th>Ref No.</th>
+        <th>Date & Time</th>
+        <th>Room / Place</th>
+    </tr>
+    </thead>
+    <!--<tbody data-ng-repeat="(k, v) in vm.previousMeetingScheduleList">-->
+    <tbody data-ng-repeat="meetingPrevious in (filterdPrevious = (vm.previousMeetingScheduleList)) | filter: {type: vm.previousMeetingType} | limitTo:vm.itemsPerPageOfPrevious:vm.itemsPerPageOfPrevious*(vm.currentPageNumberOfPrevious - 1)">
+    <tr>
+        <td>{{(vm.currentPageNumberOfPrevious - 1) * vm.itemsPerPageOfPrevious + $index + 1}}</td>
+        <td>{{meetingPrevious.type.name}}</td>
+        <td>{{meetingPrevious.meetingNo}}</td>
+        <td>{{meetingPrevious.refNo}}</td>
+        <td>{{meetingPrevious.datetime}}</td>
+        <td>{{meetingPrevious.room}}</td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="row">
+    <div class="col-md-4">
+        <b><u>Total :</u></b> {{filterdPrevious.length}}
+    </div>
+    <div class="col-md-8">
+        <div align="right">
+            <pagination total-items="filterdPrevious.length" ng-model="vm.currentPageNumberOfPrevious" max-size="7"
+                        class="pagination-sm" boundary-links="true" rotate="false"
+                        class="pagination-page"
+                        items-per-page="vm.itemsPerPageOfPrevious"></pagination>
+        </div>
+    </div>
+</div>
+
+<div id="editSchedule" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
+     aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="modal-default-label" class="modal-title">Type - {{vm.scheduleToEdit.type.name}}; No. -
+                    {{vm.scheduleToEdit.meetingNo}}</h4>
+            </div>
+            <div class="modal-body">
+                <form name="nScheduleEditForm" class="form-horizontal" ng-submit="vm.update()" novalidate>
+                    <div class="form-body pal">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nScheduleEditForm.nEditType.$invalid && !nScheduleEditForm.nEditType.$pristine }">
+                            <label class="col-md-3 control-label">Meeting Type</label>
+                            <div class="col-md-9">
+                                <select id="iEditType"
+                                        name="nEditType"
+                                        data-ng-model="vm.scheduleToEdit.type"
+                                        data-ng-options="meetingType.name for meetingType in vm.meetingTypes track by meetingType.id"
+                                        class="form-control" required disabled>
+                                    <option value="">Select Meeting Type</option>
+                                </select>
+
+                                <label data-ng-show="nScheduleEditForm.nType.$invalid && !nScheduleEditForm.nType.$pristine"
+                                       class="help-block control-label">Please specify meeting type.</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Meeting No.</label>
+                            <div class="col-md-9">
+                                <input type="number"
+                                       data-ng-model="vm.scheduleToEdit.meetingNo"
+                                       class="form-control"
+                                       placeholder="Meeting No."
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nScheduleEditForm.nEditRefNo.$invalid && !nScheduleEditForm.nEditRefNo.$pristine }">
+                            <label class="col-md-3 control-label">Ref No.</label>
+                            <div class="col-md-9">
+                                <input id="iEditRefNo"
+                                       name="nEditRefNo"
+                                       type="text"
+                                       data-ng-model="vm.scheduleToEdit.refNo"
+                                       class="form-control"
+                                       placeholder="Ref No." required>
+
+                                <label data-ng-show="nScheduleEditForm.nEditRefNo.$invalid && !nScheduleEditForm.nEditRefNo.$pristine"
+                                       class="help-block control-label">Please specify ref no.</label>
+                            </div>
+                        </div>
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nScheduleEditForm.nEditDateTime.$invalid && !nScheduleEditForm.nEditDateTime.$pristine }">
+                            <label class="col-md-3 control-label">Date & Time</label>
+                            <div class="col-md-9">
+                                <div class="input-icon right">
+                                    <i class="fa fa-calendar"></i>
+                                    <input name="nEditDateTime"
+                                           type="text"
+                                           id="datetimepicker-default1"
+                                           data-ng-model="vm.scheduleToEdit.datetime"
+                                           data-datetime-format="dd/MM/yyyy hh:mm aaa"
+                                           class="form-control"
+                                           autocomplete="off" required>
+
+                                    <label data-ng-show="nScheduleEditForm.nEditDateTime.$invalid && !nScheduleEditForm.nEditDateTime.$pristine"
+                                           class="help-block control-label">Please specify date & time.</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nScheduleEditForm.nEditRoom.$invalid && !nScheduleEditForm.nEditRoom.$pristine }">
+                            <label class="col-md-3 control-label">Room / Place</label>
+                            <div class="col-md-9">
+                                <input id="iEditRoom"
+                                       name="nEditRoom"
+                                       type="text"
+                                       data-ng-model="vm.scheduleToEdit.room"
+                                       class="form-control"
+                                       placeholder="Meeting Room" required>
+
+                                <label data-ng-show="nScheduleEditForm.nEditRoom.$invalid && !nScheduleEditForm.nEditRoom.$pristine"
+                                       class="help-block control-label">Please specify a room or place.</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions text-right pal">
+                        <button type="submit" data-ng-disabled="nScheduleEditForm.$invalid" class="btn btn-success">
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

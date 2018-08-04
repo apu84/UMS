@@ -143,6 +143,20 @@ module ums{
             return defer.promise;
         }
 
+        public saveBibPublicationInformation(json: any): ng.IPromise<any> {
+            let defer = this.$q.defer();
+            this.httpClient.post(this.publicationUrl + "/bulk", json, 'application/json')
+                .success((data: any) => {
+                    this.notify.success("Successfully Saved");
+                    defer.resolve(data);
+                })
+                .error((data) => {
+                    this.notify.error("Error in Saving");
+                    defer.reject(data);
+                });
+            return defer.promise;
+        }
+
         public updatePublicationInformation(json: any): ng.IPromise<any> {
             let defer = this.$q.defer();
             this.httpClient.put(this.publicationUrl, json, 'application/json')
@@ -546,6 +560,23 @@ module ums{
             let fileName = "CV of " + employeeId;
 
             this.httpClient.get("employee/report/cv/employeeId/" + employeeId, 'application/pdf', (data: any, etag: string) => {
+
+                    // var file = new Blob([data], {type: 'application/pdf'});
+                    // var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
+                    // this.$window.open(fileURL);
+
+                    UmsUtil.writeFileContent(data, contentType, fileName);
+                },
+                (response: ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                }, 'arraybuffer');
+        }
+
+        public getEmployeeListPdf(deptList: string[], employeeTypeList: number[], choice: number): void {
+            let contentType: string = UmsUtil.getFileContentType("pdf");
+            let fileName = "List of Employees";
+
+            this.httpClient.get("academic/employee/report/employeeList/deptList/" + deptList + "/empTypeList/" + employeeTypeList + "/choice/" + choice, 'application/pdf', (data: any, etag: string) => {
 
                     // var file = new Blob([data], {type: 'application/pdf'});
                     // var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));

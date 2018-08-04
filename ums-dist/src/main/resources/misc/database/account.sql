@@ -1,3 +1,56 @@
+--- Date: 23-06-2018
+--- Added company column in fin_account_year
+
+alter table fin_account_year
+add column comp_code varchar2(2);
+
+
+--- Date: 15-06-2018
+--- Added User Company Map Table
+
+CREATE TABLE DB_IUMS_ACCOUNT.USER_COMPANY_MAP
+(
+  ID             NUMBER,
+  USER_ID        VARCHAR2(100 BYTE),
+  COMPANY_ID     VARCHAR2(2 BYTE),
+  LAST_MODIFIED  VARCHAR2(18 BYTE)
+);
+
+Insert into DB_IUMS_ACCOUNT.USER_COMPANY_MAP(ID, USER_ID, COMPANY_ID, LAST_MODIFIED)
+ Values(1, 'ddf', '01', NULL);
+Insert into DB_IUMS_ACCOUNT.USER_COMPANY_MAP(ID, USER_ID, COMPANY_ID, LAST_MODIFIED)
+ Values(2, 'ddf', '02', NULL);
+
+
+
+/*DATE 11-06-2018*/
+ALTER TABLE DT_TRANSACTION ADD PAID_AMOUNT NUMBER NULL;
+/*END OF DATE 11-06-2018*/
+
+/*Date 04-06-2018*/
+
+create table system_account_map(
+  id NUMBER,
+  account_type NUMBER,
+  account_id NUMBER,
+  comp_code VARCHAR2(2),
+  modified_by VARCHAR2(15),
+  modified_date DATE,
+  last_modified VARCHAR2(18)
+);
+
+/*End of date 04-06-2018*/
+
+
+/*Date 02-06-2018*/
+alter table DT_TRANSACTION
+add  paid_amount NUMBER;
+
+
+
+/*End of date 02-06-2018*/
+
+
 create table system_group_map
 (
   id NUMBER,

@@ -11,6 +11,7 @@ module ums {
 
     private groupTypeList: IConstant[];
     private systemGroupMapList: ISystemGroupMap[];
+    private systemGroupMapListDisplay: ISystemAccountMap[];
     private systemGroupMap: ISystemGroupMap;
     private groupTypeMapWithId: any;
     private groups: IGroup[];
@@ -49,6 +50,7 @@ module ums {
       let systemGroupMapWithGroupTypeId:any={};
       systemGroupMapList.forEach((s:ISystemGroupMap)=> systemGroupMapWithGroupTypeId[s.groupType]=s);
       this.systemGroupMapList = [];
+      this.systemGroupMapListDisplay = [];
       for (let i = 0; i < this.groupTypeList.length; i++) {
         let systemGroupMap: ISystemGroupMap = <ISystemGroupMap>{};
         if(systemGroupMapWithGroupTypeId[this.groupTypeList[i].id]!=null){
@@ -60,6 +62,7 @@ module ums {
           this.systemGroupMapList.push(systemGroupMap);
       }
 
+      this.systemGroupMapListDisplay = angular.copy(this.systemGroupMapList);
       console.log("System group map");
       console.log(this.systemGroupMapList);
     }

@@ -3,25 +3,20 @@ package org.ums.domain.model.mutable.library;
 import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.dto.library.ImprintDto;
-import org.ums.domain.model.dto.library.PhysicalDescriptionDto;
-import org.ums.domain.model.immutable.library.MaterialContributor;
-import org.ums.domain.model.immutable.library.Note;
 import org.ums.domain.model.immutable.library.Record;
-import org.ums.domain.model.immutable.library.Subject;
 import org.ums.domain.model.mutable.MutableLastModifier;
 import org.ums.enums.common.Language;
+import org.ums.enums.library.GeneralMaterialDescription;
 import org.ums.enums.library.JournalFrequency;
 import org.ums.enums.library.MaterialType;
 import org.ums.enums.library.RecordStatus;
 
-import java.util.List;
+import java.util.Date;
 
 /**
  * Created by Ifti on 16-Feb-17.
  */
 public interface MutableRecord extends Record, Editable<Long>, MutableLastModifier, MutableIdentifier<Long> {
-
-  void setMfn(Long pMfn);
 
   void setLanguage(Language pLanguage);
 
@@ -29,7 +24,7 @@ public interface MutableRecord extends Record, Editable<Long>, MutableLastModifi
 
   void setSubTitle(String pSubTitle);
 
-  void setGmd(String pGmd);
+  void setGmd(GeneralMaterialDescription pGmd);
 
   void setSeriesTitle(String pSeriesTitle);
 
@@ -67,21 +62,17 @@ public interface MutableRecord extends Record, Editable<Long>, MutableLastModifi
 
   void setClassNo(String pClassNo);
 
-  void setCallDate(String pCallDate);
+  void setAuthorMark(String pAuthorMark);
+
+  void setCallYear(Integer pCallDate);
 
   void setCallEdition(String pCallEdition);
 
   void setCallVolume(String pCallVolume);
 
-  void setAuthorMark(String pAuthorMark);
-
-  void setContributorList(List<MaterialContributor> pContributorList);
-
   void setContributorJsonString(String pContributorJsonString);
 
   void setImprint(ImprintDto pImprint);
-
-  void setPhysicalDescription(PhysicalDescriptionDto pPhysicalDescription);
 
   void setPhysicalDescriptionString(String pPhysicalDescriptionString);
 
@@ -91,30 +82,24 @@ public interface MutableRecord extends Record, Editable<Long>, MutableLastModifi
 
   void setKeyWords(String pKeywords);
 
-  void setSubjectList(List<Subject> pSubjectList);
-
   void setSubjectJsonString(String pSubjectJsonString);
-
-  void setNoteList(List<Note> pNoteList);
 
   void setNoteJsonString(String pNoteJsonString);
 
+  void setTotalItems(Integer pTotalItems);
+
+  void setTotalAvailable(Integer pTotalAvailable);
+
+  void setTotalCheckedOut(Integer pTotalCheckedOut);
+
+  void setTotalOnHold(Integer pTotalOnHold);
+
   void setDocumentalist(String pDocumentalist);
 
-  void setEntryDate(String pEntryDate);
+  void setEntryDate(Date pEntryDate);
 
-  void setLastUpdatedOn(String pLastUpdatedOn);
+  void setLastUpdatedOn(Date pLastUpdatedOn);
 
   void setLastUpdatedBy(String pLastUpdatedBy);
-
-  void setPublisherId(Long pPublisherId);
-
-  void setTotalItems(int pTotalItems);
-
-  void setTotalAvailable(int pTotalAvailable);
-
-  void setTotalCheckedOut(int pTotalCheckedOut);
-
-  void setTotalOnHold(int pTotalOnHold);
 
 }

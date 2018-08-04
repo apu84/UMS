@@ -5,10 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.common.LmsTypeDaoDecorator;
 import org.ums.domain.model.immutable.common.LmsType;
 import org.ums.domain.model.mutable.common.MutableLmsType;
-import org.ums.enums.common.DurationType;
-import org.ums.enums.common.EmployeeLeaveType;
-import org.ums.enums.common.Gender;
-import org.ums.enums.common.SalaryType;
+import org.ums.enums.common.*;
 import org.ums.persistent.model.common.PersistentLmsType;
 
 import java.sql.ResultSet;
@@ -32,7 +29,7 @@ public class PersistentLmsTypeDao extends LmsTypeDaoDecorator {
 
   @Override
   public List<LmsType> getAll() {
-    String query = SELECT_ALL;
+    String query = SELECT_ALL + " ORDER BY VIEW_ORDER";
     return mJdbcTemplate.query(query, new LmsTypeRowMapper());
   }
 
@@ -40,11 +37,11 @@ public class PersistentLmsTypeDao extends LmsTypeDaoDecorator {
   public List<LmsType> getLmsTypes(EmployeeLeaveType pType, Gender pGender) {
     String query = "";
     if(pGender == Gender.MALE) {
-      query = SELECT_ALL + " where type=1 or type=? order by id";
+      query = SELECT_ALL + " where type=1 or type=? order by VIEW_ORDER";
       return mJdbcTemplate.query(query, new Object[] {pType.getId()}, new LmsTypeRowMapper());
     }
     else {
-      query = SELECT_ALL + " where type=1 or type=? and type=? order by id";
+      query = SELECT_ALL + " where type=1 or type=? and type=? order by VIEW_ORDER";
       return mJdbcTemplate.query(query, new Object[] {pType.getId(), EmployeeLeaveType.FEMALE_LEAVE.getId()},
           new LmsTypeRowMapper());
     }
@@ -116,6 +113,9 @@ public class PersistentLmsTypeDao extends LmsTypeDaoDecorator {
       lmsType.setLastModified(rs.getString("last_modified"));
       lmsType.setAuthorizeRoleId(rs.getInt("authorize_role"));
       lmsType.setSpecialAuthorizeRoleId(rs.getInt("special_authorize_role"));
+      lmsType.setLeaveTypeCategory(LeaveTypeCategory.get(rs.getInt("category")));
+      lmsType.setViewOrder(rs.getInt("view_order"));
+      lmsType.setVisibilityType(VisibilityType.get(rs.getString("visibility")));
       return lmsType;
     }
   }

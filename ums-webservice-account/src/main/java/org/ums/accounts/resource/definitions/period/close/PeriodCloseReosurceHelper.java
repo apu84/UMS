@@ -13,6 +13,7 @@ import org.ums.persistent.model.accounts.PersistentPeriodClose;
 import org.ums.resource.ResourceHelper;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
+import org.ums.util.Utils;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -46,20 +47,21 @@ public class PeriodCloseReosurceHelper extends ResourceHelper<PeriodClose, Mutab
     List<MutablePeriodClose> updatedList = new ArrayList<>();
     List<MutablePeriodClose> newList = new ArrayList<>();
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
-    pMutablePeriodCloses.forEach(p->{
+    pMutablePeriodCloses.forEach(p -> {
       p.setModifiedBy(user.getEmployeeId());
       p.setModifiedDate(new Date());
-      if(p.getId()==null){
+      p.setCompanyId(Utils.getCompany().getId());
+      if (p.getId() == null) {
         p.setId(mIdGenerator.getNumericId());
         newList.add(p);
-      }else{
+      } else {
         updatedList.add(p);
       }
 
     });
-    if(updatedList.size()>0)
+    if (updatedList.size() > 0)
       getContentManager().update(updatedList);
-    if(newList.size()>0)
+    if (newList.size() > 0)
       getContentManager().create(newList);
 
     return pMutablePeriodCloses;

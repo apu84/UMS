@@ -16,6 +16,8 @@
 <div class="col-md-8">
     <div class="col-md-12"><h3>Application Status</h3></div>
     <div class="col-md-12"><p>Applied By:<b> {{vm.pendingApplication.applicantsName}}</b></p></div>
+    <div class="col-md-12"><p>Submitted
+        By:<b> {{vm.pendingApplication.leaveApplication.submittedByEmp.employeeName}}</b></p></div>
     <div class="col-md-4"><p>Applied On:<b> {{vm.pendingApplication.appliedOn}}</b></p></div>
     <div class="col-md-4"><p>From <b>{{vm.pendingApplication.fromDate}}</b> to <b>{{vm.pendingApplication.toDate}}</b>
     </p>
@@ -46,18 +48,14 @@
 
                     <p disabled="true"
                        class="white-space-pre">{{s.comments}}</p>
-                    <p align="right"><i> By {{s.actionTakenByName}} on {{s.appliedOn}}, Status <label
-                            class="label label-primary">
-                        {{s.actionStatusLabel}}</label> </i></p>
+                    <p ng-bind-html="vm.getStatusLabel(s)" align="right"></p>
                 </div>
                 <div data-ng-if="s.rowNumber%2!=0" style="background-color: navajowhite; padding:3%">
 
                     <p disabled="true"
                        class="white-space-pre">{{s.comments}}</p>
 
-                    <p align="right"><i> By {{s.actionTakenByName}} on {{s.appliedOn}}, Status <label
-                            class="label label-primary">
-                        {{s.actionStatusLabel}}</label> </i></p>
+                    <p ng-bind-html="vm.getStatusLabel(s)" align="right"></p>
                 </div>
 
             </a>
@@ -65,6 +63,6 @@
     </div>
 </div>
 
-<div class="col-md-4" data-ng-include="" src="'views/leave-management/remaining-leaves.html'"></div>
+<div class="col-md-4" ng-if="vm.leaveApplicationService.employeeId && vm.showRemainingLeaves" lms-remaining-leave-dir></div>
 
 

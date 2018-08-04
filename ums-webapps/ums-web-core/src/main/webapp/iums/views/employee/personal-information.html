@@ -5,1027 +5,1012 @@
     }
 </style>
 
-<div class="panel-group">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col-md-9">General Information</div>
-                <div class="col-md-3">
-                    <div data-ng-if="vm.enableEditButton">
-                        <div data-ng-if="vm.generalReadOnly==true">
-                            <div align="right">
-                                <a data-ng-click="vm.generalReadOnly=false" style="cursor: pointer;">
-                                    <i style="color: blue;" class="fa fa-edit"></i>
-                                </a>
+<div data-ng-if="vm.showLoader" align="center">
+    <div data-spinner=""></div>
+</div>
+
+<div data-ng-if="!vm.showLoader">
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-9">General Information</div>
+                    <div class="col-md-3">
+                        <div data-ng-if="vm.enableEditButton">
+                            <div data-ng-if="vm.generalReadOnly==true">
+                                <div align="right">
+                                    <a data-ng-click="vm.generalReadOnly=false" style="cursor: pointer;">
+                                        <i style="color: blue;" class="fa fa-edit"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="panel-body">
+            <div class="panel-body">
 
-            <form name="nGeneralForm" ng-submit="vm.submit('general')" novalidate>
-                <div class="row">
-                    <div class="col-md-9">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group"
-                                     ng-class="{ 'has-error' : nGeneralForm.nName.$invalid && !nGeneralForm.nName.$pristine }">
-                                    <label for="iName" class="control-label">Name<span
-                                            data-ng-show="!vm.generalReadOnly"
-                                            class='require'>*</span>
-                                    </label>
+                <form name="nGeneralForm" ng-submit="vm.submit('general')" novalidate>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group"
+                                         ng-class="{ 'has-error' : nGeneralForm.nName.$invalid && !nGeneralForm.nName.$pristine }">
+                                        <label for="iName" class="control-label">Name<span
+                                                data-ng-show="!vm.generalReadOnly"
+                                                class='require'>*</span>
+                                        </label>
+                                        <div data-ng-show="!vm.generalReadOnly">
+                                            <input type="text"
+                                                   id="iName"
+                                                   name="nName"
+                                                   class="form-control"
+                                                   data-ng-model="vm.entry.general.name"
+                                                   ng-disabled="vm.generalReadOnly" required>
+                                            <label data-ng-show="nGeneralForm.nName.$invalid && !nGeneralForm.nName.$pristine"
+                                                   class="help-block control-label">Please provide us your name.</label>
+                                        </div>
+
+                                        <div data-ng-show="vm.generalReadOnly">
+                                            <div class="underlineBox">
+                                                <label class="control-label">{{vm.entry.general.name}}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group"
+                                         ng-class="{ 'has-error' : nGeneralForm.nFatherName.$invalid && !nGeneralForm.nFatherName.$pristine}">
+
+                                        <label for="iFatherName" class="control-label">Father's Name<span
+                                                data-ng-show="!vm.generalReadOnly"
+                                                class='require'>*</span></label>
+                                        <div data-ng-show="!vm.generalReadOnly">
+                                            <input type="text"
+                                                   id="iFatherName"
+                                                   name="nFatherName"
+                                                   class="form-control"
+                                                   data-ng-model="vm.entry.general.fatherName"
+                                                   ng-readonly="vm.generalReadOnly"
+                                                   placeholder="Father's Name" required>
+                                            <label data-ng-show="nGeneralForm.nFatherName.$invalid && !nGeneralForm.nFatherName.$pristine"
+                                                   class="help-block control-label">
+                                                Your father's name is required</label>
+                                        </div>
+
+                                        <div data-ng-show="vm.generalReadOnly">
+                                            <div class="underlineBox">
+                                                <label class="control-label">{{vm.entry.general.fatherName}}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group"
+                                         ng-class="{ 'has-error' : nGeneralForm.nMotherName.$invalid && !nGeneralForm.nMotherName.$pristine}">
+                                        <label for="iMotherName" class="control-label">Mother's Name<span
+                                                data-ng-show="!vm.generalReadOnly"
+                                                class='require'>*</span></label>
+                                        <div data-ng-show="!vm.generalReadOnly"><input type="text"
+                                                                                       id="iMotherName"
+                                                                                       name="nMotherName"
+                                                                                       class="form-control"
+                                                                                       data-ng-model="vm.entry.general.motherName"
+                                                                                       ng-readonly="vm.generalReadOnly"
+                                                                                       placeholder="Mother's Name"
+                                                                                       required>
+                                            <label data-ng-show="nGeneralForm.nMotherName.$invalid && !nGeneralForm.nMotherName.$pristine"
+                                                   class="help-block control-label">
+                                                Your mother's name is required.</label>
+                                        </div>
+
+                                        <div data-ng-show="vm.generalReadOnly">
+                                            <div class="underlineBox">
+                                                <label class="control-label">{{vm.entry.general.motherName}}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="row">
+                                <label></label>
+                            </div>
+                            <div class="row">
+                                <div data-ng-show="vm.enableEditButton">
                                     <div data-ng-show="!vm.generalReadOnly">
-                                        <input type="text"
-                                               id="iName"
-                                               name="nName"
-                                               class="form-control"
-                                               data-ng-model="vm.entry.general.name"
-                                               ng-disabled="vm.generalReadOnly" required>
-                                        <label data-ng-show="nGeneralForm.nName.$invalid && !nGeneralForm.nName.$pristine"
-                                               class="help-block control-label">Please provide us your name.</label>
+                                        <div align="center" data-ng-if="vm.test==true">
+                                            <img data-target="#modal-confirm" data-toggle="modal" class="img-square"
+                                                 style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0); cursor: pointer"
+                                                 src=""
+                                                 img-id="vm.userId"
+                                                 data-profile-picture="">
+                                        </div>
                                     </div>
-
                                     <div data-ng-show="vm.generalReadOnly">
-                                        <div class="underlineBox">
-                                            <label class="control-label">{{vm.entry.general.name}}</label>
+                                        <div align="center" data-ng-if="vm.test==true">
+                                            <img class="img-square"
+                                                 style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0);"
+                                                 src=""
+                                                 img-id="vm.userId"
+                                                 data-profile-picture="">
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group"
-                                     ng-class="{ 'has-error' : nGeneralForm.nFatherName.$invalid && !nGeneralForm.nFatherName.$pristine}">
-
-                                    <label for="iFatherName" class="control-label">Father's Name<span
-                                            data-ng-show="!vm.generalReadOnly"
-                                            class='require'>*</span></label>
-                                    <div data-ng-show="!vm.generalReadOnly">
-                                        <input type="text"
-                                               id="iFatherName"
-                                               name="nFatherName"
-                                               class="form-control"
-                                               data-ng-model="vm.entry.general.fatherName"
-                                               ng-readonly="vm.generalReadOnly"
-                                               placeholder="Father's Name" required>
-                                        <label data-ng-show="nGeneralForm.nFatherName.$invalid && !nGeneralForm.nFatherName.$pristine"
-                                               class="help-block control-label">
-                                            Your father's name is required</label>
-                                    </div>
-
-                                    <div data-ng-show="vm.generalReadOnly">
-                                        <div class="underlineBox">
-                                            <label class="control-label">{{vm.entry.general.fatherName}}</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group"
-                                     ng-class="{ 'has-error' : nGeneralForm.nMotherName.$invalid && !nGeneralForm.nMotherName.$pristine}">
-                                    <label for="iMotherName" class="control-label">Mother's Name<span
-                                            data-ng-show="!vm.generalReadOnly"
-                                            class='require'>*</span></label>
-                                    <div data-ng-show="!vm.generalReadOnly"><input type="text"
-                                                                                   id="iMotherName"
-                                                                                   name="nMotherName"
-                                                                                   class="form-control"
-                                                                                   data-ng-model="vm.entry.general.motherName"
-                                                                                   ng-readonly="vm.generalReadOnly"
-                                                                                   placeholder="Mother's Name" required>
-                                        <label data-ng-show="nGeneralForm.nMotherName.$invalid && !nGeneralForm.nMotherName.$pristine"
-                                               class="help-block control-label">
-                                            Your mother's name is required.</label>
-                                    </div>
-
-                                    <div data-ng-show="vm.generalReadOnly">
-                                        <div class="underlineBox">
-                                            <label class="control-label">{{vm.entry.general.motherName}}</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="row">
-                            <label></label>
-                        </div>
-                        <div class="row">
-                            <div data-ng-show="vm.enableEditButton">
-                                <div data-ng-show="!vm.generalReadOnly">
-                                    <div align="center" data-ng-if="vm.test==true">
-                                        <img data-target="#modal-confirm" data-toggle="modal" class="img-square"
-                                             style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0); cursor: pointer"
-                                             src=""
-                                             img-id="vm.userId"
-                                             data-profile-picture="">
-                                    </div>
-                                </div>
-                                <div data-ng-show="vm.generalReadOnly">
-                                    <div align="center" data-ng-if="vm.test==true">
+                                <div data-ng-show="!vm.enableEditButton">
+                                    <div align="center">
                                         <img class="img-square"
                                              style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0);"
                                              src=""
-                                             img-id="vm.userId"
                                              data-profile-picture="">
                                     </div>
                                 </div>
                             </div>
-                            <div data-ng-show="!vm.enableEditButton">
-                                <div align="center">
-                                    <img class="img-square"
-                                         style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0);"
-                                         src=""
-                                         data-profile-picture="">
-                                </div>
-                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nGeneralForm.nGender.$invalid && !nGeneralForm.nGender.$pristine}">
-                            <label class="control-label" for="iGender">Gender<span
-                                    data-ng-show="!vm.generalReadOnly"
-                                    class='require'>*</span></label>
-
-                            <div data-ng-show="!vm.generalReadOnly">
-                                <select name="nGender"
-                                        id="iGender"
-                                        data-ng-model="vm.entry.general.gender"
-                                        data-ng-options="gender.name for gender in vm.genders track by gender.id"
-                                        ng-readonly="vm.generalReadOnly"
-                                        class="form-control" required>
-                                    <option value="">Select Gender</option>
-                                </select>
-                                <label data-ng-show="nGeneralForm.nGender.$invalid && !nGeneralForm.nGender.$pristine"
-                                       class="help-block control-label">Are you male or female?</label>
-                            </div>
-                            <div data-ng-show="vm.generalReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.general.gender.name}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nGeneralForm.nBloodGroup.$invalid && !nGeneralForm.nBloodGroup.$pristine}">
-                            <label class="control-label" for="iBloodGroup">Blood Group<span
-                                    data-ng-show="!vm.generalReadOnly"
-                                    class='require'>*</span></label>
-                            <div data-ng-show="!vm.generalReadOnly">
-                                <select name="nBloodGroup"
-                                        id="iBloodGroup"
-                                        data-ng-model="vm.entry.general.bloodGroup"
-                                        data-ng-options="bloodGroup.name for bloodGroup in vm.bloodGroups track by bloodGroup.id"
-                                        ng-readonly="vm.generalReadOnly"
-                                        class="form-control" required>
-                                    <option value="">Select Blood Group</option>
-                                </select>
-                                <label data-ng-show="nGeneralForm.nBloodGroup.$invalid && !nGeneralForm.nBloodGroup.$pristine"
-                                       class="help-block control-label">What is your blood group?</label>
-                            </div>
-
-                            <div data-ng-show="vm.generalReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.general.bloodGroup.name}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nGeneralForm.nNationality.$invalid && !nGeneralForm.nNationality.$pristine}">
-                            <label class="control-label" for="iNationality">Nationality<span
-                                    data-ng-show="!vm.generalReadOnly"
-                                    class='require'>*</span></label>
-
-                            <div data-ng-show="!vm.generalReadOnly">
-                                <select name="nNationality"
-                                        id="iNationality"
-                                        data-ng-model="vm.entry.general.nationality"
-                                        data-ng-options="nationality.name for nationality in vm.nationalities  track by nationality.id"
-                                        ng-readonly="vm.generalReadOnly"
-                                        class="form-control" required>
-                                    <option value="">Select Nationality</option>
-                                </select>
-                            </div>
-                            <label data-ng-show="nGeneralForm.nNationality.$invalid && !nGeneralForm.nNationality.$pristine"
-                                   class="help-block control-label">Where you belong to?</label>
-
-                            <div data-ng-show="vm.generalReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.general.nationality.name}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nGeneralForm.nReligion.$invalid && !nGeneralForm.nReligion.$pristine}">
-                            <label class="control-label" for="iReligion">Religion<span
-                                    data-ng-show="!vm.generalReadOnly"
-                                    class='require'>*</span></label>
-                            <div data-ng-show="!vm.generalReadOnly">
-                                <select name="nReligion"
-                                        id="iReligion"
-                                        data-ng-model="vm.entry.general.religion"
-                                        data-ng-options="religion.name for religion in vm.religions track by religion.id"
-                                        ng-readonly="vm.generalReadOnly"
-                                        class="form-control" required>
-                                    <option value="">Select Religion</option>
-                                </select>
-
-                                <label data-ng-show="nGeneralForm.nReligion.$invalid && !nGeneralForm.nReligion.$pristine"
-                                       class="help-block control-label">Your religion?</label>
-                            </div>
-                            <div data-ng-show="vm.generalReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.general.religion.name}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nGeneralForm.nBirthDate.$invalid && !nGeneralForm.nBirthDate.$pristine}">
-                            <label for="iBirthDate" class="control-label">Date of Birth<span
-                                    data-ng-show="!vm.generalReadOnly"
-                                    class='require'>*</span></label>
-                            <div data-ng-show="!vm.generalReadOnly">
-                                <input type="text"
-                                       name="nBirthDate"
-                                       id="iBirthDate"
-                                       data-ng-model="vm.entry.general.dateOfBirth"
-                                       data-provide="datepicker"
-                                       data-date-format="dd/mm/yyyy"
-                                       placeholder="DD/MM/YYYY"
-                                       autocomplete="off"
-                                       ng-readonly="vm.generalReadOnly"
-                                       class="form-control" required>
-                                <label data-ng-show="nGeneralForm.nBirthDate.$invalid && !nGeneralForm.nBirthDate.$pristine"
-                                       class="help-block control-label">
-                                    When is your birthday?</label>
-                            </div>
-                            <div data-ng-show="vm.generalReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.general.dateOfBirth}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nGeneralForm.nNationalId.$invalid && !nGeneralForm.nNationalId.$pristine}">
-                            <label for="iNationalId" class="control-label">National
-                                Id Card No.</label>
-
-                            <div data-ng-show="!vm.generalReadOnly">
-                                <input type="text"
-                                       id="iNationalId"
-                                       name="nNationalId"
-                                       class="form-control"
-                                       ng-readonly="vm.generalReadOnly"
-                                       data-ng-model="vm.entry.general.nidNo">
-                                <label data-ng-show="nGeneralForm.nNationalId.$invalid && !nGeneralForm.nNationalId.$pristine"
-                                       class="help-block control-label">
-                                    Please provide us you national identity.</label>
-                            </div>
-
-                            <div data-ng-show="vm.generalReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.general.nidNo}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nGeneralForm.nMaritalStatus.$invalid && !nGeneralForm.nMaritalStatus.$pristine}">
-                            <label class="control-label" for="iMaritalStatus">Marital Status<span
-                                    data-ng-show="!vm.generalReadOnly"
-                                    class='require'>*</span></label>
-
-                            <div data-ng-show="!vm.generalReadOnly">
-                                <select name="nMaritalStatus"
-                                        id="iMaritalStatus"
-                                        data-ng-model="vm.entry.general.maritalStatus"
-                                        data-ng-options="maritalStatus.name for maritalStatus in vm.maritalStatus track by maritalStatus.id"
-                                        ng-readonly="vm.generalReadOnly"
-                                        class="form-control" required>
-                                    <option value="">Select Marital Status</option>
-                                </select>
-
-                                <label data-ng-show="nGeneralForm.nMaritalStatus.$invalid && !nGeneralForm.nMaritalStatus.$pristine"
-                                       class="help-block control-label">Single or Married?</label>
-                            </div>
-                            <div data-ng-show="vm.generalReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.general.maritalStatus.name}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div ng-if="vm.entry.general.maritalStatus.id==2">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="form-group"
-                                 ng-class="{ 'has-error' : nGeneralForm.nSpouseName.$invalid && !nGeneralForm.nSpouseName.$pristine}">
-                                <label for="iSpouseName" class="control-label">Spouse's Name<span
+                                 ng-class="{ 'has-error' : nGeneralForm.nGender.$invalid && !nGeneralForm.nGender.$pristine}">
+                                <label class="control-label" for="iGender">Gender<span
                                         data-ng-show="!vm.generalReadOnly"
-                                        class="require">*</span></label>
+                                        class='require'>*</span></label>
 
                                 <div data-ng-show="!vm.generalReadOnly">
+                                    <select name="nGender"
+                                            id="iGender"
+                                            data-ng-model="vm.entry.general.gender"
+                                            data-ng-options="gender.name for gender in vm.genders track by gender.id"
+                                            ng-readonly="vm.generalReadOnly"
+                                            class="form-control" required>
+                                        <option value="">Select Gender</option>
+                                    </select>
+                                    <label data-ng-show="nGeneralForm.nGender.$invalid && !nGeneralForm.nGender.$pristine"
+                                           class="help-block control-label">Please select a gender.</label>
+                                </div>
+                                <div data-ng-show="vm.generalReadOnly">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{vm.entry.general.gender.name}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nGeneralForm.nBloodGroup.$invalid && !nGeneralForm.nBloodGroup.$pristine}">
+                                <label class="control-label" for="iBloodGroup">Blood Group<span
+                                        data-ng-show="!vm.generalReadOnly"
+                                        class='require'>*</span></label>
+                                <div data-ng-show="!vm.generalReadOnly">
+                                    <select name="nBloodGroup"
+                                            id="iBloodGroup"
+                                            data-ng-model="vm.entry.general.bloodGroup"
+                                            data-ng-options="bloodGroup.name for bloodGroup in vm.bloodGroups track by bloodGroup.id"
+                                            ng-readonly="vm.generalReadOnly"
+                                            class="form-control" required>
+                                        <option value="">Select Blood Group</option>
+                                    </select>
+                                    <label data-ng-show="nGeneralForm.nBloodGroup.$invalid && !nGeneralForm.nBloodGroup.$pristine"
+                                           class="help-block control-label">Please select a blood group.</label>
+                                </div>
+
+                                <div data-ng-show="vm.generalReadOnly">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{vm.entry.general.bloodGroup.name}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nGeneralForm.nNationality.$invalid && !nGeneralForm.nNationality.$pristine}">
+                                <label class="control-label" for="iNationality">Nationality<span
+                                        data-ng-show="!vm.generalReadOnly"
+                                        class='require'>*</span></label>
+
+                                <div data-ng-show="!vm.generalReadOnly">
+                                    <select name="nNationality"
+                                            id="iNationality"
+                                            data-ng-model="vm.entry.general.nationality"
+                                            data-ng-options="nationality.name for nationality in vm.nationalities  track by nationality.id"
+                                            ng-readonly="vm.generalReadOnly"
+                                            class="form-control" required>
+                                        <option value="">Select Nationality</option>
+                                    </select>
+                                </div>
+                                <label data-ng-show="nGeneralForm.nNationality.$invalid && !nGeneralForm.nNationality.$pristine"
+                                       class="help-block control-label">Please select a nationality.</label>
+
+                                <div data-ng-show="vm.generalReadOnly">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{vm.entry.general.nationality.name}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nGeneralForm.nReligion.$invalid && !nGeneralForm.nReligion.$pristine}">
+                                <label class="control-label" for="iReligion">Religion<span
+                                        data-ng-show="!vm.generalReadOnly"
+                                        class='require'>*</span></label>
+                                <div data-ng-show="!vm.generalReadOnly">
+                                    <select name="nReligion"
+                                            id="iReligion"
+                                            data-ng-model="vm.entry.general.religion"
+                                            data-ng-options="religion.name for religion in vm.religions track by religion.id"
+                                            ng-readonly="vm.generalReadOnly"
+                                            class="form-control" required>
+                                        <option value="">Select Religion</option>
+                                    </select>
+
+                                    <label data-ng-show="nGeneralForm.nReligion.$invalid && !nGeneralForm.nReligion.$pristine"
+                                           class="help-block control-label">Please select a religion.</label>
+                                </div>
+                                <div data-ng-show="vm.generalReadOnly">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{vm.entry.general.religion.name}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nGeneralForm.nBirthDate.$invalid && !nGeneralForm.nBirthDate.$pristine}">
+                                <label for="iBirthDate" class="control-label">Date of Birth<span
+                                        data-ng-show="!vm.generalReadOnly"
+                                        class='require'>*</span></label>
+                                <div data-ng-show="!vm.generalReadOnly">
                                     <input type="text"
-                                           name="nSpouseName"
-                                           id="iSpouseName"
-                                           data-ng-model="vm.entry.general.spouseName"
-                                           placeholder="Spouse's Name"
+                                           name="nBirthDate"
+                                           id="iBirthDate"
+                                           data-ng-model="vm.entry.general.dateOfBirth"
+                                           data-provide="datepicker"
+                                           data-date-format="dd/mm/yyyy"
+                                           placeholder="DD/MM/YYYY"
+                                           autocomplete="off"
                                            ng-readonly="vm.generalReadOnly"
                                            class="form-control" required>
-                                    <label data-ng-show="nGeneralForm.nSpouseName.$invalid && !nGeneralForm.nSpouseName.$pristine"
+                                    <label data-ng-show="nGeneralForm.nBirthDate.$invalid && !nGeneralForm.nBirthDate.$pristine"
                                            class="help-block control-label">
-                                        What is you spouse's name?</label>
+                                        Please provide us your DoB.</label>
                                 </div>
                                 <div data-ng-show="vm.generalReadOnly">
                                     <div class="underlineBox">
-                                        <label class="control-label">{{vm.entry.general.spouseName}}</label>
+                                        <label class="control-label">{{vm.entry.general.dateOfBirth}}</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-md-6">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nGeneralForm.nSpouseNationalId.$invalid && !nGeneralForm.nSpouseNationalId.$pristine}">
-                                <label for="iSpouseNationalId" class="control-label">Spouse's National Id Card
-                                    No</label>
+                            <div class="form-group">
+                                <label for="iNationalId" class="control-label">National
+                                    Id Card No.</label>
+
                                 <div data-ng-show="!vm.generalReadOnly">
                                     <input type="text"
-                                           name="nSpouseNationalId"
-                                           id="iSpouseNationalId"
-                                           data-ng-model="vm.entry.general.spouseNidNo"
-                                           placeholder="Spouse's National Id Card Number"
+                                           id="iNationalId"
+                                           name="nNationalId"
+                                           class="form-control"
                                            ng-readonly="vm.generalReadOnly"
-                                           class="form-control">
-                                    <label data-ng-show="nGeneralForm.nSpouseNationalId.$invalid && !nGeneralForm.nSpouseNationalId.$pristine"
-                                           class="help-block control-label">
-                                        Your spouses's national identity?</label>
+                                           data-ng-model="vm.entry.general.nidNo">
+                                </div>
+
+                                <div data-ng-show="vm.generalReadOnly">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{vm.entry.general.nidNo}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nGeneralForm.nMaritalStatus.$invalid && !nGeneralForm.nMaritalStatus.$pristine}">
+                                <label class="control-label" for="iMaritalStatus">Marital Status<span
+                                        data-ng-show="!vm.generalReadOnly"
+                                        class='require'>*</span></label>
+
+                                <div data-ng-show="!vm.generalReadOnly">
+                                    <select name="nMaritalStatus"
+                                            id="iMaritalStatus"
+                                            data-ng-model="vm.entry.general.maritalStatus"
+                                            data-ng-options="maritalStatus.name for maritalStatus in vm.maritalStatus track by maritalStatus.id"
+                                            ng-readonly="vm.generalReadOnly"
+                                            class="form-control" required>
+                                        <option value="">Select Marital Status</option>
+                                    </select>
+
+                                    <label data-ng-show="nGeneralForm.nMaritalStatus.$invalid && !nGeneralForm.nMaritalStatus.$pristine"
+                                           class="help-block control-label">Please select a marital status.</label>
                                 </div>
                                 <div data-ng-show="vm.generalReadOnly">
                                     <div class="underlineBox">
-                                        <label class="control-label">{{vm.entry.general.spouseNidNo}}</label>
+                                        <label class="control-label">{{vm.entry.general.maritalStatus.name}}</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nGeneralForm.nPersonalWebsite.$invalid && !nGeneralForm.nPersonalWebsite.$pristine}">
-                            <label for="iPersonalWebsite" class="control-label">Personal Website</label>
-                            <div data-ng-show="!vm.generalReadOnly">
-                                <input type="url"
-                                       name="nPersonalWebsite"
-                                       id="iPersonalWebsite"
-                                       data-ng-model="vm.entry.general.website"
-                                       placeholder="Personal Website"
-                                       ng-readonly="vm.generalReadOnly"
-                                       class="form-control">
-                                <label data-ng-show="nGeneralForm.nPersonalWebsite.$invalid && !nGeneralForm.nPersonalWebsite.$pristine"
-                                       class="help-block control-label">
-                                    Have any website or blog?</label>
+                    <div ng-if="vm.entry.general.maritalStatus.id==2">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nGeneralForm.nSpouseName.$invalid && !nGeneralForm.nSpouseName.$pristine}">
+                                    <label for="iSpouseName" class="control-label">Spouse's Name<span
+                                            data-ng-show="!vm.generalReadOnly"
+                                            class="require">*</span></label>
+
+                                    <div data-ng-show="!vm.generalReadOnly">
+                                        <input type="text"
+                                               name="nSpouseName"
+                                               id="iSpouseName"
+                                               data-ng-model="vm.entry.general.spouseName"
+                                               placeholder="Spouse's Name"
+                                               ng-readonly="vm.generalReadOnly"
+                                               class="form-control" required>
+                                        <label data-ng-show="nGeneralForm.nSpouseName.$invalid && !nGeneralForm.nSpouseName.$pristine"
+                                               class="help-block control-label">
+                                            Please provide spouse's name</label>
+                                    </div>
+                                    <div data-ng-show="vm.generalReadOnly">
+                                        <div class="underlineBox">
+                                            <label class="control-label">{{vm.entry.general.spouseName}}</label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div data-ng-show="vm.generalReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.general.website}}</label>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="iSpouseNationalId" class="control-label">Spouse's National Id Card
+                                        No</label>
+                                    <div data-ng-show="!vm.generalReadOnly">
+                                        <input type="text"
+                                               name="nSpouseNationalId"
+                                               id="iSpouseNationalId"
+                                               data-ng-model="vm.entry.general.spouseNidNo"
+                                               placeholder="Spouse's National Id Card Number"
+                                               ng-readonly="vm.generalReadOnly"
+                                               class="form-control">
+                                    </div>
+                                    <div data-ng-show="vm.generalReadOnly">
+                                        <div class="underlineBox">
+                                            <label class="control-label">{{vm.entry.general.spouseNidNo}}</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6"></div>
-                </div>
 
-                <div data-ng-if="vm.generalReadOnly==false">
                     <div class="row">
-                        <div class="col-md-1">
-                            <button type="button"
-                                    data-ng-click="vm.generalReadOnly=true; vm.getGeneralInformation();"
-                                    class="btn btn-danger btn-xs">Cancel
-                            </button>
+                        <div class="col-md-6">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nGeneralForm.nPersonalWebsite.$invalid && !nGeneralForm.nPersonalWebsite.$pristine}">
+                                <label for="iPersonalWebsite" class="control-label">Personal Website</label>
+                                <div data-ng-show="!vm.generalReadOnly">
+                                    <input type="url"
+                                           name="nPersonalWebsite"
+                                           id="iPersonalWebsite"
+                                           data-ng-model="vm.entry.general.website"
+                                           placeholder="Personal Website (ex: https://www.aust.edu)"
+                                           ng-readonly="vm.generalReadOnly"
+                                           class="form-control">
+                                    <label data-ng-show="nGeneralForm.nPersonalWebsite.$invalid && !nGeneralForm.nPersonalWebsite.$pristine"
+                                           class="help-block control-label">
+                                        Not a website</label>
+                                </div>
+                                <div data-ng-show="vm.generalReadOnly">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{vm.entry.general.website}}</label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-10"></div>
-                        <div class="col-md-1">
-                            <div align="right">
-                                <button type="submit" class="btn btn-success btn-xs"
-                                        data-ng-disabled="nGeneralForm.$invalid">Submit
+                        <div class="col-md-6"></div>
+                    </div>
+
+                    <div data-ng-if="vm.generalReadOnly==false">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <button type="button"
+                                        data-ng-click="vm.generalReadOnly=true; vm.getGeneralInformation();"
+                                        class="btn btn-danger btn-xs">Cancel
                                 </button>
+                            </div>
+                            <div class="col-md-10"></div>
+                            <div class="col-md-1">
+                                <div align="right">
+                                    <button type="submit" class="btn btn-success btn-xs"
+                                            data-ng-disabled="nGeneralForm.$invalid">Submit
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col-md-9">Contact Information</div>
-                <div class="col-md-3">
-                    <div data-ng-if="vm.enableEditButton">
-                        <div data-ng-if="vm.contactReadOnly==true">
-                            <div align="right">
-                                <a data-ng-click="vm.contactReadOnly=false" style="cursor: pointer;">
-                                    <i style="color: blue;" class="fa fa-edit"></i>
-                                </a>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-9">Contact Information</div>
+                    <div class="col-md-3">
+                        <div data-ng-if="vm.enableEditButton">
+                            <div data-ng-if="vm.contactReadOnly==true">
+                                <div align="right">
+                                    <a data-ng-click="vm.contactReadOnly=false" style="cursor: pointer;">
+                                        <i style="color: blue;" class="fa fa-edit"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="panel-body">
-            <form name="nContactForm" ng-submit="vm.submit('contact')" novalidate>
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nContactForm.nPersonalEmail.$invalid && !nContactForm.nPersonalEmail.$pristine}">
-                            <label for="iPersonalEmail" class="control-label">Personal Email<span
-                                    data-ng-show="!vm.contactReadOnly"
-                                    class="require">*</span></label>
-                            <div data-ng-show="!vm.contactReadOnly">
-                                <input type="email"
-                                       name="nPersonalEmail"
-                                       id="iPersonalEmail"
-                                       data-ng-model="vm.entry.contact.personalEmail"
-                                       placeholder="Personal Email"
-                                       ng-readonly="vm.contactReadOnly"
-                                       class="form-control" required>
-                                <label data-ng-show="nContactForm.nPersonalEmail.$invalid && !nContactForm.nPersonalEmail.$pristine"
-                                       class="help-block control-label">
-                                    example: someone@gmail.com.</label>
-                                <label data-ng-show="nContactForm.nPersonalEmail.$error.email"
-                                       class="help-block control-label">
-                                    Not an email address.</label>
-                            </div>
-                            <div data-ng-show="vm.contactReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.contact.personalEmail}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nContactForm.nOrganizationalEmail.$invalid && !nContactForm.nOrganizationalEmail.$pristine}">
-                            <label for="iOrganizationalEmail" class="control-label">Organizational Email</label>
-                            <div data-ng-show="!vm.contactReadOnly">
-                                <input type="email"
-                                       name="nOrganizationalEmail"
-                                       id="iOrganizationalEmail"
-                                       data-ng-model="vm.entry.contact.organizationalEmail"
-                                       ng-readonly="vm.contactReadOnly"
-                                       class="form-control">
-                                <label data-ng-show="nContactForm.nOrganizationalEmail.$error.email"
-                                       class="help-block control-label">
-                                    Not an email address.</label>
-                            </div>
-                            <div data-ng-show="vm.contactReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.contact.organizationalEmail}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nContactForm.nMobile.$invalid && !nContactForm.nMobile.$pristine}">
-                            <label for="iMobile" class="control-label">Mobile No<span
-                                    data-ng-show="!vm.contactReadOnly"
-                                    class="require">*</span></label>
-                            <div data-ng-show="!vm.contactReadOnly">
-                                <input type="text"
-                                       name="nMobile"
-                                       id="iMobile"
-                                       data-ng-model="vm.entry.contact.mobile"
-                                       placeholder="Mobile"
-                                       ng-readonly="vm.contactReadOnly"
-                                       class="form-control" required>
-                                <label data-ng-show="nContactForm.nMobile.$invalid && !nContactForm.nMobile.$pristine"
-                                       class="help-block control-label">
-                                    Only mobile number. Do not enter country code.</label>
-                            </div>
-                            <div data-ng-show="vm.contactReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.contact.mobile}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nContactForm.nPhone.$invalid && !nContactForm.nPhone.$pristine}">
-                            <label for="iPhone" class="control-label">Phone</label>
-                            <div data-ng-show="!vm.contactReadOnly">
-                                <input type="text"
-                                       name="nPhone"
-                                       id="iPhone"
-                                       data-ng-model="vm.entry.contact.phone"
-                                       placeholder="Phone"
-                                       ng-readonly="vm.contactReadOnly"
-                                       class="form-control">
-                                <label data-ng-show="nContactForm.nPhone.$invalid && !nContactForm.nPhone.$pristine"
-                                       class="help-block control-label">
-                                    Any more phn numbers?</label>
-                            </div>
-                            <div data-ng-show="vm.contactReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.contact.phone}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label class="control-label"><b>Present Address:</b></label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-9">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nContactForm.nPresentAddressHouse.$invalid && !nContactForm.nPresentAddressHouse.$pristine}">
-                            <label for="iPresentAddressHouse" class="control-label">Address Line 1<span
-                                    class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
-                            <div data-ng-show="!vm.contactReadOnly">
-                                <input type="text"
-                                       name="nPresentAddressHouse"
-                                       id="iPresentAddressHouse"
-                                       data-ng-model="vm.entry.contact.preAddressLine1"
-                                       placeholder="Personal Website"
-                                       ng-readonly="vm.contactReadOnly"
-                                       class="form-control" required>
-                                <label data-ng-show="nContactForm.nPresentAddressHouse.$invalid && !nContactForm.nPresentAddressHouse.$pristine"
-                                       class="help-block control-label">
-                                    flat/house and road/village name.</label>
-                            </div>
-                            <div data-ng-show="vm.contactReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.contact.preAddressLine1}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nContactForm.nPresentAddressCountry.$invalid && !nContactForm.nPresentAddressCountry.$pristine}">
-                            <label class="control-label" for="iPresentAddressCountry">Country<span
-                                    class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
-
-                            <div data-ng-show="!vm.contactReadOnly">
-                                <select name="nPresentAddressCountry"
-                                        id="iPresentAddressCountry"
-                                        data-ng-model="vm.entry.contact.preAddressCountry"
-                                        data-ng-options="country.name for country in vm.countries track by country.id"
-                                        data-ng-change="vm.changePresentAddressFields()"
-                                        ng-readonly="vm.contactReadOnly"
-                                        class="form-control" required>
-                                    <option value="">Select Country</option>
-                                </select>
-                                <label data-ng-show="nContactForm.nPresentAddressCountry.$invalid && !nContactForm.nPresentAddressCountry.$pristine"
-                                       class="help-block control-label">Yougender is required.</label>
-                            </div>
-                            <div data-ng-show="vm.contactReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.contact.preAddressCountry.name}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div data-ng-if="vm.entry.contact.preAddressCountry.name==='Bangladesh'">
+            <div class="panel-body">
+                <form name="nContactForm" ng-submit="vm.submit('contact')" novalidate>
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group"
-                                 ng-class="{ 'has-error' : nContactForm.nPresentAddressDivision.$invalid && !nContactForm.nPresentAddressDivision.$pristine}">
-                                <label class="control-label" for="iPresentAddressDivision">Division<span
+                                 ng-class="{ 'has-error' : nContactForm.nPersonalEmail.$invalid && !nContactForm.nPersonalEmail.$pristine}">
+                                <label for="iPersonalEmail" class="control-label">Personal Email<span
+                                        data-ng-show="!vm.contactReadOnly"
+                                        class="require">*</span></label>
+                                <div data-ng-show="!vm.contactReadOnly">
+                                    <input type="email"
+                                           name="nPersonalEmail"
+                                           id="iPersonalEmail"
+                                           data-ng-model="vm.entry.contact.personalEmail"
+                                           placeholder="Personal Email"
+                                           ng-readonly="vm.contactReadOnly"
+                                           class="form-control" required>
+                                    <label data-ng-show="nContactForm.nPersonalEmail.$invalid && !nContactForm.nPersonalEmail.$pristine"
+                                           class="help-block control-label">
+                                        example: someone@gmail.com.</label>
+                                    <label data-ng-show="nContactForm.nPersonalEmail.$error.email"
+                                           class="help-block control-label">
+                                        Not an email address.</label>
+                                </div>
+                                <div data-ng-show="vm.contactReadOnly">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{vm.entry.contact.personalEmail}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nContactForm.nOrganizationalEmail.$invalid && !nContactForm.nOrganizationalEmail.$pristine}">
+                                <label for="iOrganizationalEmail" class="control-label">Organizational Email</label>
+                                <div data-ng-show="!vm.contactReadOnly">
+                                    <input type="email"
+                                           name="nOrganizationalEmail"
+                                           id="iOrganizationalEmail"
+                                           data-ng-model="vm.entry.contact.organizationalEmail"
+                                           ng-readonly="vm.contactReadOnly"
+                                           class="form-control">
+                                    <label data-ng-show="nContactForm.nOrganizationalEmail.$error.email"
+                                           class="help-block control-label">
+                                        Not an email address.</label>
+                                </div>
+                                <div data-ng-show="vm.contactReadOnly">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{vm.entry.contact.organizationalEmail}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nContactForm.nMobile.$invalid && !nContactForm.nMobile.$pristine}">
+                                <label for="iMobile" class="control-label">Mobile No<span
+                                        data-ng-show="!vm.contactReadOnly"
+                                        class="require">*</span></label>
+                                <div data-ng-show="!vm.contactReadOnly">
+                                    <input type="text"
+                                           name="nMobile"
+                                           id="iMobile"
+                                           data-ng-model="vm.entry.contact.mobile"
+                                           placeholder="Mobile"
+                                           ng-readonly="vm.contactReadOnly"
+                                           class="form-control" required>
+                                    <label data-ng-show="nContactForm.nMobile.$invalid && !nContactForm.nMobile.$pristine"
+                                           class="help-block control-label">
+                                        Only mobile number. Do not enter country code.</label>
+                                </div>
+                                <div data-ng-show="vm.contactReadOnly">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{vm.entry.contact.mobile}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="iPhone" class="control-label">Phone</label>
+                                <div data-ng-show="!vm.contactReadOnly">
+                                    <input type="text"
+                                           name="nPhone"
+                                           id="iPhone"
+                                           data-ng-model="vm.entry.contact.phone"
+                                           placeholder="Phone"
+                                           ng-readonly="vm.contactReadOnly"
+                                           class="form-control">
+                                </div>
+                                <div data-ng-show="vm.contactReadOnly">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{vm.entry.contact.phone}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label"><b>Present Address:</b></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nContactForm.nPresentAddressHouse.$invalid && !nContactForm.nPresentAddressHouse.$pristine}">
+                                <label for="iPresentAddressHouse" class="control-label">Address Line 1<span
+                                        class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
+                                <div data-ng-show="!vm.contactReadOnly">
+                                    <input type="text"
+                                           name="nPresentAddressHouse"
+                                           id="iPresentAddressHouse"
+                                           data-ng-model="vm.entry.contact.preAddressLine1"
+                                           placeholder="Personal Website"
+                                           ng-readonly="vm.contactReadOnly"
+                                           class="form-control" required>
+                                    <label data-ng-show="nContactForm.nPresentAddressHouse.$invalid && !nContactForm.nPresentAddressHouse.$pristine"
+                                           class="help-block control-label">
+                                        flat/house and road/village name.</label>
+                                </div>
+                                <div data-ng-show="vm.contactReadOnly">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{vm.entry.contact.preAddressLine1}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nContactForm.nPresentAddressCountry.$invalid && !nContactForm.nPresentAddressCountry.$pristine}">
+                                <label class="control-label" for="iPresentAddressCountry">Country<span
                                         class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
 
                                 <div data-ng-show="!vm.contactReadOnly">
-                                    <select name="nPresentAddressDivision"
-                                            id="iPresentAddressDivision"
-                                            data-ng-model="vm.entry.contact.preAddressDivision"
-                                            data-ng-options="division.name for division in vm.divisions track by division.id"
-                                            data-ng-change="vm.changePresentAddressDistrict()"
+                                    <select name="nPresentAddressCountry"
+                                            id="iPresentAddressCountry"
+                                            data-ng-model="vm.entry.contact.preAddressCountry"
+                                            data-ng-options="country.name for country in vm.countries track by country.id"
+                                            data-ng-change="vm.changePresentAddressFields()"
                                             ng-readonly="vm.contactReadOnly"
                                             class="form-control" required>
-                                        <option value="">Select Division</option>
+                                        <option value="">Select Country</option>
                                     </select>
-                                    <label data-ng-show="nContactForm.nPresentAddressDivision.$invalid && !nContactForm.nPresentAddressDivision.$pristine"
-                                           class="help-block control-label">Yougender is required.</label>
+                                    <label data-ng-show="nContactForm.nPresentAddressCountry.$invalid && !nContactForm.nPresentAddressCountry.$pristine"
+                                           class="help-block control-label">Please select a country.</label>
                                 </div>
                                 <div data-ng-show="vm.contactReadOnly">
                                     <div class="underlineBox">
-                                        <label class="control-label">{{vm.entry.contact.preAddressDivision.name}}</label>
+                                        <label class="control-label">{{vm.entry.contact.preAddressCountry.name}}</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nContactForm.nPresentAddressDistrict.$invalid && !nContactForm.nPresentAddressDistrict.$pristine}">
-                                <label class="control-label" for="iPresentAddressDistrict">District<span
-                                        class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
+                    </div>
+
+                    <div data-ng-if="vm.entry.contact.preAddressCountry.name==='Bangladesh'">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nContactForm.nPresentAddressDivision.$invalid && !nContactForm.nPresentAddressDivision.$pristine}">
+                                    <label class="control-label" for="iPresentAddressDivision">Division<span
+                                            class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
+
+                                    <div data-ng-show="!vm.contactReadOnly">
+                                        <select name="nPresentAddressDivision"
+                                                id="iPresentAddressDivision"
+                                                data-ng-model="vm.entry.contact.preAddressDivision"
+                                                data-ng-options="division.name for division in vm.divisions track by division.id"
+                                                data-ng-change="vm.changePresentAddressDistrict()"
+                                                ng-readonly="vm.contactReadOnly"
+                                                class="form-control" required>
+                                            <option value="">Select Division</option>
+                                        </select>
+                                        <label data-ng-show="nContactForm.nPresentAddressDivision.$invalid && !nContactForm.nPresentAddressDivision.$pristine"
+                                               class="help-block control-label">Please select a division.</label>
+                                    </div>
+                                    <div data-ng-show="vm.contactReadOnly">
+                                        <div class="underlineBox">
+                                            <label class="control-label">{{vm.entry.contact.preAddressDivision.name}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nContactForm.nPresentAddressDistrict.$invalid && !nContactForm.nPresentAddressDistrict.$pristine}">
+                                    <label class="control-label" for="iPresentAddressDistrict">District<span
+                                            class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
+                                    <div data-ng-show="!vm.contactReadOnly">
+                                        <select name="nPresentAddressDistrict"
+                                                id="iPresentAddressDistrict"
+                                                data-ng-model="vm.entry.contact.preAddressDistrict"
+                                                data-ng-options="district.name for district in vm.presentAddressDistricts track by district.id"
+                                                data-ng-change="vm.changePresentAddressThana()"
+                                                ng-readonly="vm.contactReadOnly"
+                                                class="form-control" required>
+                                            <option value="">Select District</option>
+                                        </select>
+                                        <label data-ng-show="nContactForm.nPresentAddressDistrict.$invalid && !nContactForm.nPresentAddressDistrict.$pristine"
+                                               class="help-block control-label">Please select a district.</label>
+                                    </div>
+                                    <div data-ng-show="vm.contactReadOnly">
+                                        <div class="underlineBox">
+                                            <label class="control-label">{{vm.entry.contact.preAddressDistrict.name}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nContactForm.nPresentAddressPoliceStation.$invalid && !nContactForm.nPresentAddressPoliceStation.$pristine}">
+                                    <label class="control-label" for="iPresentAddressPoliceStation">Thana<span
+                                            class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
+                                    <div data-ng-show="!vm.contactReadOnly">
+                                        <select name="nPresentAddressPoliceStation"
+                                                id="iPresentAddressPoliceStation"
+                                                data-ng-model="vm.entry.contact.preAddressThana"
+                                                data-ng-options="thana.name for thana in vm.presentAddressThanas track by thana.id"
+                                                ng-readonly="vm.contactReadOnly"
+                                                class="form-control" required>
+                                            <option value="">Select Thana</option>
+                                        </select>
+                                        <label data-ng-show="nContactForm.nPresentAddressPoliceStation.$invalid && !nContactForm.nPresentAddressPoliceStation.$pristine"
+                                               class="help-block control-label">Please select a thana.</label>
+                                    </div>
+                                    <div data-ng-show="vm.contactReadOnly">
+                                        <div class="underlineBox">
+                                            <label class="control-label">{{vm.entry.contact.preAddressThana.name}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="iPresentAddressPostOffice" class="control-label">Post Code</label>
+                                    <div data-ng-show="!vm.contactReadOnly">
+                                        <input type="text"
+                                               name="nPresentAddressPostOffice"
+                                               id="iPresentAddressPostOffice"
+                                               data-ng-model="vm.entry.contact.preAddressPostCode"
+                                               placeholder="Police Post Office/Zip"
+                                               value=""
+                                               ng-readonly="vm.contactReadOnly"
+                                               class="form-control">
+                                    </div>
+                                    <div data-ng-show="vm.contactReadOnly">
+                                        <div class="underlineBox">
+                                            <label class="control-label">{{vm.entry.contact.preAddressPostCode}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label"><b>Permanent Address:</b></label>
                                 <div data-ng-show="!vm.contactReadOnly">
-                                    <select name="nPresentAddressDistrict"
-                                            id="iPresentAddressDistrict"
-                                            data-ng-model="vm.entry.contact.preAddressDistrict"
-                                            data-ng-options="district.name for district in vm.presentAddressDistricts track by district.id"
-                                            data-ng-change="vm.changePresentAddressThana()"
-                                            ng-readonly="vm.contactReadOnly"
-                                            class="form-control" required>
-                                        <option value="">Select District</option>
-                                    </select>
-                                    <label data-ng-show="nContactForm.nPresentAddressDistrict.$invalid && !nContactForm.nPresentAddressDistrict.$pristine"
-                                           class="help-block control-label">Yougender is required.</label>
-                                </div>
-                                <div data-ng-show="vm.contactReadOnly">
-                                    <div class="underlineBox">
-                                        <label class="control-label">{{vm.entry.contact.preAddressDistrict.name}}</label>
-                                    </div>
+                                    <input type="checkbox" data-ng-model="vm.checkBoxValue"
+                                           data-ng-click="vm.sameAsPresentAddress()"/>Same as present
+                                    address
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-9">
                             <div class="form-group"
-                                 ng-class="{ 'has-error' : nContactForm.nPresentAddressPoliceStation.$invalid && !nContactForm.nPresentAddressPoliceStation.$pristine}">
-                                <label class="control-label" for="iPresentAddressPoliceStation">Thana<span
+                                 ng-class="{ 'has-error' : nContactForm.nPermanentAddressHouse.$invalid && !nContactForm.nPermanentAddressHouse.$pristine}">
+                                <label for="iPermanentAddressHouse" class="control-label">Address Line 1<span
                                         class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
-                                <div data-ng-show="!vm.contactReadOnly">
-                                    <select name="nPresentAddressPoliceStation"
-                                            id="iPresentAddressPoliceStation"
-                                            data-ng-model="vm.entry.contact.preAddressThana"
-                                            data-ng-options="thana.name for thana in vm.presentAddressThanas track by thana.id"
-                                            ng-readonly="vm.contactReadOnly"
-                                            class="form-control" required>
-                                        <option value="">Select Thana</option>
-                                    </select>
-                                    <label data-ng-show="nContactForm.nPresentAddressPoliceStation.$invalid && !nContactForm.nPresentAddressPoliceStation.$pristine"
-                                           class="help-block control-label">Yougender is required.</label>
-                                </div>
-                                <div data-ng-show="vm.contactReadOnly">
-                                    <div class="underlineBox">
-                                        <label class="control-label">{{vm.entry.contact.preAddressThana.name}}</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nContactForm.nPresentAddressPostOffice.$invalid && !nContactForm.nPresentAddressPostOffice.$pristine}">
-                                <label for="iPresentAddressPostOffice" class="control-label">Post Code</label>
                                 <div data-ng-show="!vm.contactReadOnly">
                                     <input type="text"
-                                           name="nPresentAddressPostOffice"
-                                           id="iPresentAddressPostOffice"
-                                           data-ng-model="vm.entry.contact.preAddressPostCode"
-                                           placeholder="Police Post Office/Zip"
-                                           value=""
+                                           name="nPermanentAddressHouse"
+                                           id="iPermanentAddressHouse"
+                                           data-ng-model="vm.entry.contact.perAddressLine1"
+                                           placeholder="Personal Website"
                                            ng-readonly="vm.contactReadOnly"
-                                           class="form-control">
-                                    <label data-ng-show="nContactForm.nPresentAddressPostOffice.$invalid && !nContactForm.nPresentAddressPostOffice.$pristine"
+                                           class="form-control" required>
+                                    <label data-ng-show="nContactForm.nPermanentAddressHouse.$invalid && !nContactForm.nPermanentAddressHouse.$pristine"
                                            class="help-block control-label">
                                         Youname is required.</label>
                                 </div>
                                 <div data-ng-show="vm.contactReadOnly">
                                     <div class="underlineBox">
-                                        <label class="control-label">{{vm.entry.contact.preAddressPostCode}}</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label class="control-label"><b>Permanent Address:</b></label>
-                            <div data-ng-show="!vm.contactReadOnly">
-                                <input type="checkbox" data-ng-model="vm.checkBoxValue"
-                                       data-ng-click="vm.sameAsPresentAddress()"/>Same as present
-                                address
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-9">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nContactForm.nPermanentAddressHouse.$invalid && !nContactForm.nPermanentAddressHouse.$pristine}">
-                            <label for="iPermanentAddressHouse" class="control-label">Address Line 1<span
-                                    class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
-                            <div data-ng-show="!vm.contactReadOnly">
-                                <input type="text"
-                                       name="nPermanentAddressHouse"
-                                       id="iPermanentAddressHouse"
-                                       data-ng-model="vm.entry.contact.perAddressLine1"
-                                       placeholder="Personal Website"
-                                       ng-readonly="vm.contactReadOnly"
-                                       class="form-control" required>
-                                <label data-ng-show="nContactForm.nPermanentAddressHouse.$invalid && !nContactForm.nPermanentAddressHouse.$pristine"
-                                       class="help-block control-label">
-                                    Youname is required.</label>
-                            </div>
-                            <div data-ng-show="vm.contactReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.contact.perAddressLine1}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nContactForm.nPermanentAddressCountry.$invalid && !nContactForm.nPermanentAddressCountry.$pristine}">
-                            <label class="control-label" for="iPermanentAddressCountry">Country<span
-                                    class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
-                            <div data-ng-show="!vm.contactReadOnly">
-                                <select name="nPermanentAddressCountry"
-                                        id="iPermanentAddressCountry"
-                                        data-ng-model="vm.entry.contact.perAddressCountry"
-                                        data-ng-options="country.name for country in vm.countries track by country.id"
-                                        data-ng-change="vm.changePermanentAddressFields()"
-                                        ng-readonly="vm.contactReadOnly"
-                                        class="form-control" required>
-                                    <option value="">Select Country</option>
-                                </select>
-                                <label data-ng-show="nContactForm.nPermanentAddressCountry.$invalid && !nContactForm.nPermanentAddressCountry.$pristine"
-                                       class="help-block control-label">Select a country.</label>
-                            </div>
-                            <div data-ng-show="vm.contactReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.contact.perAddressCountry.name}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div data-ng-if="vm.entry.contact.perAddressCountry.name==='Bangladesh'">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nContactForm.nPermanentAddressDivision.$invalid && !nContactForm.nPermanentAddressDivision.$pristine}">
-                                <label class="control-label" for="iPermanentAddressDivision">Division<span
-                                        class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
-
-                                <div data-ng-show="!vm.contactReadOnly">
-                                    <select name="nPermanentAddressDivision"
-                                            id="iPermanentAddressDivision"
-                                            data-ng-model="vm.entry.contact.perAddressDivision"
-                                            data-ng-options="division.name for division in vm.divisions track by division.id"
-                                            data-ng-change="vm.changePermanentAddressDistrict()"
-                                            ng-readonly="vm.contactReadOnly"
-                                            class="form-control" required>
-                                        <option value="">Select Division</option>
-                                    </select>
-                                    <label data-ng-show="nContactForm.nPermanentAddressDivision.$invalid && !nContactForm.nPermanentAddressDivision.$pristine"
-                                           class="help-block control-label">Yougender is required.</label>
-                                </div>
-                                <div data-ng-show="vm.contactReadOnly">
-                                    <div class="underlineBox">
-                                        <label class="control-label">{{vm.entry.contact.perAddressDivision.name}}</label>
+                                        <label class="control-label">{{vm.entry.contact.perAddressLine1}}</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group"
-                                 ng-class="{ 'has-error' : nContactForm.nPermanentAddressDistrict.$invalid && !nContactForm.nPermanentAddressDistrict.$pristine}">
-                                <label class="control-label" for="iPermanentAddressDistrict">District<span
+                                 ng-class="{ 'has-error' : nContactForm.nPermanentAddressCountry.$invalid && !nContactForm.nPermanentAddressCountry.$pristine}">
+                                <label class="control-label" for="iPermanentAddressCountry">Country<span
                                         class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
                                 <div data-ng-show="!vm.contactReadOnly">
-                                    <select name="nPermanentAddressDistrict"
-                                            id="iPermanentAddressDistrict"
-                                            data-ng-model="vm.entry.contact.perAddressDistrict"
-                                            data-ng-options="district.name for district in vm.permanentAddressDistricts track by district.id"
-                                            data-ng-change="vm.changePermanentAddressThana()"
+                                    <select name="nPermanentAddressCountry"
+                                            id="iPermanentAddressCountry"
+                                            data-ng-model="vm.entry.contact.perAddressCountry"
+                                            data-ng-options="country.name for country in vm.countries track by country.id"
+                                            data-ng-change="vm.changePermanentAddressFields()"
                                             ng-readonly="vm.contactReadOnly"
                                             class="form-control" required>
-                                        <option value="">Select District</option>
+                                        <option value="">Select Country</option>
                                     </select>
-                                    <label data-ng-show="nContactForm.nPermanentAddressDistrict.$invalid && !nContactForm.nPermanentAddressDistrict.$pristine"
-                                           class="help-block control-label">Yougender is required.</label>
+                                    <label data-ng-show="nContactForm.nPermanentAddressCountry.$invalid && !nContactForm.nPermanentAddressCountry.$pristine"
+                                           class="help-block control-label">Please select a country.</label>
                                 </div>
                                 <div data-ng-show="vm.contactReadOnly">
                                     <div class="underlineBox">
-                                        <label class="control-label">{{vm.entry.contact.perAddressDistrict.name}}</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nContactForm.nPermanentAddressPoliceStation.$invalid && !nContactForm.nPermanentAddressPoliceStation.$pristine}">
-                                <label class="control-label" for="iPermanentAddressPoliceStation">Thana<span
-                                        class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
-
-                                <div data-ng-show="!vm.contactReadOnly">
-                                    <select name="nPermanentAddressPoliceStation"
-                                            id="iPermanentAddressPoliceStation"
-                                            data-ng-model="vm.entry.contact.perAddressThana"
-                                            data-ng-options="thana.name for thana in vm.permanentAddressThanas track by thana.id"
-                                            ng-readonly="vm.contactReadOnly"
-                                            class="form-control" required>
-                                        <option value="">Select Thana</option>
-                                    </select>
-                                    <label data-ng-show="nContactForm.nPermanentAddressPoliceStation.$invalid && !nContactForm.nPermanentAddressPoliceStation.$pristine"
-                                           class="help-block control-label">Yougender is required.</label>
-                                </div>
-                                <div data-ng-show="vm.contactReadOnly">
-                                    <div class="underlineBox">
-                                        <label class="control-label">{{vm.entry.contact.perAddressThana.name}}</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nContactForm.nPermanentAddressPostOffice.$invalid && !nContactForm.nPermanentAddressPostOffice.$pristine}">
-                                <label for="iPermanentAddressPostOffice" class="control-label">Post Code</label>
-                                <div data-ng-show="!vm.contactReadOnly">
-                                    <input type="text"
-                                           name="nPermanentAddressPostOffice"
-                                           id="iPermanentAddressPostOffice"
-                                           data-ng-model="vm.entry.contact.perAddressPostCode"
-                                           placeholder="Police Post Office/Zip"
-                                           value=""
-                                           ng-readonly="vm.contactReadOnly"
-                                           class="form-control">
-                                    <label data-ng-show="nContactForm.nPermanentAddressPostOffice.$invalid && !nContactForm.nPermanentAddressPostOffice.$pristine"
-                                           class="help-block control-label">
-                                        Youname is required.</label>
-                                </div>
-                                <div data-ng-show="vm.contactReadOnly">
-                                    <div class="underlineBox">
-                                        <label class="control-label">{{vm.entry.contact.perAddressPostCode}}</label>
+                                        <label class="control-label">{{vm.entry.contact.perAddressCountry.name}}</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div data-ng-if="vm.contactReadOnly==false">
-                    <div class="row">
-                        <div class="col-md-1">
-                            <button type="button" data-ng-click="vm.contactReadOnly=true; vm.getContactInformation();"
-                                    class="btn btn-danger btn-xs">Cancel
-                            </button>
+                    <div data-ng-if="vm.entry.contact.perAddressCountry.name==='Bangladesh'">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nContactForm.nPermanentAddressDivision.$invalid && !nContactForm.nPermanentAddressDivision.$pristine}">
+                                    <label class="control-label" for="iPermanentAddressDivision">Division<span
+                                            class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
+
+                                    <div data-ng-show="!vm.contactReadOnly">
+                                        <select name="nPermanentAddressDivision"
+                                                id="iPermanentAddressDivision"
+                                                data-ng-model="vm.entry.contact.perAddressDivision"
+                                                data-ng-options="division.name for division in vm.divisions track by division.id"
+                                                data-ng-change="vm.changePermanentAddressDistrict()"
+                                                ng-readonly="vm.contactReadOnly"
+                                                class="form-control" required>
+                                            <option value="">Select Division</option>
+                                        </select>
+                                        <label data-ng-show="nContactForm.nPermanentAddressDivision.$invalid && !nContactForm.nPermanentAddressDivision.$pristine"
+                                               class="help-block control-label">Please select a division.</label>
+                                    </div>
+                                    <div data-ng-show="vm.contactReadOnly">
+                                        <div class="underlineBox">
+                                            <label class="control-label">{{vm.entry.contact.perAddressDivision.name}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nContactForm.nPermanentAddressDistrict.$invalid && !nContactForm.nPermanentAddressDistrict.$pristine}">
+                                    <label class="control-label" for="iPermanentAddressDistrict">District<span
+                                            class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
+                                    <div data-ng-show="!vm.contactReadOnly">
+                                        <select name="nPermanentAddressDistrict"
+                                                id="iPermanentAddressDistrict"
+                                                data-ng-model="vm.entry.contact.perAddressDistrict"
+                                                data-ng-options="district.name for district in vm.permanentAddressDistricts track by district.id"
+                                                data-ng-change="vm.changePermanentAddressThana()"
+                                                ng-readonly="vm.contactReadOnly"
+                                                class="form-control" required>
+                                            <option value="">Select District</option>
+                                        </select>
+                                        <label data-ng-show="nContactForm.nPermanentAddressDistrict.$invalid && !nContactForm.nPermanentAddressDistrict.$pristine"
+                                               class="help-block control-label">Please select a district.</label>
+                                    </div>
+                                    <div data-ng-show="vm.contactReadOnly">
+                                        <div class="underlineBox">
+                                            <label class="control-label">{{vm.entry.contact.perAddressDistrict.name}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group"
+                                     ng-class="{ 'has-error' : nContactForm.nPermanentAddressPoliceStation.$invalid && !nContactForm.nPermanentAddressPoliceStation.$pristine}">
+                                    <label class="control-label" for="iPermanentAddressPoliceStation">Thana<span
+                                            class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
+
+                                    <div data-ng-show="!vm.contactReadOnly">
+                                        <select name="nPermanentAddressPoliceStation"
+                                                id="iPermanentAddressPoliceStation"
+                                                data-ng-model="vm.entry.contact.perAddressThana"
+                                                data-ng-options="thana.name for thana in vm.permanentAddressThanas track by thana.id"
+                                                ng-readonly="vm.contactReadOnly"
+                                                class="form-control" required>
+                                            <option value="">Select Thana</option>
+                                        </select>
+                                        <label data-ng-show="nContactForm.nPermanentAddressPoliceStation.$invalid && !nContactForm.nPermanentAddressPoliceStation.$pristine"
+                                               class="help-block control-label">Please select a thana.</label>
+                                    </div>
+                                    <div data-ng-show="vm.contactReadOnly">
+                                        <div class="underlineBox">
+                                            <label class="control-label">{{vm.entry.contact.perAddressThana.name}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="iPermanentAddressPostOffice" class="control-label">Post Code</label>
+                                    <div data-ng-show="!vm.contactReadOnly">
+                                        <input type="text"
+                                               name="nPermanentAddressPostOffice"
+                                               id="iPermanentAddressPostOffice"
+                                               data-ng-model="vm.entry.contact.perAddressPostCode"
+                                               placeholder="Police Post Office/Zip"
+                                               value=""
+                                               ng-readonly="vm.contactReadOnly"
+                                               class="form-control">
+                                    </div>
+                                    <div data-ng-show="vm.contactReadOnly">
+                                        <div class="underlineBox">
+                                            <label class="control-label">{{vm.entry.contact.perAddressPostCode}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-10"></div>
-                        <div class="col-md-1">
-                            <div align="right">
-                                <button type="submit" class="btn btn-success btn-xs"
-                                        data-ng-disabled="nContactForm.$invalid">Submit
+                    </div>
+
+                    <div data-ng-if="vm.contactReadOnly==false">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <button type="button"
+                                        data-ng-click="vm.contactReadOnly=true; vm.getContactInformation();"
+                                        class="btn btn-danger btn-xs">Cancel
                                 </button>
                             </div>
+                            <div class="col-md-10"></div>
+                            <div class="col-md-1">
+                                <div align="right">
+                                    <button type="submit" class="btn btn-success btn-xs"
+                                            data-ng-disabled="nContactForm.$invalid">Submit
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col-md-9">Emergency Contact Information</div>
-                <div class="col-md-3">
-                    <div data-ng-if="vm.enableEditButton">
-                        <div data-ng-if="vm.emergencyContactReadOnly==true">
-                            <div align="right">
-                                <a data-ng-click="vm.emergencyContactReadOnly=false" style="cursor: pointer;">
-                                    <i style="color: blue;" class="fa fa-edit"></i>
-                                </a>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-9">Emergency Contact Information</div>
+                    <div class="col-md-3">
+                        <div data-ng-if="vm.enableEditButton">
+                            <div data-ng-if="vm.emergencyContactReadOnly==true">
+                                <div align="right">
+                                    <a data-ng-click="vm.emergencyContactReadOnly=false" style="cursor: pointer;">
+                                        <i style="color: blue;" class="fa fa-edit"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="panel-body">
+            <div class="panel-body">
 
-            <form name="nEmergencyContactForm" ng-submit="vm.submit('emergencyContact')" novalidate>
-                <div class="row">
-                    <div class="col-md-9">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nEmergencyContactForm.nEmergencyContactName.$invalid && !nEmergencyContactForm.nEmergencyContactName.$pristine}">
-                            <label for="iEmergencyContactName" class="control-label">Name<span
-                                    class="require" data-ng-show="!vm.emergencyContactReadOnly">*</span></label>
-                            <div data-ng-show="!vm.emergencyContactReadOnly">
-                                <input type="text"
-                                       name="nEmergencyContactName"
-                                       id="iEmergencyContactName"
-                                       data-ng-model="vm.entry.emergencyContact.emergencyContactName"
-                                       placeholder="Name"
-                                       ng-readonly="vm.emergencyContactReadOnly"
-                                       class="form-control" required>
-                                <label data-ng-show="nEmergencyContactForm.nEmergencyContactName.$invalid && !nEmergencyContactForm.nEmergencyContactName.$pristine"
-                                       class="help-block control-label">
-                                    With whom we can contact in your absence.</label>
+                <form name="nEmergencyContactForm" ng-submit="vm.submit('emergencyContact')" novalidate>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nEmergencyContactForm.nEmergencyContactName.$invalid && !nEmergencyContactForm.nEmergencyContactName.$pristine}">
+                                <label for="iEmergencyContactName" class="control-label">Name<span
+                                        class="require" data-ng-show="!vm.emergencyContactReadOnly">*</span></label>
+                                <div data-ng-show="!vm.emergencyContactReadOnly">
+                                    <input type="text"
+                                           name="nEmergencyContactName"
+                                           id="iEmergencyContactName"
+                                           data-ng-model="vm.entry.emergencyContact.emergencyContactName"
+                                           placeholder="Name"
+                                           ng-readonly="vm.emergencyContactReadOnly"
+                                           class="form-control" required>
+                                    <label data-ng-show="nEmergencyContactForm.nEmergencyContactName.$invalid && !nEmergencyContactForm.nEmergencyContactName.$pristine"
+                                           class="help-block control-label">
+                                        With whom we can contact in your absence.</label>
+                                </div>
+                                <div data-ng-show="vm.emergencyContactReadOnly">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{vm.entry.emergencyContact.emergencyContactName}}</label>
+                                    </div>
+                                </div>
                             </div>
-                            <div data-ng-show="vm.emergencyContactReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.emergencyContact.emergencyContactName}}</label>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nEmergencyContactForm.nEmergencyContactRelation.$invalid && !nEmergencyContactForm.nEmergencyContactRelation.$pristine}">
+                                <label for="iEmergencyContactRelation" class="control-label">Relation<span
+                                        class="require" data-ng-show="!vm.emergencyContactReadOnly">*</span></label>
+                                <div data-ng-show="!vm.emergencyContactReadOnly">
+                                    <select name="nEmergencyContactRelation"
+                                            id="iEmergencyContactRelation"
+                                            data-ng-model="vm.entry.emergencyContact.emergencyContactRelation"
+                                            data-ng-options="relation.name for relation in vm.relations track by relation.id"
+                                            ng-readonly="vm.emergencyContactReadOnly"
+                                            class="form-control" required>
+                                        <option value="">Select Relation</option>
+                                    </select>
+                                    <label data-ng-show="nEmergencyContactForm.nEmergencyContactRelation.$invalid && !nEmergencyContactForm.nEmergencyContactRelation.$pristine"
+                                           class="help-block control-label">
+                                        Relation is required.</label>
+                                </div>
+
+                                <div data-ng-show="vm.emergencyContactReadOnly">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{vm.entry.emergencyContact.emergencyContactRelation.name}}</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nEmergencyContactForm.nEmergencyContactRelation.$invalid && !nEmergencyContactForm.nEmergencyContactRelation.$pristine}">
-                            <label for="iEmergencyContactRelation" class="control-label">Relation<span
-                                    class="require" data-ng-show="!vm.emergencyContactReadOnly">*</span></label>
-                            <div data-ng-show="!vm.emergencyContactReadOnly">
-                                <select name="nEmergencyContactRelation"
-                                        id="iEmergencyContactRelation"
-                                        data-ng-model="vm.entry.emergencyContact.emergencyContactRelation"
-                                        data-ng-options="relation.name for relation in vm.relations track by relation.id"
-                                        ng-readonly="vm.emergencyContactReadOnly"
-                                        class="form-control" required>
-                                    <option value="">Select Relation</option>
-                                </select>
-                                <label data-ng-show="nEmergencyContactForm.nEmergencyContactRelation.$invalid && !nEmergencyContactForm.nEmergencyContactRelation.$pristine"
-                                       class="help-block control-label">
-                                    Youname is required.</label>
-                            </div>
 
-                            <div data-ng-show="vm.emergencyContactReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.emergencyContact.emergencyContactRelation.name}}</label>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nEmergencyContactForm.nEmergencyContactPhone.$invalid && !nEmergencyContactForm.nEmergencyContactPhone.$pristine}">
+                                <label for="iEmergencyContactPhone" class="control-label">Phone<span
+                                        class="require" data-ng-show="!vm.emergencyContactReadOnly">*</span></label>
+                                <div data-ng-show="!vm.emergencyContactReadOnly">
+                                    <input type="text"
+                                           name="nEmergencyContactPhone"
+                                           id="iEmergencyContactPhone"
+                                           data-ng-model="vm.entry.emergencyContact.emergencyContactPhone"
+                                           placeholder="Phone"
+                                           ng-readonly="vm.emergencyContactReadOnly"
+                                           class="form-control" required>
+                                    <label data-ng-show="nEmergencyContactForm.nEmergencyContactPhone.$invalid && !nEmergencyContactForm.nEmergencyContactPhone.$pristine"
+                                           class="help-block control-label">
+                                        Contact number is required.</label>
+                                </div>
+                                <div data-ng-show="vm.emergencyContactReadOnly">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{vm.entry.emergencyContact.emergencyContactPhone}}</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nEmergencyContactForm.nEmergencyContactPhone.$invalid && !nEmergencyContactForm.nEmergencyContactPhone.$pristine}">
-                            <label for="iEmergencyContactPhone" class="control-label">Phone<span
-                                    class="require" data-ng-show="!vm.emergencyContactReadOnly">*</span></label>
-                            <div data-ng-show="!vm.emergencyContactReadOnly">
-                                <input type="text"
-                                       name="nEmergencyContactPhone"
-                                       id="iEmergencyContactPhone"
-                                       data-ng-model="vm.entry.emergencyContact.emergencyContactPhone"
-                                       placeholder="Phone"
-                                       ng-readonly="vm.emergencyContactReadOnly"
-                                       class="form-control" required>
-                                <label data-ng-show="nEmergencyContactForm.nEmergencyContactPhone.$invalid && !nEmergencyContactForm.nEmergencyContactPhone.$pristine"
-                                       class="help-block control-label">
-                                    Youname is required.</label>
-                            </div>
-                            <div data-ng-show="vm.emergencyContactReadOnly">
-                                <div class="underlineBox">
-                                    <label class="control-label">{{vm.entry.emergencyContact.emergencyContactPhone}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-9">
-                        <div class="form-group"
-                             ng-class="{ 'has-error' : nEmergencyContactForm.nEmergencyContactAddress.$invalid && !nEmergencyContactForm.nEmergencyContactAddress.$pristine}">
+                        <div class="col-md-9">
                             <label for="iEmergencyContactAddress" class="control-label">Address</label>
                             <div data-ng-show="!vm.emergencyContactReadOnly">
                                 <input type="text"
@@ -1035,9 +1020,6 @@
                                        placeholder="Address"
                                        ng-readonly="vm.emergencyContactReadOnly"
                                        class="form-control">
-                                <label data-ng-show="nEmergencyContactForm.nEmergencyContactAddress.$invalid && !nEmergencyContactForm.nEmergencyContactAddress.$pristine"
-                                       class="help-block control-label">
-                                    Youname is required.</label>
                             </div>
                             <div data-ng-show="vm.emergencyContactReadOnly">
                                 <div class="underlineBox">
@@ -1046,30 +1028,29 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div data-ng-if="vm.emergencyContactReadOnly==false">
-                    <div class="row">
-                        <div class="col-md-1">
-                            <button type="button"
-                                    data-ng-click="vm.emergencyContactReadOnly=true; vm.getEmergencyContactInformation();"
-                                    class="btn btn-danger btn-xs">Cancel
-                            </button>
-                        </div>
-                        <div class="col-md-10"></div>
-                        <div class="col-md-1">
-                            <div align="right">
-                                <button type="submit" class="btn btn-success btn-xs"
-                                        data-ng-disabled="nEmergencyContactForm.$invalid">Submit
+                    <div data-ng-if="vm.emergencyContactReadOnly==false">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <button type="button"
+                                        data-ng-click="vm.emergencyContactReadOnly=true; vm.getEmergencyContactInformation();"
+                                        class="btn btn-danger btn-xs">Cancel
                                 </button>
+                            </div>
+                            <div class="col-md-10"></div>
+                            <div class="col-md-1">
+                                <div align="right">
+                                    <button type="submit" class="btn btn-success btn-xs"
+                                            data-ng-disabled="nEmergencyContactForm.$invalid">Submit
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </div>
-
 
 <div id="modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
     <div class="modal-dialog">

@@ -16,9 +16,13 @@ public interface AgendaResolution extends Serializable, EditType<MutableAgendaRe
 
   String getAgendaEditor();
 
+  String getPlainAgenda();
+
   String getResolution();
 
   String getResolutionEditor();
+
+  String getPlainResolution();
 
   Long getScheduleId();
 }

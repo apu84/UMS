@@ -1,0 +1,14 @@
+version: "2"
+services:
+  oraclexe:
+    image: sath89/oracle-xe-11g
+    ports:
+    - "15080:8080"
+    - "1521:1521"
+    volumes:
+    - "C:/oracle/oradata:/u01/app/oracle1"
+    - "C:/oracle/dmp:/home"
+
+
+#alter database datafile '/u01/app/oracle/oradata/XE/system.dbf' autoextend on next 128m maxsize 8192m;
+#alter database datafile 'C:/oraclexe/app/oracle/oradata/XE/system.dbf' autoextend on next 128m maxsize 8192m;

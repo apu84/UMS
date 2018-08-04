@@ -11,24 +11,21 @@ import org.ums.domain.model.immutable.accounts.Currency;
 import org.ums.domain.model.mutable.accounts.MutableAccountBalance;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
 import org.ums.domain.model.mutable.accounts.MutableChequeRegister;
-import org.ums.enums.accounts.definitions.account.balance.AccountType;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.currency.CurrencyFlag;
 import org.ums.enums.accounts.definitions.group.GroupType;
 import org.ums.enums.accounts.general.ledger.reports.FetchType;
-import org.ums.enums.accounts.general.ledger.vouchers.AccountTransactionType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
 import org.ums.persistent.model.accounts.PersistentAccountBalance;
 import org.ums.service.AccountBalanceService;
 import org.ums.service.AccountTransactionService;
-import org.ums.util.UmsAccountUtils;
 import org.ums.util.UmsUtils;
+import org.ums.util.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -38,7 +35,7 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.ums.util.UmsAccountUtils.*;
+import static org.ums.util.Utils.*;
 
 /**
  * Created by Monjur-E-Morshed on 20-Mar-18.
@@ -145,7 +142,7 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
     setTopAndBottomBorderAndAddCell(table, cell);
     table.setHeaderRows(1);
 
-    FinancialAccountYear currentFinancialAccountYear = mFinancialAccountYearManager.getOpenedFinancialAccountYear();
+    FinancialAccountYear currentFinancialAccountYear = mFinancialAccountYearManager.getOpenedFinancialAccountYear(Utils.getCompany());
     AccountBalance accountBalance = new PersistentAccountBalance();
     LocalDate fromDateLocalDateFormat = fromDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     LocalDate toDateLocalDateFormat = toDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -154,8 +151,8 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
     if (pAccountId != null) {
       accountTransactions = mAccountTransactionManager.getAccountTransactions(UmsUtils.convertToDate("01-01-" + fromDateLocalDateFormat.getYear(), "dd-MM-yyyy"), toDate, mAccountManager.get(pAccountId));
     } else if (pGroupCode != null) {
-      List<Group> groupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(pGroupCode));
-      accountsOfTheGroup = mAccountManager.getIncludingGroups(groupList.stream().map(g -> g.getGroupCode()).collect(Collectors.toList()));
+      List<Group> groupList = mGroupManager.getIncludingMainGroupList(Arrays.asList(pGroupCode), Utils.getCompany());
+      accountsOfTheGroup = mAccountManager.getIncludingGroups(groupList.stream().map(g -> g.getGroupCode()).collect(Collectors.toList()), Utils.getCompany());
       accountTransactions = mAccountTransactionManager.getAccountTransactions(UmsUtils.convertToDate("01-01-" + fromDateLocalDateFormat.getYear(), "dd-MM-yyyy"), toDate, accountsOfTheGroup);
     } else {
       accountTransactions = mAccountTransactionManager.getAccountTransactions(UmsUtils.convertToDate("01-01-" + fromDateLocalDateFormat.getYear(), "dd-MM-yyyy"), toDate);
@@ -208,7 +205,6 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
     }
 
 
-
     List<MutableAccountBalance> accountBalanceList = mAccountBalanceManager.getAccountBalance(currentFinancialAccountYear.getCurrentStartDate(),
         currentFinancialAccountYear.getCurrentEndDate(), accountList);
     Map<Account, MutableAccountBalance> accountBalanceMap = accountBalanceList
@@ -234,18 +230,18 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
       cell.setColspan(4);
       cell.setHorizontalAlignment(Element.ALIGN_CENTER);
       setTopBorderAndAddCell(table, cell);
-      BigDecimal totalOpeningBalance=  mAccountBalanceService.getTillLastMonthBalance(account,
-          mFinancialAccountYearManager.getOpenedFinancialAccountYear(), fromDate, accountBalance);
+      BigDecimal totalOpeningBalance = mAccountBalanceService.getTillLastMonthBalance(account,
+          mFinancialAccountYearManager.getOpenedFinancialAccountYear(Utils.getCompany()), fromDate, accountBalance);
       totalOpeningBalance = totalOpeningBalance.add(accountTransactionService.getTotalBalance(
-              accountTransactions.
-                      stream()
-                      .filter(t->
-                              t.getVoucherDate().after(UmsUtils.convertFromLocalDateToDate(UmsUtils.convertFromDateToLocalDate(firstDateOfTheFromDateInstance).minusDays(1)))
-                              && t.getVoucherDate().before(fromDate)
-                      )
-                      .collect(Collectors.toList())));
+          accountTransactions.
+              stream()
+              .filter(t ->
+                  t.getVoucherDate().after(UmsUtils.convertFromLocalDateToDate(UmsUtils.convertFromDateToLocalDate(firstDateOfTheFromDateInstance).minusDays(1)))
+                      && t.getVoucherDate().before(fromDate)
+              )
+              .collect(Collectors.toList())));
 
-      String balanceStr = UmsAccountUtils.getBalanceInDebitOrCredit(totalOpeningBalance);
+      String balanceStr = Utils.getBalanceInDebitOrCredit(totalOpeningBalance);
       cell = new PdfPCell(new Paragraph(balanceStr, mLiteFont));
       cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
       setTopBorderAndAddCell(table, cell);
@@ -253,8 +249,8 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
       List<AccountTransaction> accountReportBodyTransactions = new ArrayList<>();
       if (accountTransactionMapWithAccount.containsKey(account.getId()))
         accountReportBodyTransactions = accountTransactionMapWithAccount.get(account.getId()).stream()
-          .filter(t -> t.getVoucherDate().after(UmsUtils.convertFromLocalDateToDate(fromDateLocalDateFormat.minusDays(1))) && t.getVoucherDate().before(UmsUtils.convertFromLocalDateToDate(toDateLocalDateFormat.plusDays(1))))
-          .collect(Collectors.toList());
+            .filter(t -> t.getVoucherDate().after(UmsUtils.convertFromLocalDateToDate(fromDateLocalDateFormat.minusDays(1))) && t.getVoucherDate().before(UmsUtils.convertFromLocalDateToDate(toDateLocalDateFormat.plusDays(1))))
+            .collect(Collectors.toList());
 
       for (AccountTransaction transaction : accountReportBodyTransactions) {
         cell = new PdfPCell(new Paragraph(UmsUtils.formatDate(transaction.getVoucherDate(), "dd-MM-yyyy"), mLiteFont));
@@ -268,16 +264,16 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
         setNoBorderAndAddCell(table, cell);
 
 
-        if (mSystemGroupMapManager.exists(GroupType.BANK_ACCOUNTS, mCompanyManager.getDefaultCompany()) &&
-                transaction.getAccount().getAccGroupCode().equals(mSystemGroupMapManager.get(GroupType.BANK_ACCOUNTS, mCompanyManager.getDefaultCompany()).getGroup().getGroupCode())) {
+        if (mSystemGroupMapManager.exists(GroupType.BANK_ACCOUNTS, Utils.getCompany()) &&
+            transaction.getAccount().getAccGroupCode().equals(mSystemGroupMapManager.get(GroupType.BANK_ACCOUNTS, Utils.getCompany()).getGroup().getGroupCode())) {
           ChequeRegister chequeRegister = chequeRegisterMapWithTransactionId.get(transaction.getId());
 
 
-          cell = new PdfPCell(new Paragraph(chequeRegister==null?" ":chequeRegister.getChequeNo(), mLiteFont));
+          cell = new PdfPCell(new Paragraph(chequeRegister == null ? " " : chequeRegister.getChequeNo(), mLiteFont));
           setNoBorderAndAddCell(table, cell);
 
 
-          cell = new PdfPCell(new Paragraph(chequeRegister==null? " ": UmsUtils.formatDate(chequeRegister.getChequeDate(), "dd-MM-yyyy"), mLiteFont));
+          cell = new PdfPCell(new Paragraph(chequeRegister == null ? " " : UmsUtils.formatDate(chequeRegister.getChequeDate(), "dd-MM-yyyy"), mLiteFont));
           setNoBorderAndAddCell(table, cell);
 
 
@@ -288,25 +284,24 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
 
         }
 
-        cell = new PdfPCell(new Paragraph(transaction.getBalanceType().equals(BalanceType.Dr) ? UmsAccountUtils.getFormattedBalance(transaction.getAmount()) : "", mLiteFont));
+        cell = new PdfPCell(new Paragraph(transaction.getBalanceType().equals(BalanceType.Dr) ? Utils.getFormattedBalance(transaction.getAmount()) : "", mLiteFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         setNoBorderAndAddCell(table, cell);
 
 
-        cell = new PdfPCell(new Paragraph(transaction.getBalanceType().equals(BalanceType.Cr) ? UmsAccountUtils.getFormattedBalance(transaction.getAmount()) : " ", mLiteFont));
+        cell = new PdfPCell(new Paragraph(transaction.getBalanceType().equals(BalanceType.Cr) ? Utils.getFormattedBalance(transaction.getAmount()) : " ", mLiteFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         setNoBorderAndAddCell(table, cell);
 
 
-        if (transaction.getBalanceType().equals(BalanceType.Dr)){
-          totalOpeningBalance =totalOpeningBalance.add(transaction.getAmount());
-        }
-        else{
+        if (transaction.getBalanceType().equals(BalanceType.Dr)) {
+          totalOpeningBalance = totalOpeningBalance.add(transaction.getAmount());
+        } else {
           totalOpeningBalance = totalOpeningBalance.subtract(transaction.getAmount());
         }
 
 
-        cell = new PdfPCell(new Paragraph(UmsAccountUtils.getBalanceInDebitOrCredit(totalOpeningBalance), mLiteFont));
+        cell = new PdfPCell(new Paragraph(Utils.getBalanceInDebitOrCredit(totalOpeningBalance), mLiteFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         setNoBorderAndAddCell(table, cell);
 
@@ -321,19 +316,19 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
       BigDecimal totalDebitBalance = new BigDecimal(0);
       BigDecimal totalCreditBalance = new BigDecimal(0);
 
-      totalDebitBalance = UmsAccountUtils.countTotalAmount(accountReportBodyTransactions.stream().filter(t -> t.getBalanceType().equals(BalanceType.Dr)).collect(Collectors.toList()));
-      totalCreditBalance = UmsAccountUtils.countTotalAmount(accountReportBodyTransactions.stream().filter(t -> t.getBalanceType().equals(BalanceType.Cr)).collect(Collectors.toList()));
+      totalDebitBalance = Utils.countTotalAmount(accountReportBodyTransactions.stream().filter(t -> t.getBalanceType().equals(BalanceType.Dr)).collect(Collectors.toList()));
+      totalCreditBalance = Utils.countTotalAmount(accountReportBodyTransactions.stream().filter(t -> t.getBalanceType().equals(BalanceType.Cr)).collect(Collectors.toList()));
 
-      cell = new PdfPCell(new Paragraph(UmsAccountUtils.getFormattedBalance(totalDebitBalance), mLiteFont));
+      cell = new PdfPCell(new Paragraph(Utils.getFormattedBalance(totalDebitBalance), mLiteFont));
       cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
       setTopBorderAndAddCell(table, cell);
 
 
-      cell = new PdfPCell(new Paragraph(UmsAccountUtils.getFormattedBalance(totalCreditBalance), mLiteFont));
+      cell = new PdfPCell(new Paragraph(Utils.getFormattedBalance(totalCreditBalance), mLiteFont));
       cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
       setTopBorderAndAddCell(table, cell);
 
-      cell = new PdfPCell(new Paragraph(UmsAccountUtils.getBalanceInDebitOrCredit(totalOpeningBalance), mLiteFont));
+      cell = new PdfPCell(new Paragraph(Utils.getBalanceInDebitOrCredit(totalOpeningBalance), mLiteFont));
       cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
       setTopBorderAndAddCell(table, cell);
     }
@@ -355,7 +350,7 @@ public class GeneralLedgerReportGeneratorImpl implements GeneralLedgerReportGene
     Phrase innerPhrase = new Phrase();
     Paragraph paragraph = new Paragraph("Company: ", mBoldFont);
     innerPhrase.add(paragraph);
-    Company company = mCompanyManager.getDefaultCompany();
+    Company company = Utils.getCompany();
     paragraph = new Paragraph(company.getName(), mLiteFont);
     innerPhrase.add(paragraph);
     leftCell.addElement(innerPhrase);

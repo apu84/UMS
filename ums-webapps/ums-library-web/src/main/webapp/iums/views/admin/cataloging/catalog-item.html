@@ -32,6 +32,7 @@
                     <th class="numeric">Accession No</th>
                     <th class="numeric">Accession Date</th>
                     <th class="numeric">Binding Type</th>
+                    <th class="numeric">Paper Quality</th>
                     <th class="numeric">Acqui. Type</th>
                     <th class="numeric">Currency</th>
                     <th class="numeric" style="text-align: center">Purchase Price</th>
@@ -47,6 +48,7 @@
                     <td data-title="Accession No" class="numeric">{{item.accessionNumber}}</td>
                     <td data-title="Accession Date" class="numeric">{{item.accessionDate}}</td>
                     <td data-title="bindingType" class="numeric">{{item.bindingTypeName}}</td>
+                    <td data-title="paperQuality" class="numeric">{{item.paperQuality}}</td>
                     <td data-title="acqType" class="numeric">{{item.acqTypeName}}</td>
                     <td data-title="Currency" class="numeric">{{item.currencyName}}</td>
                     <td data-title="Purchase Price" class="numeric" style="text-align: right">{{item.price}}</td>
@@ -152,7 +154,7 @@
                 <select style="width: 98%" class="required" data-ng-model="item.currency" id="currency"
                         name="currency" ng-disabled="data.itemReadOnlyMode"
                         ng-class="{'disabledElement': data.itemReadOnlyMode}" data-convert-to-number>
-                    <option data-ng-repeat="currency in currencies" value="{{currency.id}}">{{currency.notation}}
+                    <option data-ng-repeat="currency in data.currencies" value="{{currency.id}}">{{currency.name}}
                     </option>
                 </select>
             </div>
@@ -222,6 +224,14 @@
             </div>
 
         </div>
+
+        <div class="form-group">
+            <label class="col-md-1 control-label" for="paperQuality">Paper Quality</label>
+            <div class="col-md-3">
+                <input type="text" placeholder="" class="form-control dottedInput"
+                       data-ng-model="item.paperQuality" name="paperQuality" id="paperQuality"/>
+            </div>
+        </div>
     </div>
 
     <div class="row" data-ng-show="data.showItemMainButtonPanel">
@@ -249,6 +259,7 @@
                 <th align="center" width="8%" style="text-align: center;">Accession Date</th>
                 <th align="center" width="10%" style="text-align: center;">Barcode</th>
                 <th align="center" width="12%" style="text-align: center;">Binding Type</th>
+                <th align="center" width="12%" style="text-align: center;">Paper Quality</th>
                 <th align="center" width="12%" style="text-align: center;">Acqui. Type</th>
                 <th align="center" width="8%" style="text-align: center;">Currency</th>
                 <th align="center" width="8%" style="text-align: center;">Price</th>
@@ -276,7 +287,13 @@
                     <option data-ng-repeat="bindingType in data.bindingTypeOptions" value="{{bindingType.id}}">
                         {{acqType.name}}
                     </option>
-                </select></td>
+                </select>
+                </td>
+
+                <td align="center">
+                    <input type='text' style='width:80px;border: 1px solid grey;text-align: center;'
+                           data-ng-model="item.paperQuality"/>
+                </td>
 
                 <td align="center">
                     <select style="width: 98%"
@@ -295,7 +312,7 @@
                                            id="bulkCurrency{{$index}}"
                                            name="bulkCurrency{{$index}}" ng-disabled="data.itemReadOnlyMode"
                                            ng-class="{'disabledElement': data.itemReadOnlyMode}" data-convert-to-number>
-                    <option data-ng-repeat="currency in currencies" value="{{currency.id}}">{{currency.notation}}
+                    <option data-ng-repeat="currency in data.currencies" value="{{currency.id}}">{{currency.name}}
                     </option>
                 </select></td>
                 <td align="center"><input type='text'
@@ -343,7 +360,7 @@
                 <td width="10%" style="height: 28px;">Copy Start From :</td>
                 <td width="23%"><input type="text" value="" style="text-align:center;border:1px solid grey;"
                                        ng-model="bulk.config.copyStartFrom"/></td>
-                <td width="10%">First Accession # :</td>
+                <td width="10%">First Accession# :</td>
                 <td width="23%"><input type="text" value="" style="text-align:center;border:1px solid grey;"
                                        ng-model="bulk.config.firstAccession"/></td>
                 <td width="10%">Increment Segment :</td>
@@ -365,9 +382,8 @@
                 <td width="10%">Currency :</td>
                 <td width="23%"><select style="height: 24px;padding: 0px; width: 158px;"
                                         data-ng-model="bulk.config.currency" data-convert-to-number>
-                    <option data-ng-repeat="currency in currencies" value="{{currency.id}}">
-                        {{currency.notation}}
-                    </option>
+                    <option data-ng-repeat="currency in data.currencies" value="{{currency.id}}">
+                        {{currency.name}}
                 </select></td>
             </tr>
             <tr>
@@ -394,14 +410,23 @@
                 <td width="23%"><input type="text" value="" style="text-align:center;border:1px solid grey;"
                                        ng-model="bulk.config.internalNote"/></td>
                 <td width="10%">Binding Type: </td>
-                <td><select style="width: 98%"
+                <td width="23%"><select style="width: 98%"
                             data-ng-model="bulk.config.bindingType"
                             data-convert-to-number>
                     <option data-ng-repeat="bindingtype in data.bindingTypeOptions" value="{{bindingtype.id}}">
                         {{bindingtype.name}}
                     </option>
                 </select></td>
-                <td></td>
+                <td width="10%">Paper Quality: </td>
+                <td width="23%">
+                    <input type='text' style='border: 1px solid grey;text-align: center;'
+                           data-ng-model="bulk.config.paperQuality"/>
+                </td>
+            </tr>
+            <tr>
+                <td></td><td></td>
+                <td></td><td></td>
+                <td></td><td></td>
                 <td><input type="button" value="Set Values" ng-click="setBulkItemsValue()"></td>
             </tr>
         </table>

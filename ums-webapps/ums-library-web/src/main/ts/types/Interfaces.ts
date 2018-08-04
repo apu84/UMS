@@ -28,8 +28,9 @@ module ums {
         publisher: string;
         publisherName: string;
         placeOfPublication: string;
-        yearDateOfPublication: string;
-        copyRightDate: string;
+        yearOfPublication: number;
+        yearOfCopyRight: number;
+        yearOfReprint: number;
     }
 
     export interface IPhysicalDescription {
@@ -37,7 +38,6 @@ module ums {
         illustrations: string;
         accompanyingMaterials: string;
         dimensions: string;
-        paperQuality: string;
     }
 
     export interface IRecord {
@@ -50,7 +50,7 @@ module ums {
         statusName: string;
         title: string;
         subTitle: string;
-        gmd: string;
+        gmd: number;
         seriesTitle: string;
         volumeNo: string;
         volumeTitle: string;
@@ -69,7 +69,7 @@ module ums {
         frequency: number;
         callNo: string;
         classNo: string;
-        callDate: string;
+        callYear: number;
         callEdition: string;
         callVolume: string;
         authorMark: string;
@@ -107,6 +107,7 @@ module ums {
         circulationStatus: number;
         bindingType: number;
         bindingTypeName: string;
+        paperQuality: string;
     }
 
     export interface ISupplier {

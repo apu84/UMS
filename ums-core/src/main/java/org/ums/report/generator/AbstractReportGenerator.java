@@ -15,26 +15,11 @@
 
 package org.ums.report.generator;
 
-import org.pentaho.reporting.engine.classic.core.ClassicEngineBoot;
-import org.pentaho.reporting.engine.classic.core.DataFactory;
-import org.pentaho.reporting.engine.classic.core.MasterReport;
-import org.pentaho.reporting.engine.classic.core.layout.output.AbstractReportProcessor;
-import org.pentaho.reporting.engine.classic.core.modules.output.pageable.base.PageableReportProcessor;
-import org.pentaho.reporting.engine.classic.core.modules.output.pageable.pdf.PdfOutputProcessor;
-import org.pentaho.reporting.engine.classic.core.modules.output.table.base.FlowReportProcessor;
-import org.pentaho.reporting.engine.classic.core.modules.output.table.base.StreamReportProcessor;
-import org.pentaho.reporting.engine.classic.core.modules.output.table.html.*;
-import org.pentaho.reporting.engine.classic.core.modules.output.table.xls.FlowExcelOutputProcessor;
-import org.pentaho.reporting.libraries.repository.ContentLocation;
-import org.pentaho.reporting.libraries.repository.DefaultNameGenerator;
-import org.pentaho.reporting.libraries.repository.stream.StreamRepository;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * This is the base class used with the report generation examples. It contains the actual
@@ -56,7 +41,7 @@ public abstract class AbstractReportGenerator {
    */
   public AbstractReportGenerator() {
     // Initialize the reporting engine
-    ClassicEngineBoot.getInstance().start();
+    // ClassicEngineBoot.getInstance().start();
   }
 
   /**
@@ -66,7 +51,7 @@ public abstract class AbstractReportGenerator {
    * 
    * @return the report definition used by thus report generator
    */
-  public abstract MasterReport getReportDefinition() throws Exception;
+  // public abstract MasterReport getReportDefinition() throws Exception;
 
   /**
    * Returns the data factory used by this report generator. If this method returns
@@ -75,7 +60,7 @@ public abstract class AbstractReportGenerator {
    * 
    * @return the data factory used by this report generator
    */
-  public abstract DataFactory getDataFactory(String reportQuery);
+  // public abstract DataFactory getDataFactory(String reportQuery);
 
   /**
    * Returns the set of parameters that will be passed to the report generation process. If there
@@ -94,28 +79,21 @@ public abstract class AbstractReportGenerator {
    * @param outputType the output type of the report (HTML, PDF, HTML)
    * @param outputFile the file into which the report will be written
    * @throws IllegalArgumentException indicates the required parameters were not provided
-   * @throws java.io.IOException indicates an error opening the file for writing
-   * @throws org.pentaho.reporting.engine.classic.core.ReportProcessingException indicates an error
+   * @throws java.io.IOException indicates an error opening the file for writing // * @throws
+   *         org.pentaho.reporting.engine.classic.core.ReportProcessingException indicates an error
    *         generating the report
    */
-  public void generateReport(final OutputType outputType, File outputFile, String reportQuery) throws Exception {
-    if(outputFile == null) {
-      throw new IllegalArgumentException("The output file was not specified");
-    }
-
-    OutputStream outputStream = null;
-    try {
-      // Open the output stream
-      outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
-
-      // Generate the report to this output stream
-      generateReport(outputType, outputStream, reportQuery);
-    } finally {
-      if(outputStream != null) {
-        outputStream.close();
-      }
-    }
-  }
+  /*
+   * public void generateReport(final OutputType outputType, File outputFile, String reportQuery)
+   * throws Exception { if (outputFile == null) { throw new
+   * IllegalArgumentException("The output file was not specified"); }
+   * 
+   * OutputStream outputStream = null; try { // Open the output stream outputStream = new
+   * BufferedOutputStream(new FileOutputStream(outputFile));
+   * 
+   * // Generate the report to this output stream generateReport(outputType, outputStream,
+   * reportQuery); } finally { if (outputStream != null) { outputStream.close(); } } }
+   */
 
   /**
    * Generates the report in the specified <code>outputType</code> and writes it into the specified
@@ -126,79 +104,52 @@ public abstract class AbstractReportGenerator {
    * 
    * @param outputType the output type of the report (HTML, PDF, HTML)
    * @param outputStream the stream into which the report will be written
-   * @throws IllegalArgumentException indicates the required parameters were not provided
-   * @throws org.pentaho.reporting.engine.classic.core.ReportProcessingException indicates an error
+   * @throws IllegalArgumentException indicates the required parameters were not provided // * @throws
+   *         org.pentaho.reporting.engine.classic.core.ReportProcessingException indicates an error
    *         generating the report
    */
-  public void generateReport(final OutputType outputType, OutputStream outputStream, String reportQuery)
-      throws Exception {
-    if(outputStream == null) {
-      throw new IllegalArgumentException("The output stream was not specified");
-    }
-
-    // Get the report and data factory
-    final MasterReport report = getReportDefinition();
-    final DataFactory dataFactory = getDataFactory(reportQuery);
-
-    // Set the data factory for the report
-    if(dataFactory != null) {
-      report.setDataFactory(dataFactory);
-    }
-
-    // Add any parameters to the report
-    final Map<String, Object> reportParameters = getReportParameters();
-    if(null != reportParameters) {
-      for(String key : reportParameters.keySet()) {
-        report.getParameterValues().put(key, reportParameters.get(key));
-      }
-    }
-
-    prepareReport(outputType, outputStream, report);
-  }
-
-  private void prepareReport(final OutputType outputType, OutputStream outputStream, final MasterReport report)
-      throws Exception {
-    // Prepare to generate the report
-    AbstractReportProcessor reportProcessor = null;
-    try {
-      // Greate the report processor for the specified output type
-      switch(outputType) {
-        case PDF: {
-          final PdfOutputProcessor outputProcessor =
-              new PdfOutputProcessor(report.getConfiguration(), outputStream, report.getResourceManager());
-          reportProcessor = new PageableReportProcessor(report, outputProcessor);
-          break;
-        }
-
-        case EXCEL: {
-          final FlowExcelOutputProcessor target =
-              new FlowExcelOutputProcessor(report.getConfiguration(), outputStream, report.getResourceManager());
-          reportProcessor = new FlowReportProcessor(report, target);
-          break;
-        }
-
-        case HTML: {
-          final StreamRepository targetRepository = new StreamRepository(outputStream);
-          final ContentLocation targetRoot = targetRepository.getRoot();
-          final HtmlOutputProcessor outputProcessor = new StreamHtmlOutputProcessor(report.getConfiguration());
-          final HtmlPrinter printer = new AllItemsHtmlPrinter(report.getResourceManager());
-          printer.setContentWriter(targetRoot, new DefaultNameGenerator(targetRoot, "index", "html"));
-          printer.setDataWriter(null, null);
-          printer.setUrlRewriter(new FileSystemURLRewriter());
-          outputProcessor.setPrinter(printer);
-          reportProcessor = new StreamReportProcessor(report, outputProcessor);
-          break;
-        }
-      }
-
-      // Generate the report
-      reportProcessor.processReport();
-    } finally {
-      if(reportProcessor != null) {
-        reportProcessor.close();
-      }
-    }
-  }
+  /*
+   * public void generateReport(final OutputType outputType, OutputStream outputStream, String
+   * reportQuery) throws Exception { if (outputStream == null) { throw new
+   * IllegalArgumentException("The output stream was not specified"); }
+   * 
+   * // Get the report and data factory final MasterReport report = getReportDefinition(); final
+   * DataFactory dataFactory = getDataFactory(reportQuery);
+   * 
+   * // Set the data factory for the report if (dataFactory != null) {
+   * report.setDataFactory(dataFactory); }
+   * 
+   * // Add any parameters to the report final Map<String, Object> reportParameters =
+   * getReportParameters(); if (null != reportParameters) { for (String key :
+   * reportParameters.keySet()) { report.getParameterValues().put(key, reportParameters.get(key)); }
+   * }
+   * 
+   * prepareReport(outputType, outputStream, report); }
+   * 
+   * private void prepareReport(final OutputType outputType, OutputStream outputStream, final
+   * MasterReport report) throws Exception { // Prepare to generate the report
+   * AbstractReportProcessor reportProcessor = null; try { // Greate the report processor for the
+   * specified output type switch (outputType) { case PDF: { final PdfOutputProcessor
+   * outputProcessor = new PdfOutputProcessor(report.getConfiguration(), outputStream,
+   * report.getResourceManager()); reportProcessor = new PageableReportProcessor(report,
+   * outputProcessor); break; }
+   * 
+   * case EXCEL: { final FlowExcelOutputProcessor target = new
+   * FlowExcelOutputProcessor(report.getConfiguration(), outputStream, report.getResourceManager());
+   * reportProcessor = new FlowReportProcessor(report, target); break; }
+   * 
+   * case HTML: { final StreamRepository targetRepository = new StreamRepository(outputStream);
+   * final ContentLocation targetRoot = targetRepository.getRoot(); final HtmlOutputProcessor
+   * outputProcessor = new StreamHtmlOutputProcessor(report.getConfiguration()); final HtmlPrinter
+   * printer = new AllItemsHtmlPrinter(report.getResourceManager());
+   * printer.setContentWriter(targetRoot, new DefaultNameGenerator(targetRoot, "index", "html"));
+   * printer.setDataWriter(null, null); printer.setUrlRewriter(new FileSystemURLRewriter());
+   * outputProcessor.setPrinter(printer); reportProcessor = new StreamReportProcessor(report,
+   * outputProcessor); break; } }
+   * 
+   * // Generate the report reportProcessor.processReport(); } finally { if (reportProcessor !=
+   * null) { reportProcessor.close(); } } }
+   */
 
   /**
    * The supported output types for this sample
