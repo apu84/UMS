@@ -225,6 +225,8 @@
 /// <reference path='controller/tesController/facultyBusinessAndSocialScience/DeanBusinessAndSocialIndividualQuestion.ts'/>
 /// <reference path='controller/tesController/facultyArchitecture/DeanArchitectureTes.ts'/>
 /// <reference path='controller/tesController/facultyArchitecture/DeanArchitectureIndividualQuestion.ts'/>
+/// <reference path='controller/employeeExamAttendance/employeeExamAttendance.ts'/>
+/// <reference path='controller/employeeExamAttendance/employeeExamAttendanceService.ts'/>
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>

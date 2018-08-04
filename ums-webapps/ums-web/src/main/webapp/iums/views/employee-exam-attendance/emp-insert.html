@@ -1,0 +1,131 @@
+<div class="row">
+            <div class="col-md-4 form-group">
+                <ui-select id="employee" theme="bootstrap"
+                           style="width: 70%"
+                           data-ng-model="vm.employee"
+                           on-select="vm.employeeChanged(vm.employee)"
+                >
+                    <ui-select-match placeholder="Select Employee">{{vm.selectedEmployeeName}}
+                </ui-select-match>
+                    <ui-select-choices repeat="g in vm.employees|filter:$select.search">
+                        <small ng-bind-html="g.employeeName | highlight:$select.search"></small>
+                    </ui-select-choices>
+                </ui-select>
+
+            </div>
+            <div class="col-md-4 form-group" >
+                <ui-select id="room" theme="bootstrap"
+                           style="width: 70%"
+                           data-ng-model="vm.classRoom"
+                           on-select="vm.classRoomChanged(vm.classRoom)"
+                >
+                    <ui-select-match placeholder="Select Room No">{{vm.selectedClassRoomNo}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="g in vm.classRooms|filter:$select.search">
+                        <small ng-bind-html="g.roomNo | highlight:$select.search"></small>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="col-md-4 form-group" data-ng-if="!vm.isStaffSelected">
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label>Room In Charge</label>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <input type="checkbox" ng-model="vm.roomInCharge">
+                    </div>
+                </div>
+            </div>
+        </div>
+<div class="row" data-ng-if="!vm.isStaffSelected">
+            <div class="col-md-4 form-group">
+                <input align="center" contenteditable="editable"
+                       ng-disabled="editable"
+                       style="width:70%;text-align: center;"
+                       type="text"
+                       data-date-format="dd-mm-yyyy" placeholder="Invigilator Date"
+                       class="datepicker-default form-control"
+                       data-ng-model="vm.empExamDate"
+                       data-ng-change="vm.dateChanged(vm.empExamDate)">
+            </div>
+
+            <div class="col-md-4 form-group">
+                <input align="center" contenteditable="editable"
+                       ng-disabled="editable"
+                       style="width:70%;text-align: center;"
+                       type="text"
+                       data-date-format="dd-mm-yyyy" placeholder="Reserve Date"
+                       class="datepicker-default form-control"
+                       data-ng-model="vm.empReserveDate"
+                       data-ng-change="vm.dateChanged(vm.empReserveDate)">
+            </div>
+        </div>
+    <div  align="right">
+        <button type="button"
+                class="btn btn-success"
+                data-toggle="modal"
+                data-ng-click="vm.isEligibleForSubmitData()"
+                data-target="#myModal">submit</button>
+    </div>
+<div data-ng-if="vm.isSubmitModalAvailable">
+    <div class="modal fade" id="myModal" role="dialog">
+        <!--   <div class="modal-backdrop"> --->
+        <div class="modal-dialog  modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" >
+                    <button type="button"  data-ng-click="vm.reset()" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Employee Exam Attendant Info</h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <td width="30%"><b>{{'Employee Name'}}</b></td>
+                                <td>{{vm.selectedEmployeeName}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Faculty/Satff'}}</b></td>
+                                <td>{{vm.employeeTypeName}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Dept'}}</b></td>
+                                <td>{{vm.selectedDeptName}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Exam Type'}}</b></td>
+                                <td>{{vm.selectedExamTypeName}}</td>
+                            </tr>
+                            <tr data-ng-if="!vm.isStaffSelected">
+                                <td width="30%"><b>{{'Invigilator Date'}}</b></td>
+                                <td >{{vm.empExamDate}}</td>
+                            </tr>
+                            <tr data-ng-if="!vm.isStaffSelected">
+                                <td width="30%"><b>{{'Reserve Date'}}</b></td>
+                                <td >{{vm.empReserveDate}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Invigilation Room'}}</b></td>
+                                <td >{{vm.selectedClassRoomNo}}</td>
+                            </tr>
+                            <tr data-ng-if="!vm.isStaffSelected">
+                                <td width="30%"><b>{{'Room In Charge'}}</b></td>
+                                <td data-ng-if="vm.roomInCharge==1">{{'YES'}}</td>
+                                <td data-ng-if="vm.roomInCharge!=1">{{'NO'}}</td>
+                            </tr>
+
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info"  data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" data-ng-click="vm.save()" data-dismiss="modal">Confirm</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -277,6 +277,31 @@ public class AcademicContext {
   }
 
   @Bean
+  EmpExamAttendanceManager empExamAttendanceManager() {
+    EmpExamAttendanceCache empExamAttendanceCache = new EmpExamAttendanceCache((mCacheFactory.getCacheManager()));
+    empExamAttendanceCache.setManager(new PersistentEmpExamAttendanceDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
+    return empExamAttendanceCache;
+  }
+
+  @Bean
+  EmpExamInvigilatorDateManager empExamInvigilatorDateManager() {
+    EmpExamInvigilatorDateCache empExamInvigilatorDateCache =
+        new EmpExamInvigilatorDateCache((mCacheFactory.getCacheManager()));
+    empExamInvigilatorDateCache.setManager(new PersistentEmpExamInvigilatorDateDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
+    return empExamInvigilatorDateCache;
+  }
+
+  @Bean
+  EmpExamReserveDateManager empExamReserveDateManager() {
+    EmpExamReserveDateCache empExamReserveDateCache = new EmpExamReserveDateCache((mCacheFactory.getCacheManager()));
+    empExamReserveDateCache.setManager(new PersistentEmpExamReserveDateDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
+    return empExamReserveDateCache;
+  }
+
+  @Bean
   CourseTeacherManager courseTeacherManager() {
     CourseTeacherCache courseTeacherCache = new CourseTeacherCache(mCacheFactory.getCacheManager());
     courseTeacherCache.setManager(new PersistentCourseTeacherDao(mTemplateFactory.getJdbcTemplate(),

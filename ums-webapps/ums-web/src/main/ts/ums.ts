@@ -970,8 +970,26 @@ module ums {
             }]
           }
         })
-
-        .state('leaveApplication', {
+        .state('employeeExamAttendance', {
+            url: "/employeeExamAttendance",
+            controller: 'EmployeeExamAttendance',
+            controllerAs: 'vm',
+            templateUrl: 'views/employee-exam-attendance/employee-exam-attendance.html',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        files: [
+                            'vendors/bootstrap-datepicker/css/datepicker.css',
+                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                            'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
+                            'vendors/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
+                            'vendors/bootstrap-timepicker/css/bootstrap-timepicker.css',
+                            'vendors/bootstrap-timepicker/js/bootstrap-timepicker.js'
+                        ]
+                    });
+                }]
+            }
+        }).state('leaveApplication', {
           url: "/leaveApplication",
           controller: 'LeaveApplicationController',
           controllerAs: 'vm',
