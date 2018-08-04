@@ -2,6 +2,11 @@
     table{
         padding: 0px;
     }
+
+    table {
+        table-layout: fixed;
+        word-wrap: break-word;
+    }
 </style>
 <div class="col-md-12" ng-if="vm.classRoutineService.routineData">
     <table class="table table-bordered" ng-if="vm.showRoutineChart">
@@ -16,8 +21,8 @@
         </thead>
         <tbody>
         <tr ng-repeat="day in vm.weekDay">
-            <td>{{day.name}}</td>
-            <td ng-repeat="header in vm.getDayWiseTableHeader(day.id)"
+            <td style="wdith:30%">{{day.name}}</td>
+            <td style="width:30%" ng-repeat="header in vm.getDayWiseTableHeader(day.id)"
                 colspan="{{vm.getColSpan(day.id, header.startTime)/vm.routineConfigService.routineConfig.duration}}">
                 <div align="right">
                     <i ng-if="vm.classRoutineService.enableEdit" class="fa fa-pencil-square-o" aria-hidden="true"
