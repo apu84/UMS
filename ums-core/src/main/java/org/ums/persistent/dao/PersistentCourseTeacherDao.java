@@ -133,6 +133,12 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
   }
 
   @Override
+  public List<CourseTeacher> getDistinctCourseTeacher(int pSemesterId) {
+    String query = "SELECT  DISTINCT TEACHER_ID,SEMESTER_ID,COURSE_ID FROM COURSE_TEACHER where semester_id=?";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId}, new DistinctCourseTeacherRowMapper());
+  }
+
+  @Override
   public int update(MutableCourseTeacher pMutable) {
     String query = UPDATE_ALL + " WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getTeacher().getId(), pMutable
@@ -214,6 +220,17 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
     }
   }
 
+  class DistinctCourseTeacherRowMapper implements RowMapper<CourseTeacher> {
+    @Override
+    public CourseTeacher mapRow(ResultSet rs, int rowNum) throws SQLException {
+      MutableCourseTeacher courseTeacher = new PersistentCourseTeacher();
+      courseTeacher.setTeacherId(rs.getString("TEACHER_ID"));
+      courseTeacher.setSemesterId(rs.getInt("SEMESTER_ID"));
+      courseTeacher.setCourseId(rs.getString("COURSE_ID"));
+      AtomicReference<CourseTeacher> atomicReference = new AtomicReference<>(courseTeacher);
+      return atomicReference.get();
+   }
+}
   class CourseTeacherRowMapperForAllSection implements RowMapper<ApplicationTES> {
     @Override
     public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {

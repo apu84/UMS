@@ -6,6 +6,7 @@ module ums{
     designation:number;
     designationName?:string;
     employmentType:string;
+    employeeType:number;
     deptOfficeId:string;
     deptOfficeName?: string;
     fatherName:string;

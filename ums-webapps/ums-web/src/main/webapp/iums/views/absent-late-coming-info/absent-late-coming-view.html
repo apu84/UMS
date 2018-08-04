@@ -1,0 +1,136 @@
+
+<div class="panel">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <select
+                                class="form-control required"
+                                data-ng-options="absPreStatus.name for absPreStatus in vm.absPreStatusListForFilter track by absPreStatus.id"
+                                data-ng-model="vm.absPreStatusForFilter"
+                                data-ng-change="vm.changeAbsPreStatusForFilter(vm.absPreStatusForFilter)"
+                        >
+                        </select>
+                    </div>
+                    <div class="col-md-8 form-group">
+                        <div align="left">
+                            <button type="button" data-ng-click="vm.doSomething()" class="btn btn-success">Search</button>
+                        </div>
+                    </div>
+                </div>
+                    <div class="row">
+                        <div class="col-md-4 form-group" >
+                                <select
+                                        class="form-control required"
+                                        name="deptName"
+                                        id="deptName"
+                                        style="width: 70%";
+                                        data-ng-options="dept.name for dept in vm.deptListForFilter track by dept.id"
+                                        data-ng-model="vm.deptNameForFilter"
+                                        data-ng-change="vm.deptChangedForFilter(vm.deptNameForFilter)"
+                                ><option value="">Select All Dept./Office</option></select>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <div>
+                                <select class="form-control" name="examDate" style="width: 70%"; data-ng-model="vm.examDateForFilter" data-ng-change="vm.ExamDateChangeForFilter(vm.examDateForFilter)">
+                                    <option value="">Select an Exam Date </option>
+                                    <option data-ng-repeat="examRoutine in vm.examRoutineArrForFilter">{{examRoutine.examDate}}</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                <form>
+                    <table class="table table-hover table-bordered table-advanced">
+                        <thead>
+                        <tr role="row" class="heading">
+                            <th>#</th>
+                            <th>Employee Name</th>
+                            <th>Faculty/Staff</th>
+                            <th>Dept</th>
+                            <th data-ng-show="vm.isArrivalTimeEligibleForFilter">Arrival Time</th>
+                            <th>Remarks</th>
+                            <th>Invigilation Room</th>
+                            <th>Exam Date</th>
+                            <th data-ng-show="vm.showDeleteColumn">Delete</th>
+                        </tr>
+                        </thead>
+                        <thead>
+                        <tr data-ng-repeat="app in vm.absLateComeInfo | orderBy:'deptId'| filter:{deptId:vm.selectedDepartmentIdForFilter,examDate:vm.examDateForFilter,presentType:vm.selectedAbsPreStatusIdForFilter} ">
+                            <td>{{$index+1}}</td>
+                            <td>{{app.employeeName}}</td>
+                            <td>{{app.employeeType}}</td>
+                            <td>{{app.deptName}}</td>
+                            <td data-ng-show="vm.isArrivalTimeEligibleForFilter">{{app.arrivalTime}}</td>
+                            <td>{{app.remarks}}</td>
+                            <td>{{app.invigilatorRoomName}}</td>
+                            <td>{{app.examDate}}</td>
+                            <td data-ng-show="vm.showDeleteColumn"><input
+                                    type="checkbox"
+                                    data-ng-model="app.apply"
+                                    data-ng-click="vm.checkMoreThanOneSelectionSubmit(app)"
+                            >
+                            </td>
+                        </tr>
+                        </thead>
+                    </table>
+                    <div align="right">
+                        <button type="button"
+                                data-toggle="modal"
+                                data-target="#myModalViewInfo"
+                                data-ng-hide="vm.submit_Button_Disable"
+                                class="btn btn-success">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+<div class="modal fade" id="myModalViewInfo" role="dialog"  >
+    <!--   <div class="modal-backdrop"> -->
+    <div class="modal-dialog  modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" >
+                <button type="button"  class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Absent/Late Coming Information</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr role="row" class="heading">
+                            <th>#</th>
+                            <th>Employee Name</th>
+                            <th>Faculty/Staff</th>
+                            <th>Dept</th>
+                            <th data-ng-show="vm.isArrivalTimeEligibleForFilter">Arrival Time</th>
+                            <th>Remarks</th>
+                            <th>Invigilation Room</th>
+                            <th>Exam Date</th>
+                        </tr>
+                        </thead>
+                        <thead>
+                        <tr data-ng-repeat="app in vm.absLateComeInfo |filter:{apply:true}| orderBy:'examDate'">
+                            <td>{{$index+1}}</td>
+                            <td>{{app.employeeName}}</td>
+                            <td>{{app.employeeType}}</td>
+                            <td>{{app.deptName}}</td>
+                            <td data-ng-show="vm.isArrivalTimeEligibleForFilter">{{app.arrivalTime}}</td>
+                            <td>{{app.remarks}}</td>
+                            <td>{{app.invigilatorRoomName}}</td>
+                            <td>{{app.examDate}}</td>
+                            </td>
+                        </tr>
+                        </thead>
+                    </table>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success"  data-ng-click="vm.deleteExpelInfo()"  data-dismiss="modal">Confirm</button>
+                <button type="button" class="btn btn-info" data-ng-click="vm.close()"  data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
