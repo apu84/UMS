@@ -41,6 +41,7 @@ module ums {
     public showApplicationSection: boolean;
     public fromPendingApplicationSection: boolean;
     public fromHistorySection: boolean;
+    public showRemainingLeaves:boolean;
 
 
     public static $inject = ['appConstants', '$scope', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService', 'programService', '$timeout', 'leaveTypeService', 'leaveApplicationService', 'leaveApplicationStatusService', 'userService', 'attachmentService'];
@@ -68,6 +69,7 @@ module ums {
       this.fromHistorySection = false;
       this.fromPendingApplicationSection = true;
       this.showApplicationSection = true;
+      this.showRemainingLeaves = false;
       this.data = {};
       this.data.totalLeaveDurationInDays = 0;
       this.pageNumber = 1;
@@ -79,6 +81,7 @@ module ums {
 
       this.initializeDatePickers();
       this.getLeaveTypes();
+      this.getPendingApplications();
 
       $("#leaveType").focus();
     }
@@ -140,11 +143,11 @@ module ums {
     }
 
     private getAllLeaveApplicationsForHistory() {
-      this.leaveApplicationStatusService.pendingApplications = [];
+      this.pendingApplications = [];
       this.leaveApplicationStatusService.fetchAllLeaveApplicationsOfEmployeeWithPagination(this.leaveApplicationService.user.employeeId, this.leaveApprovalStatus.id, this.pageNumber, this.itemsPerPage).then((leaveApplications) => {
-        this.leaveApplicationStatusService.pendingApplications = leaveApplications.statusList;
+        this.pendingApplications = leaveApplications.statusList;
         this.totalItems = leaveApplications.totalSize;
-        console.log(this.leaveApplicationStatusService.pendingApplications);
+        console.log(this.pendingApplications);
       });
     }
 
@@ -155,11 +158,12 @@ module ums {
       this.showApplicationSection = true;
       this.fromHistorySection = false;
       this.fromPendingApplicationSection = true;
+      this.getPendingApplications();
     }
 
 
     private setResultsPerPage(itemPerPage: number) {
-      if (itemPerPage > 0 && itemPerPage != null) {
+      if (itemPerPage!=undefined && itemPerPage > 0 && itemPerPage != null) {
         this.itemsPerPage = itemPerPage;
         this.getAllLeaveApplicationsForHistory();
       }
@@ -231,11 +235,20 @@ module ums {
 
     }
 
+    private getPendingApplications() {
+      this.pendingApplications = [];
 
+      this.leaveApplicationStatusService.fetchPendingLeaves(this.leaveApplicationService.employeeId).then((pendingLeaves) => {
+        this.pendingApplications = pendingLeaves;
+        this.totalItems = pendingLeaves.length;
+        //this.leaveApplicationService.employeeId = angular.copy(this.pendingApplications[0].applicantsId);
+      });
+    }
 
 
 
     private save() {
+      this.showRemainingLeaves = false;
       this.convertToJson(Utils.LEAVE_APPLICATION_SAVED).then((json) => {
         this.leaveApplicationService.saveLeaveApplication(json).then((message) => {
 
@@ -245,6 +258,7 @@ module ums {
             this.data.totalLeaveDurationInDays = 0;
           }
 
+          this.showRemainingLeaves = true;
         });
       });
     }
@@ -285,6 +299,7 @@ module ums {
                 this.saveAttachments(message[0].id);
                 this.leaveApplication = <LmsApplication>{};
                 this.leaveType = this.leaveTypes[0];
+                this.getPendingApplications();
               } else {
                 this.leaveApplication = <LmsApplication>{};
               }
@@ -300,11 +315,17 @@ module ums {
       let defer = this.$q.defer();
       let fromDate:string = moment(this.leaveApplication.fromDate).format("DD-MM-YYYY");
       let toDate: string = moment(this.leaveApplication.toDate).format("DD-MM-YYYY");
-      this.leaveApplicationService.fetchApprovedLeavesWithDateRange(fromDate, toDate).then((applications: any) => {
-        if (applications.length > 0)
-          foundOccurance = true;
-        else
-          foundOccurance = false;
+      this.leaveApplicationService.fetchApprovedLeavesWithDateRange(fromDate, toDate).then((applications: LmsApplication[]) => {
+        foundOccurance = false;
+
+        for (var i=0; i<applications.length; i++){
+          let appFromDate = moment(applications[i].fromDate,"DD/MM/YYYY").toDate();
+          let appToDate = moment(applications[i].toDate, "DD/MM/YYYY").toDate();
+          if (this.leaveApplication.fromDate>=appFromDate && this.leaveApplication.toDate<=appToDate){
+            foundOccurance = true;
+            break;
+          }
+        }
 
         defer.resolve(foundOccurance);
       });
@@ -318,6 +339,7 @@ module ums {
       this.showApplicationSection = false;
       this.pendingApplication = pendingApplication;
       this.applicationStatusList = [];
+      this.showRemainingLeaves=false;
 
       this.attachmentService.fetchAttachments(Utils.APPLICATION_TYPE_LEAVE.toString(), pendingApplication.appId).then((attachments) => {
         this.fileAttachments = [];
@@ -326,6 +348,7 @@ module ums {
 
       this.leaveApplicationStatusService.fetchApplicationStatus(pendingApplication.appId).then((statusList: Array<LmsApplicationStatus>) => {
         this.applicationStatusList = statusList;
+        this.showRemainingLeaves = true;
       });
     }
 

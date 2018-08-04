@@ -1,13 +1,18 @@
 module ums {
-  export class ClassRoutineSlotEditController {
+  import ClassRoutine = ums.ClassRoutine;
+
+    export class ClassRoutineSlotEditController {
 
 
     private selectedCourse: Course;
     private selectedRoom: ClassRoom;
+    private selectedCourseTeacher:Employee;
     private showCourseInfo: boolean;
     private showRoomInfo: boolean;
+    private showTeachersInfo: boolean;
     private routineBasedOnCourse: ClassRoutine[];
     private routineBasedOnRoom: ClassRoutine[];
+    private routineBasedOnCourseTeacher: ClassRoutine[];
     private THEORY_TYPE: number = 1;
     private SESSIONAL_TYPE: number = 2;
     private courseTeacher: Employee = <Employee>{};
@@ -40,12 +45,22 @@ module ums {
     public init() {
       this.showCourseInfo = false;
       this.showRoomInfo = false;
+      console.log("Slot routine list");
+      console.log(this.classRoutineService.slotRoutineList);
       if (this.classRoutineService.slotRoutineList.length == 0) {
         this.slotGroupNo = Math.floor((Math.random() * 10000) + 1);
         let slotRoutine: ClassRoutine = <ClassRoutine>{};
         slotRoutine.slotGroup = this.slotGroupNo;
         slotRoutine = this.initialzeRoutine(slotRoutine);
         this.classRoutineService.slotRoutineList.push(slotRoutine);
+      }else{
+        console.log("Existing slot");
+        console.log(this.classRoutineService.slotRoutineList);
+        this.classRoutineService.slotRoutineList.forEach((c:ClassRoutine)=>{
+          c.startTimeObj = moment(c.startTime,"hh:mm A").toDate();
+          c.endTimeObj = moment(c.endTime,'hh:mm A').toDate();
+          this.slotGroupNo = c.slotGroup;
+        });
       }
       this.setSessionalSection().then((sectionList: any) => {
         this.assignSectionsToSessionalCourses();
@@ -78,23 +93,50 @@ module ums {
       this.classRoutineService.slotRoutineList.push(slotRoutine);
     }
 
+    public courseSearched(){
+        this.fetchCourseInfo();
+    }
+
     public courseSelected(slotRoutine: ClassRoutine) {
       this.selectedCourse = slotRoutine.course;
       let startTime: any = {};
-      startTime = moment(slotRoutine.startTime, 'hh:mm A');
+      startTime = moment(this.classRoutineService.selectedHeader.startTime,"hh:mm A");
+      slotRoutine.startTimeObj = moment(startTime).toDate();
       if (slotRoutine.course.type_value == this.SESSIONAL_TYPE) {
         let endTime: any = moment(startTime).add(this.routineConfigService.routineConfig.duration * 3, 'm').toDate();
-        slotRoutine.endTime = moment(endTime).format('hh:mm A');
+        slotRoutine.endTimeObj = moment(endTime).toDate();
         slotRoutine.sessionalSection = this.sectionList[0];
         slotRoutine.duration = (this.routineConfigService.routineConfig.duration * 3).toString();
       } else {
         let endTime: any = moment(startTime).add(this.routineConfigService.routineConfig.duration, 'm').toDate();
-        slotRoutine.endTime = moment(endTime).format('hh:mm A');
+        slotRoutine.endTimeObj = moment(endTime).toDate();
         slotRoutine.duration = this.routineConfigService.routineConfig.duration.toString();
       }
       slotRoutine.courseId = slotRoutine.course.id;
       this.assignExistingTeacher(slotRoutine);
       this.fetchCourseInfo();
+    }
+
+    public courseTeacherSearched(){
+      this.fetchCourseTeacherInfo();
+      console.log('course teacher');
+      console.log(this.selectedCourseTeacher);
+    }
+
+    public courseTeacherSelected(courseTeacher: Employee){
+      this.fetchCourseTeacherInfo();
+    }
+
+    public fetchCourseTeacherInfo(){
+        this.showCourseInfo=false;
+        this.showRoomInfo = false;
+        this.showTeachersInfo = true;
+
+      if(this.selectedCourseTeacher)
+      this.classRoutineService.getRoutineForTeacher(this.selectedCourseTeacher.id).then((routine:ClassRoutine[])=>{
+        this.routineBasedOnCourseTeacher=[];
+        this.routineBasedOnCourseTeacher = routine;
+      });
     }
 
     private assignExistingTeacher(slotRoutine: ClassRoutine) {
@@ -186,6 +228,7 @@ module ums {
     public fetchCourseInfo() {
       this.showCourseInfo = true;
       this.showRoomInfo = false;
+      this.showTeachersInfo = false;
       this.classRoutineService.getRoutineBySemesterAndCourse(this.classRoutineService.selectedSemester.id, this.selectedCourse.id).then((classRoutineList: ClassRoutine[]) => {
 
         this.routineBasedOnCourse = [];
@@ -196,10 +239,17 @@ module ums {
     public fetchRoomInfo() {
       this.showCourseInfo = false;
       this.showRoomInfo = true;
+      this.showTeachersInfo = false;
       this.classRoutineService.getRoomBasedClassRoutine(this.classRoutineService.selectedSemester.id, +this.selectedRoom.id).then((classRoutineList: ClassRoutine[]) => {
         this.routineBasedOnRoom = [];
         this.routineBasedOnRoom = classRoutineList;
+        console.log("In room");
+        console.log(classRoutineList);
       })
+    }
+
+    public roomSearched(){
+        this.fetchRoomInfo();
     }
 
     public roomSelected(slotRoutine: ClassRoutine) {
@@ -260,9 +310,9 @@ module ums {
       if (classRoutine.course.type_value == Utils.COURSE_TYPE_SESSIONAL)
         duration = duration * 3;
       let startTime: any = {};
-      startTime = moment(classRoutine.startTime, 'hh:mm A');
+      startTime = moment(classRoutine.startTimeObj);
       let endTime: any = moment(startTime).add(duration, 'm').toDate();
-      classRoutine.endTime = moment(endTime).format('hh:mm A');
+      classRoutine.endTimeObj = moment(endTime).toDate();
     }
   }
 

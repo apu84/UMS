@@ -30,6 +30,8 @@ module ums{
     academicSemester: number;
     startTime: string;
     endTime: string;
+    startTimeObj: Date;
+    endTimeObj: Date;
     duration: string;
     room: ClassRoom;
     roomId: string;
@@ -78,8 +80,9 @@ module ums{
     public selectedDay: IConstant;
     public sessionalSectionMap: { [key: string]: IConstant };
     public dayAndTimeMapWithRoutine: { [key: string]: ClassRoutine[] }; // map[day+startTime] = ClassRoutine[];
+    public dayAndTimeMapWithGroup:{[key:string]:number};
     public dayAndTimeMapWithRoutineSlot: {[key:string]: RoutineSlot};
-    public groupMapWithRoutineSlot: {[key:string]:RoutineSlot};
+    public groupMapWithRoutineSlot: {[key:number]:RoutineSlot};
     public groupList: number[];
     public courseTeacherMap: { [key: string]: CourseTeacherInterface[] }; // map[courseId]= CourseTeacher[];
     public courseTeacherWithSectionMap: { [key: string]: CourseTeacherInterface[] }; // map[courseId+section]= CourseTeacher[];
@@ -107,10 +110,10 @@ module ums{
       return defer.promise;
     }
 
-    public getRoutineForTeacher():ng.IPromise<any>{
+    public getRoutineForTeacher(employeeId: string):ng.IPromise<any>{
       var defer = this.$q.defer();
       var routines:any={};
-      this.httpClient.get("/ums-webservice-academic/academic/routine/routineForTeacher",'application/json',
+      this.httpClient.get("/ums-webservice-academic/academic/routine/routineForTeacher/employeeId/"+employeeId,'application/json',
           (data:any,etag:string)=>{
             routines = data.entries;
             defer.resolve(routines);

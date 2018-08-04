@@ -16,6 +16,7 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Employee;
+import org.ums.domain.model.immutable.common.EmployeeEarnedLeaveBalance;
 import org.ums.domain.model.immutable.common.LmsApplication;
 import org.ums.domain.model.immutable.common.LmsType;
 import org.ums.domain.model.mutable.common.MutableLmsAppStatus;
@@ -23,10 +24,7 @@ import org.ums.domain.model.mutable.common.MutableLmsApplication;
 import org.ums.enums.ApplicationType;
 import org.ums.enums.common.*;
 import org.ums.manager.EmployeeManager;
-import org.ums.manager.common.AttachmentManager;
-import org.ums.manager.common.LmsAppStatusManager;
-import org.ums.manager.common.LmsApplicationManager;
-import org.ums.manager.common.LmsTypeManager;
+import org.ums.manager.common.*;
 import org.ums.persistent.model.common.PersistentAttachment;
 import org.ums.persistent.model.common.PersistentLmsAppStatus;
 import org.ums.persistent.model.common.PersistentLmsApplication;
@@ -89,6 +87,9 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
 
   @Autowired
   private AttachmentManager mAttachmentManager;
+
+  @Autowired
+  private EmployeeEarnedLeaveBalanceManager mEmployeeEarnedLeaveBalanceManager;
 
   ApplicationContext applicationContext = AppContext.getApplicationContext();
 
@@ -287,6 +288,8 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
         .filter(app -> app.getApplicationStatus() == LeaveApplicationApprovalStatus.APPLICATION_APPROVED)
         .collect(Collectors.groupingBy(LmsApplication::getLeaveTypeId));
 
+    EmployeeEarnedLeaveBalance employeeEarnedLeaveBalance = mEmployeeEarnedLeaveBalanceManager.getEarnedLeaveBalance(pEmployeeId) ;
+
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -300,14 +303,26 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
       jsonObject.add("viewOrder", lmsType.getViewOrder());
       int leavesTaken = getLeavesTaken(applicationMap, lmsType);
 
-      jsonObject.add("daysLeft",
-          applicationMap.get(lmsType.getId()) != null ?
-              getDateOutputModifiedFormat(lmsType.getMaxDuration() - leavesTaken)
-              : getDateOutputModifiedFormat(lmsType.getMaxDuration()) + "");
-      jsonObject.add("daysLeftNumber",
-          applicationMap.get(lmsType.getId()) != null ?
-              lmsType.getMaxDuration() - leavesTaken
-              : lmsType.getMaxDuration());
+      if(lmsType.getId().equals(LeaveCategories.EARNED_LEAVE_ON_FULL_PAY.getId())){
+        String dayStr = employeeEarnedLeaveBalance.getFullPay().equals(0) || employeeEarnedLeaveBalance.getFullPay().equals(1)?" Day":" Days";
+        jsonObject.add("daysLeft", employeeEarnedLeaveBalance.getFullPay().toString()+dayStr);
+        jsonObject.add("daysLeftNumber", employeeEarnedLeaveBalance.getFullPay());
+      }
+      else if(lmsType.getId().equals(LeaveCategories.EARNED_LEAVE_ON_HALF_PAY.getId())){
+        String dayStr = employeeEarnedLeaveBalance.getHalfPay().equals(0) || employeeEarnedLeaveBalance.getHalfPay().equals(1)?" Day":" Days";
+        jsonObject.add("daysLeft", employeeEarnedLeaveBalance.getHalfPay().toString()+dayStr);
+        jsonObject.add("daysLeftNumber", employeeEarnedLeaveBalance.getHalfPay());
+      }
+      else{
+        jsonObject.add("daysLeft",
+            applicationMap.get(lmsType.getId()) != null ?
+                getDateOutputModifiedFormat(lmsType.getMaxDuration() - leavesTaken)
+                : getDateOutputModifiedFormat(lmsType.getMaxDuration()) + "");
+        jsonObject.add("daysLeftNumber",
+            applicationMap.get(lmsType.getId()) != null ?
+                lmsType.getMaxDuration() - leavesTaken
+                : lmsType.getMaxDuration());
+      }
 
       children.add(jsonObject);
     }
@@ -362,7 +377,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
     List<LmsApplication> leaveApplications =
-        getContentManager().getApprovedApplicationsWithinDateRange(user.getEmployeeId(), pStartDate, pEndDate);
+        getContentManager().getApplicationsWithinRange(user.getEmployeeId(), pStartDate, pEndDate);
     return getJsonObject(pUriInfo, leaveApplications);
   }
 

@@ -1,3 +1,4 @@
+<br/>
 <div align="right">
     <dir-pagination-controls boundary-links="true"
                              pagination-id="leaveApplication"
@@ -24,7 +25,7 @@
     <tbody>
     <tr dir-paginate="p in vm.pendingApplications | itemsPerPage: vm.itemsPerPage"
         current-page="vm.pagination.currentPage"
-        total-items="totalItems"
+        total-items="vm.totalItems"
         pagination-id="leaveApplication"
         data-ng-click="vm.fetchApplicationStatus(p, pagination.currentPage)"
         style="cursor: pointer;">

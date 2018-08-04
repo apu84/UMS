@@ -1,0 +1,31 @@
+<style>
+
+    table{
+        padding: 0px;
+    }
+
+</style>
+
+<!--<div ng-bind-html="vm.template"></div>-->
+<div ng-if="vm.template==''"></div>
+<table class="table table-bordered" ng-if="vm.template!=''"  >
+    <tbody>
+   <!-- <tr>
+        <td class="col-md-3" colspan="3">Three</td>
+    </tr>
+    <tr>
+        <td class="col-md-1" colspan="1">one</td>
+        <td class="col-md-2" colspan="2">Two</td>
+    </tr>-->
+    <tr ng-repeat="r in vm.routineRows">
+        <td  ng-repeat="l in r.routineList" colspan="{{vm.getColSpan(l)}}" align="center" class="col-md-{{vm.getColSpan(l)}}">
+            <div ng-if="l.course!=undefined">
+                {{l.course.no}}({{l.section}})<br>
+                {{l.room.roomNo}}<br>
+            </div>
+
+           <!-- {{vm.getCourseTeacherByCourseAndSection(routine.courseId, routine.section)}}-->
+        </td>
+    </tr>
+    </tbody>
+</table>

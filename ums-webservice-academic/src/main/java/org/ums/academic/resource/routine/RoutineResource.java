@@ -35,10 +35,11 @@ public class RoutineResource extends MutableRoutineResource {
   }
 
   @GET
-  @Path("/routineForTeacher")
+  @Path("/routineForTeacher/employeeId/{employee-id}")
   @GetLog(message = "Accessed teacher's class routine")
-  public JsonObject getRoutineForTeachers(final @Context HttpServletRequest pHttpServletRequest) {
-    return mRoutineResourceHelper.getRoutineForTeacher(mUriInfo);
+  public JsonObject getRoutineForTeachers(final @Context HttpServletRequest pHttpServletRequest,
+      @PathParam("employee-id") String pEmployeeId) {
+    return mRoutineResourceHelper.getRoutineForTeacher(pEmployeeId, mUriInfo);
   }
 
   @GET

@@ -18,8 +18,7 @@ public class PersistentFCMToken implements MutableFCMToken {
 
   private String mId;
   private String mToken;
-  private Date mRefreshedOn;
-  private Date mDeletedOn;
+  private Date mCreatedOn;
   private String mLastModified;
 
   public PersistentFCMToken() {}
@@ -27,8 +26,7 @@ public class PersistentFCMToken implements MutableFCMToken {
   public PersistentFCMToken(PersistentFCMToken pPersistentFCMToken) {
     mId = pPersistentFCMToken.getId();
     mToken = pPersistentFCMToken.getToken();
-    mRefreshedOn = pPersistentFCMToken.getRefreshedOn();
-    mDeletedOn = pPersistentFCMToken.getDeleteOn();
+    mCreatedOn = pPersistentFCMToken.getCreatedOn();
     mLastModified = pPersistentFCMToken.getLastModified();
   }
 
@@ -78,13 +76,8 @@ public class PersistentFCMToken implements MutableFCMToken {
   }
 
   @Override
-  public void setRefreshedOn(Date pRefreshedOn) {
-    mRefreshedOn = pRefreshedOn;
-  }
-
-  @Override
-  public void setDeletedOn(Date pDeletedOn) {
-    mDeletedOn = pDeletedOn;
+  public void setCreatedOn(Date pCreatedOn) {
+    mCreatedOn = pCreatedOn;
   }
 
   @Override
@@ -93,12 +86,7 @@ public class PersistentFCMToken implements MutableFCMToken {
   }
 
   @Override
-  public Date getRefreshedOn() {
-    return mRefreshedOn;
-  }
-
-  @Override
-  public Date getDeleteOn() {
-    return mDeletedOn;
+  public Date getCreatedOn() {
+    return mCreatedOn;
   }
 }

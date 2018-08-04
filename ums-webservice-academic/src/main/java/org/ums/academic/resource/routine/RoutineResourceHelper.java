@@ -76,8 +76,10 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     for(int i = 0; i < pJsonArray.size(); i++) {
       MutableRoutine routine = new PersistentRoutine();
       getBuilder().build(routine, pJsonArray.getJsonObject(i), localCache);
-      if(routine.getId() == null)
+      if(routine.getId() == null) {
+        routine.setId(mIdGenerator.getNumericId());
         newRoutineList.add(routine);
+      }
       else
         updatableRoutineList.add(routine);
     }
@@ -205,10 +207,8 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return object.build();
   }
 
-  public JsonObject getRoutineForTeacher(final UriInfo pUriInfo) {
-    String userId = SecurityUtils.getSubject().getPrincipal().toString();
-    User user = mUserManager.get(userId);
-    String employeeId = user.getEmployeeId();
+  public JsonObject getRoutineForTeacher(final String pEmployeeId, final UriInfo pUriInfo) {
+    String employeeId = pEmployeeId;
     // Employee employee = mEmployeeManager.getByEmployeeId(employeeId);
     List<Routine> routines = getContentManager().getTeacherRoutine(employeeId);
     JsonObjectBuilder object = Json.createObjectBuilder();

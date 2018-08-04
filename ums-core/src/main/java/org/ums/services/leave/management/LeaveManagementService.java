@@ -14,9 +14,11 @@ import org.ums.enums.common.RoleType;
 import org.ums.manager.EmployeeManager;
 import org.ums.manager.common.LmsApplicationManager;
 import org.ums.persistent.model.common.PersistentLmsAppStatus;
+import org.ums.services.FirebaseMessagingImpl;
 import org.ums.services.NotificationGenerator;
 import org.ums.services.Notifier;
 import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,41 +40,12 @@ public class LeaveManagementService {
   @Autowired
   EmployeeManager mEmployeeManager;
 
+  @Autowired
+  FirebaseMessagingImpl mFirebaseMessaging;
+
   public void setNotification(String userId, String message) {
-    Notifier notifier = new Notifier() {
-      @Override
-      public List<String> consumers() {
-        List<String> users = new ArrayList<>();
-        users.add(userId);
-        return users;
-      }
-
-      @Override
-      public String producer() {
-        return SecurityUtils.getSubject().getPrincipal().toString();
-      }
-
-      @Override
-      public String notificationType() {
-        return new StringBuilder(Notification.Type.LEAVE_APPLICATION.getValue()).toString();
-      }
-
-      @Override
-      public String payload() {
-        try {
-          return message;
-        } catch(Exception e) {
-          mLogger.error("Exception while looking for user: ", e);
-        }
-        return null;
-      }
-    };
-
-    try {
-      mNotificationGenerator.notify(notifier);
-    } catch(Exception e) {
-      mLogger.error("Failed to generate notification", e);
-    }
+    String sendersId = SecurityUtils.getSubject().toString();
+   // mFirebaseMessaging.send(sendersId, sendersId, "Leave Application", message, true);
   }
 
   public void setApplicationStatus(PersistentLmsAppStatus pLmsAppStatus, User pUser, List<Integer> pAdditionalRoleIds,

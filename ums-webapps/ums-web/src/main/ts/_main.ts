@@ -233,6 +233,15 @@
 /// <reference path='controller/syllabus/GridSyllabus.ts'/>
 /// <reference path='controller/semester/SemesterEnrollment.ts'/>
 /// <reference path='controller/student/StudentProfile.ts'/>
+/// <reference path='controller/expelled-information/ExpelledInformation.ts'/>
+/// <reference path='controller/expelled-information/ExpelledInformationService.ts'/>
+/// <reference path='controller/daily-exam-attendance-report/dailyExamAttendanceReport.ts'/>
+/// <reference path='controller/daily-exam-attendance-report/dailyExamAttendanceReportService.ts'/>
+/// <reference path='controller/absent-late-coming-info/absentLateComingInfo.ts'/>
+/// <reference path='controller/absent-late-coming-info/absLateComingService.ts'/>
+/// <reference path='controller/dailyExamReport/dailyExamReport.ts'/>
+/// <reference path='controller/question-correction-info/questionCorrectionInfo.ts'/>
+/// <reference path='controller/question-correction-info/questionCorrectionInfoService.ts'/>
 
 /// <reference path='dummy/DummyController.ts'/>
 /// <reference path='twofatest/two.fa.test.controller.ts'/>
@@ -270,7 +279,10 @@
 /// <reference path='directive/SubGroupSortable.ts'/>
 /// <reference path='directive/TimeLogging.ts'/>
 /// <reference path='directive/ClassRoutineDir.ts'/>
+/// <reference path='directive/RoutineSlotDir.ts'/>
 /// <reference path='directive/date.range.picker.ts'/>
+
+
 
 /// <reference path='student/student.info.service.ts'/>
 

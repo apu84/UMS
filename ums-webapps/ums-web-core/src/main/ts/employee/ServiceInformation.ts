@@ -66,6 +66,7 @@ module ums {
             this.serviceRegularIntervals.push(this.registrarConstants.servicePeriods[1]);
             this.serviceRegularIntervals.push(this.registrarConstants.servicePeriods[2]);
             this.serviceContractIntervals.push(this.registrarConstants.servicePeriods[3]);
+            this.serviceContractIntervals.push(this.registrarConstants.servicePeriods[4]);
         }
 
         public filterDesignationSelection(index: number): void {

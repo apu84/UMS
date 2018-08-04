@@ -7,6 +7,7 @@ import org.ums.enums.common.LeaveApplicationApprovalStatus;
 import org.ums.manager.CacheManager;
 import org.ums.manager.common.LmsApplicationManager;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,8 +43,13 @@ public class LmsApplicationCache extends
   }
 
   @Override
-  public List<LmsApplication> getApprovedApplicationsWithinDateRange(String pEmployeeId, String startDate,
-      String endDate) {
-    return getManager().getApprovedApplicationsWithinDateRange(pEmployeeId, startDate, endDate);
+  public List<LmsApplication> getApplicationsWithinRange(String pEmployeeId, String startDate, String endDate) {
+    return getManager().getApplicationsWithinRange(pEmployeeId, startDate, endDate);
+  }
+
+  @Override
+  public List<LmsApplication> getWithinDateRange(Date pStartDate, Date pEndDate,
+      LeaveApplicationApprovalStatus pLeaveApplicationStatus) {
+    return getManager().getWithinDateRange(pStartDate, pEndDate, pLeaveApplicationStatus);
   }
 }

@@ -125,7 +125,7 @@ module ums {
                     {id: 'AB–', name: 'AB-'}
                 ],
                 ugDept: [
-                    {id: '', name: 'Select Dept./School'},
+                    {   id: '', name: 'Select Dept./School'},
                     {id: '01', name: 'ARC'},
                     {id: '02', name: 'BBA'},
                     {id: '03', name: 'CE'},
@@ -381,6 +381,17 @@ module ums {
                     '110707': ['BSc in IPE'],
                     '110708': ['BSc in ME']
                 },
+                programs:[
+                    {id: 0, name: 'Select Program'},
+                    {id: 110100, name: 'Bsc in ARC'},
+                    {id: 110200, name: 'BBA'},
+                    {id: 110300, name: 'Bsc in CE'},
+                    {id: 110400, name: 'Bsc in CSE'},
+                    {id: 110500, name: 'Bsc in EEE'},
+                    {id: 110600, name: 'Bsc in TE'},
+                    {id: 110707, name: 'Bsc in IPE'},
+                    {id: 110708, name: 'Bsc in ME'}
+                ],
                 optionalCourseYearSemester: {
                     '110200':[{'year':'4','semester':'1'},{'year':'4','semester':'2'}],
                     '110400':[{'year':'4','semester':'2'}],
@@ -447,6 +458,16 @@ module ums {
                     {id: "1", name: "Semester Withdraw"},
                     {id: "2", name: "Optional Course Selection"}
                 ],
+                absentPresentStatus: [
+                    {id: 1, name: "Absent"},
+                    {id: 2, name: "Late Coming"}
+                ], absPreRemarks: [
+                    {id: 1, name: "Did not inform"},
+                    {id: 2, name: "Inform"}
+                ],amPmType: [
+                    {id: 1, name: "AM"},
+                    {id: 2, name: "PM"}
+                ],
                 actors: [
                     {id: "0", name: "Student"},
                     {id: "1", name: "Head"},
@@ -460,6 +481,16 @@ module ums {
                     {id: "1", name: "Submitted"},
                     {id: "2", name: "Approved"},
                     {id: "3", name: "Rejected"}
+                ],
+                regType: [
+                    {id: 1, name: "Regular"},
+                    {id: 2, name: "Clearance"},
+                    {id: 3, name: "Carry"},
+                    {id: 4, name: "Special Carry"},
+                    {id: 5, name: "Improvement"}
+                ],examType: [
+                    {id: 1, name: "Regular"},
+                    {id: 2, name: "Carry/Clearance/Improvement"}
                 ],
                 responseTypes: {
                     'ERROR': 'ERROR',
@@ -919,7 +950,8 @@ module ums {
                     {id: 1, name: "Contractual"},
                     {id: 2, name: "Probation"},
                     {id: 3, name: "Permanent"},
-                    {id: 4, name: "Contract"}
+                    {id: 4, name: "Contract"},
+                    {id: 5, name: "Add-Hoc"}
                 ],
                 meetingTypes: [
                     {id: 10, name: "Board Of Trustees Meeting"},

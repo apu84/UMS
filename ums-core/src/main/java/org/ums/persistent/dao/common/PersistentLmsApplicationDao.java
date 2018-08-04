@@ -13,6 +13,7 @@ import org.ums.util.UmsUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +72,14 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
   public List<LmsApplication> getAll() {
     String query = SELECT_ALL;
     return mNamedParameterJdbcTemplate.query(query, new LmsApplicationRowMapper());
+  }
+
+  @Override
+  public List<LmsApplication> getWithinDateRange(Date pStartDate, Date pEndDate,
+      LeaveApplicationApprovalStatus pLeaveApplicationStatus) {
+    String query = "select * from LMS_APPLICATION where (FROM_DATE>=? or TO_DATE<=?) and APP_STATUS=?";
+    return mJdbcTemplate.query(query, new Object[] {pStartDate, pEndDate, pLeaveApplicationStatus.getId()},
+        new LmsApplicationRowMapper());
   }
 
   @Override
@@ -144,7 +153,7 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
     String query = "select count(*) from lms_application " + " where id=:id";
     Map parameterMap = new HashMap();
     parameterMap.put("id", pId);
-    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, Integer.class) == 1 ? true : false;
+    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, Integer.class).equals(1) ? true : false;
   }
 
   @Override
@@ -168,13 +177,12 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
   }
 
   @Override
-  public List<LmsApplication> getApprovedApplicationsWithinDateRange(String pEmployeeId, String startDate,
-      String endDate) {
+  public List<LmsApplication> getApplicationsWithinRange(String pEmployeeId, String startDate, String endDate) {
     String query =
         "SELECT * "
             + "FROM LMS_APPLICATION "
             + "WHERE "
-            + "  EMPLOYEE_ID = :employeeId AND APP_STATUS = 7 AND :startDate>= FROM_DATE AND :modifiedStartDate<= TO_DATE "
+            + "  EMPLOYEE_ID = :employeeId AND (APP_STATUS!=3 or APP_STATUS!=5 OR APP_STATUS!=6) AND :startDate>= FROM_DATE AND :modifiedStartDate<= TO_DATE "
             + "  AND :endDate >= FROM_DATE AND :endDate <= TO_DATE";
     Map parameterMap = new HashMap();
     parameterMap.put("employeeId", pEmployeeId);

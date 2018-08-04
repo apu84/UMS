@@ -3,6 +3,7 @@ module ums {
     id: string;
     roomId: string;
     roomNumber:string;
+    roomNo: string;
     description: string;
     totalRow: number;
     totalColumn: number;

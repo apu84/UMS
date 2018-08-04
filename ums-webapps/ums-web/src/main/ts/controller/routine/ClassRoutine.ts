@@ -128,8 +128,14 @@ module ums {
         }
         else {
           this.classRoutineService.getClassRoutineForEmployee(this.classRoutineService.selectedSemester.id, this.classRoutineService.selectedProgram.id, +this.classRoutineService.studentsYear, +this.classRoutineService.studentsSemester, this.classRoutineService.selectedTheorySection.id).then((routineData: ClassRoutine[]) => {
+            console.log("Routine data");
+            console.log(routineData);
             this.classRoutineService.routineData = [];
             this.classRoutineService.dayAndTimeMapWithRoutine = {};
+            routineData.forEach((r:ClassRoutine)=>{
+              r.startTimeObj = moment(r.startTime, "hh:mm A").toDate();
+              r.endTimeObj = moment(r.endTime, "hh:mm A").toDate();
+            })
             this.classRoutineService.routineData = routineData;
             defer.resolve(routineData);
           });
