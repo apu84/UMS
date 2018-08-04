@@ -229,8 +229,8 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
       courseTeacher.setCourseId(rs.getString("COURSE_ID"));
       AtomicReference<CourseTeacher> atomicReference = new AtomicReference<>(courseTeacher);
       return atomicReference.get();
-   }
-}
+    }
+  }
   class CourseTeacherRowMapperForAllSection implements RowMapper<ApplicationTES> {
     @Override
     public ApplicationTES mapRow(ResultSet pResultSet, int pI) throws SQLException {

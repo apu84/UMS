@@ -127,9 +127,9 @@ public class EmpExamAttendanceHelper extends ResourceHelper<EmpExamAttendance, M
     empExamReserveDate.setAttendantId(application.getId());
     try {
 
-        mEmpExamInvigilatorDateManager.delete(empExamInvigilatorDate);
-        mEmpExamReserveDateManager.delete(empExamReserveDate);
-         mManager.delete(application);
+      mEmpExamInvigilatorDateManager.delete(empExamInvigilatorDate);
+      mEmpExamReserveDateManager.delete(empExamReserveDate);
+      mManager.delete(application);
 
       PersistentEmpExamAttendance app = new PersistentEmpExamAttendance();
       getBuilder().build(app, jsonObjectForAdd, localCache);

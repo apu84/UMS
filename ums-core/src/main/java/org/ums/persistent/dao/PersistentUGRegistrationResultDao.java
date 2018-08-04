@@ -142,7 +142,7 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
     return mJdbcTemplate.query(REGISTERED_THEORY_COURSES, new Object[] {pStudentId, pSemesterId, pExamType, pRegType,
         pSemesterId}, new UGRegistrationResultRowMapperWithoutResult());
   }
-  
+
   public Integer getTotalRegisteredStudentForCourse(String pCourseId, List<String> pSection, Integer pSemesterId) {
     String query =
         "SELECT  COUNT (a.STUDENT_ID) FROM UG_REGISTRATION_RESULT_CURR a,STUDENTS b WHERE  a.COURSE_ID=:courseId AND b.THEORY_SECTION IN(:sectionList) AND a.SEMESTER_ID=:semesterId "

@@ -274,6 +274,7 @@ public class AcademicContext {
     questionCorrectionInfoCache.setManager(new PersistentQuestionCorrectionDao(mTemplateFactory.getJdbcTemplate(),
         mIdGenerator));
     return questionCorrectionInfoCache;
+  }
 
   ApplicationTESManager applicationTESManager() {
     ApplicationTESCache applicationTESCache = new ApplicationTESCache((mCacheFactory.getCacheManager()));

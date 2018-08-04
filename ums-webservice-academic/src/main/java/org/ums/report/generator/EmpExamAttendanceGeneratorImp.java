@@ -519,7 +519,7 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
     footer.setWidthPercentage(100);
     mDateFormat = new DateFormat("dd MMM YYYY");
     Font fontTimes10Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 10);
-      Font fontTimes8Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 8);
+    Font fontTimes8Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 8);
     chunk = new Chunk("(* Not arranged in accordance with seniority): ", fontTimes8Normal);
     paragraph = new UmsParagraph();
     paragraph.setAlignment(Element.ALIGN_LEFT);
@@ -542,13 +542,12 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
     document.add(paragraph);
     Integer designationOfCoe = 2061;
     List<Employee> coe = mEmployeeManager.getByDesignation(designationOfCoe.toString());
-    String coeName="";
-    for(Employee emp:coe){
-        coeName=emp.getPersonalInformation().getName();
+    String coeName = "";
+    for(Employee emp : coe) {
+      coeName = emp.getPersonalInformation().getName();
     }
     chunk =
-        new Chunk("\nBy order of the Vice-Chancellor   \n\n"
-            + "------------------------------------------\n"+coeName
+        new Chunk("\nBy order of the Vice-Chancellor   \n\n" + "------------------------------------------\n" + coeName
             + "   \nController of Examinations,Aust\n\n", fontTimes10Normal);
     paragraph = new UmsParagraph();
     paragraph.setAlignment(Element.ALIGN_RIGHT);

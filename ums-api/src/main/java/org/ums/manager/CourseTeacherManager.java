@@ -19,7 +19,7 @@ public interface CourseTeacherManager extends AssignedTeacherManager<CourseTeach
   List<CourseTeacher> getCourseTeacher(final int pSemesterId);
 
   List<CourseTeacher> getDistinctCourseTeacher(final int pSemesterId);
-  
+
   List<ApplicationTES> getAllSectionForSelectedCourse(final String pCourseId, String pTeacherId,
       final Integer pSemesterId);
 }
