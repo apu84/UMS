@@ -3,6 +3,7 @@ package org.ums.microservice.instance.earnedleave;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.common.EmployeeEarnedLeaveBalance;
 import org.ums.domain.model.immutable.common.EmployeeEarnedLeaveBalanceHistory;
@@ -13,15 +14,19 @@ import org.ums.domain.model.mutable.common.MutableEmployeeEarnedLeaveBalanceHist
 import org.ums.domain.model.mutable.common.MutableHolidays;
 import org.ums.domain.model.mutable.common.MutableLmsApplication;
 import org.ums.enums.common.LeaveApplicationApprovalStatus;
+import org.ums.enums.common.LeaveMigrationType;
+import org.ums.generator.IdGenerator;
 import org.ums.manager.EmployeeManager;
 import org.ums.manager.common.EmployeeEarnedLeaveBalanceHistoryManager;
 import org.ums.manager.common.EmployeeEarnedLeaveBalanceManager;
 import org.ums.manager.common.HolidaysManager;
 import org.ums.manager.common.LmsApplicationManager;
+import org.ums.persistent.model.common.PersistentEmployeeEarnedLeaveBalanceHistory;
 import org.ums.persistent.model.common.PersistentHolidays;
 import org.ums.persistent.model.common.PersistentLmsApplication;
 import org.ums.util.UmsUtils;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,13 +42,16 @@ public class EarnedLeaveCounterService {
     EmployeeEarnedLeaveBalanceHistoryManager mEmployeeEarnedLeaveBalanceHistoryManager;
     @Autowired
     EmployeeManager mEmployeeManager;
+    @Autowired
+    IdGenerator mIdGenerator;
 
 
     private List<Holidays> mHolidays;
     private int ACTIVE_STATUS=1;
 
 
-    public void updateEmployeesEarnedLeaveBalance() throws  Exception{
+    @Transactional
+    public void calculateAndUpdateEmployeesEarnedLeaveBalance() throws  Exception{
         List<Employee> employeeList = mEmployeeManager.getAll()
                 .parallelStream()
                 .filter(e->e.getStatus()==ACTIVE_STATUS)
@@ -60,10 +68,60 @@ public class EarnedLeaveCounterService {
 
         for(Employee employee: employeeList){
             MutableEmployeeEarnedLeaveBalance employeeEarnedLeaveBalance = (MutableEmployeeEarnedLeaveBalance) earnedLeaveBalanceMap.get(employee.getId());
-            
+            int totalLeavesTakenOnPreviousMonth = 0;
+            if(employeesTotalLeaveTaken.containsKey(employee.getId()))
+              totalLeavesTakenOnPreviousMonth = employeesTotalLeaveTaken.get(employee.getId());
+            employeeEarnedLeaveBalance = updateEarnedLeaveBalance(employeeEarnedLeaveBalance, (publicHolidays+weeklyHolidays+totalLeavesTakenOnPreviousMonth), calendar, earnedLeaveBalanceHistories);
+            updatedEarnedLeaveBalance.add(employeeEarnedLeaveBalance);
         }
+        mEmployeeEarnedLeaveBalanceManager.update(updatedEarnedLeaveBalance);
+        mEmployeeEarnedLeaveBalanceHistoryManager.create(earnedLeaveBalanceHistories);
 
     }
+
+    private MutableEmployeeEarnedLeaveBalance updateEarnedLeaveBalance(MutableEmployeeEarnedLeaveBalance pMutableEmployeeEarnedLeaveBalance, int totalAvailableLeave, Calendar pCalendar, List<MutableEmployeeEarnedLeaveBalanceHistory> pMutableEmployeeEarnedLeaveBalanceHistories){
+      int totalMonthDays = pCalendar.getMaximum(Calendar.DATE) - pCalendar.getMinimum(Calendar.DATE);
+      int daysLeft = totalMonthDays - totalAvailableLeave;
+      double earnedLeave = daysLeft/11;
+      MutableEmployeeEarnedLeaveBalanceHistory history = new PersistentEmployeeEarnedLeaveBalanceHistory();
+
+      BigDecimal previousFullBalance = pMutableEmployeeEarnedLeaveBalance.getFullPay();
+      BigDecimal previousHalfBalance = pMutableEmployeeEarnedLeaveBalance.getHalfPay();
+
+
+      history.setEmployeeId(pMutableEmployeeEarnedLeaveBalance.getEmployeeId());
+      history.setLeaveMigrationType(LeaveMigrationType.DATA_MIGRATION);
+      history.setChangedOn(new Date());
+
+      if(pMutableEmployeeEarnedLeaveBalance.getFullPay().compareTo(new BigDecimal(120))<=0 ){
+        BigDecimal totalEarnedLeave = pMutableEmployeeEarnedLeaveBalance.getFullPay().add(new BigDecimal(earnedLeave));
+        BigDecimal excessedLeave = totalEarnedLeave.subtract(pMutableEmployeeEarnedLeaveBalance.getFullPay()).abs();
+        pMutableEmployeeEarnedLeaveBalance.setFullPay((excessedLeave.compareTo(new BigDecimal(0))>0)? new BigDecimal(120): totalEarnedLeave);
+        pMutableEmployeeEarnedLeaveBalance.setHalfPay((pMutableEmployeeEarnedLeaveBalance.getHalfPay().add(excessedLeave).compareTo(new BigDecimal(120)))>0? new BigDecimal(120): (pMutableEmployeeEarnedLeaveBalance.getHalfPay().add(excessedLeave)));
+      }else if( pMutableEmployeeEarnedLeaveBalance.getHalfPay().compareTo(new BigDecimal(120))<=0){
+        BigDecimal totalEarnedLeave = pMutableEmployeeEarnedLeaveBalance.getHalfPay().add(new BigDecimal(earnedLeave));
+        pMutableEmployeeEarnedLeaveBalance.setHalfPay((pMutableEmployeeEarnedLeaveBalance.getHalfPay().add(totalEarnedLeave).compareTo(new BigDecimal(120))>0)? new BigDecimal(120): pMutableEmployeeEarnedLeaveBalance.getHalfPay().add(totalEarnedLeave));
+      }
+
+      MutableEmployeeEarnedLeaveBalanceHistory fullEarnedLeaveBalanceHistory = history;
+      MutableEmployeeEarnedLeaveBalanceHistory halfEarnedLeaveBalanceHistory = history;
+      if(!pMutableEmployeeEarnedLeaveBalance.getFullPay().equals(previousFullBalance)){
+        fullEarnedLeaveBalanceHistory.setCredit(pMutableEmployeeEarnedLeaveBalance.getFullPay().subtract(previousFullBalance));
+        fullEarnedLeaveBalanceHistory.setBalance(pMutableEmployeeEarnedLeaveBalance.getFullPay());
+        fullEarnedLeaveBalanceHistory.setId(mIdGenerator.getNumericId());
+        pMutableEmployeeEarnedLeaveBalanceHistories.add(fullEarnedLeaveBalanceHistory);
+
+      }
+      if(!pMutableEmployeeEarnedLeaveBalance.getHalfPay().equals(previousHalfBalance)){
+        halfEarnedLeaveBalanceHistory.setCredit(pMutableEmployeeEarnedLeaveBalance.getHalfPay().subtract(previousHalfBalance));
+        halfEarnedLeaveBalanceHistory.setBalance(pMutableEmployeeEarnedLeaveBalance.getHalfPay());
+        halfEarnedLeaveBalanceHistory.setId(mIdGenerator.getNumericId());
+        pMutableEmployeeEarnedLeaveBalanceHistories.add(halfEarnedLeaveBalanceHistory);
+      }
+      return pMutableEmployeeEarnedLeaveBalance;
+    }
+
+
 
 
 

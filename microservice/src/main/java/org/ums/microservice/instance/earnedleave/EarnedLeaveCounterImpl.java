@@ -23,8 +23,18 @@ public class EarnedLeaveCounterImpl extends AbstractService implements EarnedLea
 
   SecurityManager mSecurityManager;
 
+  EarnedLeaveCounterService mEarnedLeaveCounterService;
+
   private ContentManager[] mContentManagers;
 
+
+  public EarnedLeaveCounterImpl(UMSConfiguration pUMSConfiguration, ServiceConfiguration pServiceConfiguration, SecurityManager pSecurityManager, EarnedLeaveCounterService pEarnedLeaveCounterService, ContentManager... pContentManagers) {
+    mUMSConfiguration = pUMSConfiguration;
+    mServiceConfiguration = pServiceConfiguration;
+    mSecurityManager = pSecurityManager;
+    mEarnedLeaveCounterService = pEarnedLeaveCounterService;
+    mContentManagers = pContentManagers;
+  }
 
   @Override
   protected SecurityManager getSecurityManager() {
@@ -44,7 +54,11 @@ public class EarnedLeaveCounterImpl extends AbstractService implements EarnedLea
   @Override
   @Scheduled(cron = "0 0 0 1 1/1 *") // this should execute on 1st day every month @00:00
   public void countEarnedLeave() {
-
+    try{
+      mEarnedLeaveCounterService.calculateAndUpdateEmployeesEarnedLeaveBalance();
+    }catch (Exception pE){
+      pE.printStackTrace();
+    }
   }
 
 }

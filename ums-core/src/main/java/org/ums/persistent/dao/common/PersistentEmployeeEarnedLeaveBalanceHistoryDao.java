@@ -28,9 +28,9 @@ public class PersistentEmployeeEarnedLeaveBalanceHistoryDao extends EmployeeEarn
 
   private String SELECT_ALL = "select * from EMP_EL_HISTORY";
   private String INSERT_ONE =
-      "INSERT INTO EMP_EL_HISTORY(ID, MIGRATION_TYPE, CHANGED_ON, DEBIT, CREDIT, BALANCE, BALANCE_TYPE, LAST_MODIFIED) VALUES (:id, :migrationType, :changedOn, :debit, :credit, :balance, :balanceType, :lastModified)";
+      "INSERT INTO EMP_EL_HISTORY(ID, EMPLOYEE_ID, MIGRATION_TYPE, CHANGED_ON, DEBIT, CREDIT, BALANCE, BALANCE_TYPE, LAST_MODIFIED) VALUES (:id, :employeeId, :migrationType, :changedOn, :debit, :credit, :balance, :balanceType, :lastModified)";
   private String UPDATE_ONE =
-      "UPDATE EMP_EL_HISTORY SET MIGRATION_TYPE=:migrationType, CHANGED_ON=:changedOn, DEBIT=:debit, CREDIT=:credit, BALANCE=:balance, BALANCE_TYPE=:balanceType, LAST_MODIFIED=:lastModified WHERE ID=:id";
+      "UPDATE EMP_EL_HISTORY SET  EMPLOYEE_ID=:employeeId, MIGRATION_TYPE=:migrationType, CHANGED_ON=:changedOn, DEBIT=:debit, CREDIT=:credit, BALANCE=:balance, BALANCE_TYPE=:balanceType, LAST_MODIFIED=:lastModified WHERE ID=:id";
   private String DELETE_ONE = "DELETE FROM EMP_EL_HISTORY WHERE ID=:id";
 
   private JdbcTemplate mJdbcTemplate;
