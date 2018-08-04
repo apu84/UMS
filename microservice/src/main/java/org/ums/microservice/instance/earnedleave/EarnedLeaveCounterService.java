@@ -1,6 +1,5 @@
 package org.ums.microservice.instance.earnedleave;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,25 +31,23 @@ import java.util.stream.Collectors;
 
 @Service
 public class EarnedLeaveCounterService {
-    @Autowired
-    HolidaysManager mHolidaysManager;
-    @Autowired
-    LmsApplicationManager mLmsApplicationManager;
-    @Autowired
-    EmployeeEarnedLeaveBalanceManager mEmployeeEarnedLeaveBalanceManager;
-    @Autowired
-    EmployeeEarnedLeaveBalanceHistoryManager mEmployeeEarnedLeaveBalanceHistoryManager;
-    @Autowired
-    EmployeeManager mEmployeeManager;
-    @Autowired
-    IdGenerator mIdGenerator;
+  @Autowired
+  HolidaysManager mHolidaysManager;
+  @Autowired
+  LmsApplicationManager mLmsApplicationManager;
+  @Autowired
+  EmployeeEarnedLeaveBalanceManager mEmployeeEarnedLeaveBalanceManager;
+  @Autowired
+  EmployeeEarnedLeaveBalanceHistoryManager mEmployeeEarnedLeaveBalanceHistoryManager;
+  @Autowired
+  EmployeeManager mEmployeeManager;
+  @Autowired
+  IdGenerator mIdGenerator;
 
+  private List<Holidays> mHolidays;
+  private int ACTIVE_STATUS = 1;
 
-    private List<Holidays> mHolidays;
-    private int ACTIVE_STATUS=1;
-
-
-    @Transactional
+  @Transactional
     public void calculateAndUpdateEmployeesEarnedLeaveBalance() throws  Exception{
         List<Employee> employeeList = mEmployeeManager.getAll()
                 .parallelStream()
@@ -79,80 +76,83 @@ public class EarnedLeaveCounterService {
 
     }
 
-    private MutableEmployeeEarnedLeaveBalance updateEarnedLeaveBalance(MutableEmployeeEarnedLeaveBalance pMutableEmployeeEarnedLeaveBalance, int totalAvailableLeave, Calendar pCalendar, List<MutableEmployeeEarnedLeaveBalanceHistory> pMutableEmployeeEarnedLeaveBalanceHistories){
-      int totalMonthDays = pCalendar.getMaximum(Calendar.DATE) - pCalendar.getMinimum(Calendar.DATE);
-      int daysLeft = totalMonthDays - totalAvailableLeave;
-      double earnedLeave = daysLeft/11;
-      MutableEmployeeEarnedLeaveBalanceHistory history = new PersistentEmployeeEarnedLeaveBalanceHistory();
+  private MutableEmployeeEarnedLeaveBalance updateEarnedLeaveBalance(
+      MutableEmployeeEarnedLeaveBalance pMutableEmployeeEarnedLeaveBalance, int totalAvailableLeave,
+      Calendar pCalendar, List<MutableEmployeeEarnedLeaveBalanceHistory> pMutableEmployeeEarnedLeaveBalanceHistories) {
+    int totalMonthDays = pCalendar.getMaximum(Calendar.DATE) - pCalendar.getMinimum(Calendar.DATE);
+    int daysLeft = totalMonthDays - totalAvailableLeave;
+    double earnedLeave = daysLeft / 11;
+    MutableEmployeeEarnedLeaveBalanceHistory history = new PersistentEmployeeEarnedLeaveBalanceHistory();
 
-      BigDecimal previousFullBalance = pMutableEmployeeEarnedLeaveBalance.getFullPay();
-      BigDecimal previousHalfBalance = pMutableEmployeeEarnedLeaveBalance.getHalfPay();
+    BigDecimal previousFullBalance = pMutableEmployeeEarnedLeaveBalance.getFullPay();
+    BigDecimal previousHalfBalance = pMutableEmployeeEarnedLeaveBalance.getHalfPay();
 
+    history.setEmployeeId(pMutableEmployeeEarnedLeaveBalance.getEmployeeId());
+    history.setLeaveMigrationType(LeaveMigrationType.DATA_MIGRATION);
+    history.setChangedOn(new Date());
 
-      history.setEmployeeId(pMutableEmployeeEarnedLeaveBalance.getEmployeeId());
-      history.setLeaveMigrationType(LeaveMigrationType.DATA_MIGRATION);
-      history.setChangedOn(new Date());
-
-      if(pMutableEmployeeEarnedLeaveBalance.getFullPay().compareTo(new BigDecimal(120))<=0 ){
-        BigDecimal totalEarnedLeave = pMutableEmployeeEarnedLeaveBalance.getFullPay().add(new BigDecimal(earnedLeave));
-        BigDecimal excessedLeave = totalEarnedLeave.subtract(pMutableEmployeeEarnedLeaveBalance.getFullPay()).abs();
-        pMutableEmployeeEarnedLeaveBalance.setFullPay((excessedLeave.compareTo(new BigDecimal(0))>0)? new BigDecimal(120): totalEarnedLeave);
-        pMutableEmployeeEarnedLeaveBalance.setHalfPay((pMutableEmployeeEarnedLeaveBalance.getHalfPay().add(excessedLeave).compareTo(new BigDecimal(120)))>0? new BigDecimal(120): (pMutableEmployeeEarnedLeaveBalance.getHalfPay().add(excessedLeave)));
-      }else if( pMutableEmployeeEarnedLeaveBalance.getHalfPay().compareTo(new BigDecimal(120))<=0){
-        BigDecimal totalEarnedLeave = pMutableEmployeeEarnedLeaveBalance.getHalfPay().add(new BigDecimal(earnedLeave));
-        pMutableEmployeeEarnedLeaveBalance.setHalfPay((pMutableEmployeeEarnedLeaveBalance.getHalfPay().add(totalEarnedLeave).compareTo(new BigDecimal(120))>0)? new BigDecimal(120): pMutableEmployeeEarnedLeaveBalance.getHalfPay().add(totalEarnedLeave));
-      }
-
-      MutableEmployeeEarnedLeaveBalanceHistory fullEarnedLeaveBalanceHistory = history;
-      MutableEmployeeEarnedLeaveBalanceHistory halfEarnedLeaveBalanceHistory = history;
-      if(!pMutableEmployeeEarnedLeaveBalance.getFullPay().equals(previousFullBalance)){
-        fullEarnedLeaveBalanceHistory.setCredit(pMutableEmployeeEarnedLeaveBalance.getFullPay().subtract(previousFullBalance));
-        fullEarnedLeaveBalanceHistory.setBalance(pMutableEmployeeEarnedLeaveBalance.getFullPay());
-        fullEarnedLeaveBalanceHistory.setId(mIdGenerator.getNumericId());
-        pMutableEmployeeEarnedLeaveBalanceHistories.add(fullEarnedLeaveBalanceHistory);
-
-      }
-      if(!pMutableEmployeeEarnedLeaveBalance.getHalfPay().equals(previousHalfBalance)){
-        halfEarnedLeaveBalanceHistory.setCredit(pMutableEmployeeEarnedLeaveBalance.getHalfPay().subtract(previousHalfBalance));
-        halfEarnedLeaveBalanceHistory.setBalance(pMutableEmployeeEarnedLeaveBalance.getHalfPay());
-        halfEarnedLeaveBalanceHistory.setId(mIdGenerator.getNumericId());
-        pMutableEmployeeEarnedLeaveBalanceHistories.add(halfEarnedLeaveBalanceHistory);
-      }
-      return pMutableEmployeeEarnedLeaveBalance;
+    if(pMutableEmployeeEarnedLeaveBalance.getFullPay().compareTo(new BigDecimal(120)) <= 0) {
+      BigDecimal totalEarnedLeave = pMutableEmployeeEarnedLeaveBalance.getFullPay().add(new BigDecimal(earnedLeave));
+      BigDecimal excessedLeave = totalEarnedLeave.subtract(pMutableEmployeeEarnedLeaveBalance.getFullPay()).abs();
+      pMutableEmployeeEarnedLeaveBalance.setFullPay((excessedLeave.compareTo(new BigDecimal(0)) > 0) ? new BigDecimal(
+          120) : totalEarnedLeave);
+      pMutableEmployeeEarnedLeaveBalance.setHalfPay((pMutableEmployeeEarnedLeaveBalance.getHalfPay().add(excessedLeave)
+          .compareTo(new BigDecimal(120))) > 0 ? new BigDecimal(120) : (pMutableEmployeeEarnedLeaveBalance.getHalfPay()
+          .add(excessedLeave)));
+    }
+    else if(pMutableEmployeeEarnedLeaveBalance.getHalfPay().compareTo(new BigDecimal(120)) <= 0) {
+      BigDecimal totalEarnedLeave = pMutableEmployeeEarnedLeaveBalance.getHalfPay().add(new BigDecimal(earnedLeave));
+      pMutableEmployeeEarnedLeaveBalance.setHalfPay((pMutableEmployeeEarnedLeaveBalance.getHalfPay()
+          .add(totalEarnedLeave).compareTo(new BigDecimal(120)) > 0) ? new BigDecimal(120)
+          : pMutableEmployeeEarnedLeaveBalance.getHalfPay().add(totalEarnedLeave));
     }
 
+    MutableEmployeeEarnedLeaveBalanceHistory fullEarnedLeaveBalanceHistory = history;
+    MutableEmployeeEarnedLeaveBalanceHistory halfEarnedLeaveBalanceHistory = history;
+    if(!pMutableEmployeeEarnedLeaveBalance.getFullPay().equals(previousFullBalance)) {
+      fullEarnedLeaveBalanceHistory.setCredit(pMutableEmployeeEarnedLeaveBalance.getFullPay().subtract(
+          previousFullBalance));
+      fullEarnedLeaveBalanceHistory.setBalance(pMutableEmployeeEarnedLeaveBalance.getFullPay());
+      fullEarnedLeaveBalanceHistory.setId(mIdGenerator.getNumericId());
+      pMutableEmployeeEarnedLeaveBalanceHistories.add(fullEarnedLeaveBalanceHistory);
 
+    }
+    if(!pMutableEmployeeEarnedLeaveBalance.getHalfPay().equals(previousHalfBalance)) {
+      halfEarnedLeaveBalanceHistory.setCredit(pMutableEmployeeEarnedLeaveBalance.getHalfPay().subtract(
+          previousHalfBalance));
+      halfEarnedLeaveBalanceHistory.setBalance(pMutableEmployeeEarnedLeaveBalance.getHalfPay());
+      halfEarnedLeaveBalanceHistory.setId(mIdGenerator.getNumericId());
+      pMutableEmployeeEarnedLeaveBalanceHistories.add(halfEarnedLeaveBalanceHistory);
+    }
+    return pMutableEmployeeEarnedLeaveBalance;
+  }
 
-
-
-    private int calculateTotalWeeklyHolidays(Calendar pCalender){
-        int totalDays = 0;
-        int maxDayInMonth = pCalender.getMaximum(Calendar.MONTH);
-        for(int i=1; i<=maxDayInMonth; i++){
-            pCalender.set(Calendar.DAY_OF_MONTH, i);
-            int dayOfWeek = pCalender.get(Calendar.DAY_OF_WEEK);
-            if(checkWhetherTheDayIsWithingPublicHolidays(dayOfWeek) == false)
-                if(Calendar.FRIDAY == dayOfWeek){
-                    totalDays++;
-                }
+  private int calculateTotalWeeklyHolidays(Calendar pCalender) {
+    int totalDays = 0;
+    int maxDayInMonth = pCalender.getMaximum(Calendar.MONTH);
+    for(int i = 1; i <= maxDayInMonth; i++) {
+      pCalender.set(Calendar.DAY_OF_MONTH, i);
+      int dayOfWeek = pCalender.get(Calendar.DAY_OF_WEEK);
+      if(checkWhetherTheDayIsWithingPublicHolidays(dayOfWeek) == false)
+        if(Calendar.FRIDAY == dayOfWeek) {
+          totalDays++;
         }
-        return totalDays;
     }
+    return totalDays;
+  }
 
-    private boolean checkWhetherTheDayIsWithingPublicHolidays(int day){
-        boolean found=false;
-        for(Holidays holiday: mHolidays){
-            if(day >= holiday.getFromDate().getDay() && day<= holiday.getToDate().getDay())
-            {
-                found = true;
-                break;
-            }
-        }
-        return found;
+  private boolean checkWhetherTheDayIsWithingPublicHolidays(int day) {
+    boolean found = false;
+    for(Holidays holiday : mHolidays) {
+      if(day >= holiday.getFromDate().getDay() && day <= holiday.getToDate().getDay()) {
+        found = true;
+        break;
+      }
     }
+    return found;
+  }
 
-
-    private Map<String, EmployeeEarnedLeaveBalance> getEmployeeIdMapWithEarnedLeaveBalance(){
+  private Map<String, EmployeeEarnedLeaveBalance> getEmployeeIdMapWithEarnedLeaveBalance(){
         Map<String, EmployeeEarnedLeaveBalance> employeeIdMapWithEarnedLeaveBalance = new HashMap<>();
         List<EmployeeEarnedLeaveBalance> earnedLeaveBalanceList = mEmployeeEarnedLeaveBalanceManager.getAllEarnedLeaveBalanceOfActiveEmployees();
         employeeIdMapWithEarnedLeaveBalance = earnedLeaveBalanceList
@@ -161,8 +161,7 @@ public class EarnedLeaveCounterService {
         return employeeIdMapWithEarnedLeaveBalance;
     }
 
-
-    private int calculatePublicHolidays(Calendar pCalendar) throws Exception{
+  private int calculatePublicHolidays(Calendar pCalendar) throws Exception{
         Date fromDate = new Date();
         Date toDate = new Date();
         getFirstAndLastDate(pCalendar, fromDate, toDate);
@@ -179,37 +178,40 @@ public class EarnedLeaveCounterService {
                 .sum();
     }
 
+  private Map<String, Integer> calculateTotalLeavesOfEmployees(Calendar pCalendar) throws Exception {
+    Date fromDate = new Date(), toDate = new Date();
+    getFirstAndLastDate(pCalendar, fromDate, toDate);
+    List<LmsApplication> leaveApplicationList =
+        mLmsApplicationManager
+            .getWithinDateRange(fromDate, toDate, LeaveApplicationApprovalStatus.APPLICATION_APPROVED);
 
-    private Map<String, Integer> calculateTotalLeavesOfEmployees(Calendar pCalendar) throws Exception{
-        Date fromDate = new Date(), toDate = new Date();
-        getFirstAndLastDate(pCalendar, fromDate, toDate);
-        List<LmsApplication> leaveApplicationList = mLmsApplicationManager.getWithinDateRange(fromDate, toDate, LeaveApplicationApprovalStatus.APPLICATION_APPROVED);
+    Map<String, Integer> employeeIdMapWithTotalDaysLeaveTaken = new HashMap<>();
+    for(LmsApplication lmsApplication : leaveApplicationList) {
+      MutableLmsApplication lmsApplicationTmp = (PersistentLmsApplication) lmsApplication;
+      int totalDays = 0;
+      if(lmsApplication.getToDate().after(toDate))
+        lmsApplicationTmp.setToDate(toDate);
 
-        Map<String, Integer> employeeIdMapWithTotalDaysLeaveTaken = new HashMap<>();
-        for(LmsApplication lmsApplication: leaveApplicationList){
-            MutableLmsApplication lmsApplicationTmp = (PersistentLmsApplication) lmsApplication;
-            int totalDays = 0;
-            if(lmsApplication.getToDate().after(toDate))
-                lmsApplicationTmp.setToDate(toDate);
-
-            if(employeeIdMapWithTotalDaysLeaveTaken.containsKey(lmsApplication.getEmployeeId())){
-                totalDays = employeeIdMapWithTotalDaysLeaveTaken.get(lmsApplication.getEmployeeId());
-                totalDays = totalDays+ ((lmsApplicationTmp.getFromDate().getDay()- lmsApplicationTmp.getToDate().getDay())+1);
-            }else{
-                totalDays = (lmsApplicationTmp.getFromDate().getDay()- lmsApplicationTmp.getToDate().getDay())+1;
-            }
-            employeeIdMapWithTotalDaysLeaveTaken.put(lmsApplication.getEmployeeId(), totalDays);
-        }
-        return employeeIdMapWithTotalDaysLeaveTaken;
+      if(employeeIdMapWithTotalDaysLeaveTaken.containsKey(lmsApplication.getEmployeeId())) {
+        totalDays = employeeIdMapWithTotalDaysLeaveTaken.get(lmsApplication.getEmployeeId());
+        totalDays =
+            totalDays + ((lmsApplicationTmp.getFromDate().getDay() - lmsApplicationTmp.getToDate().getDay()) + 1);
+      }
+      else {
+        totalDays = (lmsApplicationTmp.getFromDate().getDay() - lmsApplicationTmp.getToDate().getDay()) + 1;
+      }
+      employeeIdMapWithTotalDaysLeaveTaken.put(lmsApplication.getEmployeeId(), totalDays);
     }
+    return employeeIdMapWithTotalDaysLeaveTaken;
+  }
 
-
-    private void getFirstAndLastDate(Calendar pCalendar, Date pStartDate, Date pEndDate) throws Exception{
-        int month = pCalendar.get(Calendar.MONTH);
-        String monthStr = (month+"").length()==1?"0"+month:month+"";
-        Date fromDate = UmsUtils.convertToDate("01-"+monthStr+"-"+pCalendar.get(Calendar.YEAR), "dd-MM-yyyy");
-        Date toDate = UmsUtils.convertToDate(pCalendar.getMaximum(Calendar.MONTH)+"-"+pCalendar.get(Calendar.MONTH)+"-"+pCalendar.get(Calendar.YEAR), "dd-MM-yyyy");
-    }
-
+  private void getFirstAndLastDate(Calendar pCalendar, Date pStartDate, Date pEndDate) throws Exception {
+    int month = pCalendar.get(Calendar.MONTH);
+    String monthStr = (month + "").length() == 1 ? "0" + month : month + "";
+    Date fromDate = UmsUtils.convertToDate("01-" + monthStr + "-" + pCalendar.get(Calendar.YEAR), "dd-MM-yyyy");
+    Date toDate =
+        UmsUtils.convertToDate(pCalendar.getMaximum(Calendar.MONTH) + "-" + pCalendar.get(Calendar.MONTH) + "-"
+            + pCalendar.get(Calendar.YEAR), "dd-MM-yyyy");
+  }
 
 }

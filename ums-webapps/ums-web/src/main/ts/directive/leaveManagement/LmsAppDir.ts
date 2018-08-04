@@ -315,11 +315,17 @@ module ums {
       let defer = this.$q.defer();
       let fromDate:string = moment(this.leaveApplication.fromDate).format("DD-MM-YYYY");
       let toDate: string = moment(this.leaveApplication.toDate).format("DD-MM-YYYY");
-      this.leaveApplicationService.fetchApprovedLeavesWithDateRange(fromDate, toDate).then((applications: any) => {
-        if (applications.length > 0)
-          foundOccurance = true;
-        else
-          foundOccurance = false;
+      this.leaveApplicationService.fetchApprovedLeavesWithDateRange(fromDate, toDate).then((applications: LmsApplication[]) => {
+        foundOccurance = false;
+
+        for (var i=0; i<applications.length; i++){
+          let appFromDate = moment(applications[i].fromDate,"DD/MM/YYYY").toDate();
+          let appToDate = moment(applications[i].toDate, "DD/MM/YYYY").toDate();
+          if (this.leaveApplication.fromDate>=appFromDate && this.leaveApplication.toDate<=appToDate){
+            foundOccurance = true;
+            break;
+          }
+        }
 
         defer.resolve(foundOccurance);
       });

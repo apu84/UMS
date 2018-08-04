@@ -66,49 +66,67 @@ module ums{
                 routineRow.routineList=[];
 
                 for (var i=0; i<iterationLength; i++){
-                  if (this.routineList.length<=0)
+                  if (this.routineList.length==0 && i==(iterationLength))
                     break;
-                  this.routine = angular.copy(this.routineList.shift());
-                  let slotStartTime:any = moment(this.routine.startTime,'hh:mm A');
-                  let breakCondition:boolean = false;
-                  if (iterationStartTime===this.routine.startTime){
-                    routineRow.routineList.push(angular.copy(this.routine));
-                    let slotEndTime:any = moment(this.routine.endTime, 'hh:mm A');
-                    let diff=slotEndTime.diff(slotStartTime,'minutes');
-                    this.colSpan = diff/this.routineConfigService.routineConfig.duration;
-                    this.template = this.template+'<td align="center" colspan="'+this.colSpan.toString()+'">';
-                    this.template = this.template+this.routine.course.no+" ("+this.routine.section+")<br>"+this.routine.room.roomNo;
-                    this.template=this.template+`</td>`;
-                    if (this.routine.endTime==this.routineSlot.endTime){
-                      iterationStartTime = angular.copy( this.routineSlot.startTime);
-                      this.template = this.template+'</tr>';
-                      breakCondition = true;
-                    }
-                    else{
-                      /*let iterationStartTimeObj:any = moment(iterationStartTime, 'hh:mm A');
-                      iterationStartTimeObj = moment(iterationStartTimeObj).add(this.routineConfigService.routineConfig.duration,'m').toDate();
-                      iterationStartTime = moment(iterationStartTimeObj).format("hh:mm A");*/
-                      iterationStartTime= this.routine.endTime;
-                    }
-                    if (breakCondition) break;
 
-                  } else{
-                    this.routineList.unshift(this.routine);
+
+                  if (this.routineList.length==0){
                     let iterationStartTimeObj:any = moment(iterationStartTime, 'hh:mm A');
                     let emptyRoutine:ClassRoutine=<ClassRoutine>{};
                     emptyRoutine.startTime=iterationStartTime;
                     this.template = this.template+`<td></td>`;
                     iterationStartTimeObj = moment(iterationStartTimeObj).add(this.routineConfigService.routineConfig.duration,'m').toDate();
                     iterationStartTime = moment(iterationStartTimeObj).format("hh:mm A");
+                    console.log("iteration time"+ iterationStartTime);
                     emptyRoutine.endTime = iterationStartTime;
                     routineRow.routineList.push(emptyRoutine);
+                  }else{
+                    this.routine = angular.copy(this.routineList.shift());
+                    let slotStartTime:any = moment(this.routine.startTime,'hh:mm A');
+                    let breakCondition:boolean = false;
+                    if (iterationStartTime===this.routine.startTime){
+                      routineRow.routineList.push(angular.copy(this.routine));
+                      let slotEndTime:any = moment(this.routine.endTime, 'hh:mm A');
+                      let diff=slotEndTime.diff(slotStartTime,'minutes');
+                      this.colSpan = diff/this.routineConfigService.routineConfig.duration;
+                      this.template = this.template+'<td align="center" colspan="'+this.colSpan.toString()+'">';
+                      this.template = this.template+this.routine.course.no+" ("+this.routine.section+")<br>"+this.routine.room.roomNo;
+                      this.template=this.template+`</td>`;
+                      if (this.routine.endTime==this.routineSlot.endTime){
+                        iterationStartTime = angular.copy( this.routineSlot.startTime);
+                        this.template = this.template+'</tr>';
+                        breakCondition = true;
+                      }
+                      else{
+                        /*let iterationStartTimeObj:any = moment(iterationStartTime, 'hh:mm A');
+                        iterationStartTimeObj = moment(iterationStartTimeObj).add(this.routineConfigService.routineConfig.duration,'m').toDate();
+                        iterationStartTime = moment(iterationStartTimeObj).format("hh:mm A");*/
+                        iterationStartTime= this.routine.endTime;
+                      }
+                      if (breakCondition) break;
 
+                    } else{
+                      this.routineList.unshift(this.routine);
+                      let iterationStartTimeObj:any = moment(iterationStartTime, 'hh:mm A');
+                      let emptyRoutine:ClassRoutine=<ClassRoutine>{};
+                      emptyRoutine.startTime=iterationStartTime;
+                      this.template = this.template+`<td></td>`;
+                      iterationStartTimeObj = moment(iterationStartTimeObj).add(this.routineConfigService.routineConfig.duration,'m').toDate();
+                      iterationStartTime = moment(iterationStartTimeObj).format("hh:mm A");
+                      emptyRoutine.endTime = iterationStartTime;
+                      routineRow.routineList.push(emptyRoutine);
+
+                    }
                   }
+
 
                 }
                 this.routineRows.push(routineRow);
                 // this.template = this.template+"</tr>";
               }
+
+
+
 
                 /*this.template=
                     `

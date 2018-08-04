@@ -27,8 +27,9 @@ public class EarnedLeaveCounterImpl extends AbstractService implements EarnedLea
 
   private ContentManager[] mContentManagers;
 
-
-  public EarnedLeaveCounterImpl(UMSConfiguration pUMSConfiguration, ServiceConfiguration pServiceConfiguration, SecurityManager pSecurityManager, EarnedLeaveCounterService pEarnedLeaveCounterService, ContentManager... pContentManagers) {
+  public EarnedLeaveCounterImpl(UMSConfiguration pUMSConfiguration, ServiceConfiguration pServiceConfiguration,
+      SecurityManager pSecurityManager, EarnedLeaveCounterService pEarnedLeaveCounterService,
+      ContentManager... pContentManagers) {
     mUMSConfiguration = pUMSConfiguration;
     mServiceConfiguration = pServiceConfiguration;
     mSecurityManager = pSecurityManager;
@@ -48,15 +49,20 @@ public class EarnedLeaveCounterImpl extends AbstractService implements EarnedLea
 
   @Override
   public void start() {
-    // do nothing for now.
+    try {
+      mEarnedLeaveCounterService.calculateAndUpdateEmployeesEarnedLeaveBalance();
+    } catch(Exception pE) {
+      pE.printStackTrace();
+    }
   }
 
   @Override
-  @Scheduled(cron = "0 0 0 1 1/1 *") // this should execute on 1st day every month @00:00
+  @Scheduled(cron = "0 0 0 1 1/1 *")
+  // this should execute on 1st day every month @00:00
   public void countEarnedLeave() {
-    try{
+    try {
       mEarnedLeaveCounterService.calculateAndUpdateEmployeesEarnedLeaveBalance();
-    }catch (Exception pE){
+    } catch(Exception pE) {
       pE.printStackTrace();
     }
   }

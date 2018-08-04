@@ -377,7 +377,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
     List<LmsApplication> leaveApplications =
-        getContentManager().getApprovedApplicationsWithinDateRange(user.getEmployeeId(), pStartDate, pEndDate);
+        getContentManager().getApplicationsWithinRange(user.getEmployeeId(), pStartDate, pEndDate);
     return getJsonObject(pUriInfo, leaveApplications);
   }
 

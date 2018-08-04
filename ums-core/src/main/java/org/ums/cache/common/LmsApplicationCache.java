@@ -43,9 +43,8 @@ public class LmsApplicationCache extends
   }
 
   @Override
-  public List<LmsApplication> getApprovedApplicationsWithinDateRange(String pEmployeeId, String startDate,
-      String endDate) {
-    return getManager().getApprovedApplicationsWithinDateRange(pEmployeeId, startDate, endDate);
+  public List<LmsApplication> getApplicationsWithinRange(String pEmployeeId, String startDate, String endDate) {
+    return getManager().getApplicationsWithinRange(pEmployeeId, startDate, endDate);
   }
 
   @Override

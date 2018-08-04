@@ -177,13 +177,12 @@ public class PersistentLmsApplicationDao extends LmsApplicationDaoDecorator {
   }
 
   @Override
-  public List<LmsApplication> getApprovedApplicationsWithinDateRange(String pEmployeeId, String startDate,
-      String endDate) {
+  public List<LmsApplication> getApplicationsWithinRange(String pEmployeeId, String startDate, String endDate) {
     String query =
         "SELECT * "
             + "FROM LMS_APPLICATION "
             + "WHERE "
-            + "  EMPLOYEE_ID = :employeeId AND APP_STATUS = 7 AND :startDate>= FROM_DATE AND :modifiedStartDate<= TO_DATE "
+            + "  EMPLOYEE_ID = :employeeId AND (APP_STATUS!=3 or APP_STATUS!=5 OR APP_STATUS!=6) AND :startDate>= FROM_DATE AND :modifiedStartDate<= TO_DATE "
             + "  AND :endDate >= FROM_DATE AND :endDate <= TO_DATE";
     Map parameterMap = new HashMap();
     parameterMap.put("employeeId", pEmployeeId);
