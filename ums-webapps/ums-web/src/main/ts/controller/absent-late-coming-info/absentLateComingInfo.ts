@@ -154,7 +154,7 @@ module ums{
             try {
                 this.selectedDepartmentIdForFilter=deptId.id;
                 console.log("Filter DeptID: "+this.selectedDepartmentIdForFilter);
-            }catch {
+            }catch(e) {
                 console.log("**Inside Catch***");
                 this.selectedDepartmentIdForFilter="";
             }
@@ -216,7 +216,7 @@ module ums{
             try{
                 this.selectedClassRoomId = value.id;
                 this.selectedClassRoomNo = value.roomNo;
-            }catch {
+            }catch (e){
                 this.selectedClassRoomId=null;
             }
 
@@ -253,7 +253,7 @@ module ums{
                 this.selectedDepartmentId=deptId.id;
                 console.log("id: "+this.selectedDepartmentId);
                 this.getEmployees(this.selectedDepartmentId);
-            }catch {
+            }catch (e){
                 this.selectedDepartmentId="";
                 this.getEmployees(this.selectedDepartmentId);
             }
