@@ -276,6 +276,7 @@ public class AcademicContext {
     return questionCorrectionInfoCache;
   }
 
+  @Bean
   ApplicationTESManager applicationTESManager() {
     ApplicationTESCache applicationTESCache = new ApplicationTESCache((mCacheFactory.getCacheManager()));
     applicationTESCache.setManager(new PersistentApplicationTESDao(mTemplateFactory.getJdbcTemplate(),

@@ -219,7 +219,7 @@ module ums{
          }
          private initializeDatePickers() {
              setTimeout(function () {
-                 $('.datepicker').datepicker('remove');
+                 $(".datepicker-default").datepicker("clearDates");
                  $('.datepicker-default').datepicker({
                      inputs: undefined,
                      todayHighlight:true,
@@ -228,6 +228,7 @@ module ums{
                  });
                  $('.datepicker-default').on('change', function () {
                  });
+                 $('.datepicker-default').datepicker('setDates', [new Date(2018, 8, 8), new Date(2018, 8, 9)]);
              }, 200);
          }
          private dateChanged(examDate: any) {
