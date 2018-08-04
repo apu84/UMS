@@ -93,11 +93,6 @@ module ums{
               });
           return defer.promise;
       }
-
-
-
-
-
   }
 
   UMS.service("studentService",StudentService);

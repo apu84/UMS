@@ -3,6 +3,7 @@ package org.ums.cache;
 import java.util.List;
 import java.util.Map;
 
+import org.ums.domain.model.immutable.StudentsExamAttendantInfo;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableUGRegistrationResult;
 import org.ums.enums.CourseRegType;
@@ -67,6 +68,18 @@ public class UGRegistrationResultCache extends
   }
 
   @Override
+  public List<UGRegistrationResult> getRegisteredTheoryCourseByStudent(String pStudentId, int pSemesterId,
+      int pExamType, int pRegType) {
+    return getManager().getRegisteredTheoryCourseByStudent(pStudentId, pSemesterId, pExamType, pRegType);
+  }
+
+  @Override
+  public List<UGRegistrationResult> getRegisteredCoursesBySemesterAndExamTypeAndRegTpe(int pSemesterId, int pExamType,
+      int pRegType) {
+    return getManager().getRegisteredCoursesBySemesterAndExamTypeAndRegTpe(pSemesterId, pExamType, pRegType);
+  }
+
+  @Override
   public List<UGRegistrationResult> getResults(String pStudentId, Integer pSemesterId) {
     String cacheKey = getCacheKey(UGRegistrationResult.class.toString(), pStudentId, pSemesterId);
     return cachedList(cacheKey, () -> getManager().getResults(pStudentId, pSemesterId));
@@ -91,6 +104,11 @@ public class UGRegistrationResultCache extends
   public Map<String, TabulationCourseModel> getResultForTabulation(Integer pProgramId, Integer pSemesterId,
       Integer pYear, Integer pSemester) {
     return getManager().getResultForTabulation(pProgramId, pSemesterId, pYear, pSemester);
+  }
+
+  @Override
+  public List<StudentsExamAttendantInfo> getExamAttendantInfo(Integer pSemesterId, String pExamDate, Integer pExamType) {
+    return getManager().getExamAttendantInfo(pSemesterId, pExamDate, pExamType);
   }
 
   @Override
