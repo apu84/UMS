@@ -213,7 +213,7 @@ module ums{
              try{
                  this.selectedClassRoomId = value.id;
                  this.selectedClassRoomNo = value.roomNo;
-             }catch {
+             }catch (e){
                  this.selectedClassRoomId=null;
              }
          }
@@ -239,7 +239,7 @@ module ums{
              try{
                  this.selectedDepartmentId=deptId.id;
                  this.departmentName=deptId.name;
-             }catch {
+             }catch (e){
                  this.selectedDepartmentId="";
              }
          }

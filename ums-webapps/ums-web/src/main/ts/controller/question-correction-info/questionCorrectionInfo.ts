@@ -144,7 +144,7 @@ module ums{
             try{
                 this.programIdForFilter=programs.id;
                 console.log("Id: "+this.programIdForFilter);
-            }catch {
+            }catch (e){
                 this.programIdForFilter=null;
             }
         }
@@ -165,7 +165,7 @@ module ums{
                 this.courseNo=value.courseNo;
                 this.courseTitle=value.courseTitle;
                 this.checkCourseSelection=true;
-            }catch {
+            }catch (e){
                 this.selectedCourseId=null;
             }
             this.getExamDate();
@@ -231,7 +231,7 @@ module ums{
                 this.programName=programs.name;
                 console.log("id: "+this.selectedProgramId);
                 this.getCourse();
-            }catch {
+            }catch (e){
                 this.selectedProgramId=null;
                 this.getCourse();
             }
@@ -244,7 +244,7 @@ module ums{
                 this.year=value.name;
                 this.selectedYear=value.id;
                 this.getCourse();
-            }catch {
+            }catch (e){
                 this.selectedYear=null;
                 this.getCourse();
             }
@@ -257,7 +257,7 @@ module ums{
                 this.acaSemester=value.name;
                 this.selectedSemester=value.id;
                 this.getCourse();
-            }catch {
+            }catch (e){
                 this.selectedSemester=null;
                 this.getCourse();
             }
