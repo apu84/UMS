@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.academic.tabulation.service.TabulationService;
 import org.ums.academic.tabulation.service.TabulationServiceImpl;
 import org.ums.cache.*;
@@ -29,9 +28,9 @@ import org.ums.message.MessageResource;
 import org.ums.persistent.dao.*;
 import org.ums.persistent.dao.applications.PersistentAppConfigDao;
 import org.ums.persistent.dao.applications.PersistentAppRulesDao;
-import org.ums.persistent.model.PersistentAbsLateComingInfoDao;
 import org.ums.persistent.dao.routine.PersistentRoutineConfigDao;
 import org.ums.persistent.dao.routine.PersistentRoutineDao;
+import org.ums.persistent.model.PersistentAbsLateComingInfoDao;
 import org.ums.punishment.PersistentPunishmentDao;
 import org.ums.punishment.PunishmentCache;
 import org.ums.punishment.PunishmentManager;
@@ -276,6 +275,7 @@ public class AcademicContext {
     return questionCorrectionInfoCache;
   }
 
+  @Bean
   ApplicationTESManager applicationTESManager() {
     ApplicationTESCache applicationTESCache = new ApplicationTESCache((mCacheFactory.getCacheManager()));
     applicationTESCache.setManager(new PersistentApplicationTESDao(mTemplateFactory.getJdbcTemplate(),
