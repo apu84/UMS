@@ -21,14 +21,33 @@ module ums {
     }
 
     export class RecordSearch {
-        public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'catalogingService', '$stateParams', 'supplierService', 'publisherService', 'contributorService',
-            'contributor', 'supplier', 'publisher'];
+        public static $inject = [
+            '$scope',
+            '$q',
+            'notify',
+            'libConstants',
+            'catalogingService',
+            '$stateParams',
+            'supplierService',
+            'publisherService',
+            'contributorService',
+            'contributor',
+            'supplier',
+            'publisher'
+        ];
 
         constructor(private $scope: IRecordSearchScope,
-                    private $q: ng.IQService, private notify: Notify, private libConstants: any,
-                    private catalogingService: CatalogingService, private $stateParams: any,
-                    private supplierService: SupplierService, private publisherService: PublisherService, private contributorService: ContributorService,
-                    private contributor: any, private supplier: any, private publisher: any) {
+                    private $q: ng.IQService,
+                    private notify: Notify,
+                    private libConstants: any,
+                    private catalogingService: CatalogingService,
+                    private $stateParams: any,
+                    private supplierService: SupplierService,
+                    private publisherService: PublisherService,
+                    private contributorService: ContributorService,
+                    private contributor: any,
+                    private supplier: any,
+                    private publisher: any) {
 
             $scope.recordList = Array<IRecord>();
             $scope.recordIdList = Array<String>();
