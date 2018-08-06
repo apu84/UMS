@@ -135,13 +135,11 @@ module ums{
              this.examRoutineService.getExamRoutineDates(this.selectedSemesterId,this.selectedExamTypeId).then((examDateArr: any) =>{
                  this.examRoutineArr={};
                  this.examRoutineArr=examDateArr;
-                 console.log("eee");
                  this.selectedExamDate=this.examRoutineArr[0].examDate;
              })
          }
          private ExamDateChange(value:any){
              this.selectedExamDate=value;
-             console.log(this.selectedExamDate);
          }
          private changeEmployeeType(value:any){
              this.employeeTypeId=value.id;
