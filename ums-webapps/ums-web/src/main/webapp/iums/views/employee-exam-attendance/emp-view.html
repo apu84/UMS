@@ -27,7 +27,7 @@
             <th width="40%">Invigilator Date</th>
             <th width="24%">Reserve Date</th>
             <th width="5%">Room</th>
-            <th width="3%">
+            <th width="3%" data-ng-if="vm.hideInsertMode">
              Update/Delete
             </th>
         </tr>
@@ -40,7 +40,7 @@
             <td>{{app.invigilatorDate}}</td>
             <td>{{app.reserveDate}}</td>
             <td>{{app.invigilatorRoomName}}</td>
-            <td>
+            <td data-ng-if="vm.hideInsertMode">
                 <button type="button"
                         data-toggle="modal"
                         data-target="#myModalViewInfo"
