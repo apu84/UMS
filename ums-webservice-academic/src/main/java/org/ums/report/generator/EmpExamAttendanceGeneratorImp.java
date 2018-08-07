@@ -245,11 +245,11 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
     Font fontTimes10Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 9);
     UmsCell cell;
     PdfPTable empTable = new PdfPTable(6);
-    empTable.setWidths(new float[] {1, 4, 2, 2, 2, 2});
+    empTable.setWidths(new float[] {1, 4, 1, 2, 2, 3});
     empTable.setSpacingBefore(5);
     empTable.setSpacingAfter(5);
     empTable.setWidthPercentage(100);
-    cell = new UmsCell(new Phrase("Serial No", fontTimes10Normal));
+    cell = new UmsCell(new Phrase("Serial", fontTimes10Normal));
     cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
     empTable.addCell(cell);
     cell = new UmsCell(new Phrase("Invigilators' Name", fontTimes10Normal));
@@ -283,6 +283,7 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
       counter++;
       cell = new UmsCell(new Phrase("" + counter, fontTimes10Normal));
       cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+      cell.setMinimumHeight(20f);
       empTable.addCell(cell);
       cell =
           new UmsCell(
@@ -444,11 +445,11 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
       document.add(paragraph);
       UmsCell cell;
       PdfPTable empTable = new PdfPTable(6);
-      empTable.setWidths(new float[] { 1,4,2,2,2,2 });
+      empTable.setWidths(new float[] { 1,4,1,2,2,3 });
       empTable.setSpacingBefore(5);
       empTable.setSpacingAfter(5);
       empTable.setWidthPercentage(100);
-      cell = new UmsCell(new Phrase("Serial No", fontTimes10Normal));
+      cell = new UmsCell(new Phrase("Serial", fontTimes10Normal));
       cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
       empTable.addCell(cell);
       cell = new UmsCell(new Phrase("Name", fontTimes10Normal));
@@ -473,7 +474,8 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
       for(EmpExamAttendance app:empExamAttendance){
           counter++;
           cell = new UmsCell(new Phrase(""+counter, fontTimes10Normal));
-          cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
+          cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
+          cell.setMinimumHeight(20f);
           empTable.addCell(cell);
           cell = new UmsCell(new Phrase(""+mPersonalInformationManager.get(app.getEmployeeId()).getName(), fontTimes10Normal));
           cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
