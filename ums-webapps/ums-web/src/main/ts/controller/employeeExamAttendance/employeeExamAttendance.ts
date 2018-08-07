@@ -185,7 +185,7 @@ module ums{
                  for(let i=0;i<this.employees.length;i++){
                      this.employees[i].employeeName=this.employees[i].employeeName+"("+this.employees[i].designationName+")";
                  }
-             })
+             });
              this.selectedEmployeeId=""
          }
          private employeeChanged(value:any){
@@ -222,7 +222,23 @@ module ums{
 
          }
          private dateChanged(examDate: any) {
-
+             let invigilator: string[] = [];
+             let reserve: string[] = [];
+             let counter=0;
+             if (this.empExamDate != "" || this.empReserveDate!=""){
+                 invigilator = this.empExamDate.split(",");
+             reserve = this.empReserveDate.split(",");
+             for (let i = 0; i < invigilator.length; i++) {
+                 for (let j = 0; j < reserve.length; j++) {
+                     if (reserve[j] == invigilator[i]) {
+                         counter++;
+                     }
+                 }
+             }
+             if(counter >0){
+                 this.notify.warn(counter+" duplicate Reserve date and Invigilator date found");
+             }
+         }
          }
          private deptChanged(deptId:any){
              this.isRightDivAvailable=false;
@@ -237,7 +253,7 @@ module ums{
          private save():void{
                     var json: any = this.convertToJson();
                     this.employeeExamAttendanceService.addEmpExamAttendanceInfo(json).then((data) => {
-                        if(data=="success" || data.equals("success")){
+                        if(data=="success"){
                             this.notify.success("Successfully Saved");
                         }
                         this.getData();
