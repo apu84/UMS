@@ -185,7 +185,7 @@ module ums{
                  for(let i=0;i<this.employees.length;i++){
                      this.employees[i].employeeName=this.employees[i].employeeName+"("+this.employees[i].designationName+")";
                  }
-             })
+             });
              this.selectedEmployeeId=""
          }
          private employeeChanged(value:any){
