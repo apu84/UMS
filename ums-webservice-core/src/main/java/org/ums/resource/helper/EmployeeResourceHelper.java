@@ -299,10 +299,9 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   }
 
   private void prepareUserInformation(MutableUser pMutableUser, JsonObject pJsonObject) {
-    String tempPassword = "12345";
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
-    pMutableUser.setId(pJsonObject.getString("shortName"));
+    pMutableUser.setId(pJsonObject.getString("id"));
     pMutableUser.setEmployeeId(pJsonObject.getString("id"));
     pMutableUser.setPassword(null);
     pMutableUser.setActive(true);
