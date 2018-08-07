@@ -109,7 +109,7 @@ public class AccountBalanceService {
   public MutableAccountBalance setMonthAccountBalance(MutableAccountBalance pAccountBalance, Account pAccount) {
     LocalDate localDate = pAccountBalance.getModifiedDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     Integer month = localDate.getMonthValue();
-    if(month.equals(MonthType.JANUARY.getValue())) {
+    if(month.equals(MonthType.JANUARY.getId())) {
       if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal01(pAccountBalance.getTotMonthCrBal01() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal01().add(pAccountBalance.getYearOpenBalance()));
@@ -117,7 +117,7 @@ public class AccountBalanceService {
         pAccountBalance.setTotMonthDbBal01(pAccountBalance.getTotMonthDbBal01() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal01().add(pAccountBalance.getYearOpenBalance()));
     }
-    if(month.equals(MonthType.FEBRUARY.getValue())) {
+    if(month.equals(MonthType.FEBRUARY.getId())) {
       if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal02(pAccountBalance.getTotMonthCrBal02() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal02().add(pAccountBalance.getYearOpenBalance()));
@@ -125,7 +125,7 @@ public class AccountBalanceService {
         pAccountBalance.setTotMonthDbBal02(pAccountBalance.getTotMonthDbBal02() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal02().add(pAccountBalance.getYearOpenBalance()));
     }
-    if(month.equals(MonthType.MARCH.getValue())) {
+    if(month.equals(MonthType.MARCH.getId())) {
       if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal03(pAccountBalance.getTotMonthCrBal03() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal03().add(pAccountBalance.getYearOpenBalance()));
@@ -133,7 +133,7 @@ public class AccountBalanceService {
         pAccountBalance.setTotMonthDbBal03(pAccountBalance.getTotMonthDbBal03() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal03().add(pAccountBalance.getYearOpenBalance()));
     }
-    if(month.equals(MonthType.APRIL.getValue())) {
+    if(month.equals(MonthType.APRIL.getId())) {
       if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal04(pAccountBalance.getTotMonthCrBal04() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal04().add(pAccountBalance.getYearOpenBalance()));
@@ -141,7 +141,7 @@ public class AccountBalanceService {
         pAccountBalance.setTotMonthDbBal04(pAccountBalance.getTotMonthDbBal04() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal04().add(pAccountBalance.getYearOpenBalance()));
     }
-    if(month.equals(MonthType.MAY.getValue())) {
+    if(month.equals(MonthType.MAY.getId())) {
       if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal05(pAccountBalance.getTotMonthCrBal05() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal05().add(pAccountBalance.getYearOpenBalance()));
@@ -149,7 +149,7 @@ public class AccountBalanceService {
         pAccountBalance.setTotMonthDbBal05(pAccountBalance.getTotMonthDbBal05() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal05().add(pAccountBalance.getYearOpenBalance()));
     }
-    if(month.equals(MonthType.JUNE.getValue())) {
+    if(month.equals(MonthType.JUNE.getId())) {
       if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal06(pAccountBalance.getTotMonthCrBal06() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal06().add(pAccountBalance.getYearOpenBalance()));
@@ -157,7 +157,7 @@ public class AccountBalanceService {
         pAccountBalance.setTotMonthDbBal06(pAccountBalance.getTotMonthDbBal06() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal06().add(pAccountBalance.getYearOpenBalance()));
     }
-    if(month.equals(MonthType.JULY.getValue())) {
+    if(month.equals(MonthType.JULY.getId())) {
       if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal07(pAccountBalance.getTotMonthCrBal07() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal07().add(pAccountBalance.getYearOpenBalance()));
@@ -165,7 +165,7 @@ public class AccountBalanceService {
         pAccountBalance.setTotMonthDbBal07(pAccountBalance.getTotMonthDbBal07() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal07().add(pAccountBalance.getYearOpenBalance()));
     }
-    if(month.equals(MonthType.AUGUST.getValue())) {
+    if(month.equals(MonthType.AUGUST.getId())) {
       if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal08(pAccountBalance.getTotMonthCrBal08() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal08().add(pAccountBalance.getYearOpenBalance()));
@@ -173,7 +173,7 @@ public class AccountBalanceService {
         pAccountBalance.setTotMonthDbBal08(pAccountBalance.getTotMonthDbBal08() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal08().add(pAccountBalance.getYearOpenBalance()));
     }
-    if(month.equals(MonthType.SEPTEMBER.getValue())) {
+    if(month.equals(MonthType.SEPTEMBER.getId())) {
       if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal09(pAccountBalance.getTotMonthCrBal09() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal09().add(pAccountBalance.getYearOpenBalance()));
@@ -181,7 +181,7 @@ public class AccountBalanceService {
         pAccountBalance.setTotMonthDbBal09(pAccountBalance.getTotMonthDbBal09() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal09().add(pAccountBalance.getYearOpenBalance()));
     }
-    if(month.equals(MonthType.OCTOBER.getValue())) {
+    if(month.equals(MonthType.OCTOBER.getId())) {
       if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal10(pAccountBalance.getTotMonthCrBal10() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal10().add(pAccountBalance.getYearOpenBalance()));
@@ -189,7 +189,7 @@ public class AccountBalanceService {
         pAccountBalance.setTotMonthDbBal10(pAccountBalance.getTotMonthDbBal10() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal10().add(pAccountBalance.getYearOpenBalance()));
     }
-    if(month.equals(MonthType.NOVEMBER.getValue())) {
+    if(month.equals(MonthType.NOVEMBER.getId())) {
       if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal11(pAccountBalance.getTotMonthCrBal11() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal11().add(pAccountBalance.getYearOpenBalance()));
@@ -197,7 +197,7 @@ public class AccountBalanceService {
         pAccountBalance.setTotMonthDbBal11(pAccountBalance.getTotMonthDbBal11() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthDbBal11().add(pAccountBalance.getYearOpenBalance()));
     }
-    if(month.equals(MonthType.DECEMBER.getValue())) {
+    if(month.equals(MonthType.DECEMBER.getId())) {
       if(pAccountBalance.getYearOpenBalanceType().equals(BalanceType.Cr))
         pAccountBalance.setTotMonthCrBal12(pAccountBalance.getTotMonthCrBal12() == null ? pAccountBalance
             .getYearOpenBalance() : pAccountBalance.getTotMonthCrBal12().add(pAccountBalance.getYearOpenBalance()));
