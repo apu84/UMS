@@ -242,7 +242,7 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
   private void getData(OutputStream pOutputStream, List<MutableEmpExamAttendance> empExamAttendance, Document document,
       ByteArrayOutputStream baos, Font fontTimes8Normal, Font fontTimes10Bold, Font iums, Integer isReserve)
       throws DocumentException, IOException {
-      Font fontTimes10Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 9);
+    Font fontTimes10Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 9);
     UmsCell cell;
     PdfPTable empTable = new PdfPTable(6);
     empTable.setWidths(new float[] {1, 4, 2, 2, 2, 2});
@@ -285,13 +285,14 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
       cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
       empTable.addCell(cell);
       cell =
-          new UmsCell(new Phrase("" + mPersonalInformationManager.get(app.getEmployeeId()).getName(), fontTimes10Normal));
+          new UmsCell(
+              new Phrase("" + mPersonalInformationManager.get(app.getEmployeeId()).getName(), fontTimes10Normal));
       cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
       empTable.addCell(cell);
       if(isReserve == 1) {
         cell =
-            new UmsCell(
-                new Phrase("" + mClassRoomManager.get(app.getInvigilatorRoomId()).getRoomNo(), fontTimes10Normal));
+            new UmsCell(new Phrase("" + mClassRoomManager.get(app.getInvigilatorRoomId()).getRoomNo(),
+                fontTimes10Normal));
         cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
         empTable.addCell(cell);
       }
@@ -643,16 +644,17 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
     footer.addCell(cell);
     document.add(footer);
   }
-    class EmpExamAttendanceReportHeaderAndFooter extends PdfPageEventHelper {
 
-        @Override
-        public void onEndPage(PdfWriter writer, Document pDocument) {
-            PdfContentByte cb = writer.getDirectContent();
-            String text = String.format("Page %s", writer.getCurrentPageNumber());
-            Paragraph paragraph = new Paragraph(text, mBoldFont);
-            ColumnText.showTextAligned(cb, Element.ALIGN_RIGHT, new Phrase(paragraph),
-                    (pDocument.right() - pDocument.left()) / 2 + pDocument.leftMargin(), pDocument.bottom() - 10, 0);
-        }
+  class EmpExamAttendanceReportHeaderAndFooter extends PdfPageEventHelper {
+
+    @Override
+    public void onEndPage(PdfWriter writer, Document pDocument) {
+      PdfContentByte cb = writer.getDirectContent();
+      String text = String.format("Page %s", writer.getCurrentPageNumber());
+      Paragraph paragraph = new Paragraph(text, mBoldFont);
+      ColumnText.showTextAligned(cb, Element.ALIGN_RIGHT, new Phrase(paragraph), (pDocument.right() - pDocument.left())
+          / 2 + pDocument.leftMargin(), pDocument.bottom() - 10, 0);
     }
+  }
 
 }
