@@ -203,11 +203,11 @@ public class EmpExamAttendanceHelper extends ResourceHelper<EmpExamAttendance, M
       for(Map.Entry<String, String> entry : dayMonthMap.entrySet()) {
         if(counter > 0) {
           newDate =
-              newDate + ", and " + MonthType.get(Integer.parseInt(entry.getKey())).name() + ": " + entry.getValue()
+              newDate + ", and " + MonthType.get(Integer.parseInt(entry.getKey())).getLabel() + ": " + entry.getValue()
                   + " ";
         }
         else {
-          newDate = newDate + MonthType.get(Integer.parseInt(entry.getKey())).name() + ": " + entry.getValue();
+          newDate = newDate + MonthType.get(Integer.parseInt(entry.getKey())).getLabel() + ": " + entry.getValue();
         }
         counter = counter + 1;
       }

@@ -37,7 +37,7 @@
             <td>{{$index+1}}</td>
             <td>{{app.employeeFullName+''+app.roomInChargeStatus+''}}</td>
             <td>{{app.departmentShortName}}</td>
-            <td>{{app.invigilatorDate}}</td>
+            <td>{{app.invigilatorDate==" " ? "Attendant":app.invigilatorDate}}</td>
             <td>{{app.reserveDate}}</td>
             <td>{{app.invigilatorRoomName}}</td>
             <td data-ng-if="vm.hideInsertMode">
