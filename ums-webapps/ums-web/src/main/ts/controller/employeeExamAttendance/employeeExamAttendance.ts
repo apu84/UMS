@@ -102,7 +102,6 @@ module ums{
             this.isDeptSelected=false;
             this.isSubmitModalAvailable=false;
             this.isInsertAvailable=false;
-
             this.getSemesters();
         }
          private enableInsert(){
@@ -119,6 +118,7 @@ module ums{
                     this.getEmployees(this.selectedDepartmentId);
                     this.getClassRoomInfo();
                     this.getData();
+                    this.empName="";
             }else{
                 this.notify.warn("Select Department");
             }
