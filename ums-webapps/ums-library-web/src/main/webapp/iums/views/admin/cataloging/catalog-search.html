@@ -2,6 +2,7 @@
     .top-buffer {
         margin-top: 10px;
     }
+
     .line-separator {
         height: 2px;
         background: #717171;
@@ -9,8 +10,8 @@
     }
 </style>
 
-<div data-ng-show="!showAdvancedSearchForm">
-    <form id="iBasicSearchForm" name="nBasicSearchForm" ng-submit="doSearch();" novalidate>
+<div data-ng-show="!vm.showAdvancedSearchForm">
+    <form id="iBasicSearchForm" name="nBasicSearchForm" ng-submit="vm.doSearch();" novalidate>
         <div class="row">
             <div class="col-md-12">
                 <input id="iSearchBox"
@@ -23,89 +24,108 @@
                           border-radius: 15px"
                        size="70"
                        placeholder="Search here..."
-                       data-ng-model="search.queryTerm"
+                       data-ng-model="vm.search.queryTerm"
                        title="Search here..."
                        autocomplete="off"/>
                 <button class="btn btn-default"
                         style="background-color: white;
                            border-radius: 15px !important;"
-                        data-ng-click="doSearch()">
+                        data-ng-click="vm.doSearch()">
                     <i class="fa fa-search fa-lg"
-                       data-ng-click="doSearch()"
                        style="color: #0093d9;">
                     </i>
                 </button>
             </div>
         </div>
 
+        <br/>
+
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-2">
+                <label class="control-label label-info">Select a category:</label>
+            </div>
+            <div class="col-md-1">
                 <input type="radio"
                        id="square-radio-1"
                        name="choice"
-                       ng-model="choice"
+                       ng-model="vm.choice"
                        value="subjects_txt"
-                       autocomplete="off"/>&nbsp;
-                <label for="square-radio-1">Subject</label>&nbsp;&nbsp;
+                       autocomplete="off"/>
+                <label for="square-radio-1">Subject</label>
+            </div>
+            <div class="col-md-1">
                 <input type="radio"
                        id="square-radio-2"
                        name="choice"
-                       ng-model="choice"
+                       ng-model="vm.choice"
                        value="title_t"
-                       autocomplete="off"/>&nbsp;
-                <label for="square-radio-2">Title</label>&nbsp;&nbsp;
+                       autocomplete="off"/>
+                <label for="square-radio-2">Title</label>
+            </div>
+            <div class="col-md-1">
                 <input type="radio"
                        id="square-radio-3"
                        name="choice"
-                       ng-model="choice"
+                       ng-model="vm.choice"
                        value="contributors_txt"
-                       autocomplete="off"/>&nbsp;
-                <label for="square-radio-3">Author</label>&nbsp;&nbsp;
+                       autocomplete="off"/>
+                <label for="square-radio-3">Author</label>
+            </div>
+            <div class="col-md-1">
                 <input type="radio"
                        id="square-radio-4"
                        name="choice"
-                       ng-model="choice"
+                       ng-model="vm.choice"
                        value="any"
                        checked="checked"
-                       autocomplete="off"/>&nbsp;
-                <label for="square-radio-4">Any Field</label>&nbsp;&nbsp;
+                       autocomplete="off"/>
+                <label for="square-radio-4">Any</label>
             </div>
+        </div>
 
-            <div class="col-md-3">
+        <div class="row">
+            <div class="col-md-2">
+                <label class="control-label label-info">Select a category:</label>
+            </div>
+            <div class="col-md-1">
                 <input type="radio"
                        id="square-radio-5"
                        name="choiceType"
-                       ng-model="choiceType"
+                       ng-model="vm.choiceType"
                        value="Exact"
-                       autocomplete="off"/>&nbsp;
-                <label for="square-radio-5">Exact</label>&nbsp;&nbsp;
+                       checked="checked"
+                       autocomplete="off"/>
+                <label for="square-radio-5">Exactly</label>
+            </div>
+            <div class="col-md-1">
                 <input type="radio"
                        id="square-radio-6"
                        name="choiceType"
-                       ng-model="choiceType"
+                       ng-model="vm.choiceType"
                        value="Likely"
-                       autocomplete="off"/>&nbsp;
-                <label for="square-radio-6">Likely</label>&nbsp;&nbsp;
+                       autocomplete="off"/>
+                <label for="square-radio-6">Likely</label>
             </div>
         </div>
     </form>
 </div>
 
 <div class="row top-buffer">
-    <div data-ng-show="!showAdvancedSearchForm">
+    <div data-ng-show="!vm.showAdvancedSearchForm">
         <div class="col-md-12">
-            <a style="color: #2aabd2; cursor: pointer" data-ng-click="showAdvancedSearchForm=true"><u>Advanced
+            <a style="color: #2aabd2; cursor: pointer" data-ng-click="vm.showAdvancedSearchForm=true"><u>Advanced
                 Search</u></a>
         </div>
     </div>
-    <div data-ng-show="showAdvancedSearchForm">
+    <div data-ng-show="vm.showAdvancedSearchForm">
         <div class="col-md-12">
-            <a style="color: #2aabd2; cursor: pointer" data-ng-click="showAdvancedSearchForm=false"><u>Basic Search</u></a>
+            <a style="color: #2aabd2; cursor: pointer" data-ng-click="vm.showAdvancedSearchForm=false"><u>Basic
+                Search</u></a>
         </div>
     </div>
 </div>
 
-<div data-ng-if="showAdvancedSearchForm">
+<div data-ng-if="vm.showAdvancedSearchForm">
     <div class="row top-buffer">
         <div class="col-md-10">
             <h5>Advanced Search</h5>
@@ -119,7 +139,7 @@
 
     <div class="row top-buffer">
         <div class="col-md-12">
-            <form id="iAdvancedSearch" name="nAdvancedSearch" ng-submit="doSearch()" novalidate>
+            <form id="iAdvancedSearch" name="nAdvancedSearch" ng-submit="vm.doSearch()" novalidate>
                 <div class="row">
                     <div class="col-md-8">
                         <div class="row">
@@ -224,7 +244,7 @@
                     color: black;
                     min-height: 20px;
                     text-align:center">
-            Total <strong>{{data.totalRecord}}</strong> records found.
+            Total <strong>{{vm.data.totalRecord}}</strong> records found.
         </div>
     </div>
 </div>
@@ -243,11 +263,12 @@
             </thead>
 
             <tbody>
-            <tr dir-paginate="rec in recordList | itemsPerPage: data.itemPerPage" current-page="pagination.currentPage"
-                total-items="data.totalRecord"
+            <tr dir-paginate="rec in vm.recordList | itemsPerPage: vm.data.itemPerPage"
+                current-page="vm.pagination.currentPage"
+                total-items="vm.data.totalRecord"
                 pagination-id="mainRecordPaginator">
                 <td>
-                    <span style="font-size: 110%;">{{((pagination.currentPage-1)*data.itemPerPage) + ($index+1)}}. </span>
+                    <span style="font-size: 110%;">{{((vm.pagination.currentPage-1)*vm.data.itemPerPage) + ($index+1)}}. </span>
                 </td>
                 <td>{{rec.materialTypeName}}</td>
                 <td>
@@ -258,7 +279,7 @@
                                       color: #0066cc;"
                                data-toggle="modal"
                                data-target="#bookPreview"
-                               data-ng-click="recordDetails($index)"
+                               data-ng-click="vm.recordDetails($index)"
                                href="javascript:void(0)">
                                 {{rec.title}}
                             </a>
@@ -274,10 +295,10 @@
                                     />
                                 </a>
                                 | <a href="javascript:void(0);"
-                                     data-ng-click="navigateRecord('view', rec.mfnNo, pagination.currentPage, $index)">View
+                                     data-ng-click="vm.navigateRecord('view', rec.mfnNo, vm.pagination.currentPage, $index)">View
                             </a>
                                 | <a href="javascript:void(0);"
-                                     data-ng-click="navigateRecord('edit', rec.mfnNo, pagination.currentPage, $index)">Edit
+                                     data-ng-click="vm.navigateRecord('edit', rec.mfnNo, vm.pagination.currentPage, $index)">Edit
                             </a>
                             </div>
                         </div>
@@ -314,7 +335,7 @@
 <div class="text-right">
     <dir-pagination-controls boundary-links="true"
                              pagination-id="mainRecordPaginator"
-                             on-page-change="pageChanged(newPageNumber, 1)"
+                             on-page-change="vm.pageChanged(newPageNumber)"
                              template-url="views\admin\patron\dirPagination.tpl.html">
     </dir-pagination-controls>
 </div>
@@ -328,32 +349,32 @@
                 <button type="button" data-dismiss="modal" aria-hidden="true"
                         class="close" style="opacity: 1;margin-top: 0;">&times;
                 </button>
-                <h4 id="modal-default-label" class="modal-title">MFN-{{record.mfnNo}}; Call Number :
-                    {{record.callNo}}</h4></div>
+                <h4 id="modal-default-label" class="modal-title">MFN-{{vm.record.mfnNo}}; Call Number :
+                    {{vm.record.callNo}}</h4></div>
             <div class="modal-body">
                 <ul class="list-unstyled desc">
                     <li><a href="javascript:void(0);"
-                           class="title">{{record.title}}</a>
+                           class="title">{{vm.record.title}}</a>
                     </li>
                     <li>by &nbsp;<span
-                            data-ng-repeat="con in record.contributorList">{{con.name}}[{{con.roleName}}]</span>
+                            data-ng-repeat="con in vm.record.contributorList">{{con.name}}[{{con.roleName}}]</span>
                     </li>
-                    <li><b>Material type:</b>{{record.materialTypeName}}</li>
-                    <li><b>Edition:</b> {{record.edition}}</li>
-                    <li><b>ISBN:</b> {{record.isbn}}</li>
-                    <li><b>Imprint:</b> {{record.imprint.publisherName}}, &nbsp;
-                        {{record.imprint.yearOfPublication}}, &nbsp;{{record.imprint.placeOfPublication}}
+                    <li><b>Material type:</b>{{vm.record.materialTypeName}}</li>
+                    <li><b>Edition:</b> {{vm.record.edition}}</li>
+                    <li><b>ISBN:</b> {{vm.record.isbn}}</li>
+                    <li><b>Imprint:</b> {{vm.record.imprint.publisherName}}, &nbsp;
+                        {{vm.record.imprint.yearOfPublication}}, &nbsp;{{vm.record.imprint.placeOfPublication}}
                     </li>
                     <li><b>Subject:</b> <span
-                            data-ng-repeat="sub in record.subjectList">{{sub.subject}}, &nbsp;</span>
+                            data-ng-repeat="sub in vm.record.subjectList">{{sub.subject}}, &nbsp;</span>
                     </li>
-                    <li><b>keywords:</b> {{record.keywords}}</li>
-                    <li><b>Notes:</b><span data-ng-repeat="note in record.noteList">{{note.note}}</span></li>
-                    <li><b>Physical Description:</b>Pagination: {{record.physicalDescription.pagination}},
-                        Illustrations: {{record.physicalDescription.illustrations}},
-                        AccompanyingMaterials: {{record.physicalDescription.accompanyingMaterials}},
-                        Dimensions: {{record.physicalDescription.dimensions}},
-                        PaperQuality: {{record.physicalDescription.paperQuality}}
+                    <li><b>keywords:</b> {{vm.record.keywords}}</li>
+                    <li><b>Notes:</b><span data-ng-repeat="note in vm.record.noteList">{{note.note}}</span></li>
+                    <li><b>Physical Description:</b>Pagination: {{vm.record.physicalDescription.pagination}},
+                        Illustrations: {{vm.record.physicalDescription.illustrations}},
+                        AccompanyingMaterials: {{vm.record.physicalDescription.accompanyingMaterials}},
+                        Dimensions: {{vm.record.physicalDescription.dimensions}},
+                        PaperQuality: {{vm.record.physicalDescription.paperQuality}}
                     </li>
                 </ul>
             </div>

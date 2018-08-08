@@ -47,7 +47,7 @@ module ums {
                 url: "/search/:1",
                 controller: 'RecordSearch',
                 templateUrl: 'views/admin/cataloging/catalog-search.html',
-
+                controllerAs: 'vm',
                 resolve: {
                     loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                         return $ocLazyLoad.load({
