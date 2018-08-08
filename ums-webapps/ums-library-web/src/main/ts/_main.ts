@@ -122,6 +122,7 @@
 /// <reference path='controller/PatronDetails.ts'/>
 /// <reference path='controller/CheckIn.ts'/>
 /// <reference path='controller/PatronSearch.ts'/>
+/// <reference path='controller/CatalogHome.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/library/LibrarySearch.ts'/>
 /// <reference path='controller/BorrowHistory.ts'/>
 

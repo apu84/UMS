@@ -136,7 +136,6 @@ module ums {
         }
 
         private fetchRecords(pageNumber: number): void {
-            console.log(pageNumber);
             this.catalogingService.fetchRecords(pageNumber, this.data.itemPerPage, "", this.search.filter).then((response: any) => {
                 this.recordIdList = Array<String>();
                 this.recordList = response.entries;
