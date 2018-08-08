@@ -55,6 +55,7 @@ public class EarnedLeaveCounterService {
                 .collect(Collectors.toList());
         Date current = new Date();
         Calendar calendar = Calendar.getInstance();
+        calendar.setTime(current);
         calendar.add(Calendar.DATE, -1);
         int publicHolidays = calculatePublicHolidays(calendar);
         int weeklyHolidays = calculateTotalWeeklyHolidays(calendar);
@@ -144,7 +145,11 @@ public class EarnedLeaveCounterService {
   private boolean checkWhetherTheDayIsWithingPublicHolidays(int day) {
     boolean found = false;
     for(Holidays holiday : mHolidays) {
-      if(day >= holiday.getFromDate().getDay() && day <= holiday.getToDate().getDay()) {
+      Calendar fromCalendar = Calendar.getInstance();
+      fromCalendar.setTime(holiday.getFromDate());
+      Calendar toCalendar = Calendar.getInstance();
+      toCalendar.setTime(holiday.getToDate());
+      if(day >= fromCalendar.get(Calendar.DAY_OF_WEEK) && day <= toCalendar.get(Calendar.DAY_OF_WEEK)) {
         found = true;
         break;
       }
@@ -169,12 +174,14 @@ public class EarnedLeaveCounterService {
         mHolidays = new ArrayList<>();
         for(Holidays holiday: holidays){
             MutableHolidays holidayTmp = (PersistentHolidays)holiday;
-            if(holiday.getFromDate().getMonth()> pCalendar.get(Calendar.MONTH))
+            Calendar holidayDateCalendar = Calendar.getInstance();
+            holidayDateCalendar.setTime(holiday.getFromDate());
+            if(holidayDateCalendar.get(Calendar.MONTH)> pCalendar.get(Calendar.MONTH))
                 holidayTmp.setFromDate(fromDate);
             mHolidays.add(holidayTmp);
         }
         return mHolidays.stream()
-                .mapToInt(e-> (e.getFromDate().getDay() - e.getToDate().getDay())+1)
+                .mapToInt(e-> (e.getFromDate().getDate() - e.getToDate().getDate())+1)
                 .sum();
     }
 
@@ -195,10 +202,10 @@ public class EarnedLeaveCounterService {
       if(employeeIdMapWithTotalDaysLeaveTaken.containsKey(lmsApplication.getEmployeeId())) {
         totalDays = employeeIdMapWithTotalDaysLeaveTaken.get(lmsApplication.getEmployeeId());
         totalDays =
-            totalDays + ((lmsApplicationTmp.getFromDate().getDay() - lmsApplicationTmp.getToDate().getDay()) + 1);
+            totalDays + ((lmsApplicationTmp.getFromDate().getDate() - lmsApplicationTmp.getToDate().getDate()) + 1);
       }
       else {
-        totalDays = (lmsApplicationTmp.getFromDate().getDay() - lmsApplicationTmp.getToDate().getDay()) + 1;
+        totalDays = (lmsApplicationTmp.getFromDate().getDate() - lmsApplicationTmp.getToDate().getDate()) + 1;
       }
       employeeIdMapWithTotalDaysLeaveTaken.put(lmsApplication.getEmployeeId(), totalDays);
     }

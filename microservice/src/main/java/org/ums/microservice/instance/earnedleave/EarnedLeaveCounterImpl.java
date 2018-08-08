@@ -49,11 +49,11 @@ public class EarnedLeaveCounterImpl extends AbstractService implements EarnedLea
 
   @Override
   public void start() {
-    try {
+    /*try {
       mEarnedLeaveCounterService.calculateAndUpdateEmployeesEarnedLeaveBalance();
     } catch(Exception pE) {
       pE.printStackTrace();
-    }
+    }*/
   }
 
   @Override
