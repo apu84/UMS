@@ -328,6 +328,32 @@ module ums {
                     }]
                 }
             })
+            .state('modifyEmployee', {
+                url: "/modifyEmployee",
+                templateUrl: 'views/modify-employee.html',
+                controller: 'ModifyEmployee',
+                controllerAs: 'vm',
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            files: [
+                                'vendors/bootstrap-datepicker/css/datepicker.css',
+                                'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
+                            ]
+                        });
+                    }],
+                    departments: ['departmentService', function (departmentService) {
+                        return departmentService.getAll().then((data) => {
+                            return data;
+                        });
+                    }],
+                    designations: ['designationService', function (designationService) {
+                        return designationService.getAll().then((data) => {
+                            return data;
+                        });
+                    }]
+                }
+            })
             .state('schedule', {
                 url: "/schedule",
                 templateUrl: 'views/meeting/schedule.html',
