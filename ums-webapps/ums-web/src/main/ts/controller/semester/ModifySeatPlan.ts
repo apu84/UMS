@@ -44,6 +44,9 @@ module ums {
 
 
         public search() {
+            if (!this.modifiedSelectedExamRoutine.examDate){
+              this.modifiedSelectedExamRoutine.examDate='01-01-2099';
+            }
             this.seatPlanService.getSeatPlanByStudent(this.semester.id, +this.examType, this.modifiedSelectedExamRoutine.examDate, this.student.id).then((seatPlan: ISeatPlan) => {
                 this.seatPlan = seatPlan;
                 console.log("selected room");
@@ -61,6 +64,9 @@ module ums {
                 }).then(() => {
                     this.getUniqueExamRoutineList();
                 })
+            }else{
+              this.modifiedSelectedExamRoutine= <IDateTime>{};
+              this.modifiedSelectedExamRoutine.examDate="01-01-2099";
             }
         }
 
