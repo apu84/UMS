@@ -47,55 +47,56 @@ module  ums{
             this.selectedExamDate="";
             this.isExamDateSelected=false;
             this.getSemesters();
-            this.getExamDates();
         }
         private search():void{
-            this.isRightDivAvailable=true;
-            Utils.expandRightDiv();
-            this.state.current.url === '/dailyExamReport'
-            this.state.go('dailyExamReport' + '.' + 'dailyExamAttendanceReport',
-                {semesterId:this.stateParams.semesterId,examType:this.stateParams.examType,examDate:this.stateParams.examDate});
-            console.log("State Change!!");
-            console.log(this.stateParams);
+            if(this.selectedExamDate !="") {
+                this.isRightDivAvailable=true;
+                Utils.expandRightDiv();
+                this.state.current.url === '/dailyExamReport'
+                this.state.go('dailyExamReport' + '.' + 'dailyExamAttendanceReport',
+                    {
+                        semesterId: this.selectedSemesterId,
+                        examType: this.selectedExamTypeId,
+                        examDate: this.selectedExamDate
+                    });
+            }else{
+                this.notify.warn("Select an exam date!!!!");
+            }
         }
 
         public redirectTo(tab: string): void{
                 this.state.go('dailyExamReport' + '.' + tab,
-                    {semesterId:this.stateParams.semesterId,examType:this.stateParams.examType,examDate:this.stateParams.examDate});
-                console.log("State Change!!");
-                console.log(this.stateParams);
+                    {semesterId:this.selectedSemesterId,examType:this.selectedExamTypeId,examDate:this.selectedExamDate});
         }
         private getExamDates(){
             let examTypeId=this.selectedExamTypeId == ExamType.REGULAR ? ExamType.REGULAR:ExamType.CARRY_CLEARANCE_IMPROVEMENT;
-            console.log("examTypeId: "+examTypeId);
+            this.selectedExamDate="";
             this.examRoutineArr={};
             this.examRoutineService.getExamRoutineDates(this.selectedSemesterId,examTypeId).then((examDateArr: any) =>{
                 this.examRoutineArr={};
-                console.log("****Exam Dates***");
-                this.examRoutineArr=examDateArr;
-                console.log(this.examRoutineArr);
-            })
-
+                if(examDateArr.length>0) {
+                    this.examRoutineArr = examDateArr;
+                    this.selectedExamDate = this.examRoutineArr[0].examDate;
+                }else{
+                    this.notify.warn("No class Routine Found");
+                }
+            });
         }
         private ExamDateChange(value:any){
             this.selectedExamDate=value;
-            this.stateParams.examDate=this.selectedExamDate;
             this.isExamDateSelected=true;
-            console.log("Exam Date: "+this.selectedExamDate);
+            this.isRightDivAvailable=false;
 
         }
         private changeExamType(value:any){
-            console.log(value.id+"  "+value.name);
             this.selectedExamTypeId=value.id;
             this.selectedExamTypeName=value.name;
-            this.stateParams.examType=this.selectedExamTypeId;
+            this.isRightDivAvailable=false;
             this.getExamDates();
         }
         private getSemesters():void{
             this.semesterService.fetchSemesters(11,5).then((semesters:Array<Semester>)=>{
                 this.semesters=semesters;
-                console.log("Semester's");
-                console.log(this.semesters);
                 for(var i=0;i<semesters.length;i++){
                     if(semesters[i].status==1){
                         this.semester = semesters[i];
@@ -106,25 +107,21 @@ module  ums{
                 this.selectedSemesterId=this.semester.id;
                 this.stateParams.semesterId=this.selectedSemesterId;
                 this.semesterName=this.semester.name;
-                console.log("Selected_Id: "+this.selectedSemesterId);
-                console.log("Active_Semester_Id: "+this.activeSemesterId);
-            });
+            }).then((data)=>{
+                this.getExamDates();
+            })
         }
         private semesterChanged(val:any){
-            console.log("Name: "+val.name+"\nsemesterId: "+val.id);
             this.selectedSemesterId=val.id;
             this.semesterName=val.name;
-            this.stateParams.semesterId=this.selectedSemesterId;
-            console.log("Active Semester id: "+this.activeSemesterId);
+            this.isRightDivAvailable=false;
             this.getExamDates();
         }
         private getPdfVersionReport(){
-            if(this.isExamDateSelected) {
-                this.dailyExamAttendanceReportService.getExamAttendantReport(this.selectedSemesterId, this.selectedExamTypeId, this.selectedExamDate).then((data) => {
-                    console.log("success!!")
-                });
-            }else {
-                this.notify.warn("Select Exam Date");
+            if(this.selectedExamDate !="") {
+                this.dailyExamAttendanceReportService.getExamAttendantReport(this.selectedSemesterId, this.selectedExamTypeId, this.selectedExamDate);
+            }else{
+                this.notify.warn("Select an exam date");
             }
         }
     }

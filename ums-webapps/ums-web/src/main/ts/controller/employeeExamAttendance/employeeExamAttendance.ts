@@ -86,7 +86,7 @@ module ums{
             this.examTypeList=this.appConstants.examType;
             this.examType=this.examTypeList[0];
             this.selectedExamTypeId=this.examType.id;
-            this.selectedExamTypeName=this.examType.name
+            this.selectedExamTypeName=this.examType.name;
             this.roomInCharge=false;
             this.empExamDate="";
             this.empReserveDate="";
@@ -111,6 +111,7 @@ module ums{
              this.isInsertAvailable=false;
          }
         private search():void{
+            if(this.selectedExamDate !=""){
             if(this.isDeptSelected==true){
                     this.isRightDivAvailable = true;
                     Utils.expandRightDiv();
@@ -121,6 +122,9 @@ module ums{
                     this.empName="";
             }else{
                 this.notify.warn("Select Department");
+            }
+            }else {
+                this.notify.warn("Select an exam date");
             }
         }
         private getData():void{
@@ -133,10 +137,15 @@ module ums{
          private getExamDates(){
              this.examRoutineArr={};
              this.examRoutineService.getExamRoutineDates(this.selectedSemesterId,this.selectedExamTypeId).then((examDateArr: any) =>{
+                 this.selectedExamDate="";
                  this.examRoutineArr={};
-                 this.examRoutineArr=examDateArr;
-                 this.selectedExamDate=this.examRoutineArr[0].examDate;
-             })
+                 if(examDateArr.length>0) {
+                     this.examRoutineArr = examDateArr;
+                     this.selectedExamDate = this.examRoutineArr[0].examDate;
+                 }else{
+                     this.notify.warn("No class Routine Found");
+                 }
+             });
          }
          private ExamDateChange(value:any){
              this.selectedExamDate=value;
@@ -196,7 +205,7 @@ module ums{
          }
 
          private getClassRoomInfo(){
-             this.classRoomService.getClassRooms().then((data:Array<ClassRoom>)=>{
+             this.classRoomService.getClassRoomsForSeatPlan().then((data:Array<ClassRoom>)=>{
                  this.classRooms=data;
              });
          }
@@ -299,7 +308,6 @@ module ums{
              this.upEmpExamReserveDate=this. empExamAttendantInfoForDelete.reserveDate;
              this.isDeleteAvailable=true;
          }
-
          private delete():void{
                 var json = this.convertToJsonForDelete(this. empExamAttendantInfoForDelete);
                 this.employeeExamAttendanceService.deleteEmpExamAttendanceInfo(json).then((data) => {

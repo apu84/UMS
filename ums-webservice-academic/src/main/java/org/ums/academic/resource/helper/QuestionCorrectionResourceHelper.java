@@ -15,6 +15,7 @@ import org.ums.domain.model.mutable.MutableQuestionCorrectionInfo;
 import org.ums.employee.personal.PersonalInformation;
 import org.ums.employee.personal.PersonalInformationManager;
 import org.ums.enums.CourseType;
+import org.ums.enums.ProgramType;
 import org.ums.manager.*;
 import org.ums.persistent.model.PersistentQuestionCorrectionInfo;
 import org.ums.resource.ResourceHelper;
@@ -54,6 +55,8 @@ public class QuestionCorrectionResourceHelper extends
   CourseTeacherManager mCourseTeacherManager;
   @Autowired
   ExamRoutineManager mExamRoutineManager;
+  @Autowired
+  SemesterManager mSemesterManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -61,7 +64,7 @@ public class QuestionCorrectionResourceHelper extends
     LocalCache localCache = new LocalCache();
     JsonObject jsonObject = entries.getJsonObject(0);
     PersistentQuestionCorrectionInfo application = new PersistentQuestionCorrectionInfo();
-    application.setSemesterId(11012017);
+    application.setSemesterId(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
     getBuilder().build(application, jsonObject, localCache);
     try {
       mManager.create(application);
@@ -81,7 +84,7 @@ public class QuestionCorrectionResourceHelper extends
       LocalCache localCache = new LocalCache();
       JsonObject jsonObject = entries.getJsonObject(i);
       PersistentQuestionCorrectionInfo application = new PersistentQuestionCorrectionInfo();
-      application.setSemesterId(11012017);
+      application.setSemesterId(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
       getBuilder().build(application, jsonObject, localCache);
       applications.add(application);
     }
@@ -94,7 +97,7 @@ public class QuestionCorrectionResourceHelper extends
 
   public JsonObject getCourses(final Integer pProgramId, final Integer pYear, final Integer pSemester,
       final Request pRequest, final UriInfo pUriInfo) {
-    List<Course> courses = mCourseManager.getByYearSemester("11012017", pProgramId.toString(), pYear, pSemester);
+    List<Course> courses = mCourseManager.getByYearSemester(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId().toString(), pProgramId.toString(), pYear, pSemester);
     List<Course> theoryCourses=courses.stream().filter(f->f.getCourseType().getId()==CourseType.THEORY.getId()).collect(Collectors.toList());
 
     JsonObjectBuilder object = Json.createObjectBuilder();

@@ -370,16 +370,16 @@ public class SeatChartReport {
             }
           }
           float summaryFontSize = 10.0f;
-          if(deptList.size() < 6 && room.getCapacity()<60) {
+          if(deptList.size() < 6 && room.getCapacity() < 60) {
             fontSize = 11.0f;
             summaryFontSize = 11.0f;
           }
-          else if(deptList.size() >= 6 && deptList.size() < 9 && room.getCapacity()<60) {
+          else if(deptList.size() >= 6 && deptList.size() < 9 && room.getCapacity() < 60) {
             fontSize = 10.0f;
             summaryFontSize = 10.0f;
 
           }
-          else if(deptList.size() == 9 && room.getCapacity()<60) {
+          else if(deptList.size() == 9 && room.getCapacity() < 60) {
             fontSize = 10.0f;
             summaryFontSize = 10.0f;
           }
@@ -388,7 +388,7 @@ public class SeatChartReport {
               fontSize = 9.0f;
               summaryFontSize = 9.0f;
             }
-            else if(room.getCapacity()<60){
+            else if(room.getCapacity() < 60) {
               fontSize = 8.5f;
               summaryFontSize = 8.5f;
             }

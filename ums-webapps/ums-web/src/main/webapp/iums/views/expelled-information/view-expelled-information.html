@@ -60,7 +60,7 @@
                         <th>CourseNo</th>
                         <th>Date of Exam</th>
                         <th>Reason of Expulsion</th>
-                        <th data-ng-show="vm.showDeleteColumn">Delete</th>
+                        <th data-ng-if="vm.hideInsertMode">Delete</th>
                     </tr>
                     </thead>
                     <thead>
@@ -75,7 +75,7 @@
                         <td>{{app.courseNo}}</td>
                         <td>{{app.examDate }}</td>
                         <td>{{app.expelledReason}}</td>
-                        <td data-ng-show="vm.showDeleteColumn"><input
+                        <td data-ng-if="vm.hideInsertMode"><input
                                 type="checkbox"
                                 data-ng-model="app.apply"
                                 data-ng-click="vm.checkMoreThanOneSelectionSubmit(app)"
