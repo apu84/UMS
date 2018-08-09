@@ -63,7 +63,7 @@ public class ExpelledInformationResourceHelper extends
     LocalCache localCache = new LocalCache();
     JsonObject jsonObject = entries.getJsonObject(0);
     PersistentExpelledInformation application = new PersistentExpelledInformation();
-    application.setSemesterId(11012017);
+    application.setSemesterId(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
     getBuilder().build(application, jsonObject, localCache);
 
     mManager.create(application);
@@ -108,13 +108,13 @@ public class ExpelledInformationResourceHelper extends
   }
 
   public List<MutableExpelledInformation> getExpelledInformation(String pStudentId, Integer pRegType, Integer examType) {
-    List<ExamRoutineDto> examRoutineList = mExamRoutineManager.getExamRoutine(11012017, examType);
+    List<ExamRoutineDto> examRoutineList = mExamRoutineManager.getExamRoutine(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId(), examType);
     Map<String, String> examRoutineMapWithCourseId = examRoutineList
             .stream()
             .collect(Collectors.toMap(e->e.getCourseId(), e->e.getExamDate()));
     List<ExpelledInformation> expelledInfo=getContentManager().getAll();
     List<UGRegistrationResult> registeredTheoryCourseList =
-        mUGRegistrationResultManager.getRegisteredTheoryCourseByStudent(pStudentId, 11012017, examType,pRegType);
+        mUGRegistrationResultManager.getRegisteredTheoryCourseByStudent(pStudentId, mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId(), examType,pRegType);
     List<MutableExpelledInformation> mutableExpelledInformationList = addDataToList(pStudentId, examType, examRoutineMapWithCourseId, expelledInfo, registeredTheoryCourseList);
     return mutableExpelledInformationList;
   }
@@ -128,7 +128,7 @@ public class ExpelledInformationResourceHelper extends
       expelledInformation.setCourseTitle(mCourseManager.get(registrationResult.getCourseId()).getTitle());
       expelledInformation.setExamDate(examRoutineMapWithCourseId.get(registrationResult.getCourseId()));
       expelledInformation.setRegType(registrationResult.getType().getId());
-      expelledInformation.setStatus(expelledInfo.stream().filter(a->a.getSemesterId()==11012017 && a.getCourseId().equals(registrationResult.getCourseId()) && a.getStudentId().equals(pStudentId)
+      expelledInformation.setStatus(expelledInfo.stream().filter(a->a.getSemesterId()==mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId() && a.getCourseId().equals(registrationResult.getCourseId()) && a.getStudentId().equals(pStudentId)
                && a.getExamType()==examType).collect(Collectors.toList()).size()==1 ? 1:0);
       mutableExpelledInformationList.add(expelledInformation);
     }
@@ -143,7 +143,7 @@ public class ExpelledInformationResourceHelper extends
     if(pSemesterId.equals(semesterId)){
       hideDeleteOption=1;
     }
-    List<ExamRoutineDto> examRoutineList = mExamRoutineManager.getExamRoutine(11012017, examType);
+    List<ExamRoutineDto> examRoutineList = mExamRoutineManager.getExamRoutine(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId(), examType);
 
     Map<String, String> examRoutineMapWithCourseId = examRoutineList
             .stream()

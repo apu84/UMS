@@ -8,9 +8,9 @@ import org.ums.academic.resource.exam.attendant.helper.StudentsExamAttendantData
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Program;
-import org.ums.domain.model.immutable.ProgramType;
 import org.ums.domain.model.immutable.StudentsExamAttendantInfo;
 import org.ums.domain.model.mutable.MutableStudentsExamAttendantInfo;
+import org.ums.enums.ProgramType;
 import org.ums.manager.*;
 import org.ums.persistent.model.PersistentStudentsExamAttendantInfo;
 import org.ums.resource.ResourceHelper;
@@ -58,7 +58,7 @@ public class StudentsExamAttendantInfoHelper extends
       LocalCache localCache = new LocalCache();
       JsonObject jsonObject = entries.getJsonObject(i);
       PersistentStudentsExamAttendantInfo application = new PersistentStudentsExamAttendantInfo();
-      application.setSemesterId(11012017);
+      application.setSemesterId(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
       getBuilder().build(application, jsonObject, localCache);
       applications.add(application);
     }
