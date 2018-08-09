@@ -112,7 +112,8 @@ public class ExpelledInformationResourceHelper extends
     Map<String, String> examRoutineMapWithCourseId = examRoutineList
             .stream()
             .collect(Collectors.toMap(e->e.getCourseId(), e->e.getExamDate()));
-    List<ExpelledInformation> expelledInfo=getContentManager().getAll();
+    List<ExpelledInformation> expelledInfo=mManager.getSemesterExamTyeRegTypeWiseRecords(
+            mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId(),examType,pRegType);
     List<UGRegistrationResult> registeredTheoryCourseList =
         mUGRegistrationResultManager.getRegisteredTheoryCourseByStudent(pStudentId, mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId(), examType,pRegType);
     List<MutableExpelledInformation> mutableExpelledInformationList = addDataToList(pStudentId, examType, examRoutineMapWithCourseId, expelledInfo, registeredTheoryCourseList);
@@ -143,7 +144,7 @@ public class ExpelledInformationResourceHelper extends
     if(pSemesterId.equals(semesterId)){
       hideDeleteOption=1;
     }
-    List<ExamRoutineDto> examRoutineList = mExamRoutineManager.getExamRoutine(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId(), examType);
+    List<ExamRoutineDto> examRoutineList = mExamRoutineManager.getExamRoutine(pSemesterId, examType);
 
     Map<String, String> examRoutineMapWithCourseId = examRoutineList
             .stream()
@@ -151,7 +152,7 @@ public class ExpelledInformationResourceHelper extends
     Map<String, String> examRoutineMapWithProgramId= examRoutineList
             .stream()
             .collect(Collectors.toMap(e->e.getCourseId(), e->e.getProgramName()));
-    List<ExpelledInformation> expelledInfo=getContentManager().getAll().stream().filter(a->a.getExamType()==examType && a.getRegType()==pRegType).collect(Collectors.toList());
+    List<ExpelledInformation> expelledInfo=mManager.getSemesterExamTyeRegTypeWiseRecords(pSemesterId,examType,pRegType);
 
     List<MutableExpelledInformation> expelInfoList = addInfo(pRegType, hideDeleteOption, examRoutineMapWithCourseId, examRoutineMapWithProgramId, expelledInfo);
 

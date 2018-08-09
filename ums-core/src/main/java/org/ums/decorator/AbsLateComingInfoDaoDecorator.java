@@ -17,4 +17,9 @@ public class AbsLateComingInfoDaoDecorator extends
       String pExamDate) {
     return getManager().getInfoBySemesterExamTypeAndExamDate(pSemesterId, pExamType, pExamDate);
   }
+
+  @Override
+  public List<AbsLateComingInfo> getInfoBySemesterExamType(Integer pSemesterId, Integer pExamType) {
+    return getManager().getInfoBySemesterExamType(pSemesterId, pExamType);
+  }
 }

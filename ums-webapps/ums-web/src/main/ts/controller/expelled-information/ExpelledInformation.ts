@@ -106,6 +106,7 @@ module ums{
             this.deptName=this.deptList[0];
             this.isInsertAvailable=false;
             this.getSemesters();
+            this.doSomething();
         }
         private deptChanged(deptId:any){
             this.selectedDepartmentId=deptId.id;

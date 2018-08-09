@@ -13,4 +13,7 @@ public interface ExpelledInformationManager extends
   List<ExpelledInformation> getSemesterExamTyeDateWiseRecords(final Integer pSemesterId, final Integer pExamType,
       final String pExamDate);
 
+  List<ExpelledInformation> getSemesterExamTyeRegTypeWiseRecords(final Integer pSemesterId, final Integer pExamType,
+      final Integer pRegType);
+
 }
