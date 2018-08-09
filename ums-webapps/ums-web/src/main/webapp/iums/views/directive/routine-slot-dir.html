@@ -22,6 +22,8 @@
             <div ng-if="l.course!=undefined">
                 {{l.course.no}}({{l.section}})<br>
                 {{l.room.roomNo}}<br>
+                <hr/>
+                {{vm.getCourseTeacher(l.course.id)}}
             </div>
 
            <!-- {{vm.getCourseTeacherByCourseAndSection(routine.courseId, routine.section)}}-->
