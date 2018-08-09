@@ -650,10 +650,10 @@ module ums {
                     {id: '71', name: 'Office of the Treasurer'},
                     {id: '72', name: 'Office of the Registrar'},
                     {id: '73', name: 'Office of the Controller of Examinations'},
-                    {id: '74', name: 'Proctor Office'},
-                    {id: '75', name: 'Engineering Office'},
+                    {id: '74', name: 'Kazi Fazlur Rahman Library'},
+                    {id: '75', name: 'Office of the Proctor'},
                     {id: '76', name: "Office of the Advisor of Student's Welfare"},
-                    {id: '77', name: "Kazi Fazlur Rahman Library"}
+                    {id: '77', name: "Office of the University Engineer"}
                 ],
                 certificateStatus: [
                     {id: 1, name: 'Applied'},
