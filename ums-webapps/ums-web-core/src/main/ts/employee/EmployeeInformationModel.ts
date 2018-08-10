@@ -181,4 +181,10 @@ module ums{
         longName: string;
         type: string;
     }
+
+    export interface IDesignation {
+        id: number;
+        name: string;
+        employeeType: ICommon;
+    }
 }

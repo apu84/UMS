@@ -88,6 +88,19 @@ module ums{
           return defer.promise;
       }
 
+      public update(employeeId: string, json: any): ng.IPromise<any> {
+          let defer = this.$q.defer();
+          this.httpClient.put("academic/employee/"+ employeeId, json, 'application/json')
+              .success(() => {
+                  defer.resolve("Success");
+              })
+              .error((data) => {
+                  console.log(data);
+                  defer.reject();
+              });
+          return defer.promise;
+      }
+
 
       public getNewEmployeeId(pDept: string, pEmployeeType: number):ng.IPromise<any>{
           var defer = this.$q.defer();

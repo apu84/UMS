@@ -4,9 +4,11 @@ module ums{
     employeeName:string;
     text?: string;
     designation:number;
+    designationObj: IDesignation;
     designationName?:string;
     employmentType:string;
     employeeType:number;
+    departmentObj: IDepartment;
     deptOfficeId:string;
     deptOfficeName?: string;
     fatherName:string;
