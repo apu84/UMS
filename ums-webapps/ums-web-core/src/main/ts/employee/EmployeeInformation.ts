@@ -5,7 +5,7 @@ module ums {
     }
 
     class EmployeeInformation {
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', 'departmentService', 'employeeService', 'employeeInformationService', '$state', 'allUsers'];
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', 'departmentService', 'designationService', 'employeeService', 'employeeInformationService', '$state', 'allUsers'];
         private searchBy: string = "";
         private changedUserName: string = "";
         private showSearchByUserId: boolean = false;
@@ -16,6 +16,8 @@ module ums {
         private changedDepartment: IDepartment;
         private allUser: Array<Employee>;
         private departments: IDepartment[] = [];
+        private designations: IDesignation[] = [];
+        private filteredDesignation: IDesignation[] = [];
         private employee: Employee;
         private showInformationPanel: boolean = false;
         private indexValue: number = 0;
@@ -32,12 +34,15 @@ module ums {
         private finalListOfDept: string[] = [];
         private finalListOfEmpType: number[] = [];
         private choice: number = 1;
+        private employeeBasicInfoEdit: Employee;
+        private setIndex: number;
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeInformation,
                     private $q: ng.IQService,
                     private notify: Notify,
                     private departmentService: DepartmentService,
+                    private designationService: DesignationService,
                     private employeeService: EmployeeService,
                     private employeeInformationService: EmployeeInformationService,
                     private $state: any,
@@ -53,6 +58,11 @@ module ums {
         private initialization() {
             this.departmentService.getAll().then((departments: any) => {
                 this.departments = departments;
+
+                this.designationService.getAll().then((designations: any) => {
+                    this.designations = designations;
+                    this.filteredDesignation = designations;
+                });
             });
         }
 
@@ -176,7 +186,6 @@ module ums {
         }
 
         private downloadEmployeeList() {
-            console.log(this.deptList);
             if (!this.printType) {
                 this.notify.error("Please select a dept/Office category");
             }
@@ -211,6 +220,77 @@ module ums {
                 this.finalListOfEmpType[j] = (+this.empTypeList[j]);
             }
             return defer.promise;
+        }
+
+        set setIndexValue(pIndex: number) {
+            this.setIndex = pIndex;
+        }
+
+        get getIndexValue(): number {
+            return this.setIndex;
+        }
+
+        public startEdit(index: number): void {
+            this.setIndexValue = index;
+            this.employeeBasicInfoEdit = <Employee>{};
+            this.employeeBasicInfoEdit = this.$scope.filterd[index];
+            let dept: IDepartment[] = this.departments.filter((val, index) => {
+                return this.employeeBasicInfoEdit.deptOfficeId == this.departments[index].id;
+            });
+            this.employeeBasicInfoEdit.departmentObj = dept[0];
+            this.filterDesignationSelection();
+
+        }
+
+        public editBasicInfo(): void {
+            if (this.employeeBasicInfoEdit.id && this.employeeBasicInfoEdit.designation) {
+                this.employeeService.update(this.employeeBasicInfoEdit.id, this.employeeBasicInfoEdit).then((response) => {
+                    this.notify.success("Updated Successfully 1");
+                    this.reload();
+                });
+            }
+            else {
+                this.notify.error("Please complete all the fields properly.");
+            }
+        }
+
+        public filterDesignationSelection(): void {
+            this.filteredDesignation = [];
+            this.employeeService.getDesignation(this.employeeBasicInfoEdit.deptOfficeId.toString()).then((response: any) => {
+                if (response.length < 1) {
+                    this.notify.error("No designation found");
+                }
+                else {
+                    for (let i = 0; i < response.length; i++) {
+                        for (let j = 0; j < this.designations.length; j++) {
+                            if (response[i].designationId == this.designations[j].id) {
+                                this.filteredDesignation.push(this.designations[j]);
+                            }
+                        }
+                    }
+                }
+
+                let des: IDesignation[] = this.filteredDesignation.filter((val, index) => {
+                    return this.employeeBasicInfoEdit.designation == this.filteredDesignation[index].id;
+                });
+
+                this.employeeBasicInfoEdit.designationObj = des[0];
+            });
+        }
+
+        public setDesignationId(): void {
+            if (this.employeeBasicInfoEdit.designationObj) {
+                this.employeeBasicInfoEdit.designation = this.employeeBasicInfoEdit.designationObj.id;
+            }
+            else {
+                this.employeeBasicInfoEdit.designation = undefined;
+            }
+        }
+
+        private reload(): void {
+            this.employeeService.getAll().then((data) => {
+                this.allUser = data;
+            });
         }
     }
 

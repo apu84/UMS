@@ -134,9 +134,12 @@
                                     data-ng-click="vm.view(filterd[(vm.currentPageNumber - 1) * vm.itemsPerPage + $index], (vm.currentPageNumber - 1) * vm.itemsPerPage + $index)">
                                     {{user.id}}
                                 </td>
-                                <td>{{user.employeeName}}</td>
+                                <td>{{user.employeeName}}
+                                </td>
                                 <td>{{user.deptOfficeName}}</td>
-                                <td>{{user.designationName}}</td>
+                                <td style="cursor: pointer;" data-tooltip="toggle" title="Edit"
+                                    data-target="#editBasicInfo" data-toggle="modal"
+                                    data-ng-click="vm.startEdit($index)">{{user.designationName}}</td>
                                 <!--<td data-ng-click="vm.downloadPdf(user.id)"><img class="img-responsive" src="https://cdn1.iconfinder.com/data/icons/CrystalClear/128x128/mimetypes/pdf.png" style="width: 20px; height: 25px; cursor: pointer"></td>-->
                             </tr>
                             </tbody>
@@ -282,6 +285,57 @@
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
                 <button type="button" class="btn btn-success" data-ng-click="vm.downloadEmployeeList()">Print</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="editBasicInfo" tabindex="-1" role="dialog" aria-labelledby="modal-default-label-1"
+     aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="modal-default-label-1" class="modal-title">Edit</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="iEmployeeId" class="control-label">Employee Id</label>
+                    </div>
+                    <div class="col-md-1">:</div>
+                    <div class="col-md-8">
+                        <input id="iEmployeeId"
+                               name="nEmployeeId"
+                               data-ng-model="vm.employeeBasicInfoEdit.id"
+                               class="form-control"
+                               disabled/>
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="iDesignation2" class="control-label">Designation</label>
+                    </div>
+                    <div class="col-md-1">:</div>
+                    <div class="col-md-8">
+                        <select class="form-control"
+                                name="nDesignation2"
+                                id="iDesignation2"
+                                data-ng-options="desig.name for desig in vm.filteredDesignation"
+                                data-ng-model="vm.employeeBasicInfoEdit.designationObj"
+                                data-ng-change="vm.setDesignationId();"
+                        >
+                            <option value="">Select Designation</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                <button type="button" class="btn btn-success" data-ng-click="vm.editBasicInfo()">Update</button>
             </div>
         </div>
     </div>
