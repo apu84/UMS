@@ -48,32 +48,29 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
   @Override
   public void build(MutableEmployee pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setId(pJsonObject.getString("id"));
-    try{
+    try {
       pMutable.setDesignationId(pJsonObject.getInt("designation"));
-    }
-    catch(Exception e) {
+    } catch(Exception e) {
       pMutable.setDesignationId(pJsonObject.getJsonObject("designation").getInt("id"));
     }
-    try{
+    try {
       pMutable.setEmploymentType(pJsonObject.getString("employmentType"));
-    }
-    catch (Exception e){
+    } catch(Exception e) {
       pMutable.setEmploymentType(String.valueOf(pJsonObject.getJsonObject("employmentType").getInt("id")));
     }
     PersistentDepartment dept = new PersistentDepartment();
-    try{
+    try {
       dept.setId(pJsonObject.getString("deptOfficeId"));
-    }catch (Exception e) {
+    } catch(Exception e) {
       dept.setId(pJsonObject.getJsonObject("department").getString("id"));
     }
     pMutable.setDepartment(dept);
     pMutable.setJoiningDate(mDateFormat.parse(pJsonObject.getString("joiningDate")));
     // pMutable.setStatus(1);
-    pMutable.setShortName(pJsonObject.getString("shortName"));
-    try{
+    pMutable.setShortName(pJsonObject.containsKey("shortName") ? pJsonObject.getString("shortName").isEmpty() ? "" : pJsonObject.getString("shortName") : "");
+    try {
       pMutable.setEmployeeType(pJsonObject.getInt("employeeType"));
-    }
-    catch (Exception e) {
+    } catch(Exception e) {
       pMutable.setEmployeeType(pJsonObject.getJsonObject("employeeType").getInt("id"));
     }
     pMutable.setStatus(pJsonObject.getInt("status"));

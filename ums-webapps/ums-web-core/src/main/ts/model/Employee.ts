@@ -35,7 +35,7 @@ module ums{
         employmentType: any;
         joiningDate: string;
         status: number;
-        shortName: string;
+        academicInitial: string;
         email: string;
         employeeType: any;
         role: any;
