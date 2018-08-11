@@ -12,7 +12,8 @@ module ums {
             'designations',
             'employmentTypes',
             'employeeService',
-            'roles'];
+            'roles',
+            'employeeInformationService'];
 
         private allDepartments = [];
         private allDesignations = [];
@@ -25,7 +26,7 @@ module ums {
         private allRoles = [];
         private showRightDiv: boolean = false;
         private newEmployee: INewEmployee;
-        private isNotUniqueShortName: boolean = false;
+        private isNotUniqueAcademicInitial: boolean = false;
         private similarUsers = [];
         private showSimilarUsersPortion: boolean = false;
         private isStaff: boolean = false;
@@ -40,7 +41,8 @@ module ums {
                     private designations: any,
                     private employmentTypes: any,
                     private employeeService: EmployeeService,
-                    private roles: any) {
+                    private roles: any,
+                    private employeeInformationService: EmployeeInformationService) {
 
             this.newEmployee = <INewEmployee>{};
             this.allEmployeeTypes = appConstants.employeeTypes;
@@ -54,8 +56,8 @@ module ums {
         }
 
         public submitNewEmployeeForm(form: ng.IFormController): void {
-            if (this.isNotUniqueShortName) {
-                this.notify.error("Short name is not unique");
+            if (this.isNotUniqueAcademicInitial) {
+                this.notify.error("Academic initial is not unique");
             }
             else {
                 this.newEmployee.status = 1;
@@ -91,11 +93,11 @@ module ums {
             }
         }
 
-        public validateShortName(): void {
-            this.employeeService.checkDuplicate(this.newEmployee.shortName).then((result: any) => {
-                this.isNotUniqueShortName = !!result;
-                if (this.isNotUniqueShortName) {
-                    this.notify.error("Short name already exists");
+        public validateAcademicInitial(): void {
+            this.employeeInformationService.checkDuplicateAcademicInitial(this.newEmployee.academicInitial, this.newEmployee.department['id']).then((result: any) => {
+                this.isNotUniqueAcademicInitial = !!result;
+                if (this.isNotUniqueAcademicInitial) {
+                    this.notify.error("Academic initial already exists");
                 }
             });
         }

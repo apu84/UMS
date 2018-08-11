@@ -252,7 +252,7 @@
                                                name="nAcademicInitial"
                                                class="form-control"
                                                ng-model="vm.newEmployee.academicInitial"
-                                               data-ng-change="vm.validateShortName()">
+                                               data-ng-change="vm.validateAcademicInitial()">
                                     </div>
                                 </div>
                             </div>
@@ -285,7 +285,7 @@
                             <div class="col-md-6">
                                 <div align="right">
                                     <button type="submit" class="btn btn-success"
-                                            data-ng-disabled="nEmployeeForm.$invalid || vm.isNotUniqueShortName">Submit
+                                            data-ng-disabled="nEmployeeForm.$invalid || vm.isNotUniqueAcademicInitial">Submit
                                     </button>
                                 </div>
                             </div>

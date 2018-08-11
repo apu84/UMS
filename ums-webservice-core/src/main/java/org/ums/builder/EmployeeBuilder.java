@@ -67,7 +67,8 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
     pMutable.setDepartment(dept);
     pMutable.setJoiningDate(mDateFormat.parse(pJsonObject.getString("joiningDate")));
     // pMutable.setStatus(1);
-    pMutable.setShortName(pJsonObject.containsKey("shortName") ? pJsonObject.getString("shortName").isEmpty() ? "" : pJsonObject.getString("shortName") : "");
+    pMutable.setShortName(pJsonObject.containsKey("shortName") ? pJsonObject.getString("shortName").isEmpty() ? ""
+        : pJsonObject.getString("shortName") : "");
     try {
       pMutable.setEmployeeType(pJsonObject.getInt("employeeType"));
     } catch(Exception e) {
