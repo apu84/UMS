@@ -963,6 +963,11 @@ module ums {
                 experienceCategories: [
                     {id: 10, name: "Job"},
                     {id: 20, name: "Research"}
+                ],
+                empStatus: [
+                    {id: 1, name: "Active"},
+                    {id: 2, name: "On Leave"},
+                    {id: 3, name: "Inactive"}
                 ]
             }
         }
