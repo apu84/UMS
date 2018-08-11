@@ -332,6 +332,28 @@
                         </select>
                     </div>
                 </div>
+
+                <br />
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="iStatus" class="control-label">Status</label>
+                    </div>
+                    <div class="col-md-1">:</div>
+                    <div class="col-md-8">
+                        <select class="form-control"
+                                name="nStatus"
+                                id="iStatus"
+                                data-ng-model="vm.employeeBasicInfoEdit.status"
+                                data-convert-to-number
+                        >
+                            <option value="">Select Status</option>
+                            <option value="1">Active</option>
+                            <option value="2">On Leave</option>
+                            <option value="3">Inactive</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>

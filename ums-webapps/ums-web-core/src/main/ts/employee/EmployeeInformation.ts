@@ -243,9 +243,9 @@ module ums {
         }
 
         public editBasicInfo(): void {
-            if (this.employeeBasicInfoEdit.id && this.employeeBasicInfoEdit.designation) {
+            if (this.employeeBasicInfoEdit.id && this.employeeBasicInfoEdit.designation && this.employeeBasicInfoEdit.status) {
                 this.employeeService.update(this.employeeBasicInfoEdit.id, this.employeeBasicInfoEdit).then((response) => {
-                    this.notify.success("Updated Successfully 1");
+                    this.notify.success("Updated Successfully");
                     this.reload();
                 });
             }
