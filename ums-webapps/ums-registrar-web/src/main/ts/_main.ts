@@ -128,6 +128,8 @@
 
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformationModel.ts' />
 
+/// <reference path='../../../../ums-web-core/src/main/ts/model/LoggedInUser.ts'/>
+
 /// <reference path='controller/NewEmployee.ts'/>
 
 /// <reference path='directive/ElementValidation.ts' />
