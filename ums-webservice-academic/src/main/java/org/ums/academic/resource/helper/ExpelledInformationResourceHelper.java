@@ -129,7 +129,7 @@ public class ExpelledInformationResourceHelper extends
       expelledInformation.setCourseTitle(mCourseManager.get(registrationResult.getCourseId()).getTitle());
       expelledInformation.setExamDate(examRoutineMapWithCourseId.get(registrationResult.getCourseId()));
       expelledInformation.setRegType(registrationResult.getType().getId());
-      expelledInformation.setStatus(expelledInfo.stream().filter(a->a.getSemesterId()==mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId() && a.getCourseId().equals(registrationResult.getCourseId()) && a.getStudentId().equals(pStudentId)
+      expelledInformation.setStatus(expelledInfo.stream().filter(a->a.getSemesterId().equals(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId()) && a.getCourseId().equals(registrationResult.getCourseId()) && a.getStudentId().equals(pStudentId)
                && a.getExamType()==examType).collect(Collectors.toList()).size()==1 ? 1:0);
       mutableExpelledInformationList.add(expelledInformation);
     }
