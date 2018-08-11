@@ -11,6 +11,7 @@ import org.ums.domain.model.immutable.Semester;
 import org.ums.enums.ExamType;
 import org.ums.manager.SeatPlanManager;
 import org.ums.manager.SemesterManager;
+import org.ums.report.itext.UmsPdfPageEventHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -62,6 +63,8 @@ public class SittingArrangementReport {
 
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PdfWriter writer = PdfWriter.getInstance(document, baos);
+    SittingArrangementReportEventHandler eventHandler = new SittingArrangementReportEventHandler();
+    writer.setPageEvent(eventHandler);
     document.open();
 //    SittingArrangement sittingArrangement = new SittingArrangement();
 //    writer.setPageEvent(sittingArrangement);
@@ -72,7 +75,7 @@ public class SittingArrangementReport {
     Font boldFont = FontFactory.getFont(FontFactory.TIMES_BOLD, 12);
 
 
-    document.newPage();
+   // document.newPage();
 
     for (int i = 0; i < sortedSeatPlanMapKeys.size(); i++) {
       //PdfContentByte cb = writer.getDirectContent();
@@ -180,5 +183,10 @@ public class SittingArrangementReport {
     document.close();
     baos.writeTo(pOutputStream);
 
+  }
+
+  class SittingArrangementReportEventHandler extends UmsPdfPageEventHelper {
+    @Override
+    public void onStartPage(PdfWriter writer, Document document) {}
   }
 }

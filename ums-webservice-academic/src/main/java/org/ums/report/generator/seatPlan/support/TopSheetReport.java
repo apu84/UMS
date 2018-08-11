@@ -13,6 +13,7 @@ import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.enums.ExamType;
 import org.ums.manager.*;
+import org.ums.report.itext.UmsPdfPageEventHelper;
 import org.ums.util.UmsUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -62,6 +63,8 @@ public class TopSheetReport {
 
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PdfWriter writer = PdfWriter.getInstance(document, baos);
+    TopSheetPageEventHandler eventHandler = new TopSheetPageEventHandler();
+    writer.setPageEvent(eventHandler);
     /*
      * MyFooter event = new MyFooter(); writer.setPageEvent(event);
      */
@@ -471,5 +474,10 @@ public class TopSheetReport {
       notePhrase.add(noteChunk);
     }
     return notePhrase;
+  }
+
+  class TopSheetPageEventHandler extends UmsPdfPageEventHelper {
+    @Override
+    public void onEndPage(PdfWriter writer, Document document) {}
   }
 }

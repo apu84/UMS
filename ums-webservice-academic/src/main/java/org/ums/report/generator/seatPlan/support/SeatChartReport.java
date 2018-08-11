@@ -9,6 +9,7 @@ import org.ums.domain.model.immutable.*;
 import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
 import org.ums.manager.*;
+import org.ums.report.itext.UmsPdfPageEventHelper;
 import org.ums.util.UmsUtils;
 import sun.font.FontFamily;
 
@@ -54,10 +55,9 @@ public class SeatChartReport {
     PdfWriter writer = PdfWriter.getInstance(document, baos);
     MyFooter event = new MyFooter();
     writer.setPageEvent(event);
-    document.open();
-    document.setPageSize(PageSize.A4.rotate());
 
-    document.newPage();
+    document.setPageSize(PageSize.A4.rotate());
+    document.open();
 
     Font f = new Font(Font.FontFamily.TIMES_ROMAN, 10.0f, Font.BOLD, BaseColor.BLACK);
 
@@ -181,6 +181,7 @@ public class SeatChartReport {
       java.util.List<ClassRoom> rooms = mRoomManager.getAll();
 
       int roomCounter = 0;
+      int seatPlanEnabledRoomCounter = 0;
       for(ClassRoom room : rooms) {
         float fontSize;
         roomCounter += 1;
@@ -189,8 +190,10 @@ public class SeatChartReport {
         // mSeatPlanManager.checkIfExistsByRoomSemesterGroupExamType(room.getId(),pSemesterId,groupNo,type);
 
         if(checkIfRoomExistsInSeatPlan && room.getId() != 284) {
-
-          document.add(UmsUtils.getIUMSHeaderParagraph());
+          if(seatPlanEnabledRoomCounter > 0)
+            document.newPage();
+          seatPlanEnabledRoomCounter += 1;
+          // document.add(UmsUtils.getIUMSHeaderParagraph());
 
           long startTimeInRoom = System.currentTimeMillis();
           String roomHeader = "Room No: " + room.getRoomNo();
@@ -698,7 +701,7 @@ public class SeatChartReport {
           /* document.add(footer); */
           long endTimeInRoom = System.currentTimeMillis();
           long totalTimeInRoom = endTimeInRoom - startTimeInRoom;
-          document.newPage();
+          // document.newPage();
 
         }
 
@@ -719,8 +722,13 @@ public class SeatChartReport {
     baos.writeTo(pOutputStream);
   }
 
-  class MyFooter extends PdfPageEventHelper {
+  class MyFooter extends UmsPdfPageEventHelper {
     Font ffont = new Font(Font.FontFamily.UNDEFINED, 5, Font.ITALIC);
+
+    @Override
+    public void onStartPage(PdfWriter writer, Document document) {
+      super.onStartPage(writer, document);
+    }
 
     public void onEndPage(PdfWriter writer, Document document) {
       PdfContentByte cb = writer.getDirectContent();

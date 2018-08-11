@@ -13,6 +13,7 @@ import org.ums.enums.ExamType;
 import org.ums.manager.SeatPlanReportManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.UGRegistrationResultManager;
+import org.ums.report.itext.UmsPdfPageEventHelper;
 import org.ums.util.UmsUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -81,6 +82,8 @@ public class AttendanceSheetReport {
 
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PdfWriter writer = PdfWriter.getInstance(document, baos);
+    AttendanceSheetReportEventHandler eventHandler = new AttendanceSheetReportEventHandler();
+    writer.setPageEvent(eventHandler);
     /*
      * MyFooter event = new MyFooter(); writer.setPageEvent(event);
      */
@@ -420,6 +423,12 @@ public class AttendanceSheetReport {
   private void getCenterAlignmentAndBoldTimesFont(Paragraph pHeaderParagraph) {
     pHeaderParagraph.setAlignment(Element.ALIGN_CENTER);
     pHeaderParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD));
+  }
+
+  class AttendanceSheetReportEventHandler extends UmsPdfPageEventHelper {
+    @Override
+    public void onEndPage(PdfWriter writer, Document document) {}
+
   }
 
 }
