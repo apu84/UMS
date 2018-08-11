@@ -58,6 +58,7 @@ module ums {
                 this.notify.error("Short name is not unique");
             }
             else {
+                this.newEmployee.status = 1;
                 this.convertToJson().then((result: any) => {
                     this.employeeService.save(result).then((message: any) => {
                         this.resetForm(form);
