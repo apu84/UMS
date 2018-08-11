@@ -77,7 +77,13 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   }
 
   @Override
-  public List<Routine> getRoutine(int pSemesterId, String pCourseId) {
+  public List<Routine> getRoutineBySemesterAndRoom(int pSemesterId, int pRoomId) {
+    String query = SELECT_ALL + " where semester_id=? and room_id=?";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pRoomId}, new RoutineRowMapper());
+  }
+
+  @Override
+  public List<Routine> getRoutineBySemesterAndCourse(int pSemesterId, String pCourseId) {
     String query = SELECT_ALL + " where semester_id=? and course_id=?";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId}, new RoutineRowMapper());
   }
@@ -96,13 +102,13 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   }
 
   @Override
-  public List<Routine> getTeacherRoutine(String teacherId) {
+  public List<Routine> getRoutineByTeacher(String teacherId) {
     String query = SELECT_ALL_FOR_TEACHER;
     return mJdbcTemplate.query(query, new Object[] {teacherId}, new RoutineRowMapper());
   }
 
   @Override
-  public List<Routine> getRoutine(int pSemesterId, int pProgramId) {
+  public List<Routine> getRoutineBySemesterAndProgram(int pSemesterId, int pProgramId) {
     String query =
         SELECT_ALL + " WHERE CLASS_ROUTINE.COURSE_ID=MST_COURSE.COURSE_ID  " + " and CLASS_ROUTINE.SEMESTER_ID=?  "
             + " and program_id=?  ORDER BY CLASS_ROUTINE.DAY, class_routine.START_TIME";
@@ -110,7 +116,7 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   }
 
   @Override
-  public List<Routine> getStudentRoutine(Student pStudent) {
+  public List<Routine> getRoutineByStudent(Student pStudent) {
     String query = SELECT_ALL_FOR_STUDENT;
     return mJdbcTemplate.query(
         query,
@@ -119,7 +125,8 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   }
 
   @Override
-  public List<Routine> getRoutine(int semesterId, int programId, int year, int semester, String section) {
+  public List<Routine> getRoutineBySemesterProgramIdYearSemesterAndSection(int semesterId, int programId, int year,
+      int semester, String section) {
     String query =
         "select CLASS_ROUTINE.* FROM CLASS_ROUTINE, MST_COURSE WHERE  CLASS_ROUTINE.COURSE_ID=MST_COURSE.COURSE_ID AND CLASS_ROUTINE.SEMESTER_ID=? and CLASS_ROUTINE.PROGRAM_ID=? and CLASS_ROUTINE.YEAR=? and CLASS_ROUTINE.SEMESTER=? and CLASS_ROUTINE.SECTION LIKE '"
             + section + "%'  order by day,start_time , MST_COURSE.COURSE_TYPE desc, duration";

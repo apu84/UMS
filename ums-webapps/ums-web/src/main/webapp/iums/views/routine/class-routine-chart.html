@@ -27,7 +27,7 @@
         <tr ng-repeat="day in vm.weekDay">
             <td style="wdith:30%">{{day.name}}</td>
             <td style="width:30%" ng-repeat="header in vm.getDayWiseTableHeader(day.id)"
-                colspan="{{vm.getColSpan(day.id, header.startTime)/vm.routineConfigService.routineConfig.duration}}">
+                colspan="{{vm.getColSpan(day.id, header.startTime)/vm.routineConfigService.routineConfig.duration}}" vertical-align="center">
                 <div align="right">
                     <i ng-if="vm.classRoutineService.enableEdit" class="fa fa-pencil-square-o" aria-hidden="true"
                        style="cursor: pointer"

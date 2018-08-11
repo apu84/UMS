@@ -145,17 +145,14 @@ module ums{
         roomId=9999;
       }
 
-      this.httpClient.get("academic/routine/roomBasedRoutine/semester/"+semesterId+"/room/"+roomId,  'application/pdf',
+      this.httpClient.get("academic/routine/roomBasedRoutine/semester/"+semesterId+"/room/"+roomId,  'application/json',
           (data:any, etag:string) => {
-            var file = new Blob([data], {type: 'application/pdf'});
-            var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
-            this.$window.open(fileURL);
-            defer.resolve(fileURL);
+            defer.resolve(data.entries);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
             defer.resolve("failure");
-          },'arraybuffer');
+          });
 
       return defer.promise;
     }
