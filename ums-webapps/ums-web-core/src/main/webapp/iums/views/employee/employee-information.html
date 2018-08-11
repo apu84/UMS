@@ -132,11 +132,9 @@
                                 <td>{{(vm.currentPageNumber - 1) * vm.itemsPerPage + $index + 1}}</td>
                                 <td style="cursor:pointer"
                                     data-ng-click="vm.view(filterd[(vm.currentPageNumber - 1) * vm.itemsPerPage + $index], (vm.currentPageNumber - 1) * vm.itemsPerPage + $index)">
-                                    {{user.id}}
-                                </td>
-                                <td>{{user.employeeName}}
-                                </td>
-                                <td>{{user.designationName}}</td>
+                                    {{user.id}}</td>
+                                <td>{{user.employeeName}}</td>
+                                <td>{{user.deptOfficeName}}</td>
                                 <td style="cursor: pointer;" data-tooltip="toggle" title="Edit"
                                     data-target="#editBasicInfo" data-toggle="modal"
                                     data-ng-click="vm.startEdit($index)">{{user.designationName}}</td>
