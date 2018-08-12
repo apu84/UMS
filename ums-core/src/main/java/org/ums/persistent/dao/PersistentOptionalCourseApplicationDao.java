@@ -126,7 +126,7 @@ public class PersistentOptionalCourseApplicationDao {
 
     if(!pStatus.equalsIgnoreCase("all")) {
       query +=
-          " and  Status in   " + "( " + "select regexp_substr(?,'[^,]+', 1, level) " + "from dual " + "connect by "
+          " and  opt.Status in   " + "( " + "select regexp_substr(?,'[^,]+', 1, level) " + "from dual " + "connect by "
               + "regexp_substr(?, '[^,]+', 1, level) " + "is not null " + ") " + "Order by Applied_On Desc ";
       objectArray = new Object[] {pSemesterId, pCourseId, pStatus, pStatus};
     }
