@@ -25,6 +25,7 @@ module ums{
     joiningDate:string;
     jobPermanentDate:string;
     status:number;
+    statusName:string;
   }
 
     export interface INewEmployee {
