@@ -10,6 +10,7 @@ import org.ums.builder.SemesterBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
+import org.ums.employee.additional.AdditionalInformationManager;
 import org.ums.manager.CourseManager;
 import org.ums.manager.EmployeeManager;
 import org.ums.manager.SemesterManager;
@@ -37,6 +38,8 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
   private TeacherBuilder mTeacherBuilder;
   @Autowired
   private EmployeeManager mEmployeeManager;
+  @Autowired
+  private AdditionalInformationManager mAdditionalInformationManager;
 
   @Override
   public void build(JsonObjectBuilder pBuilder, CourseTeacher pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
@@ -66,7 +69,13 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
 
       pBuilder.add("teacherId", teacher.getId());
       pBuilder.add("teacherName", teacher.getName());
-      pBuilder.add("shortName", mEmployeeManager.get(teacher.getId()).getShortName());
+      if (mAdditionalInformationManager.exists(teacher.getId()) && mAdditionalInformationManager.get(teacher.getId()).getAcademicInitial()!=null){
+        pBuilder.add("shortName", mAdditionalInformationManager.get(teacher.getId()).getAcademicInitial());
+      }else if(mEmployeeManager.get(teacher.getId()).getShortName()!=null){
+        pBuilder.add("shortName", mEmployeeManager.get(teacher.getId()).getShortName());
+      }else{
+        pBuilder.add("shortName", teacher.getName());
+      }
       JsonObjectBuilder teacherJsonObject = Json.createObjectBuilder();
       mTeacherBuilder.build(teacherJsonObject, teacher, pUriInfo, pLocalCache);
       pBuilder.add("teacher", teacherJsonObject);
