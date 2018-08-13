@@ -111,6 +111,9 @@ public class AttendanceSheetReport {
       // seatPlanReports = getUnusedStudents(seatPlanReports, studentsUsageMap);
       SeatPlanReportDto seatPlanReportDto = seatPlanReports.get(0);
 
+      if(routineCounter > 0) {
+        document.newPage();
+      }
       routineCounter += 1;
 
       PdfPTable table = new PdfPTable(2);
@@ -402,7 +405,7 @@ public class AttendanceSheetReport {
       table.addCell(cellTwo);
 
       document.add(table);
-      document.newPage();
+      // document.newPage();
       // break;
 
       if(seatPlanReports.size() == 0) {
