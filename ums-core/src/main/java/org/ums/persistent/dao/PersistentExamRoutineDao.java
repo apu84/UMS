@@ -45,7 +45,7 @@ public class PersistentExamRoutineDao extends ExamRoutineDaoDecorator {
             + "And COURSE_SYLLABUS_MAP.COURSE_ID = MST_COURSE.COURSE_ID "
             + "And SEMESTER_SYLLABUS_MAP.YEAR=MST_COURSE.YEAR AND SEMESTER_SYLLABUS_MAP.SEMESTER=MST_COURSE.SEMESTER "
             + "AND SEMESTER_SYLLABUS_MAP.SEMESTER_ID=EXAM_ROUTINE.SEMESTER "
-            + "Order By to_date(EXAM_DATE,'DD/MM/YYYY') desc,Exam_Time,Program_Id,Year,Semester,Course_No  ";
+            + "Order By to_date(EXAM_DATE,'DD/MM/YYYY') ,Exam_Time,Program_Id,Year,Semester,Course_No  ";
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new Object[] {semesterId, examTypeId}, new ExamRoutineRowMapper());
   }
