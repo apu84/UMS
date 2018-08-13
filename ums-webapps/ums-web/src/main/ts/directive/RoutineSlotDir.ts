@@ -145,12 +145,12 @@ module ums{
 
         }
 
-        public getCourseTeacher(courseId: string):string{
+        public getCourseTeacher(courseId: string, section: string):string{
           let courseTeacherStr="(";
-          if (this.classRoutineService.courseTeacherMap[courseId]==undefined)
+          if (this.classRoutineService.courseTeacherMapWithCourseIdAndSection[courseId+section]==undefined)
             courseTeacherStr = courseTeacherStr+"TBA";
           else{
-            let courseTeacherList:CourseTeacherInterface[] = this.classRoutineService.courseTeacherMap[courseId];
+            let courseTeacherList:CourseTeacherInterface[] = this.classRoutineService.courseTeacherMapWithCourseIdAndSection[courseId+section];
             let courseTeacherInitials:string[] = []
             courseTeacherList.forEach((c:CourseTeacherInterface)=>{
               courseTeacherInitials.push( c.shortName);

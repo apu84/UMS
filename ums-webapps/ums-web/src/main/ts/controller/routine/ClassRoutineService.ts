@@ -84,7 +84,7 @@ module ums{
     public dayAndTimeMapWithRoutineSlot: {[key:string]: RoutineSlot};
     public groupMapWithRoutineSlot: {[key:number]:RoutineSlot};
     public groupList: number[];
-    public courseTeacherMap: { [key: string]: CourseTeacherInterface[] }; // map[courseId]= CourseTeacher[];
+    public courseTeacherMapWithCourseIdAndSection: { [key: string]: CourseTeacherInterface[] }; // map[courseId]= CourseTeacher[];
     public courseTeacherWithSectionMap: { [key: string]: CourseTeacherInterface[] }; // map[courseId+section]= CourseTeacher[];
     public routineUrl: string = '/ums-webservice-academic/academic/routine';
     public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
