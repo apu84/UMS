@@ -94,7 +94,7 @@
         '/experience': {title: 'Profile', 'breadcrumb': ['Profile']},
         '/additional': {title: 'Profile', 'breadcrumb': ['Profile']},
         '/service': {title: 'Profile', 'breadcrumb': ['Profile']},
-        '/employeeInformation': {title: 'Employee Information', 'breadcrumb': ['Employee Information']}
+        '/employeeInformation': {title: 'Search', 'breadcrumb': ['Search']}
     };
 
 
