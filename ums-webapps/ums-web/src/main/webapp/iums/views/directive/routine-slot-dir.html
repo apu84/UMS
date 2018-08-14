@@ -1,12 +1,6 @@
 <style>
 
-    table{
-        padding: 0px;
-    }
 
-    .border-tba{
-        border-color: #0a6aa1;
-    }
 
 </style>
 
@@ -22,7 +16,7 @@
         <td class="col-md-2" colspan="2">Two</td>
     </tr>-->
     <tr ng-repeat="r in vm.routineRows">
-        <td  ng-repeat="l in r.routineList" colspan="{{vm.getColSpan(l)}}" align="center" class="col-md-{{vm.getColSpan(l)}}">
+        <td  ng-repeat="l in r.routineList" colspan="{{vm.getColSpan(l)}}" align="center" class="col-md-{{vm.getColSpan(l)}}*2" >
             <div ng-if="l.course!=undefined">
                 {{l.course.no}}({{l.section}})<br>
                 {{l.room.roomNo}}<br>

@@ -52,11 +52,15 @@ module ums {
         this.getClassRoomList();
         this.getTeacherList();
       }
+      this.showProgressBar = false;
+      this.progress=0;
       this.showRoutineChart = false;
       this.createRoutineBody();
     }
 
     public createRoutineBody() {
+      this.showProgressBar = false;
+      this.progress=0;
       this.generateHeader();
       this.generateBody();
       this.classRoutineService.dayAndTimeMapWithRoutine = {};
@@ -355,9 +359,37 @@ module ums {
       if (this.classRoutineService.slotRoutineList.length == 0) {
         this.createRoutineBody();
       } else {
-        this.saveSlotData();
+        this.checkRequiredFieldsInSlotRoutineList().then((foundIssue: boolean)=>{
+          if(foundIssue==false)
+            this.saveSlotData();
+        });
+      }
+    }
+
+    private checkRequiredFieldsInSlotRoutineList(): ng.IPromise<boolean>{
+      let defer: ng.IDeferred<boolean>  = this.$q.defer();
+      let foundIssue: boolean = false;
+      for(var i=0; i<this.classRoutineService.slotRoutineList.length; i++){
+        let routine : ClassRoutine= this.classRoutineService.slotRoutineList[i];
+        if(routine.course==undefined || routine.course==null){
+          this.notify.error("Please select course");
+          foundIssue= true;
+          break;
+        }
+        else if(routine.room==null || routine.room==undefined){
+          this.notify.error("Please select roomNo");
+          foundIssue= true;
+          break;
+        }
+        else if(moment(routine.startTimeObj).diff(moment(routine.endTimeObj), 'minutes')>300){
+          this.notify.error("Time duration is more than expected.");
+          foundIssue= true;
+          break;
+        }
       }
 
+      defer.resolve(foundIssue);
+      return defer.promise;
     }
 
     public createCourseTeacherMap() {

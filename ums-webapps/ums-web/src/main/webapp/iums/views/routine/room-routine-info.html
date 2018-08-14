@@ -28,9 +28,9 @@
     <div class="col-md-12">
         <p><b>Course in routine</b></p>
     </div>
-    <div class="col-md-12">
-        <table class="table table-bordered table-striped">
-            <thread>
+    <div class="col-md-12 list-group-short">
+        <table st-table="vm.routineBasedOnRoom" class="table table-bordered table-striped" st-paginaio-scroll>
+            <thread class="slotHead">
                 <th>Day</th>
                 <th>Start Time</th>
                 <th>End Time</th>
@@ -38,8 +38,8 @@
                 <th>Course Title</th>
                 <th>Section</th>
             </thread>
-            <tbody>
-            <tr ng-repeat="routine in vm.routineBasedOnRoom">
+            <tbody >
+            <tr  ng-repeat="routine in vm.routineBasedOnRoom">
 
                 <td>{{vm.classRoutineService.weekDayMapWithId[routine.day]}}</td>
                 <td>{{routine.startTime}}</td>

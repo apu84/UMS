@@ -71,6 +71,8 @@ module ums {
     private initialzeRoutine(slotRoutine: ClassRoutine): ClassRoutine {
       slotRoutine.startTime = this.classRoutineService.selectedHeader.startTime;
       slotRoutine.endTime = this.classRoutineService.selectedHeader.endTime;
+      slotRoutine.startTimeObj = moment(slotRoutine.startTime,"hh:mm A").toDate();
+      slotRoutine.endTimeObj = moment(slotRoutine.endTime,'hh:mm A').toDate();
       slotRoutine.semesterId = this.classRoutineService.selectedSemester.id;
       slotRoutine.semester = this.classRoutineService.selectedSemester;
       slotRoutine.programId = this.classRoutineService.selectedProgram.id.toString();
