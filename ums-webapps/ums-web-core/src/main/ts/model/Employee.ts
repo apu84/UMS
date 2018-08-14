@@ -2,6 +2,7 @@ module ums{
   export interface Employee{
     id:string;
     employeeName:string;
+    name: string;
     text?: string;
     designation:number;
     designationObj: IDesignation;

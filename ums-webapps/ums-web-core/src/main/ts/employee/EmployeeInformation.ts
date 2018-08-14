@@ -98,7 +98,6 @@ module ums {
             else {
                 this.enablePreviousButton = true;
             }
-            console.log(this.$scope.filterd);
             if (this.indexValue >= this.$scope.filterd.length - 1) {
                 this.enableNextButton = false;
             }
@@ -257,7 +256,7 @@ module ums {
         }
 
         public editBasicInfo(): void {
-            if (this.employeeBasicInfoEdit.id && this.employeeBasicInfoEdit.designation && this.employeeBasicInfoEdit.status) {
+            if (this.employeeBasicInfoEdit.id && this.employeeBasicInfoEdit.name && this.employeeBasicInfoEdit.designation && this.employeeBasicInfoEdit.status) {
                 this.employeeService.update(this.employeeBasicInfoEdit.id, this.employeeBasicInfoEdit).then((response) => {
                     this.notify.success("Updated Successfully");
                     this.reload();
