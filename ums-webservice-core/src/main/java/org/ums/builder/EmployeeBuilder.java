@@ -29,6 +29,7 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("text", pReadOnly.getId());
     pBuilder.add("employeeName", pReadOnly.getPersonalInformation().getName());
+    pBuilder.add("name", pReadOnly.getPersonalInformation().getName());
     pBuilder.add("designation", pReadOnly.getDesignationId());
     pBuilder.add("designationName", mDesignationManager.get(pReadOnly.getDesignationId()).getDesignationName());
     pBuilder.add("employmentType", pReadOnly.getEmploymentType());

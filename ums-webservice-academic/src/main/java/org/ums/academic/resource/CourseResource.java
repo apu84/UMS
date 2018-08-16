@@ -3,7 +3,7 @@ package org.ums.academic.resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.academic.resource.helper.CourseResourceHelper;
-import org.ums.manager.CourseManager;
+import org.ums.report.optReports.CourseByGroupIdReport;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
@@ -11,7 +11,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import java.util.List;
 
 @Component
 @Path("/academic/course")
@@ -89,7 +89,7 @@ public class CourseResource extends MutableCourseResource {
 
   @GET
   @Path("/optional/semester-id/{semester-id}/program/{program-id}/year/{year}/semester/{semester}")
-  public JsonObject getOptionalCourses(final @Context Request pRequest,
+  public List<CourseByGroupIdReport> getOptionalCourses(final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId, final @PathParam("program-id") Integer pProgramId,
       final @PathParam("year") Integer pYear, final @PathParam("semester") Integer pSemester) {
     return mResourceHelper.getOptionalCourses(pSemesterId, pProgramId, pYear, pSemester, pRequest, mUriInfo);
