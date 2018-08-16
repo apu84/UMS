@@ -90,7 +90,7 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
     Font fontTimes8Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 8);
     Font fontTimes10Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 10);
     Font fontTimes9Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 9);
-    Font iums = FontFactory.getFont(FontFactory.TIMES_ITALIC, 6);
+    Font iums = FontFactory.getFont(FontFactory.TIMES_BOLDITALIC, 8);
     String examDate = "";
 
     List<ExamRoutineDto> examDates = mExamRoutineManager.getExamDatesBySemesterAndType(pSemesterId,pExamType);
@@ -214,7 +214,7 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
       empExamAttendance=empExamAttendance.stream().filter(
               e->e.getEmployeeType()==EmployeeType.TEACHER.getId() && e.getDepartmentId().equals(pDeptId)
       ).collect(Collectors.toList());
-      String reportName="Invigilators's Reporting Sheet";
+      String reportName="Invigilators' Reporting Sheet";
       int invigilator=1;
       Document document = new Document();
 
@@ -243,6 +243,7 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
       ByteArrayOutputStream baos, Font fontTimes8Normal, Font fontTimes10Bold, Font iums, Integer isReserve)
       throws DocumentException, IOException {
     Font fontTimes10Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 9);
+    Font footer = FontFactory.getFont(FontFactory.TIMES_BOLDITALIC, 7);
     UmsCell cell;
     PdfPTable empTable = new PdfPTable(6);
     empTable.setWidths(new float[] {1, 4, 1, 2, 2, 3});
@@ -315,7 +316,7 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
       empTable.addCell(cell);
     }
     document.add(empTable);
-    getFooter(document, fontTimes10Bold, iums);
+    getFooter(document, fontTimes10Bold, footer);
     document.close();
     baos.writeTo(pOutputStream);
   }
@@ -323,9 +324,10 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
   private void getReportingHeader(Integer pSemesterId, Integer pExamType, String pExamDate, String pDeptId,
       String reportName, Document document, Font fontTimes8Normal, Font fontTimes8Bold, Integer isReserve)
       throws DocumentException, ParseException {
+    Font fontTimes10Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 10);
     Chunk chunk;
     UmsParagraph paragraph;
-    chunk = new Chunk("Ahsanullah University of Science And Technology", fontTimes8Bold);
+    chunk = new Chunk("Ahsanullah University of Science And Technology", fontTimes10Bold);
     paragraph = new UmsParagraph();
     paragraph.setAlignment(Element.ALIGN_CENTER);
     paragraph.setFont(fontTimes8Normal);
@@ -412,8 +414,8 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
       Font fontTimes12Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 12);
       Font fontTimes8Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 8);
       Font fontTimes10Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 10);
-      Font fontTimes9Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 9);
-      Font iums = FontFactory.getFont(FontFactory.TIMES_ITALIC, 6);
+      Font fontTimes9Bold = FontFactory.getFont(FontFactory.TIMES_BOLD, 10);
+      Font iums = FontFactory.getFont(FontFactory.TIMES_BOLDITALIC, 7);
       document.open();
       document.setPageSize(PageSize.A4);
 
@@ -424,7 +426,7 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
       paragraph = new UmsParagraph();
       document.add(paragraph);
 
-      chunk = new Chunk("Ahsanullah University of Science And Technology",fontTimes8Bold);
+      chunk = new Chunk("Ahsanullah University of Science And Technology",fontTimes10Bold);
       paragraph = new UmsParagraph();
       paragraph.setAlignment(Element.ALIGN_CENTER);
       paragraph.setFont(fontTimes8Normal);
@@ -536,12 +538,12 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
     chunk =
         new Chunk(
             "(1. It may be stated that the examinations will start at 9:30 am and continue up to 12:30 pm everyday.\n"
-                + "2. tAll Invigilators and Staff members will have to report at the Jury room at 9:10 am or earlier.\n"
+                + "2. All Invigilators and Staff members will have to report at the Jury room at 9:10 am or earlier.\n"
                 + "3. Concerned Room-in-charge ( Or Invigilators on request of Room in charge) and Staff members are requested to "
                 + "collect room-wise question papers, answer scripts and other relevant papers/documents and accessories "
                 + "from Jury Room (Room no: 2C02, Level 2, Block C) of the University positively at 9:10 am or earlier.\n"
                 + "4. Reserved invigilators will have to report to the Jury Room at 9:10 am or earlier. They will perform"
-                + "their duties as and when required during the examinations.", fontTimes8Normal);
+                + " their duties as and when required during the examinations.", fontTimes8Normal);
     paragraph = new UmsParagraph();
     paragraph.setAlignment(Element.ALIGN_LEFT);
     paragraph.setFont(fontTimes8Normal);
@@ -554,8 +556,8 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
       coeName = emp.getPersonalInformation().getName();
     }
     chunk =
-        new Chunk("\nBy order of the Vice-Chancellor   \n\n" + "----------------------------------------\n" + coeName
-            + "   \nController of Examinations,Aust\n\n", fontTimes10Normal);
+        new Chunk("\nBy order of the Vice-Chancellor   \n\n" + "-----------------------------------------\n" + coeName
+            + "   \nController of Examinations, Aust\n\n", fontTimes10Normal);
     paragraph = new UmsParagraph();
     paragraph.setAlignment(Element.ALIGN_RIGHT);
     paragraph.setFont(fontTimes10Normal);
@@ -609,6 +611,7 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
     paragraph.setFont(fontTimes10Normal);
     paragraph.add(chunk);
     document.add(paragraph);
+    mDateFormat = new DateFormat("dd MMM YYYY hh:mm:ss a");
     chunk = new Chunk("Generated By: IUMS on " + mDateFormat.format(new Date()), iums);
     paragraph = new UmsParagraph();
     paragraph.setAlignment(Element.ALIGN_LEFT);
@@ -622,12 +625,13 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
     UmsCell cell;
     UmsParagraph paragraph = null;
     Chunk chunk = null;
-    PdfPTable footer = new PdfPTable(4);
+    PdfPTable footer = new PdfPTable(2);
     footer.setSpacingBefore(2);
     footer.setSpacingAfter(2);
     footer.setWidthPercentage(100);
     // table creation for Info
     // program cell
+    mDateFormat = new DateFormat("dd MMM YYYY hh:mm:ss a");
     cell = new UmsCell(new Phrase("Generated by: IUMS on " + mDateFormat.format(new Date()), iums));
     cell.setBorder(Rectangle.NO_BORDER);
     cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
@@ -635,14 +639,6 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
     cell = new UmsCell(new Phrase(" ", fontTimes10Bold));
     cell.setBorder(Rectangle.NO_BORDER);
     cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
-    footer.addCell(cell);
-    cell = new UmsCell(new Phrase(" ", fontTimes10Bold));
-    cell.setBorder(Rectangle.NO_BORDER);
-    cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
-    footer.addCell(cell);
-    cell = new UmsCell(new Phrase(" ", fontTimes10Bold));
-    cell.setBorder(Rectangle.NO_BORDER);
-    cell.setHorizontalAlignment(UmsCell.ALIGN_RIGHT);
     footer.addCell(cell);
     document.add(footer);
   }

@@ -196,33 +196,51 @@
                                 <fieldset class="scheduler-border">
                                     <legend class="scheduler-border">Selected Optional Courses For Application</legend>
                                     <div class="control-group">
-                                        <table class="table table-hover table-condensed">
-                                            <thead>
-                                            <tr>
-                                                <th width="1%">#</th>
-                                                <th width="50%">Course Details</th>
-                                                <th width="2%">Course Type</th>
-                                                <th width="2%" style="text-align: center">Approved</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr ng-repeat="course in optional.optionalCourses"
-                                                style="background-color: {{course.bgColor}}">
-                                                <td>{{$index + 1}}</td>
-                                                <td>{{course.title}}
-                                                    <b>&nbsp;&nbsp;&nbsp;{{"  ("+course.no+")  "}}&nbsp;&nbsp;&nbsp;</b>
-                                                    <span  class="badge badge-warning pull-center"><b>{{"CrHr: "+course.crhr}}</b></span>
-                                                </td>
-                                                <td align="center"><span class="label label-sm label-success">{{course.type}}</span></td>
+                                        <table width="100%">
+                                            <tr data-ng-repeat="course in optional.optionalCourses" data-ng-if="$index % 1 == 0" >
+                                                <td ng-repeat="course in optional.optionalCourses.slice($index, $index + 1)" style="vertical-align: top">
+                                                    <div>
+                                                        <div>
+                                                            <div class="row">
+                                                            <div class="col-md-12" style="background-color: lightgrey">
+                                                                <span  class="badge badge-success pull-left"><b>{{course.groupId==11?'Elective One':course.groupId}}</b></span>
+                                                            </div>
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-hover table-condensed">
+                                                            <thead>
+                                                            <tr>
+                                                                <th width="1%">#</th>
+                                                                <th width="50%">Course Details</th>
+                                                                <th width="2%">Course Type</th>
+                                                                <th width="2%" style="text-align: center">Call For<br/> Application</th>
+                                                                <th width="2%" style="text-align: center">Approved</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr data-ng-repeat="app in course.courses">
+                                                                <td>{{$index + 1}}</td>
+                                                                <td>{{app.title}}
+                                                                    <b>&nbsp;&nbsp;&nbsp;{{"  ("+app.no+")  "}}&nbsp;&nbsp;&nbsp;</b>
+                                                                    <span  class="badge badge-warning pull-right"><b>{{"CrHr: "+app.crHr}}</b></span>
+                                                                </td>
+                                                                <td align="center"><span class="label label-sm label-success">{{app.courseType}}</span></td>
+                                                                <td style="text-align: center">
+                                                                    <input tabindex="13" type="checkbox" ng-model="app.application"
+                                                                           data-ng-change="applicationSelectionChange($index,app)"/>&nbsp;&nbsp;
+                                                                </td>
+                                                                <td style="text-align: right">
+                                                                    <input tabindex="13" type="checkbox" ng-model="app.approved"
+                                                                           data-ng-change="approvedSelectionChange($index,app)" />&nbsp;&nbsp;
+                                                                    {{approved}}
+                                                                </td>
+                                                            </tr>
 
-                                                <td style="text-align: right">
-                                                    <input tabindex="13" type="checkbox" ng-model="course.approved"
-                                                           data-ng-change="approvedSelectionChange({{$index}},course)"/>&nbsp;&nbsp;
-                                                    {{approved}}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </td>
                                             </tr>
-
-                                            </tbody>
                                         </table>
                                     </div>
                                 </fieldset>
