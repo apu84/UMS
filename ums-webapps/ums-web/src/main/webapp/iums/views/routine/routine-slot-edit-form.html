@@ -85,7 +85,7 @@
                                     class="form-control required"
                                     name="section"
                                     ng-options="s.name for s in vm.sectionList"
-                                    ng-model="slotRoutine.sessionalSection"></select>
+                                    ng-model="slotRoutine.sessionalSection" ng-change="vm.courseSelected(slotRoutine)"></select>
                         </div>
                         <!--section end-->
                         <!--room begin-->

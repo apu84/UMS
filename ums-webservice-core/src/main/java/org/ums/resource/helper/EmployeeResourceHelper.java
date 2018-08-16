@@ -13,6 +13,9 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.mutable.MutableEmployee;
+import org.ums.employee.additional.AdditionalInformationManager;
+import org.ums.employee.additional.MutableAdditionalInformation;
+import org.ums.employee.additional.PersistentAdditionalInformation;
 import org.ums.employee.personal.MutablePersonalInformation;
 import org.ums.employee.personal.PersistentPersonalInformation;
 import org.ums.employee.personal.PersonalInformationManager;
@@ -89,6 +92,9 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   RoleManager mRoleManager;
 
   @Autowired
+  AdditionalInformationManager mAdditionalInformationManager;
+
+  @Autowired
   private NewIUMSAccountInfoEmailService mNewIUMSAccountInfoEmailService;
 
   @Override
@@ -113,6 +119,18 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     Long serviceId = mServiceInformationManager.create(mutableServiceInformation);
     mutableServiceInformationDetail.setServiceId(serviceId);
     mServiceInformationDetailManager.create(mutableServiceInformationDetail);
+
+    if(pJsonObject.getJsonObject("entries").containsKey("academicInitial")
+        && !pJsonObject.getJsonObject("entries").getString("academicInitial").isEmpty()) {
+      MutableAdditionalInformation mutableAdditionalInformation = new PersistentAdditionalInformation();
+      mutableAdditionalInformation
+          .setAcademicInitial(pJsonObject.getJsonObject("entries").getString("academicInitial"));
+      mutableAdditionalInformation.setExtNo("");
+      mutableAdditionalInformation.setRoomNo("");
+      mutableAdditionalInformation.setId(pJsonObject.getJsonObject("entries").getString("id"));
+
+      mAdditionalInformationManager.create(mutableAdditionalInformation);
+    }
 
     if(pJsonObject.getJsonObject("entries").containsKey("IUMSAccount")
         && pJsonObject.getJsonObject("entries").getBoolean("IUMSAccount")

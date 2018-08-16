@@ -5,7 +5,7 @@ module ums {
     }
 
     class EmployeeInformation {
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', 'departmentService', 'designationService', 'employeeService', 'employeeInformationService', '$state', 'allUsers'];
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', 'departmentService', 'designationService', 'employeeService', 'employeeInformationService', '$state', 'allUsers', 'userService'];
         private searchBy: string = "";
         private changedUserName: string = "";
         private showSearchByUserId: boolean = false;
@@ -15,6 +15,7 @@ module ums {
         private showEmployeeProfilePanel: boolean = false;
         private changedDepartment: IDepartment;
         private allUser: Array<Employee>;
+        private modifiedUserList: Employee[];
         private departments: IDepartment[] = [];
         private designations: IDesignation[] = [];
         private filteredDesignation: IDesignation[] = [];
@@ -36,6 +37,7 @@ module ums {
         private choice: number = 1;
         private employeeBasicInfoEdit: Employee;
         private setIndex: number;
+        private currentUser: LoggedInUser;
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeeInformation,
@@ -46,8 +48,10 @@ module ums {
                     private employeeService: EmployeeService,
                     private employeeInformationService: EmployeeInformationService,
                     private $state: any,
-                    private allUsers: any) {
+                    private allUsers: any,
+                    private userService: UserService) {
 
+            $scope.filterd = Array<Employee>();
             this.state = $state;
             $scope.getEmployees = this.getEmployees.bind(this);
             this.allUser = allUsers;
@@ -62,6 +66,15 @@ module ums {
                 this.designationService.getAll().then((designations: any) => {
                     this.designations = designations;
                     this.filteredDesignation = designations;
+                });
+
+                this.userService.fetchCurrentUserInfo().then((result) => {
+                    this.currentUser = result;
+                    if(this.currentUser.roleId === 1041){
+                        this.modifiedUserList = this.allUser.filter((value, index) => {
+                            return this.currentUser.departmentId == this.allUser[index].deptOfficeId && this.allUser[index].employeeType == 3;
+                        });
+                    }
                 });
             });
         }
@@ -243,9 +256,9 @@ module ums {
         }
 
         public editBasicInfo(): void {
-            if (this.employeeBasicInfoEdit.id && this.employeeBasicInfoEdit.designation) {
+            if (this.employeeBasicInfoEdit.id && this.employeeBasicInfoEdit.name && this.employeeBasicInfoEdit.designation && this.employeeBasicInfoEdit.status) {
                 this.employeeService.update(this.employeeBasicInfoEdit.id, this.employeeBasicInfoEdit).then((response) => {
-                    this.notify.success("Updated Successfully 1");
+                    this.notify.success("Updated Successfully");
                     this.reload();
                 });
             }

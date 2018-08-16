@@ -93,7 +93,8 @@
         '/training': {title: 'Profile', 'breadcrumb': ['Profile']},
         '/experience': {title: 'Profile', 'breadcrumb': ['Profile']},
         '/additional': {title: 'Profile', 'breadcrumb': ['Profile']},
-        '/service': {title: 'Profile', 'breadcrumb': ['Profile']}
+        '/service': {title: 'Profile', 'breadcrumb': ['Profile']},
+        '/employeeInformation': {title: 'Search', 'breadcrumb': ['Search']}
     };
 
 

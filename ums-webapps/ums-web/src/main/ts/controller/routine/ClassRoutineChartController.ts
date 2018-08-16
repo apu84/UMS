@@ -287,8 +287,8 @@ module ums {
           r.courseTeacher = this.classRoutineService.courseTeacherWithSectionMap[r.courseId + r.section];
         }
         else {
-          if (this.classRoutineService.courseTeacherMap[r.courseId]) {
-            let courseTeacherList = angular.copy(this.classRoutineService.courseTeacherMap[r.courseId]);
+          if (this.classRoutineService.courseTeacherMapWithCourseIdAndSection[r.courseId+r.section]) {
+            let courseTeacherList = angular.copy(this.classRoutineService.courseTeacherMapWithCourseIdAndSection[r.courseId+r.section]);
             courseTeacherList.forEach((c: CourseTeacherInterface) => c.id = undefined);
             r.courseTeacher = courseTeacherList;
           }
@@ -361,16 +361,16 @@ module ums {
     }
 
     public createCourseTeacherMap() {
-      this.classRoutineService.courseTeacherMap = {};
+      this.classRoutineService.courseTeacherMapWithCourseIdAndSection = {};
       this.courseTeacherList.forEach((courseTeacher: CourseTeacherInterface) => {
         let courseTeacherList: CourseTeacherInterface[] = [];
-        if (this.classRoutineService.courseTeacherMap[courseTeacher.courseId] == undefined) {
+        if (this.classRoutineService.courseTeacherMapWithCourseIdAndSection[courseTeacher.courseId+ courseTeacher.section] == undefined) {
           courseTeacherList.push(courseTeacher);
-          this.classRoutineService.courseTeacherMap[courseTeacher.courseId] = courseTeacherList;
+          this.classRoutineService.courseTeacherMapWithCourseIdAndSection[courseTeacher.courseId+courseTeacher.section] = courseTeacherList;
         } else {
-          courseTeacherList = this.classRoutineService.courseTeacherMap[courseTeacher.courseId];
+          courseTeacherList = this.classRoutineService.courseTeacherMapWithCourseIdAndSection[courseTeacher.courseId+courseTeacher.section];
           courseTeacherList.push(courseTeacher);
-          this.classRoutineService.courseTeacherMap[courseTeacher.courseId] = courseTeacherList;
+          this.classRoutineService.courseTeacherMapWithCourseIdAndSection[courseTeacher.courseId+courseTeacher.section] = courseTeacherList;
         }
       })
     }

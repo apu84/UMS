@@ -2,6 +2,7 @@ module ums{
   export interface Employee{
     id:string;
     employeeName:string;
+    name: string;
     text?: string;
     designation:number;
     designationObj: IDesignation;
@@ -25,6 +26,7 @@ module ums{
     joiningDate:string;
     jobPermanentDate:string;
     status:number;
+    statusName:string;
   }
 
     export interface INewEmployee {
@@ -34,8 +36,8 @@ module ums{
         designation: any;
         employmentType: any;
         joiningDate: string;
-        status: any;
-        shortName: string;
+        status: number;
+        academicInitial: string;
         email: string;
         employeeType: any;
         role: any;

@@ -4,6 +4,10 @@
         padding: 0px;
     }
 
+    .border-tba{
+        border-color: #0a6aa1;
+    }
+
 </style>
 
 <!--<div ng-bind-html="vm.template"></div>-->
@@ -22,8 +26,8 @@
             <div ng-if="l.course!=undefined">
                 {{l.course.no}}({{l.section}})<br>
                 {{l.room.roomNo}}<br>
-                <hr/>
-                {{vm.getCourseTeacher(l.course.id)}}
+                <p ng-if="vm.getCourseTeacher(l.course.id)=='(TBA)'" style="color: #0000cc">{{vm.getCourseTeacher(l.course.id, l.section)}}</p>
+                <p ng-if="vm.getCourseTeacher(l.course.id)!='(TBA)'" style="color: #1f232a">{{vm.getCourseTeacher(l.course.id, l.section)}}</p>
             </div>
 
            <!-- {{vm.getCourseTeacherByCourseAndSection(routine.courseId, routine.section)}}-->

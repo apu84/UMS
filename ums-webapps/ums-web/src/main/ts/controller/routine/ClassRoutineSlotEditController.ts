@@ -97,7 +97,10 @@ module ums {
         this.fetchCourseInfo();
     }
 
+
     public courseSelected(slotRoutine: ClassRoutine) {
+      console.log("Slot routine");
+      console.log(slotRoutine);
       this.selectedCourse = slotRoutine.course;
       let startTime: any = {};
       startTime = moment(this.classRoutineService.selectedHeader.startTime,"hh:mm A");
@@ -105,15 +108,16 @@ module ums {
       if (slotRoutine.course.type_value == this.SESSIONAL_TYPE) {
         let endTime: any = moment(startTime).add(this.routineConfigService.routineConfig.duration * 3, 'm').toDate();
         slotRoutine.endTimeObj = moment(endTime).toDate();
-        slotRoutine.sessionalSection = this.sectionList[0];
+        slotRoutine.sessionalSection = slotRoutine.sessionalSection? slotRoutine.sessionalSection: this.sectionList[0];
         slotRoutine.duration = (this.routineConfigService.routineConfig.duration * 3).toString();
+        this.assignExistingTeacher(slotRoutine, slotRoutine.sessionalSection.id);
       } else {
         let endTime: any = moment(startTime).add(this.routineConfigService.routineConfig.duration, 'm').toDate();
         slotRoutine.endTimeObj = moment(endTime).toDate();
         slotRoutine.duration = this.routineConfigService.routineConfig.duration.toString();
+        this.assignExistingTeacher(slotRoutine, this.classRoutineService.selectedTheorySection.id);
       }
       slotRoutine.courseId = slotRoutine.course.id;
-      this.assignExistingTeacher(slotRoutine);
       this.fetchCourseInfo();
     }
 
@@ -139,10 +143,15 @@ module ums {
       });
     }
 
-    private assignExistingTeacher(slotRoutine: ClassRoutine) {
-      if (this.classRoutineService.courseTeacherMap[slotRoutine.course.id] != undefined) {
-        let courseTeacherList: CourseTeacherInterface[] = angular.copy(this.classRoutineService.courseTeacherMap[slotRoutine.course.id]);
-        courseTeacherList.forEach((c: CourseTeacherInterface) => c.id = undefined);
+    private assignExistingTeacher(slotRoutine: ClassRoutine, section: string) {
+      console.log("Section ---> "+section);
+      console.log("Course teacher map");
+      console.log(this.classRoutineService.courseTeacherMapWithCourseIdAndSection);
+      console.log(this.classRoutineService.slotRoutineList);
+      if (this.classRoutineService.courseTeacherMapWithCourseIdAndSection[slotRoutine.course.id+section] != undefined) {
+        console.log("Found");
+        let courseTeacherList: CourseTeacherInterface[] = angular.copy(this.classRoutineService.courseTeacherMapWithCourseIdAndSection[slotRoutine.course.id+section]);
+        //courseTeacherList.forEach((c: CourseTeacherInterface) => c.id = undefined);
         slotRoutine.courseTeacher = courseTeacherList;
       } else {
         slotRoutine.courseTeacher = [];
@@ -217,7 +226,7 @@ module ums {
       if (this.classRoutineService.courseTeacherWithSectionMap[courseTeacher.courseId + courseTeacher.section] == undefined) {
         courseTeacherList.push(courseTeacher);
         this.classRoutineService.courseTeacherWithSectionMap[courseTeacher.courseId + courseTeacher.section] = courseTeacherList;
-        this.classRoutineService.courseTeacherMap[courseTeacher.courseId] = courseTeacherList;
+        this.classRoutineService.courseTeacherMapWithCourseIdAndSection[courseTeacher.courseId] = courseTeacherList;
       } else {
         courseTeacherList = this.classRoutineService.courseTeacherWithSectionMap[courseTeacher.courseId + courseTeacher.section];
         courseTeacherList.push(courseTeacher);
