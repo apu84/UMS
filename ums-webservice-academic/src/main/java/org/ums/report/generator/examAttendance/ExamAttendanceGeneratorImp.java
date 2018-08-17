@@ -637,6 +637,7 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
       document.add(programTable);
     }
   }
+
   class EmpAttendanceReportHeaderAndFooter extends UmsPdfPageEventHelper {
 
     @Override
@@ -650,7 +651,7 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
       String text = String.format("Page %s", writer.getCurrentPageNumber());
       Paragraph paragraph = new Paragraph(text, mBoldFont);
       ColumnText.showTextAligned(cb, Element.ALIGN_RIGHT, new Phrase(paragraph), (pDocument.right() - pDocument.left())
-              / 2 + pDocument.leftMargin(), pDocument.bottom() - 10, 0);
+          / 2 + pDocument.leftMargin(), pDocument.bottom() - 10, 0);
     }
 
   }
