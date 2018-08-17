@@ -1,18 +1,19 @@
 package org.ums.ftp;
 
-import java.io.IOException;
-
 import org.apache.commons.net.ftp.FTPClient;
-import org.springframework.integration.ftp.session.DefaultFtpSessionFactory;
+import org.springframework.integration.ftp.session.AbstractFtpSessionFactory;
 
-public class UMSFtpSessionFactory extends DefaultFtpSessionFactory {
+public class UMSFtpSessionFactory extends AbstractFtpSessionFactory<FTPClient> {
   private int mMinActivePort = 3000;
   private int mMaxActivePort = 4000;
 
-  protected void postProcessClientBeforeConnect(FTPClient ftpClient) throws IOException {
+  @Override
+  protected FTPClient createClientInstance() {
+    FTPClient ftpClient = new FTPClient();
     ftpClient.setActivePortRange(mMinActivePort, mMaxActivePort);
     ftpClient.setRemoteVerificationEnabled(false);
     ftpClient.setUseEPSVwithIPv4(false);
+    return ftpClient;
   }
 
   public int getMinActivePort() {
