@@ -45,7 +45,7 @@ public class LeaveManagementService {
 
   public void setNotification(String userId, String message) {
     String sendersId = SecurityUtils.getSubject().toString();
-    mFirebaseMessaging.send(sendersId, userId, "Leave Application", message, true);
+    // mFirebaseMessaging.send(sendersId, sendersId, "Leave Application", message, true);
   }
 
   public void setApplicationStatus(PersistentLmsAppStatus pLmsAppStatus, User pUser, List<Integer> pAdditionalRoleIds,

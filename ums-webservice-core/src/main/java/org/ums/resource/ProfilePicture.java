@@ -1,10 +1,8 @@
 package org.ums.resource;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,16 +24,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.NoRouteToHostException;
-import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.nio.file.Files;
-import java.sql.Timestamp;
 import java.util.Date;
 
 @Component
@@ -70,7 +65,7 @@ public class ProfilePicture extends Resource {
   public Response get(@Context HttpServletRequest pHttpServletRequest, final @PathParam("image-id") String pImageId) {
     String photoId = "";
     String userId = null;
-    System.out.println(new Date());
+    mLogger.info(new Date().toString());
     if(pImageId.equals("0")) {
       userId = SecurityUtils.getSubject().getPrincipal().toString();
       User user = mUserManager.get(userId);
@@ -94,10 +89,11 @@ public class ProfilePicture extends Resource {
       }
       else {
         try {
-          mLogger.info("[" + userId + "] :" + photoId + ".jpg image not found", e);
+          mLogger.info("[" + userId + "] :" + photoId + ".jpg image not found");
           imageData = mGateway.read("files/user.png");
-          mLogger.info("[" + userId + "]: Using default user photo from ftp.", e);
+          mLogger.info("[" + userId + "]: Using default user photo from ftp.");
         } catch(Exception e1) {
+          mLogger.info("Using default image from system.");
           imageData = getDefaultImage();
           if(imageData == null)
             return Response.status(Response.Status.NOT_FOUND).build();

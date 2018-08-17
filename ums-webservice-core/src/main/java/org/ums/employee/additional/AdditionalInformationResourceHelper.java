@@ -46,6 +46,10 @@ public class AdditionalInformationResourceHelper extends
     return null;
   }
 
+  public boolean validateAcademicInitial(final String pAcademicInitial, final String pDeptId) {
+    return mManager.hasDuplicate(pAcademicInitial, pDeptId);
+  }
+
   @Override
   protected ContentManager<AdditionalInformation, MutableAdditionalInformation, String> getContentManager() {
     return mManager;

@@ -3,6 +3,7 @@ package org.ums.academic.resource.helper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.report.optReports.CourseByGroupIdReport;
 import org.ums.resource.SemesterResource;
 import org.ums.builder.CourseBuilder;
 import org.ums.cache.LocalCache;
@@ -22,7 +23,10 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -179,12 +183,21 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     return buildCourse(courses, pUriInfo);
   }
 
-  public JsonObject getOptionalCourses(final Integer pSemesterId, final Integer pProgramId, final Integer pYear,
-      final Integer pSemester, final Request pRequest, final UriInfo pUriInfo) {
+  public List<CourseByGroupIdReport> getOptionalCourses(final Integer pSemesterId, final Integer pProgramId, final Integer pYear,
+                                                        final Integer pSemester, final Request pRequest, final UriInfo pUriInfo) {
     Syllabus syllabus = mSemesterSyllabusMapManager.getSyllabusForSemester(pProgramId, pSemesterId, pYear, pSemester);
     List<Course> courses = getContentManager().getOptionalCourseList(syllabus.getId(), pYear, pSemester);
+    Map<Integer,List<Course>> grpByOpt=courses.stream().collect(Collectors.groupingBy(Course::getCourseGroupId));
+    List<CourseByGroupIdReport> courseByGroupIdReport= new ArrayList<>();
+    for(Map.Entry<Integer,List<Course>> entry:grpByOpt.entrySet()){
+      CourseByGroupIdReport app= new CourseByGroupIdReport();
+      app.setGroupId(entry.getKey());
+      app.setCourses(entry.getValue());
+      courseByGroupIdReport.add(app);
+    }
+    courseByGroupIdReport.sort(Comparator.comparing(CourseByGroupIdReport::getGroupId));
 
-    return buildCourse(courses, pUriInfo);
+    return courseByGroupIdReport;
   }
 
   public JsonObject getOfferedCourses(final Integer pSemesterId, final Integer pProgramId, final Integer pYear,

@@ -106,7 +106,7 @@
                                             data-ng-options="employeeTypes.name for employeeTypes in vm.changedEmployeeTypes track by employeeTypes.id"
                                             data-ng-change="vm.createId(); vm.changeDesignationSelection();"
                                             class="form-control" required>
-                                        <option value="">Select A Employee Type</option>
+                                        <option value="">Select Employee Type</option>
                                     </select>
                                     <label data-ng-show="nEmployeeForm.nEmployeeType.$invalid && !nEmployeeForm.nEmployeeType.$pristine"
                                            class="help-block control-label">Select Employee Type.</label>
@@ -244,21 +244,16 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group"
-                                     ng-class="{ 'has-error' : nEmployeeForm.nShortName.$invalid && !nEmployeeForm.nShortName.$pristine }">
-                                    <label for="iShortName" class="control-label">Short Name<span
-                                            class="require">*</span></label>
-                                    <input type="text"
-                                           id="iShortName"
-                                           name="nShortName"
-                                           class="form-control"
-                                           ng-minlength="3"
-                                           ng-maxlength="5"
-                                           ng-model="vm.newEmployee.shortName"
-                                           data-ng-change="vm.validateShortName()" required>
-                                    <label data-ng-show="nEmployeeForm.nShortName.$invalid && !nEmployeeForm.nShortName.$pristine"
-                                           class="help-block control-label">ShortName is required (Min-length: 3 and
-                                        Max-length: 5).</label>
+                                <div data-ng-if="vm.newEmployee.employeeType.id==1">
+                                    <div class="form-group">
+                                        <label for="iAcademicInitial" class="control-label">Academic Initial</label>
+                                        <input type="text"
+                                               id="iAcademicInitial"
+                                               name="nAcademicInitial"
+                                               class="form-control"
+                                               ng-model="vm.newEmployee.academicInitial"
+                                               data-ng-change="vm.validateAcademicInitial()">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -290,7 +285,7 @@
                             <div class="col-md-6">
                                 <div align="right">
                                     <button type="submit" class="btn btn-success"
-                                            data-ng-disabled="nEmployeeForm.$invalid || vm.isNotUniqueShortName">Submit
+                                            data-ng-disabled="nEmployeeForm.$invalid || vm.isNotUniqueAcademicInitial">Submit
                                     </button>
                                 </div>
                             </div>

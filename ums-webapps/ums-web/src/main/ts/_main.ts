@@ -225,12 +225,23 @@
 /// <reference path='controller/tesController/facultyBusinessAndSocialScience/DeanBusinessAndSocialIndividualQuestion.ts'/>
 /// <reference path='controller/tesController/facultyArchitecture/DeanArchitectureTes.ts'/>
 /// <reference path='controller/tesController/facultyArchitecture/DeanArchitectureIndividualQuestion.ts'/>
+/// <reference path='controller/employeeExamAttendance/employeeExamAttendance.ts'/>
+/// <reference path='controller/employeeExamAttendance/employeeExamAttendanceService.ts'/>
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>
 /// <reference path='controller/syllabus/GridSyllabus.ts'/>
 /// <reference path='controller/semester/SemesterEnrollment.ts'/>
 /// <reference path='controller/student/StudentProfile.ts'/>
+/// <reference path='controller/expelled-information/ExpelledInformation.ts'/>
+/// <reference path='controller/expelled-information/ExpelledInformationService.ts'/>
+/// <reference path='controller/daily-exam-attendance-report/dailyExamAttendanceReport.ts'/>
+/// <reference path='controller/daily-exam-attendance-report/dailyExamAttendanceReportService.ts'/>
+/// <reference path='controller/absent-late-coming-info/absentLateComingInfo.ts'/>
+/// <reference path='controller/absent-late-coming-info/absLateComingService.ts'/>
+/// <reference path='controller/dailyExamReport/dailyExamReport.ts'/>
+/// <reference path='controller/question-correction-info/questionCorrectionInfo.ts'/>
+/// <reference path='controller/question-correction-info/questionCorrectionInfoService.ts'/>
 
 /// <reference path='dummy/DummyController.ts'/>
 /// <reference path='twofatest/two.fa.test.controller.ts'/>
@@ -242,7 +253,7 @@
 
 /// <reference path='model/TeacherAssignmentSearchParamModel.ts'/>
 /// <reference path='model/CourseTeacherSearchParamModel.ts'/>
-/// <reference path='model/LoggedInUser.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/model/LoggedInUser.ts'/>
 /// <reference path='model/CourseTeacherModel.ts'/>
 /// <reference path='model/Attachment.ts'/>
 /// <reference path='model/ExamRoutineModel.ts'/>

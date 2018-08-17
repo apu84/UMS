@@ -19,7 +19,7 @@ public enum DepartmentType {
   RO("72", "Office of the Registrar"),
   TO("71", "Office of the Treasurer"),
   AoSW("76", "Office of the Advisor of Student's Welfare"),
-  KFRL("74", "Kazi Fazlur RahmanLibrary"),
+  KFRL("74", "Kazi Fazlur Rahman Library"),
   UE("77", "Office of the University Engineer"),
   PO("75", "Proctor Office"),
   AS("15", "Department of Arts and Sciences"),

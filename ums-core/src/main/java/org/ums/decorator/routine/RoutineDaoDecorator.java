@@ -14,27 +14,34 @@ import java.util.List;
 public class RoutineDaoDecorator extends ContentDaoDecorator<Routine, MutableRoutine, Long, RoutineManager> implements
     RoutineManager {
   @Override
-  public List<Routine> getTeacherRoutine(String teacherId) {
-    return getManager().getTeacherRoutine(teacherId);
+  public List<Routine> getRoutineByTeacher(String teacherId) {
+    return getManager().getRoutineByTeacher(teacherId);
   }
 
   @Override
-  public List<Routine> getStudentRoutine(Student student) {
-    return getManager().getStudentRoutine(student);
+  public List<Routine> getRoutineByStudent(Student student) {
+    return getManager().getRoutineByStudent(student);
   }
 
   @Override
-  public List<Routine> getRoutine(int semesterId, int programId, int year, int semester, String section) {
-    return getManager().getRoutine(semesterId, programId, year, semester, section);
+  public List<Routine> getRoutineBySemesterProgramIdYearSemesterAndSection(int semesterId, int programId, int year,
+      int semester, String section) {
+    return getManager().getRoutineBySemesterProgramIdYearSemesterAndSection(semesterId, programId, year, semester,
+        section);
   }
 
   @Override
-  public List<Routine> getRoutine(int pSemesterId, int pProgramId) {
-    return getManager().getRoutine(pSemesterId, pProgramId);
+  public List<Routine> getRoutineBySemesterAndProgram(int pSemesterId, int pProgramId) {
+    return getManager().getRoutineBySemesterAndProgram(pSemesterId, pProgramId);
   }
 
   @Override
-  public List<Routine> getRoutine(int pSemesterId, String pCourseId) {
-    return getManager().getRoutine(pSemesterId, pCourseId);
+  public List<Routine> getRoutineBySemesterAndCourse(int pSemesterId, String pCourseId) {
+    return getManager().getRoutineBySemesterAndCourse(pSemesterId, pCourseId);
+  }
+
+  @Override
+  public List<Routine> getRoutineBySemesterAndRoom(int pSemesterId, int pRoomId) {
+    return getManager().getRoutineBySemesterAndRoom(pSemesterId, pRoomId);
   }
 }

@@ -1,0 +1,145 @@
+ <div class="panel">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    <select
+                            class="form-control required"
+                            data-ng-options="examType.name for examType in vm.examTypeListForFilter track by examType.id"
+                            data-ng-model="vm.examTypeForFilter"
+                            style="width: 70%"
+                            data-ng-change="vm.changeExamTypeForFilter(vm.examTypeForFilter)"
+                    >
+                    </select>
+                </div>
+                <div class="col-md-8 form-group">
+                    <div align="left">
+                        <button type="button" data-ng-click="vm.doSomething()" class="btn btn-success">Search</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 form-group" >
+                    <input type="text"
+                           class="form-control required"
+                           id="rstudenid"
+                           style="width: 70%";
+                           placeholder="Search By Student ID"
+                           data-ng-model="vm.studentIdForFilter"
+                    />
+                </div>
+            <div class="col-md-4 form-group" >
+                    <select
+                            class="form-control required"
+                            style="width: 70%";
+                            data-ng-options="dept.name for dept in vm.deptList"
+                            data-ng-model="vm.deptName"
+                            data-ng-change="vm.deptChanged(vm.deptName)"
+                    ></select>
+            </div>
+            <div class="col-md-4 form-group">
+                <div>
+                    <select class="form-control" name="examDate" style="width: 70%"; data-ng-model="vm.examDateForFilter" data-ng-change="vm.ExamDateChange(vm.examDateForFilter)">
+                        <option value="">Select an Exam Date</option>
+                        <option data-ng-repeat="examRoutine in vm.examRoutineArr">{{examRoutine.examDate}}</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+            <form>
+                <table class="table table-hover table-bordered table-advanced">
+                    <thead>
+                    <tr role="row" class="heading">
+                        <th>#</th>
+                        <th>Student Name</th>
+                        <th>Student ID</th>
+                        <th>Semester Name</th>
+                        <th>Dept</th>
+                        <th>Program</th>
+                        <th>Exam Type</th>
+                        <th>CourseNo</th>
+                        <th>Date of Exam</th>
+                        <th>Reason of Expulsion</th>
+                        <th data-ng-if="vm.hideInsertMode">Delete</th>
+                    </tr>
+                    </thead>
+                    <thead>
+                    <tr data-ng-repeat="app in vm.expelInfo | orderBy:['deptId','examDate']| filter:{studentId:vm.studentIdForFilter,deptId:vm.selectedDepartmentId,examDate:vm.examDateForFilter} ">
+                        <td>{{$index+1}}</td>
+                        <td>{{app.studentName}}</td>
+                        <td>{{app.studentId}}</td>
+                        <td>{{app.semesterName}}</td>
+                        <td>{{app.deptName}}</td>
+                        <td>{{app.programName}}</td>
+                        <td>{{app.examTypeName}}</td>
+                        <td>{{app.courseNo}}</td>
+                        <td>{{app.examDate }}</td>
+                        <td>{{app.expelledReason}}</td>
+                        <td data-ng-if="vm.hideInsertMode"><input
+                                type="checkbox"
+                                data-ng-model="app.apply"
+                                data-ng-click="vm.checkMoreThanOneSelectionSubmit(app)"
+                              >
+                        </td>
+                    </tr>
+                    </thead>
+                </table>
+                <div align="right">
+                        <button type="button"
+                                data-toggle="modal"
+                                data-target="#myModalViewInfo"
+                                data-ng-hide="vm.submit_Button_Disable"
+                                class="btn btn-success">Delete</button>
+                    </div>
+            </form>
+        </div>
+ </div>
+
+<div class="modal fade" id="myModalViewInfo" role="dialog"  >
+    <!--   <div class="modal-backdrop"> -->
+    <div class="modal-dialog  modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" >
+                <button type="button"  class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Expelled Information</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr role="row" class="heading">
+                            <th>Student ID</th>
+                            <th>Semester Name</th>
+                            <th>Program</th>
+                            <th>Exam Type</th>
+                            <th>CourseNo</th>
+                            <th>Date of Exam</th>
+                            <th>Reason of Expulsion</th>
+                        </tr>
+                        </thead>
+                        <thead>
+                        <tr data-ng-repeat="app in vm.expelInfo |filter:{apply:true}| orderBy:'examDate'">
+                            <td>{{app.studentId}}</td>
+                            <td>{{app.semesterName}}</td>
+                            <td>{{app.programName}}</td>
+                            <td>{{app.examTypeName}}</td>
+                            <td>{{app.courseNo}}</td>
+                            <td>{{app.examDate }}</td>
+                            <td>{{app.expelledReason}}</td>
+                            </td>
+                        </tr>
+                        </thead>
+                    </table>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success"  data-ng-click="vm.deleteExpelInfo()"  data-dismiss="modal">Confirm</button>
+                <button type="button" class="btn btn-info"  data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>

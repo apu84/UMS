@@ -23,13 +23,14 @@ module ums{
       return defer.promise;
     }
 
-
     public getAllClassRooms():ng.IPromise<any>{
       var defer = this.$q.defer();
+      console.log("-----");
       var rooms:any={};
       this.httpClient.get("/ums-webservice-academic/academic/classroom/all",'application/json',
           (json:any,etag:string)=>{
             rooms = json.entries;
+              console.log("----"+json);
             defer.resolve(rooms);
           },
           (response:ng.IHttpPromiseCallbackArg<any>)=>{
@@ -82,6 +83,7 @@ module ums{
       this.httpClient.get("/ums-webservice-academic/academic/classroom/seatplan/semester/"+semesterId+"/examType/"+examType,'application/json',
           (json:any,etag:string)=>{
             rooms = json.entries;
+            console.log(rooms);
             defer.resolve(rooms);
           },
           (response:ng.IHttpPromiseCallbackArg<any>)=>{

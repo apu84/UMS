@@ -18,7 +18,7 @@ module ums{
         private routine:ClassRoutine;
         private routineRows: IRoutineRow[];
 
-        public static $inject = ['$scope','classRoomService', 'courseService', 'appConstants', '$timeout', 'semesterService', '$q','routineConfigService'];
+        public static $inject = ['$scope','classRoomService', 'courseService', 'appConstants', '$timeout', 'semesterService', '$q','routineConfigService', 'classRoutineService'];
 
         constructor(private $scope: IRoutineSlotDirScope,
                     private classRoomService: ClassRoomService,
@@ -27,7 +27,8 @@ module ums{
                     public $timeout: ng.ITimeoutService,
                     private semesterService: SemesterService,
                     private $q: ng.IQService,
-                    private routineConfigService: RoutineConfigService) {
+                    private routineConfigService: RoutineConfigService,
+                    private classRoutineService: ClassRoutineService) {
 
 
             this.initialize();
@@ -142,6 +143,22 @@ module ums{
                 `;*/
             }
 
+        }
+
+        public getCourseTeacher(courseId: string, section: string):string{
+          let courseTeacherStr="(";
+          if (this.classRoutineService.courseTeacherMapWithCourseIdAndSection[courseId+section]==undefined)
+            courseTeacherStr = courseTeacherStr+"TBA";
+          else{
+            let courseTeacherList:CourseTeacherInterface[] = this.classRoutineService.courseTeacherMapWithCourseIdAndSection[courseId+section];
+            let courseTeacherInitials:string[] = []
+            courseTeacherList.forEach((c:CourseTeacherInterface)=>{
+              courseTeacherInitials.push( c.shortName);
+            }) ;
+            courseTeacherStr = courseTeacherStr+courseTeacherInitials.join(",");
+          }
+          courseTeacherStr = courseTeacherStr+")";
+          return courseTeacherStr;
         }
 
     }

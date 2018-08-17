@@ -7,7 +7,7 @@ module ums {
     constructor(private $scope: any, private $stateParams: any,
                 private appConstants: any,
                 private httpClient: HttpClient,
-                private fileManagerConfig: any) {
+                private fileManagerConfig: any){
 
       $scope.loadingVisibility = false;
       $scope.contentVisibility = false;

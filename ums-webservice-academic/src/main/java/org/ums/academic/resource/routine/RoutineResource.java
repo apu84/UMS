@@ -70,22 +70,11 @@ public class RoutineResource extends MutableRoutineResource {
 
   @GET
   @Path("/roomBasedRoutine/semester/{semester-id}/room/{room-id}")
-  @Produces("application/pdf")
-  @GetLog(message = "Accessed room-based class routine report (PDF)")
-  public StreamingOutput createRoomBasedRoutineReport(final @Context HttpServletRequest pHttpServletRequest,
+  @GetLog(message = "Accessed room-based class routine")
+  public JsonObject createRoomBasedRoutine(final @Context HttpServletRequest pHttpServletRequest,
       final @PathParam("semester-id") int pSemesterId, final @PathParam("room-id") int pRoomId,
       final @Context Request pRequest) {
-    return new StreamingOutput() {
-      @Override
-      public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
-        try {
-          mRoutineResourceHelper.getRoomBasedRoutineReport(pOutputStream, pSemesterId, pRoomId);
-        } catch(Exception e) {
-          mLogger.error(e.getMessage());
-          throw new WebApplicationException(e);
-        }
-      }
-    };
+    return mRoutineResourceHelper.getRoomBasedRoutine(pSemesterId, pRoomId, mUriInfo);
   }
 
   @GET

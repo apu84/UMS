@@ -403,6 +403,21 @@ module ums{
 
 
         //AdditionalInformationService
+
+        public checkDuplicateAcademicInitial(pShortName: string, pDeptId: string):ng.IPromise<any>{
+            var defer = this.$q.defer();
+            this.httpClient.get(this.additionalUrl + "/initial/" + pShortName + "/deptId/" + pDeptId,'application/json',
+                (result:boolean,etag:string)=>{
+                    defer.resolve(result);
+                },
+                (response:ng.IHttpPromiseCallbackArg<any>)=>{
+                    console.error(response);
+                    this.notify.error("Error");
+                });
+
+            return defer.promise;
+        }
+
         public saveAdditionalInformation(json: any): ng.IPromise<any> {
             let defer = this.$q.defer();
             this.httpClient.post(this.additionalUrl, json, 'application/json')

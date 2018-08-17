@@ -1,0 +1,311 @@
+<div>
+    <div class="panel">
+        <div class="panel-body">
+            <div align="right"  style="padding-bottom: 5px"data-ng-hide="vm.isInsertAvailable" data-ng-if="vm.hideInsertMode">
+                <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.enableInsert()">
+                    <span class="glyphicon glyphicon-plus"></span> Insert
+                </button>
+            </div>
+            <div align="right" style="padding-bottom: 5px" data-ng-show="vm.isInsertAvailable">
+                <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.hideInsert()">
+                    <span class="glyphicon glyphicon-th-list"></span> View
+                </button>
+            </div>
+            <div data-ng-show="vm.isInsertAvailable">
+            <div class="row">
+                <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-4 form-group">
+                                        <select
+                                                class="form-control required"
+                                                name="deptType"
+                                                id="deptType"
+                                                style="width: 70%";
+                                                data-ng-options="dept.name for dept in vm.deptList"
+                                                data-ng-model="vm.deptName"
+                                                data-ng-change="vm.deptChanged(vm.deptName)"
+                                        ></select>
+                                    </div>
+                            <div class="col-md-4 form-group">
+                                        <select
+                                                class="form-control required"
+                                                name="year"
+                                                id="year"
+                                                style="width: 70%";
+                                                data-ng-options=" L.name for L in vm.yearList"
+                                                data-ng-model="vm.yearName"
+                                                data-ng-change="vm.yearChanged(vm.yearName)"
+                                        ></select>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <select
+                                            class="form-control required"
+                                            name="semester"
+                                            id="semester"
+                                            style="width: 70%";
+                                            data-ng-options=" L.name for L in vm.academicSemesterList"
+                                            data-ng-model="vm.academicSemesterName"
+                                            data-ng-change="vm.academicSemester(vm.academicSemesterName)"
+                                    ></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End of 1st Row-->
+            <div class="row ">
+                <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-4 form-group">
+                                        <select
+                                                class="form-control required"
+                                                name="meritType"
+                                                style="width: 70%;"
+                                                data-ng-options="examType.name for examType in vm.examTypeList track by examType.id"
+                                                data-ng-model="vm.examType"
+                                                data-ng-change="vm.changeExamType(vm.examType)"
+                                        >
+                                        </select>
+                                    </div>
+                            <div class="col-md-4 form-group">
+                                <ui-select id="course" theme="bootstrap"
+                                           style="width: 70%"
+                                           data-ng-model="vm.courses"
+                                           on-select="vm.changeCourse(vm.courses)"
+                                >
+                                    <ui-select-match placeholder="Select Course No">{{vm.courseNo}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="g in vm.courseList|filter:$select.search">
+                                        <small ng-bind-html="g.courseNo | highlight:$select.search"></small>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="text"
+                                           class="form-control required"
+                                           style="width: 70%";
+                                           placeholder="Incorrect Question No"
+                                           data-ng-model="vm.incorrectQuestionNo"
+                                    />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--  End of 2nd row -->
+            <div class="row ">
+                <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-4 form-group">
+                                    <input type="text"
+                                           class="form-control required"
+                                           style="width: 70%";
+                                           placeholder="Type of Mistake"
+                                           data-ng-model="vm.mistakeType"
+                                    />
+                                </div>
+
+                            <div class="col-md-4 form-group">
+                                        <div>
+                                            <select class="form-control" id="examDate" name="examDate" style="width: 70%";>
+                                                <option >{{vm.selectedExamDate}}</option>
+                                            </select>
+                                        </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+                <!-- End of 3rd Row -->
+                <div class="row">
+                    <div class="col-md-8 form-group" align="right">
+                    </div>
+                    <div class="col-md-4 form-group" align="center">
+                        <button type="button"
+                                class="btn btn-success"
+                                data-toggle="modal"
+                                data-ng-click="vm.isEligibleForSubmitData()"
+                                style="width: 40%"
+                                data-target="#myModal"
+                        >submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- end of panel body -->
+                <div data-ng-if="!vm.isInsertAvailable">
+                        <div class="row" style="margin-top: -15px">
+                            <div class="col-md-4 form-group">
+                                    <select
+                                            class="form-control required"
+                                            name="programs"
+                                            id="programs"
+                                            style="width: 70%";
+                                            data-ng-options="dept.name for dept in vm.programList"
+                                            data-ng-model="vm.programs"
+                                            data-ng-change="vm.programChanged(vm.programs)"
+                                    >
+                                    </select>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <div>
+                                    <select class="form-control" name="examDate" style="width: 70%"; data-ng-model="vm.examDateForFilter" data-ng-change="vm.changeDateForFilter(vm.examDateForFilter)">
+                                        <option value="">Select an Exam Date </option>
+                                        <option data-ng-repeat="examRoutine in vm.examRoutineForFilter">{{examRoutine.examDate}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    <form>
+                        <table class="table table-hover table-bordered table-advanced">
+                            <thead>
+                            <tr role="row" class="heading">
+                                <th width="2%">#</th>
+                                <th width="10%">Program</th>
+                                <th width="5%">Year/Sem</th>
+                                <th width="20%">Course No</th>
+                                <th width="10%">Incorrect Question No</th>
+                                <th width="15%">Type Of Mistake</th>
+                                <th width="20%">Course Teacher</th>
+                                <th width="10%">Exam Date</th>
+                                <th width="8%"  data-ng-if="vm.hideInsertMode">Delete</th>
+                            </tr>
+                            </thead>
+                            <thead>
+
+                            <tr data-ng-repeat="app in vm.questionCorrectionInfo | orderBy:['programId','examDate'] | filter:{programId:vm.programIdForFilter,examDate:vm.examDateForFilter}">
+                                <td>{{$index+1}}</td>
+                                <td>{{app.programName}}</td>
+                                <td>{{app.year+'/'+app.semester}}</td>
+                                <td>{{app.courseTitle+'('+app.courseNo+')'}}</td>
+                                <td>{{app.incorrectQuestionNo}}</td>
+                                <td>{{app.mistakeType}}</td>
+                                <td>{{app.employeeName}}</td>
+                                <td>{{app.examDate}}</td>
+                                <td data-ng-if="vm.hideInsertMode"><input
+                                        type="checkbox"
+                                        data-ng-model="app.apply"
+                                        data-ng-click="vm.checkMoreThanOneSelectionSubmit(app)"
+                                >
+                                </td>
+                            </tr>
+                            </thead>
+                        </table>
+                        <div align="right">
+                            <button type="button"
+                                    data-toggle="modal"
+                                    data-target="#myModalViewInfo"
+                                    data-ng-hide="vm.submit_Button_Disable"
+                                    class="btn btn-success">Delete</button>
+                        </div>
+                    </form>
+                </div>
+        </div>
+
+<div data-ng-if="vm.isSubmitEligible">
+    <div class="modal fade" id="myModal" role="dialog">
+        <!--   <div class="modal-backdrop"> --->
+        <div class="modal-dialog  modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" >
+                    <button type="button"  data-ng-click="vm.reset()" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Cofirmation of  Information</h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <td width="30%"><b>{{'Program'}}</b></td>
+                                <td>{{vm.programName}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Year/Sem'}}</b></td>
+                                <td>{{vm.selectedYear+'/'+vm.selectedSemester}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Exam Type'}}</b></td>
+                                <td>{{vm.selectedExamTypeName}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Course No'}}</b></td>
+                                <td>{{vm.courseNo}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Incorrect Question No'}}</b></td>
+                                <td>{{vm.incorrectQuestionNo}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Type of Mistake'}}</b></td>
+                                <td>{{vm.mistakeType}}</td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>{{'Exam Date'}}</b></td>
+                                <td >{{vm.selectedExamDate}}</td>
+                            </tr>
+
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info"  data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" data-ng-click="vm.save()" data-dismiss="modal">Confirm</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="myModalViewInfo" role="dialog"  >
+    <!--   <div class="modal-backdrop"> -->
+    <div class="modal-dialog  modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" >
+                <button type="button"  class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Absent/Late Coming Information</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr role="row" class="heading">
+                            <th>#</th>
+                            <th>Program</th>
+                            <th>Year/Sem</th>
+                            <th>Course No</th>
+                            <th>Incorrect Question No</th>
+                            <th>Type Of Mistake</th>
+                            <th>Course Teacher</th>
+                            <th>Exam Date</th>
+                        </tr>
+                        </thead>
+                        <thead>
+                        <tr data-ng-repeat="app in  vm.questionCorrectionInfo |filter:{apply:true}| orderBy:'examDate'">
+                            <td>{{$index+1}}</td>
+                            <td>{{app.programName}}</td>
+                            <td>{{app.year+'/'+app.semester}}</td>
+                            <td>{{app.courseTitle+'('+app.courseNo+')'}}</td>
+                            <td>{{app.incorrectQuestionNo}}</td>
+                            <td>{{app.mistakeType}}</td>
+                            <td>{{app.employeeName}}</td>
+                            <td>{{app.examDate}}</td>
+                        </tr>
+                        </tr>
+                        </thead>
+                    </table>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success"  data-ng-click="vm.deleteExpelInfo()"  data-dismiss="modal">Confirm</button>
+                <button type="button" class="btn btn-info" data-ng-click="vm.close()"  data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>

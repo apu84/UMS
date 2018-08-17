@@ -48,7 +48,7 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
   @Override
   public int update(MutableEmployee pMutable) {
     String query = UPDATE_ONE + " WHERE EMPLOYEE_ID=? ";
-    return mJdbcTemplate.update(query, pMutable.getShortName(), pMutable.getDesignation(),
+    return mJdbcTemplate.update(query, pMutable.getShortName(), pMutable.getDesignation().getId(),
         pMutable.getEmploymentType(), pMutable.getDepartment().getId(), pMutable.getJoiningDate(),
         pMutable.getStatus(), pMutable.getEmployeeType(), pMutable.getId());
   }

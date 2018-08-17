@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.academic.tabulation.service.TabulationService;
 import org.ums.academic.tabulation.service.TabulationServiceImpl;
 import org.ums.cache.*;
@@ -31,6 +30,7 @@ import org.ums.persistent.dao.applications.PersistentAppConfigDao;
 import org.ums.persistent.dao.applications.PersistentAppRulesDao;
 import org.ums.persistent.dao.routine.PersistentRoutineConfigDao;
 import org.ums.persistent.dao.routine.PersistentRoutineDao;
+import org.ums.persistent.model.PersistentAbsLateComingInfoDao;
 import org.ums.punishment.PersistentPunishmentDao;
 import org.ums.punishment.PunishmentCache;
 import org.ums.punishment.PunishmentManager;
@@ -242,6 +242,40 @@ public class AcademicContext {
   }
 
   @Bean
+  ExpelledInformationManager expelledInformationManager() {
+    ExpelledInformationCache expelledInformationCache = new ExpelledInformationCache(mCacheFactory.getCacheManager());
+    expelledInformationCache.setManager(new PersistentExpelledInformationDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
+    return expelledInformationCache;
+  }
+
+  @Bean
+  StudentsExamAttendantInfoManager studentsExamAttendantInfoManager() {
+    StudentsExamAttendantInfoCache studentsExamAttendantInfoCache =
+        new StudentsExamAttendantInfoCache(mCacheFactory.getCacheManager());
+    studentsExamAttendantInfoCache.setManager(new PersistentStudentsExamAttendantInfoDao(mTemplateFactory
+        .getJdbcTemplate(), mIdGenerator));
+    return studentsExamAttendantInfoCache;
+  }
+
+  @Bean
+  AbsLateComingInfoManager absLateComingInfoManager() {
+    AbsLateComingInfoCache absLateComingInfoCache = new AbsLateComingInfoCache(mCacheFactory.getCacheManager());
+    absLateComingInfoCache.setManager(new PersistentAbsLateComingInfoDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
+    return absLateComingInfoCache;
+  }
+
+  @Bean
+  QuestionCorrectionManager questionCorrectionManager() {
+    QuestionCorrectionInfoCache questionCorrectionInfoCache =
+        new QuestionCorrectionInfoCache(mCacheFactory.getCacheManager());
+    questionCorrectionInfoCache.setManager(new PersistentQuestionCorrectionDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
+    return questionCorrectionInfoCache;
+  }
+
+  @Bean
   ApplicationTESManager applicationTESManager() {
     ApplicationTESCache applicationTESCache = new ApplicationTESCache((mCacheFactory.getCacheManager()));
     applicationTESCache.setManager(new PersistentApplicationTESDao(mTemplateFactory.getJdbcTemplate(),
@@ -274,6 +308,31 @@ public class AcademicContext {
     applicationTesSelectedCoursesCache.setManager(new PersistentApplicationTesSelectedCoursesDao(mTemplateFactory
         .getJdbcTemplate(), mIdGenerator));
     return applicationTesSelectedCoursesCache;
+  }
+
+  @Bean
+  EmpExamAttendanceManager empExamAttendanceManager() {
+    EmpExamAttendanceCache empExamAttendanceCache = new EmpExamAttendanceCache((mCacheFactory.getCacheManager()));
+    empExamAttendanceCache.setManager(new PersistentEmpExamAttendanceDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
+    return empExamAttendanceCache;
+  }
+
+  @Bean
+  EmpExamInvigilatorDateManager empExamInvigilatorDateManager() {
+    EmpExamInvigilatorDateCache empExamInvigilatorDateCache =
+        new EmpExamInvigilatorDateCache((mCacheFactory.getCacheManager()));
+    empExamInvigilatorDateCache.setManager(new PersistentEmpExamInvigilatorDateDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
+    return empExamInvigilatorDateCache;
+  }
+
+  @Bean
+  EmpExamReserveDateManager empExamReserveDateManager() {
+    EmpExamReserveDateCache empExamReserveDateCache = new EmpExamReserveDateCache((mCacheFactory.getCacheManager()));
+    empExamReserveDateCache.setManager(new PersistentEmpExamReserveDateDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
+    return empExamReserveDateCache;
   }
 
   @Bean

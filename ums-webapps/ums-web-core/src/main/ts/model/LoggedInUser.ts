@@ -5,5 +5,6 @@ module ums {
     departmentId: string;
     departmentName: string;
     employeeId: string;
+    roleId: number;
   }
 }
