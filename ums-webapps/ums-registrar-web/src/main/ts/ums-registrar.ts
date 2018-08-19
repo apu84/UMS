@@ -145,9 +145,9 @@ module ums {
                 controller: 'ServiceInformation',
                 controllerAs: 'vm'
             })
-            .state('EmployeeSearch', {
-                url: "/EmployeeSearch",
-                templateUrl: 'views/ems/employee-search.html',
+            .state('employeeSearch', {
+                url: "/employeeSearch",
+                templateUrl: 'views/ems/search/employee-search.html',
                 controller: 'EmployeeSearch',
                 controllerAs: 'vm',
                 resolve: {
@@ -158,7 +158,7 @@ module ums {
                     }]
                 }
             })
-            .state('EmployeeSearch.employeeProfile', {
+            .state('employeeSearch.employeeProfile', {
                 url: "/employeeProfile",
                 params: {
                   'id' : null
@@ -187,7 +187,7 @@ module ums {
                     }]
                 }
             })
-            .state('EmployeeSearch.employeeProfile.personal', {
+            .state('employeeSearch.employeeProfile.personal', {
                 url: "/personal",
                 params : {
                     'id' : null,
@@ -197,7 +197,7 @@ module ums {
                 controller: 'PersonalInformation',
                 controllerAs: 'vm'
             })
-            .state('EmployeeSearch.employeeProfile.academic', {
+            .state('employeeSearch.employeeProfile.academic', {
                 url: "/academic",
                 params : {
                     'id' : null,
@@ -207,7 +207,7 @@ module ums {
                 controller: 'AcademicInformation',
                 controllerAs: 'vm'
             })
-            .state('EmployeeSearch.employeeProfile.publication', {
+            .state('employeeSearch.employeeProfile.publication', {
                 url: "/publication",
                 params : {
                     'id' : null,
@@ -217,7 +217,7 @@ module ums {
                 controller: 'PublicationInformation',
                 controllerAs: 'vm'
             })
-            .state('EmployeeSearch.employeeProfile.training', {
+            .state('employeeSearch.employeeProfile.training', {
                 url: "/training",
                 params : {
                     'id' : null,
@@ -227,7 +227,7 @@ module ums {
                 controller: 'TrainingInformation',
                 controllerAs: 'vm'
             })
-            .state('EmployeeSearch.employeeProfile.award', {
+            .state('employeeSearch.employeeProfile.award', {
                 url: "/award",
                 params : {
                     'id' : null,
@@ -237,7 +237,7 @@ module ums {
                 controller: 'AwardInformation',
                 controllerAs: 'vm'
             })
-            .state('EmployeeSearch.employeeProfile.experience', {
+            .state('employeeSearch.employeeProfile.experience', {
                 url: "/experience",
                 params : {
                     'id' : null,
@@ -247,7 +247,7 @@ module ums {
                 controller: 'ExperienceInformation',
                 controllerAs: 'vm'
             })
-            .state('EmployeeSearch.employeeProfile.additional', {
+            .state('employeeSearch.employeeProfile.additional', {
                 url: "/additional",
                 params : {
                     'id' : null,
@@ -257,7 +257,7 @@ module ums {
                 controller: 'AdditionalInformation',
                 controllerAs: 'vm'
             })
-            .state('EmployeeSearch.employeeProfile.service', {
+            .state('employeeSearch.employeeProfile.service', {
                 url: "/service",
                 params : {
                     'id' : null,
@@ -292,7 +292,7 @@ module ums {
             })
             .state('newEmployee', {
                 url: "/newEmployee",
-                templateUrl: 'views/new-employee.html',
+                templateUrl: 'views/ems/create-new/new-employee.html',
                 controller: 'NewEmployee',
                 controllerAs: 'vm',
                 resolve: {

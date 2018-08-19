@@ -358,3 +358,7 @@
 
 /// <reference path='student/gradesheet/student.gradesheet.controller.ts'/>
 /// <reference path='student/gradesheet/student.gradesheet.service.ts'/>
+
+
+/// <reference path='../../../../ums-registrar-web/src/main/ts/ems/search/employee.search.controller.ts'/>
+/// <reference path='../../../../ums-registrar-web/src/main/ts/ems/search/employee.search.service.ts'/>
