@@ -114,14 +114,14 @@
 
 /// <reference path='../../../../ums-web-core/src/main/ts/ems/ApprovePublicationService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/EmployeeInformationService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/personal/PersonalInformation.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/academic/AcademicInformation.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/publication/PublicationInformation.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/award/AwardInformation.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/training/TrainingInformation.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/experience/ExperienceInformation.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/additional/AdditionalInformation.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/service/ServiceInformation.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/personal/personal.controller.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/academic/academic.controller.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/publication/publication.controller.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/award/award.controller.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/training/training.controller.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/experience/experience.controller.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/additional/additional.controller.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/service/service.controller.ts'/>
 /// <reference path='service/MeetingService.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/EmployeeInformationModel.ts' />

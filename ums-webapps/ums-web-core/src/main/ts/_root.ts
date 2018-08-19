@@ -116,13 +116,13 @@
 /// <reference path='ems/EmployeePublication.ts'/>
 /// <reference path='ems/PagerService.ts'/>
 /// <reference path='ems/CRUDDetectionService.ts'/>
-/// <reference path='ems/profile-management/personal/PersonalInformation.ts'/>
-/// <reference path='ems/profile-management/academic/AcademicInformation.ts'/>
-/// <reference path='ems/profile-management/publication/PublicationInformation.ts'/>
-/// <reference path='ems/profile-management/training/TrainingInformation.ts'/>
-/// <reference path='ems/profile-management/award/AwardInformation.ts'/>
-/// <reference path='ems/profile-management/experience/ExperienceInformation.ts'/>
-/// <reference path='ems/profile-management/additional/AdditionalInformation.ts'/>
-/// <reference path='ems/profile-management/service/ServiceInformation.ts'/>
+/// <reference path='ems/profile-management/personal/personal.controller.ts'/>
+/// <reference path='ems/profile-management/academic/academic.controller.ts'/>
+/// <reference path='ems/profile-management/publication/publication.controller.ts'/>
+/// <reference path='ems/profile-management/training/training.controller.ts'/>
+/// <reference path='ems/profile-management/award/award.controller.ts'/>
+/// <reference path='ems/profile-management/experience/experience.controller.ts'/>
+/// <reference path='ems/profile-management/additional/additional.controller.ts'/>
+/// <reference path='ems/profile-management/service/service.controller.ts'/>
 
 /// <reference path='library/LibrarySearch.ts'/>
