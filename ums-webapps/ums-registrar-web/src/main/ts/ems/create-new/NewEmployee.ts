@@ -13,7 +13,7 @@ module ums {
             'employmentTypes',
             'employeeService',
             'roles',
-            'employeeInformationService'];
+            'additionalInformation'];
 
         private allDepartments = [];
         private allDesignations = [];
@@ -42,7 +42,7 @@ module ums {
                     private employmentTypes: any,
                     private employeeService: EmployeeService,
                     private roles: any,
-                    private employeeInformationService: EmployeeInformationService) {
+                    private additionalInformation: AdditionalInformation) {
 
             this.newEmployee = <INewEmployee>{};
             this.allEmployeeTypes = appConstants.employeeTypes;
@@ -94,7 +94,7 @@ module ums {
         }
 
         public validateAcademicInitial(): void {
-            this.employeeInformationService.checkDuplicateAcademicInitial(this.newEmployee.academicInitial, this.newEmployee.department['id']).then((result: any) => {
+            this.additionalInformation.checkDuplicateAcademicInitial(this.newEmployee.academicInitial, this.newEmployee.department['id']).then((result: any) => {
                 this.isNotUniqueAcademicInitial = !!result;
                 if (this.isNotUniqueAcademicInitial) {
                     this.notify.error("Academic initial already exists");

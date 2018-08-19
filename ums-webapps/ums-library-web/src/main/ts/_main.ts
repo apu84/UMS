@@ -97,7 +97,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DepartmentService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/AcademicDegreeService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/EmployeeProfile.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/ems/EmployeeInformation.ts'/>
+/// <reference path='../../../../ums-registrar-web/src/main/ts/ems/search/employee.search.controller.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/ems/EmployeePublication.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/EmployeeInformationService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/library/LibrarySearch.ts' />

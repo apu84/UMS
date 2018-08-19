@@ -110,7 +110,7 @@
 
 /// <reference path='ems/profile-management/EmployeeProfile.ts'/>
 /// <reference path='ems/ApprovePublicationService.ts'/>
-/// <reference path='ems/EmployeeInformation.ts'/>
+/// <reference path='../../../../ums-registrar-web/src/main/ts/ems/search/employee.search.controller.ts'/>
 /// <reference path='ems/EmployeePublication.ts'/>
 /// <reference path='ems/profile-management/personal/personal.controller.ts'/>
 /// <reference path='ems/profile-management/personal/personal.model.ts'/>

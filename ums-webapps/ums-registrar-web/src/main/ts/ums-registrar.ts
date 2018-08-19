@@ -145,9 +145,9 @@ module ums {
                 controller: 'ServiceInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation', {
-                url: "/employeeInformation",
-                templateUrl: 'views/ems/employee-information.html',
+            .state('EmployeeSearch', {
+                url: "/EmployeeSearch",
+                templateUrl: 'views/ems/employee-search.html',
                 controller: 'EmployeeInformation',
                 controllerAs: 'vm',
                 resolve: {
@@ -158,7 +158,7 @@ module ums {
                     }]
                 }
             })
-            .state('employeeInformation.employeeProfile', {
+            .state('EmployeeSearch.employeeProfile', {
                 url: "/employeeProfile",
                 params: {
                   'id' : null
@@ -187,7 +187,7 @@ module ums {
                     }]
                 }
             })
-            .state('employeeInformation.employeeProfile.personal', {
+            .state('EmployeeSearch.employeeProfile.personal', {
                 url: "/personal",
                 params : {
                     'id' : null,
@@ -197,7 +197,7 @@ module ums {
                 controller: 'PersonalInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.academic', {
+            .state('EmployeeSearch.employeeProfile.academic', {
                 url: "/academic",
                 params : {
                     'id' : null,
@@ -207,7 +207,7 @@ module ums {
                 controller: 'AcademicInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.publication', {
+            .state('EmployeeSearch.employeeProfile.publication', {
                 url: "/publication",
                 params : {
                     'id' : null,
@@ -217,7 +217,7 @@ module ums {
                 controller: 'PublicationInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.training', {
+            .state('EmployeeSearch.employeeProfile.training', {
                 url: "/training",
                 params : {
                     'id' : null,
@@ -227,7 +227,7 @@ module ums {
                 controller: 'TrainingInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.award', {
+            .state('EmployeeSearch.employeeProfile.award', {
                 url: "/award",
                 params : {
                     'id' : null,
@@ -237,7 +237,7 @@ module ums {
                 controller: 'AwardInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.experience', {
+            .state('EmployeeSearch.employeeProfile.experience', {
                 url: "/experience",
                 params : {
                     'id' : null,
@@ -247,7 +247,7 @@ module ums {
                 controller: 'ExperienceInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.additional', {
+            .state('EmployeeSearch.employeeProfile.additional', {
                 url: "/additional",
                 params : {
                     'id' : null,
@@ -257,7 +257,7 @@ module ums {
                 controller: 'AdditionalInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.service', {
+            .state('EmployeeSearch.employeeProfile.service', {
                 url: "/service",
                 params : {
                     'id' : null,
@@ -324,32 +324,6 @@ module ums {
                     roles: ['roleService', function (roleService) {
                         return roleService.getAll().then((data: any) => {
                             return data.entries;
-                        });
-                    }]
-                }
-            })
-            .state('modifyEmployee', {
-                url: "/modifyEmployee",
-                templateUrl: 'views/modify-employee.html',
-                controller: 'ModifyEmployee',
-                controllerAs: 'vm',
-                resolve: {
-                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load({
-                            files: [
-                                'vendors/bootstrap-datepicker/css/datepicker.css',
-                                'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
-                            ]
-                        });
-                    }],
-                    departments: ['departmentService', function (departmentService) {
-                        return departmentService.getAll().then((data) => {
-                            return data;
-                        });
-                    }],
-                    designations: ['designationService', function (designationService) {
-                        return designationService.getAll().then((data) => {
-                            return data;
                         });
                     }]
                 }

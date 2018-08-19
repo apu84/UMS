@@ -4,7 +4,7 @@ module ums {
         filterd: Array<Employee>;
     }
 
-    class EmployeeInformation {
+    class EmployeeSearch {
         public static $inject = ['registrarConstants', '$scope', '$q', 'notify', 'departmentService', 'designationService', 'employeeService', 'employeeInformationService', '$state', 'allUsers', 'userService'];
         private searchBy: string = "";
         private changedUserName: string = "";
@@ -307,5 +307,5 @@ module ums {
         }
     }
 
-    UMS.controller("EmployeeInformation", EmployeeInformation);
+    UMS.controller("EmployeeSearch", EmployeeSearch);
 }

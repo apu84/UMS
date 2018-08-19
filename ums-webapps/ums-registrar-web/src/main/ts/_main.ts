@@ -105,17 +105,16 @@
 /// <reference path='data.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/EmployeeProfile.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/ems/EmployeeInformation.ts'/>
+/// <reference path='./ems/search/employee.search.controller.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/ems/EmployeePublication.ts'/>
 /// <reference path='controller/meeting/AgendaResolution.ts'/>
 /// <reference path='controller/meeting/Schedule.ts'/>
 /// <reference path='controller/meeting/Search.ts'/>
-/// <reference path='controller/ModifyEmployee.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/ems/ApprovePublicationService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/EmployeeInformationService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/EmployeeProfile.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/ems/EmployeeInformation.ts'/>
+/// <reference path='./ems/search/employee.search.controller.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/ems/EmployeePublication.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/EmployeeInformationService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/library/LibrarySearch.ts' />
@@ -164,7 +163,7 @@
 
 /// <reference path='../../../../ums-web-core/src/main/ts/model/LoggedInUser.ts'/>
 
-/// <reference path='controller/NewEmployee.ts'/>
+/// <reference path='ems/create-new/NewEmployee.ts'/>
 
 /// <reference path='directive/ElementValidation.ts' />
 
