@@ -6,7 +6,7 @@ module ums {
             'registrarConstants',
             '$q',
             'notify',
-            'employeeInformationService',
+            'academicService',
             'academicDegreeService',
             '$stateParams'
         ];
@@ -27,7 +27,7 @@ module ums {
         constructor(private registrarConstants: any,
                     private $q: ng.IQService,
                     private notify: Notify,
-                    private employeeInformationService: EmployeeInformationService,
+                    private academicService: AcademicService,
                     private academicDegreeService: AcademicDegreeService,
                     private $stateParams: any) {
 
@@ -57,7 +57,7 @@ module ums {
 
 
         private create(json: any, index: number) {
-            this.employeeInformationService.saveAcademicInformation(json).then((data: any) => {
+            this.academicService.saveAcademicInformation(json).then((data: any) => {
                 this.academic[index] = data;
                 this.enableEdit[index] = false;
             }).catch((reason: any) => {
@@ -66,7 +66,7 @@ module ums {
         }
 
         private update(json: any, index: number) {
-            this.employeeInformationService.updateAcademicInformation(json).then((data: any) => {
+            this.academicService.updateAcademicInformation(json).then((data: any) => {
                 this.academic[index] = data;
                 this.enableEdit[index] = false;
             }).catch((reason: any) => {
@@ -77,7 +77,7 @@ module ums {
         private get(): void {
             this.showLoader = true;
             this.academic = [];
-            this.employeeInformationService.getAcademicInformation(this.userId).then((academicInformation: any) => {
+            this.academicService.getAcademicInformation(this.userId).then((academicInformation: any) => {
                 if (academicInformation) {
                     this.academic = academicInformation;
                 }
@@ -90,7 +90,7 @@ module ums {
 
         public delete(index: number): void {
             if (this.academic[index].id) {
-                this.employeeInformationService.deleteAcademicInformation(this.academic[index].id).then((data: any) => {
+                this.academicService.deleteAcademicInformation(this.academic[index].id).then((data: any) => {
                     this.academic.splice(index, 1);
                 });
             }
@@ -105,7 +105,7 @@ module ums {
 
         public createNewDegreeTitle(): void{
             this.convertToJson(this.newDegreeTitle).then((json: any)=>{
-                this.employeeInformationService.saveNewDegreeTitle(json).then(() =>{
+                this.academicService.saveNewDegreeTitle(json).then(() =>{
                     this.academicDegreeService.getAcademicDegreeList().then((degree: any) => {
                         this.degreeTitle = degree;
                     });

@@ -6,7 +6,7 @@ module ums {
             'registrarConstants',
             '$q',
             'notify',
-            'employeeInformationService',
+            'awardService',
             '$stateParams'];
 
         private award: IAwardInformationModel[] = [];
@@ -19,7 +19,7 @@ module ums {
         constructor(private registrarConstants: any,
                     private $q: ng.IQService,
                     private notify: Notify,
-                    private employeeInformationService: EmployeeInformationService,
+                    private awardService: AwardService,
                     private $stateParams: any) {
 
 
@@ -43,7 +43,7 @@ module ums {
 
 
         private create(json: any, index: number) {
-            this.employeeInformationService.saveAwardInformation(json).then((data: any) => {
+            this.awardService.saveAwardInformation(json).then((data: any) => {
                 this.award[index] = data;
                 this.enableEdit[index] = false;
             }).catch((reason: any) => {
@@ -52,7 +52,7 @@ module ums {
         }
 
         private update(json: any, index: number) {
-            this.employeeInformationService.updateAwardInformation(json).then((data: any) => {
+            this.awardService.updateAwardInformation(json).then((data: any) => {
                 this.award[index] = data;
                 this.enableEdit[index] = false;
             }).catch((reason: any) => {
@@ -63,7 +63,7 @@ module ums {
         private get() {
             this.showLoader = true;
             this.award = [];
-            this.employeeInformationService.getAwardInformation(this.userId).then((awardInformation: any) => {
+            this.awardService.getAwardInformation(this.userId).then((awardInformation: any) => {
                 if (awardInformation) {
                     this.award = awardInformation;
                 }
@@ -91,7 +91,7 @@ module ums {
 
         private delete(index: number) {
             if (this.award[index].id) {
-                this.employeeInformationService.deleteAwardInformation(this.award[index].id).then((data: any) => {
+                this.awardService.deleteAwardInformation(this.award[index].id).then((data: any) => {
                     this.award.splice(index, 1);
                 });
             }

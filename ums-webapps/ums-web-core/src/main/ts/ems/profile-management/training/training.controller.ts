@@ -6,7 +6,7 @@ module ums {
             'registrarConstants',
             '$q',
             'notify',
-            'employeeInformationService',
+            'trainingService',
             '$stateParams'];
 
         private training: ITrainingInformationModel[] = [];
@@ -20,7 +20,7 @@ module ums {
         constructor(private registrarConstants: any,
                     private $q: ng.IQService,
                     private notify: Notify,
-                    private employeeInformationService: EmployeeInformationService,
+                    private trainingService: TrainingService,
                     private $stateParams: any) {
 
 
@@ -44,7 +44,7 @@ module ums {
         }
 
         private create(json: any, index: number) {
-            this.employeeInformationService.saveTrainingInformation(json).then((data: any) => {
+            this.trainingService.saveTrainingInformation(json).then((data: any) => {
                 this.training[index] = data;
                 this.enableEdit[index] = false;
             }).catch((reason: any) => {
@@ -53,7 +53,7 @@ module ums {
         }
 
         private update(json: any, index: number) {
-            this.employeeInformationService.updateTrainingInformation(json).then((data: any) => {
+            this.trainingService.updateTrainingInformation(json).then((data: any) => {
                 this.training[index] = data;
                 this.enableEdit[index] = false;
             }).catch((reason: any) => {
@@ -65,7 +65,7 @@ module ums {
         private get(): void {
             this.showLoader = true;
             this.training = [];
-            this.employeeInformationService.getTrainingInformation(this.userId).then((trainingData: any) => {
+            this.trainingService.getTrainingInformation(this.userId).then((trainingData: any) => {
                 if (trainingData) {
                     this.training = trainingData;
                 }
@@ -94,7 +94,7 @@ module ums {
 
         public delete(index: number): void {
             if (this.training[index].id) {
-                this.employeeInformationService.deleteTrainingInformation(this.training[index].id).then((data: any) => {
+                this.trainingService.deleteTrainingInformation(this.training[index].id).then((data: any) => {
                     this.training.splice(index, 1);
                 });
             }

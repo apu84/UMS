@@ -7,7 +7,7 @@ module ums {
             '$q',
             'notify',
             'countryService',
-            'employeeInformationService',
+            'publicationService',
             '$stateParams'];
 
 
@@ -38,7 +38,7 @@ module ums {
                     private $q: ng.IQService,
                     private notify: Notify,
                     private countryService: CountryService,
-                    private employeeInformationService: EmployeeInformationService,
+                    private publicationService: PublicationService,
                     private $stateParams: any) {
 
             this.publication = [];
@@ -65,7 +65,7 @@ module ums {
 
 
         private create(json: any, index: number) {
-            this.employeeInformationService.savePublicationInformation(json).then((data: any) => {
+            this.publicationService.savePublicationInformation(json).then((data: any) => {
                 this.publication[index] = data;
                 this.enableEdit[index] = false;
             }).catch((reason: any) => {
@@ -74,7 +74,7 @@ module ums {
         }
 
         private update(json: any, index: number) {
-            this.employeeInformationService.updatePublicationInformation(json).then((data: any) => {
+            this.publicationService.updatePublicationInformation(json).then((data: any) => {
                 this.publication[index] = data;
                 this.enableEdit[index] = false;
             }).catch((reason: any) => {
@@ -89,7 +89,7 @@ module ums {
         private get(): void {
             this.showLoader = true;
             this.publication = [];
-            this.employeeInformationService.getPublicationInformation(this.userId).then((academicInformation: any) => {
+            this.publicationService.getPublicationInformation(this.userId).then((academicInformation: any) => {
                 if (academicInformation) {
                     this.publication = academicInformation;
                 }
@@ -102,7 +102,7 @@ module ums {
 
         public delete(index: number): void {
             if (this.publication[index].id) {
-                this.employeeInformationService.deletePublicationInformation(this.publication[index].id).then((data: any) => {
+                this.publicationService.deletePublicationInformation(this.publication[index].id).then((data: any) => {
                     this.publication.splice(index, 1);
                 });
             }
@@ -229,7 +229,7 @@ module ums {
 
             if (flag == 0) {
                 this.convertToJson(this.bulkPublication).then((json: any) => {
-                    this.employeeInformationService.saveBibPublicationInformation(json).then((resolve: any) => {
+                    this.publicationService.saveBibPublicationInformation(json).then((resolve: any) => {
                         this.get();
                         this.bulkPublication = [];
                         this.bibInput = "";

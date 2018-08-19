@@ -148,7 +148,7 @@ module ums {
             .state('EmployeeSearch', {
                 url: "/EmployeeSearch",
                 templateUrl: 'views/ems/employee-search.html',
-                controller: 'EmployeeInformation',
+                controller: 'EmployeeSearch',
                 controllerAs: 'vm',
                 resolve: {
                     allUsers: ['employeeService', function (employeeService) {

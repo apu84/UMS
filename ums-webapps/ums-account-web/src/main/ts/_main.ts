@@ -105,7 +105,6 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/refresh.token.service.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/EmployeeProfile.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/EmployeeInformationService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CountryService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DivisionService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DistrictService.ts'/>
@@ -117,7 +116,6 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/EmployeeProfile.ts'/>
 /// <reference path='../../../../ums-registrar-web/src/main/ts/ems/search/employee.search.controller.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/ems/EmployeePublication.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/EmployeeInformationService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/library/LibrarySearch.ts' />
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CountryService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DivisionService.ts'/>

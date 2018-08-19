@@ -4,8 +4,8 @@ module ums {
         filterd: Array<Employee>;
     }
 
-    class EmployeeSearch {
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', 'departmentService', 'designationService', 'employeeService', 'employeeInformationService', '$state', 'allUsers', 'userService'];
+    class EmployeeInformation {
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', 'departmentService', 'designationService', 'employeeService', 'employeeSearchService', '$state', 'allUsers', 'userService'];
         private searchBy: string = "";
         private changedUserName: string = "";
         private showSearchByUserId: boolean = false;
@@ -46,7 +46,7 @@ module ums {
                     private departmentService: DepartmentService,
                     private designationService: DesignationService,
                     private employeeService: EmployeeService,
-                    private employeeInformationService: EmployeeInformationService,
+                    private employeeSearchService: EmployeeSearchService,
                     private $state: any,
                     private allUsers: any,
                     private userService: UserService) {
@@ -195,7 +195,7 @@ module ums {
         }
 
         private downloadPdf(userId: string) {
-            this.employeeInformationService.getEmployeeCV(userId);
+            this.employeeSearchService.getEmployeeCV(userId);
         }
 
         private downloadEmployeeList() {
@@ -216,7 +216,7 @@ module ums {
                     }
                 }
                 this.prepareList();
-                this.employeeInformationService.getEmployeeListPdf(this.finalListOfDept, this.finalListOfEmpType, this.choice);
+                this.employeeSearchService.getEmployeeListPdf(this.finalListOfDept, this.finalListOfEmpType, this.choice);
 
             }
         }
@@ -307,5 +307,5 @@ module ums {
         }
     }
 
-    UMS.controller("EmployeeSearch", EmployeeSearch);
+    UMS.controller("EmployeeInformation", EmployeeInformation);
 }

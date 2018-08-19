@@ -2,7 +2,7 @@ module ums {
     class PersonalInformation {
         public static $inject = ['registrarConstants', '$q', 'notify',
             'countryService', 'divisionService', 'districtService', 'thanaService',
-            'employeeInformationService',
+            'personalService',
             '$stateParams', 'FileUpload'];
 
         private entry: {
@@ -50,7 +50,7 @@ module ums {
                     private divisionService: DivisionService,
                     private districtService: DistrictService,
                     private thanaService: ThanaService,
-                    private employeeInformationService: EmployeeInformationService,
+                    private personalService: PersonalService,
                     private $stateParams: any,
                     private FileUpload: FileUpload) {
 
@@ -119,7 +119,7 @@ module ums {
         private submitGeneralForm(): void {
             this.convertToJson('general', this.entry.general)
                 .then((json: any) => {
-                    this.employeeInformationService.updatePersonalInformation(json)
+                    this.personalService.updatePersonalInformation(json)
                         .then((message: any) => {
                             this.getGeneralInformation();
                             this.generalReadOnly = true;
@@ -132,7 +132,7 @@ module ums {
 
             this.convertToJson('contact', this.entry.contact)
                 .then((json: any) => {
-                    this.employeeInformationService.updatePersonalInformation(json)
+                    this.personalService.updatePersonalInformation(json)
                         .then((message: any) => {
                             this.getContactInformation();
                             this.contactReadOnly = true;
@@ -145,7 +145,7 @@ module ums {
         private submitEmergencyContactForm(): void {
             this.convertToJson('emergencyContact', this.entry.emergencyContact)
                 .then((json: any) => {
-                    this.employeeInformationService.updatePersonalInformation(json)
+                    this.personalService.updatePersonalInformation(json)
                         .then((message: any) => {
                             this.getEmergencyContactInformation();
                             this.emergencyContactReadOnly = true;
@@ -157,7 +157,7 @@ module ums {
 
         private getPersonalInformation() {
             this.showLoader = true;
-            this.employeeInformationService.getPersonalInformation(this.userId)
+            this.personalService.getPersonalInformation(this.userId)
                 .then((data: any) => {
                     this.initializePersonalObjects('all');
                     this.entry.general = data.general;
@@ -173,7 +173,7 @@ module ums {
         }
 
         private getGeneralInformation() {
-            this.employeeInformationService.getPersonalInformation(this.userId).then((data: any) => {
+            this.personalService.getPersonalInformation(this.userId).then((data: any) => {
                 this.initializePersonalObjects('general');
                 this.entry.general = data.general;
             }).then(() => {
@@ -182,7 +182,7 @@ module ums {
         }
 
         private getContactInformation() {
-            this.employeeInformationService.getPersonalInformation(this.userId).then((data: any) => {
+            this.personalService.getPersonalInformation(this.userId).then((data: any) => {
                 this.initializePersonalObjects('contact');
                 this.entry.contact = data.contact;
 
@@ -192,7 +192,7 @@ module ums {
         }
 
         private getEmergencyContactInformation() {
-            this.employeeInformationService.getPersonalInformation(this.userId).then((data: any) => {
+            this.personalService.getPersonalInformation(this.userId).then((data: any) => {
                 this.initializePersonalObjects('emergencyContact');
                 this.entry.emergencyContact = data.emergencyContact;
             }).then(() => {

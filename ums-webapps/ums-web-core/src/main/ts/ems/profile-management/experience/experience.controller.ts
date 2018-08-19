@@ -5,7 +5,7 @@ module ums {
         public static $inject = ['registrarConstants',
             '$q',
             'notify',
-            'employeeInformationService',
+            'experienceService',
             '$stateParams'
         ];
 
@@ -20,7 +20,7 @@ module ums {
         constructor(private registrarConstants: any,
                     private $q: ng.IQService,
                     private notify: Notify,
-                    private employeeInformationService: EmployeeInformationService,
+                    private experienceService: ExperienceService,
                     private $stateParams: any) {
 
             this.experience = [];
@@ -43,7 +43,7 @@ module ums {
         }
 
         private create(json: any, index: number) {
-            this.employeeInformationService.saveExperienceInformation(json).then((data: any) => {
+            this.experienceService.saveExperienceInformation(json).then((data: any) => {
                 this.experience[index] = data;
                 this.enableEdit[index] = false;
             }).catch((reason: any) => {
@@ -52,7 +52,7 @@ module ums {
         }
 
         private update(json: any, index: number) {
-            this.employeeInformationService.updateExperienceInformation(json).then((data: any) => {
+            this.experienceService.updateExperienceInformation(json).then((data: any) => {
                 this.experience[index] = data;
                 this.enableEdit[index] = false;
             }).catch((reason: any) => {
@@ -63,7 +63,7 @@ module ums {
         private get(): void {
             this.showLoader = true;
             this.experience = [];
-            this.employeeInformationService.getExperienceInformation(this.userId).then((experienceInformation: any) => {
+            this.experienceService.getExperienceInformation(this.userId).then((experienceInformation: any) => {
                 if (experienceInformation) {
                     this.experience = experienceInformation;
                 }
@@ -92,7 +92,7 @@ module ums {
 
         public delete(index: number): void {
             if (this.experience[index].id) {
-                this.employeeInformationService.deleteExperienceInformation(this.experience[index].id).then((data: any) => {
+                this.experienceService.deleteExperienceInformation(this.experience[index].id).then((data: any) => {
                     this.experience.splice(index, 1);
                 });
             }

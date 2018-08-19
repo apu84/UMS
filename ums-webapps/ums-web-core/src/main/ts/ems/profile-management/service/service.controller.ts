@@ -4,7 +4,7 @@ module ums {
         public static $inject = ['registrarConstants',
             '$q',
             'notify',
-            'employeeInformationService',
+            'serviceService',
             '$stateParams',
             'employmentTypeService',
             'departmentService',
@@ -30,7 +30,7 @@ module ums {
         constructor(private registrarConstants: any,
                     private $q: ng.IQService,
                     private notify: Notify,
-                    private employeeInformationService: EmployeeInformationService,
+                    private serviceService: ServiceService,
                     private $stateParams: any,
                     private employmentTypeService: EmploymentTypeService,
                     private departmentService: DepartmentService,
@@ -122,7 +122,7 @@ module ums {
 
         private create(type: string, json: any, index: number, parentIndex?: number) {
             if (type === 'service') {
-                this.employeeInformationService.saveServiceInformation(json).then((data: any) => {
+                this.serviceService.saveServiceInformation(json).then((data: any) => {
                     this.service[index] = data;
                     this.enableEdit[index] = false;
                 }).catch((reason: any) => {
@@ -130,7 +130,7 @@ module ums {
                 });
             }
             else if (type === 'serviceDetails') {
-                this.employeeInformationService.saveServiceDetailInformation(json).then((data: any) => {
+                this.serviceService.saveServiceDetailInformation(json).then((data: any) => {
                     this.service[parentIndex].intervalDetails[index] = data;
                     this.enableServiceDetailEdit[parentIndex][index] = false;
                 }).catch((reason: any) => {
@@ -141,7 +141,7 @@ module ums {
 
         private update(type: string, json: any, index: number, parentIndex?: number) {
             if (type === 'service') {
-                this.employeeInformationService.updateServiceInformation(json).then((data: any) => {
+                this.serviceService.updateServiceInformation(json).then((data: any) => {
                     this.service[index] = data;
                     this.enableEdit[index] = false;
                 }).catch((reason: any) => {
@@ -149,7 +149,7 @@ module ums {
                 });
             }
             else if (type === 'serviceDetails') {
-                this.employeeInformationService.updateServiceDetailInformation(json).then((data: any) => {
+                this.serviceService.updateServiceDetailInformation(json).then((data: any) => {
                     this.service[parentIndex].intervalDetails[index] = data;
                     this.enableServiceDetailEdit[parentIndex][index] = false;
                 }).catch((reason: any) => {
@@ -161,7 +161,7 @@ module ums {
         private get(): void {
             this.showLoader = true;
             this.service = [];
-            this.employeeInformationService.getServiceInformation(this.userId).then((serviceInformation: any) => {
+            this.serviceService.getServiceInformation(this.userId).then((serviceInformation: any) => {
                 if (serviceInformation) {
                     this.service = serviceInformation;
                     this.setInitialDesignation();
@@ -231,7 +231,7 @@ module ums {
         public delete(type: string, index: number, parentIndex?: number): void {
             if (type === 'service') {
                 if (this.service[index].id) {
-                    this.employeeInformationService.deleteServiceInformation(this.service[index].id).then((data: any) => {
+                    this.serviceService.deleteServiceInformation(this.service[index].id).then((data: any) => {
                         this.service.splice(index, 1);
                     });
                 }
@@ -241,7 +241,7 @@ module ums {
             }
             else if (type === 'serviceDetails') {
                 if (this.service[parentIndex].intervalDetails[index].id) {
-                    this.employeeInformationService.deleteServiceDetailInformation(this.service[parentIndex].intervalDetails[index].id).then((data: any) => {
+                    this.serviceService.deleteServiceDetailInformation(this.service[parentIndex].intervalDetails[index].id).then((data: any) => {
                         this.service[parentIndex].intervalDetails.splice(index, 1);
                     });
                 }

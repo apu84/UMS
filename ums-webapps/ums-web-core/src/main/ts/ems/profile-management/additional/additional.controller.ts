@@ -5,7 +5,7 @@ module ums {
             'registrarConstants',
             '$q',
             'notify',
-            'employeeInformationService',
+            'additionalService',
             '$stateParams'];
 
 
@@ -21,7 +21,7 @@ module ums {
         constructor(private registrarConstants: any,
                     private $q: ng.IQService,
                     private notify: Notify,
-                    private employeeInformationService: EmployeeInformationService,
+                    private additionalService: AdditionalService,
                     private $stateParams: any) {
 
             this.additional = <IAdditionalInformationModel>{};
@@ -36,7 +36,7 @@ module ums {
         public get(type: string): void {
             this.showLoader = true;
             if (type === 'additional') {
-                this.employeeInformationService.getAdditionalInformation(this.userId).then((additionalInformation: any) => {
+                this.additionalService.getAdditionalInformation(this.userId).then((additionalInformation: any) => {
                     if (additionalInformation) {
                         this.additional = additionalInformation;
                     }
@@ -47,7 +47,7 @@ module ums {
                 });
             }
             else if (type === 'aoi') {
-                this.employeeInformationService.getAoiInformation(this.userId).then((aoiInformation: any) => {
+                this.additionalService.getAoiInformation(this.userId).then((aoiInformation: any) => {
                     if (aoiInformation) {
                         this.aoi = aoiInformation;
                     }
@@ -65,7 +65,7 @@ module ums {
                 this.additional.employeeId = this.stateParams.id;
                 console.log(this.additional);
                 this.convertToJson(this.additional).then((json: any) => {
-                    this.employeeInformationService.saveAdditionalInformation(json).then((data: any) => {
+                    this.additionalService.saveAdditionalInformation(json).then((data: any) => {
                         this.enableEdit = false;
                     }).catch((reason: any) => {
                         this.enableEdit = true;
@@ -74,7 +74,7 @@ module ums {
             }
             else if(type === 'aoi') {
                 this.convertToJson(this.aoi).then((json: any) => {
-                    this.employeeInformationService.saveAoiInformation(json).then((data: any) => {
+                    this.additionalService.saveAoiInformation(json).then((data: any) => {
                         this.enableAoiEdit = false;
                     }).catch((reason: any) => {
                         this.enableAoiEdit = true;
