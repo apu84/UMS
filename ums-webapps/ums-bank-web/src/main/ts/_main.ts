@@ -74,7 +74,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/model/PaymentInfo.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/Semester.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/Employee.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformationModel.ts' />
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/EmployeeInformationModel.ts' />
 /// <reference path='../../../../ums-web-core/src/main/ts/model/User.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/GridConfig.ts'/>

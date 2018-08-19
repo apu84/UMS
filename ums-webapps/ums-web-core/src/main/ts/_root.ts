@@ -108,21 +108,21 @@
 /// <reference path='util/UmsUtil.ts'/>
 /// <reference path='util/UriUtil.ts'/>
 
-/// <reference path='employee/EmployeeProfile.ts'/>
-/// <reference path='employee/ApprovePublicationService.ts'/>
-/// <reference path='employee/EmployeeInformation.ts'/>
-/// <reference path='employee/EmployeeInformationModel.ts'/>
-/// <reference path='employee/EmployeeInformationService.ts'/>
-/// <reference path='employee/EmployeePublication.ts'/>
-/// <reference path='employee/PagerService.ts'/>
-/// <reference path='employee/CRUDDetectionService.ts'/>
-/// <reference path='employee/PersonalInformation.ts'/>
-/// <reference path='employee/AcademicInformation.ts'/>
-/// <reference path='employee/PublicationInformation.ts'/>
-/// <reference path='employee/TrainingInformation.ts'/>
-/// <reference path='employee/AwardInformation.ts'/>
-/// <reference path='employee/ExperienceInformation.ts'/>
-/// <reference path='employee/AdditionalInformation.ts'/>
-/// <reference path='employee/ServiceInformation.ts'/>
+/// <reference path='ems/profile-management/EmployeeProfile.ts'/>
+/// <reference path='ems/ApprovePublicationService.ts'/>
+/// <reference path='ems/EmployeeInformation.ts'/>
+/// <reference path='ems/profile-management/EmployeeInformationModel.ts'/>
+/// <reference path='ems/profile-management/EmployeeInformationService.ts'/>
+/// <reference path='ems/EmployeePublication.ts'/>
+/// <reference path='ems/PagerService.ts'/>
+/// <reference path='ems/CRUDDetectionService.ts'/>
+/// <reference path='ems/profile-management/personal/PersonalInformation.ts'/>
+/// <reference path='ems/profile-management/academic/AcademicInformation.ts'/>
+/// <reference path='ems/profile-management/publication/PublicationInformation.ts'/>
+/// <reference path='ems/profile-management/training/TrainingInformation.ts'/>
+/// <reference path='ems/profile-management/award/AwardInformation.ts'/>
+/// <reference path='ems/profile-management/experience/ExperienceInformation.ts'/>
+/// <reference path='ems/profile-management/additional/AdditionalInformation.ts'/>
+/// <reference path='ems/profile-management/service/ServiceInformation.ts'/>
 
 /// <reference path='library/LibrarySearch.ts'/>

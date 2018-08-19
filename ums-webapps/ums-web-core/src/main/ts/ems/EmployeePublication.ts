@@ -43,7 +43,7 @@ module ums {
     }
 
     class EmployeePublication {
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce', 'employeeInformationService', 'approvePublicationService', 'pagerService'];
+        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', '$window', '$sce', 'employeeInformationService', 'approvePublicationService'];
 
         constructor(private registrarConstants: any,
                     private $scope: IEmployeePublication,
@@ -52,8 +52,7 @@ module ums {
                     private $window: ng.IWindowService,
                     private $sce: ng.ISCEService,
                     private employeeInformationService: EmployeeInformationService,
-                    private approvePublicationService: ApprovePublicationService,
-                    private pagerService: PagerService) {
+                    private approvePublicationService: ApprovePublicationService) {
 
             $scope.item = Array<IPublicationInformationModel>();
             $scope.publications = Array<IPublicationInformationModel>();
