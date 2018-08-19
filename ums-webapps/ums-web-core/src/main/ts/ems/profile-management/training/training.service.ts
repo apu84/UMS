@@ -1,6 +1,7 @@
 module ums{
     export class TrainingService {
         public static $inject = ['HttpClient', '$q', 'notify'];
+        private trainingUrl: string = "employee/training";
 
         constructor(private httpClient: HttpClient,
                     private $q: ng.IQService,

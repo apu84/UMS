@@ -3,14 +3,6 @@ module ums{
         public static $inject = ['HttpClient', '$q', 'notify'];
 
 
-        private academicUrl: string = "employee/academic";
-        private publicationUrl: string = "employee/publication";
-        private trainingUrl: string = "employee/training";
-        private awardUrl: string = "employee/award";
-        private experienceUrl: string = "employee/experience";
-        private additionalUrl: string = "employee/additional";
-        private aoiUrl: string = "employee/aoi";
-        private serviceUrl: string = "employee/service";
 
         constructor(private httpClient: HttpClient,
                     private $q: ng.IQService,
