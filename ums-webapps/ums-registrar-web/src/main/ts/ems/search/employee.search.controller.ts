@@ -88,7 +88,7 @@ module ums {
             this.showEmployeeProfilePanel = true;
             this.showInformationPanel = true;
             Utils.expandRightDiv();
-            this.state.go("employeeInformation.employeeProfile", {id: this.employee.id});
+            this.state.go("employeeSearch.employeeProfile", {id: this.employee.id});
         }
 
         private checkPreviousAndNextButtons(): void {
@@ -307,5 +307,5 @@ module ums {
         }
     }
 
-    UMS.controller("employeeSearch", EmployeeSearch);
+    UMS.controller("EmployeeSearch", EmployeeSearch);
 }

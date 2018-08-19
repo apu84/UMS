@@ -18,17 +18,17 @@ module ums {
             this.state = $state;
             this.stateParams = $stateParams;
 
-            if(this.stateParams.id && this.state.current.name.includes('employeeInformation')){
+            if(this.stateParams.id && this.state.current.name.includes('employeeSearch')){
 
                 // when registrar tries to access all employee profile
-                this.tab = 'employeeInformation.employeeProfile';
+                this.tab = 'employeeSearch.employeeProfile';
                 this.employeeId = this.stateParams.id;
                 this.initialRouting();
             }
-            else if(!this.stateParams.id && this.state.current.name.includes('employeeInformation')){
+            else if(!this.stateParams.id && this.state.current.name.includes('employeeSearch')){
 
                 // when registrar tries to access all employee profile
-                this.state.go('employeeInformation');
+                this.state.go('employeeSearch');
             }
             else if(!this.stateParams.id && this.state.current.name.includes('employeeProfile')){
                 userService.fetchCurrentUserInfo().then((user: any) => {
@@ -61,7 +61,7 @@ module ums {
 
         private verifyEditPermission(tab: string): ng.IPromise<any>{
             let defer = this.$q.defer();
-            if(this.tab === 'employeeInformation.employeeProfile') {
+            if(this.tab === 'employeeSearch.employeeProfile') {
                 defer.resolve(true);
             }
             else if(this.tab === 'employeeProfile'){
