@@ -112,6 +112,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/model/Teacher.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/AdmissionStudent.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/Semester.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/model/LoggedInUser.ts'/>
 /// <reference path='./model/leaveManagement/LmsApplication.ts'/>
 /// <reference path='./model/leaveManagement/LmsApplicationStatus.ts'/>
 /// <reference path='./model/leaveManagement/LmsType.ts'/>
@@ -298,7 +299,6 @@
 
 /// <reference path='model/TeacherAssignmentSearchParamModel.ts'/>
 /// <reference path='model/CourseTeacherSearchParamModel.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/model/LoggedInUser.ts'/>
 /// <reference path='model/CourseTeacherModel.ts'/>
 /// <reference path='model/Attachment.ts'/>
 /// <reference path='model/ExamRoutineModel.ts'/>
