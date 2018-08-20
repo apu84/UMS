@@ -51,6 +51,11 @@
 /// <reference path='service/DivisionService.ts'/>
 /// <reference path='service/DistrictService.ts'/>
 /// <reference path='service/ThanaService.ts'/>
+/// <reference path='service/AcademicDegreeService.ts'/>
+/// <reference path='service/AreaOfInterestService.ts'/>
+/// <reference path='service/DepartmentService.ts'/>
+/// <reference path='service/DesignationService.ts'/>
+/// <reference path='service/EmploymentTypeService.ts'/>
 
 /// <reference path='controller/AppController.ts'/>
 /// <reference path='controller/MainController.ts'/>
@@ -107,10 +112,9 @@
 /// <reference path='util/UmsUtil.ts'/>
 /// <reference path='util/UriUtil.ts'/>
 
-/// <reference path='ems/profile-management/EmployeeProfile.ts'/>
 /// <reference path='ems/ApprovePublicationService.ts'/>
-/// <reference path='../../../../ums-registrar-web/src/main/ts/ems/search/employee.search.controller.ts'/>
 /// <reference path='ems/EmployeePublication.ts'/>
+/// <reference path='ems/profile-management/EmployeeProfile.ts'/>
 /// <reference path='ems/profile-management/personal/personal.controller.ts'/>
 /// <reference path='ems/profile-management/personal/personal.model.ts'/>
 /// <reference path='ems/profile-management/personal/personal.service.ts'/>
