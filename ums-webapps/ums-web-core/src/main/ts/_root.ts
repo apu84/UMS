@@ -51,7 +51,6 @@
 /// <reference path='service/DivisionService.ts'/>
 /// <reference path='service/DistrictService.ts'/>
 /// <reference path='service/ThanaService.ts'/>
-/// <reference path='service/BibtexParserService.ts'/>
 
 /// <reference path='controller/AppController.ts'/>
 /// <reference path='controller/MainController.ts'/>

@@ -88,6 +88,9 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/fee/payment-status/payment.status.model.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/fee/filter/list.filter.directive.ts'/>
 
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/service/service.model.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/personal/personal.model.ts'/>
+
 /// <reference path='data.ts'/>
 /// <reference path='controller/admission/AdmissionFee.ts'/>
 /// <reference path='fee/conclude.payment.ts'/>

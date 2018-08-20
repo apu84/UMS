@@ -10,7 +10,7 @@ import org.ums.builder.SemesterBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
-import org.ums.employee.additional.AdditionalInformationManager;
+import org.ums.ems.profilemanagement.additional.AdditionalInformationManager;
 import org.ums.manager.CourseManager;
 import org.ums.manager.EmployeeManager;
 import org.ums.manager.SemesterManager;

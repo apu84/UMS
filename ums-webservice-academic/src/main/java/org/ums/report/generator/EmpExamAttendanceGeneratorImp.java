@@ -1,18 +1,20 @@
 package org.ums.report.generator;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.*;
-import org.jetbrains.annotations.NotNull;
+import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.ums.academic.resource.helper.EmpExamAttendanceHelper;
 import org.ums.domain.model.dto.ExamRoutineDto;
-import org.ums.domain.model.immutable.*;
+import org.ums.domain.model.immutable.EmpExamAttendance;
+import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.mutable.MutableEmpExamAttendance;
-import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
 import org.ums.enums.ExamType;
-import org.ums.enums.common.DesignationType;
 import org.ums.enums.common.EmployeeType;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.*;
@@ -26,10 +28,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static org.ums.util.ReportUtils.mBoldFont;

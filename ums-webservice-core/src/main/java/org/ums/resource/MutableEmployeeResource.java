@@ -2,9 +2,9 @@ package org.ums.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.ums.employee.personal.MutablePersonalInformation;
-import org.ums.employee.personal.PersistentPersonalInformation;
-import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.ems.profilemanagement.personal.MutablePersonalInformation;
+import org.ums.ems.profilemanagement.personal.PersistentPersonalInformation;
+import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
 import org.ums.logs.DeleteLog;
 import org.ums.logs.PostLog;
 import org.ums.logs.PutLog;

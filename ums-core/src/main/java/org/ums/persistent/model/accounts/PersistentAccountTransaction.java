@@ -9,7 +9,7 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.*;
 import org.ums.domain.model.mutable.accounts.MutableAccountTransaction;
-import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.general.ledger.vouchers.AccountTransactionType;
 import org.ums.manager.CompanyManager;

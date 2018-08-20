@@ -2,14 +2,16 @@ package org.ums.report.generator.examAttendance;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
-import org.jvnet.hk2.internal.Collector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.ums.academic.resource.helper.QuestionCorrectionResourceHelper;
-import org.ums.domain.model.immutable.*;
+import org.ums.domain.model.immutable.AbsLateComingInfo;
+import org.ums.domain.model.immutable.ExpelledInformation;
+import org.ums.domain.model.immutable.Program;
+import org.ums.domain.model.immutable.StudentsExamAttendantInfo;
 import org.ums.domain.model.mutable.MutableQuestionCorrectionInfo;
-import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
 import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
 import org.ums.enums.common.EmployeeType;
@@ -20,7 +22,6 @@ import org.ums.report.itext.UmsParagraph;
 import org.ums.report.itext.UmsPdfPageEventHelper;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;

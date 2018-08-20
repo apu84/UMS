@@ -47,14 +47,8 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/EmploymentTypeService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DesignationService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DepartmentService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/BloodGroupService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/NationalityService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/ReligionService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/RelationTypeService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/MaritalStatusService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/AreaOfInterestService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/AcademicDegreeService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/BibtexParserService.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/MainController.ts'/>
@@ -124,11 +118,6 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/EmploymentTypeService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DesignationService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/DepartmentService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/BloodGroupService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/NationalityService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/ReligionService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/RelationTypeService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/MaritalStatusService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/AreaOfInterestService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/AcademicDegreeService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/ems/ApprovePublicationService.ts'/>

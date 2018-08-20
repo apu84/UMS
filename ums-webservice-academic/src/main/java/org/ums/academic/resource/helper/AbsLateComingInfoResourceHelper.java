@@ -3,13 +3,11 @@ package org.ums.academic.resource.helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.AbsLateComingInfoBuilder;
-import org.ums.builder.ApplicationCCIBuilder;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.dto.ExamRoutineDto;
 import org.ums.domain.model.immutable.AbsLateComingInfo;
 import org.ums.domain.model.mutable.MutableAbsLateComingInfo;
-import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
 import org.ums.enums.ProgramType;
 import org.ums.enums.common.EmployeeType;
 import org.ums.manager.*;
@@ -24,8 +22,6 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Created by Monjur-E-Morshed on 7/1/2018.

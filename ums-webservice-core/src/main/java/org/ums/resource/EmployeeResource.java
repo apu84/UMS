@@ -2,7 +2,7 @@ package org.ums.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.employee.cv.EmployeeListGenerator;
+import org.ums.ems.cv.EmployeeListGenerator;
 import org.ums.logs.GetLog;
 import org.ums.manager.EmployeeManager;
 

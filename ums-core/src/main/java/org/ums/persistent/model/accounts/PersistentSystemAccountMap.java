@@ -10,7 +10,7 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.Account;
 import org.ums.domain.model.mutable.accounts.MutableSystemAccountMap;
-import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
 import org.ums.enums.accounts.definitions.account.balance.AccountType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.AccountManager;
