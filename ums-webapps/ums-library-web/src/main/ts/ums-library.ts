@@ -222,7 +222,7 @@ module ums {
             })
             .state('employeeProfile', {
                 url: "/employeeProfile",
-                templateUrl: 'views/ems/employee-profile.html',
+                templateUrl: 'views/ems/profile-management/employee-profile.html',
                 controller: 'EmployeeProfile',
                 controllerAs: 'vm',
                 resolve: {
