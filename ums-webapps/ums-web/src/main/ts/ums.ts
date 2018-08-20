@@ -1723,10 +1723,10 @@ module ums {
 
         // Temporary. Will remove after 1 month
 
-            .state('employeeInformation', {
+            .state('employeeSearch', {
                 url: "/employeeInformation",
                 templateUrl: 'views/ems/employee-information-for-aao.html',
-                controller: 'EmployeeInformation',
+                controller: 'EmployeeSearch',
                 controllerAs: 'vm',
                 resolve: {
                     allUsers: ['employeeService', function (employeeService) {
@@ -1736,7 +1736,7 @@ module ums {
                     }]
                 }
             })
-            .state('employeeInformation.employeeProfile', {
+            .state('employeeSearch.employeeProfile', {
                 url: "/employeeProfile",
                 params: {
                     'id' : null
@@ -1765,7 +1765,7 @@ module ums {
                     }]
                 }
             })
-            .state('employeeInformation.employeeProfile.personal', {
+            .state('employeeSearch.employeeProfile.personal', {
                 url: "/personal",
                 params : {
                     'id' : null,
@@ -1775,7 +1775,7 @@ module ums {
                 controller: 'PersonalInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.academic', {
+            .state('employeeSearch.employeeProfile.academic', {
                 url: "/academic",
                 params : {
                     'id' : null,
@@ -1785,7 +1785,7 @@ module ums {
                 controller: 'AcademicInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.publication', {
+            .state('employeeSearch.employeeProfile.publication', {
                 url: "/publication",
                 params : {
                     'id' : null,
@@ -1795,7 +1795,7 @@ module ums {
                 controller: 'PublicationInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.training', {
+            .state('employeeSearch.employeeProfile.training', {
                 url: "/training",
                 params : {
                     'id' : null,
@@ -1805,7 +1805,7 @@ module ums {
                 controller: 'TrainingInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.award', {
+            .state('employeeSearch.employeeProfile.award', {
                 url: "/award",
                 params : {
                     'id' : null,
@@ -1815,7 +1815,7 @@ module ums {
                 controller: 'AwardInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.experience', {
+            .state('employeeSearch.employeeProfile.experience', {
                 url: "/experience",
                 params : {
                     'id' : null,
@@ -1825,7 +1825,7 @@ module ums {
                 controller: 'ExperienceInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.additional', {
+            .state('employeeSearch.employeeProfile.additional', {
                 url: "/additional",
                 params : {
                     'id' : null,

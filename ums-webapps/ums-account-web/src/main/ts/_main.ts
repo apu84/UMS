@@ -130,6 +130,10 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/library/LibrarySearch.ts' />
 /// <reference path='../../../../ums-library-web/src/main/ts/types/Interfaces.ts'/>
 
+
+/// <reference path='../../../../ums-registrar-web/src/main/ts/ems/search/employee.search.controller.ts'/>
+/// <reference path='../../../../ums-registrar-web/src/main/ts/ems/search/employee.search.service.ts'/>
+
 /// <reference path='data.ts'/>
 /// <reference path='components/AccountsMainController.ts'/>
 /// <reference path='components/definitions/group/group.controller.ts'/>
