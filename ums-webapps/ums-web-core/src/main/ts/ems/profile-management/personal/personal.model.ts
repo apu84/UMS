@@ -7,6 +7,7 @@ module ums{
 
     export interface IGeneralInformationModel{
         employeeId: string;
+        salutation: ICommon;
         name: string;
         fatherName: string;
         motherName: string;

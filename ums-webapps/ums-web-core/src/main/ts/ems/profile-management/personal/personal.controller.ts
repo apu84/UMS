@@ -18,6 +18,7 @@ module ums {
         private disablePresentAddressDropdown: boolean = false;
         private disablePermanentAddressDropdown: boolean = false;
         private checkBoxValue: boolean;
+        private salutations: ICommon[] = [];
         private genders: IGender[] = [];
         private maritalStatus: ICommon[] = [];
         private religions: ICommon[] = [];
@@ -41,6 +42,7 @@ module ums {
         private enableEdit: boolean;
         private enableEditButton: boolean = false;
         private test: boolean = true;
+        private test1: boolean = false;
         private showLoader: boolean = true;
 
         constructor(private registrarConstants: any,
@@ -62,6 +64,7 @@ module ums {
 
             this.stateParams = $stateParams;
             this.enableEditButton = this.stateParams.edit;
+            this.salutations = this.registrarConstants.salutationTypes;
             this.genders = this.registrarConstants.genderTypes;
             this.publicationTypes = this.registrarConstants.publicationTypes;
             this.bloodGroups = this.registrarConstants.bloodGroupTypes;
@@ -70,6 +73,8 @@ module ums {
             this.relations = this.registrarConstants.relationTypes;
             this.nationalities = this.registrarConstants.nationalityTypes;
             this.userId = this.stateParams.id;
+            this.test1 = false;
+
             this.initialization();
         }
 

@@ -34,7 +34,33 @@
                     <div class="row">
                         <div class="col-md-9">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <div class="form-group"
+                                         ng-class="{ 'has-error' : nGeneralForm.nSalute.$invalid && !nGeneralForm.nSalute.$pristine}">
+                                        <label class="control-label" for="iSalute">Salutation<span
+                                                data-ng-show="!vm.generalReadOnly && vm.test1"
+                                                class='require'>*</span></label>
+
+                                        <div data-ng-show="!vm.generalReadOnly">
+                                            <select name="nSalute"
+                                                    id="iSalute"
+                                                    data-ng-model="vm.entry.general.salutation"
+                                                    data-ng-options="salute.name for salute in vm.salutations track by salute.id"
+                                                    ng-readonly="vm.generalReadOnly"
+                                                    class="form-control" ng-required="vm.test1">
+                                                <option value="">Select Salutation</option>
+                                            </select>
+                                            <label data-ng-show="nGeneralForm.nSalute.$invalid && !nGeneralForm.nSalute.$pristine"
+                                                   class="help-block control-label">Please your salutation.</label>
+                                        </div>
+                                        <div data-ng-show="vm.generalReadOnly">
+                                            <div class="underlineBox">
+                                                <label class="control-label">{{vm.entry.general.salutation.name}}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
                                     <div class="form-group"
                                          ng-class="{ 'has-error' : nGeneralForm.nName.$invalid && !nGeneralForm.nName.$pristine }">
                                         <label for="iName" class="control-label">Name<span

@@ -968,6 +968,12 @@ module ums {
                     {id: 1, name: "Active"},
                     {id: 2, name: "On Leave"},
                     {id: 3, name: "Inactive"}
+                ],
+                salutationTypes: [
+                    {id: 1, name: "Mr."},
+                    {id: 2, name: "Ms."},
+                    {id: 3, name: "Dr."},
+                    {id: 4, name: "Prof. Dr."}
                 ]
             }
         }
