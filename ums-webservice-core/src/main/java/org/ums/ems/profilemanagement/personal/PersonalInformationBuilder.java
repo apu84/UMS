@@ -60,7 +60,7 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
     generalObjectBuilder.add("salutation", pReadOnly.getSalutationId());
     JsonObjectBuilder salutationBuilder = Json.createObjectBuilder();
     salutationBuilder.add("id", pReadOnly.getSalutationId()).add("name",
-            Salutation.get(pReadOnly.getSalutationId()).getLabel());
+        Salutation.get(pReadOnly.getSalutationId()).getLabel());
     generalObjectBuilder.add("salutation", salutationBuilder);
     generalObjectBuilder.add("name", pReadOnly.getName());
     generalObjectBuilder.add("fatherName", pReadOnly.getFatherName());
