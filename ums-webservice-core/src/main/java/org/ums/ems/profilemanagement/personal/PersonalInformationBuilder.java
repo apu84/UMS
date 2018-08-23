@@ -57,6 +57,11 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
   public void build(JsonObjectBuilder pBuilder, PersonalInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     JsonObjectBuilder generalObjectBuilder = Json.createObjectBuilder();
     generalObjectBuilder.add("employeeId", pReadOnly.getId());
+    generalObjectBuilder.add("salutation", pReadOnly.getSalutationId());
+    JsonObjectBuilder salutationBuilder = Json.createObjectBuilder();
+    salutationBuilder.add("id", pReadOnly.getSalutationId()).add("name",
+            Salutation.get(pReadOnly.getSalutationId()).getLabel());
+    generalObjectBuilder.add("salutation", salutationBuilder);
     generalObjectBuilder.add("name", pReadOnly.getName());
     generalObjectBuilder.add("fatherName", pReadOnly.getFatherName());
     generalObjectBuilder.add("motherName", pReadOnly.getMotherName());
@@ -242,6 +247,7 @@ public class PersonalInformationBuilder implements Builder<PersonalInformation, 
 
     if(pJsonObject.getString("type").equals("general")) {
       pMutable.setId(pJsonObject.getString("employeeId"));
+      pMutable.setSalutationId(pJsonObject.getJsonObject("salutation").getInt("id"));
       pMutable.setName(pJsonObject.getString("name").trim());
       pMutable.setFatherName(pJsonObject.getString("fatherName"));
       pMutable.setMotherName(pJsonObject.getString("motherName"));
