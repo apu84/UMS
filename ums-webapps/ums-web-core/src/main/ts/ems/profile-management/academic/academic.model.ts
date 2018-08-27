@@ -4,11 +4,11 @@ module ums{
         employeeId: string;
         degreeLevel: IDegreeLevel;
         degreeTitle: IDegreeTitle;
+        board: string;
         institution: string;
         passingYear: number;
         result: string;
         major: string;
-        duration: number;
     }
 
     export interface IDegreeLevel{

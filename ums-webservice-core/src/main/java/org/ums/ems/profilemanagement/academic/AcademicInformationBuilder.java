@@ -39,11 +39,11 @@ public class AcademicInformationBuilder implements Builder<AcademicInformation, 
           .add("degreeLevelId", mDegreeTitleManager.get(pReadOnly.getDegreeTitleId()).getDegreeLevelId());
     }
     pBuilder.add("degreeTitle", degreeTitleBuilder);
+    pBuilder.add("board", pReadOnly.getBoard() == null ? "" : pReadOnly.getBoard());
     pBuilder.add("institution", pReadOnly.getInstitute());
     pBuilder.add("passingYear", pReadOnly.getPassingYear());
     pBuilder.add("result", pReadOnly.getResult() == null ? "" : pReadOnly.getResult());
     pBuilder.add("major", pReadOnly.getMajor() == null ? "" : pReadOnly.getMajor());
-    pBuilder.add("duration", pReadOnly.getDuration() == null ? 0 : pReadOnly.getDuration());
   }
 
   @Override
@@ -57,6 +57,6 @@ public class AcademicInformationBuilder implements Builder<AcademicInformation, 
     pMutable.setPassingYear(pJsonObject.getInt("passingYear"));
     pMutable.setResult(pJsonObject.getString("result") == null ? "" : pJsonObject.getString("result"));
     pMutable.setMajor(pJsonObject.getString("major") == null ? "" : pJsonObject.getString("major"));
-    pMutable.setDuration(pJsonObject.getInt("duration"));
+    pMutable.setBoard(pJsonObject.getString("board") == null ? "" : pJsonObject.getString("board"));
   }
 }

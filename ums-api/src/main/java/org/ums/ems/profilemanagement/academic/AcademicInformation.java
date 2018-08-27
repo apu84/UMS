@@ -21,6 +21,8 @@ public interface AcademicInformation extends Serializable, EditType<MutableAcade
 
   Integer getDegreeTitleId();
 
+  String getBoard();
+
   String getInstitute();
 
   Integer getPassingYear();
@@ -28,6 +30,4 @@ public interface AcademicInformation extends Serializable, EditType<MutableAcade
   String getResult();
 
   String getMajor();
-
-  Integer getDuration();
 }

@@ -21,6 +21,7 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
   private Integer mDegreeLevelId;
   private DegreeTitle mDegreeTitle;
   private Integer mDegreeTitleId;
+  private String mBoard;
   private String mInstitute;
   private int mPassingYear;
   private String mResult;
@@ -41,7 +42,7 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
     mPassingYear = pPersistentAcademicInformation.getPassingYear();
     mResult = pPersistentAcademicInformation.getResult();
     mMajor = pPersistentAcademicInformation.getMajor();
-    mDuration = pPersistentAcademicInformation.getDuration();
+    mBoard = pPersistentAcademicInformation.getBoard();
     mLastModified = pPersistentAcademicInformation.getLastModified();
   }
 
@@ -111,6 +112,11 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
   }
 
   @Override
+  public void setBoard(String pBoard) {
+    mBoard = pBoard;
+  }
+
+  @Override
   public void setInstitute(String pInstitute) {
     mInstitute = pInstitute;
   }
@@ -128,11 +134,6 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
   @Override
   public void setMajor(String pMajor) {
     mMajor = pMajor;
-  }
-
-  @Override
-  public void setDuration(Integer pDuration) {
-    mDuration = pDuration;
   }
 
   @Override
@@ -161,6 +162,11 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
   }
 
   @Override
+  public String getBoard() {
+    return mBoard;
+  }
+
+  @Override
   public String getInstitute() {
     return mInstitute;
   }
@@ -178,10 +184,5 @@ public class PersistentAcademicInformation implements MutableAcademicInformation
   @Override
   public String getMajor() {
     return mMajor;
-  }
-
-  @Override
-  public Integer getDuration() {
-    return mDuration;
   }
 }

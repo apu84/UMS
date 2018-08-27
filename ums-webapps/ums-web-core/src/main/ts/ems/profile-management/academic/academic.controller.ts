@@ -120,11 +120,11 @@ module ums {
                 employeeId: this.userId,
                 degreeLevel: null,
                 degreeTitle: null,
+                board: "",
                 institution: "",
                 passingYear: null,
                 result: "",
-                major: "",
-                duration: 0
+                major: ""
             };
             this.academic.push(academicEntry);
         }
