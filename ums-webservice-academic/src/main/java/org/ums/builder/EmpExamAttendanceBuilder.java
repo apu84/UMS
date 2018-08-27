@@ -39,7 +39,7 @@ public class EmpExamAttendanceBuilder implements Builder<EmpExamAttendance, Muta
     }
     if(pReadOnly.getEmployeeId() != null) {
       Employee employee = pReadOnly.getEmployees();
-      pBuilder.add("employeeFullName", employee.getPersonalInformation().getName());
+      pBuilder.add("employeeFullName", employee.getPersonalInformation().getFullName());
       pBuilder.add("employeeType", employee.getEmployeeType());
     }
     if(pReadOnly.getDepartmentId() != null) {

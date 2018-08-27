@@ -89,7 +89,7 @@ public class AbsLateComingInfoResourceHelper extends ResourceHelper<AbsLateComin
     for(AbsLateComingInfo app : absLateComingInfoList) {
       MutableAbsLateComingInfo mutableAbsLateComingInfo = new PersistentAbsLateComingInfo();
       mutableAbsLateComingInfo.setEmployeeId(app.getEmployeeId());
-      mutableAbsLateComingInfo.setEmployeeName(mPersonalInformationManager.get(app.getEmployeeId()).getName());
+      mutableAbsLateComingInfo.setEmployeeName(mPersonalInformationManager.get(app.getEmployeeId()).getFullName());
       mutableAbsLateComingInfo.setSemesterId(app.getSemesterId());
       mutableAbsLateComingInfo.setExamType(app.getExamType());
       mutableAbsLateComingInfo.setPresentType(app.getPresentType());

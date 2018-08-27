@@ -145,7 +145,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
       mutableUser.setTemporaryPassword(tempPassword.toCharArray());
       mUserManager.create(mutableUser);
 
-      mNewIUMSAccountInfoEmailService.sendEmail(mutablePersonalInformation.getName(), mutableUser.getId(),
+      mNewIUMSAccountInfoEmailService.sendEmail(mutablePersonalInformation.getFullName(), mutableUser.getId(),
           tempPassword, mutablePersonalInformation.getPersonalEmail(), "IUMS", "AUST: IUMS Account Credentials");
     }
 

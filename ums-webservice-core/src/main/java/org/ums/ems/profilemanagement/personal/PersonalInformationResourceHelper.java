@@ -49,7 +49,7 @@ public class PersonalInformationResourceHelper extends
         List<PersonalInformation> personalInformationList = mManager.getAll();
         CharSequence target = pName.trim().toLowerCase().replaceAll("[^a-zA-Z0-9]+", "");
         for (PersonalInformation personalInformation : personalInformationList) {
-          CharSequence source = personalInformation.getName().trim().toLowerCase().replaceAll("[^a-zA-Z0-9]+", "");
+          CharSequence source = personalInformation.getFullName().trim().toLowerCase().replaceAll("[^a-zA-Z0-9]+", "");
             JaroWinklerDistance jaroWinklerDistance = new JaroWinklerDistance();
             Double score = jaroWinklerDistance.apply(target, source);
             if (score > 0.9) {

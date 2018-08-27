@@ -383,6 +383,11 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
   }
 
   @Override
+  public String getFullName() {
+    return Salutation.get(mSalutationId).getLabel().concat(" ").concat(mName);
+  }
+
+  @Override
   public String getGender() {
     return mGender;
   }

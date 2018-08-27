@@ -124,7 +124,7 @@ public class PersistentSystemAccountMap implements MutableSystemAccountMap {
 
   @Override
   public String getModifierName() {
-    return sPersonalInformationManager.get(mModifiedBy).getName();
+    return sPersonalInformationManager.get(mModifiedBy).getFullName();
   }
 
   @Override

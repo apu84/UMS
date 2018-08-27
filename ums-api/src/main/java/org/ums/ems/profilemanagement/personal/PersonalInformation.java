@@ -21,6 +21,8 @@ public interface PersonalInformation extends Serializable, EditType<MutablePerso
 
   String getName();
 
+  String getFullName();
+
   String getGender();
 
   Integer getBloodGroupId();

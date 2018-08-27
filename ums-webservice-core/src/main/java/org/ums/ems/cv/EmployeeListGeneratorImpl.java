@@ -135,7 +135,7 @@ public class EmployeeListGeneratorImpl implements EmployeeListGenerator {
                 cell = new PdfPCell(new Phrase(employee.getId()));
                 table.addCell(cell);
 
-                cell = new PdfPCell(new Phrase(mPersonalInformationManager.get(employee.getId()).getName()));
+                cell = new PdfPCell(new Phrase(mPersonalInformationManager.get(employee.getId()).getFullName()));
                 table.addCell(cell);
 
                 cell =

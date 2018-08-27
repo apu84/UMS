@@ -69,7 +69,7 @@
 // asyncLogstashAppender.addAppender(logstashAppender);
 // asyncLogstashAppender.start();
 // // for(Logger logger : context.getLoggerList()) {
-// // System.out.println(logger.getName());
+// // System.out.println(logger.getFullName());
 // // }
 // context.getLogger("ROOT").addAppender(asyncLogstashAppender);
 // }

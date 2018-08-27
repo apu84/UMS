@@ -175,7 +175,7 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
           for(int i=0;i<entry.getValue().size();i++){
               String roomInCharge=entry.getValue().get(i).getRoomInCharge()==1?"(Room In Charge)":" ";
               cell = new UmsCell(new Phrase(""+mPersonalInformationManager.
-                      get(entry.getValue().get(i).getEmployeeId()).getName()+" "+roomInCharge+"", fontTimes8Normal));
+                      get(entry.getValue().get(i).getEmployeeId()).getFullName()+" "+roomInCharge+"", fontTimes8Normal));
               cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
               classRoomTable.addCell(cell);
               cell = new UmsCell(new Phrase(""+mEmployeeManager.
@@ -289,8 +289,8 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
       cell.setMinimumHeight(20f);
       empTable.addCell(cell);
       cell =
-          new UmsCell(
-              new Phrase("" + mPersonalInformationManager.get(app.getEmployeeId()).getName(), fontTimes10Normal));
+          new UmsCell(new Phrase("" + mPersonalInformationManager.get(app.getEmployeeId()).getFullName(),
+              fontTimes10Normal));
       cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
       empTable.addCell(cell);
       if(isReserve == 1) {
@@ -483,7 +483,7 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
           cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
           cell.setMinimumHeight(20f);
           empTable.addCell(cell);
-          cell = new UmsCell(new Phrase(""+mPersonalInformationManager.get(app.getEmployeeId()).getName(), fontTimes10Normal));
+          cell = new UmsCell(new Phrase(""+mPersonalInformationManager.get(app.getEmployeeId()).getFullName(), fontTimes10Normal));
           cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
           empTable.addCell(cell);
           cell = new UmsCell(new Phrase(""+mClassRoomManager.get(app.getInvigilatorRoomId()).getRoomNo(), fontTimes10Normal));
@@ -557,7 +557,7 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
     List<Employee> coe = mEmployeeManager.getByDesignation(designationOfCoe.toString());
     String coeName = "";
     for(Employee emp : coe) {
-      coeName = emp.getPersonalInformation().getName();
+      coeName = emp.getPersonalInformation().getFullName();
     }
     chunk =
         new Chunk("\nBy order of the Vice-Chancellor   \n\n" + "-----------------------------------------\n" + coeName

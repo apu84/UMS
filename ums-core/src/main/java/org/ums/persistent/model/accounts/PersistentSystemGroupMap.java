@@ -60,7 +60,7 @@ public class PersistentSystemGroupMap implements MutableSystemGroupMap {
 
   @Override
   public String getModifierName() {
-    return mModifierName == null ? sPersonalInformationManager.get(mModifiedBy).getName() : mModifierName;
+    return mModifierName == null ? sPersonalInformationManager.get(mModifiedBy).getFullName() : mModifierName;
   }
 
   @Override

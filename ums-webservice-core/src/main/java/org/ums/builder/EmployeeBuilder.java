@@ -28,8 +28,8 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
   public void build(JsonObjectBuilder pBuilder, Employee pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("text", pReadOnly.getId());
-    pBuilder.add("employeeName", pReadOnly.getPersonalInformation().getName());
-    pBuilder.add("name", pReadOnly.getPersonalInformation().getName());
+    pBuilder.add("employeeName", pReadOnly.getPersonalInformation().getFullName());
+    pBuilder.add("name", pReadOnly.getPersonalInformation().getFullName());
     pBuilder.add("designation", pReadOnly.getDesignationId());
     pBuilder.add("designationName", mDesignationManager.get(pReadOnly.getDesignationId()).getDesignationName());
     pBuilder.add("employmentType", pReadOnly.getEmploymentType());
@@ -85,7 +85,7 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
 
     DesignationType designationType = null;
     pBuilder.add("id", pReadOnly.getId());
-    pBuilder.add("name", pReadOnly.getPersonalInformation().getName());
+    pBuilder.add("name", pReadOnly.getPersonalInformation().getFullName());
     pBuilder.add("designation", DesignationType.get(pReadOnly.getDesignationId()).getLabel());
     // if(pReadOnly.getEmploymentType().equals(EmploymentType.PERMANENT.getLabel()))
     // pBuilder.add("employmentType", "Permanent");

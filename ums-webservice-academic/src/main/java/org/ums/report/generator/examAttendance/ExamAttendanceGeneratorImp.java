@@ -235,8 +235,8 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
     }
     for(int i = 0; i < absentInfoList.size(); i++) {
       cell =
-          new UmsCell(new Phrase("" + mPersonalInformationManager.get(absentInfoList.get(i).getEmployeeId()).getName(),
-              fontTimes8Normal));
+          new UmsCell(new Phrase(""
+              + mPersonalInformationManager.get(absentInfoList.get(i).getEmployeeId()).getFullName(), fontTimes8Normal));
       cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
       absentInfoTable.addCell(cell);
       cell =
@@ -305,7 +305,8 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
     for(int i = 0; i < lateComingInfoList.size(); i++) {
       cell =
           new UmsCell(new Phrase(""
-              + mPersonalInformationManager.get(lateComingInfoList.get(i).getEmployeeId()).getName(), fontTimes8Normal));
+              + mPersonalInformationManager.get(lateComingInfoList.get(i).getEmployeeId()).getFullName(),
+              fontTimes8Normal));
       cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
       lateComingInfoTable.addCell(cell);
       cell =

@@ -43,7 +43,7 @@ public class LmsApplicationBuilder implements Builder<LmsApplication, MutableLms
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("secondId", pReadOnly.getId());
     pBuilder.add("employeeId", pReadOnly.getEmployee().getId());
-    pBuilder.add("employeeName", pReadOnly.getEmployee().getPersonalInformation().getName());
+    pBuilder.add("employeeName", pReadOnly.getEmployee().getPersonalInformation().getFullName());
     JsonObjectBuilder employee = Json.createObjectBuilder();
     mEmployeeBuilder.build(employee, pReadOnly.getEmployee(), pUriInfo, pLocalCache);
     pBuilder.add("employee", employee);
