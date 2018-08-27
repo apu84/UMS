@@ -11,7 +11,7 @@ import java.util.List;
 public class PersistentAcademicInformationDao extends AcademicInformationDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO EMP_ACADEMIC_INFO (ID, EMPLOYEE_ID, DEGREE_LEVEL_ID, DEGREE_TITLE_ID, BOARD, INSTITUTE, PASSING_YEAR, RESULT, MAJOR, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, ? ,? ,?, ?, ?,"
+      "INSERT INTO EMP_ACADEMIC_INFO (ID, EMPLOYEE_ID, DEGREE_LEVEL_ID, DEGREE_TITLE_ID, BOARD, INSTITUTE, PASSING_YEAR, RESULT, MAJOR, LAST_MODIFIED) VALUES (?, ?, ?, ?, ? ,? ,?, ?, ?,"
           + getLastModifiedSql() + ")";
 
   static String GET_ALL =
