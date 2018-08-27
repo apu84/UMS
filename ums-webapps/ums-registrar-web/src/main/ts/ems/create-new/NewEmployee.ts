@@ -15,6 +15,8 @@ module ums {
             'roles',
             'additionalService'];
 
+
+        private salutations: ICommon[] = [];
         private allDepartments = [];
         private allDesignations = [];
         private changedDesignationTypes = [];
@@ -45,6 +47,7 @@ module ums {
                     private additionalService: AdditionalService) {
 
             this.newEmployee = <INewEmployee>{};
+            this.salutations = this.registrarConstants.salutationTypes;
             this.allEmployeeTypes = appConstants.employeeTypes;
             this.academicEmployeeTypes = appConstants.academicEmployeeTypes;
             this.officialEmployeeTypes = appConstants.officialEmployeeTypes;

@@ -277,6 +277,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
       email = "-";
     }
     pMutablePersonalInformation.setId(pJsonObject.getString("id"));
+    pMutablePersonalInformation.setSalutationId(pJsonObject.getInt("salutation"));
     pMutablePersonalInformation.setName(pJsonObject.getString("name"));
     pMutablePersonalInformation.setFatherName(" ");
     pMutablePersonalInformation.setMotherName(" ");

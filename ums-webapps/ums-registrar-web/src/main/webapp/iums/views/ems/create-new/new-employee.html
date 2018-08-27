@@ -208,6 +208,26 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group"
+                                     ng-class="{ 'has-error' : nEmployeeForm.nSalute.$invalid && !nEmployeeForm.nSalute.$pristine}">
+                                    <label class="control-label" for="iSalute">Salutation<span
+                                            data-ng-show="!vm.generalReadOnly && vm.test1"
+                                            class='require'>*</span></label>
+
+                                    <div data-ng-show="!vm.generalReadOnly">
+                                        <select name="nSalute"
+                                                id="iSalute"
+                                                data-ng-model="vm.newEmployee.salutation"
+                                                data-ng-options="salute.name for salute in vm.salutations track by salute.id"
+                                                class="form-control">
+                                            <option value="">Select Salutation</option>
+                                        </select>
+                                        <label data-ng-show="nEmployeeForm.nSalute.$invalid && !nEmployeeForm.nSalute.$pristine"
+                                               class="help-block control-label">Please your salutation.</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group"
                                      ng-class="{ 'has-error' : nEmployeeForm.nName.$invalid && !nEmployeeForm.nName.$pristine }">
                                     <label for="iName" class="control-label">Employee Name<span
                                             class="require">*</span></label>
@@ -221,6 +241,8 @@
                                            class="help-block control-label">Name is required.</label>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group"
                                      ng-class="{ 'has-error' : nEmployeeForm.nJoiningDate.$invalid && !nEmployeeForm.nJoiningDate.$pristine}">
@@ -240,9 +262,7 @@
                                         Joining Date is Required.</label>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row">
                             <div class="col-md-6">
                                 <div data-ng-if="vm.newEmployee.employeeType.id==1">
                                     <div class="form-group">
@@ -270,14 +290,17 @@
                                             <label>
                                                 <input id="iIUMSAccount" name="nIUMSACCOUNT" type="checkbox"
                                                        data-ng-model="vm.newEmployee.IUMSAccount">
-                                                <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                                <span class="cr"><i
+                                                        class="cr-icon glyphicon glyphicon-ok"></i></span>
                                                 <b>Create IUMS account</b>
                                             </label>
                                         </div>
                                     </div>
                                     <div data-ng-if="vm.newEmployee.designation.roleId==0">
-                                        <p><span style="color: red;">* N.B:</span> &nbsp;<b>IUMS account</b> will not be
-                                            available for this user. But we will keep information for further process.
+                                        <p><span style="color: red;">* N.B:</span> &nbsp;<b>IUMS account</b> will
+                                            not be
+                                            available for this user. But we will keep information for further
+                                            process.
                                             Please proceed to submit.</p>
                                     </div>
                                 </div>
@@ -285,7 +308,8 @@
                             <div class="col-md-6">
                                 <div align="right">
                                     <button type="submit" class="btn btn-success"
-                                            data-ng-disabled="nEmployeeForm.$invalid || vm.isNotUniqueAcademicInitial">Submit
+                                            data-ng-disabled="nEmployeeForm.$invalid || vm.isNotUniqueAcademicInitial">
+                                        Submit
                                     </button>
                                 </div>
                             </div>
