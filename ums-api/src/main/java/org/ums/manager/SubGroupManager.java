@@ -13,6 +13,8 @@ public interface SubGroupManager extends ContentManager<SubGroup, MutableSubGrou
 
   int deleteBySemesterGroupAndType(int pSemesterId, int pGroupNo, int pType);
 
+  List<SubGroup> getBySemesterAndExamType(int pSemesterId, int pExamType);
+
   List<SubGroup> getBySemesterGroupNoAndType(int pSemesterId, int pGroupNo, int pType);
 
   int getSubGroupNumberOfAGroup(int pSemesterId, int pExamType, int pGroupNo);

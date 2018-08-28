@@ -253,7 +253,7 @@
 
 /// <reference path='model/TeacherAssignmentSearchParamModel.ts'/>
 /// <reference path='model/CourseTeacherSearchParamModel.ts'/>
-/// <reference path='model/LoggedInUser.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/model/LoggedInUser.ts'/>
 /// <reference path='model/CourseTeacherModel.ts'/>
 /// <reference path='model/Attachment.ts'/>
 /// <reference path='model/ExamRoutineModel.ts'/>

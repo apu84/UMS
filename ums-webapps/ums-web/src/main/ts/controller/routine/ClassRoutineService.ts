@@ -84,7 +84,7 @@ module ums{
     public dayAndTimeMapWithRoutineSlot: {[key:string]: RoutineSlot};
     public groupMapWithRoutineSlot: {[key:number]:RoutineSlot};
     public groupList: number[];
-    public courseTeacherMap: { [key: string]: CourseTeacherInterface[] }; // map[courseId]= CourseTeacher[];
+    public courseTeacherMapWithCourseIdAndSection: { [key: string]: CourseTeacherInterface[] }; // map[courseId]= CourseTeacher[];
     public courseTeacherWithSectionMap: { [key: string]: CourseTeacherInterface[] }; // map[courseId+section]= CourseTeacher[];
     public routineUrl: string = '/ums-webservice-academic/academic/routine';
     public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
@@ -145,17 +145,14 @@ module ums{
         roomId=9999;
       }
 
-      this.httpClient.get("academic/routine/roomBasedRoutine/semester/"+semesterId+"/room/"+roomId,  'application/pdf',
+      this.httpClient.get("academic/routine/roomBasedRoutine/semester/"+semesterId+"/room/"+roomId,  'application/json',
           (data:any, etag:string) => {
-            var file = new Blob([data], {type: 'application/pdf'});
-            var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
-            this.$window.open(fileURL);
-            defer.resolve(fileURL);
+            defer.resolve(data.entries);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
             defer.resolve("failure");
-          },'arraybuffer');
+          });
 
       return defer.promise;
     }

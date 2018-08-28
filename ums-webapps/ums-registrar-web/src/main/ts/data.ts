@@ -8,12 +8,12 @@
       '/index': {title: 'Dashboard', 'breadcrumb': ['Dashboard']},
       '/userHome': {title: 'User Home', 'breadcrumb': ['User Home']},
       '/profile': {title: 'Profile', 'breadcrumb': ['Profile']},
-      '/employeeInformation': {title: 'Employee Information', 'breadcrumb': ['Employee Information']},
+      '/employeeInformation': {title: 'Search', 'breadcrumb': ['Search']},
       '/employeePublication': {title: 'Publication Approval', 'breadcrumb': ['Publication Approval']},
       '/schedule': {title: 'Schedule', 'breadcrumb': ['Schedule']},
       '/agendaResolution': {title: 'Agenda & Resolution', 'breadcrumb': ['Prepare Agenda & Resolution']},
       '/search': {title: 'Search', 'breadcrumb': ['Search']},
-      '/newEmployee': {title: 'Create Employee', 'breadcrumb': ['Create Employee']},
+      '/newEmployee': {title: 'Create New Employee', 'breadcrumb': ['Create New Employee']},
       '/employeeProfile': {title: 'Profile', 'breadcrumb': ['Profile']},
       '/personal': {title: 'Profile', 'breadcrumb': ['Profile']},
       '/academic': {title: 'Profile', 'breadcrumb': ['Profile']},
@@ -22,7 +22,8 @@
       '/training': {title: 'Profile', 'breadcrumb': ['Profile']},
       '/experience': {title: 'Profile', 'breadcrumb': ['Profile']},
       '/additional': {title: 'Profile', 'breadcrumb': ['Profile']},
-      '/service': {title: 'Profile', 'breadcrumb': ['Profile']}
+      '/service': {title: 'Profile', 'breadcrumb': ['Profile']},
+      '/modifyEmployee': {title: 'Modify Employee', 'breadcrumb': ['Modify Employee']}
   };
 
 

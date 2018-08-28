@@ -60,8 +60,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Exam Date</label>
                         <div class="col-md-8">
-                            <select class="form-control" name="examDate"  data-ng-model="vm.examDate" data-ng-change="vm.ExamDateChange(vm.examDate)">
-                                <option value="">Select an Exam Date</option>
+                            <select class="form-control" name="examDate"  data-ng-model="vm.selectedExamDate" data-ng-change="vm.ExamDateChange(vm.selectedExamDate)">
                                 <option data-ng-repeat="examRoutine in vm.examRoutineArr">{{examRoutine.examDate}}</option>
                             </select>
                         </div>

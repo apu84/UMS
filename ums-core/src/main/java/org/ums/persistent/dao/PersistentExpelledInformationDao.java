@@ -35,6 +35,16 @@ public class PersistentExpelledInformationDao extends ExpelledInformationDaoDeco
   String SEM_EXAM_TYPE_DATE_WISE_RECORDS =
       "SELECT STUDENT_ID,SEMESTER_ID,COURSE_ID,EXAM_TYPE,REG_TYPE,EXPEL_REASON,to_char(EXAM_DATE,'DD-MM-YYYY') EXAM_DATE FROM DER_EXPELLED_INFO "
           + " WHERE  SEMESTER_ID=? AND EXAM_TYPE=? AND EXAM_DATE = TO_DATE(?,'DD-MM-YYYY')";
+  String SELECT_RECORDS =
+      "SELECT STUDENT_ID,SEMESTER_ID,COURSE_ID,EXAM_TYPE,REG_TYPE,EXPEL_REASON,to_char(EXAM_DATE,'DD-MM-YYYY') EXAM_DATE FROM DER_EXPELLED_INFO "
+          + " WHERE  SEMESTER_ID=? AND EXAM_TYPE=? AND REG_TYPE=?";
+
+  @Override
+  public List<ExpelledInformation> getSemesterExamTyeRegTypeWiseRecords(Integer pSemesterId, Integer pExamType,
+      Integer pRegType) {
+    return mJdbcTemplate.query(SELECT_RECORDS, new Object[] {pSemesterId, pExamType, pRegType},
+        new ExpelledInformationRowMapper());
+  }
 
   @Override
   public List<ExpelledInformation> getSemesterExamTyeDateWiseRecords(Integer pSemesterId, Integer pExamType,

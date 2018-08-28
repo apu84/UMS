@@ -110,6 +110,7 @@
 /// <reference path='controller/meeting/AgendaResolution.ts'/>
 /// <reference path='controller/meeting/Schedule.ts'/>
 /// <reference path='controller/meeting/Search.ts'/>
+/// <reference path='controller/ModifyEmployee.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/ApprovePublicationService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/PagerService.ts'/>
@@ -126,6 +127,8 @@
 /// <reference path='service/MeetingService.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformationModel.ts' />
+
+/// <reference path='../../../../ums-web-core/src/main/ts/model/LoggedInUser.ts'/>
 
 /// <reference path='controller/NewEmployee.ts'/>
 

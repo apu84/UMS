@@ -17,6 +17,7 @@ import org.ums.domain.model.mutable.MutableEmpExamAttendance;
 import org.ums.domain.model.mutable.MutableEmpExamInvigilatorDate;
 import org.ums.domain.model.mutable.MutableEmpExamReserveDate;
 import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.enums.ProgramType;
 import org.ums.enums.accounts.definitions.MonthType;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.*;
@@ -73,7 +74,7 @@ public class EmpExamAttendanceHelper extends ResourceHelper<EmpExamAttendance, M
     JsonObject jsonObject = entries.getJsonObject(0);
     PersistentEmpExamAttendance application = new PersistentEmpExamAttendance();
     application.setId(id);
-    application.setSemesterId(11012017);
+    application.setSemesterId(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
     getBuilder().build(application, jsonObject, localCache);
 
     String invigilatorDate[] = application.getInvigilatorDate().split(",");
@@ -125,41 +126,31 @@ public class EmpExamAttendanceHelper extends ResourceHelper<EmpExamAttendance, M
     empExamInvigilatorDate.setAttendantId(application.getId());
     PersistentEmpExamReserveDate empExamReserveDate = new PersistentEmpExamReserveDate();
     empExamReserveDate.setAttendantId(application.getId());
-    try {
 
-      mEmpExamInvigilatorDateManager.delete(empExamInvigilatorDate);
-      mEmpExamReserveDateManager.delete(empExamReserveDate);
-      mManager.delete(application);
+    mEmpExamInvigilatorDateManager.delete(empExamInvigilatorDate);
+    mEmpExamReserveDateManager.delete(empExamReserveDate);
+    mManager.delete(application);
 
-      PersistentEmpExamAttendance app = new PersistentEmpExamAttendance();
-      getBuilder().build(app, jsonObjectForAdd, localCache);
-      app.setId(id);
-      app.setSemesterId(11012017);
+    PersistentEmpExamAttendance app = new PersistentEmpExamAttendance();
+    getBuilder().build(app, jsonObjectForAdd, localCache);
+    app.setId(id);
+    app.setSemesterId(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
 
-      String invigilatorDate[] = app.getInvigilatorDate().split(",");
-      String reverseDate[] = app.getReserveDate().split(",");
+    String invigilatorDate[] = app.getInvigilatorDate().split(",");
+    String reverseDate[] = app.getReserveDate().split(",");
 
-      List<MutableEmpExamInvigilatorDate> invigilatorDateList = getMutableEmpExamInvigilatorDate(id, invigilatorDate);
-      List<MutableEmpExamReserveDate> reserveDateList = getMutableEmpExamReserveDate(id, reverseDate);
-      addInfo(app, invigilatorDateList, reserveDateList);
-
-      builder.status(Response.Status.ACCEPTED);
-    } catch(Exception e) {
-      e.printStackTrace();
-      builder.status(Response.Status.NOT_FOUND);
-    }
+    List<MutableEmpExamInvigilatorDate> invigilatorDateList = getMutableEmpExamInvigilatorDate(id, invigilatorDate);
+    List<MutableEmpExamReserveDate> reserveDateList = getMutableEmpExamReserveDate(id, reverseDate);
+    addInfo(app, invigilatorDateList, reserveDateList);
+    builder.status(Response.Status.ACCEPTED);
     return builder.build();
   }
 
   private void addInfo(PersistentEmpExamAttendance application,
       List<MutableEmpExamInvigilatorDate> invigilatorDateList, List<MutableEmpExamReserveDate> reserveDateList) {
-    try {
-      mManager.create(application);
-      mEmpExamInvigilatorDateManager.create(invigilatorDateList);
-      mEmpExamReserveDateManager.create(reserveDateList);
-    } catch(Exception e) {
-      e.printStackTrace();
-    }
+    mManager.create(application);
+    mEmpExamInvigilatorDateManager.create(invigilatorDateList);
+    mEmpExamReserveDateManager.create(reserveDateList);
   }
 
   @Transactional
@@ -212,10 +203,11 @@ public class EmpExamAttendanceHelper extends ResourceHelper<EmpExamAttendance, M
       for(Map.Entry<String, String> entry : dayMonthMap.entrySet()) {
         if(counter > 0) {
           newDate =
-              newDate + ", and " + MonthType.get(Integer.parseInt(entry.getKey())) + ": " + entry.getValue() + " ";
+              newDate + ", and " + MonthType.get(Integer.parseInt(entry.getKey())).getLabel() + ": " + entry.getValue()
+                  + " ";
         }
         else {
-          newDate = newDate + MonthType.get(Integer.parseInt(entry.getKey())) + ": " + entry.getValue();
+          newDate = newDate + MonthType.get(Integer.parseInt(entry.getKey())).getLabel() + ": " + entry.getValue();
         }
         counter = counter + 1;
       }

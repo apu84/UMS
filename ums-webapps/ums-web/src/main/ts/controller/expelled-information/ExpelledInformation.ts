@@ -83,9 +83,6 @@ module ums{
                     private $stateParams: any,
                     private examRoutineService: ExamRoutineService){
             this.stateParams = $stateParams;
-            console.log("----State Params---");
-            console.log($stateParams);
-            console.log("semesterId: "+this.stateParams.semesterId+"\nexamType: "+this.stateParams.examType+"\nexamDate: "+this.stateParams.examDate);
             this.examTypeList=[];
             this.studentId="";
             this.reasonOfExpel="";
@@ -109,17 +106,13 @@ module ums{
             this.deptName=this.deptList[0];
             this.isInsertAvailable=false;
             this.getSemesters();
-            this.getExamDates();
+            this.doSomething();
         }
         private deptChanged(deptId:any){
             this.selectedDepartmentId=deptId.id;
-            console.log("id: "+this.selectedDepartmentId);
-
         }
         private getSemesters():void{
             this.semesterService.fetchSemesters(11,5).then((semesters:Array<Semester>)=>{
-                this.semesters=semesters;
-                console.log(this.semesters);
                 for(var i=0;i<semesters.length;i++){
                     if(semesters[i].status==1){
                         this.semester = semesters[i];
@@ -128,23 +121,20 @@ module ums{
                     }
                 }
                 this.selectedSemesterId=this.semester.id;
-                console.log("SemesterId: "+this.selectedSemesterId);
-                console.log("Active_Semester_Id: "+this.activeSemesterId);
                  this.hideInsertMode=this.activeSemesterId==this.stateParams.semesterId ? true:false;
-            });
+            }).then((data)=>{
+                this.getExamDates();
+            })
         }
         private changeExamTypeForFilter(value:any){
-            console.log("For Filter"+value.id+"  "+value.name);
             this.selectedExamTypeIdForFilter=value.id;
             this.selectedExamTypeNameForFilter=value.name;
         }
         private doSomething(){
             var res: Array<IExpelledInfo> = [];
             this.expelledInformationService.getExpelledInfo(this.stateParams.semesterId,this.selectedExamTypeIdForFilter).then((data)=>{
-                console.log("*******Data*********");
                 res=data.entries;
                 this.expelInfo=res;
-                console.log(this.expelInfo);
                 for(let i=0;i<this.expelInfo.length;i++){
                     this.expelInfo[i].examDate = this.expelInfo[i].examDate.replace("/","-");
                     this.expelInfo[i].examDate = this.expelInfo[i].examDate.replace("/","-");
@@ -154,7 +144,7 @@ module ums{
                         this.showDeleteColumn=false;
                     }
                 }
-            })
+            });
         }
         private checkMoreThanOneSelectionSubmit(result:IExpelledInfo) {
             if(result.apply){
@@ -165,9 +155,6 @@ module ums{
                 this.checkBoxCounter--;
                 this.enableOrDisableSubmitButton();
             }
-
-            console.log("value:"+this.submit_Button_Disable);
-
         }
 
         private enableOrDisableSubmitButton(): void{
@@ -181,38 +168,29 @@ module ums{
         private deleteExpelInfo(){
             var json= this.convertToJsonForDelete(this.expelInfo);
             this.expelledInformationService.deleteExpelInfo(json).then((data)=>{
-                console.log(data);
             });
             this.doSomething();
             this.checkBoxCounter=0;
             this.submit_Button_Disable=true;
-            console.log("Rumi");
         }
         private ExamDateChange(value:any){
-            console.log(value);
             this.examDateForFilter=value;
         }
         private getExamDates(){
             let examTypeId=this.stateParams.examType == ExamType.REGULAR ? ExamType.REGULAR:ExamType.CARRY_CLEARANCE_IMPROVEMENT;
-            console.log("examTypeId: "+examTypeId);
             this.examRoutineService.getExamRoutineDates(this.stateParams.semesterId,examTypeId).then((examDateArr: any) =>{
                 this.examRoutineArr={};
-                console.log("****Exam Dates***");
                 this.examRoutineArr=examDateArr;
-                console.log(this.examRoutineArr);
-            })
-
+            });
         }
 
         private enableInsert(){
-            console.log("*************************");
             this.isInsertAvailable=true;
         }
         private hideInsert():void{
             this.isInsertAvailable=false;
         }
         private changeExamType(value:any){
-            console.log("Exam Type For Insert: "+value.id);
             this.selectedExamTypeId=value.id;
             this.selectedExamTypeName=value.name;
             this.courseList=[];
@@ -224,20 +202,16 @@ module ums{
                 this.showExpelReasonBox=true;
                 var res: Array<ICourseList> = [];
                 this.expelledInformationService.getCourses(this.studentId, this.selectedExamTypeId).then((data) => {
-                    console.log("Course/List");
                     res = data.entries;
                     this.courseList = res;
-                    console.log(this.courseList);
-                })
+                });
             }else {
                 this.notify.warn("Invalid Student Id");
             }
 
         }
         private checkExpelReason(){
-            console.log("i am in")
             if(this.reasonOfExpel.length >=5 && this.reasonOfExpel.length <200){
-                console.log("Length: "+this.reasonOfExpel.length);
                 this.showModal=true;
             }else{
                 this.notify.warn("Reason of Expulsion Must be between 5 to 200 Characters");
@@ -245,7 +219,6 @@ module ums{
             }
         }
         private reset(){
-            console.log("reset");
             this.reasonOfExpel="";
             for(let i=0;i<this.courseList.length;i++){
                 this.courseList[i].apply=false;
@@ -254,19 +227,13 @@ module ums{
         }
 
         private addRecords(){
-            console.log("Student Id: "+this.studentId+"\nExamType: "+this.selectedExamTypeId);
-            console.log("Expel Reason: "+this.reasonOfExpel);
-            console.log("Course Id: "+this.selectedCourseId);
             var json: any = this.convertToJson();
             this.expelledInformationService.addExpelledStudentsRecord(json).then((data)=>{
-                console.log(data);
                 this.searchCourses();
                 this.doSomething();
                 this.reasonOfExpel="";
                 this.enableAddButton=false;
-            })
-
-
+            });
         }
         private selectAction(List:any){
             this.enableAddButton=true;
@@ -284,8 +251,6 @@ module ums{
         }
         private convertToJsonForDelete(result: Array<IExpelledInfo>): any {
             var completeJson = {};
-            console.log("result");
-            console.log(result);
             var jsonObj = [];
             for (var i = 0; i < result.length; i++) {
                 var item = {};
@@ -298,7 +263,6 @@ module ums{
                 }
             }
             completeJson["entries"] = jsonObj;
-            console.log(completeJson);
             return completeJson;
         }
 

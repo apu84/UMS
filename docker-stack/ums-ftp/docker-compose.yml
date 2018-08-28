@@ -1,0 +1,17 @@
+version: "3"
+services:
+  ums-ftp:
+    image: apu84/ums-ftp
+    environment:
+      - FTP_USER=iums
+      - FTP_PASS=austig100
+      - FTP_HOME=/home
+      - PASV_ENABLE=YES
+      - PASV_ADDRESS=172.16.22.46
+      - PASV_MIN=21100
+      - PASV_MAX=21110
+    ports:
+      - "20-21:20-21"
+      - "21100-21110:21100-21110"
+    volumes:
+      - /var/nfs:/home

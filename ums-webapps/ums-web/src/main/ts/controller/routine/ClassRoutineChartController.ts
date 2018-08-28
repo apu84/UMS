@@ -52,11 +52,15 @@ module ums {
         this.getClassRoomList();
         this.getTeacherList();
       }
+      this.showProgressBar = false;
+      this.progress=0;
       this.showRoutineChart = false;
       this.createRoutineBody();
     }
 
     public createRoutineBody() {
+      this.showProgressBar = false;
+      this.progress=0;
       this.generateHeader();
       this.generateBody();
       this.classRoutineService.dayAndTimeMapWithRoutine = {};
@@ -287,8 +291,8 @@ module ums {
           r.courseTeacher = this.classRoutineService.courseTeacherWithSectionMap[r.courseId + r.section];
         }
         else {
-          if (this.classRoutineService.courseTeacherMap[r.courseId]) {
-            let courseTeacherList = angular.copy(this.classRoutineService.courseTeacherMap[r.courseId]);
+          if (this.classRoutineService.courseTeacherMapWithCourseIdAndSection[r.courseId+r.section]) {
+            let courseTeacherList = angular.copy(this.classRoutineService.courseTeacherMapWithCourseIdAndSection[r.courseId+r.section]);
             courseTeacherList.forEach((c: CourseTeacherInterface) => c.id = undefined);
             r.courseTeacher = courseTeacherList;
           }
@@ -355,22 +359,50 @@ module ums {
       if (this.classRoutineService.slotRoutineList.length == 0) {
         this.createRoutineBody();
       } else {
-        this.saveSlotData();
+        this.checkRequiredFieldsInSlotRoutineList().then((foundIssue: boolean)=>{
+          if(foundIssue==false)
+            this.saveSlotData();
+        });
+      }
+    }
+
+    private checkRequiredFieldsInSlotRoutineList(): ng.IPromise<boolean>{
+      let defer: ng.IDeferred<boolean>  = this.$q.defer();
+      let foundIssue: boolean = false;
+      for(var i=0; i<this.classRoutineService.slotRoutineList.length; i++){
+        let routine : ClassRoutine= this.classRoutineService.slotRoutineList[i];
+        if(routine.course==undefined || routine.course==null){
+          this.notify.error("Please select course");
+          foundIssue= true;
+          break;
+        }
+        else if(routine.room==null || routine.room==undefined){
+          this.notify.error("Please select roomNo");
+          foundIssue= true;
+          break;
+        }
+        else if(moment(routine.startTimeObj).diff(moment(routine.endTimeObj), 'minutes')>300){
+          this.notify.error("Time duration is more than expected.");
+          foundIssue= true;
+          break;
+        }
       }
 
+      defer.resolve(foundIssue);
+      return defer.promise;
     }
 
     public createCourseTeacherMap() {
-      this.classRoutineService.courseTeacherMap = {};
+      this.classRoutineService.courseTeacherMapWithCourseIdAndSection = {};
       this.courseTeacherList.forEach((courseTeacher: CourseTeacherInterface) => {
         let courseTeacherList: CourseTeacherInterface[] = [];
-        if (this.classRoutineService.courseTeacherMap[courseTeacher.courseId] == undefined) {
+        if (this.classRoutineService.courseTeacherMapWithCourseIdAndSection[courseTeacher.courseId+ courseTeacher.section] == undefined) {
           courseTeacherList.push(courseTeacher);
-          this.classRoutineService.courseTeacherMap[courseTeacher.courseId] = courseTeacherList;
+          this.classRoutineService.courseTeacherMapWithCourseIdAndSection[courseTeacher.courseId+courseTeacher.section] = courseTeacherList;
         } else {
-          courseTeacherList = this.classRoutineService.courseTeacherMap[courseTeacher.courseId];
+          courseTeacherList = this.classRoutineService.courseTeacherMapWithCourseIdAndSection[courseTeacher.courseId+courseTeacher.section];
           courseTeacherList.push(courseTeacher);
-          this.classRoutineService.courseTeacherMap[courseTeacher.courseId] = courseTeacherList;
+          this.classRoutineService.courseTeacherMapWithCourseIdAndSection[courseTeacher.courseId+courseTeacher.section] = courseTeacherList;
         }
       })
     }

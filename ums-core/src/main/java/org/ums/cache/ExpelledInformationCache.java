@@ -30,4 +30,10 @@ public class ExpelledInformationCache extends
       String pExamDate) {
     return getManager().getSemesterExamTyeDateWiseRecords(pSemesterId, pExamType, pExamDate);
   }
+
+  @Override
+  public List<ExpelledInformation> getSemesterExamTyeRegTypeWiseRecords(Integer pSemesterId, Integer pExamType,
+      Integer pRegType) {
+    return getManager().getSemesterExamTyeRegTypeWiseRecords(pSemesterId, pExamType, pRegType);
+  }
 }

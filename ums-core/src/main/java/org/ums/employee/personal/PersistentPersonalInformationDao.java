@@ -3,7 +3,6 @@ package org.ums.employee.personal;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import javax.ws.rs.core.Response;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -116,30 +115,37 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
   @Override
   public int update(MutablePersonalInformation pMutablePersonalInformation) {
     String query = UPDATE_ONE + " WHERE EMPLOYEE_ID = ?";
-    return mJdbcTemplate.update(query, pMutablePersonalInformation.getName(), pMutablePersonalInformation.getGender(),
-        pMutablePersonalInformation.getBloodGroupId(), pMutablePersonalInformation.getFatherName(),
-        pMutablePersonalInformation.getMotherName(), pMutablePersonalInformation.getNationalityId(),
-        pMutablePersonalInformation.getReligionId(), pMutablePersonalInformation.getDateOfBirth(),
-        pMutablePersonalInformation.getNidNo(), pMutablePersonalInformation.getMaritalStatusId(),
-        pMutablePersonalInformation.getSpouseName(), pMutablePersonalInformation.getSpouseNidNo(),
-        pMutablePersonalInformation.getWebsite(), pMutablePersonalInformation.getOrganizationalEmail(),
-        pMutablePersonalInformation.getPersonalEmail(), pMutablePersonalInformation.getMobileNumber(),
-        pMutablePersonalInformation.getPhoneNumber(), pMutablePersonalInformation.getPresentAddressLine1(),
-        pMutablePersonalInformation.getPresentAddressLine2(), pMutablePersonalInformation.getPresentAddressCountryId(),
-        pMutablePersonalInformation.getPresentAddressDivisionId(),
-        pMutablePersonalInformation.getPresentAddressDistrictId(),
-        pMutablePersonalInformation.getPresentAddressThanaId(),
+    return mJdbcTemplate.update(
+        query,
+        pMutablePersonalInformation.getName(),
+        pMutablePersonalInformation.getGender(),
+        pMutablePersonalInformation.getBloodGroupId(),
+        pMutablePersonalInformation.getFatherName(),
+        pMutablePersonalInformation.getMotherName(),
+        pMutablePersonalInformation.getNationalityId(),
+        pMutablePersonalInformation.getReligionId(),
+        pMutablePersonalInformation.getDateOfBirth(),
+        pMutablePersonalInformation.getNidNo(),
+        pMutablePersonalInformation.getMaritalStatusId(),
+        pMutablePersonalInformation.getSpouseName(),
+        pMutablePersonalInformation.getSpouseNidNo(),
+        pMutablePersonalInformation.getWebsite(),
+        pMutablePersonalInformation.getOrganizationalEmail(),
+        pMutablePersonalInformation.getPersonalEmail().equals("") ? "-" : pMutablePersonalInformation
+            .getPersonalEmail(), pMutablePersonalInformation.getMobileNumber(), pMutablePersonalInformation
+            .getPhoneNumber(), pMutablePersonalInformation.getPresentAddressLine1(), pMutablePersonalInformation
+            .getPresentAddressLine2(), pMutablePersonalInformation.getPresentAddressCountryId(),
+        pMutablePersonalInformation.getPresentAddressDivisionId(), pMutablePersonalInformation
+            .getPresentAddressDistrictId(), pMutablePersonalInformation.getPresentAddressThanaId(),
         pMutablePersonalInformation.getPresentAddressPostCode(),
         pMutablePersonalInformation.getPermanentAddressLine1(), pMutablePersonalInformation.getPermanentAddressLine2(),
-        pMutablePersonalInformation.getPermanentAddressCountryId(),
-        pMutablePersonalInformation.getPermanentAddressDivisionId(),
-        pMutablePersonalInformation.getPermanentAddressDistrictId(),
-        pMutablePersonalInformation.getPermanentAddressThanaId(),
-        pMutablePersonalInformation.getPermanentAddressPostCode(),
-        pMutablePersonalInformation.getEmergencyContactName(),
-        pMutablePersonalInformation.getEmergencyContactRelationId(),
-        pMutablePersonalInformation.getEmergencyContactPhone(),
-        pMutablePersonalInformation.getEmergencyContactAddress(), pMutablePersonalInformation.getId());
+        pMutablePersonalInformation.getPermanentAddressCountryId(), pMutablePersonalInformation
+            .getPermanentAddressDivisionId(), pMutablePersonalInformation.getPermanentAddressDistrictId(),
+        pMutablePersonalInformation.getPermanentAddressThanaId(), pMutablePersonalInformation
+            .getPermanentAddressPostCode(), pMutablePersonalInformation.getEmergencyContactName(),
+        pMutablePersonalInformation.getEmergencyContactRelationId(), pMutablePersonalInformation
+            .getEmergencyContactPhone(), pMutablePersonalInformation.getEmergencyContactAddress(),
+        pMutablePersonalInformation.getId());
   }
 
   class PersonalInformationRowMapper implements RowMapper<PersonalInformation> {

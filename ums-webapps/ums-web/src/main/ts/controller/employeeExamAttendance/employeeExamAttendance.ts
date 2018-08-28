@@ -86,7 +86,7 @@ module ums{
             this.examTypeList=this.appConstants.examType;
             this.examType=this.examTypeList[0];
             this.selectedExamTypeId=this.examType.id;
-            this.selectedExamTypeName=this.examType.name
+            this.selectedExamTypeName=this.examType.name;
             this.roomInCharge=false;
             this.empExamDate="";
             this.empReserveDate="";
@@ -102,9 +102,7 @@ module ums{
             this.isDeptSelected=false;
             this.isSubmitModalAvailable=false;
             this.isInsertAvailable=false;
-
             this.getSemesters();
-            this.getExamDates();
         }
          private enableInsert(){
              this.isInsertAvailable=true;
@@ -113,19 +111,20 @@ module ums{
              this.isInsertAvailable=false;
          }
         private search():void{
+            if(this.selectedExamDate !=""){
             if(this.isDeptSelected==true){
-                if(this.isExamDateSelected==true){
                     this.isRightDivAvailable = true;
                     Utils.expandRightDiv();
                     this.initializeData();
                     this.getEmployees(this.selectedDepartmentId);
                     this.getClassRoomInfo();
                     this.getData();
-                }else{
-                    this.notify.warn("Select an Exam Date ");
-                }
+                    this.empName="";
             }else{
                 this.notify.warn("Select Department");
+            }
+            }else {
+                this.notify.warn("Select an exam date");
             }
         }
         private getData():void{
@@ -133,21 +132,23 @@ module ums{
             this.employeeExamAttendanceService.getEmpExamAttendanceInfo(this.selectedSemesterId,this.selectedExamTypeId).then((data)=>{
                 info=data;
                 this.empExamAttendantInfo=info;
-                console.log("*****List****");
-             console.log(this.empExamAttendantInfo);
             });
         }
          private getExamDates(){
              this.examRoutineArr={};
              this.examRoutineService.getExamRoutineDates(this.selectedSemesterId,this.selectedExamTypeId).then((examDateArr: any) =>{
+                 this.selectedExamDate="";
                  this.examRoutineArr={};
-                 this.examRoutineArr=examDateArr;
-             })
+                 if(examDateArr.length>0) {
+                     this.examRoutineArr = examDateArr;
+                     this.selectedExamDate = this.examRoutineArr[0].examDate;
+                 }else{
+                     this.notify.warn("No class Routine Found");
+                 }
+             });
          }
          private ExamDateChange(value:any){
              this.selectedExamDate=value;
-             this.isExamDateSelected=true;
-             this.isRightDivAvailable=false;
          }
          private changeEmployeeType(value:any){
              this.employeeTypeId=value.id;
@@ -174,16 +175,16 @@ module ums{
                  this.selectedSemesterId=this.semester.id;
                  this.activeSemesterId=this.semester.id;
                  this.semesterName=this.semester.name;
-             });
+             }).then((data)=>{
+                 this.getExamDates();
+             })
              this.hideInsertMode=this.selectedSemesterId==this.activeSemesterId ? true:false;
-             console.log(this.hideInsertMode)
          }
          private semesterChanged(val:any){
              this.selectedSemesterId=val.id;
              this.semesterName=val.name;
              this.isRightDivAvailable=false;
              this.hideInsertMode=this.selectedSemesterId==this.activeSemesterId ? true:false;
-             console.log(this.hideInsertMode);
              this.getExamDates();
          }
          private getEmployees(deptId:string){
@@ -193,11 +194,10 @@ module ums{
                  for(let i=0;i<this.employees.length;i++){
                      this.employees[i].employeeName=this.employees[i].employeeName+"("+this.employees[i].designationName+")";
                  }
-             })
+             });
              this.selectedEmployeeId=""
          }
          private employeeChanged(value:any){
-             console.log(value);
              this.selectedEmployeeId=value.id;
              this.selectedEmployeeName=value.employeeName;
              this.selectedEmployeeType=value.employeeType;
@@ -205,7 +205,7 @@ module ums{
          }
 
          private getClassRoomInfo(){
-             this.classRoomService.getClassRooms().then((data:Array<ClassRoom>)=>{
+             this.classRoomService.getClassRoomsForSeatPlan().then((data:Array<ClassRoom>)=>{
                  this.classRooms=data;
              });
          }
@@ -219,7 +219,6 @@ module ums{
          }
          private initializeDatePickers() {
              setTimeout(function () {
-                 $('.datepicker').datepicker('remove');
                  $('.datepicker-default').datepicker({
                      inputs: undefined,
                      todayHighlight:true,
@@ -229,9 +228,26 @@ module ums{
                  $('.datepicker-default').on('change', function () {
                  });
              }, 200);
+
          }
          private dateChanged(examDate: any) {
-             console.log(""+examDate);
+             let invigilator: string[] = [];
+             let reserve: string[] = [];
+             let counter=0;
+             if (this.empExamDate != "" || this.empReserveDate!=""){
+                 invigilator = this.empExamDate.split(",");
+             reserve = this.empReserveDate.split(",");
+             for (let i = 0; i < invigilator.length; i++) {
+                 for (let j = 0; j < reserve.length; j++) {
+                     if (reserve[j] == invigilator[i]) {
+                         counter++;
+                     }
+                 }
+             }
+             if(counter >0){
+                 this.notify.warn(counter+" duplicate Reserve date and Invigilator date found");
+             }
+         }
          }
          private deptChanged(deptId:any){
              this.isRightDivAvailable=false;
@@ -246,7 +262,7 @@ module ums{
          private save():void{
                     var json: any = this.convertToJson();
                     this.employeeExamAttendanceService.addEmpExamAttendanceInfo(json).then((data) => {
-                        if(data=="success" || data.equals("success")){
+                        if(data=="success"){
                             this.notify.success("Successfully Saved");
                         }
                         this.getData();
@@ -292,18 +308,15 @@ module ums{
              this.upEmpExamReserveDate=this. empExamAttendantInfoForDelete.reserveDate;
              this.isDeleteAvailable=true;
          }
-
          private delete():void{
                 var json = this.convertToJsonForDelete(this. empExamAttendantInfoForDelete);
                 this.employeeExamAttendanceService.deleteEmpExamAttendanceInfo(json).then((data) => {
-                    console.log(data);
                     this.notify.success("Successfully deleted");
                     this.getData();
                 });
          }
          private update():void{
              var up = this.convertToJsonForUpdate(this. empExamAttendantInfoForUpdate);
-             console.log(up);
             this.employeeExamAttendanceService.updateEmpExamAttendanceInfo(up).then((data)=>{
                 this.upEmpExamReserveDate="";
                 this.upEmpExamInvDate="";
@@ -314,7 +327,6 @@ module ums{
          }
          public  getClassRoomReport():void{
             this.employeeExamAttendanceService.getMemorandumReport(this.selectedSemesterId,this.selectedExamTypeId).then((data)=>{
-                console.log("Success");
             });
          }
          public getAttendantReport():void{
@@ -322,7 +334,6 @@ module ums{
                this.selectedSemesterId,
                this.selectedExamTypeId,
                this.selectedExamDate).then((data)=>{
-               console.log("Staff");
            });
          }
          public getEmployeeReport():void{
@@ -332,7 +343,6 @@ module ums{
               this.selectedExamDate,
               this.selectedDepartmentId
           ).then((data)=>{
-              console.log("Invigilator Employee");
           });
          }
          getReserveEmployeeReport():void{
@@ -342,13 +352,10 @@ module ums{
                  this.selectedExamDate,
                  this.selectedDepartmentId
              ).then((data)=>{
-                 console.log("Reserve Employee");
              });
          }
          private convertToJsonForDelete(result: IEmployeeExamAttendance): any {
              var completeJson = {};
-             console.log("result");
-             console.log(result);
              var jsonObj = [];
                  var item = {};
                      item["id"] = result.id.toString();
@@ -358,7 +365,6 @@ module ums{
          }
          public convertToJsonForUpdate(result: IEmployeeExamAttendance): any {
              var completeJson = {};
-             console.log("Update Json");
              var jsonObj = [];
              var item = {};
              item["id"] =result.id.toString();
@@ -375,7 +381,6 @@ module ums{
 
          public convertToJson(): any {
              var completeJson = {};
-             console.log("result");
              var jsonObj = [];
              var item = {};
              item["employeeId"] =this.selectedEmployeeId;
@@ -386,7 +391,6 @@ module ums{
              item["reserveDate"]=this.empReserveDate;
              jsonObj.push(item);
              completeJson["entries"] = jsonObj;
-             console.log(completeJson);
              return completeJson;
          }
     }

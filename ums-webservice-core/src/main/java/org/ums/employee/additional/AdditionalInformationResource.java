@@ -27,4 +27,11 @@ public class AdditionalInformationResource extends MutableAdditionalInformationR
       final @PathParam("employee-id") String pEmployeeId, final @Context Request pRequest) throws Exception {
     return mHelper.get(pEmployeeId, mUriInfo);
   }
+
+  @GET
+  @Path("/initial/{academic-initial}/deptId/{dept-id}")
+  public boolean validate(final @Context Request pRequest,
+      final @PathParam("academic-initial") String pAcademicInitial, final @PathParam("dept-id") String pDeptId) {
+    return mHelper.validateAcademicInitial(pAcademicInitial, pDeptId);
+  }
 }

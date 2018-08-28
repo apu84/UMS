@@ -35,6 +35,14 @@ public class PersistentAbsLateComingInfoDao extends AbsLateComingInfoDaoDecorato
       "select  SEMESTER_ID,EXAM_TYPE,PRESENT_TYPE,REMARKS,EMPLOYEE_ID,INVIGILATOR_ROOM_ID,to_char(EXAM_DATE,'DD-MM-YYYY') EXAM_DATE,ARRIVAL_TIME from DER_ABSENT_LATE_COMING_INFO WHERE  SEMESTER_ID=? AND EXAM_TYPE=? "
           + " AND EXAM_DATE = TO_DATE(?,'DD-MM-YYYY')";
   String DELETE_ALL = "DELETE FROM DER_ABSENT_LATE_COMING_INFO";
+  String SELECT_RECORDS =
+      "select  SEMESTER_ID,EXAM_TYPE,PRESENT_TYPE,REMARKS,EMPLOYEE_ID,INVIGILATOR_ROOM_ID,to_char(EXAM_DATE,'DD-MM-YYYY') EXAM_DATE,ARRIVAL_TIME "
+          + "from DER_ABSENT_LATE_COMING_INFO WHERE  SEMESTER_ID=? AND EXAM_TYPE=?";
+
+  @Override
+  public List<AbsLateComingInfo> getInfoBySemesterExamType(Integer pSemesterId, Integer pExamType) {
+    return mJdbcTemplate.query(SELECT_RECORDS, new Object[] {pSemesterId, pExamType}, new AbsLateComingRowMapper());
+  }
 
   @Override
   public List<AbsLateComingInfo> getAll() {

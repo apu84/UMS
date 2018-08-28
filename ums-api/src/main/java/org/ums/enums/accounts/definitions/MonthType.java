@@ -8,37 +8,43 @@ import java.util.Map;
  * Created by Monjur-E-Morshed on 04-Jan-18.
  */
 public enum MonthType {
-  JANUARY(1),
-  FEBRUARY(2),
-  MARCH(3),
-  APRIL(4),
-  MAY(5),
-  JUNE(6),
-  JULY(7),
-  AUGUST(8),
-  SEPTEMBER(9),
-  OCTOBER(10),
-  NOVEMBER(11),
-  DECEMBER(12);
+  JANUARY(1, "January"),
+  FEBRUARY(2, "February"),
+  MARCH(3, "March"),
+  APRIL(4, "April"),
+  MAY(5, "May"),
+  JUNE(6, "June"),
+  JULY(7, "July"),
+  AUGUST(8, "August"),
+  SEPTEMBER(9, "September"),
+  OCTOBER(10, "October"),
+  NOVEMBER(11, "November"),
+  DECEMBER(12, "December");
+  private String label;
+  private int id;
 
-  private static final Map<Integer, MonthType> Lookup = new HashMap<>();
+  private MonthType(int id, String label) {
+    this.id = id;
+    this.label = label;
+  }
+
+  private static final Map<Integer, MonthType> lookup = new HashMap<>();
 
   static {
-    for(MonthType m : EnumSet.allOf(MonthType.class))
-      Lookup.put(m.getValue(), m);
+    for(MonthType c : EnumSet.allOf(MonthType.class)) {
+      lookup.put(c.getId(), c);
+    }
   }
 
-  private Integer typeValue;
-
-  MonthType(Integer pTypeValue) {
-    typeValue = pTypeValue;
+  public static MonthType get(final int pId) {
+    return lookup.get(pId);
   }
 
-  public static MonthType get(final Integer pTypeValue) {
-    return Lookup.get(pTypeValue);
+  public String getLabel() {
+    return this.label;
   }
 
-  public Integer getValue() {
-    return this.typeValue;
+  public int getId() {
+    return this.id;
   }
 }

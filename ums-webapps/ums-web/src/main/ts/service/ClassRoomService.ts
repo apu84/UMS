@@ -83,6 +83,7 @@ module ums{
       this.httpClient.get("/ums-webservice-academic/academic/classroom/seatplan/semester/"+semesterId+"/examType/"+examType,'application/json',
           (json:any,etag:string)=>{
             rooms = json.entries;
+            console.log(rooms);
             defer.resolve(rooms);
           },
           (response:ng.IHttpPromiseCallbackArg<any>)=>{

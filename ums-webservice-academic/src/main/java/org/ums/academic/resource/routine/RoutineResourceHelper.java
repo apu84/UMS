@@ -184,7 +184,7 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
   }
 
   public JsonArray getRoutine(final Integer pSemesterId, final String pCourseId, final UriInfo pUriInfo) {
-    List<Routine> routineList = getContentManager().getRoutine(pSemesterId, pCourseId);
+    List<Routine> routineList = getContentManager().getRoutineBySemesterAndCourse(pSemesterId, pCourseId);
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -210,7 +210,7 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
   public JsonObject getRoutineForTeacher(final String pEmployeeId, final UriInfo pUriInfo) {
     String employeeId = pEmployeeId;
     // Employee employee = mEmployeeManager.getByEmployeeId(employeeId);
-    List<Routine> routines = getContentManager().getTeacherRoutine(employeeId);
+    List<Routine> routines = getContentManager().getRoutineByTeacher(employeeId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -221,6 +221,24 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
+  }
+
+  private JsonObject createRoutineJsonObjectList(UriInfo pUriInfo, List<Routine> pRoutines) {
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(Routine routine : pRoutines) {
+      children.add(toJson(routine, pUriInfo, localCache));
+    }
+
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+  public JsonObject getRoomBasedRoutine(final int pSemesterId, final int pRoomId, final UriInfo pUriInfo) {
+    List<Routine> routineList = getContentManager().getRoutineBySemesterAndRoom(pSemesterId, pRoomId);
+    return createRoutineJsonObjectList(pUriInfo, routineList);
   }
 
   public void getRoomBasedRoutineReport(final OutputStream pOutputStream, final int pSemesterId, final int pRoomId)
@@ -239,7 +257,7 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
 
     try {
       routines = getContentManager()
-          .getStudentRoutine(student)
+          .getRoutineByStudent(student)
           .stream()
           .filter((r)->r.getSection().equals(student.getTheorySection() )|| r.getSection().equals(student.getSessionalSection()))
           .collect(Collectors.toList());
@@ -260,7 +278,8 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
   public JsonArray getRoutine(final int semesterId, final int pProgramId, final int pAcademicYear,
       final int pAcademicSemester, final String pSection, final UriInfo pUriInfo) {
     List<Routine> routineList =
-        getContentManager().getRoutine(semesterId, pProgramId, pAcademicYear, pAcademicSemester, pSection);
+        getContentManager().getRoutineBySemesterProgramIdYearSemesterAndSection(semesterId, pProgramId, pAcademicYear,
+            pAcademicSemester, pSection);
     JsonArrayBuilder routineJsonArrayBuilder = Json.createArrayBuilder();
     for(Routine routine : routineList) {
       LocalCache localCache = new LocalCache();

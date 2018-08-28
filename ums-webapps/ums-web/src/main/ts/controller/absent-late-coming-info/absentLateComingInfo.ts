@@ -33,6 +33,7 @@ module ums{
         public selectedClassRoomId:number;
         public selectedEmployeeId:string;
         public arrivalTime: string;
+        public arrivalTimeObj: Date;
         public amPmValue:string;
         public isArrivalTimeEligible:boolean;
         public isArrivalTimeEligibleForFilter:boolean;
@@ -77,9 +78,6 @@ module ums{
                     private absLateComingService:AbsLateComingService,
                     private $stateParams: any) {
             this.stateParams = $stateParams;
-            console.log("----State Params in Abs/Late Coming View---");
-            console.log($stateParams);
-            console.log("semesterId: "+this.stateParams.semesterId+"\nexamType: "+this.stateParams.examType+"\nexamDate: "+this.stateParams.examDate);
             this.examTypeList=[];
             this.examTypeList=this.appConstants.examType;
             this.examType=this.examTypeList[0];
@@ -93,9 +91,8 @@ module ums{
             this.remarks="Informed";
             this.deptList = [];
             this.deptList = this.appConstants.departmentOffice;
-            console.log("--->"+this.selectedDepartmentId)
             this.selectedExamDate="";
-            this.arrivalTime="";
+            this.arrivalTimeObj = new Date();
             this.amPmList = [];
             this.amPmList = this.appConstants.amPmType;
             this.amPm=this.amPmList[0];
@@ -104,7 +101,6 @@ module ums{
             this.absent=1;
             this.isSubmitEligible=true;
             this.selectedClassRoomId=0;
-            this.getEmployees(this.selectedDepartmentId);
             //---views
             this.isInsertAvailable=false;
             this.absPreStatusListForFilter=[];
@@ -124,9 +120,9 @@ module ums{
             this.initializeDatePickers();
             this.getClassRoomInfo();
             this.getExamDatesForFilter();
+            this.getData();
         }
         private enableInsert(){
-            console.log("AbsLate Come Insert View");
             this.isInsertAvailable=true;
         }
         private hideInsert():void{
@@ -139,52 +135,46 @@ module ums{
             }
         }
         private ExamDateChangeForFilter(value:any){
-            console.log("Filter Exam date"+value);
+
         }
         private getExamDatesForFilter(){
             this.examRoutineArrForFilter=null;
             this.examRoutineService.getExamRoutineDates(this.stateParams.semesterId,this.stateParams.examType).then((examDateArr: any) =>{
                 this.examRoutineArrForFilter={};
-                console.log("****Exam Dates ForFilter***");
                 this.examRoutineArrForFilter=examDateArr;
-                console.log(this.examRoutineArrForFilter);
             })
         }
         private deptChangedForFilter(deptId:any){
             try {
                 this.selectedDepartmentIdForFilter=deptId.id;
-                console.log("Filter DeptID: "+this.selectedDepartmentIdForFilter);
             }catch(e) {
-                console.log("**Inside Catch***");
                 this.selectedDepartmentIdForFilter="";
             }
         }
         private changeAbsPreStatusForFilter(value:any) {
-            console.log("Filter"+value);
             this.selectedAbsPreStatusIdForFilter = value.id;
             this.selectedAbsPreStatusName=value.name;
-            this.arrivalTime="";
             this.isArrivalTimeEligibleForFilter= this.selectedAbsPreStatusIdForFilter ==this.absent ? false:true;
             this.unSelectAll();
         }
-        private changeStatus(val:any){
-            console.log(val);
-            this.amPmValue=val.name;
-        }
+
         private getEmployees(deptId:string){
             this.employeeService.getAll().then((data:Array<Employee>)=>{
-                console.log("***emp info***");
                 this.employees=data;
                 this.employees=this.employees.filter((a)=>a.deptOfficeId==deptId && a.status==1);
                 for(let i=0;i<this.employees.length;i++){
                     this.employees[i].employeeName=this.employees[i].employeeName+"("+this.employees[i].designationName+")";
                 }
-                console.log(this.employees);
-            })
+            });
             this.selectedEmployeeId=""
         }
+
+        public assignArrivalTime():string{
+            this.arrivalTime = moment(this.arrivalTimeObj).format("hh:mm A").toString();
+            console.log("inside method:"+this.arrivalTime.toString());
+            return this.arrivalTime.toString();
+        }
         private employeeChanged(value:any){
-            console.log(value);
             this.selectedEmployeeId=value.id;
             this.selectedEmployeeName=value.employeeName;
             this.selectedEmployeeType=value.employeeType;
@@ -207,9 +197,7 @@ module ums{
 
         private getClassRoomInfo(){
             this.classRoomService.getClassRooms().then((data:Array<ClassRoom>)=>{
-               console.log("Class Room Info");
                this.classRooms=data;
-               console.log(this.classRooms);
             });
         }
         public classRoomChanged(value:any){
@@ -218,15 +206,6 @@ module ums{
                 this.selectedClassRoomNo = value.roomNo;
             }catch (e){
                 this.selectedClassRoomId=null;
-            }
-
-            console.log("**"+this.selectedClassRoomId);
-        }
-        private dateChanged(arrivalTime: any) {
-            this.arrivalTime=arrivalTime;
-            console.log("Arrival Time: "+arrivalTime);
-            if(arrivalTime===undefined){
-                console.log("undefinded");
             }
         }
         private initializeDatePickers() {
@@ -238,50 +217,46 @@ module ums{
             }, 200);
         }
         private getExamDates(){
-            let examTypeId=this.selectedExamTypeId == ExamType.REGULAR ? ExamType.REGULAR:ExamType.CARRY_CLEARANCE_IMPROVEMENT;
-            console.log("examTypeId: "+examTypeId);
-            this.examRoutineArr=null;
-            this.examRoutineService.getExamRoutineDates(11012017,examTypeId).then((examDateArr: any) =>{
+            this.examRoutineArr={};
+            this.examRoutineService.getExamRoutineDates(this.stateParams.semesterId,this.stateParams.examType).then((examDateArr: any) =>{
+                this.selectedExamDate="";
                 this.examRoutineArr={};
-                console.log("****Exam Dates***");
-                this.examRoutineArr=examDateArr;
-                console.log(this.examRoutineArr);
-            })
+                if(examDateArr.length>0) {
+                    this.examRoutineArr = examDateArr;
+                    this.selectedExamDate = this.examRoutineArr[0].examDate;
+                }else{
+                    this.notify.warn("No class Routine Found");
+                }
+            });
         }
         private deptChanged(deptId:any){
             try{
                 this.selectedDepartmentId=deptId.id;
-                console.log("id: "+this.selectedDepartmentId);
+                this.selectedEmployeeName="";
+                this.selectedEmployeeType="";
+                this.selectedDeptName="";
+                this.selectedEmployeeName="";
                 this.getEmployees(this.selectedDepartmentId);
             }catch (e){
                 this.selectedDepartmentId="";
                 this.getEmployees(this.selectedDepartmentId);
             }
-
-
         }
         private changeExamType(value:any){
-            console.log(value.id+"  "+value.name);
             this.selectedExamTypeId=value.id;
             this.selectedExamTypeName=value.name;
             this.getExamDates();
-
         }
         private changeAbsPreStatus(value:any) {
-            console.log(value.id + "  " + value.name);
             this.selectedAbsPreStatusId = value.id;
             this.selectedAbsPreStatusName=value.name;
-            this.arrivalTime="";
+            this.arrivalTime=this.assignArrivalTime();
            this.isArrivalTimeEligible= this.selectedAbsPreStatusId ==this.absent ? false:true;
         }
-
-
 
         private getSemesters():void{
             this.semesterService.fetchSemesters(11,5).then((semesters:Array<Semester>)=>{
                 this.semesters=semesters;
-                console.log("Semester's");
-                console.log(this.semesters);
                 for(var i=0;i<semesters.length;i++){
                     if(semesters[i].status==1){
                         this.semester = semesters[i];
@@ -291,24 +266,18 @@ module ums{
                 }
                 this.selectedSemesterId=this.semester.id;
                 this.semesterName=this.semester.name;
-                console.log("Selected_Id: "+this.selectedSemesterId);
-                console.log("Active_Semester_Id: "+this.activeSemesterId);
                 this.hideInsertMode=this.activeSemesterId==this.stateParams.semesterId ? true:false;
                 this.showDeleteColumn=this.activeSemesterId==this.stateParams.semesterId ? true:false;
+            }).then((data)=>{
                 this.getExamDates();
-            });
+            })
         }
         private ExamDateChange(value:any){
             this.selectedExamDate=value;
-            console.log("Exam Date: "+this.selectedExamDate);
-
         }
         private save():void{
          var json:any=this.convertToJson();
-         console.log("Helooooooo");
          this.absLateComingService.addAbsLateComingInfo(json).then((data)=>{
-            console.log(data);
-            console.log("Load New List");
              this.getData();
          });
         }
@@ -331,27 +300,17 @@ module ums{
             }else {
                 this.isSubmitEligible=true;
             }
-
-            if(this.isArrivalTimeEligible){
-                if(this.arrivalTime=="" || this.arrivalTime==null){
-                    this.isSubmitEligible=false;
-                    this.notify.warn("Select ArrivalTime");
-                }else{
-                    this.isSubmitEligible=true;
-                }
-            }
-        }
-        private doSomething():void{
-            this.getData();
+           console.log("Submit Eligible: "+this.isSubmitEligible);
         }
         private getData():void{
             var reg:Array<IAbsLateComeInfo>=[];
             this.absLateComingService.getAbsLateComeInfo(this.stateParams.semesterId,this.stateParams.examType).then((data)=>{
                 reg=data;
                 this.absLateComeInfo=reg;
-                console.log("*********");
-                console.log(this.absLateComeInfo);
-            })
+                console.log("Data");
+                console.log(data);
+            });
+
         }
         private checkMoreThanOneSelectionSubmit(result:any) {
             if(result.apply){
@@ -362,9 +321,6 @@ module ums{
                 this.checkBoxCounter--;
                 this.enableOrDisableSubmitButton();
             }
-
-            console.log("value:"+this.submit_Button_Disable);
-
         }
         private enableOrDisableSubmitButton(): void{
             if( this.checkBoxCounter > 0){
@@ -377,16 +333,12 @@ module ums{
             var json= this.convertToJsonForDelete(this.absLateComeInfo);
             this.absLateComingService.deleteAbsLateComeInfo(json).then((data)=>{
                 this.getData();
-                console.log(data);
             });
             this.checkBoxCounter=0;
             this.submit_Button_Disable=true;
-            console.log("Rumi");
         }
         private convertToJsonForDelete(result: Array<IAbsLateComeInfo>): any {
             var completeJson = {};
-            console.log("result");
-            console.log(result);
             var jsonObj = [];
             for (var i = 0; i < result.length; i++) {
                 var item = {};
@@ -399,12 +351,10 @@ module ums{
                 }
             }
             completeJson["entries"] = jsonObj;
-            console.log(completeJson);
             return completeJson;
         }
         public convertToJson(): any {
             var completeJson = {};
-            console.log("result");
             var jsonObj = [];
             var item = {};
             item["employeeId"] =this.selectedEmployeeId;
@@ -413,10 +363,9 @@ module ums{
             item["remarks"]=this.remarks;
             item["invigilatorRoomId"]=this.selectedClassRoomId==null? "0":this.selectedClassRoomId.toString();
             item["examDate"]=this.selectedExamDate;
-            item["arrivalTime"]=(this.arrivalTime==undefined || this.arrivalTime=="") ? 'null':this.arrivalTime+" "+this.amPmValue;
+            item["arrivalTime"]=(this.arrivalTime==undefined || this.arrivalTime==null) ? 'null':this.arrivalTime;
             jsonObj.push(item);
             completeJson["entries"] = jsonObj;
-            console.log(completeJson);
             return completeJson;
         }
     }

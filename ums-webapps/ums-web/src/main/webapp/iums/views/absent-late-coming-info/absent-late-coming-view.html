@@ -5,6 +5,7 @@
                     <div class="col-md-4 form-group">
                         <select
                                 class="form-control required"
+                                style="width: 70%"
                                 data-ng-options="absPreStatus.name for absPreStatus in vm.absPreStatusListForFilter track by absPreStatus.id"
                                 data-ng-model="vm.absPreStatusForFilter"
                                 data-ng-change="vm.changeAbsPreStatusForFilter(vm.absPreStatusForFilter)"

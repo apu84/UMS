@@ -10,6 +10,7 @@ import org.ums.domain.model.dto.ExamRoutineDto;
 import org.ums.domain.model.immutable.AbsLateComingInfo;
 import org.ums.domain.model.mutable.MutableAbsLateComingInfo;
 import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.enums.ProgramType;
 import org.ums.enums.common.EmployeeType;
 import org.ums.manager.*;
 import org.ums.persistent.dao.PersistentAbsLateComingInfo;
@@ -54,7 +55,7 @@ public class AbsLateComingInfoResourceHelper extends ResourceHelper<AbsLateComin
     LocalCache localCache = new LocalCache();
     JsonObject jsonObject = entries.getJsonObject(0);
     PersistentAbsLateComingInfo application = new PersistentAbsLateComingInfo();
-    application.setSemesterId(11012017);
+    application.setSemesterId(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
     getBuilder().build(application, jsonObject, localCache);
     try {
       mManager.create(application);
@@ -86,11 +87,11 @@ public class AbsLateComingInfoResourceHelper extends ResourceHelper<AbsLateComin
   }
 
   public JsonObject getAbsLateComeInfoList(final Integer pSemesterId, final Integer pExamType, final Request pRequest,
-                                     final UriInfo pUriInfo) {
-    List<AbsLateComingInfo> absLateComingInfoList=mManager.getAll().stream().filter(a->a.getExamType()==pExamType && a.getSemesterId().equals(pSemesterId)).collect(Collectors.toList());
-    List<MutableAbsLateComingInfo> list=new ArrayList<>();
-    for(AbsLateComingInfo app:absLateComingInfoList){
-      MutableAbsLateComingInfo mutableAbsLateComingInfo= new PersistentAbsLateComingInfo();
+      final UriInfo pUriInfo) {
+    List<AbsLateComingInfo> absLateComingInfoList = mManager.getInfoBySemesterExamType(pSemesterId, pExamType);
+    List<MutableAbsLateComingInfo> list = new ArrayList<>();
+    for(AbsLateComingInfo app : absLateComingInfoList) {
+      MutableAbsLateComingInfo mutableAbsLateComingInfo = new PersistentAbsLateComingInfo();
       mutableAbsLateComingInfo.setEmployeeId(app.getEmployeeId());
       mutableAbsLateComingInfo.setEmployeeName(mPersonalInformationManager.get(app.getEmployeeId()).getName());
       mutableAbsLateComingInfo.setSemesterId(app.getSemesterId());
@@ -104,7 +105,8 @@ public class AbsLateComingInfoResourceHelper extends ResourceHelper<AbsLateComin
       mutableAbsLateComingInfo.setArrivalTime(app.getArrivalTime());
       mutableAbsLateComingInfo.setDeptId(mEmployeeManager.get(app.getEmployeeId()).getDepartment().getId());
       mutableAbsLateComingInfo.setDeptName(mEmployeeManager.get(app.getEmployeeId()).getDepartment().getShortName());
-      mutableAbsLateComingInfo.setEmployeeType(EmployeeType.get(mEmployeeManager.get(app.getEmployeeId()).getEmployeeType()).getLabel());
+      mutableAbsLateComingInfo.setEmployeeType(EmployeeType.get(
+          mEmployeeManager.get(app.getEmployeeId()).getEmployeeType()).getLabel());
       list.add(mutableAbsLateComingInfo);
     }
     JsonObjectBuilder object = Json.createObjectBuilder();

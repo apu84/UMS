@@ -50,6 +50,12 @@ public class PersistentAdditionalInformationDao extends AdditionalInformationDao
     return mJdbcTemplate.queryForObject(query, new Object[] {pEmployeeId}, Boolean.class);
   }
 
+  @Override
+  public boolean hasDuplicate(String pShortName, String pDeptId) {
+    String query = EXISTS_ONE + " WHERE ACADEMIC_INITIAL = ? AND EMPLOYEE_ID LIKE '" + pDeptId + "____'";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pShortName}, Boolean.class);
+  }
+
   class RoleRowMapper implements RowMapper<AdditionalInformation> {
 
     @Override

@@ -52,132 +52,238 @@
         border-bottom: 5px solid #488C6C !important;
     }
 </style>
-<div id="page-user-profile" class="row">
-    <div class="col-md-12">
-        <div class="row">
-            <div class="col-md-3">
+<div class="row" >
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
+    </div>
+    <div class="panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select </h3>
+        </div>
+        <div class="panel-body pan">
+            <form action="" class="form-horizontal" >
+                <div class="form-body pal">
+                    <div class="form-group" data-ng-show="false">
+                        <label class="col-md-4 control-label">Dept./School</label>
 
-                <div class="panel panel-green">
-                    <div class="panel-heading portlet-pink">
-                        <h3 class="panel-title">Select</h3>
-                    </div>
-                    <div class="panel-body pan">
-                        <form action="" class="form-horizontal" >
-                            <div class="form-body pal">
-                                <div class="form-group" data-ng-show="false">
-                                    <label class="col-md-4 control-label">Dept./School</label>
-
-                                    <div class="col-md-8">
-                                        <select class="form-control" id="deptId" data-ng-model="optional.deptId" data-ng-change="loadPrograms()" data-convert-to-number>
-                                            <option data-ng-repeat="department in optional.depts" value="{{department.id}}">{{department.name}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label">Program</label>
-                                    <div class="col-md-8">
-                                        <select class="form-control" id="programId" data-ng-model="optional.programId" data-convert-to-number>
-                                            <option data-ng-repeat="program in optional.programs" value="{{program.id}}">{{program.shortName}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label">Semester</label>
-                                    <div class="col-md-8">
-                                        <select  class="form-control required" name="semester" data-ng-model="optional.semesterId" data-convert-to-number >
-                                            <option data-ng-repeat="semester in optional.semesters" value="{{semester.id}}">{{semester.name}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label">Y-S</label>
-                                    <div class="col-md-8">
-                                        <select  class="form-control required" name="yearSemester" data-ng-model="optional.yearSemester" >
-                                            <option data-ng-repeat="semester in optional.yearSemesters" value="{{semester.id}}">{{semester.name}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        <div class="form-actions text-right pal">
-                            <button type="button" class="btn btn-success"  data-ng-click="showCourses()">Search</button>
+                        <div class="col-md-8">
+                            <select class="form-control" id="deptId" data-ng-model="optional.deptId" data-ng-change="loadPrograms()" data-convert-to-number>
+                                <option data-ng-repeat="department in optional.depts" value="{{department.id}}">{{department.name}}</option>
+                            </select>
                         </div>
-                        </form>
                     </div>
 
-                </div>
-
-                <div class="panel panel-default portlet-pink">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Semester Summary(<b>CrHr</b>)</h3>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Program</label>
+                        <div class="col-md-8">
+                            <select class="form-control" id="programId" data-ng-model="optional.programId" data-convert-to-number>
+                                <option data-ng-repeat="program in optional.programs" value="{{program.id}}">{{program.shortName}}</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="panel-body shadowPanel">
-                        <table class="table table-striped table-hover">
-                            <tbody>
-                            <tr>
-                                <td width="50%">Semester Total</td>
-                                <td><span class="badge badge-pink pull-right" style="font-weight: bold;">{{CrHr.totalCrHr}}</span></td>
-                            </tr>
-                            <tr>
-                                <td width="50%">Optional Total</td>
-                                <td><span class="badge badge-blue pull-right">{{CrHr.optionalCrHr}}</span></td>
-                            </tr>
-                            <tr>
-                                <td width="50%">Opt. Theory Total</td>
-                                <td><span class="badge badge-yellow pull-right">{{CrHr.optionalTheoryCrHr}}</span></td>
-                            </tr>
-                            <tr>
-                                <td width="50%">Opt. Sessional Total</td>
-                                <td><span class="badge badge-yellow  pull-right">{{CrHr.optionalSessionalCrHr}}</span></td>
-                            </tr>
-                            </tbody>
-                        </table>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Semester</label>
+                        <div class="col-md-8">
+                            <select  class="form-control required" name="semester" data-ng-model="optional.semesterId" data-convert-to-number >
+                                <option  value="11022017">Fall 2017</option>
+                                <option data-ng-repeat="semester in optional.semesters" value="{{semester.id}}">{{semester.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Y-S</label>
+                        <div class="col-md-8">
+                            <select  class="form-control required" name="yearSemester" data-ng-model="optional.yearSemester" >
+                                <option data-ng-repeat="semester in optional.yearSemesters" value="{{semester.id}}">{{semester.name}}</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" class="btn btn-success"  data-ng-click="showCourses()">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="rightDiv">
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-12"  style="font-size: 13px;font-family: 'Times New Roman'">
+                        <ul data-ui-tab="" class="nav nav-tabs ul-edit responsive">
+                            <li class="active">
+                                <a href="#tab-optCourses" data-toggle="tab"><i class="fa fa-book"></i>&nbsp;Optional Courses</a>
+                            </li>
+                            <li>
+                                <a href="#tab-allStudent" data-toggle="tab"><i class="fa fa-users"></i>&nbsp;All Student</a>
+                            </li>
+                            <li>
+                                <a href="#tab-singleStudent" data-toggle="tab"><i class="fa fa-user"></i>&nbsp;Single
+                                    Student</a>
+                            </li>
+                            <li>
+                                <a href="#tab-shiftApplication" data-toggle="tab"><i class="fa fa-random"></i>&nbsp;Shift
+                                    Application</a>
+                            </li>
+                            <li>
+                                <a href="#tab-section" data-toggle="tab"><i class="fa fa-puzzle-piece"></i>&nbsp;Section</a>
+                            </li>
+                            <li>
+                                <a href="#tab-Semester-Summary" data-toggle="tab"><i class="fa fa-puzzle-piece"></i>&nbsp;Semester Summary</a>
+                            </li>
+                            <li>
+                                <a href="#tab-Application-Statistics" data-toggle="tab"><i class="fa fa-puzzle-piece"></i>&nbsp;Application Statistics</a>
+                            </li>
 
-                <div class="panel panel-default ">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Application Statistics</h3>
-                    </div>
-                    <div class="panel-body shadowPanel">
-                        <table class="table table-striped table-hover">
-                            <tbody>
-                            <tr ng-repeat="stat in optional.statistics">
-                                <td width="50%" style="font-weight: bold;">{{stat.courseNumber}}</td>
-                                <td><span class="badge badge-warning pull-right">{{stat.totalApplied}}</span></td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        </ul>
                     </div>
                 </div>
-
             </div>
-            <div class="col-md-9">
-                <ul data-ui-tab="" class="nav nav-tabs ul-edit responsive">
-                    <li class="active">
-                        <a href="#tab-optCourses" data-toggle="tab"><i class="fa fa-book"></i>&nbsp;Optional Courses</a>
-                    </li>
-                    <li>
-                        <a href="#tab-allStudent" data-toggle="tab"><i class="fa fa-users"></i>&nbsp;All Student</a>
-                    </li>
-                    <li>
-                        <a href="#tab-singleStudent" data-toggle="tab"><i class="fa fa-user"></i>&nbsp;Single
-                            Student</a>
-                    </li>
-                    <li>
-                        <a href="#tab-shiftApplication" data-toggle="tab"><i class="fa fa-random"></i>&nbsp;Shift
-                            Application</a>
-                    </li>
-                    <li>
-                        <a href="#tab-section" data-toggle="tab"><i class="fa fa-puzzle-piece"></i>&nbsp;Section</a>
-                    </li>
-
-                </ul>
-
+            <div class="panel-body">
                 <div id="generalTabContent" class="tab-content shadowPanel">
+                    <div id="tab-Semester-Summary" class="tab-pane fade">
+                        <div class="panel panel-default portlet-pink">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Semester Summary(<b>CrHr</b>)</h3>
+                            </div>
+                            <div class="panel-body shadowPanel">
+                                <table class="table table-striped table-hover">
+                                    <tbody align="left">
+                                    <tr>
+                                        <td >Semester Total</td>
+                                        <td align="center"><span class="badge badge-pink pull-right" style="font-weight: bold;">{{CrHr.totalCrHr}}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td >Optional Total</td>
+                                        <td><span class="badge badge-blue pull-right">{{CrHr.optionalCrHr}}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td >Opt. Theory Total</td>
+                                        <td><span class="badge badge-yellow pull-right">{{CrHr.optionalTheoryCrHr}}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td >Opt. Sessional Total</td>
+                                        <td><span class="badge badge-yellow  pull-right">{{CrHr.optionalSessionalCrHr}}</span></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="tab-Application-Statistics" class="tab-pane fade">
+                        <div class="panel panel-default ">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Application Statistics</h3>
+                            </div>
+                            <div class="panel-body shadowPanel">
+                                <table class="table table-striped table-hover">
+                                    <tbody>
+                                    <tr ng-repeat="stat in optional.statistics">
+                                        <td width="50%" style="font-weight: bold;">{{stat.courseNumber}}</td>
+                                        <td><span class="badge badge-warning pull-right">{{stat.totalApplied}}</span></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                     <div id="tab-optCourses" class="tab-pane fade in active">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <fieldset class="scheduler-border">
+                                    <legend class="scheduler-border">Selected Optional Courses For Application</legend>
+                                    <div class="control-group">
+                                        <table width="100%">
+                                            <tr data-ng-repeat="course in optional.optionalCourses" data-ng-if="$index % 1 == 0" >
+                                                <td ng-repeat="course in optional.optionalCourses.slice($index, $index + 1)" style="vertical-align: top">
+                                                    <div>
+                                                        <div>
+                                                            <div class="row">
+                                                            <div class="col-md-12" style="background-color: lightgrey">
+                                                                <span  class="badge badge-success pull-left"><b>{{course.groupId==11?'Elective One':course.groupId}}</b></span>
+                                                            </div>
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-hover table-condensed">
+                                                            <thead>
+                                                            <tr>
+                                                                <th width="1%">#</th>
+                                                                <th width="50%">Course Details</th>
+                                                                <th width="2%">Course Type</th>
+                                                                <th width="2%" style="text-align: center">Call For<br/> Application</th>
+                                                                <th width="2%" style="text-align: center">Approved</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr data-ng-repeat="app in course.courses">
+                                                                <td>{{$index + 1}}</td>
+                                                                <td>{{app.title}}
+                                                                    <b>&nbsp;&nbsp;&nbsp;{{"  ("+app.no+")  "}}&nbsp;&nbsp;&nbsp;</b>
+                                                                    <span  class="badge badge-warning pull-right"><b>{{"CrHr: "+app.crHr}}</b></span>
+                                                                </td>
+                                                                <td align="center"><span class="label label-sm label-success">{{app.courseType}}</span></td>
+                                                                <td style="text-align: center">
+                                                                    <input tabindex="13" type="checkbox" ng-model="app.application"
+                                                                           data-ng-change="applicationSelectionChange($index,app)"/>&nbsp;&nbsp;
+                                                                </td>
+                                                                <td style="text-align: right">
+                                                                    <input tabindex="13" type="checkbox" ng-model="app.approved"
+                                                                           data-ng-change="approvedSelectionChange($index,app)" />&nbsp;&nbsp;
+                                                                    {{approved}}
+                                                                </td>
+                                                            </tr>
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-6">
+                                <fieldset class="scheduler-border">
+                                    <legend class="scheduler-border">Call for Application</legend>
+                                    <div class="control-group">
+                                        <table class="table table-hover table-condensed">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Course No</th>
+                                                <th>Course Title</th>
+                                                <th>CrHr</th>
+                                                <th>Course Type</th>
+                                                <th style="text-align: center;">Total Applied</th>
+                                                <th style="text-align: center;">Cancel</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="course in optional.applicationCourses">
+                                                <td>{{$index + 1}}</td>
+                                                <td>{{course.no}}</td>
+                                                <td>{{course.title}}</td>
+                                                <td>{{course.crhr}}</td>
+                                                <td><span class="label label-sm label-success">{{course.type}}</span></td>
+                                                <td align="center"><a data-ng-click="showAppliedStudents()"><span
+                                                        class="badge badge-warning">{{course.totalApplied}}</span></a></td>
+                                                <td style="text-align: center;">
+                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                                       data-ng-click="removeApplicationCourse(course)">
+                                                        <i class="fa fa-times" style="color: red;"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                        </div>
                         <fieldset class="scheduler-border">
                             <legend class="scheduler-border">Approved Optional Courses</legend>
                             <div class="control-group">
@@ -211,80 +317,6 @@
                             </div>
                         </fieldset>
 
-                        <fieldset class="scheduler-border">
-                            <legend class="scheduler-border">Call for Application</legend>
-                            <div class="control-group">
-                                <table class="table table-hover table-condensed">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Course No</th>
-                                        <th>Course Title</th>
-                                        <th>CrHr</th>
-                                        <th>Course Type</th>
-                                        <th style="text-align: center;">Total Applied</th>
-                                        <th style="text-align: center;">Cancel</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr ng-repeat="course in optional.applicationCourses">
-                                        <td>{{$index + 1}}</td>
-                                        <td>{{course.no}}</td>
-                                        <td>{{course.title}}</td>
-                                        <td>{{course.crhr}}</td>
-                                        <td><span class="label label-sm label-success">{{course.type}}</span></td>
-                                        <td align="center"><a data-ng-click="showAppliedStudents()"><span
-                                                class="badge badge-warning">{{course.totalApplied}}</span></a></td>
-                                        <td style="text-align: center;">
-                                            <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                               data-ng-click="removeApplicationCourse(course)">
-                                                <i class="fa fa-times" style="color: red;"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </fieldset>
-
-                        <fieldset class="scheduler-border">
-                            <legend class="scheduler-border">Selected Optional Courses For Application</legend>
-                            <div class="control-group">
-                                <table class="table table-hover table-condensed">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Course Id</th>
-                                        <th>Course Title</th>
-                                        <th>CrHr</th>
-                                        <th>Course Type</th>
-                                        <th style="text-align: center">Call For<br/> Application</th>
-                                        <th style="text-align: center">Approved</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr ng-repeat="course in optional.optionalCourses"
-                                        style="background-color: {{course.bgColor}}">
-                                        <td>{{$index + 1}}</td>
-                                        <td>{{course.no}}</td>
-                                        <td>{{course.title}}</td>
-                                        <td>{{course.crhr}}</td>
-                                        <td><span class="label label-sm label-success">{{course.type}}</span></td>
-                                        <td style="text-align: center">
-                                            <input tabindex="13" type="checkbox" ng-model="course.application"
-                                                   data-ng-change="applicationSelectionChange({{$index}},course)"/>&nbsp;&nbsp;
-                                        </td>
-                                        <td style="text-align: center">
-                                            <input tabindex="13" type="checkbox" ng-model="course.approved"
-                                                   data-ng-change="approvedSelectionChange({{$index}},course)"/>&nbsp;&nbsp;
-                                            {{approved}}
-                                        </td>
-                                    </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </fieldset>
                         <a href="javascript:;" class="btn btn-xs btn-default"
                            data-ng-click="saveCourses()" style="margin-top: 20px;">
                             &nbsp;&nbsp;Save All &nbsp;
@@ -319,24 +351,24 @@
 
                         <table class="table table-striped table-hover">
                             <thead data-ng-show="optional.applicationStudents.length>0">
-                                <th>Student Id</th>
-                                <th>Student Name</th>
-                                <th>Status</th>
-                                <th style="text-align: center;">Action</th>
-                                <th style="text-align: center;">Clear</th>
+                            <th>Student Id</th>
+                            <th>Student Name</th>
+                            <th>Status</th>
+                            <th style="text-align: center;">Action</th>
+                            <th style="text-align: center;">Clear</th>
                             </thead>
                             <tbody>
-                            <tr <tr ng-repeat="student in optional.applicationStudents">
+                            <tr ng-repeat="student in optional.applicationStudents">
                                 <td width="15%"><a href="javascript:void(0)" ng-click="showApplicationForStudent(student)" style="font-weight: bold;">{{ ::student.studentId}}</a></td>
                                 <td width="45%">{{ ::student.studentName}}</td>
 
                                 <td width="15%">
-                                        <div ng-switch on="student.statusLabel">
-                                            <button  ng-switch-when="Applied" class="btn btn-default btn-outlined" type="button" style="padding: 0 5px;">{{ ::student.statusLabel}} </button>
-                                            <button  ng-switch-when="Approved" class="btn btn-success btn-outlined" type="button" style="padding: 0 5px;">{{ ::student.statusLabel}} </button>
-                                            <button  ng-switch-when="Rejected" class="btn btn-primary btn-outlined" type="button" style="padding: 0 5px;">{{ ::student.statusLabel}} </button>
-                                            <button  ng-switch-when="Rejected and Shifted" class="btn btn-info btn-outlined" type="button" style="padding: 0 5px;">{{ ::student.statusLabel}} </button>
-                                        </div>
+                                    <div ng-switch on="student.statusLabel">
+                                        <button  ng-switch-when="Applied" class="btn btn-default btn-outlined" type="button" style="padding: 0 5px;">{{ ::student.statusLabel}} </button>
+                                        <button  ng-switch-when="Approved" class="btn btn-success btn-outlined" type="button" style="padding: 0 5px;">{{ ::student.statusLabel}} </button>
+                                        <button  ng-switch-when="Rejected" class="btn btn-primary btn-outlined" type="button" style="padding: 0 5px;">{{ ::student.statusLabel}} </button>
+                                        <button  ng-switch-when="Rejected and Shifted" class="btn btn-info btn-outlined" type="button" style="padding: 0 5px;">{{ ::student.statusLabel}} </button>
+                                    </div>
                                 </td>
                                 <td width="15%" style="text-align: right;padding-right: 20px;">
                                     <div ng-switch on="student.statusLabel">
@@ -395,7 +427,7 @@
                                 <a href="javascript:;" class="btn btn-xs btn-default"
                                    data-ng-click="fetchApplicationForSingleStudent()">
                                     Search  <i class="fa fa-search"
-                                                       style="color: blue;"></i>
+                                               style="color: blue;"></i>
                                 </a>
 
 
@@ -406,14 +438,14 @@
                         <br/><br/><br/>
                         <table class="table table-striped table-hover">
                             <thead data-ng-show="optional.appliedCoursesForSingleStudent.length>0">
-                                <th>Course No</th>
-                                <th>Course Title</th>
-                                <th>Status</th>
-                                <th style="text-align: center;">Action</th>
-                                <th style="text-align: center;">Clear</th>
+                            <th>Course No</th>
+                            <th>Course Title</th>
+                            <th>Status</th>
+                            <th style="text-align: center;">Action</th>
+                            <th style="text-align: center;">Clear</th>
                             </thead>
                             <tbody>
-                             <tr ng-repeat="course in optional.appliedCoursesForSingleStudent">
+                            <tr ng-repeat="course in optional.appliedCoursesForSingleStudent">
                                 <td width="15%"><b>{{ ::course.courseNo}}</b></td>
                                 <td width="40%">{{ ::course.courseTitle}}</td>
                                 <td width="15%">
@@ -461,7 +493,7 @@
                                     &nbsp;&nbsp;Go Back &nbsp;
                                     <i class="fa fa-backward" style="color: green;"></i>
                                 </a>
-                                </div>
+                            </div>
                             <div class="col-md-6" style="text-align: right">
                                 <a href="javascript:;" class="btn btn-xs btn-default"
                                    data-ng-click="saveApplicationStatusForSingleStudent()" style="margin-top: 20px;">
@@ -469,7 +501,7 @@
                                     <i class="fa fa-forward" style="color: green;"></i>
                                 </a>
                             </div>
-                            </div>
+                        </div>
 
 
                     </div>
@@ -524,8 +556,8 @@
                             <div class="row">
                                 <div class="col-md-12" style="text-align: right;">
                                     <input type='button' value="Save Application Shifting" data-ng-click="saveApplicationShifting()"/>
-                                    </div>
                                 </div>
+                            </div>
                         </div>
                     </div>
                     <div id="tab-section" class="tab-pane fade">
@@ -627,6 +659,6 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>
-

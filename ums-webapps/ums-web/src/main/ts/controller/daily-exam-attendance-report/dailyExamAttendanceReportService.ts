@@ -49,7 +49,6 @@ module ums{
         }
 
         public getExamAttendantReport(pSemesterId:number,pExamType:number,pExamDate:string){
-            console.log("in");
             var defer = this.$q.defer();
             let contentType: string = UmsUtil.getFileContentType("pdf");
             let fileName="Daily Examination Report";

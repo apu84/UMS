@@ -11,4 +11,6 @@ import java.util.List;
 public interface AbsLateComingInfoManager extends ContentManager<AbsLateComingInfo, MutableAbsLateComingInfo, Long> {
   List<AbsLateComingInfo> getInfoBySemesterExamTypeAndExamDate(final Integer pSemesterId, final Integer pExamType,
       final String pExamDate);
+
+  List<AbsLateComingInfo> getInfoBySemesterExamType(final Integer pSemesterId, final Integer pExamType);
 }
