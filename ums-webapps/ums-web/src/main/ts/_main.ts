@@ -280,6 +280,7 @@
 /// <reference path='directive/ClassRoutineDir.ts'/>
 /// <reference path='directive/RoutineSlotDir.ts'/>
 /// <reference path='directive/RoutineChartDir.ts'/>
+/// <reference path='directive/RoutineSlotEditDir.ts'/>
 /// <reference path='directive/date.range.picker.ts'/>
 
 

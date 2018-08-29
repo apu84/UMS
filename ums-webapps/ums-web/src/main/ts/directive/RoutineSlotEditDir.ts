@@ -1,8 +1,10 @@
-/*
-module ums {
-  import ClassRoutine = ums.ClassRoutine;
+module ums{
 
-    export class ClassRoutineSlotEditController {
+  interface IClassRoutineSlotEditScope extends ng.IScope{
+    init:Function;
+  }
+
+  export class ClassRoutineSlotEditController {
 
 
     private selectedCourse: Course;
@@ -22,9 +24,11 @@ module ums {
     private slotGroupNo: number;
 
 
-    public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'courseService', 'classRoomService', 'classRoutineService', '$timeout', 'userService', 'routineConfigService', '$state', 'courseTeacherService'];
+    public static $inject = ['$scope','appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'courseService', 'classRoomService', 'classRoutineService', '$timeout', 'userService', 'routineConfigService', '$state', 'courseTeacherService'];
 
-    constructor(private appConstants: any,
+    constructor(
+        private $scope:IClassRoutineSlotEditScope,
+        private appConstants: any,
                 private httpClient: HttpClient,
                 private $q: ng.IQService,
                 private notify: Notify,
@@ -40,10 +44,13 @@ module ums {
                 private $state: any,
                 private courseTeacherService: CourseTeacherService) {
 
-      this.init();
+      $scope.init = this.init.bind(this);
+
     }
 
     public init() {
+      console.log("########");
+      console.log("In the init");
       this.showCourseInfo = false;
       this.showRoomInfo = false;
       console.log("Slot routine list");
@@ -98,7 +105,7 @@ module ums {
     }
 
     public courseSearched(){
-        this.fetchCourseInfo();
+      this.fetchCourseInfo();
     }
 
 
@@ -136,15 +143,15 @@ module ums {
     }
 
     public fetchCourseTeacherInfo(){
-        this.showCourseInfo=false;
-        this.showRoomInfo = false;
-        this.showTeachersInfo = true;
+      this.showCourseInfo=false;
+      this.showRoomInfo = false;
+      this.showTeachersInfo = true;
 
       if(this.selectedCourseTeacher)
-      this.classRoutineService.getRoutineForTeacher(this.selectedCourseTeacher.id).then((routine:ClassRoutine[])=>{
-        this.routineBasedOnCourseTeacher=[];
-        this.routineBasedOnCourseTeacher = routine;
-      });
+        this.classRoutineService.getRoutineForTeacher(this.selectedCourseTeacher.id).then((routine:ClassRoutine[])=>{
+          this.routineBasedOnCourseTeacher=[];
+          this.routineBasedOnCourseTeacher = routine;
+        });
     }
 
     private assignExistingTeacher(slotRoutine: ClassRoutine, section: string) {
@@ -262,7 +269,7 @@ module ums {
     }
 
     public roomSearched(){
-        this.fetchRoomInfo();
+      this.fetchRoomInfo();
     }
 
     public roomSelected(slotRoutine: ClassRoutine) {
@@ -329,5 +336,28 @@ module ums {
     }
   }
 
-  UMS.controller("ClassRoutineSlotEditController", ClassRoutineSlotEditController);
-}*/
+
+  class RoutineSlotEditDir implements ng.IDirective{
+    constructor(){
+
+    }
+
+    public restrict: string='EA';
+    public scope={
+
+    };
+
+    public controller = ClassRoutineSlotEditController;
+    public controllerAs = 'vm';
+
+    public link = (scope: any, element:any, attributes:any)=>{
+      scope.init();
+    }
+
+    public templateUrl:string='./views/directive/class-routine/routine-slot-edit-dir.html';
+  }
+
+  UMS.directive("routineSlotEditDir", [()=>{
+    return new RoutineSlotEditDir();
+  }]);
+}

@@ -19,7 +19,7 @@ module ums{
     private progress: number = 0;
     private courseTeacherList: CourseTeacherInterface[] = [];
     private colSpanWithRoutine: {[key:string]:number};
-    private showRoutineChart: boolean;
+    private showRoutineChart: boolean = false;
 
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'courseService', 'classRoomService', 'classRoutineService', '$timeout', 'userService', 'routineConfigService', '$state', 'employeeService', 'courseTeacherService'];
 
@@ -41,6 +41,7 @@ module ums{
                 private courseTeacherService: CourseTeacherService) {
 
       this.init();
+      this.showRoutineChart=false;
     }
 
     public init() {
@@ -51,11 +52,11 @@ module ums{
       }
       this.showProgressBar = false;
       this.progress=0;
-      this.showRoutineChart = false;
       this.createRoutineBody();
     }
 
     public createRoutineBody() {
+      this.showRoutineChart = false;
       this.showProgressBar = false;
       this.progress=0;
       this.generateHeader();
@@ -272,14 +273,16 @@ module ums{
         console.log("ENd of experiment");
         this.classRoutineService.slotRoutineList = this.getDayAndTimeMapWithRoutine(day.id, header.startTime).routineList;
         this.assignCourseTeachersToSlotRoutineList();
+        this.showRoutineChart=true;
       } else {
         this.classRoutineService.slotRoutineList = [];
+        this.showRoutineChart=true;
       }
 
       $("#routineConfigModal").modal('show');
       this.counter += 2;
-      this.$state.go('classRoutine.classRoutineChart.classRoutineSlotEditForm', {}, {reload: 'classRoutine.classRoutineChart.classRoutineSlotEditForm'}
-      );
+      // this.$state.go('classRoutine.classRoutineChart.classRoutineSlotEditForm', {}, {reload: 'classRoutine.classRoutineChart.classRoutineSlotEditForm'}
+      // );
     }
 
     private assignCourseTeachersToSlotRoutineList() {
@@ -330,6 +333,7 @@ module ums{
                 this.courseTeacherList = [];
                 this.courseTeacherList = updatedCourseTeacherList;
                 $("#routineConfigModal").modal('toggle');
+                this.showRoutineChart=false;
                 this.createRoutineBody();
                 this.createCourseTeacherMap();
                 this.createCourseTeacherWithSectionMap();
@@ -341,6 +345,7 @@ module ums{
               this.progress = 100;
               this.courseTeacherList = [];
               $("#routineConfigModal").modal('toggle');
+              this.showRoutineChart=false;
               this.createRoutineBody();
               this.$timeout.apply(() => {
                 this.showProgressBar = false;
@@ -526,7 +531,6 @@ module ums{
     public controller = ClassRoutineChartController;
     public controllerAs = "vm";
     public link = (scope:any, element:any, attributes:any)=>{
-
     }
 
     public templateUrl:string="./views/directive/class-routine/routine-chart-dir.html";
