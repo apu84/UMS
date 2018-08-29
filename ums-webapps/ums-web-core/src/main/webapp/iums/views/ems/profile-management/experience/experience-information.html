@@ -102,7 +102,7 @@
                                            data-provide="datepicker"
                                            data-date-format="dd/mm/yyyy"
                                            placeholder="DD/MM/YYYY"
-                                           data-ng-change="vm.calculateDifference('experience', $index, experience.experienceFrom, experience.experienceTo)"
+                                           data-ng-change="vm.calculateDifference(nForm[$index], $index, experience.experienceFrom, experience.experienceTo)"
                                            autocomplete="off"
                                            class="form-control" required>
                                     <label data-ng-show="nForm[$index].nExperienceFrom.$invalid && !nForm[$index].nExperienceFrom.$pristine"
@@ -132,7 +132,7 @@
                                            data-provide="datepicker"
                                            data-date-format="dd/mm/yyyy"
                                            placeholder="DD/MM/YYYY"
-                                           data-ng-change="vm.calculateDifference('experience', $index, experience.experienceFrom, experience.experienceTo)"
+                                           data-ng-change="vm.calculateDifference(nForm[$index], $index, experience.experienceFrom, experience.experienceTo)"
                                            autocomplete="off"
                                            class="form-control" required>
                                     <label data-ng-show="nForm[$index].nExperienceTo.$invalid && !nForm[$index].nExperienceTo.$pristine"

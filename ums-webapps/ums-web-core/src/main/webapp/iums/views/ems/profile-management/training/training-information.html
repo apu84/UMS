@@ -104,7 +104,7 @@
                                            data-provide="datepicker"
                                            data-date-format="dd/mm/yyyy"
                                            placeholder="DD/MM/YYYY"
-                                           data-ng-change="vm.calculateDifference('training', $index, training.trainingFrom, training.trainingTo)"
+                                           data-ng-change="vm.calculateDifference(nForm[$index], $index, training.trainingFrom, training.trainingTo)"
                                            autocomplete="off"
                                            class="form-control" required/>
 
@@ -134,7 +134,7 @@
                                            data-provide="datepicker"
                                            data-date-format="dd/mm/yyyy"
                                            placeholder="DD/MM/YYYY"
-                                           data-ng-change="vm.calculateDifference('training', $index, training.trainingFrom, training.trainingTo)"
+                                           data-ng-change="vm.calculateDifference(nForm[$index], $index, training.trainingFrom, training.trainingTo)"
                                            autocomplete="off"
                                            class="form-control" required>
 
