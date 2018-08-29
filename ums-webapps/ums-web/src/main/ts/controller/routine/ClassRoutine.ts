@@ -43,6 +43,7 @@ module ums {
     private state: any;
     private searchButtonClicked: boolean;
     private counter: number = 1;
+    showRoutineChart:boolean;
 
     public static $inject = ['appConstants', '$q', 'notify', 'semesterService', 'classRoomService', 'classRoutineService',
       'userService', 'routineConfigService', '$state'];
@@ -60,6 +61,7 @@ module ums {
     }
 
     public init() {
+      this.showRoutineChart = false;
       this.state = this.$state;
         this.showRoutineSection=false;
         this.programType = this.UNDERGRADUATE;
@@ -149,7 +151,8 @@ module ums {
       this.counter += 1;
       this.searchButtonClicked = true;
       this.fetchRoutineData().then((routineData) => {
-        this.$state.go('classRoutine.classRoutineChart', {}, {reload: 'classRoutine.classRoutineChart'});
+        this.showRoutineChart = true;
+        //this.$state.go('classRoutine.classRoutineChart', {}, {reload: 'classRoutine.classRoutineChart'});
       });
     }
 

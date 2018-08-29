@@ -20,8 +20,8 @@
             <div ng-if="l.course!=undefined">
                 {{l.course.no}}({{l.section}})<br>
                 {{l.room.roomNo}}<br>
-                <p ng-if="vm.getCourseTeacher(l.course.id)=='(TBA)'" style="color: #0000cc">{{vm.getCourseTeacher(l.course.id, l.section)}}</p>
-                <p ng-if="vm.getCourseTeacher(l.course.id)!='(TBA)'" style="color: #1f232a">{{vm.getCourseTeacher(l.course.id, l.section)}}</p>
+                <p ng-if="vm.getCourseTeacher(l.course.id, l.section)!=='(TBA)'" style="color: #1f232a"><span >{{vm.getCourseTeacher(l.course.id, l.section)}}</span></p>
+                <p ng-if="vm.getCourseTeacher(l.course.id, l.section)==='(TBA)'" style="color: red"><span >{{vm.getCourseTeacher(l.course.id, l.section)}}</span></p>
             </div>
 
            <!-- {{vm.getCourseTeacherByCourseAndSection(routine.courseId, routine.section)}}-->

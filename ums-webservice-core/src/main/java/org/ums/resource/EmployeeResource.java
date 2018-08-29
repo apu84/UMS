@@ -41,6 +41,12 @@ public class EmployeeResource extends MutableEmployeeResource {
   }
 
   @GET
+  @Path("/getActiveTeachers")
+  public JsonObject getActiveTeachers() {
+    return mEmployeeResourceHelper.getActiveTeachers(mUriInfo);
+  }
+
+  @GET
   @Path("/employeeById")
   public JsonObject getEmployeeById() {
     return mEmployeeResourceHelper.getByEmployeeId(mUriInfo);

@@ -93,6 +93,7 @@ module ums {
       slotRoutine.slotGroup = this.slotGroupNo;
       slotRoutine = this.initialzeRoutine(slotRoutine);
       this.classRoutineService.slotRoutineList.push(slotRoutine);
+      //$("#courseNo").focus();
     }
 
     public courseSearched(){

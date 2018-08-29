@@ -177,6 +177,12 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     return convertToJson(employees, pUriInfo);
   }
 
+  @Transactional(readOnly = true)
+  public JsonObject getActiveTeachers(final UriInfo pUriInfo) {
+    List<Employee> employees = getContentManager().getActiveTeachers();
+    return convertToJson(employees, pUriInfo);
+  }
+
   public JsonObject getEmployees(final String pDepartmentId, final UriInfo pUriInfo) {
     List<Employee> employees = new ArrayList<>();
     employees = getContentManager().getEmployees(pDepartmentId);
