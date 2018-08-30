@@ -19,10 +19,8 @@
         <form name="nEmergencyContactForm" ng-submit="vm.submit('emergencyContact')" novalidate>
             <div class="row">
                 <div class="col-md-9">
-                    <div class="form-group"
-                         ng-class="{ 'has-error' : nEmergencyContactForm.nEmergencyContactName.$invalid && !nEmergencyContactForm.nEmergencyContactName.$pristine}">
-                        <label for="iEmergencyContactName" class="control-label">Name<span
-                                class="require" data-ng-show="!vm.emergencyContactReadOnly">*</span></label>
+                    <div class="form-group">
+                        <label for="iEmergencyContactName" class="control-label">Name</label>
                         <div data-ng-show="!vm.emergencyContactReadOnly">
                             <input type="text"
                                    name="nEmergencyContactName"
@@ -30,10 +28,7 @@
                                    data-ng-model="vm.entry.emergencyContact.emergencyContactName"
                                    placeholder="Name"
                                    ng-readonly="vm.emergencyContactReadOnly"
-                                   class="form-control" required>
-                            <label data-ng-show="nEmergencyContactForm.nEmergencyContactName.$invalid && !nEmergencyContactForm.nEmergencyContactName.$pristine"
-                                   class="help-block control-label">
-                                With whom we can contact in your absence.</label>
+                                   class="form-control">
                         </div>
                         <div data-ng-show="vm.emergencyContactReadOnly">
                             <div class="underlineBox">
@@ -43,22 +38,17 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="form-group"
-                         ng-class="{ 'has-error' : nEmergencyContactForm.nEmergencyContactRelation.$invalid && !nEmergencyContactForm.nEmergencyContactRelation.$pristine}">
-                        <label for="iEmergencyContactRelation" class="control-label">Relation<span
-                                class="require" data-ng-show="!vm.emergencyContactReadOnly">*</span></label>
+                    <div class="form-group">
+                        <label for="iEmergencyContactRelation" class="control-label">Relation</label>
                         <div data-ng-show="!vm.emergencyContactReadOnly">
                             <select name="nEmergencyContactRelation"
                                     id="iEmergencyContactRelation"
                                     data-ng-model="vm.entry.emergencyContact.emergencyContactRelation"
                                     data-ng-options="relation.name for relation in vm.relations track by relation.id"
                                     ng-readonly="vm.emergencyContactReadOnly"
-                                    class="form-control" required>
+                                    class="form-control">
                                 <option value="">Select Relation</option>
                             </select>
-                            <label data-ng-show="nEmergencyContactForm.nEmergencyContactRelation.$invalid && !nEmergencyContactForm.nEmergencyContactRelation.$pristine"
-                                   class="help-block control-label">
-                                Relation is required.</label>
                         </div>
 
                         <div data-ng-show="vm.emergencyContactReadOnly">
@@ -74,8 +64,7 @@
                 <div class="col-md-3">
                     <div class="form-group"
                          ng-class="{ 'has-error' : nEmergencyContactForm.nEmergencyContactPhone.$invalid && !nEmergencyContactForm.nEmergencyContactPhone.$pristine}">
-                        <label for="iEmergencyContactPhone" class="control-label">Phone<span
-                                class="require" data-ng-show="!vm.emergencyContactReadOnly">*</span></label>
+                        <label for="iEmergencyContactPhone" class="control-label">Phone</label>
                         <div data-ng-show="!vm.emergencyContactReadOnly">
                             <input type="text"
                                    name="nEmergencyContactPhone"
@@ -83,10 +72,7 @@
                                    data-ng-model="vm.entry.emergencyContact.emergencyContactPhone"
                                    placeholder="Phone"
                                    ng-readonly="vm.emergencyContactReadOnly"
-                                   class="form-control" required>
-                            <label data-ng-show="nEmergencyContactForm.nEmergencyContactPhone.$invalid && !nEmergencyContactForm.nEmergencyContactPhone.$pristine"
-                                   class="help-block control-label">
-                                Contact number is required.</label>
+                                   class="form-control">
                         </div>
                         <div data-ng-show="vm.emergencyContactReadOnly">
                             <div class="underlineBox">
@@ -115,14 +101,13 @@
             </div>
             <div data-ng-if="vm.emergencyContactReadOnly==false">
                 <div class="row">
-                    <div class="col-md-1">
+                    <div class="col-md-6">
                         <button type="button"
                                 data-ng-click="vm.emergencyContactReadOnly=true; vm.getEmergencyContactInformation();"
                                 class="btn btn-danger btn-xs">Cancel
                         </button>
                     </div>
-                    <div class="col-md-10"></div>
-                    <div class="col-md-1">
+                    <div class="col-md-6">
                         <div align="right">
                             <button type="submit" class="btn btn-success btn-xs"
                                     data-ng-disabled="nEmergencyContactForm.$invalid">Submit
