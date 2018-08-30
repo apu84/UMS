@@ -10,6 +10,10 @@ module ums{
     name: string;
   }
 
+  interface IClassRoutineChartScope extends ng.IScope{
+    init:Function;
+  }
+
   export class ClassRoutineChartController {
     private routineData: ClassRoutine[];
     private tableHeader: IRoutineTableHeader[];
@@ -19,11 +23,13 @@ module ums{
     private progress: number = 0;
     private courseTeacherList: CourseTeacherInterface[] = [];
     private colSpanWithRoutine: {[key:string]:number};
+    private showSlotEditForm: boolean = false;
     private showRoutineChart: boolean = false;
 
-    public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'courseService', 'classRoomService', 'classRoutineService', '$timeout', 'userService', 'routineConfigService', '$state', 'employeeService', 'courseTeacherService'];
+    public static $inject = ['$scope','appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'courseService', 'classRoomService', 'classRoutineService', '$timeout', 'userService', 'routineConfigService', '$state', 'employeeService', 'courseTeacherService'];
 
-    constructor(private appConstants: any,
+    constructor(private $scope:IClassRoutineChartScope,
+                private appConstants: any,
                 private httpClient: HttpClient,
                 private $q: ng.IQService,
                 private notify: Notify,
@@ -40,8 +46,7 @@ module ums{
                 private employeeService: EmployeeService,
                 private courseTeacherService: CourseTeacherService) {
 
-      this.init();
-      this.showRoutineChart=false;
+      $scope.init = this.init.bind(this);
     }
 
     public init() {
@@ -51,13 +56,16 @@ module ums{
         this.getTeacherList();
       }
       this.showProgressBar = false;
+      this.showSlotEditForm=false;
+      this.showRoutineChart = false;
       this.progress=0;
       this.createRoutineBody();
     }
 
     public createRoutineBody() {
-      this.showRoutineChart = false;
+      this.showSlotEditForm = false;
       this.showProgressBar = false;
+      this.showRoutineChart = false;
       this.progress=0;
       this.generateHeader();
       this.generateBody();
@@ -273,10 +281,10 @@ module ums{
         console.log("ENd of experiment");
         this.classRoutineService.slotRoutineList = this.getDayAndTimeMapWithRoutine(day.id, header.startTime).routineList;
         this.assignCourseTeachersToSlotRoutineList();
-        this.showRoutineChart=true;
+        this.showSlotEditForm=true;
       } else {
         this.classRoutineService.slotRoutineList = [];
-        this.showRoutineChart=true;
+        this.showSlotEditForm=true;
       }
 
       $("#routineConfigModal").modal('show');
@@ -333,7 +341,7 @@ module ums{
                 this.courseTeacherList = [];
                 this.courseTeacherList = updatedCourseTeacherList;
                 $("#routineConfigModal").modal('toggle');
-                this.showRoutineChart=false;
+                this.showSlotEditForm=false;
                 this.createRoutineBody();
                 this.createCourseTeacherMap();
                 this.createCourseTeacherWithSectionMap();
@@ -345,7 +353,7 @@ module ums{
               this.progress = 100;
               this.courseTeacherList = [];
               $("#routineConfigModal").modal('toggle');
-              this.showRoutineChart=false;
+              this.showSlotEditForm=false;
               this.createRoutineBody();
               this.$timeout.apply(() => {
                 this.showProgressBar = false;
@@ -531,6 +539,7 @@ module ums{
     public controller = ClassRoutineChartController;
     public controllerAs = "vm";
     public link = (scope:any, element:any, attributes:any)=>{
+        scope.init();
     }
 
     public templateUrl:string="./views/directive/class-routine/routine-chart-dir.html";

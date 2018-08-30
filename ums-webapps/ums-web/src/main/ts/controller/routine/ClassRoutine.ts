@@ -150,6 +150,7 @@ module ums {
       Utils.expandRightDiv();
       this.counter += 1;
       this.searchButtonClicked = true;
+      this.showRoutineChart = false;
       this.fetchRoutineData().then((routineData) => {
         this.showRoutineChart = true;
         //this.$state.go('classRoutine.classRoutineChart', {}, {reload: 'classRoutine.classRoutineChart'});

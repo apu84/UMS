@@ -45,7 +45,6 @@ module ums{
                 private courseTeacherService: CourseTeacherService) {
 
       $scope.init = this.init.bind(this);
-
     }
 
     public init() {
