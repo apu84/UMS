@@ -68,7 +68,7 @@ module ums {
         }
 
         private prepareFilter() {
-            var filter: IFilter = <IFilter> {};
+            var filter: ISearchFilter = <ISearchFilter> {};
 
             filter.searchType = this.$scope.search.searchType;
             if (this.$scope.search.searchType == 'basic') {

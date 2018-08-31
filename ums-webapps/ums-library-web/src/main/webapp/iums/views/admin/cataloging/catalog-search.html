@@ -8,38 +8,68 @@
         background: #717171;
         border-radius: 15px;
     }
+
+    #rcorners1 {
+        border: 1px solid grey;
+        border-radius: 10px;
+        display: inline-block;
+        padding: 8px;
+    }
+
+    #iSearchBox {
+        border: none;
+        font: 20px bold;
+        vertical-align: middle;
+    }
+
+    #iSelectBox {
+        border: 2px solid #b3b3b3;
+        border-radius: 0.35em;
+        vertical-align: middle;
+        height: 35px;
+    }
 </style>
 
-<div data-ng-show="!vm.showAdvancedSearchForm">
-    <form id="iBasicSearchForm" name="nBasicSearchForm" ng-submit="vm.doSearch();" novalidate>
-        <div class="row">
-            <div class="col-md-12">
+
+<form id="iBasicSearchForm" name="nBasicSearchForm" ng-submit="vm.doSearch();" novalidate>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="rcorners1">
+                    <span>
+                        <i class="fa fa-arrow-right fa-lg" aria-hidden="true"
+                           style="color: #0093d9; padding: 0.35em"></i>
+                    </span>
                 <input id="iSearchBox"
                        name="nSearchBox"
                        type="search"
-                       style="height: 33px;
-                          font-weight: bold;
-                          margin-left: 5px;
-                          margin-right: 5px;
-                          border-radius: 15px"
-                       size="70"
+                       size="35"
                        placeholder="Search here..."
                        data-ng-model="vm.search.queryTerm"
                        title="Search here..."
                        autocomplete="off"/>
-                <button class="btn btn-default"
-                        style="background-color: white;
-                           border-radius: 15px !important;"
-                        data-ng-click="vm.doSearch()">
+                <select id="iSelectBox" data-ng-model="vm.search.searchType" autocomplete="off">
+                    <option value="basic">Basic Search</option>
+                    <option value="advanced_search">Advanced Search</option>
+                    <optgroup label="Camping">
+                        <option value="authors">Authors</option>
+                        <option value="corporate_authors">Corporate Authors</option>
+                        <option value="subjects">Subjects</option>
+                        <option value="titles">Titles</option>
+                        <option value="7">Series</option>
+                    </optgroup>
+                </select>
+                <button type="submit" class="btn btn-default"
+                        style="background-color: white;border-radius: 0.35em !important;">
                     <i class="fa fa-search fa-lg"
                        style="color: #0093d9;">
                     </i>
                 </button>
             </div>
         </div>
+    </div>
 
+    <div data-ng-show="vm.search.searchType=='basic'">
         <br/>
-
         <div class="row">
             <div class="col-md-2">
                 <label class="control-label label-info">Select a category:</label>
@@ -107,135 +137,129 @@
                 <label for="square-radio-6">Likely</label>
             </div>
         </div>
-    </form>
-</div>
-
-<div class="row top-buffer">
-    <div data-ng-show="!vm.showAdvancedSearchForm">
-        <div class="col-md-12">
-            <a style="color: #2aabd2; cursor: pointer" data-ng-click="vm.showAdvancedSearchForm=true"><u>Advanced
-                Search</u></a>
-        </div>
-    </div>
-    <div data-ng-show="vm.showAdvancedSearchForm">
-        <div class="col-md-12">
-            <a style="color: #2aabd2; cursor: pointer" data-ng-click="vm.showAdvancedSearchForm=false"><u>Basic
-                Search</u></a>
-        </div>
-    </div>
-</div>
-
-<div data-ng-if="vm.showAdvancedSearchForm">
-    <div class="row top-buffer">
-        <div class="col-md-10">
-            <h5>Advanced Search</h5>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-10">
-            <div class="line-separator"></div>
-        </div>
     </div>
 
-    <div class="row top-buffer">
-        <div class="col-md-12">
-            <form id="iAdvancedSearch" name="nAdvancedSearch" ng-submit="vm.doSearch()" novalidate>
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <input id="iSearchBoxTitle"
-                                       name="nSearchBoxTitle"
-                                       type="text"
-                                       placeholder="Title ... enter here"
-                                       class="form-control"
-                                />
-                            </div>
-                            <div class="col-md-6">
-                                <input id="iSearchBoxAuthor"
-                                       name="nSearchAuthor"
-                                       type="text"
-                                       placeholder="Author ... enter here"
-                                       class="form-control"
-                                />
-                            </div>
-                        </div>
-                        <div class="row top-buffer">
-                            <div class="col-md-6">
-                                <input id="iSearchBoxSubject"
-                                       name="nSearchBoxSubject"
-                                       type="text"
-                                       placeholder="Subject ... enter here"
-                                       class="form-control"
-                                />
-                            </div>
-                            <div class="col-md-6">
-                                <input id="iSearchBoxCorAuthor"
-                                       name="nSearchBoxCorAuthor"
-                                       type="text"
-                                       placeholder="Corporate Author ... enter here"
-                                       class="form-control"/>
-                            </div>
-                        </div>
-                        <div class="row top-buffer">
-                            <div class="col-md-6">
-                                <input id="iSearchBoxPublisher"
-                                       name="nSearchBoxPublisher"
-                                       type="text"
-                                       placeholder="Publisher ... enter here"
-                                       class="form-control"/>
-                            </div>
-                            <div class="col-md-6">
-                                <input id="iSearchBoxSeries"
-                                       name="niSearchBoxCorAuthor"
-                                       type="text"
-                                       placeholder="Series ... enter here"
-                                       class="form-control"/>
-                            </div>
-                        </div>
-                        <div class="row top-buffer">
-                            <div class="col-md-6">
-                                <input id="iSearchBoxYearFrom"
-                                       name="nSearchBoxYearFrom"
-                                       type="text"
-                                       placeholder="Year From"
-                                       class="form-control"/>
-                            </div>
+    <div data-ng-if="vm.search.searchType=='advanced_search'">
+        <div class="row top-buffer">
+            <div class="col-md-10">
+                <h5>Advanced Search</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10">
+                <div class="line-separator"></div>
+            </div>
+        </div>
 
-                            <div class="col-md-6">
-                                <input id="iSearchBoxYearTo"
-                                       name="nSearchBoxYearTo"
-                                       type="text"
-                                       placeholder="Year To"
-                                       class="form-control"/>
+        <div class="row top-buffer">
+            <div class="col-md-12">
+                <!--<form id="iAdvancedSearch" name="nAdvancedSearch" ng-submit="vm.doSearch()" novalidate>-->
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input id="iSearchBoxTitle"
+                                           name="nSearchBoxTitle"
+                                           data-ng-model="vm.search.title"
+                                           type="text"
+                                           placeholder="Title ... enter here"
+                                           class="form-control"
+                                    />
+                                </div>
+                                <div class="col-md-6">
+                                    <input id="iSearchBoxAuthor"
+                                           name="nSearchAuthor"
+                                           data-ng-model="vm.search.author"
+                                           type="text"
+                                           placeholder="Author ... enter here"
+                                           class="form-control"
+                                    />
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-6">
+                                    <input id="iSearchBoxSubject"
+                                           name="nSearchBoxSubject"
+                                           data-ng-model="vm.search.subject"
+                                           type="text"
+                                           placeholder="Subject ... enter here"
+                                           class="form-control"
+                                    />
+                                </div>
+                                <div class="col-md-6">
+                                    <input id="iSearchBoxCorAuthor"
+                                           name="nSearchBoxCorAuthor"
+                                           data-ng-model="vm.search.corpAuthor"
+                                           type="text"
+                                           placeholder="Corporate Author ... enter here"
+                                           class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-6">
+                                    <input id="iSearchBoxPublisher"
+                                           name="nSearchBoxPublisher"
+                                           data-ng-model="vm.search.publisher"
+                                           type="text"
+                                           placeholder="Publisher ... enter here"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <input id="iSearchBoxSeries"
+                                           name="niSearchBoxCorAuthor"
+                                           data-ng-model="vm.search.series"
+                                           type="text"
+                                           placeholder="Series ... enter here"
+                                           class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-md-6">
+                                    <input id="iSearchBoxYearFrom"
+                                           name="nSearchBoxYearFrom"
+                                           data-ng-model="vm.search.yearFrom"
+                                           type="text"
+                                           placeholder="Year From"
+                                           class="form-control"/>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <input id="iSearchBoxYearTo"
+                                           name="nSearchBoxYearTo"
+                                           data-ng-model="vm.search.yearTo"
+                                           type="text"
+                                           placeholder="Year To"
+                                           class="form-control"/>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-2">
-                        <select name="nSelectType"
-                                id="iSelectType"
-                                title="Select a Type ..."
-                                class="form-control"
-                                size="7"
-                                multiple>
-                            <option data-icon="fa-book">Books</option>
-                            <option>Maps</option>
-                            <option>Journals</option>
-                            <option>Thesis</option>
-                            <option>CD-DVD</option>
-                            <option>Magazine</option>
-                        </select>
+                        <div class="col-md-2">
+                            <select name="nSelectType"
+                                    id="iSelectType"
+                                    data-ng-model="vm.search.itemType"
+                                    title="Select a Type ..."
+                                    class="form-control"
+                                    size="7"
+                                    multiple>
+                                <option data-icon="fa-book" value="book">Books</option>
+                                <option value="map">Maps</option>
+                                <option value="journal">Journals</option>
+                                <option value="thesis">Thesis</option>
+                                <option value="cd">CD-DVD</option>
+                                <option value="magazine">Magazine</option>
+                            </select>
 
-                        <div class="top-buffer" align="right">
-                            <button type="button" class="btn btn-default btn-sm" data-ng-click="doSearch()">Submit
-                            </button>
+                            <!--<div class="top-buffer" align="right">-->
+                                <!--<button type="button" class="btn btn-default btn-sm" data-ng-click="doSearch()">Submit-->
+                                <!--</button>-->
+                            <!--</div>-->
                         </div>
                     </div>
-                </div>
-            </form>
+                <!--</form>-->
+            </div>
         </div>
     </div>
-</div>
+</form>
 
 <div class="row top-buffer">
     <div class="col-md-12">
