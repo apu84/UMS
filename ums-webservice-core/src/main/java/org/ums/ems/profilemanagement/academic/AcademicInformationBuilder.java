@@ -10,6 +10,7 @@ import org.ums.manager.common.DegreeTitleManager;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonValue;
 import javax.ws.rs.core.UriInfo;
 
 @Component
@@ -18,8 +19,6 @@ public class AcademicInformationBuilder implements Builder<AcademicInformation, 
   @Autowired
   private DegreeTitleManager mDegreeTitleManager;
 
-  private DegreeLevel mDegreeLevel;
-
   @Override
   public void build(JsonObjectBuilder pBuilder, AcademicInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
 
@@ -27,11 +26,11 @@ public class AcademicInformationBuilder implements Builder<AcademicInformation, 
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     JsonObjectBuilder degreeLevelBuilder = Json.createObjectBuilder();
     degreeLevelBuilder.add("id", pReadOnly.getDegreeLevelId()).add("name",
-        mDegreeLevel.get(pReadOnly.getDegreeLevelId()).getLabel());
+        DegreeLevel.get(pReadOnly.getDegreeLevelId()).getLabel());
     pBuilder.add("degreeLevel", degreeLevelBuilder);
     JsonObjectBuilder degreeTitleBuilder = Json.createObjectBuilder();
-    if(pReadOnly.getDegreeTitleId() == 0) {
-      degreeTitleBuilder.add("id", 0).add("title", "").add("degreeLevelId", 0);
+    if(pReadOnly.getDegreeTitleId() == 0 || pReadOnly.getDegreeTitleId() == null) {
+      degreeTitleBuilder.add("degreeTitle", JsonValue.NULL);
     }
     else {
       degreeTitleBuilder.add("id", pReadOnly.getDegreeTitleId())
@@ -40,7 +39,7 @@ public class AcademicInformationBuilder implements Builder<AcademicInformation, 
     }
     pBuilder.add("degreeTitle", degreeTitleBuilder);
     pBuilder.add("board", pReadOnly.getBoard() == null ? "" : pReadOnly.getBoard());
-    pBuilder.add("institution", pReadOnly.getInstitute());
+    pBuilder.add("institution", pReadOnly.getInstitute() == null ? "" : pReadOnly.getInstitute());
     pBuilder.add("passingYear", pReadOnly.getPassingYear());
     pBuilder.add("result", pReadOnly.getResult() == null ? "" : pReadOnly.getResult());
     pBuilder.add("major", pReadOnly.getMajor() == null ? "" : pReadOnly.getMajor());
@@ -52,9 +51,11 @@ public class AcademicInformationBuilder implements Builder<AcademicInformation, 
     pMutable.setId(!pJsonObject.getString("id").equals("") ? Long.parseLong(pJsonObject.getString("id")) : null);
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setDegreeLevelId(pJsonObject.getJsonObject("degreeLevel").getInt("id"));
-    pMutable.setDegreeTitleId(pJsonObject.getJsonObject("degreeTitle").getInt("id"));
+    pMutable.setDegreeTitleId(pJsonObject.get("degreeTitle").equals(JsonValue.NULL) ||
+           pJsonObject.getJsonObject("degreeTitle").get("degreeTitle").equals(JsonValue.NULL) ? null : pJsonObject.getJsonObject(
+        "degreeTitle").getInt("id"));
     pMutable.setInstitute(pJsonObject.getString("institution"));
-    pMutable.setPassingYear(pJsonObject.getInt("passingYear"));
+    pMutable.setPassingYear(pJsonObject.get("passingYear").equals(JsonValue.NULL) ? 0 :pJsonObject.getInt("passingYear"));
     pMutable.setResult(pJsonObject.getString("result") == null ? "" : pJsonObject.getString("result"));
     pMutable.setMajor(pJsonObject.getString("major") == null ? "" : pJsonObject.getString("major"));
     pMutable.setBoard(pJsonObject.getString("board") == null ? "" : pJsonObject.getString("board"));
