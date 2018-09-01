@@ -41,7 +41,7 @@ module ums {
             })
             .state('employeeProfile', {
                 url: "/employeeProfile",
-                templateUrl: 'views/ems/profile-management/employee-profile.html',
+                templateUrl: 'views/ems/profile-management/non-admin/employee-profile.html',
                 controller: 'EmployeeProfile',
                 controllerAs: 'vm',
                 resolve: {
@@ -71,7 +71,7 @@ module ums {
                     'id': null,
                     'edit': null
                 },
-                templateUrl: 'views/ems/profile-management/personal/personal-information.html',
+                templateUrl: 'views/ems/profile-management/non-admin/personal/personal-information.html',
                 controller: 'PersonalInformation',
                 controllerAs: 'vm'
             })
@@ -81,7 +81,7 @@ module ums {
                     'id': null,
                     'edit': null
                 },
-                templateUrl: 'views/ems/profile-management/academic/academic-information.html',
+                templateUrl: 'views/ems/profile-management/non-admin/academic/academic-information.html',
                 controller: 'AcademicInformation',
                 controllerAs: 'vm'
             })
@@ -91,7 +91,7 @@ module ums {
                     'id': null,
                     'edit': null
                 },
-                templateUrl: 'views/ems/profile-management/publication/publication-information.html',
+                templateUrl: 'views/ems/profile-management/non-admin/publication/publication-information.html',
                 controller: 'PublicationInformation',
                 controllerAs: 'vm'
             })
@@ -101,7 +101,7 @@ module ums {
                     'id': null,
                     'edit': null
                 },
-                templateUrl: 'views/ems/profile-management/training/training-information.html',
+                templateUrl: 'views/ems/profile-management/non-admin/training/training-information.html',
                 controller: 'TrainingInformation',
                 controllerAs: 'vm'
             })
@@ -111,7 +111,7 @@ module ums {
                     'id': null,
                     'edit': null
                 },
-                templateUrl: 'views/ems/profile-management/award/award-information.html',
+                templateUrl: 'views/ems/profile-management/non-admin/award/award-information.html',
                 controller: 'AwardInformation',
                 controllerAs: 'vm'
             })
@@ -121,7 +121,7 @@ module ums {
                     'id': null,
                     'edit': null
                 },
-                templateUrl: 'views/ems/profile-management/experience/experience-information.html',
+                templateUrl: 'views/ems/profile-management/non-admin/experience/experience-information.html',
                 controller: 'ExperienceInformation',
                 controllerAs: 'vm'
             })
@@ -131,7 +131,7 @@ module ums {
                     'id': null,
                     'edit': null
                 },
-                templateUrl: 'views/ems/profile-management/additional/additional-information.html',
+                templateUrl: 'views/ems/profile-management/non-admin/additional/additional-information.html',
                 controller: 'AdditionalInformation',
                 controllerAs: 'vm'
             })
@@ -141,7 +141,7 @@ module ums {
                     'id': null,
                     'edit': null
                 },
-                templateUrl: 'views/ems/profile-management/service/service-information.html',
+                templateUrl: 'views/ems/profile-management/non-admin/service/service-information.html',
                 controller: 'ServiceInformation',
                 controllerAs: 'vm'
             })
@@ -163,7 +163,7 @@ module ums {
                 params: {
                   'id' : null
                 },
-                templateUrl: 'views/ems/profile-management/employee-profile.html',
+                templateUrl: 'views/ems/profile-management/admin/employee-profile.html',
                 controller: 'EmployeeProfile',
                 controllerAs: 'vm',
                 resolve: {
@@ -193,7 +193,7 @@ module ums {
                     'id' : null,
                     'edit': null
                 },
-                templateUrl: 'views/ems/profile-management/personal/personal-information.html',
+                templateUrl: 'views/ems/profile-management/admin/personal/personal-information.html',
                 controller: 'PersonalInformation',
                 controllerAs: 'vm'
             })
@@ -203,7 +203,7 @@ module ums {
                     'id' : null,
                     'edit': null
                 },
-                templateUrl: 'views/ems/profile-management/academic/academic-information.html',
+                templateUrl: 'views/ems/profile-management/admin/academic/academic-information.html',
                 controller: 'AcademicInformation',
                 controllerAs: 'vm'
             })
@@ -213,7 +213,7 @@ module ums {
                     'id' : null,
                     'edit': null
                 },
-                templateUrl: 'views/ems/profile-management/publication/publication-information.html',
+                templateUrl: 'views/ems/profile-management/admin/publication/publication-information.html',
                 controller: 'PublicationInformation',
                 controllerAs: 'vm'
             })
@@ -223,7 +223,7 @@ module ums {
                     'id' : null,
                     'edit': null
                 },
-                templateUrl: 'views/ems/profile-management/training/training-information.html',
+                templateUrl: 'views/ems/profile-management/admin/training/training-information.html',
                 controller: 'TrainingInformation',
                 controllerAs: 'vm'
             })
@@ -233,7 +233,7 @@ module ums {
                     'id' : null,
                     'edit': null
                 },
-                templateUrl: 'views/ems/profile-management/award/award-information.html',
+                templateUrl: 'views/ems/profile-management/admin/award/award-information.html',
                 controller: 'AwardInformation',
                 controllerAs: 'vm'
             })
@@ -243,7 +243,7 @@ module ums {
                     'id' : null,
                     'edit': null
                 },
-                templateUrl: 'views/ems/profile-management/experience/experience-information.html',
+                templateUrl: 'views/ems/profile-management/admin/experience/experience-information.html',
                 controller: 'ExperienceInformation',
                 controllerAs: 'vm'
             })
@@ -253,7 +253,7 @@ module ums {
                     'id' : null,
                     'edit': null
                 },
-                templateUrl: 'views/ems/profile-management/additional/additional-information.html',
+                templateUrl: 'views/ems/profile-management/admin/additional/additional-information.html',
                 controller: 'AdditionalInformation',
                 controllerAs: 'vm'
             })
@@ -263,7 +263,7 @@ module ums {
                     'id' : null,
                     'edit': null
                 },
-                templateUrl: 'views/ems/profile-management/service/service-information.html',
+                templateUrl: 'views/ems/profile-management/admin/service/service-information.html',
                 controller: 'ServiceInformation',
                 controllerAs: 'vm'
             })

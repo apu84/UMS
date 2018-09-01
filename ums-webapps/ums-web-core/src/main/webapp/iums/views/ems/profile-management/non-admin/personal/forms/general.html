@@ -76,8 +76,12 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="iFatherName" class="control-label">Father's Name</label>
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nGeneralForm.nFatherName.$invalid && !nGeneralForm.nFatherName.$pristine}">
+
+                                <label for="iFatherName" class="control-label">Father's Name<span
+                                        data-ng-show="!vm.generalReadOnly"
+                                        class='require'>*</span></label>
                                 <div data-ng-show="!vm.generalReadOnly">
                                     <input type="text"
                                            id="iFatherName"
@@ -85,7 +89,10 @@
                                            class="form-control"
                                            data-ng-model="vm.entry.general.fatherName"
                                            ng-readonly="vm.generalReadOnly"
-                                           placeholder="Father's Name">
+                                           placeholder="Father's Name" required>
+                                    <label data-ng-show="nGeneralForm.nFatherName.$invalid && !nGeneralForm.nFatherName.$pristine"
+                                           class="help-block control-label">
+                                        Your father's name is required</label>
                                 </div>
 
                                 <div data-ng-show="vm.generalReadOnly">
@@ -100,17 +107,24 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="iMotherName" class="control-label">Mother's Name</label>
-                                <div data-ng-show="!vm.generalReadOnly">
-                                    <input type="text"
-                                           id="iMotherName"
-                                           name="nMotherName"
-                                           class="form-control"
-                                           data-ng-model="vm.entry.general.motherName"
-                                           ng-readonly="vm.generalReadOnly"
-                                           placeholder="Mother's Name">
+                            <div class="form-group"
+                                 ng-class="{ 'has-error' : nGeneralForm.nMotherName.$invalid && !nGeneralForm.nMotherName.$pristine}">
+                                <label for="iMotherName" class="control-label">Mother's Name<span
+                                        data-ng-show="!vm.generalReadOnly"
+                                        class='require'>*</span></label>
+                                <div data-ng-show="!vm.generalReadOnly"><input type="text"
+                                                                               id="iMotherName"
+                                                                               name="nMotherName"
+                                                                               class="form-control"
+                                                                               data-ng-model="vm.entry.general.motherName"
+                                                                               ng-readonly="vm.generalReadOnly"
+                                                                               placeholder="Mother's Name"
+                                                                               required>
+                                    <label data-ng-show="nGeneralForm.nMotherName.$invalid && !nGeneralForm.nMotherName.$pristine"
+                                           class="help-block control-label">
+                                        Your mother's name is required.</label>
                                 </div>
+
                                 <div data-ng-show="vm.generalReadOnly">
                                     <div class="underlineBox">
                                         <label class="control-label">{{vm.entry.general.motherName}}</label>
@@ -186,17 +200,22 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="form-group">
-                        <label class="control-label" for="iBloodGroup">Blood Group</label>
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : nGeneralForm.nBloodGroup.$invalid && !nGeneralForm.nBloodGroup.$pristine}">
+                        <label class="control-label" for="iBloodGroup">Blood Group<span
+                                data-ng-show="!vm.generalReadOnly"
+                                class='require'>*</span></label>
                         <div data-ng-show="!vm.generalReadOnly">
                             <select name="nBloodGroup"
                                     id="iBloodGroup"
                                     data-ng-model="vm.entry.general.bloodGroup"
                                     data-ng-options="bloodGroup.name for bloodGroup in vm.bloodGroups track by bloodGroup.id"
                                     ng-readonly="vm.generalReadOnly"
-                                    class="form-control">
+                                    class="form-control" required>
                                 <option value="">Select Blood Group</option>
                             </select>
+                            <label data-ng-show="nGeneralForm.nBloodGroup.$invalid && !nGeneralForm.nBloodGroup.$pristine"
+                                   class="help-block control-label">Please select a blood group.</label>
                         </div>
 
                         <div data-ng-show="vm.generalReadOnly">
@@ -207,8 +226,11 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="form-group">
-                        <label class="control-label" for="iNationality">Nationality</label>
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : nGeneralForm.nNationality.$invalid && !nGeneralForm.nNationality.$pristine}">
+                        <label class="control-label" for="iNationality">Nationality<span
+                                data-ng-show="!vm.generalReadOnly"
+                                class='require'>*</span></label>
 
                         <div data-ng-show="!vm.generalReadOnly">
                             <select name="nNationality"
@@ -216,10 +238,12 @@
                                     data-ng-model="vm.entry.general.nationality"
                                     data-ng-options="nationality.name for nationality in vm.nationalities  track by nationality.id"
                                     ng-readonly="vm.generalReadOnly"
-                                    class="form-control">
+                                    class="form-control" required>
                                 <option value="">Select Nationality</option>
                             </select>
                         </div>
+                        <label data-ng-show="nGeneralForm.nNationality.$invalid && !nGeneralForm.nNationality.$pristine"
+                               class="help-block control-label">Please select a nationality.</label>
 
                         <div data-ng-show="vm.generalReadOnly">
                             <div class="underlineBox">
@@ -229,17 +253,23 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="form-group">
-                        <label class="control-label" for="iReligion">Religion</label>
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : nGeneralForm.nReligion.$invalid && !nGeneralForm.nReligion.$pristine}">
+                        <label class="control-label" for="iReligion">Religion<span
+                                data-ng-show="!vm.generalReadOnly"
+                                class='require'>*</span></label>
                         <div data-ng-show="!vm.generalReadOnly">
                             <select name="nReligion"
                                     id="iReligion"
                                     data-ng-model="vm.entry.general.religion"
                                     data-ng-options="religion.name for religion in vm.religions track by religion.id"
                                     ng-readonly="vm.generalReadOnly"
-                                    class="form-control">
+                                    class="form-control" required>
                                 <option value="">Select Religion</option>
                             </select>
+
+                            <label data-ng-show="nGeneralForm.nReligion.$invalid && !nGeneralForm.nReligion.$pristine"
+                                   class="help-block control-label">Please select a religion.</label>
                         </div>
                         <div data-ng-show="vm.generalReadOnly">
                             <div class="underlineBox">
@@ -252,8 +282,11 @@
 
             <div class="row">
                 <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="iBirthDate" class="control-label">Date of Birth</label>
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : nGeneralForm.nBirthDate.$invalid && !nGeneralForm.nBirthDate.$pristine}">
+                        <label for="iBirthDate" class="control-label">Date of Birth<span
+                                data-ng-show="!vm.generalReadOnly"
+                                class='require'>*</span></label>
                         <div data-ng-show="!vm.generalReadOnly">
                             <input type="text"
                                    name="nBirthDate"
@@ -264,7 +297,10 @@
                                    placeholder="DD/MM/YYYY"
                                    autocomplete="off"
                                    ng-readonly="vm.generalReadOnly"
-                                   class="form-control">
+                                   class="form-control" required>
+                            <label data-ng-show="nGeneralForm.nBirthDate.$invalid && !nGeneralForm.nBirthDate.$pristine"
+                                   class="help-block control-label">
+                                Please provide us your DoB.</label>
                         </div>
                         <div data-ng-show="vm.generalReadOnly">
                             <div class="underlineBox">
@@ -295,17 +331,24 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="form-group">
-                        <label class="control-label" for="iMaritalStatus">Marital Status</label>
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : nGeneralForm.nMaritalStatus.$invalid && !nGeneralForm.nMaritalStatus.$pristine}">
+                        <label class="control-label" for="iMaritalStatus">Marital Status<span
+                                data-ng-show="!vm.generalReadOnly"
+                                class='require'>*</span></label>
+
                         <div data-ng-show="!vm.generalReadOnly">
                             <select name="nMaritalStatus"
                                     id="iMaritalStatus"
                                     data-ng-model="vm.entry.general.maritalStatus"
                                     data-ng-options="maritalStatus.name for maritalStatus in vm.maritalStatus track by maritalStatus.id"
                                     ng-readonly="vm.generalReadOnly"
-                                    class="form-control">
+                                    class="form-control" required>
                                 <option value="">Select Marital Status</option>
                             </select>
+
+                            <label data-ng-show="nGeneralForm.nMaritalStatus.$invalid && !nGeneralForm.nMaritalStatus.$pristine"
+                                   class="help-block control-label">Please select a marital status.</label>
                         </div>
                         <div data-ng-show="vm.generalReadOnly">
                             <div class="underlineBox">
@@ -321,7 +364,10 @@
                     <div class="col-md-6">
                         <div class="form-group"
                              ng-class="{ 'has-error' : nGeneralForm.nSpouseName.$invalid && !nGeneralForm.nSpouseName.$pristine}">
-                            <label for="iSpouseName" class="control-label">Spouse's Name</label>
+                            <label for="iSpouseName" class="control-label">Spouse's Name<span
+                                    data-ng-show="!vm.generalReadOnly"
+                                    class="require">*</span></label>
+
                             <div data-ng-show="!vm.generalReadOnly">
                                 <input type="text"
                                        name="nSpouseName"
@@ -329,7 +375,10 @@
                                        data-ng-model="vm.entry.general.spouseName"
                                        placeholder="Spouse's Name"
                                        ng-readonly="vm.generalReadOnly"
-                                       class="form-control">
+                                       class="form-control" required>
+                                <label data-ng-show="nGeneralForm.nSpouseName.$invalid && !nGeneralForm.nSpouseName.$pristine"
+                                       class="help-block control-label">
+                                    Please provide spouse's name</label>
                             </div>
                             <div data-ng-show="vm.generalReadOnly">
                                 <div class="underlineBox">
@@ -366,7 +415,7 @@
                 <div class="col-md-6">
                     <div class="form-group"
                          ng-class="{ 'has-error' : nGeneralForm.nPersonalWebsite.$invalid && !nGeneralForm.nPersonalWebsite.$pristine}">
-                        <label for="iPersonalWebsite" class="control-label">Personal Website (if any)</label>
+                        <label for="iPersonalWebsite" class="control-label">Personal Website</label>
                         <div data-ng-show="!vm.generalReadOnly">
                             <input type="url"
                                    name="nPersonalWebsite"
@@ -389,7 +438,7 @@
                 <div class="col-md-6"></div>
             </div>
 
-            <div data-ng-if="!vm.generalReadOnly">
+            <div data-ng-if="vm.generalReadOnly==false">
                 <div class="row">
                     <div class="col-md-6">
                         <button type="button"
