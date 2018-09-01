@@ -1,0 +1,83 @@
+version: "3"
+services:
+  ums-solr:
+    image: solr:5.5
+    ports:
+      - "8983:8983"
+    environment:
+      - SOLR_HOME=/opt/mysolrhome
+      - SOLR_OPTS=-Dsolr.lock.type=single
+    volumes:
+      - /mnt/nfsshare/iums-solr:/opt/mysolrhome
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - ums
+    networks:
+      ums-net:
+        aliases:
+          - ums-solr
+  ums-memcached:
+    image: harrenhall:5001/ums-memcached
+    ports:
+      - "11211:11211"
+    networks:
+      ums-net:
+        aliases:
+          - ums-memcached
+  ums-webservice-academic:
+    image: harrenhall:5001/ums-webservice-academic
+    networks:
+      ums-net:
+        aliases:
+          - ums-webservice-academic
+  ums-webservice-library:
+      image: harrenhall:5001/ums-webservice-library
+      networks:
+        ums-net:
+          aliases:
+            - ums-webservice-library
+  ums-webservice-registrar:
+      image: harrenhall:5001/ums-webservice-registrar
+      networks:
+        ums-net:
+          aliases:
+            - ums-webservice-registrar
+  ums-webservice-bank:
+      image: harrenhall:5001/ums-webservice-bank
+      networks:
+        ums-net:
+          aliases:
+            - ums-webservice-bank
+  ums-webservice-account:
+      image: harrenhall:5001/ums-webservice-account
+      networks:
+        ums-net:
+          aliases:
+            - ums-webservice-account
+  ums-web:
+    image: harrenhall:5001/ums-web
+    ports:
+      - "80:80"
+    networks:
+      ums-net:
+        aliases:
+          - ums-web
+  ums-microservice-cache-warmer:
+    image: harrenhall:5001/ums-microservice-cache-warmer
+    networks:
+      ums-net:
+        aliases:
+          - ums-microservice-cache-warmer
+  ums-microservice-indexer:
+      image: harrenhall:5001/ums-microservice-indexer
+      networks:
+        ums-net:
+          aliases:
+            - ums-microservice-indexer
+networks:
+  ums-net:
+
+volumes:
+  ums-datavolume:
+    external: true

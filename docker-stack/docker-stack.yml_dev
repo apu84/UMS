@@ -1,0 +1,40 @@
+version: "3"
+services:
+  ums-memcached:
+    image: apu84/ums-memcached
+    ports:
+      - "11211:11211"
+    networks:
+      ums-net:
+        aliases:
+          - ums-memcached	
+  ums-webservice:
+    image: apu84/ums-webservice
+    ports:
+      - "8080:8080"
+      - "3000-4000:3000-4000"
+      - "8000:8000"
+    environment:
+      - JPDA_ADDRESS:8000
+      - JPDA_TRANSPORT:dt_socket
+    entrypoint: /usr/local/tomcat/bin/catalina.sh jpda run
+    networks:
+      ums-net:
+        aliases:
+          - ums-webservice
+    volumes:
+      - /mnt/nfsshare/iums-user-content:/var/nfs
+  ums-web:
+    image: apu84/ums-web
+    ports:
+      - "80:80"
+    networks:
+      ums-net:
+        aliases:
+          - ums-web
+networks:
+  ums-net:
+
+volumes:
+  ums-datavolume:
+    external: true
