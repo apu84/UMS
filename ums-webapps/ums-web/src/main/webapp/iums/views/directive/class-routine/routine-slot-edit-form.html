@@ -66,7 +66,7 @@
                         <div class="control-label col-md-2" for="startTime">Start Time :</div>
                         <div class="col-md-4">
                             <timepicker ng-model="slotRoutine.startTimeObj" ng-change="vm.assignEndTime(slotRoutine)">Start Time</timepicker>
-                           <!-- <div uib-timepicker ng-model="slotRoutine.startTime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></div>-->
+                            <!-- <div uib-timepicker ng-model="slotRoutine.startTime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></div>-->
                             <!--<input type="text" class="form-control" id="startTime" ng-model="slotRoutine.startTime"
                                    placeholder="HH:MM AM/PM"/>-->
                         </div>
@@ -165,7 +165,7 @@
     <div class="col-md-6">
         <ul class="nav nav-tabs">
             <li data-ng-class="vm.showCourseInfo==true?'active':''"  style="cursor:pointer"><a ng-click="vm.fetchCourseInfo()"
-                                                                       data-toggle="tab">Course Info</a>
+                                                                                               data-toggle="tab">Course Info</a>
             </li>
             <li data-ng-class="vm.showRoomInfo==true?'active':''" style="cursor:pointer"><a ng-click="vm.fetchRoomInfo()" data-toggle="tab">Room
                 Info</a></li>

@@ -1,34 +1,3 @@
-<style>
-    .circle-button {
-        border-radius: 12px;
-    }
-
-    .button {
-        background-color: #4CAF50;
-        border: none;
-        color: white;
-        padding: 10px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 8px;
-        margin: 4px 2px;
-    }
-
-    .list-group{
-        max-height: 550px;
-        margin-bottom: 10px;
-        overflow:scroll;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .list-group-short{
-        max-height: 400px;
-        margin-bottom: 10px;
-        overflow:scroll;
-        -webkit-overflow-scrolling: touch;
-    }
-</style>
 <div class="row">
     <div class="col-md-6">
         <div class="well" style="background-color: #ffeeff">
@@ -50,7 +19,7 @@
                         <div class="col-md-10">
                             <ui-select id="courseNo" theme="bootstrap"
                                        data-ng-model="slotRoutine.course"
-                                       on-select="vm.courseSelected(slotRoutine)" name="course" autofocus>
+                                       on-select="vm.courseSelected(slotRoutine)" name="course">
                                 <ui-select-match placeholder="Select Course">{{slotRoutine.course.title}}
                                 </ui-select-match>
                                 <ui-select-choices id="course"
@@ -66,7 +35,7 @@
                         <div class="control-label col-md-2" for="startTime">Start Time :</div>
                         <div class="col-md-4">
                             <timepicker ng-model="slotRoutine.startTimeObj" ng-change="vm.assignEndTime(slotRoutine)">Start Time</timepicker>
-                           <!-- <div uib-timepicker ng-model="slotRoutine.startTime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></div>-->
+                            <!-- <div uib-timepicker ng-model="slotRoutine.startTime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></div>-->
                             <!--<input type="text" class="form-control" id="startTime" ng-model="slotRoutine.startTime"
                                    placeholder="HH:MM AM/PM"/>-->
                         </div>
@@ -122,11 +91,11 @@
 
                                     >
                                         <ui-select-match placeholder="Select Course Teacher">
-                                            {{slotRoutine.employee.employeeName }} ({{slotRoutine.employee.deptOfficeName}})
+                                            {{slotRoutine.employee.employeeName}}
                                         </ui-select-match>
                                         <ui-select-choices id="courseTeacher"
-                                                           repeat="g in vm.classRoutineService.teacherList | filter:$select.search | limitTo:20">
-                                            <small ng-bind-html="g.employeeName+' ('+g.deptOfficeName+')' | highlight:$select.search"></small>
+                                                           repeat="g in vm.classRoutineService.teacherList | filter:$select.search">
+                                            <small ng-bind-html="g.employeeName | highlight:$select.search"></small>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
@@ -143,7 +112,7 @@
                                         <li class="list-group-item" ng-repeat="t in slotRoutine.courseTeacher">
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    {{t.teacher.name}}[{{t.teacher.departmentName}}]
+                                                    {{t.teacher.name}}
                                                 </div>
                                                 <div class="col-md-2">
                                                     <i class="fa fa-trash" aria-hidden="true"
@@ -165,7 +134,7 @@
     <div class="col-md-6">
         <ul class="nav nav-tabs">
             <li data-ng-class="vm.showCourseInfo==true?'active':''"  style="cursor:pointer"><a ng-click="vm.fetchCourseInfo()"
-                                                                       data-toggle="tab">Course Info</a>
+                                                                                               data-toggle="tab">Course Info</a>
             </li>
             <li data-ng-class="vm.showRoomInfo==true?'active':''" style="cursor:pointer"><a ng-click="vm.fetchRoomInfo()" data-toggle="tab">Room
                 Info</a></li>

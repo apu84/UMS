@@ -116,8 +116,13 @@
                 <span
                         class="subtitle"></span></div>
             <div class="panel-body">
-                <div class="row" ng-if="vm.classRoutineService.routineData">
-                    <div ui-view></div>
+                <div class="row">
+                    <div class="col-md-12" align="right">
+                        <p><span style="cursor: pointer" title="section based routine">{{vm.classRoutineService.selectedTheorySection.name}}</span> |  <span style="cursor: pointer" title="teacher based routine"><i class="fa fa-user" aria-hidden="true"></i></span>  | <span style="cursor: pointer" title="room based routine"><i class="fa fa-th" aria-hidden="true"></i></span></p>
+                    </div>
+                </div>
+                <div class="row" ng-if="vm.showRoutineChart">
+                    <div routine-chart-dir></div>
                 </div>
             </div>
         </div>
