@@ -37,7 +37,7 @@ public class ExperienceInformationBuilder implements Builder<ExperienceInformati
     pBuilder.add("experienceDurationString",
         pReadOnly.getExperienceDurationString() == null ? "" : pReadOnly.getExperienceDurationString());
     if(pReadOnly.getExperienceCategoryId() == 0) {
-      pBuilder.add("trainingCategory", JsonValue.NULL);
+      pBuilder.add("experienceCategory", JsonValue.NULL);
     }
     else {
       JsonObjectBuilder categoryBuilder = Json.createObjectBuilder();
