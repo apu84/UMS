@@ -11,6 +11,7 @@ import org.ums.formatter.DateFormat;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonValue;
 import javax.ws.rs.core.UriInfo;
 
 @Component
@@ -25,14 +26,18 @@ public class ExperienceInformationBuilder implements Builder<ExperienceInformati
       LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
-    pBuilder.add("experienceInstitution", pReadOnly.getExperienceInstitute());
-    pBuilder.add("experienceDesignation", pReadOnly.getDesignation());
-    pBuilder.add("experienceFrom", mDateFormat.format(pReadOnly.getExperienceFromDate()));
-    pBuilder.add("experienceTo", mDateFormat.format(pReadOnly.getExperienceToDate()));
+    pBuilder.add("experienceInstitution",
+        pReadOnly.getExperienceInstitute() == null ? "" : pReadOnly.getExperienceInstitute());
+    pBuilder.add("experienceDesignation", pReadOnly.getDesignation() == null ? "" : pReadOnly.getDesignation());
+    pBuilder.add("experienceFrom",
+        pReadOnly.getExperienceFromDate() == null ? "" : mDateFormat.format(pReadOnly.getExperienceFromDate()));
+    pBuilder.add("experienceTo",
+        pReadOnly.getExperienceToDate() == null ? "" : mDateFormat.format(pReadOnly.getExperienceToDate()));
     pBuilder.add("experienceDuration", pReadOnly.getExperienceDuration());
-    pBuilder.add("experienceDurationString", pReadOnly.getExperienceDurationString());
+    pBuilder.add("experienceDurationString",
+        pReadOnly.getExperienceDurationString() == null ? "" : pReadOnly.getExperienceDurationString());
     if(pReadOnly.getExperienceCategoryId() == 0) {
-      pBuilder.add("trainingCategory", "");
+      pBuilder.add("trainingCategory", JsonValue.NULL);
     }
     else {
       JsonObjectBuilder categoryBuilder = Json.createObjectBuilder();
@@ -47,12 +52,20 @@ public class ExperienceInformationBuilder implements Builder<ExperienceInformati
 
     pMutable.setId(!pJsonObject.getString("id").equals("") ? Long.parseLong(pJsonObject.getString("id")) : null);
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
-    pMutable.setExperienceInstitute(pJsonObject.getString("experienceInstitution"));
-    pMutable.setDesignation(pJsonObject.getString("experienceDesignation"));
-    pMutable.setExperienceFromDate(mDateFormat.parse(pJsonObject.getString("experienceFrom")));
-    pMutable.setExperienceToDate(mDateFormat.parse(pJsonObject.getString("experienceTo")));
-    pMutable.setExperienceDuration(pJsonObject.getInt("experienceDuration"));
-    pMutable.setExperienceDurationString(pJsonObject.getString("experienceDurationString"));
-    pMutable.setExperienceCategoryId(pJsonObject.getJsonObject("experienceCategory").getInt("id"));
+    pMutable.setExperienceInstitute(pJsonObject.getString("experienceInstitution").isEmpty() ? "" : pJsonObject
+        .getString("experienceInstitution"));
+    pMutable.setDesignation(pJsonObject.getString("experienceDesignation").isEmpty() ? "" : pJsonObject
+        .getString("experienceDesignation"));
+    pMutable.setExperienceFromDate(pJsonObject.getString("experienceFrom") == null
+        || pJsonObject.getString("experienceFrom").isEmpty() ? null : mDateFormat.parse(pJsonObject
+        .getString("experienceFrom")));
+    pMutable.setExperienceToDate(pJsonObject.getString("experienceTo") == null
+        || pJsonObject.getString("experienceTo").isEmpty() ? null : mDateFormat.parse(pJsonObject
+        .getString("experienceTo")));
+    pMutable.setExperienceDuration(pJsonObject.getInt("experienceDuration", 0));
+    pMutable.setExperienceDurationString(pJsonObject.getString("experienceDurationString").isEmpty() ? "" : pJsonObject
+        .getString("experienceDurationString"));
+    pMutable.setExperienceCategoryId(pJsonObject.get("experienceCategory").getValueType()
+        .equals(JsonValue.ValueType.NULL) ? 0 : pJsonObject.getJsonObject("experienceCategory").getInt("id"));
   }
 }

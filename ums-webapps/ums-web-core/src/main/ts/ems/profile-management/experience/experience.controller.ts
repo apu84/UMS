@@ -120,7 +120,7 @@ module ums {
                 form.$invalid = false;
             }
             else{
-                if(this.experience[index].trainingTo) {
+                if(this.experience[index].experienceTo) {
                     this.notify.error("From date is greater than to date");
                 }
                 form.$invalid = true;
