@@ -14,10 +14,7 @@ import org.ums.util.UmsUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -63,6 +60,17 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
     String query = ALL_SECTIONS_FOR_A_COURSE;
     return mJdbcTemplate.query(query, new Object[] {pCourseId, pSemesterId, pTeacherId},
         new CourseTeacherRowMapperForAllSection());
+  }
+
+  @Override
+  public List<CourseTeacher> getCourseTeacher(int pSemesterId, List<String> pCourseIdList) {
+    if(pCourseIdList.size() == 0)
+      return new ArrayList<>();
+    String query = "select * from course_teacher where semester_id=:semesterId and course_id in (:courseIdList)";
+    Map parameterMap = new HashMap();
+    parameterMap.put("semesterId", pSemesterId);
+    parameterMap.put("courseIdList", pCourseIdList);
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new CourseTeacherRowMapper());
   }
 
   @Override

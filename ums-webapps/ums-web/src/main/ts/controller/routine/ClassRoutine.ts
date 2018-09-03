@@ -1,5 +1,7 @@
 module ums {
 
+  import ClassRoutine = ums.ClassRoutine;
+
   interface DeptProgram {
       deptId: string;
       programs: Program[];
@@ -43,10 +45,17 @@ module ums {
     private state: any;
     private searchButtonClicked: boolean;
     private counter: number = 1;
+    courseTeacherList: Employee[];
+    roomList: ClassRoom[];
+    selectedTeacher: Employee;
+    selectedRoom: ClassRoom;
     showRoutineChart:boolean;
+    showSectionWiseRoutine:boolean;
+    showTeacherWiseRoutine: boolean;
+    showRoomWiseRoutine:boolean;
 
     public static $inject = ['appConstants', '$q', 'notify', 'semesterService', 'classRoomService', 'classRoutineService',
-      'userService', 'routineConfigService', '$state'];
+      'userService', 'routineConfigService', '$state', 'employeeService'];
     constructor(private appConstants: any,
                 private $q:ng.IQService,
                 private notify: Notify,
@@ -55,13 +64,18 @@ module ums {
                 private classRoutineService:ClassRoutineService,
                 private userService: UserService,
                 private routineConfigService: RoutineConfigService,
-                private $state:any) {
+                private $state:any,
+                private employeeService: EmployeeService) {
 
         this.init();
     }
 
     public init() {
       this.showRoutineChart = false;
+      this.showSectionWiseRoutine = true;
+      this.showTeacherWiseRoutine = false;
+      this.showRoomWiseRoutine = false;
+      this.classRoutineService.sectionSpecific = true;
       this.state = this.$state;
         this.showRoutineSection=false;
         this.programType = this.UNDERGRADUATE;
@@ -121,15 +135,74 @@ module ums {
       return defer.promise;
     }
 
+    public showSectionWiseRoutinePortion(){
+      this.showSectionWiseRoutine = true;
+      this.showTeacherWiseRoutine = false;
+      this.showRoomWiseRoutine = false;
+      this.classRoutineService.sectionSpecific=true;
+      this.fetchRoutineData();
+    }
+
+    public showTeacherWiseRoutinePortion(){
+      this.showSectionWiseRoutine = false;
+      this.showTeacherWiseRoutine = true;
+      this.showRoomWiseRoutine = false;
+      this.showRoutineChart = false;
+      this.classRoutineService.sectionSpecific=false;
+
+      this.fetchActiveTeachers();
+    }
+
+
+    private fetchActiveTeachers(){
+      this.courseTeacherList = [];
+      this.employeeService.getActiveTeachers().then((employees: Employee[])=>{
+        this.courseTeacherList = employees;
+      })
+    }
+
+    public courseTeacherSelected(){
+      console.log("Course teacher");
+      console.log(this.selectedTeacher);
+      this.classRoutineService.sectionSpecific = false;
+      this.fetchRoutineData();
+    }
+
+
+    public showRoomWiseRoutinePortion(){
+      this.showSectionWiseRoutine= false;
+      this.showTeacherWiseRoutine = false;
+      this.showRoomWiseRoutine = true;
+      this.showRoutineChart = false;
+      this.classRoutineService.sectionSpecific=false;
+
+      this.fetchClassRooms();
+    }
+
+
+    private fetchClassRooms(){
+      this.roomList = [];
+      this.classRoomService.getClassRooms().then((rooms: ClassRoom[])=>{
+        this.roomList = rooms;
+      })
+    }
+
+
+    public roomSelected(){
+      this.classRoutineService.sectionSpecific= false;
+      this.fetchRoutineData();
+    }
+
     public fetchRoutineData(): ng.IPromise<ClassRoutine[]> {
       let defer: ng.IDeferred<ClassRoutine[]> = this.$q.defer();
+      this.showRoutineChart = false;
       this.fetchRoutineConfig().then((routineConfig: RoutineConfig) => {
         if (this.routineConfig == null || this.routineConfig == undefined) {
           this.notify.error("Routine of the semester is not yet configured, please contact with the registrar office");
           defer.resolve(undefined);
         }
         else {
-          this.classRoutineService.getClassRoutineForEmployee(this.classRoutineService.selectedSemester.id, this.classRoutineService.selectedProgram.id, +this.classRoutineService.studentsYear, +this.classRoutineService.studentsSemester, this.classRoutineService.selectedTheorySection.id).then((routineData: ClassRoutine[]) => {
+          this.fetchRoutineInfo().then((routineData: ClassRoutine[]) => {
             console.log("Routine data");
             console.log(routineData);
             this.classRoutineService.routineData = [];
@@ -139,6 +212,7 @@ module ums {
               r.endTimeObj = moment(r.endTime, "hh:mm A").toDate();
             })
             this.classRoutineService.routineData = routineData;
+            this.showRoutineChart=true;
             defer.resolve(routineData);
           });
         }
@@ -146,6 +220,47 @@ module ums {
       return defer.promise;
     }
 
+    private fetchRoutineInfo():ng.IPromise<ClassRoutine[]>{
+      let defer: ng.IDeferred<ClassRoutine[]> = this.$q.defer();
+
+      if(this.showSectionWiseRoutine)
+        this.fetchSectionWiseRoutineData().then((routineData:ClassRoutine[])=>defer.resolve(routineData));
+      else if(this.showTeacherWiseRoutine)
+        this.fetchTeacherWiseRoutineData().then((routineData:ClassRoutine[])=>defer.resolve(routineData));
+      else if(this.showRoomWiseRoutine)
+        this.fetchRoomWiseRoutineData().then((routineData:ClassRoutine[])=>defer.resolve(routineData));
+      return defer.promise;
+
+    }
+
+
+    private fetchSectionWiseRoutineData():ng.IPromise<ClassRoutine[]>{
+      let defer: ng.IDeferred<ClassRoutine[]> = this.$q.defer();
+      this.classRoutineService.getClassRoutineForEmployee(this.classRoutineService.selectedSemester.id, this.classRoutineService.selectedProgram.id, +this.classRoutineService.studentsYear, +this.classRoutineService.studentsSemester, this.classRoutineService.selectedTheorySection.id).then((routineData: ClassRoutine[]) => {
+        defer.resolve(routineData);
+      });
+      return defer.promise;
+    }
+
+    private fetchTeacherWiseRoutineData():ng.IPromise<ClassRoutine[]>{
+      let defer: ng.IDeferred<ClassRoutine[]> = this.$q.defer();
+
+
+      this.classRoutineService.getRoutineForTeacher(this.selectedTeacher.id, this.classRoutineService.selectedSemester.id).then((routineData: ClassRoutine[])=>{
+        defer.resolve(routineData);
+      })
+      return defer.promise;
+    }
+
+
+    private fetchRoomWiseRoutineData():ng.IPromise<ClassRoutine[]>{
+      let defer: ng.IDeferred<ClassRoutine[]> = this.$q.defer();
+
+      this.classRoutineService.getRoomBasedClassRoutine(this.classRoutineService.selectedSemester.id, +this.selectedRoom.id).then((routineData: ClassRoutine[])=>{
+        defer.resolve(routineData);
+      })
+      return defer.promise;
+    }
     public searchForRoutineData(){
       Utils.expandRightDiv();
       this.counter += 1;

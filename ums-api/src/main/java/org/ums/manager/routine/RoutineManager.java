@@ -8,7 +8,7 @@ import org.ums.manager.ContentManager;
 import java.util.List;
 
 public interface RoutineManager extends ContentManager<Routine, MutableRoutine, Long> {
-  List<Routine> getRoutineByTeacher(String teacherId);
+  List<Routine> getRoutineByTeacher(String teacherId, Integer pSemesterId);
 
   List<Routine> getRoutineByStudent(Student student);
 

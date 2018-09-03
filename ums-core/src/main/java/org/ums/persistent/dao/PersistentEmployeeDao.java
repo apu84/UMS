@@ -2,6 +2,7 @@ package org.ums.persistent.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.ums.decorator.EmployeeDaoDecorator;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.mutable.MutableEmployee;
@@ -10,7 +11,10 @@ import org.ums.util.UmsUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentEmployeeDao extends EmployeeDaoDecorator {
@@ -29,9 +33,11 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
   static String EXISTS = "SELECT COUNT(*) AS COUNTER FROM EMPLOYEES ";
 
   private JdbcTemplate mJdbcTemplate;
+  private NamedParameterJdbcTemplate mNamedParameterJdbcTemplate;
 
-  public PersistentEmployeeDao(JdbcTemplate pJdbcTemplate) {
+  public PersistentEmployeeDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
+    mNamedParameterJdbcTemplate = pNamedParameterJdbcTemplate;
   }
 
   @Override
@@ -89,6 +95,17 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
   public List<Employee> getEmployees(String pDeparmtentId) {
     String query = SELECT_ALL + " WHERE DEPT_OFFICE=? ORDER BY DESIGNATION";
     return mJdbcTemplate.query(query, new Object[] {pDeparmtentId}, new EmployeeRowMapper());
+  }
+
+  @Override
+  public List<Employee> getEmployees(List<String> pEmployeeIdList) {
+    if(pEmployeeIdList.size() == 0)
+      return new ArrayList<>();
+
+    String query = SELECT_ALL + " where employee_id in (:employeeIdList)";
+    Map parameterMap = new HashMap();
+    parameterMap.put("employeeIdList", pEmployeeIdList);
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new EmployeeRowMapper());
   }
 
   public List<Employee> getEmployees(String pDeptId, String pPublicationStatus) {

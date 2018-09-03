@@ -72,6 +72,7 @@ module ums{
     public studentsYear: string;
     public studentsSemester: string;
     public enableEdit: boolean;
+    public sectionSpecific:boolean;
     public routineMapWithTimeAndDay: any;
     public courseList: Course[];
     public roomList: ClassRoom[];
@@ -110,10 +111,11 @@ module ums{
       return defer.promise;
     }
 
-    public getRoutineForTeacher(employeeId: string):ng.IPromise<any>{
+    public getRoutineForTeacher(employeeId: string, semesterId: number):ng.IPromise<any>{
+      console.log("Semester id :"+ semesterId);
       var defer = this.$q.defer();
       var routines:any={};
-      this.httpClient.get("/ums-webservice-academic/academic/routine/routineForTeacher/employeeId/"+employeeId,'application/json',
+      this.httpClient.get("/ums-webservice-academic/academic/routine/routineForTeacher/employeeId/"+employeeId+'/semesterId/'+semesterId,'application/json',
           (data:any,etag:string)=>{
             routines = data.entries;
             defer.resolve(routines);

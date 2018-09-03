@@ -39,7 +39,7 @@ module ums{
 
     private getTeachersRoutine():ng.IPromise<any>{
       var defer = this.$q.defer();
-      this.classRoutineService.getRoutineForTeacher("nothing").then((routines:Array<IRoutine>)=>{
+      this.classRoutineService.getRoutineForTeacher("nothing",1).then((routines:Array<IRoutine>)=>{
         this.$scope.routines = routines;
 
 

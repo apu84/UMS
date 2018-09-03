@@ -18,6 +18,8 @@ public interface EmployeeManager extends ContentManager<Employee, MutableEmploye
 
   List<Employee> getEmployees(String pDepartmentId);
 
+  List<Employee> getEmployees(List<String> pEmployeeIdList);
+
   String getLastEmployeeId(String pDepartmentId, int pEmployeeType);
 
   boolean validateShortName(String pShortName);

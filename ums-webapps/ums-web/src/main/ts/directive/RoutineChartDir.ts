@@ -249,18 +249,55 @@ module ums{
     }
 
     public getCourseTeacher() {
-      this.courseTeacherService.getCourseTeacherByProgramAndSemesterAndYearAndAcademicSemester(
-          this.classRoutineService.selectedSemester.id,
-          this.classRoutineService.selectedProgram.id,
-          this.classRoutineService.selectedTheorySection.id,
-          +this.classRoutineService.studentsYear,
-          +this.classRoutineService.studentsSemester
-      ).then((courseTeacherList: CourseTeacherInterface[]) => {
-        this.courseTeacherList = courseTeacherList;
-        this.createCourseTeacherMap();
-        this.createCourseTeacherWithSectionMap();
-        this.showRoutineChart = true;
-      })
+      console.log("Section specific");
+      console.log(this.classRoutineService.sectionSpecific);
+      if(this.classRoutineService.sectionSpecific){
+        this.courseTeacherService.getCourseTeacherByProgramAndSemesterAndYearAndAcademicSemester(
+            this.classRoutineService.selectedSemester.id,
+            this.classRoutineService.selectedProgram.id,
+            this.classRoutineService.selectedTheorySection.id,
+            +this.classRoutineService.studentsYear,
+            +this.classRoutineService.studentsSemester
+        ).then((courseTeacherList: CourseTeacherInterface[]) => {
+          this.courseTeacherList = courseTeacherList;
+          this.createCourseTeacherMap();
+          this.createCourseTeacherWithSectionMap();
+          this.showRoutineChart = true;
+        })
+      }else{
+
+        this.getCourseTeacherOfAllSections().then((courseTeacher:any)=>{
+          console.log("Course teacher");
+          console.log(courseTeacher);
+          this.createCourseTeacherMap();
+          this.createCourseTeacherWithSectionMap();
+          this.showRoutineChart = true;
+        });
+
+
+      }
+
+    }
+
+    private getCourseTeacherOfAllSections():ng.IPromise<any>{
+      let defer: ng.IDeferred<CourseTeacherInterface[]> = this.$q.defer();
+      let theorySectionList: IConstant[] = this.appConstants.theorySections;
+      this.courseTeacherList = [];
+      theorySectionList.forEach((t:IConstant)=>{
+        this.courseTeacherService.getCourseTeacherByProgramAndSemesterAndYearAndAcademicSemester(
+            this.classRoutineService.selectedSemester.id,
+            this.classRoutineService.selectedProgram.id,
+            t.name,
+            +this.classRoutineService.studentsYear,
+            +this.classRoutineService.studentsSemester
+        ).then((courseTeacherList: CourseTeacherInterface[]) => {
+          this.courseTeacherList =  this.courseTeacherList.concat( courseTeacherList);
+
+        })
+      });
+
+      defer.resolve(this.courseTeacherList);
+      return defer.promise;
     }
 
     public getClassRoomList() {

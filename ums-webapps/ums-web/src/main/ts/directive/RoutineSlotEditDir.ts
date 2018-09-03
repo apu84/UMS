@@ -147,7 +147,7 @@ module ums{
       this.showTeachersInfo = true;
 
       if(this.selectedCourseTeacher)
-        this.classRoutineService.getRoutineForTeacher(this.selectedCourseTeacher.id).then((routine:ClassRoutine[])=>{
+        this.classRoutineService.getRoutineForTeacher(this.selectedCourseTeacher.id, this.classRoutineService.selectedSemester.id).then((routine:ClassRoutine[])=>{
           this.routineBasedOnCourseTeacher=[];
           this.routineBasedOnCourseTeacher = routine;
         });

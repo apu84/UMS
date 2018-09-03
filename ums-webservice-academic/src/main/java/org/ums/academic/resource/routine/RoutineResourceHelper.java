@@ -25,7 +25,6 @@ import org.ums.persistent.model.PersistentProgram;
 import org.ums.persistent.model.PersistentSemester;
 import org.ums.persistent.model.routine.PersistentRoutine;
 import org.ums.resource.ResourceHelper;
-import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
 import javax.json.*;
@@ -207,10 +206,10 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return object.build();
   }
 
-  public JsonObject getRoutineForTeacher(final String pEmployeeId, final UriInfo pUriInfo) {
+  public JsonObject getRoutineForTeacher(final String pEmployeeId, final Integer pSemesterId, final UriInfo pUriInfo) {
     String employeeId = pEmployeeId;
     // Employee employee = mEmployeeManager.getByEmployeeId(employeeId);
-    List<Routine> routines = getContentManager().getRoutineByTeacher(employeeId);
+    List<Routine> routines = getContentManager().getRoutineByTeacher(employeeId, pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

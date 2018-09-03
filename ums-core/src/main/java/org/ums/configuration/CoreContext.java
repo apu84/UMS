@@ -119,7 +119,9 @@ public class CoreContext {
   @Lazy
   EmployeeManager employeeManager() {
     EmployeeTransaction employeeTransaction = new EmployeeTransaction();
-    PersistentEmployeeDao persistentEmployeeDao = new PersistentEmployeeDao(mTemplateFactory.getJdbcTemplate());
+    PersistentEmployeeDao persistentEmployeeDao =
+        new PersistentEmployeeDao(mTemplateFactory.getJdbcTemplate(),
+            mNamedParameterJdbcTemplateFactory.getNamedParameterJdbcTemplate());
     employeeTransaction.setManager(persistentEmployeeDao);
     EmployeeCache employeeCache = new EmployeeCache(mCacheFactory.getCacheManager());
     employeeCache.setManager(employeeTransaction);

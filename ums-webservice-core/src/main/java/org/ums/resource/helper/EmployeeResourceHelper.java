@@ -183,6 +183,11 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     return convertToJson(employees, pUriInfo);
   }
 
+  public JsonObject getEmployees(final List<String> pEmployeeIdList, final UriInfo pUriInfo) {
+    List<Employee> employees = getContentManager().getEmployees(pEmployeeIdList);
+    return convertToJson(employees, pUriInfo);
+  }
+
   public JsonObject getEmployees(final String pDepartmentId, final UriInfo pUriInfo) {
     List<Employee> employees = new ArrayList<>();
     employees = getContentManager().getEmployees(pDepartmentId);

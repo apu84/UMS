@@ -14,8 +14,8 @@ import java.util.List;
 public class RoutineDaoDecorator extends ContentDaoDecorator<Routine, MutableRoutine, Long, RoutineManager> implements
     RoutineManager {
   @Override
-  public List<Routine> getRoutineByTeacher(String teacherId) {
-    return getManager().getRoutineByTeacher(teacherId);
+  public List<Routine> getRoutineByTeacher(String teacherId, Integer pSemesterId) {
+    return getManager().getRoutineByTeacher(teacherId, pSemesterId);
   }
 
   @Override
