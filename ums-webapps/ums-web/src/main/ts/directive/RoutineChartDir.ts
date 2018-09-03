@@ -264,14 +264,7 @@ module ums{
           this.createCourseTeacherWithSectionMap();
           this.showRoutineChart = true;
         })
-      }else if(this.classRoutineService.showTeacherWiseRoutine){
-        this.courseTeacherService.getCourseTeacherBySemesterAndTeacher(this.classRoutineService.selectedSemester.id, this.classRoutineService.selectedTeacher.id).then((courseTeacherList:CourseTeacherInterface[])=>{
-          this.courseTeacherList = courseTeacherList;
-          this.createCourseTeacherMap();
-          this.createCourseTeacherWithSectionMap();
-          this.showRoutineChart = true;
-        });
-      }else if(this.classRoutineService.showRoomWiseRoutine){
+      }else if(this.classRoutineService.showRoomWiseRoutine || this.classRoutineService.showTeacherWiseRoutine){
         let courseIdList: string[] = [];
         this.classRoutineService.routineData.forEach((r:ClassRoutine)=>courseIdList.push(r.course.id));
 
