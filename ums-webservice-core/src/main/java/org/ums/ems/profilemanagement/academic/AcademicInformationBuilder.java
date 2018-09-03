@@ -51,11 +51,15 @@ public class AcademicInformationBuilder implements Builder<AcademicInformation, 
     pMutable.setId(!pJsonObject.getString("id").equals("") ? Long.parseLong(pJsonObject.getString("id")) : null);
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
     pMutable.setDegreeLevelId(pJsonObject.getJsonObject("degreeLevel").getInt("id"));
-    pMutable.setDegreeTitleId(pJsonObject.get("degreeTitle").equals(JsonValue.NULL) ||
-           pJsonObject.getJsonObject("degreeTitle").get("degreeTitle").equals(JsonValue.NULL) ? null : pJsonObject.getJsonObject(
-        "degreeTitle").getInt("id"));
+    pMutable.setDegreeTitleId(pJsonObject.get("degreeTitle").getValueType().equals(JsonValue.ValueType.NULL) ?
+            null :
+            pJsonObject.get("degreeTitle").getValueType().equals(JsonValue.ValueType.OBJECT) ?
+                    pJsonObject.getJsonObject("degreeTitle").containsKey("id") ?
+                            pJsonObject.getJsonObject("degreeTitle").getInt("id") :
+                            null : null);
     pMutable.setInstitute(pJsonObject.getString("institution"));
-    pMutable.setPassingYear(pJsonObject.get("passingYear").equals(JsonValue.NULL) ? 0 :pJsonObject.getInt("passingYear"));
+    pMutable.setPassingYear(pJsonObject.get("passingYear").equals(JsonValue.NULL) ? 0 : pJsonObject
+        .getInt("passingYear"));
     pMutable.setResult(pJsonObject.getString("result") == null ? "" : pJsonObject.getString("result"));
     pMutable.setMajor(pJsonObject.getString("major") == null ? "" : pJsonObject.getString("major"));
     pMutable.setBoard(pJsonObject.getString("board") == null ? "" : pJsonObject.getString("board"));
