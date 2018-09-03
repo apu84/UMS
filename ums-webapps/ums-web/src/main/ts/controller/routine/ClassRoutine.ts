@@ -47,12 +47,10 @@ module ums {
     private counter: number = 1;
     courseTeacherList: Employee[];
     roomList: ClassRoom[];
-    selectedTeacher: Employee;
     selectedRoom: ClassRoom;
     showRoutineChart:boolean;
-    showSectionWiseRoutine:boolean;
-    showTeacherWiseRoutine: boolean;
-    showRoomWiseRoutine:boolean;
+
+
 
     public static $inject = ['appConstants', '$q', 'notify', 'semesterService', 'classRoomService', 'classRoutineService',
       'userService', 'routineConfigService', '$state', 'employeeService'];
@@ -72,9 +70,9 @@ module ums {
 
     public init() {
       this.showRoutineChart = false;
-      this.showSectionWiseRoutine = true;
-      this.showTeacherWiseRoutine = false;
-      this.showRoomWiseRoutine = false;
+      this.classRoutineService.showSectionWiseRoutine = true;
+      this.classRoutineService.showTeacherWiseRoutine = false;
+      this.classRoutineService.showRoomWiseRoutine = false;
       this.classRoutineService.sectionSpecific = true;
       this.state = this.$state;
         this.showRoutineSection=false;
@@ -136,17 +134,17 @@ module ums {
     }
 
     public showSectionWiseRoutinePortion(){
-      this.showSectionWiseRoutine = true;
-      this.showTeacherWiseRoutine = false;
-      this.showRoomWiseRoutine = false;
+      this.classRoutineService.showSectionWiseRoutine = true;
+      this.classRoutineService.showTeacherWiseRoutine = false;
+      this.classRoutineService.showRoomWiseRoutine = false;
       this.classRoutineService.sectionSpecific=true;
       this.fetchRoutineData();
     }
 
     public showTeacherWiseRoutinePortion(){
-      this.showSectionWiseRoutine = false;
-      this.showTeacherWiseRoutine = true;
-      this.showRoomWiseRoutine = false;
+      this.classRoutineService.showSectionWiseRoutine = false;
+      this.classRoutineService.showTeacherWiseRoutine = true;
+      this.classRoutineService.showRoomWiseRoutine = false;
       this.showRoutineChart = false;
       this.classRoutineService.sectionSpecific=false;
 
@@ -163,16 +161,16 @@ module ums {
 
     public courseTeacherSelected(){
       console.log("Course teacher");
-      console.log(this.selectedTeacher);
+      console.log(this.classRoutineService.selectedTeacher);
       this.classRoutineService.sectionSpecific = false;
       this.fetchRoutineData();
     }
 
 
     public showRoomWiseRoutinePortion(){
-      this.showSectionWiseRoutine= false;
-      this.showTeacherWiseRoutine = false;
-      this.showRoomWiseRoutine = true;
+      this.classRoutineService.showSectionWiseRoutine= false;
+      this.classRoutineService.showTeacherWiseRoutine = false;
+      this.classRoutineService.showRoomWiseRoutine = true;
       this.showRoutineChart = false;
       this.classRoutineService.sectionSpecific=false;
 
@@ -223,12 +221,13 @@ module ums {
     private fetchRoutineInfo():ng.IPromise<ClassRoutine[]>{
       let defer: ng.IDeferred<ClassRoutine[]> = this.$q.defer();
 
-      if(this.showSectionWiseRoutine)
+      if(this.classRoutineService.showSectionWiseRoutine)
         this.fetchSectionWiseRoutineData().then((routineData:ClassRoutine[])=>defer.resolve(routineData));
-      else if(this.showTeacherWiseRoutine)
+      else if(this.classRoutineService.showTeacherWiseRoutine)
         this.fetchTeacherWiseRoutineData().then((routineData:ClassRoutine[])=>defer.resolve(routineData));
-      else if(this.showRoomWiseRoutine)
+      else if(this.classRoutineService.showRoomWiseRoutine)
         this.fetchRoomWiseRoutineData().then((routineData:ClassRoutine[])=>defer.resolve(routineData));
+
       return defer.promise;
 
     }
@@ -245,8 +244,7 @@ module ums {
     private fetchTeacherWiseRoutineData():ng.IPromise<ClassRoutine[]>{
       let defer: ng.IDeferred<ClassRoutine[]> = this.$q.defer();
 
-
-      this.classRoutineService.getRoutineForTeacher(this.selectedTeacher.id, this.classRoutineService.selectedSemester.id).then((routineData: ClassRoutine[])=>{
+      this.classRoutineService.getRoutineForTeacher(this.classRoutineService.selectedTeacher.id, this.classRoutineService.selectedSemester.id).then((routineData: ClassRoutine[])=>{
         defer.resolve(routineData);
       })
       return defer.promise;

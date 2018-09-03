@@ -149,16 +149,16 @@
                         <p><span style="cursor: pointer" title="section based routine" ng-click="vm.showSectionWiseRoutinePortion()">{{vm.classRoutineService.selectedTheorySection.name}}</span> |  <span style="cursor: pointer" title="teacher based routine" ng-click="vm.showTeacherWiseRoutinePortion()"><i class="fa fa-user" aria-hidden="true"></i></span>  | <span style="cursor: pointer" title="room based routine" ng-click="vm.showRoomWiseRoutinePortion()"><i class="fa fa-th" aria-hidden="true"></i></span></p>
                     </div>
                 </div>
-                <div class="row" ng-if="vm.showTeacherWiseRoutine">
+                <div class="row" ng-if="vm.classRoutineService.showTeacherWiseRoutine">
                     <div class="col-md-3"></div>
                     <label class="col-md-3" align="right">Select Teacher</label>
                     <div class="col-md-3">
                         <ui-select theme="bootstrap"
-                                   data-ng-model="vm.selectedTeacher" on-select="vm.courseTeacherSelected()"
+                                   data-ng-model="vm.classRoutineService.selectedTeacher" on-select="vm.courseTeacherSelected()"
 
                         >
                             <ui-select-match placeholder="Select Course Teacher">
-                                {{vm.selectedTeacher.employeeName }} ({{vm.selectedTeacher.deptOfficeName}})
+                                {{vm.classRoutineService.selectedTeacher.employeeName }} ({{vm.classRoutineService.selectedTeacher.deptOfficeName}})
                             </ui-select-match>
                             <ui-select-choices id="courseTeacher"
                                                repeat="g in vm.courseTeacherList | filter:$select.search | limitTo:20">
@@ -168,7 +168,7 @@
                     </div>
                     <div class="col-md-3"></div>
                 </div>
-                <div class="row" ng-if="vm.showRoomWiseRoutine">
+                <div class="row" ng-if="vm.classRoutineService.showRoomWiseRoutine">
                     <div class="col-md-3"></div>
                     <label class="col-md-3" align="right">Select Room No</label>
                     <div class="col-md-3">

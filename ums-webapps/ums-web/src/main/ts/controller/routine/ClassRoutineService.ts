@@ -88,6 +88,13 @@ module ums{
     public courseTeacherMapWithCourseIdAndSection: { [key: string]: CourseTeacherInterface[] }; // map[courseId]= CourseTeacher[];
     public courseTeacherWithSectionMap: { [key: string]: CourseTeacherInterface[] }; // map[courseId+section]= CourseTeacher[];
     public routineUrl: string = '/ums-webservice-academic/academic/routine';
+    showSectionWiseRoutine:boolean;
+    showTeacherWiseRoutine: boolean;
+    showRoomWiseRoutine:boolean;
+    selectedTeacher: Employee;
+
+
+
     public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
     constructor(private appConstants: any, private httpClient: HttpClient,
                 private $q:ng.IQService, private notify: Notify,

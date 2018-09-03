@@ -147,7 +147,7 @@ public class CourseTeacherResource extends Resource {
   }
 
   @POST
-  @Path("/semester-id/{semester-id}")
+  @Path("/semesterId/{semester-id}")
   @PostLog(message = "Requested for course-teacher information by course list")
   public JsonArray post(@Context HttpServletRequest pHttpServletRequest, @PathParam("semester-id") Integer pSemesterId,
       final List<String> pCourseList) {
