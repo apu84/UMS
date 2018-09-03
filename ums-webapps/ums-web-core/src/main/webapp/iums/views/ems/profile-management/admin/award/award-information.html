@@ -27,12 +27,8 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-8">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nForm[$index].nAwardName.$invalid && !nForm[$index].nAwardName.$pristine }">
-                                <label for="iAwardName" class="control-label">Award Title<span
-                                        data-ng-show="vm.enableEdit[$index]"
-                                        class='require'>*</span></label>
-
+                            <div class="form-group">
+                                <label for="iAwardName" class="control-label">Award Title</label>
                                 <div data-ng-show="vm.enableEdit[$index]">
                                     <input type="text"
                                            name="nAwardName"
@@ -40,9 +36,7 @@
                                            data-ng-model="award.awardName"
                                            placeholder="Award/Honor Name"
                                            maxlength="100"
-                                           class="form-control" required>
-                                    <label data-ng-show="nForm[$index].nAwardName.$invalid && !nForm[$index].nAwardName.$pristine"
-                                           class="help-block control-label">Please specify award title.</label>
+                                           class="form-control">
                                 </div>
                                 <div data-ng-show="!vm.enableEdit[$index]">
                                     <div class="underlineBox">
@@ -53,11 +47,8 @@
                         </div>
 
                         <div class="col-md-2">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nForm[$index].nAwardedYear.$invalid && !nForm[$index].nAwardedYear.$pristine }">
-                                <label for="iAwardedYear" class="control-label">Awarded Year<span
-                                        data-ng-show="vm.enableEdit[$index]"
-                                        class='require'>*</span></label>
+                            <div class="form-group">
+                                <label for="iAwardedYear" class="control-label">Awarded Year</label>
                                 <div data-ng-show="vm.enableEdit[$index]">
                                     <input type="number"
                                            name="nAwardedYear"
@@ -66,9 +57,7 @@
                                            placeholder="YYYY"
                                            autocomplete="off"
                                            maxlength="4"
-                                           class="form-control" required>
-                                    <label data-ng-show="nForm[$index].nAwardedYear.$invalid && !nForm[$index].nAwardedYear.$pristine"
-                                           class="help-block control-label">Please provide your awarded year.</label>
+                                           class="form-control">
                                 </div>
                                 <div data-ng-show="!vm.enableEdit[$index]">
                                     <div class="underlineBox">
@@ -82,11 +71,8 @@
 
                     <div class="row">
                         <div class="col-md-10">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nForm[$index].nAwardInstitute.$invalid && !nForm[$index].nAwardInstitute.$pristine }">
-                                <label for="iAwardInstitute" class="control-label">Awarded Year<span
-                                        data-ng-show="vm.enableEdit[$index]"
-                                        class='require'>*</span></label>
+                            <div class="form-group">
+                                <label for="iAwardInstitute" class="control-label">Institution</label>
                                 <div data-ng-show="vm.enableEdit[$index]">
                                     <input type="text"
                                            name="nAwardInstitute"
@@ -95,8 +81,6 @@
                                            placeholder="Institution"
                                            maxlength="150"
                                            class="form-control">
-                                    <label data-ng-show="nForm[$index].nAwardInstitute.$invalid && !nForm[$index].nAwardInstitute.$pristine"
-                                           class="help-block control-label">Please provide Institution name.</label>
                                 </div>
                                 <div data-ng-show="!vm.enableEdit[$index]">
                                     <div class="underlineBox">
