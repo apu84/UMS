@@ -114,7 +114,6 @@
                             <div class="form-group">
                                 <label for="iPublicationCountry" class="control-label">Country</label>
                                 <div data-ng-show="vm.enableEdit[$index]">
-
                                     <select name="nPublicationCountry"
                                             id="iPublicationCountry"
                                             data-ng-model="publication.publicationCountry"
@@ -123,7 +122,6 @@
                                         <option value="">Select Country</option>
                                     </select>
                                 </div>
-
                                 <div data-ng-show="!vm.enableEdit[$index]">
                                     <div class="underlineBox">
                                         <label class="control-label">{{publication.publicationCountry.name}}</label>
@@ -133,20 +131,16 @@
                         </div>
 
                         <div class="col-md-3">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nForm[$index].nDateOfPublication.$invalid && !nForm[$index].nDateOfPublication.$pristine }">
+                            <div class="form-group">
                                 <label for="iDateOfPublication" class="control-label">Year of
-                                    Publication<span
-                                            data-ng-show="vm.enableEdit[$index]"
-                                            class='require'>*</span></label>
+                                    Publication</label>
                                 <div data-ng-show="vm.enableEdit[$index]">
-
                                     <input type="number"
                                            name="nDateOfPublication"
                                            id="iDateOfPublication"
                                            data-ng-model="publication.dateOfPublication"
                                            maxlength="4"
-                                           class="datepicker-default form-control" required>
+                                           class="datepicker-default form-control">
                                 </div>
 
                                 <div data-ng-show="!vm.enableEdit[$index]">
@@ -160,12 +154,9 @@
 
                     <div class="row">
                         <div class="col-md-10">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nForm[$index].nPublicationJournalName.$invalid && !nForm[$index].nPublicationJournalName.$pristine }">
+                            <div class="form-group">
                                 <label class="control-label" for="iPublicationJournalName">Journal/Conference
-                                    Name<span
-                                            ng-show="publication.publicationType.id==1 || publication.publicationType.id==2"><span
-                                            class='require'>*</span></span>
+                                    Name
                                 </label>
                                 <div data-ng-show="vm.enableEdit[$index]">
                                     <input type="text"
@@ -174,8 +165,7 @@
                                            data-ng-model="publication.publicationJournalName"
                                            placeholder="Journal Name"
                                            maxlength="250"
-                                           class="form-control"
-                                           ng-required="publication.publicationType.id==1 || publication.publicationType.id==2">
+                                           class="form-control">
                                 </div>
                                 <div data-ng-show="!vm.enableEdit[$index]">
                                     <div class="underlineBox">
@@ -188,13 +178,9 @@
 
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nForm[$index].nPublicationISSN.$invalid && !nForm[$index].nPublicationISSN.$pristine }">
-                                <label for="iPublicationISSN" class="control-label">ISSN<span
-                                        data-ng-show="vm.enableEdit[$index]"
-                                        class='require'>*</span></label>
+                            <div class="form-group">
+                                <label for="iPublicationISSN" class="control-label">ISSN</label>
                                 <div data-ng-show="vm.enableEdit[$index]">
-
                                     <input type="text"
                                            name="nPublicationISSN"
                                            id="iPublicationISSN"
@@ -203,7 +189,6 @@
                                            maxlength="80"
                                            class="form-control">
                                 </div>
-
                                 <div data-ng-show="!vm.enableEdit[$index]">
                                     <div class="underlineBox">
                                         <label class="control-label">{{publication.publicationISSN}}</label>
@@ -213,11 +198,8 @@
                         </div>
 
                         <div class="col-md-3">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nForm[$index].nPublicationVolume.$invalid && !nForm[$index].nPublicationVolume.$pristine }">
-                                <label for="iPublicationVolume" class="control-label">Volume<span
-                                        data-ng-show="vm.enableEdit[$index]"
-                                        class='require'>*</span></label>
+                            <div class="form-group">
+                                <label for="iPublicationVolume" class="control-label">Volume</label>
                                 <div data-ng-show="vm.enableEdit[$index]">
                                     <input type="text"
                                            name="nPublicationVolume"
@@ -227,7 +209,6 @@
                                            maxlength="80"
                                            class="form-control">
                                 </div>
-
                                 <div data-ng-show="!vm.enableEdit[$index]">
                                     <div class="underlineBox">
                                         <label class="control-label">{{publication.publicationVolume}}</label>
@@ -248,7 +229,6 @@
                                            maxlength="80"
                                            class="form-control">
                                 </div>
-
                                 <div data-ng-show="!vm.enableEdit[$index]">
                                     <div class="underlineBox">
                                         <label class="control-label">{{publication.publicationIssue}}</label>
@@ -260,11 +240,8 @@
 
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nForm[$index].nPublisherName.$invalid && !nForm[$index].nPublisherName.$pristine }">
-                                <label class="control-label" for="iPublisherName">Publisher Name<span
-                                        ng-show="publication.publicationType.id==1 || publication.publicationType.id==3"><span
-                                        class='require'>*</span></span></label></label>
+                            <div class="form-group">
+                                <label class="control-label" for="iPublisherName">Publisher Name</label>
                                 <div data-ng-show="vm.enableEdit[$index]">
                                     <input data-ng-model="publication.publisherName"
                                            name="nPublisherName"
@@ -272,7 +249,6 @@
                                            type="text"
                                            placeholder="Publisher Name"
                                            maxlength="100"
-                                           ng-required="publication.publicationType.id==1 || publication.publicationType.id==3"
                                            class="form-control">
                                 </div>
                                 <div data-ng-show="!vm.enableEdit[$index]">
@@ -304,8 +280,7 @@
                         </div>
 
                         <div class="col-md-3">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nForm[$index].nPublicationInterestGenre.$invalid && !nForm[$index].nPublicationInterestGenre.$pristine }">
+                            <div class="form-group">
                                 <label class="control-label"
                                        for="iPublicationInterestGenre">Genre</label>
                                 <div data-ng-show="vm.enableEdit[$index]">
@@ -328,8 +303,7 @@
 
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="form-group"
-                                 ng-class="{ 'has-error' : nForm[$index].nEmployeeWebLink.$invalid && !nForm[$index].nEmployeeWebLink.$pristine }">
+                            <div class="form-group">
                                 <label class="control-label"
                                        for="iEmployeeWebLink">Web Link</label>
                                 <div data-ng-show="vm.enableEdit[$index]">

@@ -44,7 +44,7 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
     pBuilder.add("dateOfPublication", pReadOnly.getDateOfPublication());
     JsonObjectBuilder publicationTypeBuilder = Json.createObjectBuilder();
     publicationTypeBuilder.add("id", pReadOnly.getTypeId()).add("name",
-        mPublicationType.get(pReadOnly.getTypeId()).getLabel());
+        PublicationType.get(pReadOnly.getTypeId()).getLabel());
     pBuilder.add("publicationType", publicationTypeBuilder);
     pBuilder.add("publicationWebLink", pReadOnly.getWebLink() == null ? "" : pReadOnly.getWebLink());
     pBuilder.add("publicationISSN", pReadOnly.getISSN() == null ? "" : pReadOnly.getISSN());
@@ -88,7 +88,7 @@ public class PublicationInformationBuilder implements Builder<PublicationInforma
         : mCountryManager.get(pJsonObject.getJsonObject("publicationCountry").getInt("id")) : null);
     pMutable.setPages(pJsonObject.containsKey("publicationPages") ? pJsonObject.getString("publicationPages") : "");
 
-    pMutable.setDateOfPublication(pJsonObject.getInt("dateOfPublication"));
+    pMutable.setDateOfPublication(pJsonObject.getInt("dateOfPublication", 0));
     pMutable.setTypeId(pJsonObject.getJsonObject("publicationType").getInt("id"));
     pMutable.setAppliedOn(mDateFormat.parse(mDate));
     pMutable.setStatus(pJsonObject.getString("status"));
