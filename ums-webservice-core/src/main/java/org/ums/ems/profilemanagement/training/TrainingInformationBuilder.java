@@ -11,6 +11,7 @@ import org.ums.formatter.DateFormat;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonValue;
 import javax.ws.rs.core.UriInfo;
 
 @Component
@@ -24,14 +25,14 @@ public class TrainingInformationBuilder implements Builder<TrainingInformation, 
   public void build(JsonObjectBuilder pBuilder, TrainingInformation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("employeeId", pReadOnly.getEmployeeId());
-    pBuilder.add("trainingName", pReadOnly.getTrainingName());
-    pBuilder.add("trainingInstitution", pReadOnly.getTrainingInstitute());
-    pBuilder.add("trainingFrom", mDateFormat.format(pReadOnly.getTrainingFromDate()));
-    pBuilder.add("trainingTo", mDateFormat.format(pReadOnly.getTrainingToDate()));
+    pBuilder.add("trainingName", pReadOnly.getTrainingName() == null ? "" : pReadOnly.getTrainingName());
+    pBuilder.add("trainingInstitution", pReadOnly.getTrainingInstitute() == null ? "" : pReadOnly.getTrainingInstitute());
+    pBuilder.add("trainingFrom", pReadOnly.getTrainingFromDate() == null ? "" :mDateFormat.format(pReadOnly.getTrainingFromDate()));
+    pBuilder.add("trainingTo", pReadOnly.getTrainingFromDate() == null ? "" : mDateFormat.format(pReadOnly.getTrainingToDate()));
     pBuilder.add("trainingDuration", pReadOnly.getTrainingDuration());
-    pBuilder.add("trainingDurationString", pReadOnly.getTrainingDurationString());
+    pBuilder.add("trainingDurationString", pReadOnly.getTrainingDurationString() == null ? "" : pReadOnly.getTrainingDurationString());
     if(pReadOnly.getTrainingCategoryId() == 0) {
-      pBuilder.add("trainingCategory", "");
+      pBuilder.add("trainingCategory", JsonValue.NULL);
     }
     else {
       JsonObjectBuilder categoryBuilder = Json.createObjectBuilder();
@@ -46,12 +47,12 @@ public class TrainingInformationBuilder implements Builder<TrainingInformation, 
 
     pMutable.setId(!pJsonObject.getString("id").equals("") ? Long.parseLong(pJsonObject.getString("id")) : null);
     pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
-    pMutable.setTrainingName(pJsonObject.getString("trainingName"));
-    pMutable.setTrainingInstitute(pJsonObject.getString("trainingInstitution"));
-    pMutable.setTrainingFromDate(mDateFormat.parse(pJsonObject.getString("trainingFrom")));
-    pMutable.setTrainingToDate(mDateFormat.parse(pJsonObject.getString("trainingTo")));
-    pMutable.setTrainingDuration(pJsonObject.getInt("trainingDuration"));
-    pMutable.setTrainingDurationString(pJsonObject.getString("trainingDurationString"));
-    pMutable.setTrainingCategoryId(pJsonObject.getJsonObject("trainingCategory").getInt("id"));
+    pMutable.setTrainingName(pJsonObject.getString("trainingName") == null ? "" : pJsonObject.getString("trainingName"));
+    pMutable.setTrainingInstitute(pJsonObject.getString("trainingInstitution") == null ? "" : pJsonObject.getString("trainingInstitution"));
+    pMutable.setTrainingFromDate(pJsonObject.getString("trainingFrom") == null || pJsonObject.getString("trainingFrom").isEmpty() ? null : mDateFormat.parse(pJsonObject.getString("trainingFrom")));
+    pMutable.setTrainingToDate(pJsonObject.getString("trainingTo") == null || pJsonObject.getString("trainingFrom").isEmpty() ? null : mDateFormat.parse(pJsonObject.getString("trainingTo")));
+    pMutable.setTrainingDuration(pJsonObject.getInt("trainingDuration", 0));
+    pMutable.setTrainingDurationString(pJsonObject.getString("trainingDurationString") == null ? "" : pJsonObject.getString("trainingDurationString"));
+    pMutable.setTrainingCategoryId(pJsonObject.get("trainingCategory").getValueType().equals(JsonValue.ValueType.NULL) ? 0 : pJsonObject.getJsonObject("trainingCategory").getInt("id"));
   }
 }
