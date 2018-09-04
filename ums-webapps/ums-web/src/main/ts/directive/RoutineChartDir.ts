@@ -1,7 +1,4 @@
-module ums {
-  import ClassRoom = ums.ClassRoom;
-  import ClassRoutine = ums.ClassRoutine;
-
+module ums{
   interface DeptProgram {
     deptId: string;
     programs: Program[];
@@ -22,7 +19,7 @@ module ums {
     private progress: number = 0;
     private courseTeacherList: CourseTeacherInterface[] = [];
     private colSpanWithRoutine: {[key:string]:number};
-    private showRoutineChart: boolean;
+    private showRoutineChart: boolean = false;
 
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'courseService', 'classRoomService', 'classRoutineService', '$timeout', 'userService', 'routineConfigService', '$state', 'employeeService', 'courseTeacherService'];
 
@@ -44,6 +41,7 @@ module ums {
                 private courseTeacherService: CourseTeacherService) {
 
       this.init();
+      this.showRoutineChart=false;
     }
 
     public init() {
@@ -54,11 +52,11 @@ module ums {
       }
       this.showProgressBar = false;
       this.progress=0;
-      this.showRoutineChart = false;
       this.createRoutineBody();
     }
 
     public createRoutineBody() {
+      this.showRoutineChart = false;
       this.showProgressBar = false;
       this.progress=0;
       this.generateHeader();
@@ -73,12 +71,12 @@ module ums {
       this.classRoutineService.dayAndTimeMapWithGroup = {};
       this.classRoutineService.dayAndTimeMapWithRoutine={};
       this.createGroupMapWithRoutineSlot().then((groupMap)=>{
-          this.classRoutineService.groupList.forEach((g:number)=>{
-            let routineSlot = this.classRoutineService.groupMapWithRoutineSlot[g];
-            this.classRoutineService.dayAndTimeMapWithGroup[routineSlot.day+routineSlot.startTime]=g;
-            //this.classRoutineService.dayAndTimeMapWithRoutine[routineSlot.day+routineSlot.startTime] = routineSlot.routineList;
-          });
-          this.createDayAndTimeMapWithRoutine();
+        this.classRoutineService.groupList.forEach((g:number)=>{
+          let routineSlot = this.classRoutineService.groupMapWithRoutineSlot[g];
+          this.classRoutineService.dayAndTimeMapWithGroup[routineSlot.day+routineSlot.startTime]=g;
+          //this.classRoutineService.dayAndTimeMapWithRoutine[routineSlot.day+routineSlot.startTime] = routineSlot.routineList;
+        });
+        this.createDayAndTimeMapWithRoutine();
       });
 
 
@@ -169,19 +167,19 @@ module ums {
       if(this.classRoutineService.dayAndTimeMapWithGroup[day + startTime]==undefined){
         return undefined;
       }else{
-          let groupNumber:number = this.classRoutineService.dayAndTimeMapWithGroup[day + startTime];
-          return this.classRoutineService.groupMapWithRoutineSlot[groupNumber];
+        let groupNumber:number = this.classRoutineService.dayAndTimeMapWithGroup[day + startTime];
+        return this.classRoutineService.groupMapWithRoutineSlot[groupNumber];
       }
 
     }
 
     public getColSpan(day: string, startTime: string): number {
       if(this.classRoutineService.dayAndTimeMapWithGroup[day+startTime]!=undefined){
-          let groupNo = this.classRoutineService.dayAndTimeMapWithGroup[day+startTime];
-          let routineSlot : RoutineSlot = this.classRoutineService.groupMapWithRoutineSlot[groupNo];
-          var slotStartTime:any = moment(routineSlot.startTime,'hh:mm A');
-          var slotEndTime:any = moment(routineSlot.endTime, 'hh:mm A');
-          return slotEndTime.diff(slotStartTime,'minutes');
+        let groupNo = this.classRoutineService.dayAndTimeMapWithGroup[day+startTime];
+        let routineSlot : RoutineSlot = this.classRoutineService.groupMapWithRoutineSlot[groupNo];
+        var slotStartTime:any = moment(routineSlot.startTime,'hh:mm A');
+        var slotEndTime:any = moment(routineSlot.endTime, 'hh:mm A');
+        return slotEndTime.diff(slotStartTime,'minutes');
       }else{
         return this.routineConfigService.routineConfig.duration;
       }
@@ -236,7 +234,7 @@ module ums {
     }
 
     public getTeacherList() {
-      this.employeeService.getActiveTeacherByDept().then((teacherList: Employee[]) => {
+      this.employeeService.getActiveTeachers().then((teacherList: Employee[]) => {
         this.classRoutineService.teacherList = [];
         this.classRoutineService.teacherList = teacherList;
       })
@@ -275,14 +273,16 @@ module ums {
         console.log("ENd of experiment");
         this.classRoutineService.slotRoutineList = this.getDayAndTimeMapWithRoutine(day.id, header.startTime).routineList;
         this.assignCourseTeachersToSlotRoutineList();
+        this.showRoutineChart=true;
       } else {
-          this.classRoutineService.slotRoutineList = [];
+        this.classRoutineService.slotRoutineList = [];
+        this.showRoutineChart=true;
       }
 
       $("#routineConfigModal").modal('show');
       this.counter += 2;
-      this.$state.go('classRoutine.classRoutineChart.classRoutineSlotEditForm', {}, {reload: 'classRoutine.classRoutineChart.classRoutineSlotEditForm'}
-      );
+      // this.$state.go('classRoutine.classRoutineChart.classRoutineSlotEditForm', {}, {reload: 'classRoutine.classRoutineChart.classRoutineSlotEditForm'}
+      // );
     }
 
     private assignCourseTeachersToSlotRoutineList() {
@@ -333,6 +333,7 @@ module ums {
                 this.courseTeacherList = [];
                 this.courseTeacherList = updatedCourseTeacherList;
                 $("#routineConfigModal").modal('toggle');
+                this.showRoutineChart=false;
                 this.createRoutineBody();
                 this.createCourseTeacherMap();
                 this.createCourseTeacherWithSectionMap();
@@ -344,6 +345,7 @@ module ums {
               this.progress = 100;
               this.courseTeacherList = [];
               $("#routineConfigModal").modal('toggle');
+              this.showRoutineChart=false;
               this.createRoutineBody();
               this.$timeout.apply(() => {
                 this.showProgressBar = false;
@@ -453,10 +455,10 @@ module ums {
         if (r.course.type_value == CourseType.sessional) {
           r.section = r.sessionalSection.id;
         }
-          if(r.startTimeObj)
-              r.startTime = moment(r.startTimeObj).format("hh:mm A");
-          if(r.endTimeObj)
-              r.endTime = moment(r.endTimeObj).format("hh:mm A");
+        if(r.startTimeObj)
+          r.startTime = moment(r.startTimeObj).format("hh:mm A");
+        if(r.endTimeObj)
+          r.endTime = moment(r.endTimeObj).format("hh:mm A");
       });
       defer.resolve(this.classRoutineService.slotRoutineList);
       return defer.promise;
@@ -516,5 +518,26 @@ module ums {
 
   }
 
-  UMS.controller("ClassRoutineChartController", ClassRoutineChartController);
+  class RoutineChartDir implements ng.IDirective{
+    constructor(){
+
+    }
+
+    public restrict:string = 'EA';
+    public scope={
+
+    };
+
+    public controller = ClassRoutineChartController;
+    public controllerAs = "vm";
+    public link = (scope:any, element:any, attributes:any)=>{
+    }
+
+    public templateUrl:string="./views/directive/class-routine/routine-chart-dir.html";
+
+  }
+
+  UMS.directive("routineChartDir", [()=>{
+    return new RoutineChartDir();
+  }]);
 }

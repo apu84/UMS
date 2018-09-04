@@ -29,6 +29,22 @@ module ums{
     }
 
 
+    public getActiveTeachers():ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var teachers:any={};
+      this.httpClient.get("academic/employee/getActiveTeachers",'application/json',
+          (json:any,etag:string)=>{
+            teachers = json.entries;
+            defer.resolve(teachers);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+            this.notify.error("Error in fetching teacher data");
+          });
+
+      return defer.promise;
+    }
+
     public getLoggedEmployeeInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
       var employees:any={};

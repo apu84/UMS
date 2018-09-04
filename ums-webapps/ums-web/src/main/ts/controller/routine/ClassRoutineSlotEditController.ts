@@ -1,3 +1,4 @@
+/*
 module ums {
   import ClassRoutine = ums.ClassRoutine;
 
@@ -93,6 +94,7 @@ module ums {
       slotRoutine.slotGroup = this.slotGroupNo;
       slotRoutine = this.initialzeRoutine(slotRoutine);
       this.classRoutineService.slotRoutineList.push(slotRoutine);
+      //$("#courseNo").focus();
     }
 
     public courseSearched(){
@@ -328,4 +330,4 @@ module ums {
   }
 
   UMS.controller("ClassRoutineSlotEditController", ClassRoutineSlotEditController);
-}
+}*/

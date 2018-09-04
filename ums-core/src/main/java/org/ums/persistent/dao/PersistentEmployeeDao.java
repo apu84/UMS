@@ -6,6 +6,7 @@ import org.ums.decorator.EmployeeDaoDecorator;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.mutable.MutableEmployee;
 import org.ums.persistent.model.PersistentEmployee;
+import org.ums.util.UmsUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -75,6 +76,13 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
   public List<Employee> getActiveTeachersOfDept(String deptId) {
     String query = SELECT_ALL + " WHERE DEPT_OFFICE=? AND STATUS=1 ORDER BY DESIGNATION";
     return mJdbcTemplate.query(query, new Object[] {deptId}, new EmployeeRowMapper());
+  }
+
+  @Override
+  public List<Employee> getActiveTeachers() {
+    String query = SELECT_ALL + " WHERE  STATUS=? and EMPLOYEE_TYPE=? ORDER BY DESIGNATION";
+    return mJdbcTemplate.query(query, new Object[] {UmsUtils.ACTIVE_STATUS, UmsUtils.TEACHER_EMPLOYMENT_TYPE},
+        new EmployeeRowMapper());
   }
 
   @Override

@@ -50,7 +50,7 @@
                         <div class="col-md-10">
                             <ui-select id="courseNo" theme="bootstrap"
                                        data-ng-model="slotRoutine.course"
-                                       on-select="vm.courseSelected(slotRoutine)" name="course">
+                                       on-select="vm.courseSelected(slotRoutine)" name="course" autofocus>
                                 <ui-select-match placeholder="Select Course">{{slotRoutine.course.title}}
                                 </ui-select-match>
                                 <ui-select-choices id="course"
@@ -122,11 +122,11 @@
 
                                     >
                                         <ui-select-match placeholder="Select Course Teacher">
-                                            {{slotRoutine.employee.employeeName}}
+                                            {{slotRoutine.employee.employeeName }} ({{slotRoutine.employee.deptOfficeName}})
                                         </ui-select-match>
                                         <ui-select-choices id="courseTeacher"
-                                                           repeat="g in vm.classRoutineService.teacherList | filter:$select.search">
-                                            <small ng-bind-html="g.employeeName | highlight:$select.search"></small>
+                                                           repeat="g in vm.classRoutineService.teacherList | filter:$select.search | limitTo:20">
+                                            <small ng-bind-html="g.employeeName+' ('+g.deptOfficeName+')' | highlight:$select.search"></small>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
@@ -143,7 +143,7 @@
                                         <li class="list-group-item" ng-repeat="t in slotRoutine.courseTeacher">
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    {{t.teacher.name}}
+                                                    {{t.teacher.name}}[{{t.teacher.departmentName}}]
                                                 </div>
                                                 <div class="col-md-2">
                                                     <i class="fa fa-trash" aria-hidden="true"

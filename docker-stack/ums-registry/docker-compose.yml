@@ -1,0 +1,8 @@
+version: "3"
+services:
+  ums-registry:
+    image: registry:2
+    ports:
+      - "5001:5000"
+    volumes:
+      - /mnt/nfsshare/registry:/var/lib/registry
