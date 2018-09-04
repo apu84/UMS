@@ -51,6 +51,7 @@
                                    id="iUserId"
                                    data-ng-model="vm.changedUserId"
                                    placeholder="Employee's Id"
+                                   data-ng-change="vm.showSearchByField()"
                                    class="form-control">
                         </div>
                     </div>
@@ -63,16 +64,18 @@
                                    id="iUserName"
                                    data-ng-model="vm.changedUserName"
                                    placeholder="Employee's Name"
+                                   data-ng-change="vm.showSearchByField()"
                                    class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label">Dept/Office</label>
                         <div class="col-md-8">
-                            <select class="form-control required"
+                            <select class="form-control"
                                     name="nDepartment"
                                     id="iDepartment"
                                     data-ng-options="depts.longName group by depts.category for depts in vm.departments | orderBy: 'id' track by depts.id"
+                                    data-ng-change="vm.showSearchByField()"
                                     data-ng-model="vm.changedDepartment"
                             >
                                 <option value="">Select Department</option>
@@ -82,10 +85,11 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Employee Type</label>
                         <div class="col-md-8">
-                            <select class="form-control required"
-                                    name="nEmployeeType"
-                                    id="iEmployeeType"
+                            <select class="form-control"
+                                    name="nEmployeeTypeSearch"
+                                    id="iEmployeeTypeSearch"
                                     data-ng-options="empType.name for empType in vm.empTypes track by empType.id"
+                                    data-ng-change="vm.showSearchByField()"
                                     data-ng-model="vm.changedEmpType"
                             >
                                 <option value="">Select Type</option>
@@ -95,10 +99,11 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Status</label>
                         <div class="col-md-8">
-                            <select class="form-control required"
+                            <select class="form-control"
                                     name="nStatusSearch"
                                     id="iStatusSearch"
                                     data-ng-options="status.name for status in vm.statuses track by status.id"
+                                    data-ng-change="vm.showSearchByField()"
                                     data-ng-model="vm.changedStatus"
                             >
                                 <option value="">Select Status</option>

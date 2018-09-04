@@ -77,7 +77,7 @@ module ums {
 
                 this.userService.fetchCurrentUserInfo().then((result) => {
                     this.currentUser = result;
-                    if(this.currentUser.roleId === 1041){
+                    if (this.currentUser.roleId === 1041) {
                         this.modifiedUserList = this.allUser.filter((value, index) => {
                             return this.currentUser.departmentId == this.allUser[index].deptOfficeId && this.allUser[index].employeeType == 3;
                         });
@@ -113,71 +113,49 @@ module ums {
             }
         }
 
-        /*private showSearchByField(): void {
+        private showSearchByField(): void {
             this.employee = <Employee>{};
-            if (this.searchBy == "1") {
-                this.showSearchByUserName = false;
-                this.showSearchByDepartment = false;
-                this.showListOfEmployeesPanel = false;
-                this.showInformationPanel = false;
-                this.enablePreviousButton = false;
-                this.enableNextButton = false;
-                this.changedUserName = "";
-                this.changedDepartment = null;
-                this.showSearchByUserId = true;
-                this.showEmployeeProfilePanel = true;
-                this.changedUserId = "";
-            }
-            else if (this.searchBy == "2") {
-                this.showSearchByUserId = false;
-                this.showSearchByDepartment = false;
-                this.showEmployeeProfilePanel = false;
-                this.changedUserId = "";
-                this.changedDepartment = null;
-                this.showSearchByUserName = true;
-                this.showListOfEmployeesPanel = true;
-                this.changedUserName = "";
-            }
-            else if (this.searchBy == "3") {
-                this.changedUserName = "";
-                this.changedUserId = "";
-                this.showSearchByUserId = false;
-                this.showSearchByUserName = false;
-                this.showEmployeeProfilePanel = false;
-                this.showListOfEmployeesPanel = true;
-                this.showSearchByDepartment = true;
-            }
-        }*/
+            /* if (this.searchBy == "1") {
+                 this.showSearchByUserName = false;
+                 this.showSearchByDepartment = false;
+                 this.showListOfEmployeesPanel = false;
+                 this.showInformationPanel = false;
+                 this.enablePreviousButton = false;
+                 this.enableNextButton = false;
+                 this.changedUserName = "";
+                 this.changedDepartment = null;
+                 this.showSearchByUserId = true;
+                 this.showEmployeeProfilePanel = true;
+                 this.changedUserId = "";
+             }
+             else if (this.searchBy == "2") {
+                 this.showSearchByUserId = false;
+                 this.showSearchByDepartment = false;
+                 this.showEmployeeProfilePanel = false;
+                 this.changedUserId = "";
+                 this.changedDepartment = null;
+                 this.showSearchByUserName = true;
+                 this.showListOfEmployeesPanel = true;
+                 this.changedUserName = "";
+             }
+             else if (this.searchBy == "3") {
+                 this.changedUserName = "";
+                 this.changedUserId = "";
+                 this.showSearchByUserId = false;
+                 this.showSearchByUserName = false;
+                 this.showEmployeeProfilePanel = false;
+                 this.showListOfEmployeesPanel = true;
+                 this.showSearchByDepartment = true;
+             }*/
+            this.showListOfEmployeesPanel = true;
+            this.showEmployeeProfilePanel = false;
+        }
 
         private getEmployees(): void {
             this.employee = <Employee>{};
-            if (this.searchBy == "1") {
-                if (this.findUser() == true) {
-                    this.view(this.employee);
-                    this.enablePreviousButton = false;
-                    this.enableNextButton = false;
-                }
-                else {
-                    this.notify.error("No User Found");
-                }
-            }
-            else if (this.searchBy == "2") {
-                this.showInformationPanel = false;
-                this.showEmployeeProfilePanel = false;
-                this.showListOfEmployeesPanel = true;
-                if (this.changedUserName != null || this.changedUserName != "") {
-                    Utils.expandRightDiv();
-                }
-                else {
-                    this.notify.error("User name field is empty");
-                }
-            }
-            else if (this.searchBy == "3") {
-                this.showInformationPanel = false;
-                this.showEmployeeProfilePanel = false;
-                this.showListOfEmployeesPanel = true;
-                Utils.expandRightDiv();
-            }
+            this.showEmployeeProfilePanel = false;
+            this.showListOfEmployeesPanel = true;
+            Utils.expandRightDiv();
         }
 
         private findUser(): boolean {
