@@ -11,9 +11,9 @@ module ums {
     name: string;
   }
 
-  import IParameter = ums.IParameter;
+    import IParameter = ums.IParameter;
 
-  export class ClassRoutineController {
+    export class ClassRoutineController {
 
     private selectedSemester: Semester;
     private semesterList: Semester[];
