@@ -30,58 +30,79 @@
         <div class="panel-body pan">
             <form class="form-horizontal" data-validate="" data-onvalidate="getEmployees">
                 <div class="form-body pal">
+                    <!-- <div class="form-group">
+                         <label class="col-md-4 control-label">Search By</label>
+                         <div class="col-md-8">
+                             <select name="nSearchBy" id="iSearchBy" data-ng-model="vm.searchBy"
+                                     data-ng-change="vm.showSearchByField()" class="form-control required">
+                                 <option value="">Select Search Type</option>
+                                 <option value="1">Employee Id</option>
+                                 <option value="2">Employee Name</option>
+                                 <option value="3">Dept/School/Office</option>
+                             </select>
+                         </div>
+                     </div>-->
+
                     <div class="form-group">
-                        <label class="col-md-4 control-label">Search By</label>
+                        <label class="col-md-4 control-label">Id</label>
                         <div class="col-md-8">
-                            <select name="nSearchBy" id="iSearchBy" data-ng-model="vm.searchBy"
-                                    data-ng-change="vm.showSearchByField()" class="form-control required">
-                                <option value="">Select Search Type</option>
-                                <option value="1">Employee Id</option>
-                                <option value="2">Employee Name</option>
-                                <option value="3">Dept/School/Office</option>
+                            <input type="text"
+                                   name="nUserId"
+                                   id="iUserId"
+                                   data-ng-model="vm.changedUserId"
+                                   placeholder="Employee's Id"
+                                   class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Name</label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nUserName"
+                                   id="iUserName"
+                                   data-ng-model="vm.changedUserName"
+                                   placeholder="Employee's Name"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Dept/Office</label>
+                        <div class="col-md-8">
+                            <select class="form-control required"
+                                    name="nDepartment"
+                                    id="iDepartment"
+                                    data-ng-options="depts.longName group by depts.category for depts in vm.departments | orderBy: 'id' track by depts.id"
+                                    data-ng-model="vm.changedDepartment"
+                            >
+                                <option value="">Select Department</option>
                             </select>
                         </div>
                     </div>
-                    <div data-ng-if="vm.showSearchByUserId">
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Employee Id</label>
-                            <div class="col-md-8">
-                                <input type="text"
-                                       name="nUserId"
-                                       id="iUserId"
-                                       data-ng-model="vm.changedUserId"
-                                       placeholder="Employee Id"
-                                       class="form-control">
-                            </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Employee Type</label>
+                        <div class="col-md-8">
+                            <select class="form-control required"
+                                    name="nEmployeeType"
+                                    id="iEmployeeType"
+                                    data-ng-options="empType.name for empType in vm.empTypes track by empType.id"
+                                    data-ng-model="vm.changedEmpType"
+                            >
+                                <option value="">Select Type</option>
+                            </select>
                         </div>
                     </div>
-                    <div data-ng-if="vm.showSearchByUserName">
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Employee Name</label>
-                            <div class="col-md-8">
-                                <input type="text"
-                                       name="nUserName"
-                                       id="iUserName"
-                                       data-ng-model="vm.changedUserName"
-                                       placeholder="Employee Name"
-                                       class="form-control required">
-                            </div>
-                        </div>
-                    </div>
-                    <div data-ng-if="vm.showSearchByDepartment">
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Department</label>
-                            <div class="col-md-8">
-                                <select class="form-control required"
-                                        name="nDepartment"
-                                        id="iDepartment"
-                                        data-ng-options="depts.longName group by depts.category for depts in vm.departments | orderBy: 'id' track by depts.id"
-                                        data-ng-change="vm.showSearchByField()"
-                                        data-ng-model="vm.changedDepartment"
-                                >
-                                    <option value="">Select Department</option>
-                                </select>
-                            </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Status</label>
+                        <div class="col-md-8">
+                            <select class="form-control required"
+                                    name="nStatusSearch"
+                                    id="iStatusSearch"
+                                    data-ng-options="status.name for status in vm.statuses track by status.id"
+                                    data-ng-model="vm.changedStatus"
+                            >
+                                <option value="">Select Status</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -129,7 +150,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr data-ng-repeat="user in (filterd = (vm.allUser | filter: {employeeName: vm.changedUserName} | filter: {deptOfficeId: vm.changedDepartment.id})) | limitTo:vm.itemsPerPage:vm.itemsPerPage*(vm.currentPageNumber - 1)">
+                            <tr data-ng-repeat="user in (filterd = (vm.allUser | filter: {id: vm.changedUserId} | filter: {employeeName: vm.changedUserName} | filter: {deptOfficeId: vm.changedDepartment.id} | filter: {employeeType: vm.changedEmpType.id} | filter: {status: vm.changedStatus.id})) | limitTo:vm.itemsPerPage:vm.itemsPerPage*(vm.currentPageNumber - 1)">
                                 <td>{{(vm.currentPageNumber - 1) * vm.itemsPerPage + $index + 1}}</td>
                                 <td style="cursor:pointer"
                                     data-ng-click="vm.view(filterd[(vm.currentPageNumber - 1) * vm.itemsPerPage + $index], (vm.currentPageNumber - 1) * vm.itemsPerPage + $index)">
@@ -331,7 +352,7 @@
                     </div>
                 </div>
 
-                <br />
+                <br/>
 
                 <div class="row">
                     <div class="col-md-3">

@@ -5,7 +5,7 @@ module ums {
     }
 
     class EmployeeSearch {
-        public static $inject = ['registrarConstants', '$scope', '$q', 'notify', 'departmentService', 'designationService', 'employeeService', 'employeeSearchService', '$state', 'allUsers', 'userService'];
+        public static $inject = ['appConstants', 'registrarConstants', '$scope', '$q', 'notify', 'departmentService', 'designationService', 'employeeService', 'employeeSearchService', '$state', 'allUsers', 'userService'];
         private searchBy: string = "";
         private changedUserName: string = "";
         private showSearchByUserId: boolean = false;
@@ -23,6 +23,8 @@ module ums {
         private showInformationPanel: boolean = false;
         private indexValue: number = 0;
         private changedUserId: string = "";
+        private changedStatus: ICommon = <ICommon>{};
+        private changedEmpType: ICommon = <ICommon>{};
         private currentPageNumber: number = 1;
         private itemsPerPage: number = 10;
         private totalItemsNumber: number = 0;
@@ -38,8 +40,11 @@ module ums {
         private employeeBasicInfoEdit: Employee;
         private setIndex: number;
         private currentUser: LoggedInUser;
+        private statuses: ICommon[] = [];
+        private empTypes: ICommon[] = [];
 
-        constructor(private registrarConstants: any,
+        constructor(private appConstants: any,
+                    private registrarConstants: any,
                     private $scope: IEmployeeInformation,
                     private $q: ng.IQService,
                     private notify: Notify,
@@ -56,6 +61,8 @@ module ums {
             $scope.getEmployees = this.getEmployees.bind(this);
             this.allUser = allUsers;
             this.totalItemsNumber = this.allUsers.length;
+            this.statuses = this.registrarConstants.empStatus;
+            this.empTypes = this.appConstants.employeeTypes;
             this.initialization();
         }
 
@@ -106,7 +113,7 @@ module ums {
             }
         }
 
-        private showSearchByField(): void {
+        /*private showSearchByField(): void {
             this.employee = <Employee>{};
             if (this.searchBy == "1") {
                 this.showSearchByUserName = false;
@@ -140,7 +147,7 @@ module ums {
                 this.showListOfEmployeesPanel = true;
                 this.showSearchByDepartment = true;
             }
-        }
+        }*/
 
         private getEmployees(): void {
             this.employee = <Employee>{};
