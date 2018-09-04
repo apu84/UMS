@@ -145,16 +145,21 @@
                         </div>
 
                         <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="iCategory" class="control-label">Category</label>
+                            <div class="form-group" ng-class="{ 'has-error' : nForm[$index].nCategory.$invalid && !nForm[$index].nCategory.$pristine }">
+                                <label for="iCategory" class="control-label">Category<span
+                                        data-ng-show="vm.enableEdit[$index]"
+                                        class='require'>*</span></label>
                                 <div data-ng-show="vm.enableEdit[$index]">
                                     <select name="nCategory"
                                             id="iCategory"
                                             data-ng-model="training.trainingCategory"
                                             data-ng-options="category.name for category in vm.trainingTypes track by category.id"
-                                            class="form-control">
+                                            class="form-control" required>
                                         <option value="" selected="selected">Select Category</option>
                                     </select>
+
+                                    <label data-ng-show="nForm[$index].nCategory.$invalid && !nForm[$index].nCategory.$pristine"
+                                           class="help-block control-label">Please define a category.</label>
                                 </div>
                                 <div data-ng-show="!vm.enableEdit[$index]">
                                     <div class="underlineBox">
