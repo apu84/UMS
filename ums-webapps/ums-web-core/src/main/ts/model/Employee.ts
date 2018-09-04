@@ -31,6 +31,7 @@ module ums{
 
     export interface INewEmployee {
         id: string;
+        salutation: number;
         name: string;
         department: any;
         designation: any;

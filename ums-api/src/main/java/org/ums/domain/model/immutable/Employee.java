@@ -4,7 +4,7 @@ import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.mutable.MutableEmployee;
-import org.ums.employee.personal.PersonalInformation;
+import org.ums.ems.profilemanagement.personal.PersonalInformation;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -1,0 +1,215 @@
+<div data-ng-if="vm.showLoader" align="center">
+    <div data-spinner=""></div>
+</div>
+
+<div data-ng-if="!vm.showLoader">
+    <div data-ng-repeat="training in vm.training track by $index">
+        <form name="nForm[$index]" ng-submit="vm.submit($index)" novalidate>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-9">{{$index + 1}}.
+                            <span data-ng-show="training.trainingFrom && training.trainingTo"><span
+                                    data-ng-show="training.trainingFrom">[</span>{{training.trainingFrom}}<span
+                                    data-ng-show="training.trainingFrom">]</span>
+                        <span data-ng-show="training.trainingTo"> - </span><span
+                                        data-ng-show="training.trainingTo">[</span>{{training.trainingTo}}<span
+                                        data-ng-show="training.trainingTo">]</span>
+                        </span>
+                        </div>
+                        <div class="col-md-3">
+                            <div data-ng-show="vm.enableEditButton">
+                                <div data-ng-show="!vm.enableEdit[$index]">
+                                    <div align="right">
+                                        <a data-ng-click="vm.activeEditButton($index, true)"
+                                           style="cursor: pointer;">
+                                            <i style="color: blue;" class="fa fa-edit"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label for="iTrainingName" class="control-label">Training Title</label>
+                                <div data-ng-show="vm.enableEdit[$index]">
+                                    <input type="text"
+                                           name="nTrainingName"
+                                           id="iTrainingName"
+                                           data-ng-model="training.trainingName"
+                                           placeholder="Training Name"
+                                           maxlength="150"
+                                           class="form-control">
+                                </div>
+                                <div data-ng-show="!vm.enableEdit[$index]">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{training.trainingName}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label for="iTrainingInstitution" class="control-label">Institution</label>
+                                <div data-ng-show="vm.enableEdit[$index]">
+                                    <input type="text"
+                                           name="nTrainingInstitution"
+                                           id="iTrainingInstitution"
+                                           data-ng-model="training.trainingInstitution"
+                                           placeholder="Training Institution/Organization Name"
+                                           maxlength="150"
+                                           class="form-control">
+                                </div>
+                                <div data-ng-show="!vm.enableEdit[$index]">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{training.trainingInstitution}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="iTrainingFrom" class="control-label">From</label>
+                                <div data-ng-show="vm.enableEdit[$index]">
+                                    <input type="text"
+                                           name="nTrainingFrom"
+                                           id="iTrainingFrom"
+                                           data-ng-model="training.trainingFrom"
+                                           data-provide="datepicker"
+                                           data-date-format="dd/mm/yyyy"
+                                           placeholder="DD/MM/YYYY"
+                                           data-ng-change="vm.calculateDifference(nForm[$index], $index, training.trainingFrom, training.trainingTo)"
+                                           autocomplete="off"
+                                           class="form-control"/>
+                                </div>
+                                <div data-ng-show="!vm.enableEdit[$index]">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{training.trainingFrom}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="iTrainingTo" class="control-label">To</label>
+                                <div data-ng-show="vm.enableEdit[$index]">
+                                    <input type="text"
+                                           name="nTrainingTo"
+                                           id="iTrainingTo"
+                                           data-ng-model="training.trainingTo"
+                                           data-provide="datepicker"
+                                           data-date-format="dd/mm/yyyy"
+                                           placeholder="DD/MM/YYYY"
+                                           data-ng-change="vm.calculateDifference(nForm[$index], $index, training.trainingFrom, training.trainingTo)"
+                                           autocomplete="off"
+                                           class="form-control">
+
+                                </div>
+                                <div data-ng-show="!vm.enableEdit[$index]">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{training.trainingTo}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="iTrainingDurationString" class="control-label">Duration</label>
+                                <div data-ng-show="vm.enableEdit[$index]">
+                                    <input type="text"
+                                           name="nTrainingDurationString"
+                                           id="iTrainingDurationString"
+                                           data-ng-model="training.trainingDurationString"
+                                           placeholder="Duration"
+                                           class="form-control">
+                                </div>
+                                <div data-ng-show="!vm.enableEdit[$index]">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{training.trainingDurationString}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group" ng-class="{ 'has-error' : nForm[$index].nCategory.$invalid && !nForm[$index].nCategory.$pristine }">
+                                <label for="iCategory" class="control-label">Category<span
+                                        data-ng-show="vm.enableEdit[$index]"
+                                        class='require'>*</span></label>
+                                <div data-ng-show="vm.enableEdit[$index]">
+                                    <select name="nCategory"
+                                            id="iCategory"
+                                            data-ng-model="training.trainingCategory"
+                                            data-ng-options="category.name for category in vm.trainingTypes track by category.id"
+                                            class="form-control" required>
+                                        <option value="" selected="selected">Select Category</option>
+                                    </select>
+
+                                    <label data-ng-show="nForm[$index].nCategory.$invalid && !nForm[$index].nCategory.$pristine"
+                                           class="help-block control-label">Please define a category.</label>
+                                </div>
+                                <div data-ng-show="!vm.enableEdit[$index]">
+                                    <div class="underlineBox">
+                                        <label class="control-label">{{training.trainingCategory.name}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div data-ng-show="vm.enableEdit[$index]">
+                            <div class="col-md-4">
+                           <span data-ng-show="training.id">
+                               <button type="button" class="btn btn-primary btn-xs"
+                                       data-ng-click="vm.activeEditButton($index, false)"
+                                       style="cursor:pointer;">Cancel
+                            </button>
+                           </span>
+                            </div>
+                            <div class="col-md-8">
+                                <div align="right">
+                                    <button type="button" class="btn btn-primary btn-xs"
+                                            title="Remove Row {{$index + 1}}"
+                                            data-ng-click="vm.delete($index)"
+                                            style="cursor:pointer;"><span data-ng-show="!training.id">Remove</span><span
+                                            data-ng-show="training.id">Delete</span>
+                                    </button>
+                                    <button type="submit" title="Submit" class="btn btn-success btn-xs"
+                                            data-ng-disabled="nForm[$index].$invalid"
+                                            style="cursor:pointer;"><span data-ng-show="!training.id">Save</span><span
+                                            data-ng-show="training.id">Update</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div data-ng-show="vm.enableEditButton">
+                <button title="Add New Row" type="button" class="btn btn-success btn-xs"
+                        data-ng-click="vm.addNew(); vm.activeEditButton(vm.training.length - 1, true)"
+                        style="cursor: pointer">Add new
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

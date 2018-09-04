@@ -1,0 +1,462 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-md-9">Contact Information</div>
+            <div class="col-md-3">
+                <div data-ng-if="vm.enableEditButton">
+                    <div data-ng-if="vm.contactReadOnly==true">
+                        <div align="right">
+                            <a data-ng-click="vm.contactReadOnly=false" style="cursor: pointer;">
+                                <i style="color: blue;" class="fa fa-edit"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <form name="nContactForm" ng-submit="vm.submit('contact')" novalidate>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : nContactForm.nPersonalEmail.$invalid && !nContactForm.nPersonalEmail.$pristine}">
+                        <label for="iPersonalEmail" class="control-label">Personal Email<span
+                                data-ng-show="!vm.contactReadOnly"
+                                class="require">*</span></label>
+                        <div data-ng-show="!vm.contactReadOnly">
+                            <input type="email"
+                                   name="nPersonalEmail"
+                                   id="iPersonalEmail"
+                                   data-ng-model="vm.entry.contact.personalEmail"
+                                   placeholder="Personal Email"
+                                   ng-readonly="vm.contactReadOnly"
+                                   class="form-control" required>
+                            <label data-ng-show="nContactForm.nPersonalEmail.$invalid && !nContactForm.nPersonalEmail.$pristine"
+                                   class="help-block control-label">
+                                example: someone@gmail.com.</label>
+                            <label data-ng-show="nContactForm.nPersonalEmail.$error.email"
+                                   class="help-block control-label">
+                                Not an email address.</label>
+                        </div>
+                        <div data-ng-show="vm.contactReadOnly">
+                            <div class="underlineBox">
+                                <label class="control-label">{{vm.entry.contact.personalEmail}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : nContactForm.nOrganizationalEmail.$invalid && !nContactForm.nOrganizationalEmail.$pristine}">
+                        <label for="iOrganizationalEmail" class="control-label">Organizational Email</label>
+                        <div data-ng-show="!vm.contactReadOnly">
+                            <input type="email"
+                                   name="nOrganizationalEmail"
+                                   id="iOrganizationalEmail"
+                                   data-ng-model="vm.entry.contact.organizationalEmail"
+                                   ng-readonly="vm.contactReadOnly"
+                                   class="form-control">
+                            <label data-ng-show="nContactForm.nOrganizationalEmail.$error.email"
+                                   class="help-block control-label">
+                                Not an email address.</label>
+                        </div>
+                        <div data-ng-show="vm.contactReadOnly">
+                            <div class="underlineBox">
+                                <label class="control-label">{{vm.entry.contact.organizationalEmail}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : nContactForm.nMobile.$invalid && !nContactForm.nMobile.$pristine}">
+                        <label for="iMobile" class="control-label">Mobile No<span
+                                data-ng-show="!vm.contactReadOnly"
+                                class="require">*</span></label>
+                        <div data-ng-show="!vm.contactReadOnly">
+                            <input type="text"
+                                   name="nMobile"
+                                   id="iMobile"
+                                   data-ng-model="vm.entry.contact.mobile"
+                                   placeholder="Mobile"
+                                   ng-readonly="vm.contactReadOnly"
+                                   class="form-control" required>
+                            <label data-ng-show="nContactForm.nMobile.$invalid && !nContactForm.nMobile.$pristine"
+                                   class="help-block control-label">
+                                Only mobile number. Do not enter country code.</label>
+                        </div>
+                        <div data-ng-show="vm.contactReadOnly">
+                            <div class="underlineBox">
+                                <label class="control-label">{{vm.entry.contact.mobile}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="iPhone" class="control-label">Phone</label>
+                        <div data-ng-show="!vm.contactReadOnly">
+                            <input type="text"
+                                   name="nPhone"
+                                   id="iPhone"
+                                   data-ng-model="vm.entry.contact.phone"
+                                   placeholder="Phone"
+                                   ng-readonly="vm.contactReadOnly"
+                                   class="form-control">
+                        </div>
+                        <div data-ng-show="vm.contactReadOnly">
+                            <div class="underlineBox">
+                                <label class="control-label">{{vm.entry.contact.phone}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label"><b>Present Address:</b></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : nContactForm.nPresentAddressHouse.$invalid && !nContactForm.nPresentAddressHouse.$pristine}">
+                        <label for="iPresentAddressHouse" class="control-label">Address Line 1<span
+                                class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
+                        <div data-ng-show="!vm.contactReadOnly">
+                            <input type="text"
+                                   name="nPresentAddressHouse"
+                                   id="iPresentAddressHouse"
+                                   data-ng-model="vm.entry.contact.preAddressLine1"
+                                   placeholder="Personal Website"
+                                   ng-readonly="vm.contactReadOnly"
+                                   class="form-control" required>
+                            <label data-ng-show="nContactForm.nPresentAddressHouse.$invalid && !nContactForm.nPresentAddressHouse.$pristine"
+                                   class="help-block control-label">
+                                flat/house and road/village name.</label>
+                        </div>
+                        <div data-ng-show="vm.contactReadOnly">
+                            <div class="underlineBox">
+                                <label class="control-label">{{vm.entry.contact.preAddressLine1}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : nContactForm.nPresentAddressCountry.$invalid && !nContactForm.nPresentAddressCountry.$pristine}">
+                        <label class="control-label" for="iPresentAddressCountry">Country<span
+                                class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
+
+                        <div data-ng-show="!vm.contactReadOnly">
+                            <select name="nPresentAddressCountry"
+                                    id="iPresentAddressCountry"
+                                    data-ng-model="vm.entry.contact.preAddressCountry"
+                                    data-ng-options="country.name for country in vm.countries track by country.id"
+                                    data-ng-change="vm.changePresentAddressFields()"
+                                    ng-readonly="vm.contactReadOnly"
+                                    class="form-control" required>
+                                <option value="">Select Country</option>
+                            </select>
+                            <label data-ng-show="nContactForm.nPresentAddressCountry.$invalid && !nContactForm.nPresentAddressCountry.$pristine"
+                                   class="help-block control-label">Please select a country.</label>
+                        </div>
+                        <div data-ng-show="vm.contactReadOnly">
+                            <div class="underlineBox">
+                                <label class="control-label">{{vm.entry.contact.preAddressCountry.name}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div data-ng-if="vm.entry.contact.preAddressCountry.name==='Bangladesh'">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nContactForm.nPresentAddressDivision.$invalid && !nContactForm.nPresentAddressDivision.$pristine}">
+                            <label class="control-label" for="iPresentAddressDivision">Division<span
+                                    class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
+
+                            <div data-ng-show="!vm.contactReadOnly">
+                                <select name="nPresentAddressDivision"
+                                        id="iPresentAddressDivision"
+                                        data-ng-model="vm.entry.contact.preAddressDivision"
+                                        data-ng-options="division.name for division in vm.divisions track by division.id"
+                                        data-ng-change="vm.changePresentAddressDistrict()"
+                                        ng-readonly="vm.contactReadOnly"
+                                        class="form-control" required>
+                                    <option value="">Select Division</option>
+                                </select>
+                                <label data-ng-show="nContactForm.nPresentAddressDivision.$invalid && !nContactForm.nPresentAddressDivision.$pristine"
+                                       class="help-block control-label">Please select a division.</label>
+                            </div>
+                            <div data-ng-show="vm.contactReadOnly">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{vm.entry.contact.preAddressDivision.name}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nContactForm.nPresentAddressDistrict.$invalid && !nContactForm.nPresentAddressDistrict.$pristine}">
+                            <label class="control-label" for="iPresentAddressDistrict">District<span
+                                    class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
+                            <div data-ng-show="!vm.contactReadOnly">
+                                <select name="nPresentAddressDistrict"
+                                        id="iPresentAddressDistrict"
+                                        data-ng-model="vm.entry.contact.preAddressDistrict"
+                                        data-ng-options="district.name for district in vm.presentAddressDistricts track by district.id"
+                                        data-ng-change="vm.changePresentAddressThana()"
+                                        ng-readonly="vm.contactReadOnly"
+                                        class="form-control" required>
+                                    <option value="">Select District</option>
+                                </select>
+                                <label data-ng-show="nContactForm.nPresentAddressDistrict.$invalid && !nContactForm.nPresentAddressDistrict.$pristine"
+                                       class="help-block control-label">Please select a district.</label>
+                            </div>
+                            <div data-ng-show="vm.contactReadOnly">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{vm.entry.contact.preAddressDistrict.name}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nContactForm.nPresentAddressPoliceStation.$invalid && !nContactForm.nPresentAddressPoliceStation.$pristine}">
+                            <label class="control-label" for="iPresentAddressPoliceStation">Thana<span
+                                    class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
+                            <div data-ng-show="!vm.contactReadOnly">
+                                <select name="nPresentAddressPoliceStation"
+                                        id="iPresentAddressPoliceStation"
+                                        data-ng-model="vm.entry.contact.preAddressThana"
+                                        data-ng-options="thana.name for thana in vm.presentAddressThanas track by thana.id"
+                                        ng-readonly="vm.contactReadOnly"
+                                        class="form-control" required>
+                                    <option value="">Select Thana</option>
+                                </select>
+                                <label data-ng-show="nContactForm.nPresentAddressPoliceStation.$invalid && !nContactForm.nPresentAddressPoliceStation.$pristine"
+                                       class="help-block control-label">Please select a thana.</label>
+                            </div>
+                            <div data-ng-show="vm.contactReadOnly">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{vm.entry.contact.preAddressThana.name}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="iPresentAddressPostOffice" class="control-label">Post Code</label>
+                            <div data-ng-show="!vm.contactReadOnly">
+                                <input type="text"
+                                       name="nPresentAddressPostOffice"
+                                       id="iPresentAddressPostOffice"
+                                       data-ng-model="vm.entry.contact.preAddressPostCode"
+                                       placeholder="Police Post Office/Zip"
+                                       value=""
+                                       ng-readonly="vm.contactReadOnly"
+                                       class="form-control">
+                            </div>
+                            <div data-ng-show="vm.contactReadOnly">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{vm.entry.contact.preAddressPostCode}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label"><b>Permanent Address:</b></label>
+                        <div data-ng-show="!vm.contactReadOnly">
+                            <input type="checkbox" data-ng-model="vm.checkBoxValue"
+                                   data-ng-click="vm.sameAsPresentAddress()"/>Same as present
+                            address
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : nContactForm.nPermanentAddressHouse.$invalid && !nContactForm.nPermanentAddressHouse.$pristine}">
+                        <label for="iPermanentAddressHouse" class="control-label">Address Line 1<span
+                                class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
+                        <div data-ng-show="!vm.contactReadOnly">
+                            <input type="text"
+                                   name="nPermanentAddressHouse"
+                                   id="iPermanentAddressHouse"
+                                   data-ng-model="vm.entry.contact.perAddressLine1"
+                                   placeholder="Personal Website"
+                                   ng-readonly="vm.contactReadOnly"
+                                   class="form-control" required>
+                            <label data-ng-show="nContactForm.nPermanentAddressHouse.$invalid && !nContactForm.nPermanentAddressHouse.$pristine"
+                                   class="help-block control-label">
+                                Youname is required.</label>
+                        </div>
+                        <div data-ng-show="vm.contactReadOnly">
+                            <div class="underlineBox">
+                                <label class="control-label">{{vm.entry.contact.perAddressLine1}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : nContactForm.nPermanentAddressCountry.$invalid && !nContactForm.nPermanentAddressCountry.$pristine}">
+                        <label class="control-label" for="iPermanentAddressCountry">Country<span
+                                class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
+                        <div data-ng-show="!vm.contactReadOnly">
+                            <select name="nPermanentAddressCountry"
+                                    id="iPermanentAddressCountry"
+                                    data-ng-model="vm.entry.contact.perAddressCountry"
+                                    data-ng-options="country.name for country in vm.countries track by country.id"
+                                    data-ng-change="vm.changePermanentAddressFields()"
+                                    ng-readonly="vm.contactReadOnly"
+                                    class="form-control" required>
+                                <option value="">Select Country</option>
+                            </select>
+                            <label data-ng-show="nContactForm.nPermanentAddressCountry.$invalid && !nContactForm.nPermanentAddressCountry.$pristine"
+                                   class="help-block control-label">Please select a country.</label>
+                        </div>
+                        <div data-ng-show="vm.contactReadOnly">
+                            <div class="underlineBox">
+                                <label class="control-label">{{vm.entry.contact.perAddressCountry.name}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div data-ng-if="vm.entry.contact.perAddressCountry.name==='Bangladesh'">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nContactForm.nPermanentAddressDivision.$invalid && !nContactForm.nPermanentAddressDivision.$pristine}">
+                            <label class="control-label" for="iPermanentAddressDivision">Division<span
+                                    class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
+
+                            <div data-ng-show="!vm.contactReadOnly">
+                                <select name="nPermanentAddressDivision"
+                                        id="iPermanentAddressDivision"
+                                        data-ng-model="vm.entry.contact.perAddressDivision"
+                                        data-ng-options="division.name for division in vm.divisions track by division.id"
+                                        data-ng-change="vm.changePermanentAddressDistrict()"
+                                        ng-readonly="vm.contactReadOnly"
+                                        class="form-control" required>
+                                    <option value="">Select Division</option>
+                                </select>
+                                <label data-ng-show="nContactForm.nPermanentAddressDivision.$invalid && !nContactForm.nPermanentAddressDivision.$pristine"
+                                       class="help-block control-label">Please select a division.</label>
+                            </div>
+                            <div data-ng-show="vm.contactReadOnly">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{vm.entry.contact.perAddressDivision.name}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nContactForm.nPermanentAddressDistrict.$invalid && !nContactForm.nPermanentAddressDistrict.$pristine}">
+                            <label class="control-label" for="iPermanentAddressDistrict">District<span
+                                    class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
+                            <div data-ng-show="!vm.contactReadOnly">
+                                <select name="nPermanentAddressDistrict"
+                                        id="iPermanentAddressDistrict"
+                                        data-ng-model="vm.entry.contact.perAddressDistrict"
+                                        data-ng-options="district.name for district in vm.permanentAddressDistricts track by district.id"
+                                        data-ng-change="vm.changePermanentAddressThana()"
+                                        ng-readonly="vm.contactReadOnly"
+                                        class="form-control" required>
+                                    <option value="">Select District</option>
+                                </select>
+                                <label data-ng-show="nContactForm.nPermanentAddressDistrict.$invalid && !nContactForm.nPermanentAddressDistrict.$pristine"
+                                       class="help-block control-label">Please select a district.</label>
+                            </div>
+                            <div data-ng-show="vm.contactReadOnly">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{vm.entry.contact.perAddressDistrict.name}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group"
+                             ng-class="{ 'has-error' : nContactForm.nPermanentAddressPoliceStation.$invalid && !nContactForm.nPermanentAddressPoliceStation.$pristine}">
+                            <label class="control-label" for="iPermanentAddressPoliceStation">Thana<span
+                                    class="require" data-ng-show="!vm.contactReadOnly">*</span></label>
+
+                            <div data-ng-show="!vm.contactReadOnly">
+                                <select name="nPermanentAddressPoliceStation"
+                                        id="iPermanentAddressPoliceStation"
+                                        data-ng-model="vm.entry.contact.perAddressThana"
+                                        data-ng-options="thana.name for thana in vm.permanentAddressThanas track by thana.id"
+                                        ng-readonly="vm.contactReadOnly"
+                                        class="form-control" required>
+                                    <option value="">Select Thana</option>
+                                </select>
+                                <label data-ng-show="nContactForm.nPermanentAddressPoliceStation.$invalid && !nContactForm.nPermanentAddressPoliceStation.$pristine"
+                                       class="help-block control-label">Please select a thana.</label>
+                            </div>
+                            <div data-ng-show="vm.contactReadOnly">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{vm.entry.contact.perAddressThana.name}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="iPermanentAddressPostOffice" class="control-label">Post Code</label>
+                            <div data-ng-show="!vm.contactReadOnly">
+                                <input type="text"
+                                       name="nPermanentAddressPostOffice"
+                                       id="iPermanentAddressPostOffice"
+                                       data-ng-model="vm.entry.contact.perAddressPostCode"
+                                       placeholder="Police Post Office/Zip"
+                                       value=""
+                                       ng-readonly="vm.contactReadOnly"
+                                       class="form-control">
+                            </div>
+                            <div data-ng-show="vm.contactReadOnly">
+                                <div class="underlineBox">
+                                    <label class="control-label">{{vm.entry.contact.perAddressPostCode}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div data-ng-if="vm.contactReadOnly==false">
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="button"
+                                data-ng-click="vm.contactReadOnly=true; vm.getContactInformation();"
+                                class="btn btn-danger btn-xs">Cancel
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <div align="right">
+                            <button type="submit" class="btn btn-success btn-xs"
+                                    data-ng-disabled="nContactForm.$invalid">Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

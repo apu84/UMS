@@ -1,22 +1,18 @@
 package org.ums.academic.resource.helper;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.builder.Builder;
 import org.ums.builder.EmpExamAttendanceBuilder;
-import org.ums.builder.EmpExamInvigilatorDateBuilder;
-import org.ums.builder.EmpExamReserveDateBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.EmpExamAttendance;
 import org.ums.domain.model.immutable.EmpExamInvigilatorDate;
 import org.ums.domain.model.immutable.EmpExamReserveDate;
-import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.mutable.MutableEmpExamAttendance;
 import org.ums.domain.model.mutable.MutableEmpExamInvigilatorDate;
 import org.ums.domain.model.mutable.MutableEmpExamReserveDate;
-import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
 import org.ums.enums.ProgramType;
 import org.ums.enums.accounts.definitions.MonthType;
 import org.ums.generator.IdGenerator;
@@ -31,8 +27,10 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.util.*;
-import java.util.stream.Collector;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**

@@ -1,10 +1,10 @@
 package org.ums.services;
 
 import org.apache.shiro.SecurityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Notification;
 import org.ums.manager.NotificationManager;
@@ -46,7 +46,7 @@ public class ApprovePublicationService {
       @Override
       public String payload() {
         try {
-          return sender.getPersonalInformation().getName() + "'s publication is waiting for your approval";
+          return sender.getPersonalInformation().getFullName() + "'s publication is waiting for your approval";
         } catch(Exception e) {
           mLogger.error("Exception while looking for user: ", e);
         }

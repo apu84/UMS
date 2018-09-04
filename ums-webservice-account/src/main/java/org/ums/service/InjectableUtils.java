@@ -1,15 +1,11 @@
 package org.ums.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.ums.cache.CacheFactory;
 import org.ums.context.AppContext;
-import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
 import org.ums.manager.CacheManager;
 import org.ums.manager.CompanyManager;
-import org.ums.manager.accounts.AccountManager;
 
 public class InjectableUtils {
   private static CacheFactory mCacheFactory;

@@ -148,7 +148,7 @@ public class TestimonialGeneratorImpl implements TestimonialGenerator {
     paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
     document.add(paragraph);
 
-    paragraph = new Paragraph(deptHead.getPersonalInformation().getName());
+    paragraph = new Paragraph(deptHead.getPersonalInformation().getFullName());
     paragraph.setFont(fontTimes11Normal);
     paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
     document.add(paragraph);
