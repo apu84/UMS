@@ -4,16 +4,14 @@ import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Designation;
-import org.ums.employee.personal.PersonalInformation;
-import org.ums.employee.personal.PersonalInformationManager;
-import org.ums.employee.service.ServiceInformation;
 import org.ums.domain.model.mutable.MutableEmployee;
+import org.ums.ems.profilemanagement.personal.PersonalInformation;
+import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
 import org.ums.manager.DepartmentManager;
 import org.ums.manager.DesignationManager;
 import org.ums.manager.EmployeeManager;
 
 import java.util.Date;
-import java.util.List;
 
 public class PersistentEmployee implements MutableEmployee {
 

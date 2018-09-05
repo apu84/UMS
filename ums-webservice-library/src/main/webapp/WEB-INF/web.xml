@@ -72,15 +72,15 @@
     <init-param>
       <param-name>jersey.config.server.provider.packages</param-name>
       <param-value>
-        org.ums.resource,
-        org.ums.login,
-        org.ums.cachewarmer,
-        org.ums.navigation,
-        org.ums.filter.cors,
-        org.codehaus.jackson.jaxrs,
-        org.ums.exception,
-        org.ums.employee,
-        org.ums.logs
+          org.ums.resource,
+          org.ums.login,
+          org.ums.cachewarmer,
+          org.ums.navigation,
+          org.ums.filter.cors,
+          org.codehaus.jackson.jaxrs,
+          org.ums.exception,
+          org.ums.ems,
+          org.ums.logs
       </param-value>
     </init-param>
     <init-param>

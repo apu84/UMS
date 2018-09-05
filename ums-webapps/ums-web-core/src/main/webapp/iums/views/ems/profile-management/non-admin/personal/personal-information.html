@@ -1,0 +1,30 @@
+<style>
+    img {
+        width: 150px;
+        height: 180px;
+    }
+</style>
+
+<div data-ng-if="vm.showLoader" align="center">
+    <div data-spinner=""></div>
+</div>
+
+<div data-ng-if="!vm.showLoader">
+    <ng-include src="'views/ems/profile-management/non-admin/personal/forms/general.html'"></ng-include>
+    <ng-include src="'views/ems/profile-management/non-admin/personal/forms/contact.html'"></ng-include>
+    <ng-include src="'views/ems/profile-management/non-admin/personal/forms/emergency-contact.html'"></ng-include>
+</div>
+
+<ng-include src="'views/ems/profile-management/personal/forms/upload-image-modal.html'"></ng-include>
+
+<script>
+    var $imageupload = $('.imageupload');
+    $imageupload.imageupload({
+        allowedFormats: ['jpg', 'png'],
+        maxWidth: 200,
+        maxHeight: 250,
+        maxFileSizeKb: 150,
+        height: 181,
+        width: 151
+    });
+</script>

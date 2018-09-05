@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.ums.cache.CacheFactory;
 import org.ums.configuration.UMSConfiguration;
 import org.ums.configuration.UMSContext;
-import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
 import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.lock.LockManager;
 import org.ums.manager.*;

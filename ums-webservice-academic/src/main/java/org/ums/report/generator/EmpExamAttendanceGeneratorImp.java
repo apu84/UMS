@@ -1,18 +1,20 @@
 package org.ums.report.generator;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.*;
-import org.jetbrains.annotations.NotNull;
+import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.ums.academic.resource.helper.EmpExamAttendanceHelper;
 import org.ums.domain.model.dto.ExamRoutineDto;
-import org.ums.domain.model.immutable.*;
+import org.ums.domain.model.immutable.EmpExamAttendance;
+import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.mutable.MutableEmpExamAttendance;
-import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
 import org.ums.enums.ExamType;
-import org.ums.enums.common.DesignationType;
 import org.ums.enums.common.EmployeeType;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.*;
@@ -26,10 +28,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static org.ums.util.ReportUtils.mBoldFont;
@@ -175,7 +175,7 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
           for(int i=0;i<entry.getValue().size();i++){
               String roomInCharge=entry.getValue().get(i).getRoomInCharge()==1?"(Room In Charge)":" ";
               cell = new UmsCell(new Phrase(""+mPersonalInformationManager.
-                      get(entry.getValue().get(i).getEmployeeId()).getName()+" "+roomInCharge+"", fontTimes8Normal));
+                      get(entry.getValue().get(i).getEmployeeId()).getFullName()+" "+roomInCharge+"", fontTimes8Normal));
               cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
               classRoomTable.addCell(cell);
               cell = new UmsCell(new Phrase(""+mEmployeeManager.
@@ -289,8 +289,8 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
       cell.setMinimumHeight(20f);
       empTable.addCell(cell);
       cell =
-          new UmsCell(
-              new Phrase("" + mPersonalInformationManager.get(app.getEmployeeId()).getName(), fontTimes10Normal));
+          new UmsCell(new Phrase("" + mPersonalInformationManager.get(app.getEmployeeId()).getFullName(),
+              fontTimes10Normal));
       cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
       empTable.addCell(cell);
       if(isReserve == 1) {
@@ -483,7 +483,7 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
           cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
           cell.setMinimumHeight(20f);
           empTable.addCell(cell);
-          cell = new UmsCell(new Phrase(""+mPersonalInformationManager.get(app.getEmployeeId()).getName(), fontTimes10Normal));
+          cell = new UmsCell(new Phrase(""+mPersonalInformationManager.get(app.getEmployeeId()).getFullName(), fontTimes10Normal));
           cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
           empTable.addCell(cell);
           cell = new UmsCell(new Phrase(""+mClassRoomManager.get(app.getInvigilatorRoomId()).getRoomNo(), fontTimes10Normal));
@@ -557,7 +557,7 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
     List<Employee> coe = mEmployeeManager.getByDesignation(designationOfCoe.toString());
     String coeName = "";
     for(Employee emp : coe) {
-      coeName = emp.getPersonalInformation().getName();
+      coeName = emp.getPersonalInformation().getFullName();
     }
     chunk =
         new Chunk("\nBy order of the Vice-Chancellor   \n\n" + "-----------------------------------------\n" + coeName

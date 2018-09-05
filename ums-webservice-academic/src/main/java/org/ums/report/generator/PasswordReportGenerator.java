@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import org.ums.manager.StudentManager;
 import org.ums.usermanagement.user.UserManager;
 
-import java.net.URL;
 import java.util.Map;
 
 @Component
@@ -55,10 +54,10 @@ public class PasswordReportGenerator extends AbstractReportGenerator {
    * parameters.put("credential", String.valueOf(user.getTemporaryPassword()));
    * 
    * Student student = mStudentManager.get(pParameter[0].toString()); parameters.put("user name",
-   * student.getFullName()); parameters.put("role name", user.getRole().getName());
+   * student.getFullName()); parameters.put("role name", user.getRole().getFullName());
    * parameters.put("created on", new Date()); parameters.put("department",
    * student.getDepartment().getShortName()); parameters.put("semester", "1st year, 1st semester");
-   * parameters.put("role", user.getRole().getName()); } return parameters; }
+   * parameters.put("role", user.getRole().getFullName()); } return parameters; }
    */
 
 }

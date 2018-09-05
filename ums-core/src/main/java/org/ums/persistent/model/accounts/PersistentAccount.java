@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.mutable.accounts.MutableAccount;
-import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.AccountManager;
 import org.ums.serializer.UmsDateSerializer;

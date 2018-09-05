@@ -79,11 +79,11 @@
           org.ums.resource,
           org.ums.builder,
           org.ums.meeting,
-          org.ums.employee,
+          org.ums.ems,
           org.codehaus.jackson.jaxrs,
-        org.ums.exception,
-        org.ums.common,
-        org.ums.logs
+          org.ums.exception,
+          org.ums.common,
+          org.ums.logs
       </param-value>
     </init-param>
     <init-param>

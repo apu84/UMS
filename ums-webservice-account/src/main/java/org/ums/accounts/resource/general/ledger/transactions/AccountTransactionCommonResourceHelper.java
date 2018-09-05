@@ -13,8 +13,8 @@ import org.ums.builder.Builder;
 import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.*;
 import org.ums.domain.model.mutable.accounts.*;
-import org.ums.employee.personal.PersonalInformation;
-import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.ems.profilemanagement.personal.PersonalInformation;
+import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
 import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.enums.accounts.definitions.voucher.number.control.ResetBasis;
 import org.ums.enums.accounts.definitions.voucher.number.control.VoucherType;
@@ -256,7 +256,7 @@ public class AccountTransactionCommonResourceHelper extends
     mutableAccountTransactions.forEach(a -> {
       a.setVoucherNo(a.getVoucherNo().substring(2));
       PersonalInformation personalInformation = mPersonalInformationManager.get(a.getModifiedBy());
-      a.setModifierName(personalInformation.getName());
+      a.setModifierName(personalInformation.getFullName());
     });
     PaginatedVouchers paginatedVouchers = new PaginatedVouchers();
     List<AccountTransaction> accountTransactions = new ArrayList<>(mutableAccountTransactions);

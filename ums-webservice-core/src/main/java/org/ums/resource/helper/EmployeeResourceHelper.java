@@ -13,13 +13,13 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.mutable.MutableEmployee;
-import org.ums.employee.additional.AdditionalInformationManager;
-import org.ums.employee.additional.MutableAdditionalInformation;
-import org.ums.employee.additional.PersistentAdditionalInformation;
-import org.ums.employee.personal.MutablePersonalInformation;
-import org.ums.employee.personal.PersistentPersonalInformation;
-import org.ums.employee.personal.PersonalInformationManager;
-import org.ums.employee.service.*;
+import org.ums.ems.profilemanagement.additional.AdditionalInformationManager;
+import org.ums.ems.profilemanagement.additional.MutableAdditionalInformation;
+import org.ums.ems.profilemanagement.additional.PersistentAdditionalInformation;
+import org.ums.ems.profilemanagement.personal.MutablePersonalInformation;
+import org.ums.ems.profilemanagement.personal.PersistentPersonalInformation;
+import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
+import org.ums.ems.profilemanagement.service.*;
 import org.ums.enums.common.EmploymentPeriod;
 import org.ums.enums.common.EmploymentType;
 import org.ums.formatter.DateFormat;
@@ -145,7 +145,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
       mutableUser.setTemporaryPassword(tempPassword.toCharArray());
       mUserManager.create(mutableUser);
 
-      mNewIUMSAccountInfoEmailService.sendEmail(mutablePersonalInformation.getName(), mutableUser.getId(),
+      mNewIUMSAccountInfoEmailService.sendEmail(mutablePersonalInformation.getFullName(), mutableUser.getId(),
           tempPassword, mutablePersonalInformation.getPersonalEmail(), "IUMS", "AUST: IUMS Account Credentials");
     }
 
@@ -288,6 +288,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
       email = "-";
     }
     pMutablePersonalInformation.setId(pJsonObject.getString("id"));
+    pMutablePersonalInformation.setSalutationId(pJsonObject.getInt("salutation"));
     pMutablePersonalInformation.setName(pJsonObject.getString("name"));
     pMutablePersonalInformation.setFatherName(" ");
     pMutablePersonalInformation.setMotherName(" ");

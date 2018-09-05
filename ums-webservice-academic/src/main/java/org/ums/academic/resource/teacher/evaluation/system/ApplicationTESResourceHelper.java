@@ -13,9 +13,12 @@ import org.ums.academic.resource.teacher.evaluation.system.helper.Report;
 import org.ums.academic.resource.teacher.evaluation.system.helper.StudentComment;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.*;
+import org.ums.domain.model.immutable.ApplicationTES;
+import org.ums.domain.model.immutable.Department;
+import org.ums.domain.model.immutable.Employee;
+import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableApplicationTES;
-import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
 import org.ums.enums.FacultyType;
 import org.ums.enums.ProgramType;
 import org.ums.enums.mstParameter.ParameterType;
@@ -30,9 +33,6 @@ import org.ums.usermanagement.user.UserManager;
 import org.ums.util.UmsUtils;
 
 import javax.json.*;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -442,7 +442,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
       String teacherName, deptName, courseNo, courseTitle, programName = "";
       Integer registeredStudents = 0;
       double percentage = 0;
-      teacherName = mPersonalInformationManager.get(teacherRelatedCourseList.get(j).getTeacherId()).getName();
+      teacherName = mPersonalInformationManager.get(teacherRelatedCourseList.get(j).getTeacherId()).getFullName();
       deptName = mEmployeeManager.get(teacherRelatedCourseList.get(j).getTeacherId()).getDepartment().getShortName();
       courseNo = mCourseManager.get(teacherRelatedCourseList.get(j).getReviewEligibleCourseId()).getNo();
       courseTitle = mCourseManager.get(teacherRelatedCourseList.get(j).getReviewEligibleCourseId()).getTitle();
@@ -743,7 +743,7 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
         String teacherName = "", courseNo = "", courseTitle = "", programName = "";
         double value = 0;
         double percentage = 0;
-        teacherName = mPersonalInformationManager.get(getTeachers.get(j).getTeacherId()).getName();
+        teacherName = mPersonalInformationManager.get(getTeachers.get(j).getTeacherId()).getFullName();
         courseNo = mCourseManager.get(getCourses.get(i).getReviewEligibleCourseId()).getNo();
         courseTitle = mCourseManager.get(getCourses.get(i).getReviewEligibleCourseId()).getTitle();
         if(studentNo != 0) {
@@ -987,7 +987,8 @@ public class ApplicationTESResourceHelper extends ResourceHelper<ApplicationTES,
 
   private void getTeacherPersonalData(String pDeptId, List<MutableApplicationTES> applications) {
     for(int i = 0; i < applications.size(); i++) {
-      applications.get(i).setFullName(mPersonalInformationManager.get(applications.get(i).getTeacherId()).getName());
+      applications.get(i)
+          .setFullName(mPersonalInformationManager.get(applications.get(i).getTeacherId()).getFullName());
       applications.get(i).setDeptShortName(mDepartmentManager.get(pDeptId).getShortName());
       applications.get(i).setDeptId(pDeptId);
       applications.get(i).setDesignation(

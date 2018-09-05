@@ -5,7 +5,7 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Designation;
 import org.ums.domain.model.immutable.Employee;
-import org.ums.employee.personal.PersonalInformation;
+import org.ums.ems.profilemanagement.personal.PersonalInformation;
 
 import java.util.Date;
 

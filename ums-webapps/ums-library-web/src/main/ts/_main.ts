@@ -31,7 +31,17 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Settings.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/token.model.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/refresh.token.service.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/BibtexParserService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/DivisionService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/DistrictService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/ThanaService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/EmploymentTypeService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/DesignationService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/DepartmentService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/AreaOfInterestService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/UserService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/CountryService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/AcademicDegreeService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/EmployeeService.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/MainController.ts'/>
@@ -70,7 +80,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/model/ChangePasswordModel.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/User.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/Employee.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/EmployeeService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/model/LoggedInUser.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/GridConfig.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/GridDecorator.ts'/>
@@ -85,29 +95,41 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/Utils.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/FileInput.ts'/>
 
+/// <reference path='../../../../ums-web-core/src/main/ts/types/Interfaces.ts'/>
 
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/EmployeePublication.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/ApprovePublicationService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/EmployeeProfile.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/personal/personal.controller.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/personal/personal.model.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/personal/personal.service.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/academic/academic.controller.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/academic/academic.model.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/academic/academic.service.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/publication/publication.controller.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/publication/publication.model.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/publication/publication.service.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/award/award.controller.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/award/award.model.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/award/award.service.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/training/training.controller.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/training/training.model.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/training/training.service.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/experience/experience.controller.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/experience/experience.model.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/experience/experience.service.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/additional/additional.controller.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/additional/additional.model.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/additional/additional.service.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/service/service.controller.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/service/service.model.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/ems/profile-management/service/service.service.ts'/>
 
-/// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeProfile.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformationService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/employee/EmployeeInformationModel.ts' />
-/// <reference path='../../../../ums-web-core/src/main/ts/service/CountryService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/DivisionService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/DistrictService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/ThanaService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/EmploymentTypeService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/DesignationService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/DepartmentService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/AcademicDegreeService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/employee/PersonalInformation.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/employee/AcademicInformation.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/employee/PublicationInformation.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/employee/AwardInformation.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/employee/TrainingInformation.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/employee/ExperienceInformation.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/employee/AdditionalInformation.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/employee/ServiceInformation.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/library/LibrarySearch.ts' />
+/// <reference path='../../../../ums-library-web/src/main/ts/types/Interfaces.ts'/>
 
-
+/// <reference path='../../../../ums-registrar-web/src/main/ts/ems/search/employee.search.controller.ts'/>
+/// <reference path='../../../../ums-registrar-web/src/main/ts/ems/search/employee.search.service.ts'/>
 /// <reference path='data.ts'/>
 
 /// <reference path='controller/Cataloging.ts'/>
@@ -135,9 +157,6 @@
 /// <reference path='../../../../ums-library-web/src/main/ts/types/Interfaces.ts'/>
 /// <reference path='../../../../ums-library-web/src/main/ts/directive/NavigationButton.ts'/>
 /// <reference path='../../../../ums-library-web/src/main/ts/factory/MessageFactory.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/types/Interfaces.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/CountryService.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/service/UserService.ts'/>
 /// <reference path='../../../../ums-library-web/src/main/ts/service/CirculationService.ts'/>
 
 

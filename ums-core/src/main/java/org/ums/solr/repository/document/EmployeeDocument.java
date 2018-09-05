@@ -1,12 +1,11 @@
 package org.ums.solr.repository.document;
 
-import java.util.List;
-
+import com.google.common.collect.Lists;
 import org.apache.solr.client.solrj.beans.Field;
 import org.springframework.data.annotation.Id;
 import org.ums.domain.model.immutable.Employee;
 
-import com.google.common.collect.Lists;
+import java.util.List;
 
 public class EmployeeDocument implements SearchDocument<String> {
   public static final String DOCUMENT_TYPE = "Employee";
@@ -31,7 +30,7 @@ public class EmployeeDocument implements SearchDocument<String> {
 
   public EmployeeDocument(final Employee pEmployee) {
     id = pEmployee.getId();
-    name = Lists.newArrayList(pEmployee.getPersonalInformation().getName());
+    name = Lists.newArrayList(pEmployee.getPersonalInformation().getFullName());
     departmentDocument = new DepartmentDocument(pEmployee.getDepartment());
     // dynamicMappedFieldValues = new HashMap<>();
     // dynamicMappedFieldValues.put("key1", "value1");
