@@ -43,7 +43,6 @@ module ums{
         this.$scope.routines = routines;
 
 
-
       });
       defer.resolve("success");
       return defer.promise;
