@@ -88,6 +88,7 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
           JsonObjectBuilder typedItems = Json.createObjectBuilder();
           typedItems.add("type", "additionalPermission");
           typedItems.add("name", "AdditionalPermission");
+          typedItems.add("label", "Additional");
           typedItems.add("items", buildNavigation(permissions, pUriInfo));
           children.add(typedItems);
         }
