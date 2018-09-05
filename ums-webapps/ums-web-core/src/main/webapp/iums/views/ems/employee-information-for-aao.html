@@ -30,27 +30,30 @@
         <div class="panel-body pan">
             <form class="form-horizontal" data-validate="" data-onvalidate="getEmployees">
                 <div class="form-body pal">
+
                     <div class="form-group">
-                        <label class="col-md-4 control-label">Search By</label>
+                        <label class="col-md-4 control-label">Id</label>
                         <div class="col-md-8">
-                            <select name="nSearchBy" id="iSearchBy" data-ng-model="vm.searchBy"
-                                    data-ng-change="vm.showSearchByField()" class="form-control required">
-                                <option value="">Select Search Type</option>
-                                <option value="2">Employee Name</option>
-                            </select>
+                            <input type="text"
+                                   name="nUserId"
+                                   id="iUserId"
+                                   data-ng-model="vm.changedUserId"
+                                   placeholder="Employee's Id"
+                                   data-ng-change="vm.showSearchByField()"
+                                   class="form-control">
                         </div>
                     </div>
-                    <div data-ng-if="vm.showSearchByUserName">
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Employee Name</label>
-                            <div class="col-md-8">
-                                <input type="text"
-                                       name="nUserName"
-                                       id="iUserName"
-                                       data-ng-model="vm.changedUserName"
-                                       placeholder="Employee Name"
-                                       class="form-control required">
-                            </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Name</label>
+                        <div class="col-md-8">
+                            <input type="text"
+                                   name="nUserName"
+                                   id="iUserName"
+                                   data-ng-model="vm.changedUserName"
+                                   placeholder="Employee's Name"
+                                   data-ng-change="vm.showSearchByField()"
+                                   class="form-control">
                         </div>
                     </div>
                 </div>
@@ -58,9 +61,6 @@
                 <div class="form-actions">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="col-md-12">
-
-                            </div>
                         </div>
 
                         <div class="col-md-6">
@@ -91,20 +91,24 @@
                                 <th>Department</th>
                                 <th>Designation</th>
                                 <th>Status</th>
+                                <!--<th>Action</th>-->
                             </tr>
                             </thead>
                             <tbody>
-                            <tr data-ng-repeat="user in (filterd = (vm.modifiedUserList | filter: {employeeName: vm.changedUserName} | filter: {deptOfficeId: vm.changedDepartment.id})) | limitTo:vm.itemsPerPage:vm.itemsPerPage*(vm.currentPageNumber - 1)">
+                            <tr data-ng-repeat="user in (filterd = (vm.modifiedUserList | filter: {id: vm.changedUserId} | filter: {employeeName: vm.changedUserName})) | limitTo:vm.itemsPerPage:vm.itemsPerPage*(vm.currentPageNumber - 1)">
                                 <td>{{(vm.currentPageNumber - 1) * vm.itemsPerPage + $index + 1}}</td>
                                 <td style="cursor:pointer"
                                     data-ng-click="vm.view(filterd[(vm.currentPageNumber - 1) * vm.itemsPerPage + $index], (vm.currentPageNumber - 1) * vm.itemsPerPage + $index)">
                                     {{user.id}}
                                 </td>
-                                <td>{{user.employeeName}}
-                                </td>
+                                <td>{{user.employeeName}}</td>
                                 <td>{{user.deptOfficeName}}</td>
-                                <td>{{user.designationName}}</td>
+                                <td style="cursor: pointer;" data-tooltip="toggle" title="Edit"
+                                    data-target="#editBasicInfo" data-toggle="modal"
+                                    data-ng-click="vm.startEdit($index)">{{user.designationName}}
+                                </td>
                                 <td>{{user.statusName}}</td>
+                                <!--<td data-ng-click="vm.downloadPdf(user.id)"><img class="img-responsive" src="https://cdn1.iconfinder.com/data/icons/CrystalClear/128x128/mimetypes/pdf.png" style="width: 20px; height: 25px; cursor: pointer"></td>-->
                             </tr>
                             </tbody>
                         </table>
