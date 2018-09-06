@@ -115,43 +115,12 @@ module ums {
 
         private showSearchByField(): void {
             this.employee = <Employee>{};
-            /* if (this.searchBy == "1") {
-                 this.showSearchByUserName = false;
-                 this.showSearchByDepartment = false;
-                 this.showListOfEmployeesPanel = false;
-                 this.showInformationPanel = false;
-                 this.enablePreviousButton = false;
-                 this.enableNextButton = false;
-                 this.changedUserName = "";
-                 this.changedDepartment = null;
-                 this.showSearchByUserId = true;
-                 this.showEmployeeProfilePanel = true;
-                 this.changedUserId = "";
-             }
-             else if (this.searchBy == "2") {
-                 this.showSearchByUserId = false;
-                 this.showSearchByDepartment = false;
-                 this.showEmployeeProfilePanel = false;
-                 this.changedUserId = "";
-                 this.changedDepartment = null;
-                 this.showSearchByUserName = true;
-                 this.showListOfEmployeesPanel = true;
-                 this.changedUserName = "";
-             }
-             else if (this.searchBy == "3") {
-                 this.changedUserName = "";
-                 this.changedUserId = "";
-                 this.showSearchByUserId = false;
-                 this.showSearchByUserName = false;
-                 this.showEmployeeProfilePanel = false;
-                 this.showListOfEmployeesPanel = true;
-                 this.showSearchByDepartment = true;
-             }*/
             this.showListOfEmployeesPanel = true;
             this.showEmployeeProfilePanel = false;
         }
 
         private getEmployees(): void {
+            console.log("I am here");
             this.employee = <Employee>{};
             this.showEmployeeProfilePanel = false;
             this.showListOfEmployeesPanel = true;

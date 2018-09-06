@@ -1,18 +1,18 @@
 package org.ums.usermanagement.role;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-
 public class PersistentRoleDao extends RoleDaoDecorator {
-  static String SELECT_ALL = "SELECT ROLE_ID, ROLE_NAME, LAST_MODIFIED FROM MST_ROLE ";
-  static String UPDATE_ALL = "UPDATE MST_ROLE set ROLE_NAME=?, LAST_MODIFIED = " + getLastModifiedSql();
+  static String SELECT_ALL = "SELECT ROLE_ID, ROLE_NAME, ROLE_LABEL, LAST_MODIFIED FROM MST_ROLE ";
+  static String UPDATE_ALL = "UPDATE MST_ROLE set ROLE_NAME=?, ROLE_LABEL=?, LAST_MODIFIED = " + getLastModifiedSql();
   static String DELETE_ALL = "DELETE FROM MST_ROLE ";
-  static String INSERT_ALL = "INSERT INTO MST_ROLE(ROLE_ID, ROLE_NAME, LAST_MODIFIED) VALUES(? , ?, "
+  static String INSERT_ALL = "INSERT INTO MST_ROLE(ROLE_ID, ROLE_NAME, ROLE_LABEL, LAST_MODIFIED) VALUES(?, ? , ?, "
       + getLastModifiedSql() + ") ";
   private JdbcTemplate mJdbcTemplate;
 
@@ -46,7 +46,7 @@ public class PersistentRoleDao extends RoleDaoDecorator {
 
   @Override
   public Integer create(MutableRole pMutable) {
-    mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getName());
+    mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getName(), pMutable.getLabel());
     return pMutable.getId();
   }
 
@@ -62,6 +62,7 @@ public class PersistentRoleDao extends RoleDaoDecorator {
       MutableRole role = new PersistentRole();
       role.setId(rs.getInt("ROLE_ID"));
       role.setName(rs.getString("ROLE_NAME"));
+      role.setLabel(rs.getString("ROLE_LABEL"));
       role.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<Role> atomicReference = new AtomicReference<>(role);
       return atomicReference.get();

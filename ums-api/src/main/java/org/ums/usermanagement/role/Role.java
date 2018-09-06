@@ -10,5 +10,7 @@ import java.util.Set;
 public interface Role extends Serializable, Identifier<Integer>, EditType<MutableRole>, LastModifier {
   String getName();
 
+  String getLabel();
+
   Set<String> getPermissions();
 }
