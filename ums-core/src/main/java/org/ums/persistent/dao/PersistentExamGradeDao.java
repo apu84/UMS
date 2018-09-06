@@ -342,7 +342,8 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + "select user_id,'CoE' Role from ADDITIONAL_ROLE_PERMISSIONS where role_id=7301 And Sysdate<=Valid_To And Sysdate>=Valid_From "
           + "Union " + "Select User_Id,'CoE' Role From Users,EMPLOYEES "
           + "Where USERS.EMPLOYEE_ID=EMPLOYEES.EMPLOYEE_ID " + "And EMPLOYEES.STATUS=1 And USERS.STATUS=1 "
-          + "And Designation = 2061 " + "Union " + "Select user_id,'VC' Role From Users Where Role_Id=7001 and Status=1 ";
+          + "And Designation = 2061 " + "Union "
+          + "Select user_id,'VC' Role From Users Where Role_Id=7001 and Status=1 ";
 
   String MARKS_SUBMISSION_STAT = "Select tmp1.dept_id,short_name,program_id,PROGRAM_SHORT_NAME,  "
       + "marksSubmissionStat(?, nvl(program_id,0),tmp1.dept_id,?,?,'Self','Total') Total_Offered_To_Self, "

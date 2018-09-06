@@ -384,7 +384,8 @@ public class PersistentPersonalInformation implements MutablePersonalInformation
 
   @Override
   public String getFullName() {
-    return mSalutationId == 0 ? mName.trim() : Salutation.get(mSalutationId).getLabel().concat(" ").concat(mName.trim());
+    return mSalutationId == 0 ? mName.trim() : Salutation.get(mSalutationId).getLabel().concat(" ")
+        .concat(mName.trim());
   }
 
   @Override
