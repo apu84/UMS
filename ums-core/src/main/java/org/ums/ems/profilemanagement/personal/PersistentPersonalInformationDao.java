@@ -16,7 +16,7 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
           + "WEBSITE, ORGANIZATIONAL_EMAIL, PERSONAL_EMAIL, MOBILE, PHONE, PRE_ADD_LINE1, PRE_ADD_LINE2, PRE_ADD_COUNTRY, "
           + "PRE_ADD_DIVISION, PRE_ADD_DISTRICT, PRE_ADD_THANA, PRE_ADD_POST_CODE, PER_ADD_LINE1, PER_ADD_LINE2, PER_ADD_COUNTRY, "
           + "PER_ADD_DIVISION, PER_ADD_DISTRICT, PER_ADD_THANA,  PER_ADD_POST_CODE, EMERGENCY_NAME, EMERGENCY_RELATION, "
-          + "EMERGENCY_PHONE, EMERGENCY_ADDRESS, LAST_MODIFIED) VALUES (? , ?, ? ,?, ?, ? ,? ,? ,? ,? ,?, "
+          + "EMERGENCY_PHONE, EMERGENCY_ADDRESS, LAST_MODIFIED) VALUES (? , ?, INITCAP(?) ,?, ?, ? ,? ,? ,? ,? ,?, "
           + "? ,? ,?, ?, ? ,? ,? ,? ,? ,?, ? ,? ,?, ? ,? ,? ,? ,? ,?, ? ,? ,?, ?, ? ,? ,?, " + getLastModifiedSql()
           + ")";
 
@@ -31,13 +31,13 @@ public class PersistentPersonalInformationDao extends PersonalInformationDaoDeco
   static String DELETE_ONE = "DELETE FROM EMP_PERSONAL_INFO ";
 
   static String UPDATE_ONE =
-      "UPDATE EMP_PERSONAL_INFO SET SALUTATION = ?, NAME = ?, GENDER = ?, BLOOD_GROUP = ?, FATHER_NAME = ?, "
-          + "MOTHER_NAME = ?, NATIONALITY = ?, RELIGION = ?, DATE_OF_BIRTH = ?, NID_NO = ?, "
-          + "MARITAL_STATUS = ?, SPOUSE_NAME = ?, SPOUSE_NID_NO = ?, WEBSITE = ?, ORGANIZATIONAL_EMAIL = ?, "
+      "UPDATE EMP_PERSONAL_INFO SET SALUTATION = ?, NAME = INITCAP(?), GENDER = ?, BLOOD_GROUP = ?, FATHER_NAME = INITCAP(?), "
+          + "MOTHER_NAME = INITCAP(?), NATIONALITY = ?, RELIGION = ?, DATE_OF_BIRTH = ?, NID_NO = ?, "
+          + "MARITAL_STATUS = ?, SPOUSE_NAME = INITCAP(?), SPOUSE_NID_NO = ?, WEBSITE = ?, ORGANIZATIONAL_EMAIL = ?, "
           + "PERSONAL_EMAIL = ?, MOBILE = ?, PHONE = ?, PRE_ADD_LINE1 = ?, PRE_ADD_LINE2 = ?, PRE_ADD_COUNTRY = ?, "
           + "PRE_ADD_DIVISION = ?, PRE_ADD_DISTRICT = ?, PRE_ADD_THANA = ?, PRE_ADD_POST_CODE = ?, PER_ADD_LINE1 = ?, "
           + "PER_ADD_LINE2 = ?, PER_ADD_COUNTRY = ?, PER_ADD_DIVISION = ?, PER_ADD_DISTRICT = ?, PER_ADD_THANA = ?, PER_ADD_POST_CODE = ?, "
-          + "EMERGENCY_NAME = ?, EMERGENCY_RELATION = ?, EMERGENCY_PHONE = ?, EMERGENCY_ADDRESS = ?, LAST_MODIFIED = "
+          + "EMERGENCY_NAME = INITCAP(?), EMERGENCY_RELATION = ?, EMERGENCY_PHONE = ?, EMERGENCY_ADDRESS = ?, LAST_MODIFIED = "
           + getLastModifiedSql() + " ";
 
   static String EXISTS_ONE = "SELECT COUNT(EMPLOYEE_ID) FROM EMP_PERSONAL_INFO ";
