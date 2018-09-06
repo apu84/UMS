@@ -8,7 +8,7 @@ public enum Salutation {
   Mr(1, "Mr."),
   Ms(2, "Ms."),
   Dr(3, "Dr."),
-  Prof_Dr(4, "Prof Dr.");
+  Prof_Dr(4, "Prof. Dr.");
 
   private String label;
   private Integer id;
