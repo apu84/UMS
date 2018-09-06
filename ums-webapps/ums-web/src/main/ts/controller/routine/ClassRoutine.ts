@@ -49,7 +49,7 @@ module ums {
     roomList: ClassRoom[];
     selectedRoom: ClassRoom;
     showRoutineChart:boolean;
-
+    routineTemplateFile: any;
 
 
     public static $inject = ['appConstants', '$q', 'notify', 'semesterService', 'classRoomService', 'classRoutineService',
@@ -65,6 +65,7 @@ module ums {
                 private $state:any,
                 private employeeService: EmployeeService) {
 
+      this.routineTemplateFile = {};
         this.init();
     }
 
@@ -91,6 +92,18 @@ module ums {
         this.fetchCurrentUser();
       this.searchButtonClicked = false;
       this.classRoutineService.enableEdit = true;
+    }
+
+    public uploadFile():void{
+      let formData = new FormData();
+      formData.append("file", this.routineTemplateFile);
+      formData.append("semesterId",this.classRoutineService.selectedSemester.id.toString());
+      formData.append("programId", this.classRoutineService.selectedProgram.id.toString());
+      if(this.routineTemplateFile==null)
+        this.notify.warn("No file chosen");
+      else{
+        this.classRoutineService.uploadFile(formData);
+      }
     }
 
     public fetchCurrentUser(){

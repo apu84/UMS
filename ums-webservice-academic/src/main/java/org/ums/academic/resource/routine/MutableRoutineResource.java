@@ -1,5 +1,7 @@
 package org.ums.academic.resource.routine;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.logs.DeleteLog;
 import org.ums.logs.PutLog;
@@ -7,12 +9,12 @@ import org.ums.resource.Resource;
 
 import javax.json.JsonArray;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.IOException;
 
 public class MutableRoutineResource extends Resource {
 
@@ -31,6 +33,15 @@ public class MutableRoutineResource extends Resource {
   @DeleteLog(message = "Requested for deleting routine data")
   public Response delete(@Context HttpServletRequest pHttpServletRequest, @PathParam("id") String id) throws Exception {
     return mRoutineResourceHelper.delete(Long.parseLong(id));
+  }
+
+  @POST
+  @Path("/upload")
+  @Consumes({MediaType.MULTIPART_FORM_DATA})
+  public Response uploadRoutineTemplate(@FormDataParam("file") File pFile,
+      @FormDataParam("semesterId") Integer pSemesterId, @FormDataParam("programId") Integer pProgramId)
+      throws Exception, IOException, InvalidFormatException {
+    return mRoutineResourceHelper.uploadFile(pFile, pSemesterId, pProgramId);
   }
 
   /*

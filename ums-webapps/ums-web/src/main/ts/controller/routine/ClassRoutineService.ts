@@ -256,6 +256,20 @@ module ums{
           }, 'arraybuffer');
     }
 
+    public uploadFile(formData: any): ng.IPromise<any> {
+      var defer = this.$q.defer();
+
+      var url = this.routineUrl+"/upload";
+      this.httpClient.post(url, formData, undefined)
+          .success((response) => {
+            defer.resolve(response);
+          }).error((data) => {
+        console.error(data);
+      });
+
+      return defer.promise;
+    }
+
   }
 
   UMS.service("classRoutineService",ClassRoutineService);
