@@ -1,6 +1,8 @@
 package org.ums.persistent.dao.accounts;
 
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -31,6 +33,8 @@ public class PersistentAccountDao extends AccountDaoDecorator {
   private JdbcTemplate mJdbcTemplate;
   private NamedParameterJdbcTemplate mNamedParameterJdbcTemplate;
   private IdGenerator mIdGenerator;
+
+  private Logger accountDaoLogger = LoggerFactory.getLogger(AccountDaoDecorator.class);
 
   public PersistentAccountDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate,
       IdGenerator pIdGenerator) {
@@ -122,6 +126,7 @@ public class PersistentAccountDao extends AccountDaoDecorator {
     try {
       Map parameterMap = new HashMap();
       parameterMap.put("id", pId);
+      accountDaoLogger.debug(pId.toString());
       return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentAccountRowMapper());
     } catch(EmptyResultDataAccessException e) {
       e.printStackTrace();

@@ -242,6 +242,20 @@ module ums{
       return defer.promise;
     }
 
+    public downloadRoutineTemplate():any{
+      let fileName: string = "RoutineTemplate";
+      let contentType: string = UmsUtil.getFileContentType("xls");
+      let url = this.routineUrl+"/routine-template";
+
+      this.httpClient.get(url, contentType,
+          (data:any, etag:string)=>{
+        UmsUtil.writeFileContent(data, contentType, fileName);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+          }, 'arraybuffer');
+    }
+
   }
 
   UMS.service("classRoutineService",ClassRoutineService);

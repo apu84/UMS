@@ -12,6 +12,8 @@ import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
 import org.ums.fee.payment.StudentPaymentManager;
 import org.ums.lock.LockManager;
 import org.ums.manager.*;
+import org.ums.manager.accounts.AccountManager;
+import org.ums.manager.accounts.GroupManager;
 import org.ums.manager.library.ContributorManager;
 import org.ums.manager.library.PublisherManager;
 import org.ums.manager.library.RecordManager;
@@ -116,6 +118,10 @@ public class ServiceContext {
   LegacyTabulationManager mLegacyTabulationManager;
   @Autowired
   ServiceConfiguration mServiceConfiguration;
+  @Autowired
+  AccountManager mAccountManager;
+  @Autowired
+  GroupManager mGroupManager;
 
   @Bean
   PaymentValidator paymentValidator() {
@@ -136,7 +142,7 @@ public class ServiceContext {
         mCourseGroupManager, mEquivalentCourseManager, mTeacherManager, mCourseTeacherManager, mExaminerManager,
         mStudentManager, mStudentRecordManager, mClassRoomManager, mCourseManager, mMarksSubmissionStatusManager,
         mPersonalInformationManager, mUserManager, mContributorManager, mSupplierManager, mPublisherManager,
-        mRecordManager);
+        mRecordManager, mAccountManager, mGroupManager);
     // , mAgendaResolutionManager
   }
 
