@@ -136,7 +136,7 @@ module ums {
         searchType: string,
         basicQueryField: string;
         basicQueryTerm: string;
-        advancedQueryMap: Array<IAdvancedSearchMap>;
+        advancedSearchFilter: Array<IAdvancedSearchMap>;
     }
 
     export interface IAdvancedSearchMap {

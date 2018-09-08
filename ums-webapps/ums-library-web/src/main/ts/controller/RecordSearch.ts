@@ -89,6 +89,8 @@ module ums {
             this.contributorList = contributor;
             this.supplierList = supplier;
             this.publisherList = publisher;
+
+            this.search.itemType = "Book";
         }
 
         private prepareFilter() {
@@ -105,62 +107,47 @@ module ums {
                 }
             }
             else if (this.search.searchType == 'advanced_search') {
-                filter.advancedQueryMap = [];
+                filter.advancedSearchFilter = [];
                 let advanceSearchMap1: IAdvancedSearchMap = <IAdvancedSearchMap>{};
-                advanceSearchMap1.key = 'materialType';
-                advanceSearchMap1.value =  this.search.itemType;
-                filter.advancedQueryMap.push(advanceSearchMap1);
-                let advanceSearchMap2: IAdvancedSearchMap = <IAdvancedSearchMap>{};
-                advanceSearchMap2.key = 'title';
-                advanceSearchMap2.value =  this.search.title;
-                filter.advancedQueryMap.push(advanceSearchMap2);
-                let advanceSearchMap3: IAdvancedSearchMap = <IAdvancedSearchMap>{};
-                advanceSearchMap3.key = 'author';
-                advanceSearchMap3.value =  this.search.author;
-                filter.advancedQueryMap.push(advanceSearchMap3);
-                let advanceSearchMap4: IAdvancedSearchMap = <IAdvancedSearchMap>{};
-                advanceSearchMap4.key = 'subject';
-                advanceSearchMap4.value =  this.search.subject;
-                filter.advancedQueryMap.push(advanceSearchMap4);
-                let advanceSearchMap5: IAdvancedSearchMap = <IAdvancedSearchMap>{};
-                advanceSearchMap5.key = 'corpAuthor';
-                advanceSearchMap5.value =  this.search.corpAuthor;
-                filter.advancedQueryMap.push(advanceSearchMap5);
-                let advanceSearchMap6: IAdvancedSearchMap = <IAdvancedSearchMap>{};
-                advanceSearchMap6.key = 'publisher';
-                advanceSearchMap6.value =  this.search.publisher;
-                filter.advancedQueryMap.push(advanceSearchMap6);
-                let advanceSearchMap7: IAdvancedSearchMap = <IAdvancedSearchMap>{};
-                advanceSearchMap7.key = 'yearFrom';
-                advanceSearchMap7.value =  this.search.yearFrom;
-                filter.advancedQueryMap.push(advanceSearchMap7);
-                let advanceSearchMap8: IAdvancedSearchMap = <IAdvancedSearchMap>{};
-                advanceSearchMap8.key = 'yearTo';
-                advanceSearchMap8.value =  this.search.yearTo;
-                filter.advancedQueryMap.push(advanceSearchMap8);
-                /*advanceSearchMap[1].key = 'title';
-                advanceSearchMap[1].value = this.search.title;
-                advanceSearchMap[2].key = 'author';
-                advanceSearchMap[2].value = this.search.author;
-                advanceSearchMap[3].key = 'subject';
-                advanceSearchMap[3].value = this.search.subject;
-                advanceSearchMap[4].key = 'corpAuthor';
-                advanceSearchMap[4].value = this.search.corpAuthor;
-                advanceSearchMap[5].key = 'publisher';
-                advanceSearchMap[5].value = this.search.publisher;
-                advanceSearchMap[6].key = 'yearFrom';
-                advanceSearchMap[6].value = this.search.yearFrom;
-                advanceSearchMap[7].key = 'yearTo';
-                advanceSearchMap[7].value = this.search.yearTo;
-                console.log(advanceSearchMap.length);
-                for (let i = 0; i < advanceSearchMap.length; i++) {
-
-                    console.log(i);
-                    console.log(advanceSearchMap[i]);
-                    console.log(advanceSearchMap[i].value);
-                    filter.advancedQueryMap[i].key = advanceSearchMap[i].key;
-                    filter.advancedQueryMap[i].value = advanceSearchMap[i].value;
-                }*/
+                advanceSearchMap1.key = 'materialType_s';
+                advanceSearchMap1.value = this.search.itemType;
+                filter.advancedSearchFilter.push(advanceSearchMap1);
+                if (this.search.title) {
+                    let advanceSearchMap2: IAdvancedSearchMap = <IAdvancedSearchMap>{};
+                    advanceSearchMap2.key = 'title_t';
+                    advanceSearchMap2.value = "*" + this.search.title + "*";
+                    filter.advancedSearchFilter.push(advanceSearchMap2);
+                }
+                if (this.search.author) {
+                    let advanceSearchMap3: IAdvancedSearchMap = <IAdvancedSearchMap>{};
+                    advanceSearchMap3.key = 'contributors_txt';
+                    advanceSearchMap3.value = "*" + this.search.author + "*";
+                    filter.advancedSearchFilter.push(advanceSearchMap3);
+                }
+                if (this.search.subject) {
+                    let advanceSearchMap4: IAdvancedSearchMap = <IAdvancedSearchMap>{};
+                    advanceSearchMap4.key = 'subjects_txt';
+                    advanceSearchMap4.value = "*" + this.search.subject + "*";
+                    filter.advancedSearchFilter.push(advanceSearchMap4);
+                }
+                if (this.search.corpAuthor) {
+                    let advanceSearchMap5: IAdvancedSearchMap = <IAdvancedSearchMap>{};
+                    advanceSearchMap5.key = 'corpAuthorMain_s';
+                    advanceSearchMap5.value = "*" + this.search.corpAuthor + "*" ;
+                    filter.advancedSearchFilter.push(advanceSearchMap5);
+                }
+                if (this.search.publisher) {
+                    let advanceSearchMap6: IAdvancedSearchMap = <IAdvancedSearchMap>{};
+                    advanceSearchMap6.key = 'publisher_txt';
+                    advanceSearchMap6.value = "*" + this.search.publisher + "*";
+                    filter.advancedSearchFilter.push(advanceSearchMap6);
+                }
+                if (this.search.yearFrom && this.search.yearTo) {
+                    let advanceSearchMap7: IAdvancedSearchMap = <IAdvancedSearchMap>{};
+                    advanceSearchMap7.key = 'yearOfPublication_i';
+                    advanceSearchMap7.value = "[" + this.search.yearFrom + " TO " + this.search.yearTo + "]";
+                    filter.advancedSearchFilter.push(advanceSearchMap7);
+                }
             }
             this.search.filter = filter;
             localStorage["lms_search_filter"] = JSON.stringify(filter);
