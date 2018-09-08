@@ -880,6 +880,7 @@ module ums {
                     {id: 4, name: "Jainism"},
                     {id: 5, name: "Judaism"},
                     {id: 6, name: "Sikhism"},
+                    {id: 7, name: "Christian"},
                     {id: 99, name: "Others"}
                 ],
                 nationalityTypes: [

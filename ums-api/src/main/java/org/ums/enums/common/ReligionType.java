@@ -5,13 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ReligionType {
-  Islam(1, "Islam"),
-  Buddhism(2, "Buddhism"),
-  Hinduism(3, "Hinduism"),
-  Jainism(4, "Jainism"),
-  Judaism(5, "Judaism"),
-  Sikhism(6, "Sikhism"),
-  Others(99, "Others");
+  ISLAM(1, "Islam"),
+  BUDDHISM(2, "Buddhism"),
+  HINDUISM(3, "Hinduism"),
+  JAINISM(4, "Jainism"),
+  JUDAISM(5, "Judaism"),
+  SIKHISM(6, "Sikhism"),
+  CHRISTIAN(7, "Christian"),
+  OTHERS(99, "Others");
 
   private Integer id;
   private String label;
