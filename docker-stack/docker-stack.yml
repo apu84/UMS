@@ -26,37 +26,37 @@ services:
         aliases:
           - ums-memcached
   ums-webservice-academic:
-    image: harrenhall:5001/ums-webservice-academic
+    image: harrenhall:5001/ums-webservice-academic:${TAG}
     networks:
       ums-net:
         aliases:
           - ums-webservice-academic
   ums-webservice-library:
-      image: harrenhall:5001/ums-webservice-library
+      image: harrenhall:5001/ums-webservice-library:${TAG}
       networks:
         ums-net:
           aliases:
             - ums-webservice-library
   ums-webservice-registrar:
-      image: harrenhall:5001/ums-webservice-registrar
+      image: harrenhall:5001/ums-webservice-registrar:${TAG}
       networks:
         ums-net:
           aliases:
             - ums-webservice-registrar
   ums-webservice-bank:
-      image: harrenhall:5001/ums-webservice-bank
+      image: harrenhall:5001/ums-webservice-bank:${TAG}
       networks:
         ums-net:
           aliases:
             - ums-webservice-bank
   ums-webservice-account:
-      image: harrenhall:5001/ums-webservice-account
+      image: harrenhall:5001/ums-webservice-account:${TAG}
       networks:
         ums-net:
           aliases:
             - ums-webservice-account
   ums-web:
-    image: harrenhall:5001/ums-web
+    image: harrenhall:5001/ums-web:${TAG}
     ports:
       - "80:80"
     networks:
@@ -64,13 +64,13 @@ services:
         aliases:
           - ums-web
   ums-microservice-cache-warmer:
-    image: harrenhall:5001/ums-microservice-cache-warmer
+    image: harrenhall:5001/ums-microservice-cache-warmer:${TAG}
     networks:
       ums-net:
         aliases:
           - ums-microservice-cache-warmer
   ums-microservice-indexer:
-      image: harrenhall:5001/ums-microservice-indexer
+      image: harrenhall:5001/ums-microservice-indexer:${TAG}
       networks:
         ums-net:
           aliases:
