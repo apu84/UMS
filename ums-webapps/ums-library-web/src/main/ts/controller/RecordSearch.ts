@@ -11,10 +11,7 @@ module ums {
             '$stateParams',
             'supplierService',
             'publisherService',
-            'contributorService',
-            'contributor',
-            'supplier',
-            'publisher'
+            'contributorService'
         ];
 
         private data: any;
@@ -25,9 +22,6 @@ module ums {
         private choice: string;
         private choiceType: string;
         private record: IRecord;
-        private supplierList: Array<ISupplier>;
-        private publisherList: Array<IPublisher>;
-        private contributorList: Array<IContributor>;
 
         constructor(private $q: ng.IQService,
                     private notify: Notify,
@@ -36,10 +30,7 @@ module ums {
                     private $stateParams: any,
                     private supplierService: SupplierService,
                     private publisherService: PublisherService,
-                    private contributorService: ContributorService,
-                    private contributor: any,
-                    private supplier: any,
-                    private publisher: any) {
+                    private contributorService: ContributorService) {
 
             this.recordList = Array<IRecord>();
             this.recordIdList = Array<String>();
@@ -85,10 +76,6 @@ module ums {
             else {
                 this.fetchRecords(1);
             }
-
-            this.contributorList = contributor;
-            this.supplierList = supplier;
-            this.publisherList = publisher;
 
             this.search.itemType = "Book";
         }
@@ -166,6 +153,7 @@ module ums {
 
         private fetchRecords(pageNumber: number): void {
             this.catalogingService.fetchRecords(pageNumber, this.data.itemPerPage, "", this.search.filter).then((response: any) => {
+                console.log(response);
                 this.recordIdList = Array<String>();
                 this.recordList = response.entries;
                 this.data.totalRecord = response.total;
@@ -198,30 +186,9 @@ module ums {
 
         private prepareRecord(): void {
             for (let index = 0; index < this.recordList.length; index++) {
-                this.recordList[index].contributorList = Array<IContributor>();
                 this.recordList[index].subjectList = Array<ISubjectEntry>();
                 this.recordList[index].noteList = Array<INoteEntry>();
 
-                let contributorJsonStringObj = $.parseJSON(this.recordList[index].contributorJsonString);
-
-                if (contributorJsonStringObj != null) {
-                    for (let i = 0; i < contributorJsonStringObj.length; i++) {
-                        let contributor = <IContributor> {};
-                        contributor.viewOrder = contributorJsonStringObj[i].viewOrder;
-                        contributor.role = contributorJsonStringObj[i].role;
-                        angular.forEach(this.data.contributorRoles, (attr: any) => {
-                            if (attr.id == contributorJsonStringObj[i].role) {
-                                contributor.roleName = attr.name;
-                            }
-                        });
-                        contributor.id = contributorJsonStringObj[i].id;
-                        contributor.name = this.contributorList[this.contributorList.map(function (e) {
-                            return e.id;
-                        }).indexOf(contributorJsonStringObj[i].id)].name;
-
-                        this.recordList[index].contributorList.push(contributor);
-                    }
-                }
                 let noteJsonStringObj = $.parseJSON(this.recordList[index].noteJsonString);
                 if (noteJsonStringObj != null) {
                     for (let i = 0; i < noteJsonStringObj.length; i++) {

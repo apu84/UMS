@@ -52,7 +52,8 @@ module ums {
                                 'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
                             ]
                         });
-                    }],
+                    }]
+                    /*,
                     contributor: ['contributorService', function(contributorService){
                         return contributorService.fetchAllContributors().then((contributors) =>{
                             return contributors.entries;
@@ -67,7 +68,7 @@ module ums {
                         return supplierService.fetchAllSuppliers().then((suppliers) =>{
                             return suppliers.entries;
                         });
-                    }]
+                    }]*/
                 }
             })
             .state('cataloging.search', {
