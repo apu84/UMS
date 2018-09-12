@@ -156,7 +156,7 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
     cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
     header.addCell(cell);
     mDateFormat = new DateFormat("dd MMM YYYY");
-    cell = new UmsCell(new Phrase("Date of Examination: " + mDateFormat.format(new Date()) + "\n", fontTimes12Bold));
+    cell = new UmsCell(new Phrase("Date of Examination: " + mDateFormat.format(pExamDate) + "\n", fontTimes12Bold));
     cell.setHorizontalAlignment(UmsCell.ALIGN_RIGHT);
     header.addCell(cell);
     document.add(header);
