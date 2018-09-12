@@ -71,7 +71,7 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     pBuilder.add("keywords", pReadOnly.getKeyWords() == null ? "" : pReadOnly.getKeyWords());
     pBuilder.add("contributorJsonString",
         pReadOnly.getContributorJsonString() == null ? "" : pReadOnly.getContributorJsonString());
-    pBuilder.add("contributorList",  getContributorList(pReadOnly.getContributorJsonString()));
+    pBuilder.add("contributorList", getContributorList(pReadOnly.getContributorJsonString()));
     pBuilder.add("subjectJsonString", pReadOnly.getSubjectJsonString() == null ? "" : pReadOnly.getSubjectJsonString());
     pBuilder.add("noteJsonString", pReadOnly.getNoteJsonString() == null ? "" : pReadOnly.getNoteJsonString());
     pBuilder.add("physicalDescriptionString",
@@ -189,15 +189,14 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
       pMutable.setPhysicalDescriptionString(pJsonObject.getString("physicalDescriptionString"));
   }
 
-
   private JsonArrayBuilder getContributorList(String pContributorJsonString) {
     String id[] = UmsUtils.convertJsonStringToStringArray(pContributorJsonString, "id");
     String role[] = UmsUtils.convertJsonStringToStringArray(pContributorJsonString, "role");
     JsonArrayBuilder contributorArrayJson = Json.createArrayBuilder();
     JsonObjectBuilder contributorJson = Json.createObjectBuilder();
     for(int i = 0; i < id.length; i++) {
-      contributorJson.add("name", mContributorManager.get(Long.parseLong(id[i])).getFullName()).
-              add("roleName", ContributorRole.get(Integer.parseInt(role[i])).getLabel());
+      contributorJson.add("name", mContributorManager.get(Long.parseLong(id[i])).getFullName()).add("roleName",
+          ContributorRole.get(Integer.parseInt(role[i])).getLabel());
       contributorArrayJson.add(contributorJson);
     }
     return contributorArrayJson;
