@@ -12,31 +12,30 @@ import java.io.Serializable;
 /**
  * Created by Monjur-E-Morshed on 8/29/2018.
  */
-public interface OptCourseOffer extends Serializable, LastModifier, EditType<MutableOptCourseOffer>,
-        Identifier<Long> {
-    Long getId();
+public interface OptCourseOffer extends Serializable, LastModifier, EditType<MutableOptCourseOffer>, Identifier<Long> {
+  Long getId();
 
-    Integer getSemesterId();
+  Integer getSemesterId();
 
-    String getDepartmentId();
+  String getDepartmentId();
 
-    Department getDepartment();
+  Department getDepartment();
 
-    Integer getProgramId();
+  Integer getProgramId();
 
-    String getProgramName();
+  String getProgramName();
 
-    Integer getYear();
+  Integer getYear();
 
-    Integer getSemester();
+  Integer getSemester();
 
-    String getCourseId();
+  String getCourseId();
 
-    Course getCourses();
+  Course getCourses();
 
-    Integer getCallForApplication();
+  Integer getCallForApplication();
 
-    Integer getApproved();
+  Integer getApproved();
 
-    Integer getTotal();
+  Integer getTotal();
 }

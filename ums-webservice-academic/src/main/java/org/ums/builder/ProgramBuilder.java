@@ -30,6 +30,8 @@ public class ProgramBuilder implements Builder<Program, MutableProgram> {
         pReadOnly.getDepartmentId(), Department.class);
     pBuilder.add("department", pUriInfo.getBaseUriBuilder().path("academic").path("department")
         .path(String.valueOf(department.getId())).build().toString());
+    pBuilder.add("departmentId", department.getId());
+
 
     Faculty faculty = (Faculty) pLocalCache.cache(()-> pReadOnly.getFaculty(),
         pReadOnly.getFacultyId(),Faculty.class);

@@ -15,5 +15,5 @@ import javax.ws.rs.Produces;
 @Path("academic/optCourseOffer")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class OptCourseOfferResource  extends MutableOptCourseOfferResource{
+public class OptCourseOfferResource extends MutableOptCourseOfferResource {
 }

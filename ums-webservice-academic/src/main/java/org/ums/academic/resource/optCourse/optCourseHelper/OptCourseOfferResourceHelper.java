@@ -19,28 +19,28 @@ import javax.ws.rs.core.UriInfo;
  */
 @Component
 public class OptCourseOfferResourceHelper extends ResourceHelper<OptCourseOffer, MutableOptCourseOffer, Long> {
-    @Autowired
-    OptCourseOfferBuilder mBuilder;
-    @Autowired
-    OptCourseOfferManager mManager;
+  @Autowired
+  OptCourseOfferBuilder mBuilder;
+  @Autowired
+  OptCourseOfferManager mManager;
 
-    @Override
-    public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-        return null;
-    }
+  @Override
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+    return null;
+  }
 
-    @Override
-    protected ContentManager<OptCourseOffer, MutableOptCourseOffer, Long> getContentManager() {
-        return mManager;
-    }
+  @Override
+  protected ContentManager<OptCourseOffer, MutableOptCourseOffer, Long> getContentManager() {
+    return mManager;
+  }
 
-    @Override
-    protected Builder<OptCourseOffer, MutableOptCourseOffer> getBuilder() {
-        return mBuilder;
-    }
+  @Override
+  protected Builder<OptCourseOffer, MutableOptCourseOffer> getBuilder() {
+    return mBuilder;
+  }
 
-    @Override
-    protected String getETag(OptCourseOffer pReadonly) {
-        return null;
-    }
+  @Override
+  protected String getETag(OptCourseOffer pReadonly) {
+    return null;
+  }
 }

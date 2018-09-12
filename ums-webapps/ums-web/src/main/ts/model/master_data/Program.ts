@@ -4,7 +4,8 @@
 
 module ums{
   export interface Program{
-    id:number;
+      departmentId:string;
+      id:number;
     shortName:string;
     longName:string;
     programType:number;

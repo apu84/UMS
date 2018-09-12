@@ -11,15 +11,15 @@ import org.ums.manager.optCourse.OptCourseOfferManager;
  * Created by Monjur-E-Morshed on 8/29/2018.
  */
 public class OptCourseOfferCache extends
-        ContentCache<OptCourseOffer, MutableOptCourseOffer, Long, OptCourseOfferManager> implements
-        OptCourseOfferManager {
-    CacheManager<OptCourseOffer, Long> mCacheManager;
-    @Override
-    protected CacheManager<OptCourseOffer, Long> getCacheManager() {
-        return mCacheManager;
-    }
+    ContentCache<OptCourseOffer, MutableOptCourseOffer, Long, OptCourseOfferManager> implements OptCourseOfferManager {
+  CacheManager<OptCourseOffer, Long> mCacheManager;
 
-    public OptCourseOfferCache(CacheManager<OptCourseOffer, Long> pCacheManager) {
-        mCacheManager = pCacheManager;
-    }
+  @Override
+  protected CacheManager<OptCourseOffer, Long> getCacheManager() {
+    return mCacheManager;
+  }
+
+  public OptCourseOfferCache(CacheManager<OptCourseOffer, Long> pCacheManager) {
+    mCacheManager = pCacheManager;
+  }
 }

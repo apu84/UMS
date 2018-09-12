@@ -11,31 +11,31 @@ import org.ums.domain.model.mutable.MutableLastModifier;
  * Created by Monjur-E-Morshed on 8/29/2018.
  */
 public interface MutableOptCourseOffer extends OptCourseOffer, Editable<Long>, MutableLastModifier,
-        MutableIdentifier<Long> {
+    MutableIdentifier<Long> {
 
-    void setId(Long pId);
+  void setId(Long pId);
 
-    void setSemesterId(final Integer pSemesterId);
+  void setSemesterId(final Integer pSemesterId);
 
-    void setDepartmentId(final String pDepartmentId);
+  void setDepartmentId(final String pDepartmentId);
 
-    void setDepartment(final Department pDepartment);
+  void setDepartment(final Department pDepartment);
 
-    void setProgramId(final Integer pProgramId);
+  void setProgramId(final Integer pProgramId);
 
-    void setProgramName(final String pProgramName);
+  void setProgramName(final String pProgramName);
 
-    void setYear(final Integer pYear);
+  void setYear(final Integer pYear);
 
-    void setSemester(final Integer pSemester);
+  void setSemester(final Integer pSemester);
 
-    void setCourseId(final String  pCourseId);
+  void setCourseId(final String pCourseId);
 
-    void setCourses(final Course pCourses);
+  void setCourses(final Course pCourses);
 
-    void setCallForApplication(final Integer pCallForApplication);
+  void setCallForApplication(final Integer pCallForApplication);
 
-    void setApproved(final Integer pApproved);
+  void setApproved(final Integer pApproved);
 
-    void setTotal(final Integer pTotal);
+  void setTotal(final Integer pTotal);
 }

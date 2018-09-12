@@ -18,11 +18,13 @@ import org.ums.manager.*;
 import org.ums.report.itext.UmsCell;
 import org.ums.report.itext.UmsParagraph;
 import org.ums.report.itext.UmsPdfPageEventHelper;
+import org.ums.util.UmsUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,6 +64,11 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
   @Qualifier("genericDateFormat")
   private DateFormat mDateFormat;
 
+  public String parseDate(String pExamDate) throws ParseException {
+    String date = UmsUtils.formatDate(pExamDate, "dd-MM-yyyy", "dd MMM yyyy");
+    return date;
+  }
+
   @Override
   public void createTestimonial(Integer pSemesterId, Integer pExamType, String pExamDate, OutputStream pOutputStream)
       throws IOException, DocumentException {
@@ -72,7 +79,7 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PdfWriter writer = PdfWriter.getInstance(document, baos);
     ParagraphBorder border = new ParagraphBorder();
-    writer.setPageEvent(new EmpAttendanceReportHeaderAndFooter());
+   // writer.setPageEvent(new EmpAttendanceReportHeaderAndFooter());
     writer.setPageEvent(border);
 
     Font fontTimes11Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11);
@@ -115,6 +122,12 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
       Font fontTimes11Normal, Font fontTimes12Bold, Font fontTimes9Bold) throws DocumentException {
     UmsParagraph paragraph = null;
     Chunk chunk = null;
+    String examDate = "";
+    try {
+      examDate = parseDate(pExamDate);
+    } catch(ParseException e) {
+      e.printStackTrace();
+    }
 
     paragraph = new UmsParagraph();
     document.add(paragraph);
@@ -155,7 +168,7 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
     cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
     header.addCell(cell);
     mDateFormat = new DateFormat("dd MMM YYYY");
-    cell = new UmsCell(new Phrase("Date of Examination: " + mDateFormat.format(new Date()) + "\n", fontTimes12Bold));
+    cell = new UmsCell(new Phrase("Date of Examination: " + examDate + "\n", fontTimes12Bold));
     cell.setHorizontalAlignment(UmsCell.ALIGN_RIGHT);
     header.addCell(cell);
     document.add(header);

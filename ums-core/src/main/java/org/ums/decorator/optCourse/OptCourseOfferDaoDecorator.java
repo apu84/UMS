@@ -9,8 +9,7 @@ import org.ums.manager.optCourse.OptCourseOfferManager;
  * Created by Monjur-E-Morshed on 8/29/2018.
  */
 public class OptCourseOfferDaoDecorator extends
-        ContentDaoDecorator<OptCourseOffer, MutableOptCourseOffer, Long, OptCourseOfferManager> implements
-        OptCourseOfferManager {
+    ContentDaoDecorator<OptCourseOffer, MutableOptCourseOffer, Long, OptCourseOfferManager> implements
+    OptCourseOfferManager {
 
 }
-

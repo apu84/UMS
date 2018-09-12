@@ -3,6 +3,8 @@ package org.ums.academic.resource.helper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.domain.model.immutable.optCourse.OptCourseGroup;
+import org.ums.manager.optCourse.OptCourseGroupManager;
 import org.ums.report.optReports.CourseByGroupIdReport;
 import org.ums.resource.SemesterResource;
 import org.ums.builder.CourseBuilder;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Component
@@ -48,6 +51,8 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
 
   @Autowired
   private CourseBuilder mBuilder;
+  @Autowired
+  private OptCourseGroupManager mOptCourseGroupManager;
 
   @Override
   public CourseManager getContentManager() {
@@ -188,10 +193,14 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     Syllabus syllabus = mSemesterSyllabusMapManager.getSyllabusForSemester(pProgramId, pSemesterId, pYear, pSemester);
     List<Course> courses = getContentManager().getOptionalCourseList(syllabus.getId(), pYear, pSemester);
     Map<Integer,List<Course>> grpByOpt=courses.stream().collect(Collectors.groupingBy(Course::getCourseGroupId));
+    List<OptCourseGroup> optCourseGroup=mOptCourseGroupManager.getAll();
+    Map<Integer,String> optMapOfCourseIdWithName=optCourseGroup.stream().collect(Collectors.toMap(a->a.getOptGroupId(),a->a.getOptGroupName(),
+            (oldValue, newValue) ->newValue));
     List<CourseByGroupIdReport> courseByGroupIdReport= new ArrayList<>();
     for(Map.Entry<Integer,List<Course>> entry:grpByOpt.entrySet()){
       CourseByGroupIdReport app= new CourseByGroupIdReport();
       app.setGroupId(entry.getKey());
+      app.setGroupName(optMapOfCourseIdWithName.get(entry.getKey()).toUpperCase());
       app.setCourses(entry.getValue());
       courseByGroupIdReport.add(app);
     }

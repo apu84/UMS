@@ -568,6 +568,10 @@ module ums {
                     {id: "41", name: "4-1"},
                     {id: "42", name: "4-2"}
                 ],
+                opYearSemester: [
+                    {id: "41", name: "4-1"},
+                    {id: "42", name: "4-2"}
+                ],
                 semester: [
                     {id: 1, name: "1st Semester"},
                     {id: 2, name: "2nd Semester"}

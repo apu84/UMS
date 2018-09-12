@@ -1,3 +1,526 @@
-<div>
-   <button data-ng-click="vm.doSomething()">Click Me!!</button>
+<style xmlns="http://www.w3.org/1999/html">
+   fieldset.scheduler-border {
+      border: 1px groove #ddd !important;
+      padding: 0 1.4em 1.4em 1.4em !important;
+      margin: 0 0 1.5em 0 !important;
+      -webkit-box-shadow: 0px 0px 0px 0px #000;
+      box-shadow: 0px 0px 0px 0px #000;
+   }
+
+
+
+   legend.scheduler-border {
+      font-size: 1.2em !important;
+      font-weight: bold !important;
+      text-align: left !important;
+      width: auto;
+      padding: 0 10px;
+      border-bottom: none;
+   }
+
+
+   .btn-circle {
+      width: 30px;
+      height: 30px;
+      padding: 6px 0px;
+      border-radius: 15px;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.42857;
+   }
+   .btn-xs, .btn-group-xs > .btn {
+      padding: 1px 5px !important;
+   }
+
+   .jqdragndrop-drop {
+      transition: background .2s ease;
+      background: rgba(0, 0, 0, .3);
+   }
+
+   .jqdragndrop-dropHover {
+      box-shadow: 0 0 20px rgba(0, 0, 0, .2);
+      background: rgba(0, 0, 0, .5);
+   }
+   ul.nav.nav-tabs.ul-edit li.active a {
+      background: #488C6C !important;
+   }
+   ul.nav.nav-tabs.ul-edit {
+      border-bottom: 5px solid #488C6C !important;
+   }
+   .list {
+      list-style: none outside none;
+      margin: 10px 0 30px;
+   }
+
+   .apps-container {
+      border: 2px dashed blue;
+      margin: 10px 10px 0 0;
+      padding: 5px;
+   }
+
+   .app {
+      width: 370px;
+      padding: 5px 10px;
+      margin: 5px 0;
+      border: 2px solid #444;
+      border-radius: 5px;
+      background-color: #EA8A8A;
+
+      font-size: 1.1em;
+      font-weight: bold;
+      text-align: center;
+      cursor: move;
+   }
+
+
+   /***  Extra ***/
+
+   body {
+      font-family: Verdana, 'Trebuchet ms', Tahoma;
+   }
+
+
+</style>
+
+<div class="row" >
+   <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+      <i class="fa fa-angle-double-right fa-cx"></i></i>
+   </div>
+   <div class="panel panel-green" id="leftDiv">
+      <div class="panel-heading">
+         <h3 class="panel-title">Select </h3>
+      </div>
+      <div class="panel-body pan">
+         <form action="" class="form-horizontal">
+            <div class="form-body pal">
+               <div class="form-group">
+                  <label class="col-md-4 control-label">Program</label>
+                  <div class="col-md-8">
+                     <select
+                             class="form-control required"
+                             data-ng-options="prog.shortName for prog in vm.programs track by prog.id"
+                             data-ng-model="vm.program"
+                             data-ng-change="vm.changeProgram(vm.program)"
+                     >
+                     </select>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label class="col-md-4 control-label">Semester</label>
+                  <div class="col-md-8">
+                     <select
+                             class="form-control required"
+                             name="semester"
+                             id="semester"
+                             data-ng-options="semester.name for semester in vm.semesters track by semester.id"
+                             data-ng-model="vm.semester"
+                             data-ng-change="vm.semesterChanged(vm.semester)"
+                     >
+                     </select>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label class="col-md-4 control-label">Y-S</label>
+                  <div class="col-md-8">
+                     <select
+                             class="form-control required"
+                             name="meritType"
+                             id="meritType"
+                             data-ng-options="ys.name for ys in vm.yearSemList track by ys.id"
+                             data-ng-model="vm.yearSem"
+                             data-ng-change="vm.changeYearSem(vm.yearSem)"
+                     >
+
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="form-actions text-right pal">
+               <button type="button" data-ng-click="vm.search()" class="btn btn-success">Search</button>
+            </div>
+         </form>
+      </div>
+   </div>
+
+   <div id="rightDiv">
+      <div class="panel">
+         <div class="panel-heading">
+            <div class="row">
+               <div class="col-md-9">
+                  <div>Optional Course</div>
+               </div>
+            </div>
+         </div>
+         <div class="panel-body">
+            <div>
+               <div class="row">
+                  <div class="col-md-4">
+                     <h2>Ingredients</h2>
+                        <div style="border: 1px solid black;cursor: move;padding: 5px">
+                           <div ui-sortable="vm.draggableOptions"
+                                class="draggable-element-container"
+                                data-ng-repeat="draggableArray in vm.draggables track by $index"
+                                ng-model="draggableArray.courses">
+                              <div>
+                                 <div style="padding: 5px">
+                                    <span  class="badge badge-dark"><b> {{draggableArray.groupName}}</b></span>
+                                 </div>
+                                 <table class="table table-hover table-condensed" >
+                                    <thead>
+                                    <tr>
+                                       <td width="1%">#</td>
+                                       <td width="30%">Course Title</td>
+                                       <td width="50%">Name</td>
+                                       <td width="10%">CrHr</td>
+                                       <td width="15%">Type</td>
+                                    </tr>
+                                    </thead>
+                                 </table>
+                              </div>
+                              <table ng-repeat="d in draggableArray.courses track by $index" class="table table-hover table-condensed">
+                                 <tbody>
+                                 <tr data-ng-disabled="true" data-ng-click-right-button="vm.insert()">
+                                    <td width="1%" >{{$index+1}}</td>
+                                    <td width="30%"><b>{{d.no}}</b></td>
+                                    <td width="50%">{{d.title}}</td>
+                                    <td width="10%">{{d.crHr}}</td>
+                                    <td align="center" width="15%">
+                                       <span data-ng-if="d.courseType=='THEORY'" class="badge badge-success">{{d.courseType}}</span>
+                                       <span data-ng-if="d.courseType=='SESSIONAL'" class="badge badge-warning">{{d.courseType}}</span></td>
+                                 </tr>
+                                 </tbody>
+                              </table>
+
+                           </div>
+                        </div>
+                     </div>
+
+                  <div class="col-md-8">
+                     <h2>My Coffee 2</h2>
+                     <fieldset class="scheduler-border">
+                        <legend class="scheduler-border">Offered Courses</legend>
+                        <div class="row">
+                           <div class="col-md-12" align="right" style="padding-bottom: 5px">
+                              <button type="button"
+                                      data-toggle="modal"
+                                      data-target="#myModal"
+                                      class="btn btn-light btn-xs"><span  class="glyphicon glyphicon-plus"></span></button>
+                           </div>
+                        </div>
+                        <div>
+                           <div class="control-group">
+                              <table width="100%">
+                                 <tr data-ng-repeat="course in vm.optOfferedCourseList" data-ng-if="$index % 1 == 0" >
+                                    <td ng-repeat="course in vm.optOfferedCourseList.slice($index, $index + 1)" style="vertical-align: top">
+                                       <div ui-sortable="vm.sortableOptions1" class="{{course.groupName}}" ng-model="vm.selectedComponents1" style="border: 1px dashed #a2a7ae">
+                                          <div style="padding-bottom: 5px">
+                                             <div class="row">
+                                                <div class="col-md-10" style="background-color: #FAFAFA">
+                                                   <span  class="badge badge-dark"><b>{{course.groupName}}</b></span>
+                                                </div>
+                                                <div class="col-md-2" style="background-color: #FAFAFA">
+                                                   <span data-ng-if="course.isMandatory==true" class="badge badge-danger pull-right"><span class="glyphicon glyphicon-check"></span>{{" Mandatory"}}</span>
+                                                   <span data-ng-if="course.isMandatory!=true" class="badge badge-danger pull-right"><span class="glyphicon glyphicon-time"></span>{{" Optional"}}</span>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <table>
+                                             <thead data-ng-hide="vm.isSubGroupAvailable">
+                                             <tr>
+                                                <th width="1%">#</th>
+                                                <th width="50%">Course Details</th>
+                                                <th width="10%">crHr</th>
+                                                <th width="20%">Type</th>
+                                                <th width="10%">Remove Item</th>
+                                             </tr>
+                                             </thead>
+                                             <div>
+                                                <tbody data-ng-hide="vm.isSubGroupAvailable">
+                                                <tr data-ng-repeat="app in course.courses">
+                                                   <td width="1%">{{$index + 1}}</td>
+                                                   <td width="50%">{{app.title}}
+                                                      <b>&nbsp;&nbsp;&nbsp;{{"  ("+app.no+")  "}}&nbsp;&nbsp;&nbsp;</b>
+                                                   </td>
+                                                   <td s width="10%">
+                                                      <b>{{app.crHr}}</b>
+                                                   </td>
+                                                   <td width="20%">
+                                                      <span data-ng-if="app.courseType=='THEORY'" class="badge badge-success">{{app.courseType}}</span>
+                                                      <span data-ng-if="app.courseType=='SESSIONAL'" class="badge badge-warning">{{app.courseType}}</span></td>
+                                                   <td width="10%" align="center">
+                                                      <button type="button"
+                                                              data-ng-click="vm.updateInfo(app)"
+                                                              class="btn btn-default btn-sm">
+                                                         <span class="glyphicon glyphicon-trash"></span>
+                                                      </button>
+                                                   </td>
+                                                </tr>
+                                                </tbody>
+                                             </div>
+                                             <div style="padding-top: 0px" data-ng-if="vm.isSubGroupAvailable" align="right">
+                                                <button  type="button"
+                                                         data-toggle="modal"
+                                                         data-target="#myModalSub"
+                                                         data-ng-click="vm.getParentGrpId(course.groupName,course.index,course)"
+                                                         class="btn btn-light btn-xs"><span class="glyphicon glyphicon-folder-open"></span></button>
+                                             </div>
+                                             <div style="padding-left: 40px">
+                                                <table width="100%" data-ng-show="vm.isSubGroupAvailable">
+                                                   <tr data-ng-repeat="subCourses in course.subGrpCourses" data-ng-if="$index % 1 == 0" >
+                                                      <td ng-repeat="subApp in course.subGrpCourses.slice($index, $index + 1)" style="vertical-align: top">
+                                                         <div style="padding-left: 20px">
+                                                            <div>
+                                                               <div class="row">
+                                                                  <div class="col-md-12" style="background-color: #ebebeb">
+                                                                     <span  class="badge badge-info"><b>{{subApp.groupName}}</b></span>
+                                                                  </div>
+
+                                                               </div>
+                                                            </div>
+                                                         </div>
+                                                         <table class="table table-hover table-condensed" width="100%">
+                                                            <thead>
+                                                            <tr>
+                                                               <th width="1%">#</th>
+                                                               <th width="30%">Course Details</th>
+                                                               <th width="2%" style="text-align: center"> crHr</th>
+                                                               <th width="2%">Course Type</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr data-ng-repeat="app in subApp.courses">
+                                                               <td>{{$index + 1}}</td>
+                                                               <td>{{app.title}}
+                                                                  <b>&nbsp;&nbsp;&nbsp;{{"  ("+app.no+")  "}}&nbsp;&nbsp;&nbsp;</b>
+                                                               </td>
+                                                               <td style="text-align: center">
+                                                                  <b>{{app.crHr}}</b>
+                                                               </td>
+                                                               <td align="center">
+                                                                  <span data-ng-if="app.courseType=='THEORY'" class="badge badge-success">{{app.courseType}}</span>
+                                                                  <span data-ng-if="app.courseType=='SESSIONAL'" class="badge badge-info">{{app.courseType}}</span></td>
+                                                            </tr>
+
+                                                            </tbody>
+                                                         </table>
+                                                      </td>
+                                                   </tr>
+                                                </table>
+                                             </div>
+                                             <p><br></p><p></p>
+                                          </table>
+                                       </div>
+                                    </td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </div>
+                     </fieldset>
+                     <!--
+                     <div style="border: 1px solid black;padding: 2px">
+                        <div>
+                           <div class="row" style="padding-bottom:4px">
+                              <div class="col-md-12" align="right">
+                                 <button type="button"
+                                         data-toggle="modal"
+                                         data-target="#myModal"
+                                         class="btn btn-light btn-xs"><span  class="glyphicon glyphicon-plus"></span></button>
+                              </div>
+                           </div>
+
+                              <div ng-repeat="ds in vm.optOfferedCourseList track by $index " ui-sortable="vm.sortableOptions1" class="{{ds.groupName}}" ng-model="vm.selectedComponents1" style="border: 1px solid greenyellow">
+                                 <div >
+                                    <div class="row">
+                                       <div class="col-md-10">
+                                          <span  class="badge badge-dark"><b>{{ds.groupName}}</b></span>
+                                       </div>
+                                       <div class="col-md-2">
+                                          <span data-ng-if="ds.isMandatory==true" class="badge badge-danger pull-right"><span class="glyphicon glyphicon-check"></span>{{" Mandatory"}}</span>
+                                          <span data-ng-if="ds.isMandatory!=true" class="badge badge-danger pull-right"><span class="glyphicon glyphicon-time"></span>{{" Optional"}}</span>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <table class="table table-hover table-condensed">
+                                    <thead>
+                                    <tr>
+                                       <td width="1%"><b>#</b></td>
+                                       <td width="30%"><b>Course Title</b></td>
+                                       <td width="50%"><b>Name</b></td>
+                                       <td width="10%"><b>CrHr</b></td>
+                                       <td width="15%"><b>Type</b></td>
+                                    </tr>
+                                    </thead>
+                                 </table>
+                                 <div >
+                                    <table class="table table-hover table-condensed">
+                                       <tbody>
+                                    <tr  ng-repeat="d in ds.courses track by $index">
+                                       <td width="1%">{{$index+1}}</td>
+                                       <td width="30%">{{d.no}}</td>
+                                       <td width="50%">{{d.title}}</td>
+                                       <td width="10%">{{d.crHr}}</td>
+                                       <td  width="15%">
+                                          <span data-ng-if="d.courseType=='THEORY'" class="badge badge-success">{{d.courseType}}</span>
+                                          <span data-ng-if="d.courseType=='SESSIONAL'" class="badge badge-warning">{{d.courseType}}</span></td>
+                                    </tr>
+                                       </tbody>
+                                    </table>
+                                 </div>
+
+                              </div>
+
+
+                              </tbody>
+
+                           </table></div>
+                     </div>
+                     -->
+                  </div>
+               </div>
+
+
+               <div >
+                  <button type="button" data-ng-click="vm.logModels()">Log Models</button>
+                  <ul class="list logList">
+                     <li data-ng-repeat="entry in vm.sortingLog">
+                        {{entry}}
+                     </li>
+                  </ul>
+               </div>
+
+            </div>
+            <div class="row">
+               <div class="col-md-4">
+                  <div>
+                     <fieldset class="scheduler-border">
+                     <legend class="scheduler-border">Optional Courses</legend>
+                     <div>
+                        <table width="100%">
+                           <tr data-ng-repeat="course in vm.optCourseList" data-ng-if="$index % 1 == 0" >
+                              <td ng-repeat="course in vm.optCourseList.slice($index, $index + 1)" style="vertical-align: top">
+                                 <div>
+                                    <div>
+                                       <div class="row">
+                                          <div class="col-md-12" style="background-color: #FAFAFA">
+                                             <span  class="badge badge-dark"><b>{{course.groupName}}</b></span>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div>
+                                    </div>
+                                    <table class="table table-hover table-condensed">
+                                       <thead>
+                                       <tr>
+                                          <th width="1%">#</th>
+                                          <th width="10%">Course No</th>
+                                          <th width="20%">Course Title</th>
+                                          <th width="2%" style="text-align: center"> crHr</th>
+                                          <th width="2%">Course Type</th>
+                                       </tr>
+                                       </thead>
+                                       <tbody ui-sortable="vm.sortableOptions1" class="connected-drop-target-sortable" ng-model="vm.selectedComponents1">
+                                       <tr data-ng-repeat="app in course.courses">
+                                          <td>{{$index + 1}}</td>
+                                          <td><b>{{app.no}}</b>
+                                          </td>
+                                          <td>
+                                             {{app.title}}
+                                          </td>
+                                          <td style="text-align: center">
+                                             <b>{{app.crHr}}</b>
+                                          </td>
+                                          <td align="center">
+                                             <span data-ng-if="app.courseType=='THEORY'" class="badge badge-success">{{app.courseType}}</span>
+                                             <span data-ng-if="app.courseType=='SESSIONAL'" class="badge badge-warning">{{app.courseType}}</span></td>
+                                       </tr>
+
+                                       </tbody>
+                                    </table>
+                                 </div>
+                              </td>
+                           </tr>
+                        </table>
+                     </div>
+                     </fieldset>
+                  </div>
+               </div>
+               <div class="col-md-8">
+
+               </div>
+            </div>
+         </div>
+         <!--  End of Daily Exam Report -->
+      </div>
+   </div>
+</div>
+
+<div class="modal fade" id="myModal" role="dialog">
+   <!--   <div class="modal-backdrop"> --->
+   <div class="modal-dialog  modal-md">
+      <!-- Modal content-->
+      <div class="modal-content">
+         <div class="modal-header" >
+            <button type="button"  data-ng-click="vm.reset()" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Create Group</h4>
+         </div>
+         <div class="modal-body">
+            <div>
+               <div class="row">
+                  <div class="col-md-8" >
+                     <input type="text"
+                            class="form-control required"
+                            id="rstudenid"
+                            style="width: 70%";
+                            placeholder="Enter Group Name"
+                            data-ng-model="vm.groupName"
+                     />
+                  </div>
+                  <div class="col-md-2">
+                     <p>Mandatory: </p>
+                  </div>
+                  <div class="col-md-2">
+                     <input type="checkbox" ng-model="vm.isMandatory">
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-info"  data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-success" data-ng-click="vm.addOfferedCourse()" data-dismiss="modal">Confirm</button>
+
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="modal fade" id="myModalSub" role="dialog">
+   <!--   <div class="modal-backdrop"> --->
+   <div class="modal-dialog  modal-md">
+      <!-- Modal content-->
+      <div class="modal-content">
+         <div class="modal-header" >
+            <button type="button"  data-ng-click="vm.reset()" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Create Sub Group</h4>
+         </div>
+         <div class="modal-body">
+            <div>
+               <div class="row">
+                  <div class="col-md-8" >
+                     <input type="text"
+                            class="form-control required"
+                            style="width: 100%";
+                            placeholder="Enter Group Name"
+                            data-ng-model="vm.subGroupName"
+                     />
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-info"  data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-success" data-ng-click="vm.subGroup()" data-dismiss="modal">Confirm</button>
+
+         </div>
+      </div>
+   </div>
 </div>
