@@ -3,5 +3,5 @@ SUBDIRS := ums-microservice-cache-warmer ums-microservice-indexer ums-web ums-we
 .PHONY : all $(SUBDIRS)
 all : $(SUBDIRS)
 
-$(SUBDIRS) :
-        $(MAKE) -C $@ build push
+$(SUBDIRS):
+	$(MAKE) -C $@ build push
