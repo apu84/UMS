@@ -60,4 +60,9 @@ public class CourseTeacherCache extends
   public List<CourseTeacher> getCourseTeacher(int pProgramId, int pSemesterId, String pSection, int pYear, int pSemester) {
     return getManager().getCourseTeacher(pProgramId, pSemesterId, pSection, pYear, pSemester);
   }
+
+  @Override
+  public List<CourseTeacher> getCourseTeacher(int pSemesterId, Integer pProgramId) {
+    return getManager().getCourseTeacher(pSemesterId, pProgramId);
+  }
 }

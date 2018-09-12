@@ -74,6 +74,17 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
   }
 
   @Override
+  public List<CourseTeacher> getCourseTeacher(int pSemesterId, Integer pProgramId) {
+    String query =
+        "select * from COURSE_TEACHER where SEMESTER_ID=:semesterId and  COURSE_ID in ( "
+            + "  select course_id from MST_COURSE where OFFERED_TO_PROGRAM=:programId " + ")";
+    Map parameterMap = new HashMap();
+    parameterMap.put("semesterId", pSemesterId);
+    parameterMap.put("programId", pProgramId);
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new CourseTeacherRowMapper());
+  }
+
+  @Override
   protected String getSelectSql() {
     return SELECT_ALL;
   }

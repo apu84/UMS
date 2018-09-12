@@ -20,10 +20,12 @@ import org.ums.manager.*;
 import org.ums.report.itext.UmsCell;
 import org.ums.report.itext.UmsParagraph;
 import org.ums.report.itext.UmsPdfPageEventHelper;
+import org.ums.util.UmsUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,6 +64,11 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
   @Autowired
   @Qualifier("genericDateFormat")
   private DateFormat mDateFormat;
+
+  public String parseDate(String pExamDate) throws ParseException {
+    String date = UmsUtils.formatDate(pExamDate, "dd-MM-yyyy", "dd MMM yyyy");
+    return date;
+  }
 
   @Override
   public void createTestimonial(Integer pSemesterId, Integer pExamType, String pExamDate, OutputStream pOutputStream)
@@ -114,6 +121,13 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
 
   public void getHeader(Integer pSemesterId, Integer pExamType, String pExamDate, Document document,
       Font fontTimes11Normal, Font fontTimes12Bold, Font fontTimes9Bold) throws DocumentException {
+
+    String examDate = "";
+    try {
+      examDate = parseDate(pExamDate);
+    } catch(ParseException e) {
+      e.printStackTrace();
+    }
     UmsParagraph paragraph = null;
     Chunk chunk = null;
 
@@ -156,7 +170,7 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
     cell.setHorizontalAlignment(UmsCell.ALIGN_CENTER);
     header.addCell(cell);
     mDateFormat = new DateFormat("dd MMM YYYY");
-    cell = new UmsCell(new Phrase("Date of Examination: " + mDateFormat.format(pExamDate) + "\n", fontTimes12Bold));
+    cell = new UmsCell(new Phrase("Date of Examination: " + examDate + "\n", fontTimes12Bold));
     cell.setHorizontalAlignment(UmsCell.ALIGN_RIGHT);
     header.addCell(cell);
     document.add(header);

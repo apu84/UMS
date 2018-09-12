@@ -11,6 +11,8 @@ public interface CourseTeacherManager extends AssignedTeacherManager<CourseTeach
 
   List<CourseTeacher> getCourseTeacher(final int pSemesterId, final String pCourseId);
 
+  List<CourseTeacher> getCourseTeacher(final int pSemesterId, final Integer pProgramId);
+
   List<CourseTeacher> getCourseTeacher(final int pSemesterId, List<String> pCourseIdList);
 
   List<CourseTeacher> getCourseTeacher(final int pSemesterId, final String pCourseId, final String pSection);
