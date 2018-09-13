@@ -6,25 +6,33 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.domain.model.immutable.ClassRoom;
 import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.immutable.routine.Routine;
+import org.ums.domain.model.immutable.routine.RoutineConfig;
+import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.domain.model.mutable.routine.MutableRoutine;
+import org.ums.enums.CourseType;
+import org.ums.enums.ProgramType;
 import org.ums.enums.routine.DayType;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.*;
+import org.ums.manager.routine.RoutineConfigManager;
 import org.ums.manager.routine.RoutineManager;
 import org.ums.persistent.model.PersistentCourseTeacher;
 import org.ums.persistent.model.routine.PersistentRoutine;
 import org.ums.services.academic.helper.RoutineTime;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,11 +56,14 @@ public class RoutineService {
   private CourseTeacherManager mCourseTeacherManager;
   @Autowired
   private IdGenerator mIdGenerator;
+  @Autowired
+  private RoutineConfigManager mRoutineConfigManager;
 
   private Map<Integer, RoutineTime> columnMapWithTime = new HashMap<>();
   private Map<String, ClassRoom> classRoomMapWithRoomNo;
   private Map<String, Course> courseMapWithCourseNo;
   private Map<String, List<MutableCourseTeacher>> courseIdMapWithCourseTeacher;
+  private RoutineConfig routineConfig;
 
   @Transactional
   public void extractWorkBook(Workbook pWorkbook, Integer pSemesterId, Integer pProgramId) throws Exception,
@@ -60,11 +71,14 @@ public class RoutineService {
 
     List<MutableRoutine> routineList = new ArrayList<>();
     courseIdMapWithCourseTeacher = new HashMap<>();
+    routineConfig =
+        mRoutineConfigManager.get(pSemesterId,
+            ProgramType.get(mProgramManager.get(pProgramId).getProgramType().getId()));
     createClassRoomMapWithRoomNo();
     createCourseMapWithCourseNo(pSemesterId, pProgramId);
+    removeRoutine(pSemesterId, pProgramId);
     removeCourseTeacher(pSemesterId, pProgramId);
 
-    // todo replacing pWorkbookNumberOfSheets with 1 for testing. Remove it after full test.
     for(int i = 0; i < 1; i++) {
       Sheet sheet = pWorkbook.getSheetAt(i);
       System.out.println(sheet.getSheetName() + " ");
@@ -76,17 +90,52 @@ public class RoutineService {
           globalRoomNo);
     }
 
-    System.out.println("Routine Parsing Complete");
-    System.out.println("Course Teacher Assignment Complete");
+    mRoutineManager.create(routineList);
+    insertCourseTeacher(pSemesterId, pProgramId);
   }
 
-  private void removeCourseTeacher(Integer pSemesterId, Integer pProgramId){
+  public void insertIntoRoutine(List<MutableRoutine> pRoutineList) {
+    List<MutableRoutine> routineList = new ArrayList<>();
+    for(int i = 0; i < pRoutineList.size(); i++) {
+      MutableRoutine routine = pRoutineList.get(i);
+      Long id = mIdGenerator.getNumericId();
+      System.out.println("****************");
+      System.out.println(id);
+      routine.setId(id);
+      routineList.add(routine);
+    }
+
+    mRoutineManager.create(routineList);
+  }
+
+  @Transactional
+  public void insertCourseTeacher(Integer pSemesterId, Integer pProgramId) {
+    List<MutableCourseTeacher> courseTeacherList = new ArrayList<>();
+    for(Map.Entry<String, List<MutableCourseTeacher>> entry : courseIdMapWithCourseTeacher.entrySet()) {
+      courseTeacherList.addAll(entry.getValue());
+    }
+
+    mCourseTeacherManager.create(courseTeacherList);
+  }
+
+  @Transactional
+  public void removeCourseTeacher(Integer pSemesterId, Integer pProgramId){
     List<MutableCourseTeacher> courseTeacherList = mCourseTeacherManager.getCourseTeacher(pSemesterId, pProgramId)
         .stream()
         .map(p-> (MutableCourseTeacher) p)
         .collect(Collectors.toList());
 
     mCourseTeacherManager.delete(courseTeacherList);
+  }
+
+  @Transactional
+  public void removeRoutine(Integer pSemesterId, Integer pProgramId){
+    List<MutableRoutine> routineList = mRoutineManager.getRoutineBySemesterAndProgram(pSemesterId, pProgramId)
+        .parallelStream()
+        .map(p-> (MutableRoutine) p)
+        .collect(Collectors.toList());
+
+    mRoutineManager.delete(routineList);
   }
 
   private void createClassRoomMapWithRoomNo() {
@@ -153,16 +202,23 @@ public class RoutineService {
         dayName = pRow.getCell(i).toString();
       }
       else if(pRow.getCell(i) != null && pRow.getCell(i).toString().length() != 0) {
-        List<MutableRoutine> cellRoutineList = new ArrayList<>();
         System.out.println("----Cell----> " + i);
         System.out.println(pRow.getCell(i).toString());
         String[] cellStrings = pRow.getCell(i).toString().split("\n");
+        Random random = new Random();
+        int groupId = random.nextInt(10000);
+        RoutineTime routineTime = columnMapWithTime.get(pRow.getCell(i).getColumnIndex());
         for(int k = 0; k < cellStrings.length; k++) {
+          List<MutableRoutine> cellRoutineList = new ArrayList<>();
           String[] courseStrings = cellStrings[k].split("\\|");
+          LocalTime startTime = routineTime.getStartTime();
+
           for(String courseString : courseStrings) {
             MutableRoutine routine = new PersistentRoutine();
             courseString = courseString.replaceAll("\\[", "").replaceAll("\\]", "");
             String[] courseRoutineInfo = courseString.split(" ");
+            routine.setSlotGroup(groupId);
+            routine.setId(mIdGenerator.getNumericId());
             routine.setCourseId(courseMapWithCourseNo.get(courseRoutineInfo[0] + " " + courseRoutineInfo[1]).getId());
             routine.setSection(courseRoutineInfo[2]);
             routine.setRoomId(classRoomMapWithRoomNo.get(courseRoutineInfo[3]).getId());
@@ -171,9 +227,13 @@ public class RoutineService {
             routine.setProgramId(pProgramId);
             routine.setAcademicYear(pYear);
             routine.setAcademicSemester(pSemester);
-            RoutineTime routineTime = columnMapWithTime.get(pRow.getCell(i).getColumnIndex());
-            routine.setStartTime(routineTime.getStartTime());
-            routine.setEndTime(routineTime.getEndTime());
+            routine.setStartTime(startTime);
+            if(routine.getCourse().getCourseType().equals(CourseType.SESSIONAL))
+              routine.setEndTime(routine.getStartTime().plusMinutes(routineConfig.getDuration() * 3));
+            else
+              routine.setEndTime(startTime.plusMinutes(routineConfig.getDuration()));
+
+            startTime = startTime.plusMinutes(routineConfig.getDuration());
             cellRoutineList.add(routine);
           }
           pRoutineList.addAll(cellRoutineList);
@@ -209,7 +269,9 @@ public class RoutineService {
         String teacherId = courseTeacherIdArray[i];
         MutableCourseTeacher courseTeacher = new PersistentCourseTeacher();
         courseTeacher.setId(mIdGenerator.getNumericId());
+        courseTeacher.setCourseId(pRoutine.getCourseId());
         courseTeacher.setSection(pRoutine.getSection());
+        courseTeacher.setSemesterId(pSemesterId);
         courseTeacher.setTeacherId(teacherId);
         courseTeacherList.add(courseTeacher);
       }
