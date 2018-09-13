@@ -144,13 +144,13 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + ")tmp1 Order by Serial";
 
   String CHECK_HEAD_ROLE =
-      "Select 'head' Role, 1 Serial From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=? and Role_Id=22";
+      "Select 'head' Role, 1 Serial From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=? and Role_Id=1022";
 
-  String CHECK_COE_ROLE = "Select 'coe' Role, 1 Serial From USERS Where User_Id=? and Role_Id=71 " + "Union "
-      + "Select 'CoE' Role, 2 Serial From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=?  And Role_Id=71";
+  String CHECK_COE_ROLE = "Select 'coe' Role, 1 Serial From USERS Where User_Id=? and Role_Id=7301 " + "Union "
+      + "Select 'CoE' Role, 2 Serial From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=?  And Role_Id=7301";
 
-  String CHECK_VC_ROLE = "Select 'vc' Role, 1 Serial From USERS Where User_Id=? and Role_Id=99 " + "Union "
-      + "Select 'vc' Role, 2 Serial From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=?  And Role_Id=99";
+  String CHECK_VC_ROLE = "Select 'vc' Role, 1 Serial From USERS Where User_Id=? and Role_Id=7001 " + "Union "
+      + "Select 'vc' Role, 2 Serial From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=?  And Role_Id=7001";
 
   String CHART_DATA =
       "Select Grade_Letter,sum(Total) Total, max(Color) Color From   "
