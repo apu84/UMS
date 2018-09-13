@@ -75,6 +75,9 @@ public class RoutineService {
       extractRoutineInformationFromSheet(sheet, pSemesterId, pProgramId, routineList, year, semester, section,
           globalRoomNo);
     }
+
+    System.out.println("Routine Parsing Complete");
+    System.out.println("Course Teacher Assignment Complete");
   }
 
   private void removeCourseTeacher(Integer pSemesterId, Integer pProgramId){
@@ -155,14 +158,14 @@ public class RoutineService {
         System.out.println(pRow.getCell(i).toString());
         String[] cellStrings = pRow.getCell(i).toString().split("\n");
         for(int k = 0; k < cellStrings.length; k++) {
-          String[] courseStrings = cellStrings[k].split("|");
+          String[] courseStrings = cellStrings[k].split("\\|");
           for(String courseString : courseStrings) {
             MutableRoutine routine = new PersistentRoutine();
-            courseString.replaceAll("\\[", "").replaceAll("\\]", "");
+            courseString = courseString.replaceAll("\\[", "").replaceAll("\\]", "");
             String[] courseRoutineInfo = courseString.split(" ");
-            routine.setCourseId(courseMapWithCourseNo.get(courseRoutineInfo[0]).getId());
-            routine.setSection(courseRoutineInfo[1]);
-            routine.setRoomId(classRoomMapWithRoomNo.get(courseRoutineInfo[2]).getId());
+            routine.setCourseId(courseMapWithCourseNo.get(courseRoutineInfo[0] + " " + courseRoutineInfo[1]).getId());
+            routine.setSection(courseRoutineInfo[2]);
+            routine.setRoomId(classRoomMapWithRoomNo.get(courseRoutineInfo[3]).getId());
             routine.setSemesterId(pSemesterId);
             routine.setDay(DayType.getByLabel(dayName).getValue());
             routine.setProgramId(pProgramId);
@@ -174,9 +177,14 @@ public class RoutineService {
             cellRoutineList.add(routine);
           }
           pRoutineList.addAll(cellRoutineList);
-          char[] nextCellCharacterArray = cellStrings[k + 1].toCharArray();
-          if(nextCellCharacterArray[0] == '[')
-            extractCourseTeacherInfo(pSemesterId, pProgramId, cellRoutineList, cellStrings[k + 1]);
+          if((k + 1) < cellStrings.length) {
+            char[] nextCellCharacterArray = cellStrings[k + 1].toCharArray();
+            if(nextCellCharacterArray[0] == '[') {
+              extractCourseTeacherInfo(pSemesterId, pProgramId, cellRoutineList, cellStrings[k + 1]);
+              k = k + 1;
+            }
+          }
+
         }
       }
 
@@ -185,11 +193,11 @@ public class RoutineService {
 
   private void extractCourseTeacherInfo(Integer pSemesterId, Integer pProgramId, List<MutableRoutine> pRoutineList,
       String cellCourseTeacherString) {
-    cellCourseTeacherString.replaceAll("\\[", "").replaceAll("\\]", "");
-    String[] courseTeacherListBasedOnCourse = cellCourseTeacherString.split("|");
+    cellCourseTeacherString = cellCourseTeacherString.replaceAll("\\[", "").replaceAll("\\]", "");
+    String[] courseTeacherListBasedOnCourse = cellCourseTeacherString.split("\\|");
     for(int i = 0; i < pRoutineList.size(); i++) {
       String[] courseTeacher = courseTeacherListBasedOnCourse[i].split(",");
-
+      insertOrUpdateCourseTeacher(pSemesterId, pProgramId, pRoutineList.get(i), courseTeacher);
     }
   }
 
