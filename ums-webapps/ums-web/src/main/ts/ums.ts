@@ -1701,6 +1701,7 @@ module ums {
             .state('search', {
                 url: "/search",
                 controller: 'LibrarySearch',
+                controllerAs: 'vm',
                 templateUrl: 'views/library/library-search.html',
                 resolve: {
                     loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {

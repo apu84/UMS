@@ -132,7 +132,6 @@
     <p class="alignLeft" id="pageTitle" style="padding-left: 3%;font-size: 18px;font-weight: bold;"><span
             id="headerTitle"></span></p>
     <p class="alignRight">
-        <a href="javascript:void(0)" data-ng-click="fillSampleData()" style="display: none;">Sample Data</a>
         <a href="javascript:void(0)" data-ng-click="goPrevious()" data-tooltip="tooltip" title="Previous" data-ng-if="showLeftNav"><i
                 class="fa fa-arrow-left fa-lg"></i></a> &nbsp;&nbsp; | &nbsp;&nbsp;
         <a href="javascript:void(0)" data-ng-click="goNext()"  data-tooltip="tooltip" title="Next" data-ng-if="showRightNav"><i
@@ -164,29 +163,12 @@
 <div data-ng-include="'views/admin/cataloging/supporting-panels/contributor-panel.html'"></div>
 <div data-ng-include="'views/admin/cataloging/supporting-panels/supplier-panel.html'"></div>
 <div data-ng-include="'views/admin/cataloging/supporting-panels/publisher-panel.html'"></div>
+
 <script>
     setTimeout(function () {
         $('[data-toggle="tooltip"]').tooltip(
             {container: 'body'});
     }, 1000);
-
-    function showSearchPanel(panelType) {
-        $("#searchPanel_" + panelType).show('slide', {direction: 'left'}, 400);
-        $("#listPanel_" + panelType).hide('slide', {direction: 'right'}, 400);
-        $("#entryPanel_" + panelType).hide('slide', {direction: 'right'}, 400);
-
-        $("#pageTitle_" + panelType).html("Search " + panelType);
-//        $("#footer_"+panelType).show();
-
-    }
-
-    function showEntryPanel(panelType) {
-        $("#searchPanel_" + panelType).hide('slide', {direction: 'left'}, 400);
-        $("#listPanel_" + panelType).hide('slide', {direction: 'right'}, 400);
-        $("#entryPanel_" + panelType).show('slide', {direction: 'right'}, 400);
-        $("#pageTitle_" + panelType).html("New " + panelType);
-//        $("#footer_"+panelType).hide();
-    }
 
     $("#abcd").tokenfield();
 </script>

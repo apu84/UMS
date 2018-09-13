@@ -31,64 +31,29 @@ module ums {
             .state('userHome', {
                 url: "/userHome",
                 templateUrl: 'views/user-home.html',
-                controller: 'MainController',
-                resolve: {
-                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load({
-                            files: [
-                                'vendors/bootstrap-select/bootstrap-select.min.js',
-                                'vendors/bootstrap-select/bootstrap-select.css'
-                            ]
-                        });
-                    }]
-                }
-            })
-            .state('cataloging.search', {
-                url: "/search/:1",
-                controller: 'RecordSearch',
-                templateUrl: 'views/admin/cataloging/catalog-search.html',
-
-                resolve: {
-                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load({
-                            files: [
-                                'vendors/bootstrap-select/bootstrap-select.min.js',
-                                'vendors/bootstrap-select/bootstrap-select.css'
-                            ]
-                        });
-                    }]
-                }
-            })
-            .state('cataloging.record', {
-                url: "/:1/record/:2",
-                controller: 'Cataloging',
-                templateUrl: 'views/admin/cataloging/catalog.html',
-                resolve: {
-                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load({
-                            files: [
-                                'https://sliptree.github.io/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css',
-                                'https://sliptree.github.io/bootstrap-tokenfield/dist/bootstrap-tokenfield.js',
-                                // 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css',
-                                // 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.js',
-
-
-                                'vendors/select2/select2-madmin.css',
-                                'vendors/select2/select2.min.js',
-
-
-                                'vendors/bootstrap-datepicker/css/datepicker.css',
-                                'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
-
-                            ]
-                        });
-                    }]
-                }
+                controller: 'MainController'
             })
             .state('cataloging', {
                 url: "/cataloging",
                 templateUrl: 'views/admin/cataloging/catalog-home.html',
+                controller: 'CatalogHome',
+                controllerAs: 'vm',
                 resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            files: [
+                                'vendors/bootstrap-select/bootstrap-select.min.js',
+                                'vendors/bootstrap-select/bootstrap-select.css',
+                                'https://sliptree.github.io/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css',
+                                'https://sliptree.github.io/bootstrap-tokenfield/dist/bootstrap-tokenfield.js',
+                                'vendors/select2/select2-madmin.css',
+                                'vendors/select2/select2.min.js',
+                                'vendors/bootstrap-datepicker/css/datepicker.css',
+                                'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
+                            ]
+                        });
+                    }]
+                    /*,
                     contributor: ['contributorService', function(contributorService){
                         return contributorService.fetchAllContributors().then((contributors) =>{
                             return contributors.entries;
@@ -103,8 +68,19 @@ module ums {
                         return supplierService.fetchAllSuppliers().then((suppliers) =>{
                             return suppliers.entries;
                         });
-                    }]
+                    }]*/
                 }
+            })
+            .state('cataloging.search', {
+                url: "/search/:1",
+                controller: 'RecordSearch',
+                templateUrl: 'views/admin/cataloging/catalog-search.html',
+                controllerAs: 'vm'
+            })
+            .state('cataloging.record', {
+                url: "/:1/record/:2",
+                controller: 'Cataloging',
+                templateUrl: 'views/admin/cataloging/catalog.html'
             })
             .state('cataloging.thesis', {
                 url: "/thesis",
