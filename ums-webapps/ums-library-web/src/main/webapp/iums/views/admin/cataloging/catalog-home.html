@@ -1,25 +1,8 @@
 <div class="tabbable tabs-left">
     <ul class="nav nav-tabs">
-        <li onclick="changeSelection(this.id)" id="o1" class="active"><a ui-sref=".search({ 1: 'old' })">Search</a></li>
-        <li onclick="changeSelection(this.id)" id="o2"><a ui-sref=".record({ 1: 'old', 2: -1 })">Records </a></li>
-        <!--
-        <li onclick="changeSelection(this.id)" id="o4"><a ui-sref=".journal">Journals </a></li>
-        <li onclick="changeSelection(this.id)" id="o3"><a ui-sref=".thesis">Thesis/Project </a></li>
-        <li onclick="changeSelection(this.id)" id="o5"><a ui-sref=".map">Manuscripts </a></li>
-        <li onclick="changeSelection(this.id)" id="o6"><a ui-sref=".cdDvd">CD-DVD </a></li>
-        <li onclick="changeSelection(this.id)" id="o7"><a ui-sref=".magazine">Cartographic </a></li>
-        <li onclick="changeSelection(this.id)" id="o8"><a ui-sref=".magazine">Graphic </a></li>
-        -->
+        <li ng-class="{active: vm.state.current.url === '/search/:1'}" style="cursor: pointer"><a ui-sref=".search({ 1: 'old' })">Search</a></li>
+        <li ng-class="{active: vm.state.current.url === '/:1/record/:2'}" style="cursor: pointer"><a ui-sref=".record({ 1: 'old', 2: -1 })">Records </a></li>
     </ul>
-    <div id="myTabContent2" class="tab-content" ui-view style="min-height: 500px;">
-
+    <div id="myTabContent2" class="tab-content" ui-view style="min-height: 490px;">
     </div>
 </div>
-
-
-<script type="text/javascript">
-    function changeSelection(id) {
-        $(".nav.nav-tabs>.active").removeClass("active");
-        $("#" + id).addClass("active");
-    }
-</script>

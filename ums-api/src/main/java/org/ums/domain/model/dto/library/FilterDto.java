@@ -1,6 +1,7 @@
 package org.ums.domain.model.dto.library;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Ifti on 29-Apr-17.
@@ -10,7 +11,7 @@ public class FilterDto {
   private String searchType;
   private String basicQueryField;
   private String basicQueryTerm;
-  private HashMap<String, String> advancedSearchFilter;
+  private List<HashMap<String, String>> advancedSearchFilter;
 
   public String getSearchType() {
     return searchType;
@@ -36,11 +37,11 @@ public class FilterDto {
     this.basicQueryTerm = basicQueryTerm;
   }
 
-  public HashMap<String, String> getAdvancedSearchFilter() {
+  public List<HashMap<String, String>> getAdvancedSearchFilter() {
     return advancedSearchFilter;
   }
 
-  public void setAdvancedSearchFilter(HashMap<String, String> advancedSearchFilter) {
+  public void setAdvancedSearchFilter(List<HashMap<String, String>> advancedSearchFilter) {
     this.advancedSearchFilter = advancedSearchFilter;
   }
 }

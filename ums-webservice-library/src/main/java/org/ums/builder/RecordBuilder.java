@@ -7,14 +7,15 @@ import org.ums.domain.model.dto.library.ImprintDto;
 import org.ums.domain.model.immutable.library.Record;
 import org.ums.domain.model.mutable.library.MutableRecord;
 import org.ums.enums.common.Language;
-import org.ums.enums.library.GeneralMaterialDescription;
-import org.ums.enums.library.JournalFrequency;
-import org.ums.enums.library.MaterialType;
-import org.ums.enums.library.RecordStatus;
+import org.ums.enums.library.*;
+import org.ums.manager.library.ContributorManager;
 import org.ums.manager.library.PublisherManager;
 import org.ums.manager.library.RecordManager;
+import org.ums.manager.library.SupplierManager;
+import org.ums.util.UmsUtils;
 
 import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -30,6 +31,12 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
 
   @Autowired
   PublisherManager mPublisherManager;
+
+  @Autowired
+  ContributorManager mContributorManager;
+
+  @Autowired
+  SupplierManager mSupplierManager;
 
   @Override
   public void build(final JsonObjectBuilder pBuilder, final Record pReadOnly, UriInfo pUriInfo,
@@ -64,6 +71,7 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     pBuilder.add("keywords", pReadOnly.getKeyWords() == null ? "" : pReadOnly.getKeyWords());
     pBuilder.add("contributorJsonString",
         pReadOnly.getContributorJsonString() == null ? "" : pReadOnly.getContributorJsonString());
+    pBuilder.add("contributorList", getContributorList(pReadOnly.getContributorJsonString()));
     pBuilder.add("subjectJsonString", pReadOnly.getSubjectJsonString() == null ? "" : pReadOnly.getSubjectJsonString());
     pBuilder.add("noteJsonString", pReadOnly.getNoteJsonString() == null ? "" : pReadOnly.getNoteJsonString());
     pBuilder.add("physicalDescriptionString",
@@ -179,5 +187,18 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     pMutable.setNoteJsonString(pJsonObject.getString("noteJsonString"));
     if(pJsonObject.containsKey("physicalDescriptionString"))
       pMutable.setPhysicalDescriptionString(pJsonObject.getString("physicalDescriptionString"));
+  }
+
+  private JsonArrayBuilder getContributorList(String pContributorJsonString) {
+    String id[] = UmsUtils.convertJsonStringToStringArray(pContributorJsonString, "id");
+    String role[] = UmsUtils.convertJsonStringToStringArray(pContributorJsonString, "role");
+    JsonArrayBuilder contributorArrayJson = Json.createArrayBuilder();
+    JsonObjectBuilder contributorJson = Json.createObjectBuilder();
+    for(int i = 0; i < id.length; i++) {
+      contributorJson.add("name", mContributorManager.get(Long.parseLong(id[i])).getFullName()).add("roleName",
+          ContributorRole.get(Integer.parseInt(role[i])).getLabel());
+      contributorArrayJson.add(contributorJson);
+    }
+    return contributorArrayJson;
   }
 }

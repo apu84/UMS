@@ -126,8 +126,18 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
       // filterDto.getBasicQueryTerm());
 
     }
-    else if(filterDto.getSearchType().equalsIgnoreCase("advanced")) {
-      queryString = "title_txt:Programming AND type_s: Record";
+    else if(filterDto.getSearchType().equalsIgnoreCase("advanced_search")) {
+      StringBuilder sb = new StringBuilder("");
+      int sizeOfMap = filterDto.getAdvancedSearchFilter().size();
+      for(int i = 0; i < sizeOfMap; i++) {
+        sb.append(filterDto.getAdvancedSearchFilter().get(i).get("key"))
+            .append(":")
+            .append(
+                filterDto.getAdvancedSearchFilter().get(i).get("value").isEmpty() ? "*" : filterDto
+                    .getAdvancedSearchFilter().get(i).get("value")).append(" ")
+            .append(sizeOfMap - 1 == i ? "" : "AND ");
+      }
+      queryString = sb.append(" AND type_s: Record").toString();
     }
 
     return queryString;
