@@ -10,7 +10,13 @@ import java.util.Map;
 public enum ContributorRole {
   AUTHOR(1, "Author"),
   CO_AUTHOR(2, "Co-Author"),
-  EDITOR(2, "Editor");
+  EDITOR(2, "Editor"),
+  COMPILER(4, "Compiler"),
+  TRANSLATOR(5, "Translator"),
+  COMPOSER(6, "Composer"),
+  ILLUSTRATOR(7, "Illustrator"),
+  CARTOGRAPHER(8, "Cartographer"),
+  CORPORATE_AUTHOR(9, "Corporate Author");
 
   private String label;
   private int id;
