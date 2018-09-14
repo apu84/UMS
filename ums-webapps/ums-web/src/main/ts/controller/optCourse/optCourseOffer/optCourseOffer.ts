@@ -92,9 +92,10 @@ module ums{
 
         public drag(){
             console.log(this.connectWithList);
-            this.connectWithList=['.connected-drop-target-sortable1'];
             let tmpThis = this;
             let gpName=this;
+            let checkSource="draggable-element-container";
+            let changeColorToGreen=1;
                 this.draggableOptions = {
                     connectWith: this.connectWithList,
                     stop: function (e, ui) {
@@ -104,45 +105,119 @@ module ums{
                             ui.item.sortable.droptarget != ui.item.sortable.source) {
                             // restore the removed item
                             console.log("push");
-                            ui.item.sortable.sourceModel.push(ui.item.sortable.model);
-                            console.log(ui.item.sortable.droptarget[0].classList[0]);
+                            //draggable-element-container
                             gpName.destinationDiv=ui.item.sortable.droptarget[0].classList[0].toString();
-                            tmpThis.insert(ui.item.sortable.model);
+                            if(checkSource!=gpName.destinationDiv){
+                                ui.item.sortable.sourceModel.push(ui.item.sortable.model);
+                                tmpThis.insert(ui.item.sortable.model);
+                                tmpThis.changeColor(ui.item.sortable.model.id,changeColorToGreen);
+                            }else{
+                                console.log("Same Source");
+                                console.log("s");
+                            }
                         }
                     },
                 };
         }
+        public changeColor(courseId:any,setColor:number){
+            console.log(courseId+" :"+setColor);
+            var parentIndex;
+            for(let i=0;i<this.draggables.length;i++){
+                for(let j=0;j<this.draggables[i].courses.length;j++) {
+                    if(this.draggables[i].courses[j].id==courseId){
+                        this.draggables[i].courses[j].statusId=setColor;
+                        parentIndex=i;
+                        break;
+                    }
+                }
+            }
+           this.draggables[parentIndex].courses.sort(function(a, b) {
+                if (a.id > b.id) {
+                    return 1;
+                }
+                if (a.id < b.id) {
+                    return -1;
+                }
+                return 0;
+            });
+            console.log("Detect change[parentIndex]: "+parentIndex);
+            console.log(this.draggables);
+        }
 
         public insert(data:any){
-            console.log("Group Name: "+this.destinationDiv);
+            console.log("Name: "+this.destinationDiv);
             console.log(data);
-           var index = this.optOfferedCourseList.map(e => e.groupName).indexOf(this.destinationDiv);
-           console.log(index);
-            this.optOfferedCourseList[index].courses.push({
-                id:data.id,
-                no:data.no,
-                title:data.title,
-                crHr:data.crHr,
-                courseType:data.courseType
-            });
-            console.log(this.optOfferedCourseList);
-         //  this.draggables=[];
-            //this.draggables=this.tempList;
-            console.log("***insert***");
-          //  this.search();
-        }
-        public logModels() {
-            console.log("-----hello----");
-            this.sortingLog=[];
-            console.log(this.selectedComponents1);
-        }
+            var index=0,parentIndex=0,childIndex=0;
 
+            if(this.departmentId=="05"){
+            for(let i=0;i<this.optOfferedCourseList.length;i++){
+              for(let j=0;j<this.optOfferedCourseList[i].subGrpCourses.length;j++){
+                  if(this.optOfferedCourseList[i].subGrpCourses[j].groupName==this.destinationDiv){
+                      parentIndex=i;
+                      childIndex=j;
+                      break;
+                  }
+              }
+             }
+
+                this.optOfferedCourseList[parentIndex].subGrpCourses[childIndex].courses.push(data);
+            }else{
+                index = this.optOfferedCourseList.map(e => e.groupName).indexOf(this.destinationDiv);
+                this.optOfferedCourseList[index].courses.push(data);
+            }
+            console.log("***insert***");
+            console.log(this.optOfferedCourseList);
+        }
+        public deleteItems(groupName:string,index:number,courseId:string):void{
+            var changeColor=0,isCourseFound=0;
+           var parentIndex = this.optOfferedCourseList.map(e => e.groupName).indexOf(groupName);
+            this.optOfferedCourseList[parentIndex].courses.splice(index,1);
+          for(let i=0;i<this.optOfferedCourseList.length;i++){
+              for(let j=0;j<this.optOfferedCourseList[i].courses.length;j++){
+                  if( this.optOfferedCourseList[i].courses[j].id==courseId){
+                      isCourseFound=1;
+                      break;
+                  }
+              }
+          }
+          if(isCourseFound==0){
+              this.changeColor(courseId,changeColor);
+          }
+
+        }
+        public deleteSubItems(groupName:string,subGroupName:string,index:number,courseId:string){
+            var changeColor=0,isCourseFound=0;
+            var parentIndex = this.optOfferedCourseList.map(e => e.groupName).indexOf(groupName);
+            var childIndex=this.optOfferedCourseList[parentIndex].subGrpCourses.map(e=>e.groupName).indexOf(subGroupName);
+            this.optOfferedCourseList[parentIndex].subGrpCourses[childIndex].courses.splice(index,1);
+            for(let i=0;i<this.optOfferedCourseList.length;i++){
+                for(let j=0;j<this.optOfferedCourseList[i].subGrpCourses.length;j++){
+                    for(let k=0;k<this.optOfferedCourseList[i].subGrpCourses[j].courses.length;k++){
+                        if( this.optOfferedCourseList[i].subGrpCourses[j].courses[k].id==courseId){
+                            isCourseFound=1;
+                            break;
+                        }
+                    }
+                }
+
+            }
+            if(isCourseFound==0) {
+                this.changeColor(courseId,changeColor);
+                }
+
+        }
         private subGroup():void{
             console.log("Sub Group");
           this.optOfferedCourseList[this.indexValue].subGrpCourses.push({
               groupId:null,
-              groupName:this.subGroupName
+              groupName:this.subGroupName,
+              courses:[]
           });
+            if(this.departmentId=="05"){
+                this.connectWithList.push("."+this.subGroupName);
+            }
+            console.log(this.connectWithList);
+          this.subGroupName="";
           console.log(this.optOfferedCourseList);
         }
        private getParentGrpId(data:any,index:number,course:any):void{
@@ -165,10 +240,12 @@ module ums{
                         subGrpCourses:[]
                     };
                 this.optOfferedCourseList.push(items);
+                if(this.departmentId!="05"){
+                    this.connectWithList.push("."+this.groupName);
+                }
             }else {
                 this.notify.error("Name Already exists")
             }
-            this.connectWithList.push("."+this.groupName);
             console.log("*posh*")
             console.log(this.connectWithList);
             this.groupName="";

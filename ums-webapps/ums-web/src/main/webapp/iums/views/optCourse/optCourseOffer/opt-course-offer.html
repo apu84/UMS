@@ -1,4 +1,4 @@
-<style xmlns="http://www.w3.org/1999/html">
+<style xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
    fieldset.scheduler-border {
       border: 1px groove #ddd !important;
       padding: 0 1.4em 1.4em 1.4em !important;
@@ -52,25 +52,6 @@
       margin: 10px 0 30px;
    }
 
-   .apps-container {
-      border: 2px dashed blue;
-      margin: 10px 10px 0 0;
-      padding: 5px;
-   }
-
-   .app {
-      width: 370px;
-      padding: 5px 10px;
-      margin: 5px 0;
-      border: 2px solid #444;
-      border-radius: 5px;
-      background-color: #EA8A8A;
-
-      font-size: 1.1em;
-      font-weight: bold;
-      text-align: center;
-      cursor: move;
-   }
 
 
    /***  Extra ***/
@@ -155,8 +136,9 @@
             <div>
                <div class="row">
                   <div class="col-md-4">
-                     <h2>Ingredients</h2>
-                        <div style="border: 1px solid black;cursor: move;padding: 5px">
+                     <fieldset class="scheduler-border">
+                        <legend class="scheduler-border">Optional Courses</legend>
+                        <div>
                            <div ui-sortable="vm.draggableOptions"
                                 class="draggable-element-container"
                                 data-ng-repeat="draggableArray in vm.draggables track by $index"
@@ -168,23 +150,27 @@
                                  <table class="table table-hover table-condensed" >
                                     <thead>
                                     <tr>
-                                       <td width="1%">#</td>
-                                       <td width="30%">Course Title</td>
-                                       <td width="50%">Name</td>
-                                       <td width="10%">CrHr</td>
-                                       <td width="15%">Type</td>
+                                       <td width="2%"><b>#</b></td>
+                                       <td width="25%"><b>Course No</b></td>
+                                       <td width="50%"><b>Course Title</b></td>
+                                       <td width="10%"><b>CrHr</b></td>
+                                       <td width="23%"><b>Type</b></td>
                                     </tr>
                                     </thead>
                                  </table>
                               </div>
                               <table ng-repeat="d in draggableArray.courses track by $index" class="table table-hover table-condensed">
                                  <tbody>
-                                 <tr data-ng-disabled="true" data-ng-click-right-button="vm.insert()">
-                                    <td width="1%" >{{$index+1}}</td>
-                                    <td width="30%"><b>{{d.no}}</b></td>
+                                 <!-- color codes
+                                 #D6FED7.#13F517,FCF2F2.#C14242
+                                 -->
+                                 <tr data-ng-style="d.statusId==1 ? {'background-color':'#D6FED7'}:{'background-color':'#FCF2F2'}" style="cursor: move"
+                                     data-ng-disabled="d.statusId==1 ? true:false">
+                                    <td width="2%" >{{$index+1}}</td>
+                                    <td width="25%"><b>{{d.no}}</b></td>
                                     <td width="50%">{{d.title}}</td>
                                     <td width="10%">{{d.crHr}}</td>
-                                    <td align="center" width="15%">
+                                    <td width="23%">
                                        <span data-ng-if="d.courseType=='THEORY'" class="badge badge-success">{{d.courseType}}</span>
                                        <span data-ng-if="d.courseType=='SESSIONAL'" class="badge badge-warning">{{d.courseType}}</span></td>
                                  </tr>
@@ -192,13 +178,14 @@
                               </table>
 
                            </div>
+
                         </div>
+                     </fieldset>
                      </div>
 
                   <div class="col-md-8">
-                     <h2>My Coffee 2</h2>
                      <fieldset class="scheduler-border">
-                        <legend class="scheduler-border">Offered Courses</legend>
+                        <legend class="scheduler-border">Call For Application</legend>
                         <div class="row">
                            <div class="col-md-12" align="right" style="padding-bottom: 5px">
                               <button type="button"
@@ -212,8 +199,8 @@
                               <table width="100%">
                                  <tr data-ng-repeat="course in vm.optOfferedCourseList" data-ng-if="$index % 1 == 0" >
                                     <td ng-repeat="course in vm.optOfferedCourseList.slice($index, $index + 1)" style="vertical-align: top">
-                                       <div ui-sortable="vm.sortableOptions1" class="{{course.groupName}}" ng-model="vm.selectedComponents1" style="border: 1px dashed #a2a7ae">
-                                          <div style="padding-bottom: 5px">
+                                       <div ui-sortable="vm.sortableOptions1" class="{{course.groupName}}" ng-model="vm.selectedComponents1" style="border: 1px dashed #a2a7ae;padding: 10px">
+                                          <div>
                                              <div class="row">
                                                 <div class="col-md-10" style="background-color: #FAFAFA">
                                                    <span  class="badge badge-dark"><b>{{course.groupName}}</b></span>
@@ -224,39 +211,37 @@
                                                 </div>
                                              </div>
                                           </div>
-                                          <table>
+                                          <table width="100%" class="table table-hover table-condensed">
                                              <thead data-ng-hide="vm.isSubGroupAvailable">
                                              <tr>
-                                                <th width="1%">#</th>
-                                                <th width="50%">Course Details</th>
-                                                <th width="10%">crHr</th>
-                                                <th width="20%">Type</th>
-                                                <th width="10%">Remove Item</th>
+                                                <th width="2%">#</th>
+                                                <th width="65%">Course Details</th>
+                                                <th width="8%">crHr</th>
+                                                <th width="20%">Course Type</th>
+                                                <th width="5%">Remove</th>
                                              </tr>
                                              </thead>
-                                             <div>
                                                 <tbody data-ng-hide="vm.isSubGroupAvailable">
-                                                <tr data-ng-repeat="app in course.courses">
-                                                   <td width="1%">{{$index + 1}}</td>
-                                                   <td width="50%">{{app.title}}
+                                                <tr data-ng-repeat="app in course.courses track by $index">
+                                                   <td width="2%">{{$index + 1}}</td>
+                                                   <td width="65%">{{app.title}}
                                                       <b>&nbsp;&nbsp;&nbsp;{{"  ("+app.no+")  "}}&nbsp;&nbsp;&nbsp;</b>
                                                    </td>
-                                                   <td s width="10%">
+                                                   <td  width="8%">
                                                       <b>{{app.crHr}}</b>
                                                    </td>
                                                    <td width="20%">
                                                       <span data-ng-if="app.courseType=='THEORY'" class="badge badge-success">{{app.courseType}}</span>
                                                       <span data-ng-if="app.courseType=='SESSIONAL'" class="badge badge-warning">{{app.courseType}}</span></td>
-                                                   <td width="10%" align="center">
+                                                   <td width="5%">
                                                       <button type="button"
-                                                              data-ng-click="vm.updateInfo(app)"
+                                                              data-ng-click="vm.deleteItems(course.groupName,$index,app.id)"
                                                               class="btn btn-default btn-sm">
                                                          <span class="glyphicon glyphicon-trash"></span>
                                                       </button>
                                                    </td>
                                                 </tr>
                                                 </tbody>
-                                             </div>
                                              <div style="padding-top: 0px" data-ng-if="vm.isSubGroupAvailable" align="right">
                                                 <button  type="button"
                                                          data-toggle="modal"
@@ -264,50 +249,62 @@
                                                          data-ng-click="vm.getParentGrpId(course.groupName,course.index,course)"
                                                          class="btn btn-light btn-xs"><span class="glyphicon glyphicon-folder-open"></span></button>
                                              </div>
+                                             <br>
                                              <div style="padding-left: 40px">
-                                                <table width="100%" data-ng-show="vm.isSubGroupAvailable">
+                                                <table width="100%" data-ng-show="vm.isSubGroupAvailable" >
                                                    <tr data-ng-repeat="subCourses in course.subGrpCourses" data-ng-if="$index % 1 == 0" >
                                                       <td ng-repeat="subApp in course.subGrpCourses.slice($index, $index + 1)" style="vertical-align: top">
-                                                         <div style="padding-left: 20px">
-                                                            <div>
-                                                               <div class="row">
-                                                                  <div class="col-md-12" style="background-color: #ebebeb">
-                                                                     <span  class="badge badge-info"><b>{{subApp.groupName}}</b></span>
-                                                                  </div>
+                                                         <div ui-sortable="vm.sortableOptions1" class="{{subApp.groupName}}" ng-model="vm.selectedComponents1" style="border: 1px solid black">
+                                                            <div style="padding-left: 20px">
+                                                               <div>
+                                                                  <div class="row">
+                                                                     <div class="col-md-12">
+                                                                        <span  class="badge badge-info"><b>{{subApp.groupName}}</b></span>
+                                                                     </div>
 
+                                                                  </div>
                                                                </div>
                                                             </div>
+                                                            <table class="table table-hover table-condensed" width="100%">
+                                                               <thead>
+                                                               <tr>
+                                                                  <th width="2%">#</th>
+                                                                  <th width="65%">Course Details</th>
+                                                                  <th width="8%" > crHr</th>
+                                                                  <th width="20%">Course Type</th>
+                                                                  <th width="5%">Remove</th>
+                                                               </tr>
+                                                               </thead>
+                                                               <tbody>
+                                                               <tr data-ng-repeat="app in subApp.courses track by $index">
+                                                                  <td width="2%">{{$index + 1}}</td>
+                                                                  <td width="65%">{{app.title}}
+                                                                     <b>&nbsp;&nbsp;&nbsp;{{"  ("+app.no+")  "}}&nbsp;&nbsp;&nbsp;</b>
+                                                                  </td>
+                                                                  <td width="8%" >
+                                                                     <b>{{app.crHr}}</b>
+                                                                  </td>
+                                                                  <td width="20%">
+                                                                     <span data-ng-if="app.courseType=='THEORY'" class="badge badge-success">{{app.courseType}}</span>
+                                                                     <span data-ng-if="app.courseType=='SESSIONAL'" class="badge badge-warning">{{app.courseType}}</span>
+                                                                  </td>
+                                                                  <td width="5%">
+                                                                     <button type="button"
+                                                                             data-ng-click="vm.deleteSubItems(course.groupName,subApp.groupName,$index,app.id)"
+                                                                             class="btn btn-default btn-sm">
+                                                                        <span class="glyphicon glyphicon-trash"></span>
+                                                                     </button>
+                                                                  </td>
+                                                               </tr>
+                                                               </tbody>
+                                                            </table>
                                                          </div>
-                                                         <table class="table table-hover table-condensed" width="100%">
-                                                            <thead>
-                                                            <tr>
-                                                               <th width="1%">#</th>
-                                                               <th width="30%">Course Details</th>
-                                                               <th width="2%" style="text-align: center"> crHr</th>
-                                                               <th width="2%">Course Type</th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            <tr data-ng-repeat="app in subApp.courses">
-                                                               <td>{{$index + 1}}</td>
-                                                               <td>{{app.title}}
-                                                                  <b>&nbsp;&nbsp;&nbsp;{{"  ("+app.no+")  "}}&nbsp;&nbsp;&nbsp;</b>
-                                                               </td>
-                                                               <td style="text-align: center">
-                                                                  <b>{{app.crHr}}</b>
-                                                               </td>
-                                                               <td align="center">
-                                                                  <span data-ng-if="app.courseType=='THEORY'" class="badge badge-success">{{app.courseType}}</span>
-                                                                  <span data-ng-if="app.courseType=='SESSIONAL'" class="badge badge-info">{{app.courseType}}</span></td>
-                                                            </tr>
-
-                                                            </tbody>
-                                                         </table>
+                                                         <br><br>
                                                       </td>
                                                    </tr>
                                                 </table>
                                              </div>
-                                             <p><br></p><p></p>
+                                             <br><br>
                                           </table>
                                        </div>
                                     </td>
@@ -316,140 +313,11 @@
                            </div>
                         </div>
                      </fieldset>
-                     <!--
-                     <div style="border: 1px solid black;padding: 2px">
-                        <div>
-                           <div class="row" style="padding-bottom:4px">
-                              <div class="col-md-12" align="right">
-                                 <button type="button"
-                                         data-toggle="modal"
-                                         data-target="#myModal"
-                                         class="btn btn-light btn-xs"><span  class="glyphicon glyphicon-plus"></span></button>
-                              </div>
-                           </div>
-
-                              <div ng-repeat="ds in vm.optOfferedCourseList track by $index " ui-sortable="vm.sortableOptions1" class="{{ds.groupName}}" ng-model="vm.selectedComponents1" style="border: 1px solid greenyellow">
-                                 <div >
-                                    <div class="row">
-                                       <div class="col-md-10">
-                                          <span  class="badge badge-dark"><b>{{ds.groupName}}</b></span>
-                                       </div>
-                                       <div class="col-md-2">
-                                          <span data-ng-if="ds.isMandatory==true" class="badge badge-danger pull-right"><span class="glyphicon glyphicon-check"></span>{{" Mandatory"}}</span>
-                                          <span data-ng-if="ds.isMandatory!=true" class="badge badge-danger pull-right"><span class="glyphicon glyphicon-time"></span>{{" Optional"}}</span>
-                                       </div>
-                                    </div>
-                                 </div>
-                                 <table class="table table-hover table-condensed">
-                                    <thead>
-                                    <tr>
-                                       <td width="1%"><b>#</b></td>
-                                       <td width="30%"><b>Course Title</b></td>
-                                       <td width="50%"><b>Name</b></td>
-                                       <td width="10%"><b>CrHr</b></td>
-                                       <td width="15%"><b>Type</b></td>
-                                    </tr>
-                                    </thead>
-                                 </table>
-                                 <div >
-                                    <table class="table table-hover table-condensed">
-                                       <tbody>
-                                    <tr  ng-repeat="d in ds.courses track by $index">
-                                       <td width="1%">{{$index+1}}</td>
-                                       <td width="30%">{{d.no}}</td>
-                                       <td width="50%">{{d.title}}</td>
-                                       <td width="10%">{{d.crHr}}</td>
-                                       <td  width="15%">
-                                          <span data-ng-if="d.courseType=='THEORY'" class="badge badge-success">{{d.courseType}}</span>
-                                          <span data-ng-if="d.courseType=='SESSIONAL'" class="badge badge-warning">{{d.courseType}}</span></td>
-                                    </tr>
-                                       </tbody>
-                                    </table>
-                                 </div>
-
-                              </div>
-
-
-                              </tbody>
-
-                           </table></div>
-                     </div>
-                     -->
                   </div>
-               </div>
-
-
-               <div >
-                  <button type="button" data-ng-click="vm.logModels()">Log Models</button>
-                  <ul class="list logList">
-                     <li data-ng-repeat="entry in vm.sortingLog">
-                        {{entry}}
-                     </li>
-                  </ul>
-               </div>
-
-            </div>
-            <div class="row">
-               <div class="col-md-4">
-                  <div>
-                     <fieldset class="scheduler-border">
-                     <legend class="scheduler-border">Optional Courses</legend>
-                     <div>
-                        <table width="100%">
-                           <tr data-ng-repeat="course in vm.optCourseList" data-ng-if="$index % 1 == 0" >
-                              <td ng-repeat="course in vm.optCourseList.slice($index, $index + 1)" style="vertical-align: top">
-                                 <div>
-                                    <div>
-                                       <div class="row">
-                                          <div class="col-md-12" style="background-color: #FAFAFA">
-                                             <span  class="badge badge-dark"><b>{{course.groupName}}</b></span>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div>
-                                    </div>
-                                    <table class="table table-hover table-condensed">
-                                       <thead>
-                                       <tr>
-                                          <th width="1%">#</th>
-                                          <th width="10%">Course No</th>
-                                          <th width="20%">Course Title</th>
-                                          <th width="2%" style="text-align: center"> crHr</th>
-                                          <th width="2%">Course Type</th>
-                                       </tr>
-                                       </thead>
-                                       <tbody ui-sortable="vm.sortableOptions1" class="connected-drop-target-sortable" ng-model="vm.selectedComponents1">
-                                       <tr data-ng-repeat="app in course.courses">
-                                          <td>{{$index + 1}}</td>
-                                          <td><b>{{app.no}}</b>
-                                          </td>
-                                          <td>
-                                             {{app.title}}
-                                          </td>
-                                          <td style="text-align: center">
-                                             <b>{{app.crHr}}</b>
-                                          </td>
-                                          <td align="center">
-                                             <span data-ng-if="app.courseType=='THEORY'" class="badge badge-success">{{app.courseType}}</span>
-                                             <span data-ng-if="app.courseType=='SESSIONAL'" class="badge badge-warning">{{app.courseType}}</span></td>
-                                       </tr>
-
-                                       </tbody>
-                                    </table>
-                                 </div>
-                              </td>
-                           </tr>
-                        </table>
-                     </div>
-                     </fieldset>
-                  </div>
-               </div>
-               <div class="col-md-8">
-
                </div>
             </div>
          </div>
-         <!--  End of Daily Exam Report -->
+         <!--  End  -->
       </div>
    </div>
 </div>
