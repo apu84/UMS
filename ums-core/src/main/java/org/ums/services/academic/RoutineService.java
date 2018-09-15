@@ -221,7 +221,8 @@ public class RoutineService {
             routine.setId(mIdGenerator.getNumericId());
             routine.setCourseId(courseMapWithCourseNo.get(courseRoutineInfo[0] + " " + courseRoutineInfo[1]).getId());
             routine.setSection(courseRoutineInfo[2]);
-            routine.setRoomId(classRoomMapWithRoomNo.get(courseRoutineInfo[3]).getId());
+            routine.setRoomId((4 <= courseRoutineInfo.length) ? classRoomMapWithRoomNo.get(courseRoutineInfo[3])
+                .getId() : classRoomMapWithRoomNo.get(pGlobalRoomNo).getId());
             routine.setSemesterId(pSemesterId);
             routine.setDay(DayType.getByLabel(dayName).getValue());
             routine.setProgramId(pProgramId);
