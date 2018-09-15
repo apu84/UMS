@@ -34,6 +34,8 @@ module ums{
         connectWithList:any;
         pushDataIntoList:boolean;
         destinationDiv:string;
+        courseIdMap:any;
+        pairCourseIdMapWithCourseId:any;
         public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService',
             'programService','commonService','optCourseOfferService'];
 
@@ -161,12 +163,30 @@ module ums{
              }
 
                 this.optOfferedCourseList[parentIndex].subGrpCourses[childIndex].courses.push(data);
+                if(data.pairCourseId!=null){
+                    this.insertPairCourse(data.pairCourseId,parentIndex,childIndex);
+                }
             }else{
                 index = this.optOfferedCourseList.map(e => e.groupName).indexOf(this.destinationDiv);
                 this.optOfferedCourseList[index].courses.push(data);
+                if(data.pairCourseId!=null){
+                    this.insertPairCourse(data.pairCourseId,index);
+                }
             }
             console.log("***insert***");
             console.log(this.optOfferedCourseList);
+        }
+        public insertPairCourse(courseId:string,parentIndex:number,childIndex?:number):void{
+            console.log("Inside Pair Course");
+            var data=this.courseIdMap[courseId];
+            console.log("pair CourseDetails: "+parentIndex);
+            console.log(data);
+            if(this.departmentId !="05"){
+                this.optOfferedCourseList[parentIndex].courses.push(data);
+            }else{
+                this.optOfferedCourseList[parentIndex].subGrpCourses[childIndex].courses.push(data);
+            }
+            this.changeColor(courseId,1);
         }
         public deleteItems(groupName:string,index:number,courseId:string):void{
             var changeColor=0,isCourseFound=0;
@@ -207,50 +227,64 @@ module ums{
 
         }
         private subGroup():void{
-            console.log("Sub Group");
-          this.optOfferedCourseList[this.indexValue].subGrpCourses.push({
-              groupId:null,
-              groupName:this.subGroupName,
-              courses:[]
-          });
-            if(this.departmentId=="05"){
-                this.connectWithList.push("."+this.subGroupName);
+            if(this.subGroupName.length>0){
+                var name=this.subGroupName.replace(/[^\w]/gi,'');
+                console.log(name);
+                var isNameExists=0;
+                for(let i=0;i<this.optOfferedCourseList.length;i++){
+                    isNameExists= this.optOfferedCourseList[i].subGrpCourses.filter(f=>f.groupName==name).length;
+                    if(isNameExists==1){
+                        break;
+                    }
+                }
+                if(isNameExists==0){
+                    this.optOfferedCourseList[this.indexValue].subGrpCourses.push({
+                        groupId:null,
+                        groupName:name,
+                        courses:[]
+                    });
+                    if(this.departmentId=="05"){
+                        this.connectWithList.push("."+name);
+                    }
+                }else {
+                    this.notify.error("Name Already Exists");
+                }
+            }else{
+                this.notify.warn("Name can not be Empty");
             }
-            console.log(this.connectWithList);
           this.subGroupName="";
-          console.log(this.optOfferedCourseList);
         }
        private getParentGrpId(data:any,index:number,course:any):void{
             this.parentGrpName=data;
             this.indexValue=this.optOfferedCourseList.indexOf(course);
        }
         private addOfferedCourse():void{
-            console.log("Main Group");
             var items,isNameExists=0;
-
-            if(this.optOfferedCourseList.length>0){
-                isNameExists=this.optOfferedCourseList.filter(f=>f.groupName==this.groupName).length;
-            }
-            if(isNameExists==0){
-                items=
-                    {   groupId:null,
-                        groupName:this.groupName==null ? null:this.groupName,
-                        isMandatory:this.isMandatory,
-                        courses:[],
-                        subGrpCourses:[]
-                    };
-                this.optOfferedCourseList.push(items);
-                if(this.departmentId!="05"){
-                    this.connectWithList.push("."+this.groupName);
+            if(this.groupName.length>0){
+                var name=this.groupName.replace(/[^\w]/gi,'');
+                if(this.optOfferedCourseList.length>0){
+                    isNameExists=this.optOfferedCourseList.filter(f=>f.groupName==name).length;
                 }
-            }else {
-                this.notify.error("Name Already exists")
+                if(isNameExists==0){
+                    items=
+                        {   groupId:null,
+                            groupName:name==null ? null:name,
+                            isMandatory:this.isMandatory,
+                            courses:[],
+                            subGrpCourses:[]
+                        };
+                    this.optOfferedCourseList.push(items);
+                    if(this.departmentId!="05"){
+                        this.connectWithList.push("."+name);
+                    }
+                }else {
+                    this.notify.error("Name Already Exists")
+                }
+            }else{
+                this.notify.warn("Name can be Empty");
             }
-            console.log("*posh*")
-            console.log(this.connectWithList);
             this.groupName="";
             this.isMandatory=false;
-            console.log(this.optOfferedCourseList);
         }
 
         private search():void{
@@ -266,7 +300,24 @@ module ums{
                 console.log("**Courses**");
                 console.log(this.optCourseList);
                 this.draggables=this.optCourseList;
+                this.createMap(this.draggables);
             });
+        }
+        public createMap(data:any){
+            var map: {[key:string]: object[]} = {};
+            var pairCourseIdMap: {[key:string]: string} = {};
+            for(let i=0;i<data.length;i++){
+                for(let j=0;j<data[i].courses.length;j++){
+                    map[data[i].courses[j].id] = data[i].courses[j];
+                    pairCourseIdMap[data[i].courses[j].id]=data[i].courses[j].pairCourseId;
+                }
+            }
+            this.courseIdMap=map;
+            console.log("**courseIdMap**");
+            console.log(this.courseIdMap);
+            this.pairCourseIdMapWithCourseId=pairCourseIdMap;
+            console.log("**pairCourseIdMapWithCourseId**");
+            console.log(this.pairCourseIdMapWithCourseId);
         }
 
 

@@ -255,6 +255,7 @@
                                                    <tr data-ng-repeat="subCourses in course.subGrpCourses" data-ng-if="$index % 1 == 0" >
                                                       <td ng-repeat="subApp in course.subGrpCourses.slice($index, $index + 1)" style="vertical-align: top">
                                                          <div ui-sortable="vm.sortableOptions1" class="{{subApp.groupName}}" ng-model="vm.selectedComponents1" style="border: 1px solid black">
+
                                                             <div style="padding-left: 20px">
                                                                <div>
                                                                   <div class="row">
