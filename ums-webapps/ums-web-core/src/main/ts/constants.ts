@@ -75,7 +75,7 @@ module ums {
                     '06': 'Department of Textile Engineering',
                     '07': 'Department of Mechanical & Production Engineering'
                 },
-                dept4JqGridSelectBox: ':None;01:ARC;02:BBA;03:CE;04:CSE;05:EEE;06:TE;07:MPE',
+                dept4JqGridSelectBox: ':None;07:MPE;06:TE;03:CE;05:EEE;04:CSE;02:SoB;01:ARC;73:CoE;72:RO;71:TO;75:PO;76:AoSW;74:KFRL;81:BoT;15:AS;70:OVC;77:UE;82:DoEF;83:IUMS;',
                 days: ':None;1:Saturday;2:Sunday;3:Monday;4:Tuesday;5:Wednesday;6:Thursday;7:Friday',
                 weekday: [
                     {id: "1", name: 'Saturday'},

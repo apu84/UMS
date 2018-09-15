@@ -36,7 +36,7 @@ public class ClassRoomBuilder implements Builder<ClassRoom, MutableClassRoom> {
     pMutable.setTotalColumn((Integer.parseInt(pJsonObject.getString("totalColumn"))));
     pMutable.setCapacity((Integer.parseInt(pJsonObject.getString("totalRow")) * Integer.parseInt(pJsonObject
         .getString("totalColumn"))) + 2);
-    pMutable.setRoomType(ClassRoomType.values()[Integer.parseInt(pJsonObject.getString("roomType"))]);
+    pMutable.setRoomType(ClassRoomType.get(Integer.parseInt(pJsonObject.getString("roomType"))));
     if(pJsonObject.getString("examSeatPlan").equals("0")) {
       pMutable.setExamSeatPlan(false);
     }

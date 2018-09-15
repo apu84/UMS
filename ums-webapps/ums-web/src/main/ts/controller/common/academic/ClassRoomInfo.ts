@@ -2,14 +2,15 @@ module ums {
 
   interface IClassRoomScope extends ng.IScope {
     classRoomData:any;
+    departListForJqGrid: string;
   }
 
   export class ClassRoomInfo implements GridEditActions {
 
-    public static $inject = ['appConstants', 'HttpClient', '$scope'];
+    public static $inject = ['appConstants', 'HttpClient', '$scope', 'departmentService'];
 
 
-    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IClassRoomScope) {
+    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IClassRoomScope, private departmentService: DepartmentService) {
       this.loadData();
     }
 
@@ -19,16 +20,17 @@ module ums {
 
     public insert(rowData: RowData): void {
       this.decorateScope().grid.api.toggleMessage('Saving...');
-      if (rowData.id.indexOf('jqg') == 0) {
+      console.log("Row data");
+      console.log(rowData);
         this.httpClient.post('academic/classroom', rowData, HttpClient.MIME_TYPE_JSON).success(()=> {
           this.decorateScope().grid.api.toggleMessage();
           this.loadData();
         }).error((response) => {
+          this.decorateScope().grid.api.toggleMessage();
           console.error(response);
           this.loadData();
           this.decorateScope().grid.api.toggleMessage();
         });
-      }
     }
 
     public edit(rowData: RowData): void {
@@ -156,6 +158,8 @@ module ums {
             this.$scope.classRoomData = response.rows;
           });
     }
+
+
 
     public loadComplete():any{
       alert("ifti");
