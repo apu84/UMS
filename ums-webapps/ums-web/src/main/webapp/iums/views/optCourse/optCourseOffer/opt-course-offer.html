@@ -164,7 +164,7 @@
                                  <!-- color codes
                                  #D6FED7.#13F517,FCF2F2.#C14242
                                  -->
-                                 <tr data-ng-style="d.statusId==1 ? {'background-color':'#D6FED7'}:{'background-color':'#FCF2F2'}" style="cursor: move"
+                                 <tr data-ng-style="d.statusId==1 ? {'background-color':'#F0FFF0'}:{'background-color':'#FCF2F2'}" style="cursor: move"
                                      data-ng-disabled="d.statusId==1 ? true:false">
                                     <td width="2%" >{{$index+1}}</td>
                                     <td width="25%"><b>{{d.no}}</b></td>
@@ -201,13 +201,30 @@
                                     <td ng-repeat="course in vm.optOfferedCourseList.slice($index, $index + 1)" style="vertical-align: top">
                                        <div ui-sortable="vm.sortableOptions1" class="{{course.groupName}}" ng-model="vm.selectedComponents1" style="border: 1px dashed #a2a7ae;padding: 10px">
                                           <div>
-                                             <div class="row">
-                                                <div class="col-md-10" style="background-color: #FAFAFA">
+                                             <div class="row" style="background-color: #FAFAFA">
+                                                <div class="col-md-4">
                                                    <span  class="badge badge-dark"><b>{{course.groupName}}</b></span>
                                                 </div>
-                                                <div class="col-md-2" style="background-color: #FAFAFA">
-                                                   <span data-ng-if="course.isMandatory==true" class="badge badge-danger pull-right"><span class="glyphicon glyphicon-check"></span>{{" Mandatory"}}</span>
-                                                   <span data-ng-if="course.isMandatory!=true" class="badge badge-danger pull-right"><span class="glyphicon glyphicon-time"></span>{{" Optional"}}</span>
+                                                <div class="col-md-2">
+                                                   <p data-ng-hide="vm.isSubGroupAvailable" >
+                                                      <b>Total Applied: {{0}}</b>
+                                                   </p>
+
+                                                </div>
+                                                <div class="col-md-2" >
+                                                   <p data-ng-hide="vm.isSubGroupAvailable">
+                                                   <b>No. of Seats: {{30}}</b>
+                                                   </p>
+                                                </div>
+                                                <div class="col-md-2" >
+                                                   <span data-ng-if="course.isMandatory==true"  data-ng-hide="vm.isSubGroupAvailable" class="badge badge-danger pull-right"><span class="glyphicon glyphicon-check"></span>{{" M"}}</span>
+                                                   <span data-ng-if="course.isMandatory!=true" data-ng-hide="vm.isSubGroupAvailable" class="badge badge-danger pull-right"><span class="glyphicon glyphicon-time"></span>{{" O/P"}}</span>
+                                                </div>
+                                                <div class="col-md-2" align="right">
+                                                   <a href="" class="btn btn-xs btn-default btn-round"
+                                                      data-ng-click="vm.removeMainGroup(course.groupName)">
+                                                      <i class="fa fa-times" style="color: red;"></i>
+                                                   </a>
                                                 </div>
                                              </div>
                                           </div>
@@ -259,8 +276,23 @@
                                                             <div style="padding-left: 20px">
                                                                <div>
                                                                   <div class="row">
-                                                                     <div class="col-md-12">
+                                                                     <div class="col-md-4" style="background-color: #FAFAFA">
                                                                         <span  class="badge badge-info"><b>{{subApp.groupName}}</b></span>
+                                                                     </div>
+                                                                     <div class="col-md-2" style="background-color: #FAFAFA">
+                                                                        <b>Total Applied: {{0}}</b>
+                                                                     </div>
+                                                                     <div class="col-md-2" style="background-color: #FAFAFA">
+                                                                        <b>No. of Seats: {{0}}</b>
+                                                                     </div>
+                                                                     <div class="col-md-2" style="background-color: #FAFAFA">
+                                                                        <span class="badge badge-danger pull-right"><span class="glyphicon glyphicon-check"></span>{{" N/R"}}</span>
+                                                                     </div>
+                                                                     <div class="col-md-2" style="background-color: #FAFAFA" align="right">
+                                                                        <a class="btn btn-xs btn-default btn-round"
+                                                                           data-ng-click="vm.removeSubGroup(course.groupName,subApp.groupName)">
+                                                                           <i class="fa fa-times" style="color: blue;"></i>
+                                                                        </a>
                                                                      </div>
 
                                                                   </div>

@@ -189,7 +189,7 @@ module ums{
             this.changeColor(courseId,1);
         }
         public deleteItems(groupName:string,index:number,courseId:string):void{
-            var changeColor=0,isCourseFound=0;
+            var changeColor=0,isCourseFound=0,pairCourseId;
            var parentIndex = this.optOfferedCourseList.map(e => e.groupName).indexOf(groupName);
             this.optOfferedCourseList[parentIndex].courses.splice(index,1);
           for(let i=0;i<this.optOfferedCourseList.length;i++){
@@ -204,9 +204,38 @@ module ums{
               this.changeColor(courseId,changeColor);
           }
 
+          pairCourseId=this.pairCourseIdMapWithCourseId[courseId];
+          console.log("pair course: "+pairCourseId);
+          if(pairCourseId !=null){
+              this.deletePairCourses(pairCourseId,parentIndex);
+          }
+
+        }
+        public deletePairCourses(pairCourseId:string,parentIndex:number,childIndex?:number){
+            console.log("delete pair course")
+            var isCourseFound=0,index=0,changeColor=0;
+            if(this.departmentId !="05"){
+                for(let i=0;i<this.optOfferedCourseList[parentIndex].courses.length;i++){
+                    if( this.optOfferedCourseList[parentIndex].courses[i].id==pairCourseId){
+                        index=i;
+                        break;
+                    }
+                }
+                this.optOfferedCourseList[parentIndex].courses.splice(index,1);
+            }else {
+                for(let k=0;k<this.optOfferedCourseList[parentIndex].subGrpCourses[childIndex].courses.length;k++){
+                    if( this.optOfferedCourseList[parentIndex].subGrpCourses[childIndex].courses[k].id==pairCourseId){
+                        index=k;
+                        break;
+                    }
+                }
+                this.optOfferedCourseList[parentIndex].subGrpCourses[childIndex].courses.splice(index,1);
+            }
+            this.changeColor(pairCourseId,changeColor);
+
         }
         public deleteSubItems(groupName:string,subGroupName:string,index:number,courseId:string){
-            var changeColor=0,isCourseFound=0;
+            var changeColor=0,isCourseFound=0,pairCourseId;
             var parentIndex = this.optOfferedCourseList.map(e => e.groupName).indexOf(groupName);
             var childIndex=this.optOfferedCourseList[parentIndex].subGrpCourses.map(e=>e.groupName).indexOf(subGroupName);
             this.optOfferedCourseList[parentIndex].subGrpCourses[childIndex].courses.splice(index,1);
@@ -224,6 +253,11 @@ module ums{
             if(isCourseFound==0) {
                 this.changeColor(courseId,changeColor);
                 }
+            pairCourseId=this.pairCourseIdMapWithCourseId[courseId];
+            console.log("pair course: "+pairCourseId);
+            if(pairCourseId !=null){
+                this.deletePairCourses(pairCourseId,parentIndex,childIndex);
+            }
 
         }
         private subGroup():void{
@@ -253,6 +287,7 @@ module ums{
                 this.notify.warn("Name can not be Empty");
             }
           this.subGroupName="";
+            console.log(this.connectWithList);
         }
        private getParentGrpId(data:any,index:number,course:any):void{
             this.parentGrpName=data;
@@ -285,6 +320,38 @@ module ums{
             }
             this.groupName="";
             this.isMandatory=false;
+        }
+        public removeMainGroup(groupName:string){
+            var value = confirm("Are you Confirm?");
+            if( value == true ){
+                var parentIndex = this.optOfferedCourseList.map(e => e.groupName).indexOf(groupName);
+                console.log(parentIndex);
+                if(this.departmentId!="05"){
+                    for(let j=0;j<this.optOfferedCourseList[parentIndex].courses.length;j++){
+                        this.changeColor(this.optOfferedCourseList[parentIndex].courses[j].id,0);
+                    }
+                }else {
+                    console.log("EEE");
+                    for(let j=0;j<this.optOfferedCourseList[parentIndex].subGrpCourses.length;j++){
+                        for(let k=0;k<this.optOfferedCourseList[parentIndex].subGrpCourses[j].courses.length;k++){
+                            console.log("course id :"+this.optOfferedCourseList[parentIndex].subGrpCourses[j].courses[k].id);
+                            this.changeColor(this.optOfferedCourseList[parentIndex].subGrpCourses[j].courses[k].id,0);
+                        }
+                    }
+                }
+                this.optOfferedCourseList.splice(parentIndex,1);
+            }
+        }
+        public removeSubGroup(groupName:string,subGroupName:string){
+            var value = confirm("Are you Confirm?");
+            if( value == true ) {
+                var parentIndex = this.optOfferedCourseList.map(e => e.groupName).indexOf(groupName);
+                var childIndex = this.optOfferedCourseList[parentIndex].subGrpCourses.map(e => e.groupName).indexOf(subGroupName);
+                for (let k = 0; k < this.optOfferedCourseList[parentIndex].subGrpCourses[childIndex].courses.length; k++) {
+                    this.changeColor(this.optOfferedCourseList[parentIndex].subGrpCourses[childIndex].courses[k].id, 0);
+                }
+                this.optOfferedCourseList[parentIndex].subGrpCourses.splice(childIndex, 1);
+            }
         }
 
         private search():void{
