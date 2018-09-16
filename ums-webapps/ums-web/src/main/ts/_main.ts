@@ -83,6 +83,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/TablePaginatorWrapper.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/AutoComplete.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/FileInput.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/directive/EmployeeSearchDir.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/DatePicker.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/UiDatePicker.ts'/>
 

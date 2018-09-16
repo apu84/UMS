@@ -75,6 +75,7 @@
 /// <reference path='directive/DatePicker.ts'/>
 /// <reference path='directive/UiDatePicker.ts'/>
 /// <reference path='directive/FileInput.ts'/>
+/// <reference path='directive/EmployeeSearchDir.ts'/>
 /// <reference path='directive/TablePaginatorWrapper.ts'/>
 /// <reference path='directive/Spinner.ts'/>
 /// <reference path='directive/ProfilePicture.ts'/>
