@@ -376,10 +376,10 @@
                             data-ng-model="vm.groupName"
                      />
                   </div>
-                  <div class="col-md-2">
+                  <div class="col-md-2" data-ng-hide="vm.isSubGroupAvailable">
                      <p>Mandatory: </p>
                   </div>
-                  <div class="col-md-2">
+                  <div class="col-md-2" data-ng-hide="vm.isSubGroupAvailable">
                      <input type="checkbox" ng-model="vm.isMandatory">
                   </div>
                </div>
