@@ -122,12 +122,8 @@ public class PersistentAccountDao extends AccountDaoDecorator {
 
   @Override
   public Account get(Long pId) {
-    String query = "select * from mst_account where id=:id";
-    Map parameterMap = new HashMap();
-    parameterMap.put("id", pId);
-    accountDaoLogger.debug(pId.toString());
-    return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentAccountRowMapper());
-
+    String query = "select * from mst_account where id=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentAccountRowMapper());
   }
 
   @Override

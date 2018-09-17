@@ -215,11 +215,13 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
 
   private Map getInsertOrUpdateParameters(MutableCourseTeacher pMutableCourseTeacher) {
     Map parameter = new HashMap();
-    parameter.put("id", pMutableCourseTeacher.getId());
+    parameter.put("id",
+        pMutableCourseTeacher.getId() == null ? mIdGenerator.getNumericId() : pMutableCourseTeacher.getId());
     parameter.put("courseId", pMutableCourseTeacher.getCourse().getId());
     parameter.put("semesterId", pMutableCourseTeacher.getSemester().getId());
     parameter.put("section", pMutableCourseTeacher.getSection());
-    parameter.put("teacherId", pMutableCourseTeacher.getTeacher().getId());
+    parameter.put("teacherId", pMutableCourseTeacher.getTeacherId() != null ? pMutableCourseTeacher.getTeacherId()
+        : pMutableCourseTeacher.getTeacher().getId());
     parameter.put("lastModified", UmsUtils.formatDate(new Date(), "YYYYMMDDHHMMSS"));
     return parameter;
   }

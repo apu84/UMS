@@ -57,9 +57,13 @@ public class BalanceSheetReportGenerator {
 
     FinancialAccountYear financialAccountYear = mFinancialAccountYearManager.getOpenedFinancialAccountYear(Utils.getCompany());
     List<MutableAccountBalance> accountBalanceList = mAccountBalanceManager.getAccountBalance(financialAccountYear.getCurrentStartDate(), financialAccountYear.getCurrentEndDate());
-    Map<Account, AccountBalance> accountBalanceMapWithAccount = accountBalanceList
+    Map<Account, AccountBalance> accountBalanceMapWithAccount = new HashMap<>();
+    for(AccountBalance accountBalance: accountBalanceList){
+      accountBalanceMapWithAccount.put(mAccountManager.get(accountBalance.getAccountCode()), accountBalance);
+    }
+    /*Map<Account, AccountBalance> accountBalanceMapWithAccount = accountBalanceList
         .stream()
-        .collect(Collectors.toMap(a -> mAccountManager.get(a.getAccountCode()), a -> a));
+        .collect(Collectors.toMap(a -> mAccountManager.get(a.getAccountCode()), a -> a));*/
     List<Account> accountList = accountBalanceList.stream()
         .map(a -> mAccountManager.get(a.getAccountCode()))
         .collect(Collectors.toList());

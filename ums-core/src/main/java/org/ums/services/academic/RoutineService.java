@@ -79,7 +79,7 @@ public class RoutineService {
     removeRoutine(pSemesterId, pProgramId);
     removeCourseTeacher(pSemesterId, pProgramId);
 
-    for(int i = 0; i < 1; i++) {
+    for(int i = 0; i < 4; i++) {
       Sheet sheet = pWorkbook.getSheetAt(i);
       System.out.println(sheet.getSheetName() + " ");
       int year = extractYearFromSheetName(sheet.getSheetName());
@@ -180,7 +180,7 @@ public class RoutineService {
   private void extractRoutineInformationFromSheet(Sheet pSheet, Integer pSemesterId, Integer pProgramId,
       List<MutableRoutine> pRoutineList, int pYear, int pSemester, String pSection, String pGlobalRoomNo) {
 
-    if(columnMapWithTime.isEmpty()) {
+    if(columnMapWithTime.size() < 12) {
       Row row = pSheet.getRow(0);
       createColumnAndTimeMap(row);
     }
@@ -202,54 +202,79 @@ public class RoutineService {
         dayName = pRow.getCell(i).toString();
       }
       else if(pRow.getCell(i) != null && pRow.getCell(i).toString().length() != 0) {
-        System.out.println("----Cell----> " + i);
-        System.out.println(pRow.getCell(i).toString());
-        String[] cellStrings = pRow.getCell(i).toString().split("\n");
-        Random random = new Random();
-        int groupId = random.nextInt(10000);
-        RoutineTime routineTime = columnMapWithTime.get(pRow.getCell(i).getColumnIndex());
-        for(int k = 0; k < cellStrings.length; k++) {
-          List<MutableRoutine> cellRoutineList = new ArrayList<>();
-          String[] courseStrings = cellStrings[k].split("\\|");
-          LocalTime startTime = routineTime.getStartTime();
+        extractExcelCell(pRow, pSemesterId, pProgramId, pRoutineList, pYear, pSemester, pSection, pGlobalRoomNo,
+            dayName, i);
+      }
 
-          for(String courseString : courseStrings) {
-            MutableRoutine routine = new PersistentRoutine();
-            courseString = courseString.replaceAll("\\[", "").replaceAll("\\]", "");
-            String[] courseRoutineInfo = courseString.split(" ");
-            routine.setSlotGroup(groupId);
-            routine.setId(mIdGenerator.getNumericId());
-            routine.setCourseId(courseMapWithCourseNo.get(courseRoutineInfo[0] + " " + courseRoutineInfo[1]).getId());
-            routine.setSection(courseRoutineInfo[2]);
-            routine.setRoomId((4 <= courseRoutineInfo.length) ? classRoomMapWithRoomNo.get(courseRoutineInfo[3])
-                .getId() : classRoomMapWithRoomNo.get(pGlobalRoomNo).getId());
-            routine.setSemesterId(pSemesterId);
-            routine.setDay(DayType.getByLabel(dayName).getValue());
-            routine.setProgramId(pProgramId);
-            routine.setAcademicYear(pYear);
-            routine.setAcademicSemester(pSemester);
-            routine.setStartTime(startTime);
-            if(routine.getCourse().getCourseType().equals(CourseType.SESSIONAL))
-              routine.setEndTime(routine.getStartTime().plusMinutes(routineConfig.getDuration() * 3));
-            else
-              routine.setEndTime(startTime.plusMinutes(routineConfig.getDuration()));
+    }
+  }
 
-            startTime = startTime.plusMinutes(routineConfig.getDuration());
-            cellRoutineList.add(routine);
-          }
-          pRoutineList.addAll(cellRoutineList);
-          if((k + 1) < cellStrings.length) {
-            char[] nextCellCharacterArray = cellStrings[k + 1].toCharArray();
-            if(nextCellCharacterArray[0] == '[') {
-              extractCourseTeacherInfo(pSemesterId, pProgramId, cellRoutineList, cellStrings[k + 1]);
-              k = k + 1;
-            }
-          }
+  private void extractExcelCell(Row pRow, Integer pSemesterId, Integer pProgramId, List<MutableRoutine> pRoutineList,
+      int pYear, int pSemester, String pSection, String pGlobalRoomNo, String pDayName, int pI) {
+    String[] cellStrings = pRow.getCell(pI).toString().split("\n");
+    Random random = new Random();
+    int groupId = random.nextInt(10000);
+    RoutineTime routineTime = columnMapWithTime.get(pRow.getCell(pI).getColumnIndex());
+    for(int k = 0; k < cellStrings.length; k++) {
+      List<MutableRoutine> cellRoutineList = new ArrayList<>();
+      String[] courseStrings = cellStrings[k].split("\\|");
+      LocalTime startTime = routineTime.getStartTime();
 
+      for(String courseString : courseStrings) {
+        MutableRoutine routine = new PersistentRoutine();
+        courseString = courseString.replaceAll("\\[", "").replaceAll("\\]", "");
+        if(courseString.equalsIgnoreCase("")) {
+          startTime = startTime.plusMinutes(routineConfig.getDuration());
+        }
+        else {
+          String[] courseRoutineInfo = courseString.split(" ");
+          assignRoutineData(pSemesterId, pProgramId, pYear, pSemester, pSection, pGlobalRoomNo, pDayName, groupId,
+              startTime, routine, courseRoutineInfo);
+
+          startTime = startTime.plusMinutes(routineConfig.getDuration());
+          cellRoutineList.add(routine);
+        }
+
+      }
+      pRoutineList.addAll(cellRoutineList);
+      if((k + 1) < cellStrings.length) {
+        char[] nextCellCharacterArray = cellStrings[k + 1].toCharArray();
+        if(nextCellCharacterArray[0] == '[') {
+          extractCourseTeacherInfo(pSemesterId, pProgramId, cellRoutineList, cellStrings[k + 1]);
+          k = k + 1;
         }
       }
 
     }
+  }
+
+  private void assignRoutineData(Integer pSemesterId, Integer pProgramId, int pYear, int pSemester, String pSection,
+      String pGlobalRoomNo, String pDayName, int pGroupId, LocalTime pStartTime, MutableRoutine pRoutine,
+      String[] pCourseRoutineInfo) {
+    pRoutine.setSlotGroup(pGroupId);
+    pRoutine.setId(mIdGenerator.getNumericId());
+    pRoutine.setCourseId(courseMapWithCourseNo.get(pCourseRoutineInfo[0] + " " + pCourseRoutineInfo[1]).getId());
+    if(pRoutine.getCourse().getCourseType().equals(CourseType.SESSIONAL)) {
+      pRoutine.setSection(pCourseRoutineInfo[2]);
+      pRoutine.setRoomId((4 <= pCourseRoutineInfo.length) ? classRoomMapWithRoomNo.get(pCourseRoutineInfo[3]).getId()
+          : classRoomMapWithRoomNo.get(pGlobalRoomNo).getId());
+    }
+    else {
+      pRoutine.setSection(pSection);
+      pRoutine.setRoomId((3 <= pCourseRoutineInfo.length) ? classRoomMapWithRoomNo.get(pCourseRoutineInfo[2]).getId()
+          : classRoomMapWithRoomNo.get(pGlobalRoomNo).getId());
+    }
+
+    pRoutine.setSemesterId(pSemesterId);
+    pRoutine.setDay(DayType.getByLabel(pDayName).getValue());
+    pRoutine.setProgramId(pProgramId);
+    pRoutine.setAcademicYear(pYear);
+    pRoutine.setAcademicSemester(pSemester);
+    pRoutine.setStartTime(pStartTime);
+    if(pRoutine.getCourse().getCourseType().equals(CourseType.SESSIONAL))
+      pRoutine.setEndTime(pRoutine.getStartTime().plusMinutes(routineConfig.getDuration() * 3));
+    else
+      pRoutine.setEndTime(pStartTime.plusMinutes(routineConfig.getDuration()));
   }
 
   private void extractCourseTeacherInfo(Integer pSemesterId, Integer pProgramId, List<MutableRoutine> pRoutineList,
@@ -257,8 +282,11 @@ public class RoutineService {
     cellCourseTeacherString = cellCourseTeacherString.replaceAll("\\[", "").replaceAll("\\]", "");
     String[] courseTeacherListBasedOnCourse = cellCourseTeacherString.split("\\|");
     for(int i = 0; i < pRoutineList.size(); i++) {
-      String[] courseTeacher = courseTeacherListBasedOnCourse[i].split(",");
-      insertOrUpdateCourseTeacher(pSemesterId, pProgramId, pRoutineList.get(i), courseTeacher);
+      if(!courseTeacherListBasedOnCourse[i].equalsIgnoreCase("")) {
+        String[] courseTeacher = courseTeacherListBasedOnCourse[i].split(",");
+        insertOrUpdateCourseTeacher(pSemesterId, pProgramId, pRoutineList.get(i), courseTeacher);
+      }
+
     }
   }
 

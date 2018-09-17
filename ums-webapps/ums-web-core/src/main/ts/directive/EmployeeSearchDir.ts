@@ -20,7 +20,7 @@ module ums{
       console.log("In the initializations");
         this.employees = [];
         this.employeesTmp=[];
-        this.employeeService.getActiveTeachers().then((employees:Employee[])=>{
+        this.employeeService.getAll().then((employees:Employee[])=>{
           this.employees = employees;
           this.employeesTmp = angular.copy(this.employees);
           this.gridOptions.data=this.employees;

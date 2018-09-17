@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableAsync
 @EnableScheduling
 @Import({CoreContext.class, AcademicContext.class, AdmissionContext.class, FeeContext.class, LibraryContext.class,
-    SolrContext.class, RegistrarContext.class})
+    SolrContext.class, RegistrarContext.class, AccountsContext.class})
 public class UMSContext {
 
 }
