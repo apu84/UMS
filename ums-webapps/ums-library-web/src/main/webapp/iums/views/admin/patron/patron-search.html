@@ -1,83 +1,67 @@
-<fieldset>
-    <legend>Library use</legend>
-    <div class="row">
-        <div class="col-md-10">
-            <div class="row">
-                <div class="col-md-2"><b>Name</b></div>
-                <div class="col-md-1"><b>:</b></div>
-                <div class="col-md-9">{{vm.user.userName}}</div>
-            </div>
-            <div class="row">
-                <div class="col-md-2"><b>Id</b></div>
-                <div class="col-md-1"><b>:</b></div>
-                <div class="col-md-9">{{vm.user.userId}}</div>
-            </div>
-            <div class="row">
-                <div class="col-md-2"><b>Category</b></div>
-                <div class="col-md-1"><b>:</b></div>
-                <div class="col-md-9">{{vm.user.category}}</div>
-            </div>
-            <div class="row">
-                <div class="col-md-2"><b>Email</b></div>
-                <div class="col-md-1"><b>:</b></div>
-                <div class="col-md-9">{{vm.user.emailAddress}}</div>
-            </div>
-            <div class="row">
-                <div class="col-md-2"><b>Contact No</b></div>
-                <div class="col-md-1"><b>:</b></div>
-                <div class="col-md-9">{{vm.user.mobileNo}}</div>
-            </div>
-        </div>
+<div class="row">
+    <div class="col-md-2">
+        <img class="img-square" style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);"
+             src=""
+             img-id="vm.user.userId"
+             data-profile-picture="">
+    </div>
+    <div class="col-md-9">
+        <table class="table table-condensed table-bordered">
+            <tbody>
+            <tr>
+                <td>Name</td>
+                <td>{{vm.user.userName}}</td>
 
-        <div class="col-md-2">
-            <div align="right">
-                <img class="img-square" style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);"
-                     src=""
-                     img-id="vm.user.userId"
-                     data-profile-picture="">
-            </div>
-        </div>
-    </div>
-</fieldset>
+            </tr>
+            <tr>
+                <td>Id</td>
+                <td>{{vm.user.userId}}</td>
+            </tr>
+            <tr>
+                <td>Category</td>
+                <td>{{vm.user.category}}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>{{vm.user.emailAddress}}</td>
+            </tr>
+            <tr>
+                <td>Contact No</td>
+                <td>{{vm.user.mobileNo}}</td>
+            </tr>
+            <tr>
+                <td>Gender</td>
+                <td>{{vm.user.gender}}</td>
+            </tr>
 
-<fieldset>
-    <legend>General</legend>
-    <div class="row">
-        <div class="col-md-2"><b>Gender</b></div>
-        <div class="col-md-1"><b>:</b></div>
-        <div class="col-md-9">{{vm.user.gender}}</div>
+            <tr>
+                <td>Blood Group</td>
+                <td>{{vm.user.bloodGroup}}</td>
+            </tr>
+            <tr>
+                <td>Date of Birth</td>
+                <td>{{vm.user.dateOfBirth}}</td>
+            </tr>
+            <tr>
+                <td>Department</td>
+                <td>{{vm.user.department}}</td>
+            </tr>
+            <tr>
+                <td>Designation</td>
+                <td>{{vm.user.designation}}</td>
+            </tr>
+            <tr>
+                <td>Father Name</td>
+                <td>{{vm.user.fatherName}}</td>
+            </tr>
+            <tr>
+                <td>Mother Name</td>
+                <td>{{vm.user.motherName}}</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="row">
-        <div class="col-md-2"><b>Blood Group</b></div>
-        <div class="col-md-1"><b>:</b></div>
-        <div class="col-md-9">{{vm.user.bloodGroup}}</div>
-    </div>
-    <div class="row">
-        <div class="col-md-2"><b>Date of Birth</b></div>
-        <div class="col-md-1"><b>:</b></div>
-        <div class="col-md-9">{{vm.user.dateOfBirth}}</div>
-    </div>
-    <div class="row">
-        <div class="col-md-2"><b>Department</b></div>
-        <div class="col-md-1"><b>:</b></div>
-        <div class="col-md-9">{{vm.user.department}}</div>
-    </div>
-    <div class="row">
-        <div class="col-md-2"><b>Designation</b></div>
-        <div class="col-md-1"><b>:</b></div>
-        <div class="col-md-9">{{vm.user.designation}}</div>
-    </div>
-    <div class="row">
-        <div class="col-md-2"><b>Father Name</b></div>
-        <div class="col-md-1"><b>:</b></div>
-        <div class="col-md-9">{{vm.user.fatherName}}</div>
-    </div>
-    <div class="row">
-        <div class="col-md-2"><b>Mother Name</b></div>
-        <div class="col-md-1"><b>:</b></div>
-        <div class="col-md-9">{{vm.user.motherName}}</div>
-    </div>
-</fieldset>
+</div>
 
 
 <div class="row">
