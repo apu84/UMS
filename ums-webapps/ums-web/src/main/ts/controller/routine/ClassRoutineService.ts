@@ -262,6 +262,7 @@ module ums{
       var url = this.routineUrl+"/upload";
       this.httpClient.post(url, formData, undefined)
           .success((response) => {
+            this.notify.success("Routine template parsed successfully");
             defer.resolve(response);
           }).error((data) => {
         console.error(data);
