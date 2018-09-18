@@ -118,7 +118,7 @@ module ums{
                                 console.log("s");
                             }
                         }
-                    },
+                    }
                 };
         }
         public changeColor(courseId:any,setColor:number){

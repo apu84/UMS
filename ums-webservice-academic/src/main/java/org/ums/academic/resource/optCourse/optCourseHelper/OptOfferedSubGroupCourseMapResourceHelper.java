@@ -18,7 +18,8 @@ import javax.ws.rs.core.UriInfo;
  * Created by Monjur-E-Morshed on 8/29/2018.
  */
 @Component
-public class OptOfferedSubGroupCourseMapResourceHelper extends ResourceHelper<OptOfferedSubGroupCourseMap, MutableOptOfferedSubGroupCourseMap, Long> {
+public class OptOfferedSubGroupCourseMapResourceHelper extends
+    ResourceHelper<OptOfferedSubGroupCourseMap, MutableOptOfferedSubGroupCourseMap, Long> {
   @Autowired
   OptOfferedSubGroupCourseMapBuilder mBuilder;
   @Autowired

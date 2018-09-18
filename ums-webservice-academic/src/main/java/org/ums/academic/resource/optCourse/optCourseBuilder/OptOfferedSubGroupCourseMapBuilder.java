@@ -16,9 +16,11 @@ import javax.ws.rs.core.UriInfo;
  * Created by Monjur-E-Morshed on 8/29/2018.
  */
 @Component
-public class OptOfferedSubGroupCourseMapBuilder implements Builder<OptOfferedSubGroupCourseMap, MutableOptOfferedSubGroupCourseMap> {
+public class OptOfferedSubGroupCourseMapBuilder implements
+    Builder<OptOfferedSubGroupCourseMap, MutableOptOfferedSubGroupCourseMap> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, OptOfferedSubGroupCourseMap pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, OptOfferedSubGroupCourseMap pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) {
     if(pReadOnly.getId() != null) {
       pBuilder.add("id", pReadOnly.getId().toString());
     }

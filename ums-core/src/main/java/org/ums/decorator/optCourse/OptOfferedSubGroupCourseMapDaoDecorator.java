@@ -10,12 +10,13 @@ import java.util.List;
 /**
  * Created by Monjur-E-Morshed on 8/29/2018.
  */
-public class OptOfferedSubGroupCourseMapDaoDecorator extends
-    ContentDaoDecorator<OptOfferedSubGroupCourseMap, MutableOptOfferedSubGroupCourseMap, Long, OptOfferedSubGroupCourseMapManager> implements
-        OptOfferedSubGroupCourseMapManager {
+public class OptOfferedSubGroupCourseMapDaoDecorator
+    extends
+    ContentDaoDecorator<OptOfferedSubGroupCourseMap, MutableOptOfferedSubGroupCourseMap, Long, OptOfferedSubGroupCourseMapManager>
+    implements OptOfferedSubGroupCourseMapManager {
 
-    @Override
-    public List<OptOfferedSubGroupCourseMap> getSubGroupCourses() {
-        return getManager().getSubGroupCourses();
-    }
+  @Override
+  public List<OptOfferedSubGroupCourseMap> getSubGroupCourses() {
+    return getManager().getSubGroupCourses();
+  }
 }

@@ -343,8 +343,10 @@ public class AcademicContext {
 
   @Bean
   OptOfferedSubGroupCourseMapManager optCourseOfferManager() {
-    OptOfferedSubGroupCourseMapCache optCourseOfferCache = new OptOfferedSubGroupCourseMapCache((mCacheFactory.getCacheManager()));
-    optCourseOfferCache.setManager(new PersistentOptOfferedSubGroupCourseMapDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    OptOfferedSubGroupCourseMapCache optCourseOfferCache =
+        new OptOfferedSubGroupCourseMapCache((mCacheFactory.getCacheManager()));
+    optCourseOfferCache.setManager(new PersistentOptOfferedSubGroupCourseMapDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
     return optCourseOfferCache;
   }
 

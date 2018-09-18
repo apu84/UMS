@@ -20,7 +20,8 @@ public class PersistentOptOfferedSubGroupCourseMap implements MutableOptOfferedS
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sDepartmentManager = applicationContext.getBean("departmentManager", DepartmentManager.class);
     sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
-    sOptCourseOfferManager = applicationContext.getBean("optCourseOfferManager", OptOfferedSubGroupCourseMapManager.class);
+    sOptCourseOfferManager =
+        applicationContext.getBean("optCourseOfferManager", OptOfferedSubGroupCourseMapManager.class);
   }
   private Long mId;
   private Long mSubGroupId;
@@ -33,7 +34,7 @@ public class PersistentOptOfferedSubGroupCourseMap implements MutableOptOfferedS
 
   public PersistentOptOfferedSubGroupCourseMap(PersistentOptOfferedSubGroupCourseMap pPersistentOptCourseOffer) {
     mId = pPersistentOptCourseOffer.getId();
-    mSubGroupId=pPersistentOptCourseOffer.getSubGroupId();
+    mSubGroupId = pPersistentOptCourseOffer.getSubGroupId();
     mCourseId = pPersistentOptCourseOffer.getCourseId();
     mCourse = pPersistentOptCourseOffer.getCourses();
   }
@@ -45,7 +46,7 @@ public class PersistentOptOfferedSubGroupCourseMap implements MutableOptOfferedS
 
   @Override
   public void setSubGroupId(Long pSubGroupId) {
-    mSubGroupId=pSubGroupId;
+    mSubGroupId = pSubGroupId;
 
   }
 
@@ -94,7 +95,6 @@ public class PersistentOptOfferedSubGroupCourseMap implements MutableOptOfferedS
   public Course getCourses() {
     return mCourse == null ? sCourseManager.get(mCourseId) : sCourseManager.validate(mCourse);
   }
-
 
   @Override
   public MutableOptOfferedSubGroupCourseMap edit() {

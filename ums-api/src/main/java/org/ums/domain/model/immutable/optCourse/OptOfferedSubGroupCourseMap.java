@@ -12,7 +12,8 @@ import java.io.Serializable;
 /**
  * Created by Monjur-E-Morshed on 8/29/2018.
  */
-public interface OptOfferedSubGroupCourseMap extends Serializable, LastModifier, EditType<MutableOptOfferedSubGroupCourseMap>, Identifier<Long> {
+public interface OptOfferedSubGroupCourseMap extends Serializable, LastModifier,
+    EditType<MutableOptOfferedSubGroupCourseMap>, Identifier<Long> {
   Long getId();
 
   Long getSubGroupId();

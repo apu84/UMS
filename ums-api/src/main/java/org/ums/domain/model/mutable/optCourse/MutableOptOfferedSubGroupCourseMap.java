@@ -10,8 +10,8 @@ import org.ums.domain.model.mutable.MutableLastModifier;
 /**
  * Created by Monjur-E-Morshed on 8/29/2018.
  */
-public interface MutableOptOfferedSubGroupCourseMap extends OptOfferedSubGroupCourseMap, Editable<Long>, MutableLastModifier,
-    MutableIdentifier<Long> {
+public interface MutableOptOfferedSubGroupCourseMap extends OptOfferedSubGroupCourseMap, Editable<Long>,
+    MutableLastModifier, MutableIdentifier<Long> {
 
   void setId(Long pId);
 

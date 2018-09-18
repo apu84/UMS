@@ -130,13 +130,6 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
     }
     UmsParagraph paragraph = null;
     Chunk chunk = null;
-    String examDate = "";
-    try {
-      examDate = parseDate(pExamDate);
-    } catch(ParseException e) {
-      e.printStackTrace();
-    }
-
     paragraph = new UmsParagraph();
     document.add(paragraph);
 
