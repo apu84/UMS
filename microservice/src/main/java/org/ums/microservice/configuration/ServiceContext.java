@@ -143,12 +143,13 @@ public class ServiceContext {
   @Bean
   CacheWarmerManager cacheWarmerManager() {
     return new CacheWarmerManagerImpl(mSecurityManager, mUMSConfiguration, mServiceConfiguration, mDepartmentManager,
-        mAccountManager, mGroupManager, mSystemAccountMapManager, mSystemGroupMapManager, mRoleManager, mPermissionManager, mBearerAccessTokenManager,
-        mAdditionalRolePermissionsManager, mNavigationManager, mEmployeeManager, mProgramTypeManager, mProgramManager,
-        mSemesterManager, mSyllabusManager, mCourseGroupManager, mEquivalentCourseManager, mTeacherManager,
-        mCourseTeacherManager, mExaminerManager, mStudentManager, mStudentRecordManager, mClassRoomManager,
-        mCourseManager, mMarksSubmissionStatusManager, mPersonalInformationManager, mUserManager, mContributorManager,
-        mSupplierManager, mPublisherManager, mRecordManager);
+        mAccountManager, mGroupManager, mSystemAccountMapManager, mSystemGroupMapManager, mRoleManager,
+        mPermissionManager, mBearerAccessTokenManager, mAdditionalRolePermissionsManager, mNavigationManager,
+        mEmployeeManager, mProgramTypeManager, mProgramManager, mSemesterManager, mSyllabusManager,
+        mCourseGroupManager, mEquivalentCourseManager, mTeacherManager, mCourseTeacherManager, mExaminerManager,
+        mStudentManager, mStudentRecordManager, mClassRoomManager, mCourseManager, mMarksSubmissionStatusManager,
+        mPersonalInformationManager, mUserManager, mContributorManager, mSupplierManager, mPublisherManager,
+        mRecordManager);
     // , mAgendaResolutionManager
   }
 
