@@ -1,7 +1,6 @@
 package org.ums.academic.resource.optCourse;
 
 import org.springframework.stereotype.Component;
-import org.ums.domain.model.mutable.optCourse.MutableOptCourseOffer;
 import org.ums.resource.Resource;
 
 import javax.ws.rs.Consumes;
@@ -15,5 +14,5 @@ import javax.ws.rs.Produces;
 @Path("academic/optCourseOffer")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class OptCourseOfferResource extends MutableOptCourseOfferResource {
+public class OptOfferedSubGroupCourseMapResource extends MutableOptOfferedSubGroupCourseMapResource {
 }
