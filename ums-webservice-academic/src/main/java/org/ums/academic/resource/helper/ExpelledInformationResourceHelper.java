@@ -66,10 +66,15 @@ public class ExpelledInformationResourceHelper extends
     application.setSemesterId(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
     getBuilder().build(application, jsonObject, localCache);
 
-    mManager.create(application);
+    Long response=mManager.create(application);
     URI contextURI = null;
     Response.ResponseBuilder builder = Response.created(contextURI);
-    builder.status(Response.Status.CREATED);
+    if(response !=null){
+      builder.status(Response.Status.CREATED);
+    }else {
+      builder.status(Response.Status.NOT_FOUND);
+    }
+
     return builder.build();
   }
 
