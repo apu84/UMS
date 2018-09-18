@@ -127,22 +127,27 @@
                     </div>
                     <div class="row">
                         <div data-ng-show="vm.enableEditButton">
-                            <div data-ng-show="!vm.generalReadOnly">
-                                <div align="center" data-ng-if="vm.test==true">
-                                    <img data-target="#modal-confirm" data-toggle="modal" class="img-square"
-                                         style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0); cursor: pointer"
-                                         src=""
-                                         img-id="vm.userId"
-                                         data-profile-picture="">
-                                </div>
+                            <div data-ng-if="!vm.test" align="center">
+                                <div data-spinner=""></div>
                             </div>
-                            <div data-ng-show="vm.generalReadOnly">
-                                <div align="center" data-ng-if="vm.test==true">
-                                    <img class="img-square"
-                                         style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0);"
-                                         src=""
-                                         img-id="vm.userId"
-                                         data-profile-picture="">
+                            <div data-ng-if="vm.test">
+                                <div data-ng-show="!vm.generalReadOnly">
+                                    <div align="center" data-ng-if="vm.test==true">
+                                        <img data-target="#modal-confirm" data-toggle="modal" class="img-square"
+                                             style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0); cursor: pointer"
+                                             src=""
+                                             img-id="vm.userId"
+                                             data-profile-picture="">
+                                    </div>
+                                </div>
+                                <div data-ng-show="vm.generalReadOnly">
+                                    <div align="center" data-ng-if="vm.test==true">
+                                        <img class="img-square"
+                                             style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0);"
+                                             src=""
+                                             img-id="vm.userId"
+                                             data-profile-picture="">
+                                    </div>
                                 </div>
                             </div>
                         </div>
