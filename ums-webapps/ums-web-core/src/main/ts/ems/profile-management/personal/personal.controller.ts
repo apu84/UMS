@@ -351,26 +351,24 @@ module ums {
 
 
         private uploadImage() {
-            var id = this.userId;
-            var photoContent: any = $("#userPhoto").contents();
-            var image = photoContent.prevObject[0].files[0];
+            this.test = false;
+            let id = this.userId;
+            let photoContent: any = $("#userPhoto").contents();
+            let image = photoContent.prevObject[0].files[0];
             this.getFormData(image, id).then((formData) => {
                 this.FileUpload.uploadPhoto(formData).then(() => {
-                    this.test = false;
-                    var that = this;
-                    setTimeout(() => {
-                        that.test = true;
-                    }, 500)
+                    let that = this;
+                    that.test = true;
                 });
             });
         }
 
         private getFormData(file, id): ng.IPromise<any> {
-            var formData = new FormData();
+            let formData = new FormData();
             formData.append('files', file);
             formData.append('name', file.name);
             formData.append("id", id);
-            var defer = this.$q.defer();
+            let defer = this.$q.defer();
             defer.resolve(formData);
             return defer.promise;
         }
