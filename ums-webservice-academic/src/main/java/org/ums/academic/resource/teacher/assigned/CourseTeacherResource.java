@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.ums.enums.CourseCategory;
 import org.ums.logs.DeleteLog;
 import org.ums.logs.GetLog;
+import org.ums.logs.PostLog;
 import org.ums.logs.PutLog;
 import org.ums.manager.CourseTeacherManager;
 import org.ums.manager.SemesterSyllabusMapManager;
@@ -21,6 +22,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Component
 @Path("/academic/courseTeacher")
@@ -131,9 +133,25 @@ public class CourseTeacherResource extends Resource {
     return mResourceHelper.getAssignedCourses(pSemesterId, pTeacherId, mUriInfo);
   }
 
+  @GET
+  @Path("/semesterId/{semester-id}/teacherId/{teacher-id}")
+  @GetLog(message = "Requested for course-teacher info by teacher id")
+  public JsonArray getCourseTeacher(@Context HttpServletRequest pHttpServletRequest, final @Context Request pRequest,
+      @PathParam("semester-id") Integer pSemesterId, @PathParam("teacher-id") String pTeacherId) {
+    return mResourceHelper.getCourseTeacher(pSemesterId, pTeacherId, mUriInfo);
+  }
+
   @POST
   public Response post(final JsonObject pJsonObject) {
     return mResourceHelper.post(pJsonObject, mUriInfo);
+  }
+
+  @POST
+  @Path("/semesterId/{semester-id}")
+  @PostLog(message = "Requested for course-teacher information by course list")
+  public JsonArray post(@Context HttpServletRequest pHttpServletRequest, @PathParam("semester-id") Integer pSemesterId,
+      final List<String> pCourseList) {
+    return mResourceHelper.getCourseTeacher(pSemesterId, pCourseList, mUriInfo);
   }
 
   @PUT

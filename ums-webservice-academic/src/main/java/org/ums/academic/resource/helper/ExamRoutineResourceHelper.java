@@ -306,12 +306,11 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
   public Response save(final JsonObject pJsonObject, int pSemesterId, int pExamType) {
     // check if the group for the exam is already created, if created, the group will be deleted
     List<SeatPlanGroup> groups = mSeatPlanGroupManager.getGroupBySemester(pSemesterId, pExamType);
-    if(groups.size() > 0) {
-      mSeatPlanGroupManager.deleteBySemesterAndExamType(pSemesterId, pExamType);
-      for(int i = 1; i <= 3; i++) {
-        mSubGroupManager.deleteBySemesterGroupAndType(pSemesterId, i, pExamType);
-      }
-    }
+    /*
+     * if(groups.size() > 0) { mSeatPlanGroupManager.deleteBySemesterAndExamType(pSemesterId,
+     * pExamType); for(int i = 1; i <= 3; i++) {
+     * mSubGroupManager.deleteBySemesterGroupAndType(pSemesterId, i, pExamType); } }
+     */
     PersistentExamRoutine mutable = new PersistentExamRoutine();
     getBuilder().build(mutable, pJsonObject, null);
     try {

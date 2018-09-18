@@ -415,9 +415,9 @@ public class TopSheetReport {
           Employee employee = mEmployeeManager.get(teacher.getTeacherId());
           teacherCounter += 1;
           if (teacherCounter < examiners.size()) {
-            teacherNameSet.add(employee.getPersonalInformation().getName());
+            teacherNameSet.add(employee.getPersonalInformation().getFullName());
           } else {
-            teacherNameSet.add(employee.getPersonalInformation().getName());
+            teacherNameSet.add(employee.getPersonalInformation().getFullName());
           }
         }
       }

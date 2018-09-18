@@ -1613,7 +1613,7 @@ module ums {
 
             .state('employeeProfile', {
                 url: "/employeeProfile",
-                templateUrl: 'views/employee/employee-profile.html',
+                templateUrl: 'views/ems/profile-management/non-admin/employee-profile.html',
                 controller: 'EmployeeProfile',
                 controllerAs: 'vm',
                 resolve: {
@@ -1643,7 +1643,7 @@ module ums {
                     'id': null,
                     'edit': null
                 },
-                templateUrl: 'views/employee/personal-information.html',
+                templateUrl: 'views/ems/profile-management/non-admin/personal/personal-information.html',
                 controller: 'PersonalInformation',
                 controllerAs: 'vm'
             })
@@ -1653,7 +1653,7 @@ module ums {
                     'id': null,
                     'edit': null
                 },
-                templateUrl: 'views/employee/academic-information.html',
+                templateUrl: 'views/ems/profile-management/non-admin/academic/academic-information.html',
                 controller: 'AcademicInformation',
                 controllerAs: 'vm'
             })
@@ -1663,7 +1663,7 @@ module ums {
                     'id': null,
                     'edit': null
                 },
-                templateUrl: 'views/employee/publication-information.html',
+                templateUrl: 'views/ems/profile-management/non-admin/publication/publication-information.html',
                 controller: 'PublicationInformation',
                 controllerAs: 'vm'
             })
@@ -1673,7 +1673,7 @@ module ums {
                     'id': null,
                     'edit': null
                 },
-                templateUrl: 'views/employee/training-information.html',
+                templateUrl: 'views/ems/profile-management/non-admin/training/training-information.html',
                 controller: 'TrainingInformation',
                 controllerAs: 'vm'
             })
@@ -1683,7 +1683,7 @@ module ums {
                     'id': null,
                     'edit': null
                 },
-                templateUrl: 'views/employee/award-information.html',
+                templateUrl: 'views/ems/profile-management/non-admin/award/award-information.html',
                 controller: 'AwardInformation',
                 controllerAs: 'vm'
             })
@@ -1693,7 +1693,7 @@ module ums {
                     'id': null,
                     'edit': null
                 },
-                templateUrl: 'views/employee/experience-information.html',
+                templateUrl: 'views/ems/profile-management/non-admin/experience/experience-information.html',
                 controller: 'ExperienceInformation',
                 controllerAs: 'vm'
             })
@@ -1703,7 +1703,7 @@ module ums {
                     'id': null,
                     'edit': null
                 },
-                templateUrl: 'views/employee/additional-information.html',
+                templateUrl: 'views/ems/profile-management/non-admin/additional/additional-information.html',
                 controller: 'AdditionalInformation',
                 controllerAs: 'vm'
             })
@@ -1713,13 +1713,14 @@ module ums {
                     'id': null,
                     'edit': null
                 },
-                templateUrl: 'views/employee/service-information.html',
+                templateUrl: 'views/ems/profile-management/non-admin/service/service-information.html',
                 controller: 'ServiceInformation',
                 controllerAs: 'vm'
             })
             .state('search', {
                 url: "/search",
                 controller: 'LibrarySearch',
+                controllerAs: 'vm',
                 templateUrl: 'views/library/library-search.html',
                 resolve: {
                     loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
@@ -1742,10 +1743,10 @@ module ums {
 
         // Temporary. Will remove after 1 month
 
-            .state('employeeInformation', {
+            .state('employeeSearch', {
                 url: "/employeeInformation",
-                templateUrl: 'views/employee/employee-information-for-aao.html',
-                controller: 'EmployeeInformation',
+                templateUrl: 'views/ems/employee-information-for-aao.html',
+                controller: 'EmployeeSearch',
                 controllerAs: 'vm',
                 resolve: {
                     allUsers: ['employeeService', function (employeeService) {
@@ -1755,12 +1756,12 @@ module ums {
                     }]
                 }
             })
-            .state('employeeInformation.employeeProfile', {
+            .state('employeeSearch.employeeProfile', {
                 url: "/employeeProfile",
                 params: {
                     'id' : null
                 },
-                templateUrl: 'views/employee/employee-profile.html',
+                templateUrl: 'views/ems/profile-management/admin/employee-profile.html',
                 controller: 'EmployeeProfile',
                 controllerAs: 'vm',
                 resolve: {
@@ -1784,73 +1785,73 @@ module ums {
                     }]
                 }
             })
-            .state('employeeInformation.employeeProfile.personal', {
+            .state('employeeSearch.employeeProfile.personal', {
                 url: "/personal",
                 params : {
                     'id' : null,
                     'edit': null
                 },
-                templateUrl: 'views/employee/personal-information.html',
+                templateUrl: 'views/ems/profile-management/admin/personal/personal-information.html',
                 controller: 'PersonalInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.academic', {
+            .state('employeeSearch.employeeProfile.academic', {
                 url: "/academic",
                 params : {
                     'id' : null,
                     'edit': null
                 },
-                templateUrl: 'views/employee/academic-information.html',
+                templateUrl: 'views/ems/profile-management/admin/academic/academic-information.html',
                 controller: 'AcademicInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.publication', {
+            .state('employeeSearch.employeeProfile.publication', {
                 url: "/publication",
                 params : {
                     'id' : null,
                     'edit': null
                 },
-                templateUrl: 'views/employee/publication-information.html',
+                templateUrl: 'views/ems/profile-management/admin/publication/publication-information.html',
                 controller: 'PublicationInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.training', {
+            .state('employeeSearch.employeeProfile.training', {
                 url: "/training",
                 params : {
                     'id' : null,
                     'edit': null
                 },
-                templateUrl: 'views/employee/training-information.html',
+                templateUrl: 'views/ems/profile-management/admin/training/training-information.html',
                 controller: 'TrainingInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.award', {
+            .state('employeeSearch.employeeProfile.award', {
                 url: "/award",
                 params : {
                     'id' : null,
                     'edit': null
                 },
-                templateUrl: 'views/employee/award-information.html',
+                templateUrl: 'views/ems/profile-management/admin/award/award-information.html',
                 controller: 'AwardInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.experience', {
+            .state('employeeSearch.employeeProfile.experience', {
                 url: "/experience",
                 params : {
                     'id' : null,
                     'edit': null
                 },
-                templateUrl: 'views/employee/experience-information.html',
+                templateUrl: 'views/ems/profile-management/admin/experience/experience-information.html',
                 controller: 'ExperienceInformation',
                 controllerAs: 'vm'
             })
-            .state('employeeInformation.employeeProfile.additional', {
+            .state('employeeSearch.employeeProfile.additional', {
                 url: "/additional",
                 params : {
                     'id' : null,
                     'edit': null
                 },
-                templateUrl: 'views/employee/additional-information.html',
+                templateUrl: 'views/ems/profile-management/admin/additional/additional-information.html',
                 controller: 'AdditionalInformation',
                 controllerAs: 'vm'
             })

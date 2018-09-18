@@ -7,18 +7,18 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.builder.NavigationBuilder;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.*;
+import org.ums.domain.model.immutable.Navigation;
 import org.ums.domain.model.mutable.MutableNavigation;
-import org.ums.usermanagement.permission.AdditionalRolePermissionsManager;
 import org.ums.manager.NavigationManager;
-import org.ums.usermanagement.permission.AdditionalRolePermissions;
-import org.ums.usermanagement.permission.Permission;
-import org.ums.usermanagement.permission.PermissionManager;
-import org.ums.usermanagement.user.UserManager;
 import org.ums.processor.navigation.NavigationProcessor;
 import org.ums.resource.ResourceHelper;
+import org.ums.usermanagement.permission.AdditionalRolePermissions;
+import org.ums.usermanagement.permission.AdditionalRolePermissionsManager;
+import org.ums.usermanagement.permission.Permission;
+import org.ums.usermanagement.permission.PermissionManager;
 import org.ums.usermanagement.role.Role;
 import org.ums.usermanagement.user.User;
+import org.ums.usermanagement.user.UserManager;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;
@@ -88,6 +88,7 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
           JsonObjectBuilder typedItems = Json.createObjectBuilder();
           typedItems.add("type", "additionalPermission");
           typedItems.add("name", "AdditionalPermission");
+          typedItems.add("label", "Additional");
           typedItems.add("items", buildNavigation(permissions, pUriInfo));
           children.add(typedItems);
         }
@@ -191,6 +192,7 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
 
     typedItems.add("type", pRoleType);
     typedItems.add("name", pRole.getName());
+    typedItems.add("label", pRole.getLabel());
     typedItems.add("items", buildNavigation(permissions, pUriInfo));
     return typedItems;
   }

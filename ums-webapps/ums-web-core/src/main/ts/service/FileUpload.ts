@@ -24,6 +24,7 @@ module ums {
                     this.notify.success("Uploaded Successfully");
                     defer.resolve(response);
                 }).error((data) => {
+                    this.notify.error("Upload Failed.");
                 defer.resolve(data);
             });
             return defer.promise;

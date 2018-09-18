@@ -50,6 +50,28 @@ module ums {
       return defer.promise;
     }
 
+    public getCourseTeacherBySemesterAndTeacher(semesterId: number, teacherId: string): ng.IPromise<CourseTeacherInterface[]> {
+      let defer: ng.IDeferred<CourseTeacherInterface[]> = this.$q.defer();
+      this.httpClient.get(this.courseTeacherUrl + "/semesterId/" + semesterId + "/teacherId/" + teacherId, HttpClient.MIME_TYPE_JSON,
+          (response: CourseTeacherInterface[]) => {
+            defer.resolve(response);
+          });
+      return defer.promise;
+    }
+
+    public getCourseTeacherBySemesterAndCourseList(semesterId: number, courseIdList: string[]): ng.IPromise<CourseTeacherInterface[]> {
+      let defer: ng.IDeferred<CourseTeacherInterface[]> = this.$q.defer();
+      this.httpClient.post(this.courseTeacherUrl + "/semesterId/"+semesterId, courseIdList, HttpClient.MIME_TYPE_JSON)
+          .success((response: CourseTeacherInterface[]) => defer.resolve(response))
+          .error((response) => {
+            this.notify.error("Error in saving data");
+            console.error(response);
+            defer.resolve(response);
+          })
+      return defer.promise;
+    }
+
+
     public saveOrUpdateCourseTeacher(courseTeacherList: CourseTeacherInterface[]): ng.IPromise<CourseTeacherInterface[]> {
       let defer: ng.IDeferred<CourseTeacherInterface[]> = this.$q.defer();
       this.httpClient.put(this.courseTeacherUrl + "/saveOrUpdate", courseTeacherList, HttpClient.MIME_TYPE_JSON)

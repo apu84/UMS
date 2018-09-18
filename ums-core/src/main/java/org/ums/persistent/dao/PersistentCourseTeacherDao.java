@@ -14,10 +14,7 @@ import org.ums.util.UmsUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -63,6 +60,28 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
     String query = ALL_SECTIONS_FOR_A_COURSE;
     return mJdbcTemplate.query(query, new Object[] {pCourseId, pSemesterId, pTeacherId},
         new CourseTeacherRowMapperForAllSection());
+  }
+
+  @Override
+  public List<CourseTeacher> getCourseTeacher(int pSemesterId, List<String> pCourseIdList) {
+    if(pCourseIdList.size() == 0)
+      return new ArrayList<>();
+    String query = "select * from course_teacher where semester_id=:semesterId and course_id in (:courseIdList)";
+    Map parameterMap = new HashMap();
+    parameterMap.put("semesterId", pSemesterId);
+    parameterMap.put("courseIdList", pCourseIdList);
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new CourseTeacherRowMapper());
+  }
+
+  @Override
+  public List<CourseTeacher> getCourseTeacher(int pSemesterId, Integer pProgramId) {
+    String query =
+        "select * from COURSE_TEACHER where SEMESTER_ID=:semesterId and  COURSE_ID in ( "
+            + "  select course_id from MST_COURSE where OFFERED_TO_PROGRAM=:programId " + ")";
+    Map parameterMap = new HashMap();
+    parameterMap.put("semesterId", pSemesterId);
+    parameterMap.put("programId", pProgramId);
+    return mNamedParameterJdbcTemplate.query(query, parameterMap, new CourseTeacherRowMapper());
   }
 
   @Override
@@ -196,11 +215,13 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
 
   private Map getInsertOrUpdateParameters(MutableCourseTeacher pMutableCourseTeacher) {
     Map parameter = new HashMap();
-    parameter.put("id", pMutableCourseTeacher.getId());
+    parameter.put("id",
+        pMutableCourseTeacher.getId() == null ? mIdGenerator.getNumericId() : pMutableCourseTeacher.getId());
     parameter.put("courseId", pMutableCourseTeacher.getCourse().getId());
     parameter.put("semesterId", pMutableCourseTeacher.getSemester().getId());
     parameter.put("section", pMutableCourseTeacher.getSection());
-    parameter.put("teacherId", pMutableCourseTeacher.getTeacher().getId());
+    parameter.put("teacherId", pMutableCourseTeacher.getTeacherId() != null ? pMutableCourseTeacher.getTeacherId()
+        : pMutableCourseTeacher.getTeacher().getId());
     parameter.put("lastModified", UmsUtils.formatDate(new Date(), "YYYYMMDDHHMMSS"));
     return parameter;
   }

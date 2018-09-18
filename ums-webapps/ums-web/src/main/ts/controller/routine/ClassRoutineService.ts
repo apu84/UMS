@@ -72,6 +72,7 @@ module ums{
     public studentsYear: string;
     public studentsSemester: string;
     public enableEdit: boolean;
+    public sectionSpecific:boolean;
     public routineMapWithTimeAndDay: any;
     public courseList: Course[];
     public roomList: ClassRoom[];
@@ -87,6 +88,13 @@ module ums{
     public courseTeacherMapWithCourseIdAndSection: { [key: string]: CourseTeacherInterface[] }; // map[courseId]= CourseTeacher[];
     public courseTeacherWithSectionMap: { [key: string]: CourseTeacherInterface[] }; // map[courseId+section]= CourseTeacher[];
     public routineUrl: string = '/ums-webservice-academic/academic/routine';
+    showSectionWiseRoutine:boolean;
+    showTeacherWiseRoutine: boolean;
+    showRoomWiseRoutine:boolean;
+    selectedTeacher: Employee;
+
+
+
     public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
     constructor(private appConstants: any, private httpClient: HttpClient,
                 private $q:ng.IQService, private notify: Notify,
@@ -110,10 +118,11 @@ module ums{
       return defer.promise;
     }
 
-    public getRoutineForTeacher(employeeId: string):ng.IPromise<any>{
+    public getRoutineForTeacher(employeeId: string, semesterId: number):ng.IPromise<any>{
+      console.log("Semester id :"+ semesterId);
       var defer = this.$q.defer();
       var routines:any={};
-      this.httpClient.get("/ums-webservice-academic/academic/routine/routineForTeacher/employeeId/"+employeeId,'application/json',
+      this.httpClient.get("/ums-webservice-academic/academic/routine/routineForTeacher/employeeId/"+employeeId+'/semesterId/'+semesterId,'application/json',
           (data:any,etag:string)=>{
             routines = data.entries;
             defer.resolve(routines);
@@ -230,6 +239,35 @@ module ums{
             this.notify.error("Error in removing routine data");
             defer.resolve(undefined);
           })
+      return defer.promise;
+    }
+
+    public downloadRoutineTemplate():any{
+      let fileName: string = "RoutineTemplate";
+      let contentType: string = UmsUtil.getFileContentType("xls");
+      let url = this.routineUrl+"/routine-template";
+
+      this.httpClient.get(url, contentType,
+          (data:any, etag:string)=>{
+        UmsUtil.writeFileContent(data, contentType, fileName);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+          }, 'arraybuffer');
+    }
+
+    public uploadFile(formData: any): ng.IPromise<any> {
+      var defer = this.$q.defer();
+
+      var url = this.routineUrl+"/upload";
+      this.httpClient.post(url, formData, undefined)
+          .success((response) => {
+            this.notify.success("Routine template parsed successfully");
+            defer.resolve(response);
+          }).error((data) => {
+        console.error(data);
+      });
+
       return defer.promise;
     }
 

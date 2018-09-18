@@ -12,9 +12,13 @@ public interface EmployeeManager extends ContentManager<Employee, MutableEmploye
 
   List<Employee> getActiveTeachersOfDept(String deptId);
 
+  List<Employee> getActiveTeachers();
+
   List<Employee> getEmployees(String pDeptId, String pPublicationStatus);
 
   List<Employee> getEmployees(String pDepartmentId);
+
+  List<Employee> getEmployees(List<String> pEmployeeIdList);
 
   String getLastEmployeeId(String pDepartmentId, int pEmployeeType);
 

@@ -12,7 +12,9 @@ module ums {
     'ui.sortable',
     'ngHandsontableApp',
     "dirPaginationApp",
-    'ui.select'
+    'ui.select',
+      'ngMessages',
+    'smart-table'
   ]).run(function(ExpireToken){
 
   });

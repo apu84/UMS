@@ -11,7 +11,7 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Company;
 import org.ums.domain.model.immutable.accounts.Group;
 import org.ums.domain.model.mutable.accounts.MutableSystemGroupMap;
-import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
 import org.ums.enums.accounts.definitions.group.GroupType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.GroupManager;
@@ -60,7 +60,7 @@ public class PersistentSystemGroupMap implements MutableSystemGroupMap {
 
   @Override
   public String getModifierName() {
-    return mModifierName == null ? sPersonalInformationManager.get(mModifiedBy).getName() : mModifierName;
+    return mModifierName == null ? sPersonalInformationManager.get(mModifiedBy).getFullName() : mModifierName;
   }
 
   @Override

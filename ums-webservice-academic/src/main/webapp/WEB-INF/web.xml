@@ -72,26 +72,26 @@
     <init-param>
       <param-name>jersey.config.server.provider.packages</param-name>
       <param-value>
-        org.ums.dummy.webservice,
-        org.ums.resource,
-        org.ums.login,
-        org.ums.cachewarmer,
-        org.ums.navigation,
-        org.ums.filter.cors,
-        org.ums.academic.resource,
-        org.ums.academic.resource.student.gradesheet,
-        org.ums.readmission.student,
-        org.ums.payment
-        org.ums.report.resource,
-        org.ums.resource,
-        org.ums.response.type,
-        org.codehaus.jackson.jaxrs,
-        org.ums.exception,
-        org.ums.employee
-        org.ums.twofa,
-        org.ums.logs,
-        org.ums.usermanagement,
-        org.ums.punishment
+          org.ums.dummy.webservice,
+          org.ums.resource,
+          org.ums.login,
+          org.ums.cachewarmer,
+          org.ums.navigation,
+          org.ums.filter.cors,
+          org.ums.academic.resource,
+          org.ums.academic.resource.student.gradesheet,
+          org.ums.readmission.student,
+          org.ums.payment
+          org.ums.report.resource,
+          org.ums.resource,
+          org.ums.response.type,
+          org.codehaus.jackson.jaxrs,
+          org.ums.exception,
+          org.ums.ems
+          org.ums.twofa,
+          org.ums.logs,
+          org.ums.usermanagement,
+          org.ums.punishment
       </param-value>
     </init-param>
     <init-param>

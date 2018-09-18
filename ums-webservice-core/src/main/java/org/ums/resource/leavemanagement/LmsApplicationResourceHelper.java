@@ -201,7 +201,7 @@ public class LmsApplicationResourceHelper extends ResourceHelper<LmsApplication,
     List<AdditionalRolePermissions> rolePermissionsStream = mAdditionalRolePermissionsManager.getAdditionalRole(employee.getDepartment().getId()).stream().filter(r -> r.getRoleId() == RoleType.DEPT_HEAD.getId()).collect(Collectors.toList());
 
     // todo add more roles, currently mst_role table in db is not complete.
-    String message = "Leave Application from employee: " + employee.getPersonalInformation().getName() + " of department: "
+    String message = "Leave Application from employee: " + employee.getPersonalInformation().getFullName() + " of department: "
         + employee.getDepartment().getShortName() + " is waiting for your approval.";
     if ((rolePermissionsStream.size() > 0 ? rolePermissionsStream.get(0).getUserId().equals(user.getId()) : false)
         || user.getPrimaryRole().getId() == RoleType.COE.getId()

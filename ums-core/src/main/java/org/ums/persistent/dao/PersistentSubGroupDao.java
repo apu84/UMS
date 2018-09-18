@@ -51,6 +51,12 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator {
   }
 
   @Override
+  public List<SubGroup> getBySemesterAndExamType(int pSemesterId, int pExamType) {
+    String query = "SELECT * FROM SP_SUB_GROUP WHERE SEMESTER_ID=? AND EXAM_TYPE=?";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType}, new SubGroupTableBasedRowMapper());
+  }
+
+  @Override
   public int checkBySemesterGroupNoAndType(int pSemesterId, int pGroupNo, int pType) {
     String query = "SELECT COUNT(*) FROM SP_SUB_GROUP WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=?";
     return mJdbcTemplate.queryForObject(query, Integer.class, pSemesterId, pGroupNo, pType);
@@ -80,6 +86,11 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator {
   public List<Integer> create(List<MutableSubGroup> pMutableList) {
     int[] updates = mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamList(pMutableList));
     return IntStream.of(updates).boxed().collect(Collectors.toList());
+  }
+
+  @Override
+  public int update(List<MutableSubGroup> pMutableList) {
+    return mJdbcTemplate.batchUpdate(UPDATE_ONE + " where id=?", getUpdateParamList(pMutableList)).length;
   }
 
   @Override
@@ -138,6 +149,36 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator {
 
     return params;
 
+  }
+
+  private List<Object[]> getUpdateParamList(List<MutableSubGroup> pSubGroups) {
+    List<Object[]> params = new ArrayList<>();
+
+    for(SubGroup subGroup : pSubGroups) {
+      params.add(new Object[] {subGroup.getSemester().getId(), subGroup.getGroupNo(), subGroup.subGroupNo(),
+          subGroup.getGroupId(), subGroup.getPosition(), subGroup.getStudentNumber(), subGroup.getExamType(),
+          subGroup.getId()});
+    }
+
+    return params;
+
+  }
+
+  class SubGroupTableBasedRowMapper implements RowMapper<SubGroup> {
+    @Override
+    public SubGroup mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentSubGroup mSubGroup = new PersistentSubGroup();
+      mSubGroup.setId(pResultSet.getInt("ID"));
+      mSubGroup.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
+      mSubGroup.setGroupNo(pResultSet.getInt("GROUP_NO"));
+      mSubGroup.setSubGroupNo(pResultSet.getInt("SUB_GROUP_NO"));
+      mSubGroup.setGroupId(pResultSet.getInt("GROUP_ID"));
+      mSubGroup.setPosition(pResultSet.getInt("POSITION"));
+      mSubGroup.setStudentNumber(pResultSet.getInt("STUDENT_NUMBER"));
+      mSubGroup.setExamType(pResultSet.getInt("EXAM_TYPE"));
+      mSubGroup.setLastModified(pResultSet.getString("LAST_MODIFIED"));
+      return mSubGroup;
+    }
   }
 
   class SubGroupRowMapper implements RowMapper<SubGroup> {

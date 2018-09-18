@@ -15,6 +15,7 @@ public class RoleBuilder implements Builder<Role, MutableRole> {
   public void build(JsonObjectBuilder pBuilder, Role pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("name", pReadOnly.getName());
+    pBuilder.add("label", pReadOnly.getLabel());
   }
 
   @Override

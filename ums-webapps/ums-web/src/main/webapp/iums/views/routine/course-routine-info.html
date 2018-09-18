@@ -49,7 +49,7 @@
     <div class="col-md-12">
         <p><b>Course in routine</b></p>
     </div>
-    <div class="col-md-12">
+    <div class="col-md-12 list-group-short">
         <table class="table table-bordered table-striped">
             <thread>
                 <th>Day</th>
@@ -58,7 +58,7 @@
                 <th>Room No</th>
                 <th>Section</th>
             </thread>
-            <tbody>
+            <tbody >
             <tr ng-repeat="routine in vm.routineBasedOnCourse">
                 <td>{{vm.classRoutineService.weekDayMapWithId[routine.day]}}</td>
                 <td>{{routine.startTime}}</td>

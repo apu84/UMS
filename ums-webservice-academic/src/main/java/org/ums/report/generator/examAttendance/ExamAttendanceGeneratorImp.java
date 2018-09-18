@@ -2,14 +2,16 @@ package org.ums.report.generator.examAttendance;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
-import org.jvnet.hk2.internal.Collector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.ums.academic.resource.helper.QuestionCorrectionResourceHelper;
-import org.ums.domain.model.immutable.*;
+import org.ums.domain.model.immutable.AbsLateComingInfo;
+import org.ums.domain.model.immutable.ExpelledInformation;
+import org.ums.domain.model.immutable.Program;
+import org.ums.domain.model.immutable.StudentsExamAttendantInfo;
 import org.ums.domain.model.mutable.MutableQuestionCorrectionInfo;
-import org.ums.employee.personal.PersonalInformationManager;
+import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
 import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
 import org.ums.enums.common.EmployeeType;
@@ -21,7 +23,6 @@ import org.ums.report.itext.UmsPdfPageEventHelper;
 import org.ums.util.UmsUtils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.ParseException;
@@ -120,6 +121,13 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
 
   public void getHeader(Integer pSemesterId, Integer pExamType, String pExamDate, Document document,
       Font fontTimes11Normal, Font fontTimes12Bold, Font fontTimes9Bold) throws DocumentException {
+
+    String examDate = "";
+    try {
+      examDate = parseDate(pExamDate);
+    } catch(ParseException e) {
+      e.printStackTrace();
+    }
     UmsParagraph paragraph = null;
     Chunk chunk = null;
     String examDate = "";
@@ -247,8 +255,8 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
     }
     for(int i = 0; i < absentInfoList.size(); i++) {
       cell =
-          new UmsCell(new Phrase("" + mPersonalInformationManager.get(absentInfoList.get(i).getEmployeeId()).getName(),
-              fontTimes8Normal));
+          new UmsCell(new Phrase(""
+              + mPersonalInformationManager.get(absentInfoList.get(i).getEmployeeId()).getFullName(), fontTimes8Normal));
       cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
       absentInfoTable.addCell(cell);
       cell =
@@ -317,7 +325,8 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
     for(int i = 0; i < lateComingInfoList.size(); i++) {
       cell =
           new UmsCell(new Phrase(""
-              + mPersonalInformationManager.get(lateComingInfoList.get(i).getEmployeeId()).getName(), fontTimes8Normal));
+              + mPersonalInformationManager.get(lateComingInfoList.get(i).getEmployeeId()).getFullName(),
+              fontTimes8Normal));
       cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
       lateComingInfoTable.addCell(cell);
       cell =

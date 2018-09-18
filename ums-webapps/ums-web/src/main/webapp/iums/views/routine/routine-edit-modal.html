@@ -7,7 +7,9 @@
                 <h4 class="modal-title">Edit Slot (Day - {{vm.classRoutineService.selectedDay.name}} )</h4>
             </div>
             <div class="modal-body">
-                <div ui-view></div>
+                <div ng-if="vm.showSlotEditForm==true">
+                    <div routine-slot-edit-dir=""> </div>
+                </div>
                 <div class="row" ng-if="vm.showProgressBar">
                     <div class="col-md-12">
                         <div class="progress">

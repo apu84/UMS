@@ -1,3 +1,31 @@
+<style>
+    sample-show-hide {
+        transition: all linear 0.5s;
+    }
+
+    .sample-show-hide.ng-hide {
+        opacity: 0;
+    }
+
+    /*.animate-if {
+        background: white;
+    }*/
+
+    .animate-if.ng-enter, .animate-if.ng-leave {
+        transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    }
+
+    .animate-if.ng-enter,
+    .animate-if.ng-leave.ng-leave-active {
+        opacity: 0;
+    }
+
+    .animate-if.ng-leave,
+    .animate-if.ng-enter.ng-enter-active {
+        opacity: 1;
+    }
+
+</style>
 <div class="row">
     <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
         <i class="fa fa-angle-double-right fa-cx"></i></i>
@@ -116,13 +144,60 @@
                 <span
                         class="subtitle"></span></div>
             <div class="panel-body">
-                <div class="row" ng-if="vm.classRoutineService.routineData">
-                    <div ui-view></div>
+                <div class="row">
+                    <div class="col-md-12" align="right">
+                        <p><span style="cursor: pointer" title="section based routine" ng-click="vm.showSectionWiseRoutinePortion()">{{vm.classRoutineService.selectedTheorySection.name}}</span> |  <span style="cursor: pointer" title="teacher based routine" ng-click="vm.showTeacherWiseRoutinePortion()"><i class="fa fa-user" aria-hidden="true"></i></span>  | <span style="cursor: pointer" title="room based routine" ng-click="vm.showRoomWiseRoutinePortion()"><i class="fa fa-th" aria-hidden="true"></i> </span> | <span title="Download routine template" style="cursor: pointer;" ng-click="vm.classRoutineService.downloadRoutineTemplate()"> <i class="fa fa-download" aria-hidden="true"></i></span> | <span title="Upload routine template" data-toggle="modal" data-target="#uploadModal"  style="cursor: pointer;"> <i class="fa fa-upload" aria-hidden="true"></i> </span>||||<span title="Search for employee information" data-toggle="modal" data-target="#employeeSearchModal"  style="cursor: pointer;"> <i class="fa fa-graduation-cap" aria-hidden="true"></i></span></p>
+                    </div>
                 </div>
+                <div class="row" ng-if="vm.classRoutineService.showTeacherWiseRoutine">
+                    <div class="col-md-3"></div>
+                    <label class="col-md-3" align="right">Select Teacher</label>
+                    <div class="col-md-3">
+                        <ui-select theme="bootstrap"
+                                   data-ng-model="vm.classRoutineService.selectedTeacher" on-select="vm.courseTeacherSelected()"
+
+                        >
+                            <ui-select-match placeholder="Select Course Teacher">
+                                {{vm.classRoutineService.selectedTeacher.employeeName }} ({{vm.classRoutineService.selectedTeacher.deptOfficeName}})
+                            </ui-select-match>
+                            <ui-select-choices id="courseTeacher"
+                                               repeat="g in vm.courseTeacherList | filter:$select.search | limitTo:20">
+                                <small ng-bind-html="g.employeeName+' ('+g.deptOfficeName+')' | highlight:$select.search"></small>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <div class="row" ng-if="vm.classRoutineService.showRoomWiseRoutine">
+                    <div class="col-md-3"></div>
+                    <label class="col-md-3" align="right">Select Room No</label>
+                    <div class="col-md-3">
+                        <ui-select id="room" theme="bootstrap"
+                                   data-ng-model="vm.selectedRoom" on-select="vm.roomSelected()"
+                        >
+                            <ui-select-match placeholder="Select Room No">{{vm.selectedRoom.roomNo}}
+                            </ui-select-match>
+                            <ui-select-choices id="roomNo"
+                                               repeat="g in vm.roomList | filter:$select.search">
+                                <small ng-bind-html="g.roomNo | highlight:$select.search"></small>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <hr/>
+                <div class="row" ng-if="vm.showRoutineChart">
+                    <div routine-chart-dir></div>
+                </div>
+                <div
+                     data-ng-include="'views/routine/routine-template-upload.html'"></div>
+                <div
+                        data-ng-include="'views/routine/employee-search-modal.html'"></div>
             </div>
         </div>
     </div>
 </div>
+
 
 <script type="text/javascript">
     //    setTimeout(function () {$(".fa+.fa-chevron-down").tooltip({placement : 'top', trigger : 'hover', title : "Download Promotion List"});}, 100);

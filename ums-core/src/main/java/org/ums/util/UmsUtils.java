@@ -13,7 +13,6 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,6 +23,9 @@ import java.util.function.Predicate;
 public class UmsUtils {
   public static int FIRST = 1;
   public static int NO_VALUE = 0;
+  public static int TEACHER_EMPLOYMENT_TYPE = 1;
+  public static int ACTIVE_STATUS = 1;
+  public static int INACTIVE_STATUS = 0;
 
   public static String getNumberWithSuffix(final int pNumber) {
     String suffix = "";

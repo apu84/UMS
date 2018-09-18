@@ -1,6 +1,8 @@
 package org.ums.persistent.dao.accounts;
 
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -31,6 +33,8 @@ public class PersistentAccountDao extends AccountDaoDecorator {
   private JdbcTemplate mJdbcTemplate;
   private NamedParameterJdbcTemplate mNamedParameterJdbcTemplate;
   private IdGenerator mIdGenerator;
+
+  private Logger accountDaoLogger = LoggerFactory.getLogger(AccountDaoDecorator.class);
 
   public PersistentAccountDao(JdbcTemplate pJdbcTemplate, NamedParameterJdbcTemplate pNamedParameterJdbcTemplate,
       IdGenerator pIdGenerator) {
@@ -118,15 +122,8 @@ public class PersistentAccountDao extends AccountDaoDecorator {
 
   @Override
   public Account get(Long pId) {
-    String query = "select * from mst_account where id=:id";
-    try {
-      Map parameterMap = new HashMap();
-      parameterMap.put("id", pId);
-      return mNamedParameterJdbcTemplate.queryForObject(query, parameterMap, new PersistentAccountRowMapper());
-    } catch(EmptyResultDataAccessException e) {
-      e.printStackTrace();
-      return null;
-    }
+    String query = "select * from mst_account where id=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentAccountRowMapper());
   }
 
   @Override

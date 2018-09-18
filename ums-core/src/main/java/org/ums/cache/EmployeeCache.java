@@ -37,8 +37,18 @@ public class EmployeeCache extends ContentCache<Employee, MutableEmployee, Strin
   }
 
   @Override
+  public List<Employee> getActiveTeachers() {
+    return getManager().getActiveTeachers();
+  }
+
+  @Override
   public List<Employee> getEmployees(String pDeptId, String pPublicationStatus) {
     return getManager().getEmployees(pDeptId, pPublicationStatus);
+  }
+
+  @Override
+  public List<Employee> getEmployees(List<String> pEmployeeIdList) {
+    return getManager().getEmployees(pEmployeeIdList);
   }
 
   @Override

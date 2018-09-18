@@ -102,16 +102,18 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   }
 
   @Override
-  public List<Routine> getRoutineByTeacher(String teacherId) {
-    String query = SELECT_ALL_FOR_TEACHER;
-    return mJdbcTemplate.query(query, new Object[] {teacherId}, new RoutineRowMapper());
+  public List<Routine> getRoutineByTeacher(String teacherId, Integer pSemesterId) {
+    String query =
+        "select * from CLASS_ROUTINE where SEMESTER_ID=? and (COURSE_ID,SECTION) in ( "
+            + "select COURSE_ID,SECTION from COURSE_TEACHER where SEMESTER_ID=? and TEACHER_ID=?)  ORDER BY DAY, START_TIME";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pSemesterId, teacherId}, new RoutineRowMapper());
   }
 
   @Override
   public List<Routine> getRoutineBySemesterAndProgram(int pSemesterId, int pProgramId) {
     String query =
-        SELECT_ALL + " WHERE CLASS_ROUTINE.COURSE_ID=MST_COURSE.COURSE_ID  " + " and CLASS_ROUTINE.SEMESTER_ID=?  "
-            + " and program_id=?  ORDER BY CLASS_ROUTINE.DAY, class_routine.START_TIME";
+        "SELECT ROUTINE_ID,SEMESTER_ID,PROGRAM_ID,CLASS_ROUTINE.COURSE_ID,DAY,SECTION,CLASS_ROUTINE.YEAR,CLASS_ROUTINE.SEMESTER,START_TIME,END_TIME,DURATION,ROOM_ID,CLASS_ROUTINE.LAST_MODIFIED, SLOT_GROUP FROM CLASS_ROUTINE, MST_COURSE   WHERE CLASS_ROUTINE.COURSE_ID=MST_COURSE.COURSE_ID     and CLASS_ROUTINE.SEMESTER_ID=? "
+            + "              and program_id=?  ORDER BY CLASS_ROUTINE.DAY, class_routine.START_TIME";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramId}, new RoutineRowMapper());
   }
 

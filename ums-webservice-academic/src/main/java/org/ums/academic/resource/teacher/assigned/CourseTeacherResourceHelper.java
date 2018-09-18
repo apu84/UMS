@@ -14,6 +14,7 @@ import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.*;
+import java.util.zip.CheckedOutputStream;
 
 @Component
 public class CourseTeacherResourceHelper extends
@@ -80,22 +81,29 @@ public class CourseTeacherResourceHelper extends
 
   public JsonArray getCourseTeacher(Integer pSemesterId, String pCourseId, String pSection, UriInfo pUriInfo) {
     List<CourseTeacher> courseTeacherList = getContentManager().getCourseTeacher(pSemesterId, pCourseId, pSection);
-    JsonArrayBuilder courseTeacherArrayBuilder = Json.createArrayBuilder();
-    for(CourseTeacher courseTeacher : courseTeacherList) {
-      LocalCache localCache = new LocalCache();
-      JsonObjectBuilder courseTeacherObjectBuilder = Json.createObjectBuilder();
-      getBuilder().build(courseTeacherObjectBuilder, courseTeacher, pUriInfo, localCache);
-      courseTeacherArrayBuilder.add(courseTeacherObjectBuilder);
-    }
-    return courseTeacherArrayBuilder.build();
+    return getJsonArray(pUriInfo, courseTeacherList);
   }
 
   public JsonArray getCourseTeacher(Integer pProgramId, Integer pSemesterId, String pSection, int pYear, int pSemester,
       UriInfo pUriInfo) {
     List<CourseTeacher> courseTeacherList =
         getContentManager().getCourseTeacher(pProgramId, pSemesterId, pSection, pYear, pSemester);
+    return getJsonArray(pUriInfo, courseTeacherList);
+  }
+
+  public JsonArray getCourseTeacher(Integer pSemesterId, String pTeacherId, UriInfo pUriInfo) {
+    List<CourseTeacher> courseTeacherList = getContentManager().getAssignedCourses(pSemesterId, pTeacherId);
+    return getJsonArray(pUriInfo, courseTeacherList);
+  }
+
+  public JsonArray getCourseTeacher(Integer pSemesterId, List<String> pCourseIdList, UriInfo pUriInfo) {
+    List<CourseTeacher> courseTeacherList = getContentManager().getCourseTeacher(pSemesterId, pCourseIdList);
+    return getJsonArray(pUriInfo, courseTeacherList);
+  }
+
+  private JsonArray getJsonArray(UriInfo pUriInfo, List<CourseTeacher> pCourseTeacherList) {
     JsonArrayBuilder courseTeacherArrayBuilder = Json.createArrayBuilder();
-    for(CourseTeacher courseTeacher : courseTeacherList) {
+    for(CourseTeacher courseTeacher : pCourseTeacherList) {
       LocalCache localCache = new LocalCache();
       JsonObjectBuilder courseTeacherObjectBuilder = Json.createObjectBuilder();
       getBuilder().build(courseTeacherObjectBuilder, courseTeacher, pUriInfo, localCache);

@@ -1,5 +1,7 @@
 package org.ums.persistent.dao;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.persistent.model.PersistentTeacher;
@@ -10,11 +12,14 @@ import org.ums.domain.model.immutable.Teacher;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.List;
 
 public class PersistentTeacherDao extends TeacherDaoDecorator {
   static String SELECT_ALL =
       "SELECT TEACHER_ID, TEACHER_NAME, DESIGNATION_ID, DESIGNATION_NAME, DEPT_ID, DEPT_NAME, STATUS FROM MVIEW_TEACHERS ";
+
+  Logger mLogger = LoggerFactory.getLogger(PersistentTeacherDao.class);
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -30,7 +35,12 @@ public class PersistentTeacherDao extends TeacherDaoDecorator {
   @Override
   public Teacher get(String pId) {
     String query = SELECT_ALL + "WHERE TEACHER_ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new TeacherRowMapper());
+    try {
+      return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new TeacherRowMapper());
+    } catch(Exception e) {
+      mLogger.debug("Id error-->" + pId);
+      return null;
+    }
   }
 
   @Override

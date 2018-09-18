@@ -144,13 +144,13 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + ")tmp1 Order by Serial";
 
   String CHECK_HEAD_ROLE =
-      "Select 'head' Role, 1 Serial From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=? and Role_Id=22";
+      "Select 'head' Role, 1 Serial From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=? and Role_Id=1022";
 
-  String CHECK_COE_ROLE = "Select 'coe' Role, 1 Serial From USERS Where User_Id=? and Role_Id=71 " + "Union "
-      + "Select 'CoE' Role, 2 Serial From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=?  And Role_Id=71";
+  String CHECK_COE_ROLE = "Select 'coe' Role, 1 Serial From USERS Where User_Id=? and Role_Id=7301 " + "Union "
+      + "Select 'CoE' Role, 2 Serial From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=?  And Role_Id=7301";
 
-  String CHECK_VC_ROLE = "Select 'vc' Role, 1 Serial From USERS Where User_Id=? and Role_Id=99 " + "Union "
-      + "Select 'vc' Role, 2 Serial From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=?  And Role_Id=99";
+  String CHECK_VC_ROLE = "Select 'vc' Role, 1 Serial From USERS Where User_Id=? and Role_Id=7001 " + "Union "
+      + "Select 'vc' Role, 2 Serial From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=?  And Role_Id=7001";
 
   String CHART_DATA =
       "Select Grade_Letter,sum(Total) Total, max(Color) Color From   "
@@ -337,12 +337,13 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + "Select Scrutinizer From Preparer_Scrutinizer Where Semester_Id=? and  Course_Id=?) "
           + "and Status=1  "
           + "Union "
-          + "select user_id,'Head' Role from ADDITIONAL_ROLE_PERMISSIONS where role_id=22 And Sysdate<=Valid_To And Sysdate>=Valid_From "
+          + "select user_id,'Head' Role from ADDITIONAL_ROLE_PERMISSIONS where role_id=1022 And Sysdate<=Valid_To And Sysdate>=Valid_From "
           + "Union "
-          + "select user_id,'CoE' Role from ADDITIONAL_ROLE_PERMISSIONS where role_id=71 And Sysdate<=Valid_To And Sysdate>=Valid_From "
+          + "select user_id,'CoE' Role from ADDITIONAL_ROLE_PERMISSIONS where role_id=7301 And Sysdate<=Valid_To And Sysdate>=Valid_From "
           + "Union " + "Select User_Id,'CoE' Role From Users,EMPLOYEES "
           + "Where USERS.EMPLOYEE_ID=EMPLOYEES.EMPLOYEE_ID " + "And EMPLOYEES.STATUS=1 And USERS.STATUS=1 "
-          + "And Designation = 202 " + "Union " + "Select user_id,'VC' Role From Users Where Role_Id=99 and Status=1 ";
+          + "And Designation = 2061 " + "Union "
+          + "Select user_id,'VC' Role From Users Where Role_Id=7001 and Status=1 ";
 
   String MARKS_SUBMISSION_STAT = "Select tmp1.dept_id,short_name,program_id,PROGRAM_SHORT_NAME,  "
       + "marksSubmissionStat(?, nvl(program_id,0),tmp1.dept_id,?,?,'Self','Total') Total_Offered_To_Self, "

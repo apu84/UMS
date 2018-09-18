@@ -23,27 +23,27 @@ import org.ums.bank.designation.BankDesignationDao;
 import org.ums.bank.designation.BankDesignationManager;
 import org.ums.cache.*;
 import org.ums.cache.common.*;
-import org.ums.employee.academic.AcademicInformationManager;
-import org.ums.employee.academic.PersistentAcademicInformationDao;
-import org.ums.employee.additional.AdditionalInformationManager;
-import org.ums.employee.additional.AreaOfInterestInformationManager;
-import org.ums.employee.additional.PersistentAdditionalInformationDao;
-import org.ums.employee.additional.PersistentAreaOfInterestInformationDao;
-import org.ums.employee.award.AwardInformationManager;
-import org.ums.employee.award.PersistentAwardInformationDao;
-import org.ums.employee.experience.ExperienceInformationManager;
-import org.ums.employee.experience.PersistentExperienceInformationDao;
-import org.ums.employee.personal.PersistentPersonalInformationDao;
-import org.ums.employee.personal.PersonalInformationCache;
-import org.ums.employee.personal.PersonalInformationManager;
-import org.ums.employee.publication.PersistentPublicationInformationDao;
-import org.ums.employee.publication.PublicationInformationManager;
-import org.ums.employee.service.PersistentServiceInformationDao;
-import org.ums.employee.service.PersistentServiceInformationDetailDao;
-import org.ums.employee.service.ServiceInformationDetailManager;
-import org.ums.employee.service.ServiceInformationManager;
-import org.ums.employee.training.PersistentTrainingInformationDao;
-import org.ums.employee.training.TrainingInformationManager;
+import org.ums.ems.profilemanagement.academic.AcademicInformationManager;
+import org.ums.ems.profilemanagement.academic.PersistentAcademicInformationDao;
+import org.ums.ems.profilemanagement.additional.AdditionalInformationManager;
+import org.ums.ems.profilemanagement.additional.AreaOfInterestInformationManager;
+import org.ums.ems.profilemanagement.additional.PersistentAdditionalInformationDao;
+import org.ums.ems.profilemanagement.additional.PersistentAreaOfInterestInformationDao;
+import org.ums.ems.profilemanagement.award.AwardInformationManager;
+import org.ums.ems.profilemanagement.award.PersistentAwardInformationDao;
+import org.ums.ems.profilemanagement.experience.ExperienceInformationManager;
+import org.ums.ems.profilemanagement.experience.PersistentExperienceInformationDao;
+import org.ums.ems.profilemanagement.personal.PersistentPersonalInformationDao;
+import org.ums.ems.profilemanagement.personal.PersonalInformationCache;
+import org.ums.ems.profilemanagement.personal.PersonalInformationManager;
+import org.ums.ems.profilemanagement.publication.PersistentPublicationInformationDao;
+import org.ums.ems.profilemanagement.publication.PublicationInformationManager;
+import org.ums.ems.profilemanagement.service.PersistentServiceInformationDao;
+import org.ums.ems.profilemanagement.service.PersistentServiceInformationDetailDao;
+import org.ums.ems.profilemanagement.service.ServiceInformationDetailManager;
+import org.ums.ems.profilemanagement.service.ServiceInformationManager;
+import org.ums.ems.profilemanagement.training.PersistentTrainingInformationDao;
+import org.ums.ems.profilemanagement.training.TrainingInformationManager;
 import org.ums.formatter.DateFormat;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.*;
@@ -72,7 +72,6 @@ import org.ums.usermanagement.user.PersistentUserDao;
 import org.ums.usermanagement.user.UserCache;
 import org.ums.usermanagement.user.UserManager;
 import org.ums.usermanagement.userView.PersistentUserViewDao;
-import org.ums.usermanagement.userView.UserViewCache;
 import org.ums.usermanagement.userView.UserViewManager;
 import org.ums.util.Constants;
 
@@ -119,7 +118,9 @@ public class CoreContext {
   @Lazy
   EmployeeManager employeeManager() {
     EmployeeTransaction employeeTransaction = new EmployeeTransaction();
-    PersistentEmployeeDao persistentEmployeeDao = new PersistentEmployeeDao(mTemplateFactory.getJdbcTemplate());
+    PersistentEmployeeDao persistentEmployeeDao =
+        new PersistentEmployeeDao(mTemplateFactory.getJdbcTemplate(),
+            mNamedParameterJdbcTemplateFactory.getNamedParameterJdbcTemplate());
     employeeTransaction.setManager(persistentEmployeeDao);
     EmployeeCache employeeCache = new EmployeeCache(mCacheFactory.getCacheManager());
     employeeCache.setManager(employeeTransaction);
@@ -430,9 +431,7 @@ public class CoreContext {
 
   @Bean
   UserViewManager userViewManager() {
-    UserViewCache userViewCache = new UserViewCache(mCacheFactory.getCacheManager());
-    userViewCache.setManager(new PersistentUserViewDao(mTemplateFactory.getJdbcTemplate()));
-    return userViewCache;
+    return new PersistentUserViewDao(mTemplateFactory.getJdbcTemplate());
   }
 
   @Bean

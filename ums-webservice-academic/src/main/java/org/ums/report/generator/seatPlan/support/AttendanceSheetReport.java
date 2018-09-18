@@ -221,7 +221,7 @@ public class AttendanceSheetReport {
        */
       upperCell.addElement(yearSemesterPhrase);
 
-      Paragraph departmentP = new Paragraph("Department: ", lightFont);
+      Paragraph departmentP = new Paragraph("Program: ", lightFont);
       Paragraph departmentParagraph = new Paragraph(" " + seatPlanReportDto.getProgramName(), boldFont);
       // departmentParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,12));
       PdfPCell departmentCell = new PdfPCell(departmentParagraph);

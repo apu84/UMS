@@ -13,5 +13,5 @@
     <aop:aspectj-autoproxy proxy-target-class="true"/>
     <context:spring-configured/>
     <context:component-scan
-        base-package="org.ums.login,org.ums.logs,org.ums.cachewarmer,org.ums.report,org.ums.employee,org.ums.exception,org.ums.validator,org.ums.meeting,org.ums.resource,org.ums.builder,org.ums.report.generator,org.ums.common"/>
+        base-package="org.ums.login,org.ums.logs,org.ums.cachewarmer,org.ums.report,org.ums.ems,org.ums.exception,org.ums.validator,org.ums.meeting,org.ums.resource,org.ums.builder,org.ums.report.generator,org.ums.common"/>
 </beans>

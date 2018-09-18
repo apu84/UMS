@@ -45,4 +45,9 @@ public class SubGroupDaoDecorator extends ContentDaoDecorator<SubGroup, MutableS
   public int checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(int pSemesterId, int pGroupNo, int pType) {
     return getManager().checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(pSemesterId, pGroupNo, pType);
   }
+
+  @Override
+  public List<SubGroup> getBySemesterAndExamType(int pSemesterId, int pExamType) {
+    return getManager().getBySemesterAndExamType(pSemesterId, pExamType);
+  }
 }

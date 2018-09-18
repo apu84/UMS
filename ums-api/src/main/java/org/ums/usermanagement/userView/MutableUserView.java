@@ -2,16 +2,12 @@ package org.ums.usermanagement.userView;
 
 import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
-import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.mutable.MutableLastModifier;
-import org.ums.usermanagement.role.Role;
 
 import java.util.Date;
 
 public interface MutableUserView extends UserView, Editable<String>, MutableIdentifier<String>, MutableLastModifier {
   void setUserName(final String pUserName);
-
-  void setLoginId(final String pLoginId);
 
   void setGender(final String pGender);
 

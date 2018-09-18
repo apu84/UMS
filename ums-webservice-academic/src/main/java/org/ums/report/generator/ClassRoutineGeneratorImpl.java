@@ -98,7 +98,7 @@
  * paragraph = new Paragraph(department.getLongName().toUpperCase(),headingFont);
  * paragraph.setAlignment(Element.ALIGN_CENTER); document.add(paragraph);
  * 
- * paragraph = new Paragraph("Class Schedule ("+semester.getName()+")",headingFont);
+ * paragraph = new Paragraph("Class Schedule ("+semester.getFullName()+")",headingFont);
  * paragraph.setAlignment(Element.ALIGN_CENTER);
  * 
  * document.add(paragraph);
@@ -162,12 +162,12 @@
  * paragraph = new Paragraph(department.getLongName().toUpperCase(),headingFont);
  * paragraph.setAlignment(Element.ALIGN_CENTER); document.add(paragraph);
  * 
- * paragraph = new Paragraph("Class Schedule ("+semester.getName()+")",headingFont);
+ * paragraph = new Paragraph("Class Schedule ("+semester.getFullName()+")",headingFont);
  * paragraph.setAlignment(Element.ALIGN_CENTER);
  * 
  * document.add(paragraph);
  * 
- * paragraph = new Paragraph("TEACHER'S NAME: "+ teacher.getName().toUpperCase(),headingFont);
+ * paragraph = new Paragraph("TEACHER'S NAME: "+ teacher.getFullName().toUpperCase(),headingFont);
  * paragraph.setAlignment(Element.ALIGN_CENTER);
  * 
  * document.add(paragraph); document.add(new Paragraph(" "));

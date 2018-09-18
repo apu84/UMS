@@ -32,7 +32,7 @@ public class PersistentStudentsExamAttendantInfoDao extends StudentsExamAttendan
           + "using (select 1 from DUAL) s  "
           + "      on (D.PROGRAM_ID=? and D.SEMESTER_ID=? and D.YEAR=? and D.SEMESTER=? and D.EXAM_TYPE=? and D.EXAM_DATE = TO_DATE(?,'DD-MM-YYYY')  "
           + " )  "
-          + "   WHEN MATCHED THEN UPDATE SET D.ABSENT_STUDENT=?,D.REGISTERED_STUDENT=?,D.PRESENT_STUDENT=?  "
+          + "   WHEN MATCHED THEN UPDATE SET D.ABSENT_STUDENT=?  ,D.REGISTERED_STUDENT=?,D.PRESENT_STUDENT=?"
           + "   WHEN NOT MATCHED THEN  "
           + "   INSERT (ID,PROGRAM_ID,SEMESTER_ID,YEAR,SEMESTER,EXAM_TYPE,PRESENT_STUDENT,ABSENT_STUDENT,REGISTERED_STUDENT,EXAM_DATE)  "
           + "     VALUES (?,?,?,?,?,?,?,?,?,TO_DATE(?,'DD-MM-YYYY'))";

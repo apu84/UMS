@@ -71,13 +71,12 @@ module ums {
 
     export class Cataloging {
         public static $inject = ['$scope', '$q', 'notify', 'libConstants', 'supplierService', 'publisherService', 'contributorService', 'catalogingService',
-            'countryService', '$state', '$stateParams', 'HttpClient', 'contributor', 'publisher', 'supplier'];
+            'countryService', '$state', '$stateParams', 'HttpClient'];
 
         constructor(private $scope: ICatalogingScope,
                     private $q: ng.IQService, private notify: Notify, private libConstants: any,
                     private supplierService: SupplierService, private publisherService: PublisherService, private contributorService: ContributorService,
-                    private catalogingService: CatalogingService, private countryService: CountryService, private $state: any, private $stateParams: any, private httpClient: HttpClient,
-                    private contributor: any, private publisher: any, private supplier: any) {
+                    private catalogingService: CatalogingService, private countryService: CountryService, private $state: any, private $stateParams: any, private httpClient: HttpClient) {
 
             $scope.state = $state;
 
@@ -215,9 +214,33 @@ module ums {
             // this.initializeDatePickers();
             this.setRecordHeaderTitle();
 
-            this.$scope.contributorList = contributor;
+            /*this.$scope.contributorList = contributor;
             this.$scope.supplierList = supplier;
             this.$scope.publisherList = publisher;
+            this.loadCountries();
+            $scope.showSupplierSelect2 = true;
+            $scope.showPublisherSelect2 = true;
+            $scope.showContributorSelect2 = true;*/
+
+            if(localStorage.getItem("contributors")){
+                $scope.contributorList = JSON.parse(localStorage.getItem("contributors"));
+            }
+            else{
+                this.getAllContributors();
+            }
+            if(localStorage.getItem("suppliers")){
+                $scope.supplierList = JSON.parse(localStorage.getItem("suppliers"));
+            }
+            else{
+                this.getAllSuppliers();
+            }
+            if(localStorage.getItem("publishers")){
+                $scope.publisherList = JSON.parse(localStorage.getItem("publishers"));
+            }
+            else{
+                this.getAllPublishers();
+            }
+
             this.loadCountries();
             $scope.showSupplierSelect2 = true;
             $scope.showPublisherSelect2 = true;
@@ -739,6 +762,7 @@ module ums {
             this.supplierService.fetchAllSuppliers().then((response: any) => {
                 this.$scope.supplierList = response.entries;
                 this.$scope.showSupplierSelect2 = true;
+                this.setLocalStorageItem("suppliers", JSON.stringify(response.entries));
             }, function errorCallback(response) {
                 this.notify.error(response);
             });
@@ -749,15 +773,29 @@ module ums {
             this.publisherService.fetchAllPublishers().then((response: any) => {
                 this.$scope.publisherList = response.entries;
                 this.$scope.showPublisherSelect2 = true;
+                this.setLocalStorageItem("publishers", JSON.stringify(response.entries));
             }, function errorCallback(response) {
                 this.notify.error(response);
             });
+        }
+
+        private setLocalStorageItem(key: string, value: any): void{
+            localStorage.setItem(key, value);
+        }
+
+        private getLocalStorageItem(key: string): any{
+            return localStorage.getItem(key);
+        }
+
+        private removeLocalStorageItem(key: string): void{
+            return localStorage.removeItem(key);
         }
 
         private getAllContributors(): void {
             this.contributorService.fetchAllContributors().then((response: any) => {
                 this.$scope.contributorList = response.entries;
                 this.$scope.showContributorSelect2 = true;
+                this.setLocalStorageItem("contributors", JSON.stringify(response.entries));
             }, function errorCallback(response) {
                 this.notify.error(response);
             });
@@ -829,9 +867,9 @@ module ums {
                             Utils.setSelect2Value("recordContributorDiv" + i, "contributor" + i, text[i]);
                         }
                     }
-                }, 2000);
+                }, 3000);
                 this.$scope.showContributorLoader = false;
-            }, 3000);
+            }, 3500);
         }
 
         private loadCountries(): void {

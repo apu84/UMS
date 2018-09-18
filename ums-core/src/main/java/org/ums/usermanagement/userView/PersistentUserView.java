@@ -1,14 +1,7 @@
 package org.ums.usermanagement.userView;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.util.StringUtils;
 import org.ums.context.AppContext;
-import org.ums.domain.model.immutable.Department;
-import org.ums.manager.DepartmentManager;
-import org.ums.usermanagement.role.Role;
-import org.ums.usermanagement.role.RoleManager;
-import org.ums.usermanagement.user.MutableUser;
-import org.ums.usermanagement.user.UserManager;
 
 import java.util.Date;
 
@@ -21,7 +14,6 @@ public class PersistentUserView implements MutableUserView {
   }
 
   private String mId;
-  private String mLoginId;
   private String mUserName;
   private String mGender;
   private Date mDateOfBirth;
@@ -41,7 +33,6 @@ public class PersistentUserView implements MutableUserView {
 
   public PersistentUserView(final PersistentUserView persistentUserView) {
     mId = persistentUserView.getId();
-    mLoginId = persistentUserView.getLoginId();
     mUserName = persistentUserView.getUserName();
     mGender = persistentUserView.getGender();
     mDateOfBirth = persistentUserView.getDateOfBirth();
@@ -79,11 +70,6 @@ public class PersistentUserView implements MutableUserView {
   @Override
   public void setUserName(String pUserName) {
     mUserName = pUserName;
-  }
-
-  @Override
-  public void setLoginId(String pLoginId) {
-    mLoginId = pLoginId;
   }
 
   @Override
@@ -152,11 +138,6 @@ public class PersistentUserView implements MutableUserView {
   @Override
   public String getUserName() {
     return mUserName;
-  }
-
-  @Override
-  public String getLoginId() {
-    return mLoginId;
   }
 
   @Override

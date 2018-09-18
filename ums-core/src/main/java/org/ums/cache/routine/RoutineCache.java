@@ -22,8 +22,8 @@ public class RoutineCache extends ContentCache<Routine, MutableRoutine, Long, Ro
   }
 
   @Override
-  public List<Routine> getRoutineByTeacher(String teacherId) {
-    return getManager().getRoutineByTeacher(teacherId);
+  public List<Routine> getRoutineByTeacher(String teacherId, Integer pSemesterId) {
+    return getManager().getRoutineByTeacher(teacherId, pSemesterId);
   }
 
   @Override
