@@ -355,12 +355,25 @@ module ums {
             let id = this.userId;
             let photoContent: any = $("#userPhoto").contents();
             let image = photoContent.prevObject[0].files[0];
-            this.getFormData(image, id).then((formData) => {
-                this.FileUpload.uploadPhoto(formData).then(() => {
-                    let that = this;
-                    that.test = true;
-                });
-            });
+            console.log(image.type);
+            if(image) {
+                if(image.type.startsWith("image")) {
+                    this.getFormData(image, id).then((formData) => {
+                        this.FileUpload.uploadPhoto(formData).then(() => {
+                            let that = this;
+                            that.test = true;
+                        });
+                    });
+                }
+                else{
+                    this.notify.error("File format is not correct. [png/jpg] is allowed");
+                    this.test = true;
+                }
+            }
+            else{
+                this.notify.error("No image found");
+                this.test = true;
+            }
         }
 
         private getFormData(file, id): ng.IPromise<any> {
