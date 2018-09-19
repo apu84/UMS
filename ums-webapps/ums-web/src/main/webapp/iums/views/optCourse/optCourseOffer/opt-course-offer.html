@@ -1,0 +1,427 @@
+<style xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+   fieldset.scheduler-border {
+      border: 1px groove #ddd !important;
+      padding: 0 1.4em 1.4em 1.4em !important;
+      margin: 0 0 1.5em 0 !important;
+      -webkit-box-shadow: 0px 0px 0px 0px #000;
+      box-shadow: 0px 0px 0px 0px #000;
+   }
+
+
+
+   legend.scheduler-border {
+      font-size: 1.2em !important;
+      font-weight: bold !important;
+      text-align: left !important;
+      width: auto;
+      padding: 0 10px;
+      border-bottom: none;
+   }
+
+
+   .btn-circle {
+      width: 30px;
+      height: 30px;
+      padding: 6px 0px;
+      border-radius: 15px;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.42857;
+   }
+   .btn-xs, .btn-group-xs > .btn {
+      padding: 1px 5px !important;
+   }
+
+   .jqdragndrop-drop {
+      transition: background .2s ease;
+      background: rgba(0, 0, 0, .3);
+   }
+
+   .jqdragndrop-dropHover {
+      box-shadow: 0 0 20px rgba(0, 0, 0, .2);
+      background: rgba(0, 0, 0, .5);
+   }
+   ul.nav.nav-tabs.ul-edit li.active a {
+      background: #488C6C !important;
+   }
+   ul.nav.nav-tabs.ul-edit {
+      border-bottom: 5px solid #488C6C !important;
+   }
+   .list {
+      list-style: none outside none;
+      margin: 10px 0 30px;
+   }
+
+
+
+   /***  Extra ***/
+
+   body {
+      font-family: Verdana, 'Trebuchet ms', Tahoma;
+   }
+
+
+</style>
+
+<div class="row" >
+   <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+      <i class="fa fa-angle-double-right fa-cx"></i></i>
+   </div>
+   <div class="panel panel-green" id="leftDiv">
+      <div class="panel-heading">
+         <h3 class="panel-title">Select </h3>
+      </div>
+      <div class="panel-body pan">
+         <form action="" class="form-horizontal">
+            <div class="form-body pal">
+               <div class="form-group">
+                  <label class="col-md-4 control-label">Program</label>
+                  <div class="col-md-8">
+                     <select
+                             class="form-control required"
+                             data-ng-options="prog.shortName for prog in vm.programs track by prog.id"
+                             data-ng-model="vm.program"
+                             data-ng-change="vm.changeProgram(vm.program)"
+                     >
+                     </select>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label class="col-md-4 control-label">Semester</label>
+                  <div class="col-md-8">
+                     <select
+                             class="form-control required"
+                             name="semester"
+                             id="semester"
+                             data-ng-options="semester.name for semester in vm.semesters track by semester.id"
+                             data-ng-model="vm.semester"
+                             data-ng-change="vm.semesterChanged(vm.semester)"
+                     >
+                     </select>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label class="col-md-4 control-label">Y-S</label>
+                  <div class="col-md-8">
+                     <select
+                             class="form-control required"
+                             name="meritType"
+                             id="meritType"
+                             data-ng-options="ys.name for ys in vm.yearSemList track by ys.id"
+                             data-ng-model="vm.yearSem"
+                             data-ng-change="vm.changeYearSem(vm.yearSem)"
+                     >
+
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="form-actions text-right pal">
+               <button type="button" data-ng-click="vm.search()" class="btn btn-success">Search</button>
+            </div>
+         </form>
+      </div>
+   </div>
+
+   <div id="rightDiv">
+      <div class="panel">
+         <div class="panel-heading">
+            <div class="row">
+               <div class="col-md-9">
+                  <div>Optional Course</div>
+               </div>
+            </div>
+         </div>
+         <div class="panel-body">
+            <div>
+               <div class="row">
+                  <div class="col-md-4">
+                     <fieldset class="scheduler-border">
+                        <legend class="scheduler-border">Optional Courses</legend>
+                        <div>
+                           <div ui-sortable="vm.draggableOptions"
+                                class="draggable-element-container"
+                                data-ng-repeat="draggableArray in vm.draggables track by $index"
+                                ng-model="draggableArray.courses">
+                              <div>
+                                 <div style="padding: 5px">
+                                    <span  class="badge badge-dark"><b> {{draggableArray.groupName}}</b></span>
+                                 </div>
+                                 <table class="table table-hover table-condensed" >
+                                    <thead>
+                                    <tr>
+                                       <td width="2%"><b>#</b></td>
+                                       <td width="25%"><b>Course No</b></td>
+                                       <td width="50%"><b>Course Title</b></td>
+                                       <td width="10%"><b>CrHr</b></td>
+                                       <td width="23%"><b>Type</b></td>
+                                    </tr>
+                                    </thead>
+                                 </table>
+                              </div>
+                              <table ng-repeat="d in draggableArray.courses track by $index" class="table table-hover table-condensed">
+                                 <tbody>
+                                 <!-- color codes
+                                 #D6FED7.#13F517,FCF2F2.#C14242
+                                 -->
+                                 <tr data-ng-style="d.statusId==1 ? {'background-color':'#F0FFF0'}:{'background-color':'#FCF2F2'}" style="cursor: move"
+                                     data-ng-disabled="d.statusId==1 ? true:false">
+                                    <td width="2%" >{{$index+1}}</td>
+                                    <td width="25%"><b>{{d.no}}</b></td>
+                                    <td width="50%">{{d.title}}</td>
+                                    <td width="10%">{{d.crHr}}</td>
+                                    <td width="23%">
+                                       <span data-ng-if="d.courseType=='THEORY'" class="badge badge-success">{{d.courseType}}</span>
+                                       <span data-ng-if="d.courseType=='SESSIONAL'" class="badge badge-warning">{{d.courseType}}</span></td>
+                                 </tr>
+                                 </tbody>
+                              </table>
+
+                           </div>
+
+                        </div>
+                     </fieldset>
+                     </div>
+
+                  <div class="col-md-8">
+                     <fieldset class="scheduler-border">
+                        <legend class="scheduler-border">Call For Application</legend>
+                        <div class="row">
+                           <div class="col-md-12" align="right" style="padding-bottom: 5px">
+                              <button type="button"
+                                      data-toggle="modal"
+                                      data-target="#myModal"
+                                      class="btn btn-light btn-xs"><span  class="glyphicon glyphicon-plus"></span></button>
+                           </div>
+                        </div>
+                        <div>
+                           <div class="control-group">
+                              <table width="100%">
+                                 <tr data-ng-repeat="course in vm.optOfferedCourseList" data-ng-if="$index % 1 == 0" >
+                                    <td ng-repeat="course in vm.optOfferedCourseList.slice($index, $index + 1)" style="vertical-align: top">
+                                       <div ui-sortable="vm.sortableOptions1" class="{{course.groupName}}" ng-model="vm.selectedComponents1" style="border: 1px dashed #a2a7ae;padding: 10px">
+                                          <div>
+                                             <div class="row" style="background-color: #FAFAFA">
+                                                <div class="col-md-4">
+                                                   <span  class="badge badge-dark"><b>{{course.groupName}}</b></span>
+                                                </div>
+                                                <div class="col-md-2">
+                                                   <p data-ng-hide="vm.isSubGroupAvailable" >
+                                                      <b>Total Applied: {{0}}</b>
+                                                   </p>
+
+                                                </div>
+                                                <div class="col-md-2" >
+                                                   <p data-ng-hide="vm.isSubGroupAvailable">
+                                                   <b>No. of Seats: {{30}}</b>
+                                                   </p>
+                                                </div>
+                                                <div class="col-md-2" >
+                                                   <span data-ng-if="course.isMandatory==true"  data-ng-hide="vm.isSubGroupAvailable" class="badge badge-danger pull-right"><span class="glyphicon glyphicon-check"></span>{{" M"}}</span>
+                                                   <span data-ng-if="course.isMandatory!=true" data-ng-hide="vm.isSubGroupAvailable" class="badge badge-danger pull-right"><span class="glyphicon glyphicon-time"></span>{{" O/P"}}</span>
+                                                </div>
+                                                <div class="col-md-2" align="right">
+                                                   <a href="" class="btn btn-xs btn-default btn-round"
+                                                      data-ng-click="vm.removeMainGroup(course.groupName)">
+                                                      <i class="fa fa-times" style="color: red;"></i>
+                                                   </a>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <table width="100%" class="table table-hover table-condensed">
+                                             <thead data-ng-hide="vm.isSubGroupAvailable">
+                                             <tr>
+                                                <th width="2%">#</th>
+                                                <th width="65%">Course Details</th>
+                                                <th width="8%">crHr</th>
+                                                <th width="20%">Course Type</th>
+                                                <th width="5%">Remove</th>
+                                             </tr>
+                                             </thead>
+                                                <tbody data-ng-hide="vm.isSubGroupAvailable">
+                                                <tr data-ng-repeat="app in course.courses track by $index">
+                                                   <td width="2%">{{$index + 1}}</td>
+                                                   <td width="65%">{{app.title}}
+                                                      <b>&nbsp;&nbsp;&nbsp;{{"  ("+app.no+")  "}}&nbsp;&nbsp;&nbsp;</b>
+                                                   </td>
+                                                   <td  width="8%">
+                                                      <b>{{app.crHr}}</b>
+                                                   </td>
+                                                   <td width="20%">
+                                                      <span data-ng-if="app.courseType=='THEORY'" class="badge badge-success">{{app.courseType}}</span>
+                                                      <span data-ng-if="app.courseType=='SESSIONAL'" class="badge badge-warning">{{app.courseType}}</span></td>
+                                                   <td width="5%">
+                                                      <button type="button"
+                                                              data-ng-click="vm.deleteItems(course.groupName,$index,app.id)"
+                                                              class="btn btn-default btn-sm">
+                                                         <span class="glyphicon glyphicon-trash"></span>
+                                                      </button>
+                                                   </td>
+                                                </tr>
+                                                </tbody>
+                                             <div style="padding-top: 0px" data-ng-if="vm.isSubGroupAvailable" align="right">
+                                                <button  type="button"
+                                                         data-toggle="modal"
+                                                         data-target="#myModalSub"
+                                                         data-ng-click="vm.getParentGrpId(course.groupName,course.index,course)"
+                                                         class="btn btn-light btn-xs"><span class="glyphicon glyphicon-folder-open"></span></button>
+                                             </div>
+                                             <br>
+                                             <div style="padding-left: 40px">
+                                                <table width="100%" data-ng-show="vm.isSubGroupAvailable" >
+                                                   <tr data-ng-repeat="subCourses in course.subGrpCourses" data-ng-if="$index % 1 == 0" >
+                                                      <td ng-repeat="subApp in course.subGrpCourses.slice($index, $index + 1)" style="vertical-align: top">
+                                                         <div ui-sortable="vm.sortableOptions1" class="{{subApp.groupName}}" ng-model="vm.selectedComponents1" style="border: 1px solid black">
+
+                                                            <div style="padding-left: 20px">
+                                                               <div>
+                                                                  <div class="row">
+                                                                     <div class="col-md-4" style="background-color: #FAFAFA">
+                                                                        <span  class="badge badge-info"><b>{{subApp.groupName}}</b></span>
+                                                                     </div>
+                                                                     <div class="col-md-2" style="background-color: #FAFAFA">
+                                                                        <b>Total Applied: {{0}}</b>
+                                                                     </div>
+                                                                     <div class="col-md-2" style="background-color: #FAFAFA">
+                                                                        <b>No. of Seats: {{0}}</b>
+                                                                     </div>
+                                                                     <div class="col-md-2" style="background-color: #FAFAFA">
+                                                                        <span class="badge badge-danger pull-right"><span class="glyphicon glyphicon-check"></span>{{" N/R"}}</span>
+                                                                     </div>
+                                                                     <div class="col-md-2" style="background-color: #FAFAFA" align="right">
+                                                                        <a class="btn btn-xs btn-default btn-round"
+                                                                           data-ng-click="vm.removeSubGroup(course.groupName,subApp.groupName)">
+                                                                           <i class="fa fa-times" style="color: blue;"></i>
+                                                                        </a>
+                                                                     </div>
+
+                                                                  </div>
+                                                               </div>
+                                                            </div>
+                                                            <table class="table table-hover table-condensed" width="100%">
+                                                               <thead>
+                                                               <tr>
+                                                                  <th width="2%">#</th>
+                                                                  <th width="65%">Course Details</th>
+                                                                  <th width="8%" > crHr</th>
+                                                                  <th width="20%">Course Type</th>
+                                                                  <th width="5%">Remove</th>
+                                                               </tr>
+                                                               </thead>
+                                                               <tbody>
+                                                               <tr data-ng-repeat="app in subApp.courses track by $index">
+                                                                  <td width="2%">{{$index + 1}}</td>
+                                                                  <td width="65%">{{app.title}}
+                                                                     <b>&nbsp;&nbsp;&nbsp;{{"  ("+app.no+")  "}}&nbsp;&nbsp;&nbsp;</b>
+                                                                  </td>
+                                                                  <td width="8%" >
+                                                                     <b>{{app.crHr}}</b>
+                                                                  </td>
+                                                                  <td width="20%">
+                                                                     <span data-ng-if="app.courseType=='THEORY'" class="badge badge-success">{{app.courseType}}</span>
+                                                                     <span data-ng-if="app.courseType=='SESSIONAL'" class="badge badge-warning">{{app.courseType}}</span>
+                                                                  </td>
+                                                                  <td width="5%">
+                                                                     <button type="button"
+                                                                             data-ng-click="vm.deleteSubItems(course.groupName,subApp.groupName,$index,app.id)"
+                                                                             class="btn btn-default btn-sm">
+                                                                        <span class="glyphicon glyphicon-trash"></span>
+                                                                     </button>
+                                                                  </td>
+                                                               </tr>
+                                                               </tbody>
+                                                            </table>
+                                                         </div>
+                                                         <br><br>
+                                                      </td>
+                                                   </tr>
+                                                </table>
+                                             </div>
+                                             <br><br>
+                                          </table>
+                                       </div>
+                                    </td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </div>
+                     </fieldset>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!--  End  -->
+      </div>
+   </div>
+</div>
+
+<div class="modal fade" id="myModal" role="dialog">
+   <!--   <div class="modal-backdrop"> --->
+   <div class="modal-dialog  modal-md">
+      <!-- Modal content-->
+      <div class="modal-content">
+         <div class="modal-header" >
+            <button type="button"  data-ng-click="vm.reset()" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Create Group</h4>
+         </div>
+         <div class="modal-body">
+            <div>
+               <div class="row">
+                  <div class="col-md-8" >
+                     <input type="text"
+                            class="form-control required"
+                            id="rstudenid"
+                            style="width: 70%";
+                            placeholder="Enter Group Name"
+                            data-ng-model="vm.groupName"
+                     />
+                  </div>
+                  <div class="col-md-2" data-ng-hide="vm.isSubGroupAvailable">
+                     <p>Mandatory: </p>
+                  </div>
+                  <div class="col-md-2" data-ng-hide="vm.isSubGroupAvailable">
+                     <input type="checkbox" ng-model="vm.isMandatory">
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-info"  data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-success" data-ng-click="vm.addOfferedCourse()" data-dismiss="modal">Confirm</button>
+
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="modal fade" id="myModalSub" role="dialog">
+   <!--   <div class="modal-backdrop"> --->
+   <div class="modal-dialog  modal-md">
+      <!-- Modal content-->
+      <div class="modal-content">
+         <div class="modal-header" >
+            <button type="button"  data-ng-click="vm.reset()" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Create Sub Group</h4>
+         </div>
+         <div class="modal-body">
+            <div>
+               <div class="row">
+                  <div class="col-md-8" >
+                     <input type="text"
+                            class="form-control required"
+                            style="width: 100%";
+                            placeholder="Enter Group Name"
+                            data-ng-model="vm.subGroupName"
+                     />
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-info"  data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-success" data-ng-click="vm.subGroup()" data-dismiss="modal">Confirm</button>
+
+         </div>
+      </div>
+   </div>
+</div>

@@ -224,6 +224,8 @@
 /// <reference path='controller/dept/TeachersRoutine.ts'/>
 /// <reference path='controller/dept/RoomBasedRoutine.ts'/>
 /// <reference path='controller/dept/StudentsRoutine.ts'/>
+/// <reference path='controller/optCourse/optCourseOffer/optCourseOffer.ts'/>
+/// <reference path='controller/optCourse/optCourseOffer/optCourseOfferService.ts'/>
 
 /// <reference path='controller/common/academic/ClassRoomInfo.ts'/>
 /// <reference path='controller/common/academic/ExamRoutine.ts'/>

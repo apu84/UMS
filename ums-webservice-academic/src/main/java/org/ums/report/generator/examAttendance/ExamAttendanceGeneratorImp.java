@@ -80,7 +80,7 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PdfWriter writer = PdfWriter.getInstance(document, baos);
     ParagraphBorder border = new ParagraphBorder();
-    writer.setPageEvent(new EmpAttendanceReportHeaderAndFooter());
+   // writer.setPageEvent(new EmpAttendanceReportHeaderAndFooter());
     writer.setPageEvent(border);
 
     Font fontTimes11Normal = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11);
@@ -130,7 +130,6 @@ class ExamAttendanceGeneratorImp implements ExamAttendanceGenerator {
     }
     UmsParagraph paragraph = null;
     Chunk chunk = null;
-
     paragraph = new UmsParagraph();
     document.add(paragraph);
 

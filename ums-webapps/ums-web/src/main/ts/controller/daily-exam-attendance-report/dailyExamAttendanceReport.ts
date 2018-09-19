@@ -67,9 +67,14 @@ module ums{
                 reg=data;
                 this.examInfo=reg;
             });
+            console.log("Exam Info");
+            console.log(this.examInfo);
+            console.log("------");
         }
         private  save():void {
            var json:any = this.convertToJson(this.examInfo);
+           console.log("convert to json");
+           console.log(json);
            this.dailyExamAttendanceReportService.addStudentAttendantInfo(json).then((data)=>{
                this.getData();
            });

@@ -12,7 +12,6 @@ module ums{
 
     }
 
-
     public fetchProgram(programType:number):ng.IPromise<any>{
       console.log("in the service");
       console.log(programType);

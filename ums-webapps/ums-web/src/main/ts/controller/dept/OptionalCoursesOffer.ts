@@ -33,6 +33,10 @@ module ums {
     type:string;
     students:Array<IOptStudent>;
   }
+  interface IOptCourseList{
+    groupId:number;
+    courses:IOptCourse[];
+  }
   interface IOptCourse {
     id: string;
     index: number;
@@ -112,7 +116,7 @@ module ums {
         applicationCourses: Array<IOptCourse>(),
         rejectedStudents: Array<IOptStudent>(),
         approvedCourses: Array<IOptCourse>(),
-        optionalCourses: Array<IOptCourse>(),
+        optionalCourses: Array<IOptCourseList>(),
         sections: Array<ISection>(),
         statistics: Array<IOptStatistics>(),
         targetCourseIdForStudentShifting:'',
@@ -205,30 +209,43 @@ module ums {
     }
 
     private showCourses():void {
+      Utils.expandRightDiv();
 
       this.getStatistics(this.urlPlaceholderReplace(map["statistics_url"])).then((statArr:Array<IOptStatistics>)=> {
+        console.log("Statistical");
+          console.log(statArr);
         this.$scope.optional.statistics = statArr;
       });
 
       this.getCrHrInfo(this.urlPlaceholderReplace(map["crhr_url"])).then((CrHr:ICrHr)=> {
+        console.log("CrHr");
         console.log(CrHr);
         this.$scope.CrHr= CrHr;
       });
 
 
       this.getCourses(this.urlPlaceholderReplace(map["approved_call4Application_url"])).then((optCourseArr:Array<IOptCourse>)=> {
+          console.log("approvedCallForApplicationCourses");
+          console.log(optCourseArr);
         this.$scope.optional.approvedCallForApplicationCourses = optCourseArr;
       });
 
       this.getCourses(this.urlPlaceholderReplace(map["application_url"])).then((optCourseArr:Array<IOptCourse>)=> {
+          console.log("call for application");
+          console.log(optCourseArr);
         this.$scope.optional.applicationCourses = optCourseArr;
       });
 
       this.getCourses(this.urlPlaceholderReplace(map["approved_url"])).then((optCourseArr:Array<IOptCourse>)=> {
+          console.log("approved-Courses");
+          console.log(optCourseArr);
         this.$scope.optional.approvedCourses = optCourseArr;
 
-        this.getCourses(this.urlPlaceholderReplace(map["optional_url"])).then((optCourseArr:Array<IOptCourse>)=> {
+        this.getOptCourses(this.urlPlaceholderReplace(map["optional_url"])).then((optCourseArr:Array<IOptCourseList>)=> {
+            console.log("*******Optional Courses*******");
+            console.log(optCourseArr);
           this.$scope.optional.optionalCourses = optCourseArr;
+          console.log(this.$scope.optional.optionalCourses);
           for (var ind in this.$scope.optional.optionalCourses) {
             var course:IOptCourse = this.$scope.optional.optionalCourses[ind];
             course.approved = false;
@@ -248,7 +265,7 @@ module ums {
 
           for (var ind1 in this.$scope.optional.approvedCourses) {
             var course1:IOptCourse = this.$scope.optional.approvedCourses[ind1];
-            for (var ind2 in this.$scope.optional.optionalCourses) {
+            for (var ind2 in this.$scope.optional.optionalCourses.courses) {
               var course2:IOptCourse = this.$scope.optional.optionalCourses[ind2];
               if (course1.id == course2.id) {
                 course2.approved = true;
@@ -261,9 +278,6 @@ module ums {
           }
         });
       });
-
-
-
     }
 
 
@@ -280,6 +294,19 @@ module ums {
           });
       return defer.promise;
     }
+      private getOptCourses(url:string):ng.IPromise<any> {
+          var defer = this.$q.defer();
+          this.httpClient.get(url,'application/json',
+              (response:any[]) => {
+                  defer.resolve(response);
+                  console.log("Response");
+                  console.log(response);
+              },
+              (response:ng.IHttpPromiseCallbackArg<any>) => {
+                  console.error(response);
+              });
+          return defer.promise;
+      }
 
     private getStatistics(url:string):ng.IPromise<any> {
       var defer = this.$q.defer();
@@ -310,7 +337,9 @@ module ums {
 
     }
 
-    private applicationSelectionChange(index:number, course:IOptCourse) {
+    private applicationSelectionChange(index:number, course:any) {
+      console.log("courseList");
+        console.log(course);
       this.manageSelectionChange(this.$scope.optional.applicationCourses,"application",index,course,course.application);
     }
     private approvedSelectionChange(index:number, course:IOptCourse) {
@@ -325,7 +354,6 @@ module ums {
         var item = course;
         item.index = courseIndex;
         courses.splice(0, 0, item);
-
         if(item.pairCourseId!=""){
           pairCourseIndex=Utils.findIndex(this.$scope.optional.optionalCourses,item.pairCourseId);
           if(columnType=="application") this.$scope.optional.optionalCourses[pairCourseIndex].application =true;

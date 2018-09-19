@@ -20,6 +20,7 @@ import org.ums.manager.BinaryContentManager;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -118,31 +119,39 @@ public class ProfilePicture extends Resource {
   public Response uploadFile(@FormDataParam("files") File pInputStream, @FormDataParam("id") String id,
                              @FormDataParam("name") String name) throws IOException {
 
-    File newFile = new File(pInputStream.getParent(), id + ".jpg");
-    Files.move(pInputStream.toPath(), newFile.toPath());
+    if (pInputStream.exists() && ImageIO.read(pInputStream).getHeight() <= 180 && ImageIO.read(pInputStream).getWidth() <= 150) {
 
-    Message<File> messageA = MessageBuilder.withPayload(newFile).build();
+      File newFile = new File(pInputStream.getParent(), id + ".jpg");
+      Files.move(pInputStream.toPath(), newFile.toPath());
 
-    try {
-      FtpRemoteFileTemplate template = new FtpRemoteFileTemplate(cachingSessionFactory);
-      template.setRemoteDirectoryExpression(new LiteralExpression("files/user-photo"));
-      template.setUseTemporaryFileName(false);
-      template.execute(session -> {
-        session.mkdir("files/");
-        return session.mkdir("files/user-photo/");
-      });
-      template.send(messageA);
-    } catch (Exception e) {
-      mLogger.error(e.getMessage());
-      e.printStackTrace();
-    } finally {
-      pInputStream.deleteOnExit();
-      newFile.delete();
+      Message<File> messageA = MessageBuilder.withPayload(newFile).build();
+
+      try {
+        FtpRemoteFileTemplate template = new FtpRemoteFileTemplate(cachingSessionFactory);
+        template.setRemoteDirectoryExpression(new LiteralExpression("files/user-photo"));
+        template.setUseTemporaryFileName(false);
+        template.execute(session -> {
+          session.mkdir("files/");
+          return session.mkdir("files/user-photo/");
+        });
+        template.send(messageA);
+      } catch (Exception e) {
+        mLogger.error(e.getMessage());
+        e.printStackTrace();
+      } finally {
+        pInputStream.deleteOnExit();
+        newFile.delete();
+      }
+      URI contextURI = null;
+      Response.ResponseBuilder builder = Response.created(contextURI);
+      builder.status(Response.Status.CREATED);
+      return builder.build();
+
     }
-    URI contextURI = null;
-    Response.ResponseBuilder builder = Response.created(contextURI);
-    builder.status(Response.Status.CREATED);
-    return builder.build();
 
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.serverError();
+    builder.status(Response.Status.INTERNAL_SERVER_ERROR);
+    return builder.build();
   }
 }

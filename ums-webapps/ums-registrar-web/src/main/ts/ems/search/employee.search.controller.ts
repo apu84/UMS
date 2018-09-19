@@ -77,7 +77,8 @@ module ums {
 
                 this.userService.fetchCurrentUserInfo().then((result) => {
                     this.currentUser = result;
-                    if (this.currentUser.roleId === 1041) {
+                    if (this.currentUser.roleId === 1041 || this.currentUser.roleId == 7701 || this.currentUser.roleId == 7108 || this.currentUser.roleId == 7303
+                     || this.currentUser.roleId == 7005 || this.currentUser.roleId == 7403 || this.currentUser.roleId == 7503) {
                         this.modifiedUserList = this.allUser.filter((value, index) => {
                             return this.currentUser.departmentId == this.allUser[index].deptOfficeId && this.allUser[index].employeeType == 3;
                         });
