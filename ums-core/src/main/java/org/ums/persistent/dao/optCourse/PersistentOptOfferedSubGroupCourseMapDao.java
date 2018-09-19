@@ -1,10 +1,16 @@
 package org.ums.persistent.dao.optCourse;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.optCourse.OptOfferedSubGroupCourseMapDaoDecorator;
+import org.ums.domain.model.immutable.optCourse.OptOfferedGroup;
 import org.ums.domain.model.immutable.optCourse.OptOfferedSubGroupCourseMap;
 import org.ums.generator.IdGenerator;
+import org.ums.persistent.model.optCourse.PersistentOptOfferedGroup;
+import org.ums.persistent.model.optCourse.PersistentOptOfferedSubGroupCourseMap;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -22,5 +28,18 @@ public class PersistentOptOfferedSubGroupCourseMapDao extends OptOfferedSubGroup
   @Override
   public List<OptOfferedSubGroupCourseMap> getSubGroupCourses() {
     return super.getSubGroupCourses();
+  }
+
+}
+
+
+class OptOfferedSubGroupCourseMapRowMapper implements RowMapper<OptOfferedSubGroupCourseMap> {
+  @Override
+  public OptOfferedSubGroupCourseMap mapRow(ResultSet pResultSet, int pI) throws SQLException {
+    PersistentOptOfferedSubGroupCourseMap application = new PersistentOptOfferedSubGroupCourseMap();
+    application.setId(pResultSet.getLong("ID"));
+    application.setSubGroupId(pResultSet.getLong("SUB_GROUP_ID"));
+    application.setCourseId(pResultSet.getString("COURSE_ID"));
+    return application;
   }
 }
