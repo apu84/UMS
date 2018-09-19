@@ -20,6 +20,7 @@ import org.ums.domain.model.mutable.routine.MutableRoutine;
 import org.ums.enums.CourseType;
 import org.ums.enums.ProgramType;
 import org.ums.enums.routine.DayType;
+import org.ums.exceptions.ValidationException;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.*;
 import org.ums.manager.routine.RoutineConfigManager;
@@ -57,6 +58,8 @@ public class RoutineService {
   @Autowired
   private IdGenerator mIdGenerator;
   @Autowired
+  private EmployeeManager mEmployeeManager;
+  @Autowired
   private RoutineConfigManager mRoutineConfigManager;
 
   private Map<Integer, RoutineTime> columnMapWithTime = new HashMap<>();
@@ -64,12 +67,14 @@ public class RoutineService {
   private Map<String, Course> courseMapWithCourseNo;
   private Map<String, List<MutableCourseTeacher>> courseIdMapWithCourseTeacher;
   private RoutineConfig routineConfig;
+  private List<String> exceptions;
 
   @Transactional
   public void extractWorkBook(Workbook pWorkbook, Integer pSemesterId, Integer pProgramId) throws Exception,
       IOException, InvalidFormatException {
 
     List<MutableRoutine> routineList = new ArrayList<>();
+    exceptions = new ArrayList<>();
     courseIdMapWithCourseTeacher = new HashMap<>();
     routineConfig =
         mRoutineConfigManager.get(pSemesterId,
@@ -92,6 +97,7 @@ public class RoutineService {
 
     mRoutineManager.create(routineList);
     insertCourseTeacher(pSemesterId, pProgramId);
+    System.out.println(this.exceptions);
   }
 
   public void insertIntoRoutine(List<MutableRoutine> pRoutineList) {
@@ -99,8 +105,6 @@ public class RoutineService {
     for(int i = 0; i < pRoutineList.size(); i++) {
       MutableRoutine routine = pRoutineList.get(i);
       Long id = mIdGenerator.getNumericId();
-      System.out.println("****************");
-      System.out.println(id);
       routine.setId(id);
       routineList.add(routine);
     }
@@ -182,7 +186,7 @@ public class RoutineService {
 
     if(columnMapWithTime.size() < 12) {
       Row row = pSheet.getRow(0);
-      createColumnAndTimeMap(row);
+      createColumnAndTimeMap(pSheet, row);
     }
     else {
       // todo change 6 to 5 when there is two weekends.
@@ -217,15 +221,15 @@ public class RoutineService {
     RoutineTime routineTime = columnMapWithTime.get(pRow.getCell(pI).getColumnIndex());
     for(int k = 0; k < cellStrings.length; k++) {
       k =
-          extractCellCourses(pSemesterId, pProgramId, pRoutineList, pYear, pSemester, pSection, pGlobalRoomNo,
+          extractCellCourses(pRow, pSemesterId, pProgramId, pRoutineList, pYear, pSemester, pSection, pGlobalRoomNo,
               pDayName, cellStrings, groupId, routineTime, k);
 
     }
   }
 
-  private int extractCellCourses(Integer pSemesterId, Integer pProgramId, List<MutableRoutine> pRoutineList, int pYear,
-      int pSemester, String pSection, String pGlobalRoomNo, String pDayName, String[] pCellStrings, int pGroupId,
-      RoutineTime pRoutineTime, int cellStringIndex) {
+  private int extractCellCourses(Row pRow, Integer pSemesterId, Integer pProgramId, List<MutableRoutine> pRoutineList,
+      int pYear, int pSemester, String pSection, String pGlobalRoomNo, String pDayName, String[] pCellStrings,
+      int pGroupId, RoutineTime pRoutineTime, int cellStringIndex) {
     List<MutableRoutine> cellRoutineList = new ArrayList<>();
     String[] courseStrings = pCellStrings[cellStringIndex].split("\\|");
     LocalTime startTime = pRoutineTime.getStartTime();
@@ -238,11 +242,12 @@ public class RoutineService {
       }
       else {
         String[] courseRoutineInfo = courseString.split(" ");
-        assignRoutineData(pSemesterId, pProgramId, pYear, pSemester, pSection, pGlobalRoomNo, pDayName, pGroupId,
+        assignRoutineData(pRow, pSemesterId, pProgramId, pYear, pSemester, pSection, pGlobalRoomNo, pDayName, pGroupId,
             startTime, routine, courseRoutineInfo);
 
         startTime = startTime.plusMinutes(routineConfig.getDuration());
-        cellRoutineList.add(routine);
+        if(routine != null)
+          cellRoutineList.add(routine);
       }
 
     }
@@ -250,28 +255,58 @@ public class RoutineService {
     if((cellStringIndex + 1) < pCellStrings.length) {
       char[] nextCellCharacterArray = pCellStrings[cellStringIndex + 1].toCharArray();
       if(nextCellCharacterArray[0] == '[') {
-        extractCourseTeacherInfo(pSemesterId, pProgramId, cellRoutineList, pCellStrings[cellStringIndex + 1]);
+        extractCourseTeacherInfo(pRow, pSemesterId, pProgramId, cellRoutineList, pCellStrings[cellStringIndex + 1]);
         cellStringIndex = cellStringIndex + 1;
       }
     }
     return cellStringIndex;
   }
 
-  private void assignRoutineData(Integer pSemesterId, Integer pProgramId, int pYear, int pSemester, String pSection,
-      String pGlobalRoomNo, String pDayName, int pGroupId, LocalTime pStartTime, MutableRoutine pRoutine,
-      String[] pCourseRoutineInfo) {
+  private void assignRoutineData(Row pRow, Integer pSemesterId, Integer pProgramId, int pYear, int pSemester,
+      String pSection, String pGlobalRoomNo, String pDayName, int pGroupId, LocalTime pStartTime,
+      MutableRoutine pRoutine, String[] pCourseRoutineInfo) {
+    boolean foundError = false;
     pRoutine.setSlotGroup(pGroupId);
     pRoutine.setId(mIdGenerator.getNumericId());
-    pRoutine.setCourseId(courseMapWithCourseNo.get(pCourseRoutineInfo[0] + " " + pCourseRoutineInfo[1]).getId());
-    if(pRoutine.getCourse().getCourseType().equals(CourseType.SESSIONAL)) {
-      pRoutine.setSection(pCourseRoutineInfo[2]);
-      pRoutine.setRoomId((4 <= pCourseRoutineInfo.length) ? classRoomMapWithRoomNo.get(pCourseRoutineInfo[3]).getId()
-          : classRoomMapWithRoomNo.get(pGlobalRoomNo).getId());
+    String courseNo = pCourseRoutineInfo[0] + " " + pCourseRoutineInfo[1];
+    if(!courseMapWithCourseNo.containsKey(courseNo)) {
+      foundError = true;
+      this.exceptions.add("Course " + courseNo + " is not correctly assigned at sheet -> "
+          + pRow.getSheet().getSheetName());
     }
     else {
-      pRoutine.setSection(pSection);
-      pRoutine.setRoomId((3 <= pCourseRoutineInfo.length) ? classRoomMapWithRoomNo.get(pCourseRoutineInfo[2]).getId()
-          : classRoomMapWithRoomNo.get(pGlobalRoomNo).getId());
+      pRoutine.setCourseId(courseMapWithCourseNo.get(courseNo).getId());
+      if(pRoutine.getCourse().getCourseType().equals(CourseType.SESSIONAL)) {
+        pRoutine.setSection(pCourseRoutineInfo[2]);
+        if(3 < pCourseRoutineInfo.length && classRoomMapWithRoomNo.containsKey(pCourseRoutineInfo[3])) {
+          pRoutine.setRoomId((4 <= pCourseRoutineInfo.length) ? classRoomMapWithRoomNo.get(pCourseRoutineInfo[3])
+              .getId() : classRoomMapWithRoomNo.get(pGlobalRoomNo).getId());
+        }
+        else {
+          foundError = true;
+          if(3 > pCourseRoutineInfo.length)
+            this.exceptions.add("Room no is missing in sessional course " + pRoutine.getCourse().getNo()
+                + " in sheet ->" + pRow.getSheet().getSheetName());
+          else
+            this.exceptions.add("Romm no->" + pCourseRoutineInfo[3]
+                + " is not in correct format or the room number is not stored, in sheet ->"
+                + pRow.getSheet().getSheetName());
+        }
+
+      }
+      else {
+        pRoutine.setSection(pSection);
+        try {
+          pRoutine.setRoomId((3 <= pCourseRoutineInfo.length) ? classRoomMapWithRoomNo.get(pCourseRoutineInfo[2])
+              .getId() : classRoomMapWithRoomNo.get(pGlobalRoomNo).getId());
+        } catch(Exception e) {
+          foundError = true;
+          this.exceptions.add("Romm no->" + (3 <= pCourseRoutineInfo.length ? pCourseRoutineInfo[2] : pGlobalRoomNo)
+              + " is not in correct format or the room number is not stored, in sheet ->"
+              + pRow.getSheet().getSheetName());
+        }
+
+      }
     }
 
     pRoutine.setSemesterId(pSemesterId);
@@ -284,22 +319,25 @@ public class RoutineService {
       pRoutine.setEndTime(pRoutine.getStartTime().plusMinutes(routineConfig.getDuration() * 3));
     else
       pRoutine.setEndTime(pStartTime.plusMinutes(routineConfig.getDuration()));
+    if(foundError == true)
+      pRoutine = null;
   }
 
-  private void extractCourseTeacherInfo(Integer pSemesterId, Integer pProgramId, List<MutableRoutine> pRoutineList,
-      String cellCourseTeacherString) {
+  private void extractCourseTeacherInfo(Row pRow, Integer pSemesterId, Integer pProgramId,
+      List<MutableRoutine> pRoutineList, String cellCourseTeacherString) {
     cellCourseTeacherString = cellCourseTeacherString.replaceAll("\\[", "").replaceAll("\\]", "");
+    cellCourseTeacherString = cellCourseTeacherString.trim();
     String[] courseTeacherListBasedOnCourse = cellCourseTeacherString.split("\\|");
     for(int i = 0; i < pRoutineList.size(); i++) {
       if(!courseTeacherListBasedOnCourse[i].equalsIgnoreCase("")) {
         String[] courseTeacher = courseTeacherListBasedOnCourse[i].split(",");
-        insertOrUpdateCourseTeacher(pSemesterId, pProgramId, pRoutineList.get(i), courseTeacher);
+        insertOrUpdateCourseTeacher(pRow, pSemesterId, pProgramId, pRoutineList.get(i), courseTeacher);
       }
 
     }
   }
 
-  private void insertOrUpdateCourseTeacher(Integer pSemesterId, Integer pProgramId, Routine pRoutine,
+  private void insertOrUpdateCourseTeacher(Row pRow, Integer pSemesterId, Integer pProgramId, Routine pRoutine,
       String[] courseTeacherIdArray) {
     if(!courseIdMapWithCourseTeacher.containsKey(pRoutine.getCourseId() + pRoutine.getSection())) {
       List<MutableCourseTeacher> courseTeacherList = new ArrayList<>();
@@ -311,23 +349,32 @@ public class RoutineService {
         courseTeacher.setSection(pRoutine.getSection());
         courseTeacher.setSemesterId(pSemesterId);
         courseTeacher.setTeacherId(teacherId);
-        courseTeacherList.add(courseTeacher);
+        if(mEmployeeManager.exists(teacherId))
+          courseTeacherList.add(courseTeacher);
+        else
+          this.exceptions.add("Teacher id->" + teacherId
+              + " not found in course teacher list, or the teacher id is not inserted properly, in sheet -> "
+              + pRow.getSheet().getSheetName() + " and row->" + (pRow.getRowNum() + 1));
       }
-
       courseIdMapWithCourseTeacher.put(pRoutine.getCourseId() + pRoutine.getSection(), courseTeacherList);
     }
   }
 
-  private void createColumnAndTimeMap(Row pRow) {
+  private void createColumnAndTimeMap(Sheet pSheet, Row pRow) {
     for(int i = 1; i <= 12; i++) {
       String cellValue = pRow.getCell(i).getStringCellValue();
+      cellValue = cellValue.trim();
       String[] cellItems = cellValue.split(" - ");
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
       RoutineTime routineTime = new RoutineTime();
-
-      routineTime.setStartTime(LocalTime.parse(cellItems[0], formatter));
-      routineTime.setEndTime(LocalTime.parse(cellItems[1], formatter));
-      columnMapWithTime.put(pRow.getCell(i).getColumnIndex(), routineTime);
+      try {
+        routineTime.setStartTime(LocalTime.parse(cellItems[0], formatter));
+        routineTime.setEndTime(LocalTime.parse(cellItems[1], formatter));
+        columnMapWithTime.put(pRow.getCell(i).getColumnIndex(), routineTime);
+      } catch(Exception e) {
+        throw new ValidationException("Time not in required format (HH:MM AM/PM) at sheet -> " + pSheet.getSheetName()
+            + ", at column -> " + (pRow.getCell(i).getColumnIndex() + 1) + " the error time format is -> " + cellValue);
+      }
     }
   }
 }
