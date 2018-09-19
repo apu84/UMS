@@ -22,12 +22,7 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -66,12 +61,13 @@ public class ExpelledInformationResourceHelper extends
     application.setSemesterId(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
     getBuilder().build(application, jsonObject, localCache);
 
-    Long response=mManager.create(application);
+    Long response = mManager.create(application);
     URI contextURI = null;
     Response.ResponseBuilder builder = Response.created(contextURI);
-    if(response !=null){
+    if(response != null) {
       builder.status(Response.Status.CREATED);
-    }else {
+    }
+    else {
       builder.status(Response.Status.NOT_FOUND);
     }
 

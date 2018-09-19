@@ -355,12 +355,18 @@ module ums {
             let id = this.userId;
             let photoContent: any = $("#userPhoto").contents();
             let image = photoContent.prevObject[0].files[0];
-            this.getFormData(image, id).then((formData) => {
-                this.FileUpload.uploadPhoto(formData).then(() => {
-                    let that = this;
-                    that.test = true;
+            if(image) {
+                this.getFormData(image, id).then((formData) => {
+                    this.FileUpload.uploadPhoto(formData).then(() => {
+                        let that = this;
+                        that.test = true;
+                    });
                 });
-            });
+            }
+            else{
+                this.notify.error("No Image Found");
+                this.test = true;
+            }
         }
 
         private getFormData(file, id): ng.IPromise<any> {
