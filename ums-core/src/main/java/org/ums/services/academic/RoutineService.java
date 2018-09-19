@@ -1,20 +1,16 @@
 package org.ums.services.academic;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.domain.model.immutable.ClassRoom;
 import org.ums.domain.model.immutable.Course;
-import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.immutable.routine.Routine;
 import org.ums.domain.model.immutable.routine.RoutineConfig;
-import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.domain.model.mutable.routine.MutableRoutine;
 import org.ums.enums.CourseType;
@@ -30,10 +26,8 @@ import org.ums.persistent.model.routine.PersistentRoutine;
 import org.ums.services.academic.helper.RoutineTime;
 
 import java.io.IOException;
-import java.security.SecureRandom;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -310,7 +304,7 @@ public class RoutineService {
       }
     }
 
-    if(foundError==false){
+    if(foundError == false) {
       pRoutine.setSemesterId(pSemesterId);
       pRoutine.setDay(DayType.getByLabel(pDayName).getValue());
       pRoutine.setProgramId(pProgramId);
