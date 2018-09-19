@@ -13,7 +13,7 @@
                                 {{vm.selectedCourseTeacher.employeeName}}
                             </ui-select-match>
                             <ui-select-choices id="courseTeacher"
-                                               repeat="g in vm.classRoutineService.teacherList | filter:$select.search">
+                                               repeat="g in vm.classRoutineService.teacherList | filter:$select.search| limitTo:10">
                                 <small ng-bind-html="g.employeeName | highlight:$select.search"></small>
                             </ui-select-choices>
                         </ui-select>
@@ -57,9 +57,9 @@
                 <th>Section</th>
             </thread>
             <tbody>
-            <tr ng-repeat="routine in vm.routineBasedOnCourse">
+            <tr ng-repeat="routine in vm.routineBasedOnCourseTeacher">
                 <td>{{vm.classRoutineService.weekDayMapWithId[routine.day]}}</td>
-                <td>{{routine.course.courseTitle}}</td>
+                <td>{{routine.course.no}}</td>
                 <td>{{routine.startTime}}</td>
                 <td>{{routine.endTime}}</td>
                 <td>{{routine.room.roomNo}}</td>

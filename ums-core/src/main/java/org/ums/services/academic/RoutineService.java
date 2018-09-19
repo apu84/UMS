@@ -70,7 +70,7 @@ public class RoutineService {
   private List<String> exceptions;
 
   @Transactional
-  public void extractWorkBook(Workbook pWorkbook, Integer pSemesterId, Integer pProgramId) throws Exception,
+  public List<String> extractWorkBook(Workbook pWorkbook, Integer pSemesterId, Integer pProgramId) throws Exception,
       IOException, InvalidFormatException {
 
     List<MutableRoutine> routineList = new ArrayList<>();
@@ -98,6 +98,7 @@ public class RoutineService {
     mRoutineManager.create(routineList);
     insertCourseTeacher(pSemesterId, pProgramId);
     System.out.println(this.exceptions);
+    return this.exceptions;
   }
 
   public void insertIntoRoutine(List<MutableRoutine> pRoutineList) {
@@ -246,7 +247,7 @@ public class RoutineService {
             startTime, routine, courseRoutineInfo);
 
         startTime = startTime.plusMinutes(routineConfig.getDuration());
-        if(routine != null)
+        if(routine.getRoomId() != null)
           cellRoutineList.add(routine);
       }
 
@@ -309,18 +310,21 @@ public class RoutineService {
       }
     }
 
-    pRoutine.setSemesterId(pSemesterId);
-    pRoutine.setDay(DayType.getByLabel(pDayName).getValue());
-    pRoutine.setProgramId(pProgramId);
-    pRoutine.setAcademicYear(pYear);
-    pRoutine.setAcademicSemester(pSemester);
-    pRoutine.setStartTime(pStartTime);
-    if(pRoutine.getCourse().getCourseType().equals(CourseType.SESSIONAL))
-      pRoutine.setEndTime(pRoutine.getStartTime().plusMinutes(routineConfig.getDuration() * 3));
-    else
-      pRoutine.setEndTime(pStartTime.plusMinutes(routineConfig.getDuration()));
+    if(foundError==false){
+      pRoutine.setSemesterId(pSemesterId);
+      pRoutine.setDay(DayType.getByLabel(pDayName).getValue());
+      pRoutine.setProgramId(pProgramId);
+      pRoutine.setAcademicYear(pYear);
+      pRoutine.setAcademicSemester(pSemester);
+      pRoutine.setStartTime(pStartTime);
+      if(pRoutine.getCourse().getCourseType().equals(CourseType.SESSIONAL))
+        pRoutine.setEndTime(pRoutine.getStartTime().plusMinutes(routineConfig.getDuration() * 3));
+      else
+        pRoutine.setEndTime(pStartTime.plusMinutes(routineConfig.getDuration()));
+    }
+
     if(foundError == true)
-      pRoutine = null;
+      pRoutine = new PersistentRoutine();
   }
 
   private void extractCourseTeacherInfo(Row pRow, Integer pSemesterId, Integer pProgramId,

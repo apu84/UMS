@@ -11,7 +11,7 @@
                         <ui-select-match placeholder="Select Room No">{{vm.selectedRoom.roomNo}}
                         </ui-select-match>
                         <ui-select-choices id="roomNo"
-                                           repeat="g in vm.classRoutineService.roomList | filter:$select.search">
+                                           repeat="g in vm.classRoutineService.roomList | filter:$select.search | limitTo:10">
                             <small ng-bind-html="g.roomNo | highlight:$select.search"></small>
                         </ui-select-choices>
                     </ui-select>

@@ -263,6 +263,8 @@ module ums{
       this.httpClient.post(url, formData, undefined)
           .success((response) => {
             this.notify.success("Routine template parsed successfully");
+            console.log('response');
+            console.log(response);
             defer.resolve(response);
           }).error((data) => {
         console.error(data);

@@ -191,15 +191,15 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return null;
   }
 
-  public Response uploadFile(File pFile, Integer pSemesterId, Integer pProgramId) throws IOException,
+  public List<String> uploadFile(File pFile, Integer pSemesterId, Integer pProgramId) throws IOException,
       InvalidFormatException, Exception {
     try {
       Workbook workbook = WorkbookFactory.create(pFile);
-      mRoutineService.extractWorkBook(workbook, pSemesterId, pProgramId);
-      return Response.ok().build();
+      return mRoutineService.extractWorkBook(workbook, pSemesterId, pProgramId);
+
     } catch(Exception e) {
       e.printStackTrace();
-      return Response.serverError().build();
+      return null;
     } finally {
       pFile.deleteOnExit();
     }

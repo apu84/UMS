@@ -133,8 +133,6 @@ module ums{
 
     public courseTeacherSearched(){
       this.fetchCourseTeacherInfo();
-      console.log('course teacher');
-      console.log(this.selectedCourseTeacher);
     }
 
     public courseTeacherSelected(courseTeacher: Employee){
