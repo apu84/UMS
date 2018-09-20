@@ -439,6 +439,12 @@ module ums {
                 templateUrl: 'views/borrow-history.html',
                 controllerAs: 'vm'
             })
+            .state('recordLog', {
+                url: "/recordLog",
+                controller: 'RecordLog',
+                templateUrl: 'views/admin/logs/record-log.html',
+                controllerAs: 'vm'
+            })
             .state('logout', {
                 url: "/logout",
                 controller: 'Logout'

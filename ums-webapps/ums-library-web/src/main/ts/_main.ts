@@ -147,6 +147,7 @@
 /// <reference path='controller/CatalogHome.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/library/LibrarySearch.ts'/>
 /// <reference path='controller/BorrowHistory.ts'/>
+/// <reference path='controller/RecordLog.ts'/>
 
 /// <reference path='directive/ColumnSorter.ts'/>
 
@@ -159,5 +160,6 @@
 /// <reference path='../../../../ums-library-web/src/main/ts/directive/NavigationButton.ts'/>
 /// <reference path='../../../../ums-library-web/src/main/ts/factory/MessageFactory.ts'/>
 /// <reference path='../../../../ums-library-web/src/main/ts/service/CirculationService.ts'/>
+/// <reference path='../../../../ums-library-web/src/main/ts/service/RecordLogService.ts'/>
 
 
