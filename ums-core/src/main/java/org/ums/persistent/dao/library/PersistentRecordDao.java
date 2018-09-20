@@ -104,19 +104,19 @@ public class PersistentRecordDao extends RecordDaoDecorator {
   public Long create(final MutableRecord pRecord) {
     pRecord.setId(getMfn());
     mJdbcTemplate.update(INSERT_ONE, pRecord.getId(), pRecord.getLanguage().getId(), pRecord.getTitle(), pRecord
-        .getSubTitle(), pRecord.getGmd().getId(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord
-        .getVolumeTitle(), pRecord.getSerialIssueNo(), pRecord.getSerialNumber(), pRecord.getSerialSpecial(), pRecord
-        .getLibraryLacks(), pRecord.getChangedTitle(), pRecord.getIsbn(), pRecord.getIssn(), pRecord
-        .getCorpAuthorMain(), pRecord.getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord
-        .getTranslateTitleEdition(), pRecord.getFrequency() == null ? null : pRecord.getFrequency().getId(), pRecord
-        .getCallNo(), pRecord.getClassNo(), pRecord.getCallYear(), pRecord.getCallEdition(), pRecord.getCallVolume(),
-        pRecord.getAuthorMark(), pRecord.getImprint().getPublisher() == null ? null : pRecord.getImprint()
-            .getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(), pRecord.getImprint()
-            .getYearOfPublication(), pRecord.getImprint().getYearOfCopyRight(),
-        pRecord.getImprint().getYearOfReprint(), pRecord.getMaterialType().getId(), pRecord.getRecordStatus().getId(),
-        pRecord.getKeyWords(), pRecord.getDocumentalist(), pRecord.getContributorJsonString(), pRecord
-            .getSubjectJsonString(), pRecord.getPhysicalDescriptionString(), pRecord.getNoteJsonString(), pRecord
-            .getLastUpdatedBy());
+        .getSubTitle(), pRecord.getGmd() == null ? null : pRecord.getGmd().getId(), pRecord.getSeriesTitle(), pRecord
+        .getVolumeNo(), pRecord.getVolumeTitle(), pRecord.getSerialIssueNo(), pRecord.getSerialNumber(), pRecord
+        .getSerialSpecial(), pRecord.getLibraryLacks(), pRecord.getChangedTitle(), pRecord.getIsbn(),
+        pRecord.getIssn(), pRecord.getCorpAuthorMain(), pRecord.getCorpSubBody(), pRecord.getCorpCityCountry(), pRecord
+            .getEdition(), pRecord.getTranslateTitleEdition(), pRecord.getFrequency() == null ? null : pRecord
+            .getFrequency().getId(), pRecord.getCallNo(), pRecord.getClassNo(), pRecord.getCallYear(), pRecord
+            .getCallEdition(), pRecord.getCallVolume(), pRecord.getAuthorMark(),
+        pRecord.getImprint().getPublisher() == null ? null : pRecord.getImprint().getPublisher().getId(), pRecord
+            .getImprint().getPlaceOfPublication(), pRecord.getImprint().getYearOfPublication(), pRecord.getImprint()
+            .getYearOfCopyRight(), pRecord.getImprint().getYearOfReprint(), pRecord.getMaterialType().getId(), pRecord
+            .getRecordStatus().getId(), pRecord.getKeyWords(), pRecord.getDocumentalist(), pRecord
+            .getContributorJsonString(), pRecord.getSubjectJsonString(), pRecord.getPhysicalDescriptionString(),
+        pRecord.getNoteJsonString(), pRecord.getLastUpdatedBy());
 
     return pRecord.getId();
   }
