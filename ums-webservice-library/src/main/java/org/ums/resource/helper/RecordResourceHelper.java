@@ -14,9 +14,12 @@ import org.ums.domain.model.immutable.library.Item;
 import org.ums.domain.model.immutable.library.Record;
 import org.ums.domain.model.mutable.library.MutableItem;
 import org.ums.domain.model.mutable.library.MutableRecord;
+import org.ums.domain.model.mutable.library.MutableRecordLog;
 import org.ums.manager.library.ItemManager;
+import org.ums.manager.library.RecordLogManager;
 import org.ums.manager.library.RecordManager;
 import org.ums.persistent.model.library.PersistentRecord;
+import org.ums.persistent.model.library.PersistentRecordLog;
 import org.ums.resource.RecordResource;
 import org.ums.resource.ResourceHelper;
 import org.ums.solr.repository.converter.Converter;
@@ -35,6 +38,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,6 +64,9 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
   @Autowired
   ItemManager mItemManger;
 
+  @Autowired
+  RecordLogManager mRecordLogManager;
+
   @Override
   public RecordManager getContentManager() {
     return mManager;
@@ -71,6 +78,7 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
   }
 
   @Override
+  @Transactional
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) {
     MutableRecord mutableRecord = new PersistentRecord();
     LocalCache localCache = new LocalCache();
@@ -81,6 +89,13 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     mutableRecord.setLastUpdatedBy(user.getId());
     getBuilder().build(mutableRecord, pJsonObject, localCache);
     mutableRecord.create();
+
+    MutableRecordLog mutableRecordLog = new PersistentRecordLog();
+    mutableRecordLog.setMfn(mutableRecord.getId());
+    mutableRecordLog.setModification("Created New Record");
+    mutableRecordLog.setModifiedBy(user.getId());
+    mutableRecordLog.setModifiedOn(new Date());
+    mutableRecordLog.create();
 
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(RecordResource.class).path(RecordResource.class, "get")

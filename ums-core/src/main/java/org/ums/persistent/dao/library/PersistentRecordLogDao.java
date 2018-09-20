@@ -42,7 +42,7 @@ public class PersistentRecordLogDao extends RecordLogDaoDecorator {
 
   @Override
   public List<RecordLog> get(final String pClause) {
-    String query = SELECT_ALL + " " + pClause;
+    String query = SELECT_ALL + " WHERE " + pClause;
     return mJdbcTemplate.query(query, new PersistentRecordLogDao.RecordLogRowMapper());
   }
 
@@ -65,7 +65,7 @@ public class PersistentRecordLogDao extends RecordLogDaoDecorator {
       persistentRecordLog.setModifiedOn(rs.getDate("MODIFIED_ON"));
       persistentRecordLog.setModification(rs.getString("MODIFICATION"));
       persistentRecordLog.setLastModified(rs.getString("LAST_MODIFIED"));
-      return null;
+      return persistentRecordLog;
     }
   }
 }
