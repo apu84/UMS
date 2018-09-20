@@ -149,6 +149,17 @@ module ums{
         public insert(data:any){
             console.log("Name: "+this.destinationDiv);
             console.log(data);
+            var items={
+                id: data.id,
+            no: data.no,
+            title: data.title,
+            crHr:data.crHr,
+            courseType:data.courseType,
+            year: data.year,
+            semester: data.semester,
+            pairCourseId:data.pairCourseId,
+            statusId:data.statusId
+            };
             var index=0,parentIndex=0,childIndex=0;
 
             if(this.departmentId=="05"){
@@ -162,15 +173,15 @@ module ums{
               }
              }
 
-                this.optOfferedCourseList[parentIndex].subGrpCourses[childIndex].courses.push(data);
-                if(data.pairCourseId!=null){
-                    this.insertPairCourse(data.pairCourseId,parentIndex,childIndex);
+                this.optOfferedCourseList[parentIndex].subGrpCourses[childIndex].courses.push(items);
+                if(items.pairCourseId!=null){
+                    this.insertPairCourse(items.pairCourseId,parentIndex,childIndex);
                 }
             }else{
                 index = this.optOfferedCourseList.map(e => e.groupName).indexOf(this.destinationDiv);
-                this.optOfferedCourseList[index].courses.push(data);
-                if(data.pairCourseId!=null){
-                    this.insertPairCourse(data.pairCourseId,index);
+                this.optOfferedCourseList[index].courses.push(items);
+                if(items.pairCourseId!=null){
+                    this.insertPairCourse(items.pairCourseId,index);
                 }
             }
             console.log("***insert***");
@@ -179,30 +190,32 @@ module ums{
         public insertPairCourse(courseId:string,parentIndex:number,childIndex?:number):void{
             console.log("Inside Pair Course");
             var data=this.courseIdMap[courseId];
+            var items={
+                id: data.id,
+                no: data.no,
+                title: data.title,
+                crHr:data.crHr,
+                courseType:data.courseType,
+                year: data.year,
+                semester: data.semester,
+                pairCourseId:data.pairCourseId,
+                statusId:data.statusId
+            }
             console.log("pair CourseDetails: "+parentIndex);
-            console.log(data);
+            console.log(items);
             if(this.departmentId !="05"){
-                this.optOfferedCourseList[parentIndex].courses.push(data);
+                this.optOfferedCourseList[parentIndex].courses.push(items);
             }else{
-                this.optOfferedCourseList[parentIndex].subGrpCourses[childIndex].courses.push(data);
+                this.optOfferedCourseList[parentIndex].subGrpCourses[childIndex].courses.push(items);
             }
             this.changeColor(courseId,1);
         }
         public deleteItems(groupName:string,index:number,courseId:string):void{
+            console.log("courseId: "+courseId);
             var changeColor=0,isCourseFound=0,pairCourseId;
            var parentIndex = this.optOfferedCourseList.map(e => e.groupName).indexOf(groupName);
             this.optOfferedCourseList[parentIndex].courses.splice(index,1);
-          for(let i=0;i<this.optOfferedCourseList.length;i++){
-              for(let j=0;j<this.optOfferedCourseList[i].courses.length;j++){
-                  if( this.optOfferedCourseList[i].courses[j].id==courseId){
-                      isCourseFound=1;
-                      break;
-                  }
-              }
-          }
-          if(isCourseFound==0){
-              this.changeColor(courseId,changeColor);
-          }
+            this.changeColor(courseId,changeColor);
 
           pairCourseId=this.pairCourseIdMapWithCourseId[courseId];
           console.log("pair course: "+pairCourseId);
@@ -239,20 +252,7 @@ module ums{
             var parentIndex = this.optOfferedCourseList.map(e => e.groupName).indexOf(groupName);
             var childIndex=this.optOfferedCourseList[parentIndex].subGrpCourses.map(e=>e.groupName).indexOf(subGroupName);
             this.optOfferedCourseList[parentIndex].subGrpCourses[childIndex].courses.splice(index,1);
-            for(let i=0;i<this.optOfferedCourseList.length;i++){
-                for(let j=0;j<this.optOfferedCourseList[i].subGrpCourses.length;j++){
-                    for(let k=0;k<this.optOfferedCourseList[i].subGrpCourses[j].courses.length;k++){
-                        if( this.optOfferedCourseList[i].subGrpCourses[j].courses[k].id==courseId){
-                            isCourseFound=1;
-                            break;
-                        }
-                    }
-                }
-
-            }
-            if(isCourseFound==0) {
                 this.changeColor(courseId,changeColor);
-                }
             pairCourseId=this.pairCourseIdMapWithCourseId[courseId];
             console.log("pair course: "+pairCourseId);
             if(pairCourseId !=null){
@@ -275,6 +275,8 @@ module ums{
                     this.optOfferedCourseList[this.indexValue].subGrpCourses.push({
                         groupId:null,
                         groupName:name,
+                        totalApplied:0,
+                        totalSeats:0,
                         courses:[]
                     });
                     if(this.departmentId=="05"){
@@ -305,6 +307,8 @@ module ums{
                         {   groupId:null,
                             groupName:name==null ? null:name,
                             isMandatory:this.isMandatory,
+                            totalApplied:0,
+                             totalSeats:0,
                             courses:[],
                             subGrpCourses:[]
                         };
@@ -413,6 +417,18 @@ module ums{
         private changeProgram(data:any):void{
             this.programId=data.id;
             console.log("Program Id: "+this.programId);
+        }
+        private save():void{
+            console.log("**After Converting Into Json**");
+            let YS=this.yearSemName.split("-");
+            let year = +YS[0];
+            let sem= +YS[1];
+         var json:any=this.optOfferedCourseList;
+         this.optCourseOfferService.addInfo(this.programId,year,sem,json).then((data)=>{
+             console.log(data);
+         });
+
+         console.log(json);
         }
     }
     UMS.controller("OptCourseOffer",OptCourseOffer);

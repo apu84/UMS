@@ -3,6 +3,7 @@ package org.ums.academic.resource.optCourse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.academic.resource.optCourse.optCourseHelper.OptCourseGroupResourceHelper;
 import org.ums.manager.optCourse.OptCourseGroupManager;
+import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
 import javax.ws.rs.POST;
@@ -15,18 +16,18 @@ import javax.ws.rs.core.Response;
 /**
  * Created by Monjur-E-Morshed on 8/29/2018.
  */
-public class MutableOptCourseGroupResource {
+public class MutableOptCourseGroupResource extends Resource {
   @Autowired
   OptCourseGroupResourceHelper mHelper;
 
+  @POST
+  @Path("/addRecords")
+  @Produces({MediaType.APPLICATION_JSON})
+  public Response addRecords(final JsonObject pJsonObject) throws Exception {
+    return mHelper.post(pJsonObject, mUriInfo);
+  }
+
   /*
-   * @POST
-   * 
-   * @Path("/addRecords")
-   * 
-   * @Produces({MediaType.APPLICATION_JSON}) public Response addRecords(final JsonObject
-   * pJsonObject) throws Exception { return mHelper.post(pJsonObject, mUriInfo); }
-   * 
    * @POST
    * 
    * @Path("/updateRecords")

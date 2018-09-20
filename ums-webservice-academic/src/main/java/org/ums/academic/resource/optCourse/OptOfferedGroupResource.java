@@ -14,5 +14,6 @@ import javax.ws.rs.Produces;
 @Path("academic/optOfferedGroup")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class OptOfferedGroupResource extends MutableOptCourseGroupResource {
+public class OptOfferedGroupResource extends MutableOptOfferedGroupResource {
+
 }
