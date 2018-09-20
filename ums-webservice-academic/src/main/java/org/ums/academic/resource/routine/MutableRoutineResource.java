@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class MutableRoutineResource extends Resource {
 
@@ -38,7 +39,7 @@ public class MutableRoutineResource extends Resource {
   @POST
   @Path("/upload")
   @Consumes({MediaType.MULTIPART_FORM_DATA})
-  public Response uploadRoutineTemplate(@FormDataParam("file") File pFile,
+  public List<String> uploadRoutineTemplate(@FormDataParam("file") File pFile,
       @FormDataParam("semesterId") Integer pSemesterId, @FormDataParam("programId") Integer pProgramId)
       throws Exception, IOException, InvalidFormatException {
     return mRoutineResourceHelper.uploadFile(pFile, pSemesterId, pProgramId);

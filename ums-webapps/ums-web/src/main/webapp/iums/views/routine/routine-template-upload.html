@@ -1,5 +1,5 @@
 <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="Upload Modal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Upload Routine Template</h5>
@@ -13,9 +13,24 @@
                         <input type = "file" file-model = "vm.routineTemplateFile"/>
                     </div>
                 </div>
+                <br/>
+                <div class="row" ng-if="vm.showLoader" align="center">
+                    <i class="fa fa-spinner fa-4x" aria-hidden="true"></i>
+                </div>
+                <br/>
+                <div class="row" ng-if="vm.exceptions.length>0">
+                    <div class="col-md-12">
+                        <h3>Exceptions</h3>
+                        <ul class="list-group" ng-repeat="e in vm.exceptions">
+                            <li class="list-group-item">{{e}}</li>
+                        </ul>
+                    </div>
+
+                </div>
+                <br/>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" ng-click="vm.uploadFile()" data-dismiss="modal">Upload File</button>
+                <button type="button" class="btn btn-primary" ng-click="vm.uploadFile()" >Upload File</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>

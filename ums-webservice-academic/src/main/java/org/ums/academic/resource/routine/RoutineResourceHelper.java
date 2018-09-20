@@ -191,13 +191,19 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return null;
   }
 
-  public Response uploadFile(File pFile, Integer pSemesterId, Integer pProgramId) throws IOException,
+  public List<String> uploadFile(File pFile, Integer pSemesterId, Integer pProgramId) throws IOException,
       InvalidFormatException, Exception {
-    Workbook workbook = WorkbookFactory.create(pFile);
-    mRoutineService.extractWorkBook(workbook, pSemesterId, pProgramId);
-    pFile.deleteOnExit();
+    try {
+      Workbook workbook = WorkbookFactory.create(pFile);
+      return mRoutineService.extractWorkBook(workbook, pSemesterId, pProgramId);
 
-    return Response.ok().build();
+    } catch(Exception e) {
+      e.printStackTrace();
+      return null;
+    } finally {
+      pFile.deleteOnExit();
+    }
+
   }
 
   public JsonArray getRoutine(final Integer pSemesterId, final String pCourseId, final UriInfo pUriInfo) {

@@ -10,7 +10,7 @@
                         <ui-select-match placeholder="Select Course">{{vm.selectedCourse.title}}
                         </ui-select-match>
                         <ui-select-choices id="course"
-                                           repeat="g in vm.classRoutineService.courseList|filter:$select.search"
+                                           repeat="g in vm.classRoutineService.courseList|filter:$select.search|limitTo:10"
                         >
                             <small ng-bind-html="g.title | highlight:$select.search"></small>
                         </ui-select-choices>

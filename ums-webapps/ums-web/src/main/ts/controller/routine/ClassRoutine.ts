@@ -50,6 +50,8 @@ module ums {
     selectedRoom: ClassRoom;
     showRoutineChart:boolean;
     routineTemplateFile: any;
+    exceptions:string[];
+    showLoader: boolean;
 
 
     public static $inject = ['appConstants', '$q', 'notify', 'semesterService', 'classRoomService', 'classRoutineService',
@@ -99,10 +101,17 @@ module ums {
       formData.append("file", this.routineTemplateFile);
       formData.append("semesterId",this.classRoutineService.selectedSemester.id.toString());
       formData.append("programId", this.classRoutineService.selectedProgram.id.toString());
-      if(this.routineTemplateFile==null)
+      this.exceptions = [];
+      this.showLoader = true;
+      if(this.routineTemplateFile==null){
         this.notify.warn("No file chosen");
+        this.showLoader = false;
+      }
       else{
-        this.classRoutineService.uploadFile(formData);
+        this.classRoutineService.uploadFile(formData).then((exceptions:string[])=>{
+          this.exceptions = exceptions;
+          this.showLoader = false;
+        })
       }
     }
 
