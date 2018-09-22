@@ -19,6 +19,9 @@ module ums {
 
         private searchResult: IRecordSearchResult[] = [];
 
+        private itemsPerPage = 2;
+        private currentPageNumber = 1;
+
         /*private resultTable: boolean = true;*/
 
         constructor(private $q: ng.IQService,

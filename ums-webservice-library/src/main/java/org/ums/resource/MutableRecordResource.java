@@ -14,6 +14,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 /**
  * Created by Ifti on 19-Feb-17.
@@ -31,6 +32,9 @@ public class MutableRecordResource extends Resource {
   public Response updateRecord(@Context HttpServletRequest pHttpServletRequest,
       final @PathParam("object-id") Long pObjectId, final @Context Request pRequest,
       final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) throws Exception {
+    UriInfo pUriInfo = null;
+    mHelper.createRecordLog(pObjectId, 2, "",
+          pJsonObject.toString(), "");
     return mResourceHelper.put(pObjectId, pRequest, pIfMatchHeader, pJsonObject);
   }
 
