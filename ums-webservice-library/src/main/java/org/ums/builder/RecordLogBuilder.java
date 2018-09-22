@@ -25,7 +25,9 @@ public class RecordLogBuilder implements Builder<RecordLog, MutableRecordLog> {
     pBuilder.add("mfn", pReadOnly.getMfn());
     pBuilder.add("modifiedOn", mDateFormat.format(pReadOnly.getModifiedOn()));
     pBuilder.add("modifiedBy", pReadOnly.getModifiedBy());
-    pBuilder.add("modification", pReadOnly.getModification());
+    pBuilder.add("modificationType", pReadOnly.getModificationType());
+    pBuilder.add("previousJson", pReadOnly.getPreviousJson() == null ? "" : pReadOnly.getPreviousJson());
+    pBuilder.add("modifiedJson", pReadOnly.getModifiedJson() == null ? "" : pReadOnly.getModifiedJson());
   }
 
   @Override

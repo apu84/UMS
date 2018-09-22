@@ -443,7 +443,18 @@ module ums {
                 url: "/recordLog",
                 controller: 'RecordLog',
                 templateUrl: 'views/admin/logs/record-log.html',
-                controllerAs: 'vm'
+                controllerAs: 'vm',
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            files: [
+                                'vendors/bootstrap-datepicker/css/datepicker.css',
+                                'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
+                            ]
+                        });
+                    }]
+                }
+
             })
             .state('logout', {
                 url: "/logout",

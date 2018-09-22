@@ -20,7 +20,9 @@ public class PersistentRecordLog implements MutableRecordLog {
   private Long mMfn;
   private String mModifiedBy;
   private Date mModifiedOn;
-  private String mModification;
+  private Integer mModificationType;
+  private String mPreviousJson;
+  private String mModifiedJson;
   private String mLastModified;
 
   public PersistentRecordLog() {}
@@ -30,7 +32,9 @@ public class PersistentRecordLog implements MutableRecordLog {
     mMfn = pPersistentRecordLog.getMfn();
     mModifiedBy = pPersistentRecordLog.getModifiedBy();
     mModifiedOn = pPersistentRecordLog.getModifiedOn();
-    mModification = pPersistentRecordLog.getModification();
+    mModificationType = pPersistentRecordLog.getModificationType();
+    mPreviousJson = pPersistentRecordLog.getPreviousJson();
+    mModifiedJson = pPersistentRecordLog.getModifiedJson();
     mLastModified = pPersistentRecordLog.getLastModified();
   }
 
@@ -90,8 +94,18 @@ public class PersistentRecordLog implements MutableRecordLog {
   }
 
   @Override
-  public void setModification(String pModification) {
-    mModification = pModification;
+  public void setModificationType(Integer pModificationType) {
+    mModificationType = pModificationType;
+  }
+
+  @Override
+  public void setPreviousJson(String pPreviousJson) {
+    mPreviousJson = pPreviousJson;
+  }
+
+  @Override
+  public void setModifiedJson(String pModifiedJson) {
+    mModifiedJson = pModifiedJson;
   }
 
   @Override
@@ -110,7 +124,17 @@ public class PersistentRecordLog implements MutableRecordLog {
   }
 
   @Override
-  public String getModification() {
-    return mModification;
+  public Integer getModificationType() {
+    return mModificationType;
+  }
+
+  @Override
+  public String getPreviousJson() {
+    return mPreviousJson;
+  }
+
+  @Override
+  public String getModifiedJson() {
+    return mModifiedJson;
   }
 }

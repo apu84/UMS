@@ -1,5 +1,92 @@
 <div class="panel">
-    <div class="panel-body" style="min-height: 490px;">
-        
+    <div class="panel-body shadowPanel" style="min-height: 490px;">
+
+        <div class="row">
+            <div class="col-md-3">
+                <fieldset>
+                    <legend>Search By:</legend>
+                    <form name="iSearchForm" class="form-horizontal" ng-submit="vm.search()" novalidate>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Mfn</label>
+                            <div class="col-md-8">
+                                <input class="form-control"
+                                       name="nMfn"
+                                       id="iMfn"
+                                       data-ng-model="vm.mfn"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+
+                            <label class="col-md-4 control-label">Modified By</label>
+                            <div class="col-md-8">
+                                <input class="form-control"
+                                       name="nModifiedBy"
+                                       id="iModifiedBy"
+                                       data-ng-model="vm.modifiedBy"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="col-md-4 control-label">Modified On</label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nModifiedOn"
+                                       id="iModifiedOn"
+                                       data-ng-model="vm.modifiedOn"
+                                       data-provide="datepicker"
+                                       data-date-format="dd/mm/yyyy"
+                                       placeholder="DD/MM/YYYY"
+                                       autocomplete="off"
+                                       class="form-control">
+                            </div>
+                        </div>
+
+
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-success btn-sm">Search
+                            </button>
+                        </div>
+                    </form>
+                </fieldset>
+            </div>
+
+
+            <div class="col-md-9">
+
+
+                <fieldset>
+                    <legend>Record Logs &nbsp;({{vm.searchResult.length}})</legend>
+
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>MFN</th>
+                            <th>Modified By</th>
+                            <th>Modified On</th>
+                            <th>Modification Type</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="result in vm.searchResult track by result.id">
+                            <td>{{$index + 1}}</td>
+                            <td>{{result.mfn}}</td>
+                            <td>{{result.modifiedBy}}</td>
+                            <td>{{result.modifiedOn}}</td>
+                            <td><span data-ng-show="result.modificationType==1"><button type="button" class="btn btn-success btn-xs">CREATED</button></span>
+                                <span data-ng-show="result.modificationType==2"><button type="button" class="btn btn-info btn-xs">UPDATED</button></span>
+                                <span data-ng-show="result.modificationType==3"><button type="button" class="btn-danger btn-xs">DELETE</button></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </fieldset>
+            </div>
+        </div>
     </div>
 </div>
+

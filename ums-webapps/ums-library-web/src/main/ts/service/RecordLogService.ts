@@ -15,8 +15,7 @@ module ums {
 
             this.httpClient.get(resourceUrl, 'application/json',
                 (json: any, etag: string) => {
-                console.log(json);
-                    defer.resolve(json);
+                    defer.resolve(json.entries);
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>) => {
                     console.error(response);

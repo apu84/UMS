@@ -1,5 +1,6 @@
 package org.ums.resource.helper;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -11,11 +12,13 @@ import org.ums.formatter.DateFormat;
 import org.ums.manager.ContentManager;
 import org.ums.manager.library.RecordLogManager;
 import org.ums.resource.ResourceHelper;
+import org.ums.util.Constants;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -32,16 +35,36 @@ public class RecordLogResourceHelper extends ResourceHelper<RecordLog, MutableRe
   private DateFormat mDateFormat;
 
   public JsonObject get(final String pDate, final String pEmployeeId, final String pMfn, final UriInfo pUriInfo) {
-    String clause = "";
-    clause += (pDate.isEmpty() ? "" : " MODIFIED_ON = " + mDateFormat.parse(pDate));
-    clause += (pDate.isEmpty() && pEmployeeId.isEmpty()) || (pDate.isEmpty() && pMfn.isEmpty()) ? "" : " AND ";
-    clause += (pEmployeeId.isEmpty() ? "" : " MODIFIED_BY = " + pEmployeeId);
-    clause += (pDate.isEmpty() && pEmployeeId.isEmpty()) || (pDate.isEmpty() && pMfn.isEmpty()) ? "" : " AND ";
-    clause += (pMfn.isEmpty() ? "" : " MFN = " + Long.parseLong(pMfn));
-   // List<RecordLog> recordLogs = mManager.getAll();
-
-    List<RecordLog> recordLogs = mManager.get(clause);
+    String clause = buildClause(pDate, pEmployeeId, pMfn);
+    List<RecordLog> recordLogs = recordLogs = mManager.get(clause);
     return buildJsonResponse(recordLogs, pUriInfo);
+  }
+
+  @NotNull
+  private String buildClause(String pDate, String pEmployeeId, String pMfn) {
+
+    List<String> clauseList = new ArrayList<>();
+
+    if(!pDate.isEmpty()) {
+      clauseList.add(" MODIFIED_ON = TO_DATE( " + "'" + pDate + "'" + "," + "'" + Constants.DATE_FORMAT + "'" + " ) ");
+    }
+
+    if(!pEmployeeId.isEmpty()) {
+      clauseList.add(" MODIFIED_BY = " + pEmployeeId);
+    }
+
+    if(!pMfn.isEmpty()) {
+      clauseList.add(" MFN = " + Long.parseLong(pMfn));
+    }
+
+    String clause = "";
+
+    for(int i = 0; i < clauseList.size(); i++) {
+      clause += clauseList.get(i);
+      clause += !(clauseList.size() - 1 == i) ? " AND " : "";
+    }
+
+    return clause.isEmpty() ? "" : " WHERE " + clause;
   }
 
   @Override

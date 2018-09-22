@@ -15,10 +15,11 @@ import java.util.List;
 public class PersistentRecordLogDao extends RecordLogDaoDecorator {
 
   static String INSERT_ONE =
-      "INSERT INTO RECORDS_LOG (ID, MFN, MODIFIED_BY, MODIFIED_ON, MODIFICATION, LAST_MODIFIED) VALUES(?, ?, ?, ?, ?, "
+      "INSERT INTO RECORDS_LOG (ID, MFN, MODIFIED_BY, MODIFIED_ON, MODIFICATION_TYPE, PREVIOUS_JSON, MODIFIED_JSON, LAST_MODIFIED) VALUES(?, ?, ?, ?, ?, ?, ?, "
           + getLastModifiedSql() + " ) ";
 
-  static String SELECT_ALL = "SELECT ID, MFN, MODIFIED_BY, MODIFIED_ON, MODIFICATION, LAST_MODIFIED FROM RECORDS_LOG ";
+  static String SELECT_ALL =
+      "SELECT ID, MFN, MODIFIED_BY, MODIFIED_ON, MODIFICATION_TYPE, PREVIOUS_JSON, MODIFIED_JSON, LAST_MODIFIED FROM RECORDS_LOG ";
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
@@ -42,7 +43,7 @@ public class PersistentRecordLogDao extends RecordLogDaoDecorator {
 
   @Override
   public List<RecordLog> get(final String pClause) {
-    String query = SELECT_ALL + " WHERE " + pClause;
+    String query = SELECT_ALL + pClause;
     return mJdbcTemplate.query(query, new PersistentRecordLogDao.RecordLogRowMapper());
   }
 
@@ -50,7 +51,7 @@ public class PersistentRecordLogDao extends RecordLogDaoDecorator {
   public Long create(MutableRecordLog pMutable) {
     Long id = mIdGenerator.getNumericId();
     mJdbcTemplate.update(INSERT_ONE, id, pMutable.getMfn(), pMutable.getModifiedBy(), pMutable.getModifiedOn(),
-        pMutable.getModification());
+        pMutable.getModificationType(), pMutable.getPreviousJson(), pMutable.getModifiedJson());
     return id;
   }
 
@@ -63,7 +64,9 @@ public class PersistentRecordLogDao extends RecordLogDaoDecorator {
       persistentRecordLog.setMfn(rs.getLong("MFN"));
       persistentRecordLog.setModifiedBy(rs.getString("MODIFIED_BY"));
       persistentRecordLog.setModifiedOn(rs.getDate("MODIFIED_ON"));
-      persistentRecordLog.setModification(rs.getString("MODIFICATION"));
+      persistentRecordLog.setModificationType(rs.getInt("MODIFICATION_TYPE"));
+      persistentRecordLog.setPreviousJson(rs.getString("PREVIOUS_JSON"));
+      persistentRecordLog.setModifiedJson(rs.getString("MODIFIED_JSON"));
       persistentRecordLog.setLastModified(rs.getString("LAST_MODIFIED"));
       return persistentRecordLog;
     }
