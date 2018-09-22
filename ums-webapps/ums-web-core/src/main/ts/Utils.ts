@@ -339,5 +339,30 @@ module ums {
                 a = moment(toDate, 'DD/MM/YYYY');
             return a.add(bias, 'days').isAfter(b);
         }
+
+        public static getFormattedCurrentDate(): string{
+            let today = new Date();
+            let dd = today.getDate();
+            let mm = today.getMonth()+1; //January is 0!
+            let modifiedDD = "";
+            let modifiedMM = "";
+            let modifiedDate = "";
+
+            let yyyy = today.getFullYear();
+            if(dd < 10){
+                modifiedDD = '0' + dd;
+            }
+            else{
+                modifiedDD = dd.toString();
+            }
+            if(mm < 10){
+                modifiedMM = '0' + mm;
+            }
+            else{
+                modifiedMM = mm.toString();
+            }
+            modifiedDate = modifiedDD + '/' + modifiedMM + '/' + yyyy;
+            return modifiedDate;
+        }
     }
 }

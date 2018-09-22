@@ -1,6 +1,7 @@
 package org.ums.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.domain.model.immutable.library.Record;
 import org.ums.domain.model.mutable.library.MutableRecord;
 import org.ums.logs.DeleteLog;
@@ -29,12 +30,12 @@ public class MutableRecordResource extends Resource {
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
   @PutLog(message = "Updated a library record")
+  @Transactional
   public Response updateRecord(@Context HttpServletRequest pHttpServletRequest,
       final @PathParam("object-id") Long pObjectId, final @Context Request pRequest,
       final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) throws Exception {
     UriInfo pUriInfo = null;
-    mHelper.createRecordLog(pObjectId, 2, "",
-          pJsonObject.toString(), "");
+    mHelper.insertRecordLog(pObjectId, 2, pJsonObject.toString());
     return mResourceHelper.put(pObjectId, pRequest, pIfMatchHeader, pJsonObject);
   }
 

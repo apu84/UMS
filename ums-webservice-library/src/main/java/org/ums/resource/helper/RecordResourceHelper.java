@@ -121,6 +121,10 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     mutableRecordLog.create();
   }
 
+  public void insertRecordLog(Long pObjectId, Integer pModificationType, String pJsonObject) {
+    createRecordLog(pObjectId, pModificationType, "", pJsonObject, "");
+  }
+
   @Nullable
   private User getModifiedBy(String pModifiedBy) {
     User user = null;
@@ -186,6 +190,7 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
 
   @Transactional
   public Response deleteRecord(String pMfnNo) {
+    insertRecordLog(Long.parseLong(pMfnNo), 3, "");
     LocalCache localCache = new LocalCache();
     PersistentRecord record = new PersistentRecord();
     record = (PersistentRecord) mManager.get(Long.parseLong(pMfnNo));

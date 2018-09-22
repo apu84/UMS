@@ -13,7 +13,7 @@
 
                     <fieldset>
                         <legend style="font-size: medium">Search By:</legend>
-                        <form name="iSearchForm" class="form-horizontal" ng-submit="vm.search()" novalidate>
+                        <form name="iSearchForm" id="nSearchForm" class="form-horizontal" ng-submit="vm.search()">
 
                             <div class="form-group">
                                 <label class="col-md-4 control-label">MFN</label>
@@ -50,7 +50,7 @@
                                            data-date-format="dd/mm/yyyy"
                                            placeholder="DD/MM/YYYY"
                                            autocomplete="off"
-                                           class="form-control">
+                                           class="form-control" required>
                                 </div>
                             </div>
 
@@ -81,8 +81,8 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr data-ng-repeat="result in vm.searchResult track by result.id">
-                            <td>{{$index + 1}}</td>
+                        <tr data-ng-repeat="result in vm.searchResult | limitTo:vm.itemsPerPage:vm.itemsPerPage*(vm.currentPageNumber - 1)">
+                            <td>{{(vm.currentPageNumber - 1) * vm.itemsPerPage + $index + 1}}</td>
                             <td>{{result.mfn}}</td>
                             <td>{{result.modifiedBy}}</td>
                             <td>{{result.modifiedOn}}</td>

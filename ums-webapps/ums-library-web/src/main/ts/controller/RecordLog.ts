@@ -19,7 +19,7 @@ module ums {
 
         private searchResult: IRecordSearchResult[] = [];
 
-        private itemsPerPage = 2;
+        private itemsPerPage = 10;
         private currentPageNumber = 1;
 
         /*private resultTable: boolean = true;*/
@@ -28,6 +28,8 @@ module ums {
                     private notify: Notify,
                     private recordLogService: RecordLogService) {
 
+            this.modifiedOn = Utils.getFormattedCurrentDate();
+            this.search();
         }
 
         public search(): void{

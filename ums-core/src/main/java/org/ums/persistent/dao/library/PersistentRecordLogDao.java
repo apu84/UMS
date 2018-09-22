@@ -43,7 +43,7 @@ public class PersistentRecordLogDao extends RecordLogDaoDecorator {
 
   @Override
   public List<RecordLog> get(final String pClause) {
-    String query = SELECT_ALL + pClause;
+    String query = SELECT_ALL + pClause + "ORDER BY MODIFIED_ON DESC";
     return mJdbcTemplate.query(query, new PersistentRecordLogDao.RecordLogRowMapper());
   }
 
