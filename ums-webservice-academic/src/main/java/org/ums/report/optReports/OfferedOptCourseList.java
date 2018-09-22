@@ -6,7 +6,7 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 9/20/2018.
  */
 public class OfferedOptCourseList {
-  public Integer groupId;
+  public Long groupId;
   public String groupName;
   public Integer programId;
   public Integer totalApplied;
@@ -19,7 +19,7 @@ public class OfferedOptCourseList {
 
   public OfferedOptCourseList() {}
 
-  public OfferedOptCourseList(Integer groupId, String groupName, Integer programId, Integer totalApplied,
+  public OfferedOptCourseList(Long groupId, String groupName, Integer programId, Integer totalApplied,
       Integer totalSeats, Integer year, Integer semester, Boolean isMandatory, List<CourseList> courses,
       List<SubGroupList> subGroupCourses) {
     this.groupId = groupId;
@@ -42,11 +42,11 @@ public class OfferedOptCourseList {
     isMandatory = mandatory;
   }
 
-  public Integer getGroupId() {
+  public Long getGroupId() {
     return groupId;
   }
 
-  public void setGroupId(Integer groupId) {
+  public void setGroupId(Long groupId) {
     this.groupId = groupId;
   }
 

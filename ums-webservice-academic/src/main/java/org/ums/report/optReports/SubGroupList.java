@@ -1,15 +1,12 @@
 package org.ums.report.optReports;
 
-import org.apache.xmlbeans.impl.xb.xsdschema.Public;
-import org.ums.logs.PutLog;
-
 import java.util.List;
 
 /**
  * Created by Monjur-E-Morshed on 9/20/2018.
  */
 public class SubGroupList {
-  public Integer groupId;
+  public Long groupId;
   public String groupName;
   public Integer totalApplied;
   public Integer totalSeats;
@@ -18,7 +15,7 @@ public class SubGroupList {
 
   public SubGroupList() {}
 
-  public SubGroupList(Integer subGroupId, String subGroupName, Integer totalApplied, Integer totalSeats,
+  public SubGroupList(Long subGroupId, String subGroupName, Integer totalApplied, Integer totalSeats,
       boolean isMandatory, List<CourseList> courses) {
     this.groupId = subGroupId;
     this.groupName = subGroupName;
@@ -36,11 +33,11 @@ public class SubGroupList {
     isMandatory = mandatory;
   }
 
-  public Integer getSubGroupId() {
+  public Long getSubGroupId() {
     return groupId;
   }
 
-  public void setSubGroupId(Integer subGroupId) {
+  public void setSubGroupId(Long subGroupId) {
     this.groupId = subGroupId;
   }
 
