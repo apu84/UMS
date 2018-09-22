@@ -7,7 +7,6 @@ import org.ums.resource.helper.RecordLogResourceHelper;
 import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.UriInfo;
-import java.util.Date;
 
 @Component
 @Path("record/log")
@@ -25,11 +24,11 @@ public class RecordLogResource extends MutableRecordLogResource {
   }
 
   @GET
-  @Path("/modifiedDate/{modified-date}/employeeId/{employee-id}/mfn/{mfn-no}")
-  public JsonObject get(final @PathParam("modified-date") Date pModifiedDate,
-      final @PathParam("employee-id") String pEmployeeId, final @PathParam("mfn-no") Long pMfn, final UriInfo pUriInfo)
+  @Path("/filter/query")
+  public JsonObject get(final @QueryParam("modifiedDate") String pModifiedDate,
+      final @QueryParam("modifiedBy") String pModifiedBy, final @QueryParam("mfn") String pMfn, final UriInfo pUriInfo)
       throws Exception {
-    return mHelper.get(pModifiedDate, pEmployeeId, pMfn, mUriInfo);
+    return mHelper.get(pModifiedDate, pModifiedBy, pMfn, mUriInfo);
   }
 
 }
