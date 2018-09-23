@@ -40,8 +40,23 @@
         <img src="" data-profile-picture="" alt="" class="img-responsive img-circle"/>
         &nbsp;<span class="hidden-xs">{{user.username}}</span>&nbsp;<span class="caret"></span></a>
         <ul class="dropdown-menu dropdown-user pull-right">
+          <li>
+            <div>
+              <div class="media"><div class="pull-left" style="padding:10px">
+                <img src="" data-profile-picture="" alt="" class="toolbarBigProfileImg"/>
+              </div>
+                <div class="media-body">
+                  <h6 class="media-heading" style="font-weight:bold;padding-top:10px;font"><span id="userName"></span></h6>
+                  <span id="userDesignation" style="font-size:13px;"></span>
+                </div>
+              </div>
+            </div>
+            <div id="empProfile" style="text-align:center;width:220px;">
+              <a  href="#/employeeProfile/personal" style="font-weight:bold;color:#0073b1">View profile</a>
+            </div>
+          </li>
+          <li class="divider"></li>
           <li><a href="#/home"><i class="fa fa-user"></i>User Home</a></li>
-          <li id='empProfile'><a href="#/employeeProfile"><i class="fa fa-address-card-o"></i>Employee Profile</a></li>
           <li><a href="#/changePassword"><i class="fa fa-pencil"></i>Change Password</a></li>
           <li><a href="#/userGuide"><i class="fa fa-book"></i>User Guide</a></li>
           <li class="divider"></li>
@@ -51,3 +66,8 @@
     </ul>
   </div>
 </nav>
+
+<script type="text/javascript">
+    $("#userName").html(localStorage.getItem("userFullName"));
+    $("#userDesignation").html(localStorage.getItem("userDesignation"));
+</script>

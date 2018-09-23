@@ -480,3 +480,19 @@ body.sidebar-colors #wrapper #sidebar ul#side-menu li ul.nav-second-level li.act
 body.sidebar-colors #wrapper #sidebar ul#side-menu li ul.nav-second-level li:hover a i:before {
     color: #FFFFFF;
 }
+
+/** Toolbar User Name-Designation Info */
+.toolbarBigProfileImg {
+    width: 50px !important;
+    height: 50px !important;
+}
+#topbar .navbar-top-links li .dropdown-menu li #empProfile a{
+    color: #0073b1 !important;
+    margin-left: 10px !important;
+    width:98% !important;
+    display:inline-block;
+}
+
+#topbar .navbar-top-links li .dropdown-menu li #empProfile a:hover{
+    background-color: #d1edfa !important;
+}
