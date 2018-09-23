@@ -21,6 +21,7 @@ module ums {
         baseUriProvider.setServicePath('/ums-webservice-library/');
     }]);
 
+    UMS.constant("appConstants", Constants.Default());
     UMS.constant("libConstants", Constants.LibConstant());
     UMS.constant("registrarConstants", Constants.RegistrarConstant());
 
