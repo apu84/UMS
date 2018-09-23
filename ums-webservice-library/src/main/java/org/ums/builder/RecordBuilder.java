@@ -195,8 +195,11 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     JsonArrayBuilder contributorArrayJson = Json.createArrayBuilder();
     JsonObjectBuilder contributorJson = Json.createObjectBuilder();
     for(int i = 0; i < id.length; i++) {
-      contributorJson.add("name", mContributorManager.get(Long.parseLong(id[i])).getFullName()).add("roleName",
-          ContributorRole.get(Integer.parseInt(role[i])).getLabel());
+      contributorJson.add(
+          "name",
+              id[i] == null ? "" : mContributorManager.exists(Long.parseLong(id[i])) ? mContributorManager.get(Long.parseLong(id[i]))
+              .getFullName() : "").add("roleName",
+          role[i] == null ? "" : ContributorRole.get(Integer.parseInt(role[i])).getLabel());
       contributorArrayJson.add(contributorJson);
     }
     return contributorArrayJson;
