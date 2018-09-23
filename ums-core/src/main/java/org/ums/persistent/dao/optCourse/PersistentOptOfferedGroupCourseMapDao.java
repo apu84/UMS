@@ -28,7 +28,7 @@ public class PersistentOptOfferedGroupCourseMapDao extends OptOfferedGroupCourse
 
   String INSERT = "Insert into OPT_GROUP_COURSE_MAP (ID,GROUP_ID,COURSE_ID) values (?,?,?)";
   String GET_INFO =
-      "SELECT b.GROUP_ID,b.COURSE_ID FROM OPT_GROUP a,OPT_GROUP_COURSE_MAP b WHERE SEMESTER_ID=? AND PROGRAM_ID=? AND \"YEAR\"=? AND SEMESTER=? AND a.ID=b.GROUP_ID";
+      "SELECT b.GROUP_ID,b.COURSE_ID FROM OPT_GROUP a,OPT_GROUP_COURSE_MAP b WHERE a.SEMESTER_ID=? AND a.PROGRAM_ID=? AND a.\"YEAR\"=? AND a.SEMESTER=? AND a.ID=b.GROUP_ID";
 
   @Override
   public List<OptOfferedGroupCourseMap> getInfo(Integer pSemesterId, Integer pProgramId, Integer pYear,

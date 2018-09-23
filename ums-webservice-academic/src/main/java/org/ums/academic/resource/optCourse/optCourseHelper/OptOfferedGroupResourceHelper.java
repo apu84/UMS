@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.academic.resource.optCourse.optCourseBuilder.OptOfferedGroupBuilder;
 import org.ums.builder.Builder;
+import org.ums.domain.model.immutable.SubGroup;
 import org.ums.domain.model.immutable.optCourse.OptOfferedGroup;
 import org.ums.domain.model.immutable.optCourse.OptOfferedGroupCourseMap;
+import org.ums.domain.model.immutable.optCourse.OptOfferedGroupSubGroupMap;
+import org.ums.domain.model.immutable.optCourse.OptOfferedSubGroupCourseMap;
 import org.ums.domain.model.mutable.optCourse.MutableOptOfferedGroup;
 import org.ums.domain.model.mutable.optCourse.MutableOptOfferedGroupCourseMap;
 import org.ums.domain.model.mutable.optCourse.MutableOptOfferedGroupSubGroupMap;
@@ -23,6 +26,7 @@ import org.ums.persistent.model.optCourse.PersistentOptOfferedGroupSubGroupMap;
 import org.ums.persistent.model.optCourse.PersistentOptOfferedSubGroupCourseMap;
 import org.ums.report.optReports.CourseList;
 import org.ums.report.optReports.OfferedOptCourseList;
+import org.ums.report.optReports.SubGroupList;
 import org.ums.resource.ResourceHelper;
 import org.ums.usermanagement.user.UserManager;
 
@@ -71,7 +75,11 @@ public class OptOfferedGroupResourceHelper extends ResourceHelper<OptOfferedGrou
   public Response addInfo(Integer pProgramId, Integer pYear, Integer pSemester,
       List<OfferedOptCourseList> offeredCourseList) {
     Integer semesterId = mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId();
-    List<OfferedOptCourseList> x = getOptOfferedCourseList(semesterId, pProgramId, pYear, pSemester);
+    List<OfferedOptCourseList> savedInDb = getOptOfferedCourseList(semesterId, pProgramId, pYear, pSemester);
+    List<OfferedOptCourseList> newList=offeredCourseList.stream().filter(elm->savedInDb.contains(offeredCourseList)).collect(Collectors.toList());
+
+
+    int x=0;
     /*
      * String userId = SecurityUtils.getSubject().getPrincipal().toString(); String
      * deptId=mEmployeeManager.get(userId).getDepartment().getId(); List<Program>
@@ -117,7 +125,7 @@ public class OptOfferedGroupResourceHelper extends ResourceHelper<OptOfferedGrou
                 mCourseManager.get(courseId).getTitle(),
                 mCourseManager.get(courseId).getNo(),
                 mCourseManager.get(courseId).getCrHr(),
-                mCourseManager.get(courseId).getCourseType().getLabel(),
+                mCourseManager.get(courseId).getCourseType().getLabel().toUpperCase(),
                 mCourseManager.get(courseId).getYear(),
                 mCourseManager.get(courseId).getSemester(),
                 mCourseManager.get(courseId).getPairCourseId(),
@@ -126,16 +134,67 @@ public class OptOfferedGroupResourceHelper extends ResourceHelper<OptOfferedGrou
       }
       tempCourseList.put(groupId,courseList);
     }
+    //Sub Group portion
+    List<OptOfferedGroupSubGroupMap> grpSubGrpList = mOptOfferedGroupSubGroupMapManager.getBySemesterId(pSemesterId, pProgramId, pYear, pSemester);
+    Map<Long,List<OptOfferedGroupSubGroupMap>> subGrpMap=grpSubGrpList.stream().collect(Collectors.groupingBy(OptOfferedGroupSubGroupMap::getGroupId));
+    List<OptOfferedSubGroupCourseMap> subGroupCourseMap=mOptOfferedSubGroupCourseMapManager.getSubGroupCourses(pSemesterId,pProgramId,pYear,pSemester);
+    Map<Long,List<OptOfferedSubGroupCourseMap>> subGrpMapWithCourseId=subGroupCourseMap.stream().collect(Collectors.groupingBy(OptOfferedSubGroupCourseMap::getSubGroupId));
+    //Map for CourseList
+    Map<Long,List<CourseList>> tempSubGroupCourseList=  new HashMap<>();
+    for(Map.Entry<Long,List<OptOfferedSubGroupCourseMap>> entry:subGrpMapWithCourseId.entrySet()){
+      Long groupId=entry.getKey();
+      List<CourseList> courseList= new ArrayList<>();
+      for(int i=0;i<entry.getValue().size();i++){
+        String courseId=entry.getValue().get(i).getCourseId();
+        CourseList app= new CourseList(courseId,
+                mCourseManager.get(courseId).getTitle(),
+                mCourseManager.get(courseId).getNo(),
+                mCourseManager.get(courseId).getCrHr(),
+                mCourseManager.get(courseId).getCourseType().getLabel().toUpperCase(),
+                mCourseManager.get(courseId).getYear(),
+                mCourseManager.get(courseId).getSemester(),
+                mCourseManager.get(courseId).getPairCourseId(),
+                0);
+        courseList.add(app);
+      }
+      tempSubGroupCourseList.put(groupId,courseList);
+
+    }
+    //Group && sub Group object Map
+    Map<Long,List<SubGroupList>> subGroupCourseList= new HashMap<>();
+    for(Map.Entry<Long,List<OptOfferedGroupSubGroupMap>> entry:subGrpMap.entrySet()){
+      Long grpId=entry.getKey();
+      List<SubGroupList> subGroupList= new ArrayList<>();
+      for(int i=0;i<entry.getValue().size();i++){
+        SubGroupList app = new SubGroupList();
+        app.setSubGroupId(entry.getValue().get(i).getSubGroupId());
+        app.setSubGroupName(entry.getValue().get(i).getSubGroupName());
+        app.setTotalApplied(0);
+        app.setTotalSeats(20);
+        app.setCourses(tempSubGroupCourseList.get(entry.getValue().get(i).getSubGroupId()));
+        subGroupList.add(app);
+      }
+      subGroupCourseList.put(grpId,subGroupList);
+    }
+    //End of Sub group
+
+
+
     List<OfferedOptCourseList> newList= new ArrayList<>();
     for(int i=0;i<grpList.size();i++){
       OfferedOptCourseList app = new OfferedOptCourseList();
       app.setGroupId(grpList.get(i).getId());
       app.setGroupName(grpList.get(i).getGroupName());
+      app.setProgramId(grpList.get(i).getProgramId());
+      app.setYear(grpList.get(i).getYear());
+      app.setSemester(grpList.get(i).getSemester());
+      app.setMandatory(grpList.get(i).getIsMandatory()==1 ?true:false);
       app.setCourses(tempCourseList.get(grpList.get(i).getId()));
+      app.setSubGrpCourses(subGroupCourseList.get(grpList.get(i).getId()));
       newList.add(app);
     }
 
-    return null;
+    return newList;
   }
 
   public List<MutableOptOfferedSubGroupCourseMap> getMutableOptOfferedSubGroupCourseMaps(

@@ -28,7 +28,7 @@ public class PersistentOptOfferedGroupSubGroupMapDao extends OptOfferedGroupSubG
 
   String INSERT = "Insert into OPT_GROUP_SUB_GROUP_MAP (ID,GROUP_ID,SUB_GROUP_ID,SUB_GROUP_NAME) values (?,?,?,?)";
   String GET_BY_SEMESTER_ID =
-      "SELECT b.GROUP_ID,b.SUB_GROUP_ID,b.SUB_GROUP_NAME FROM OPT_GROUP a,OPT_GROUP_SUB_GROUP_MAP b WHERE SEMESTER_ID=? AND PROGRAM_ID=? AND \"YEAR\"=? AND SEMESTER=? AND a.ID=b.GROUP_ID";
+      "SELECT b.GROUP_ID,b.SUB_GROUP_ID,b.SUB_GROUP_NAME FROM OPT_GROUP a,OPT_GROUP_SUB_GROUP_MAP b WHERE a.SEMESTER_ID=? AND a.PROGRAM_ID=? AND a.\"YEAR\"=? AND a.SEMESTER=? AND a.ID=b.GROUP_ID";
 
   @Override
   public List<OptOfferedGroupSubGroupMap> getBySemesterId(Integer pSemesterId, Integer pProgramId, Integer pYear,

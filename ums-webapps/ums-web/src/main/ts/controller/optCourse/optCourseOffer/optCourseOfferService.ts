@@ -49,6 +49,19 @@ module ums{
                 });
             return defer.promise;
         }
+        public getOfferedCourses(semesterId:number,programId:number,year:number,semester:number):ng.IPromise<any> {
+            var defer = this.$q.defer();
+            this.httpClient.get('academic/optOfferedGroup/getOfferedCourses/semesterId/'+semesterId+'/program/'+programId+'/year/'+year+'/semester/'+semester,'application/json',
+                (response:any[]) => {
+                    defer.resolve(response);
+                    console.log("Response");
+                    console.log(response);
+                },
+                (response:ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                });
+            return defer.promise;
+        }
         public getOfferEligibleCourses(semesterId:number,examType:number):ng.IPromise<any>{
             var defer = this.$q.defer();
             this.httpClient.get('academic/empExamAttendance/getEmpExamAttendanceList/semesterId/'+semesterId+'/examType/'+examType,HttpClient.MIME_TYPE_JSON,

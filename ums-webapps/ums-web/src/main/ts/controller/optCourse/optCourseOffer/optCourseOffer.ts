@@ -3,41 +3,41 @@ module ums{
         id:any;
         name:string;
     }
-    class OptCourseOffer{
-        public departmentId:string;
-        public programId:number;
-        public programs:Array<Program>;
-        public program:Program;
-        public semesters:Array<Semester>;
-        public semester:Semester;
-        public selectedSemesterId:number;
-        public activeSemesterId:number;
-        yearSemList:Array<IConstants>;
-        yearSem:IConstants;
-        yearSemName:string;
-        public optCourseList:Array<IOptCourseList>;
-        public tempList:Array<IOptCourseList>;
-        public optOfferedCourseList:Array<any>;
-        public isSubGroupAvailable:boolean;
-        public isMandatory:boolean;
-        public groupName:string;
-        public subGroupName:string;
-        public parentGrpName:string;
-        public indexValue:number;
-        draggables:Array<any>;
-        selectedComponents:any;
-        selectedComponents1:any;
-        sortingLog:any;
-        draggableOptions:any;
-        sortableOptions:any;
-        sortableOptions1:any;
-        connectWithList:any;
-        pushDataIntoList:boolean;
-        destinationDiv:string;
-        courseIdMap:any;
-        pairCourseIdMapWithCourseId:any;
-        public static $inject = ['appConstants','HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService',
-            'programService','commonService','optCourseOfferService'];
+    class OptCourseOffer {
+        public departmentId: string;
+        public programId: number;
+        public programs: Array<Program>;
+        public program: Program;
+        public semesters: Array<Semester>;
+        public semester: Semester;
+        public selectedSemesterId: number;
+        public activeSemesterId: number;
+        yearSemList: Array<IConstants>;
+        yearSem: IConstants;
+        yearSemName: string;
+        public optCourseList: Array<IOptCourseList>;
+        public tempList: Array<IOptCourseList>;
+        public optOfferedCourseList: Array<any>;
+        public isSubGroupAvailable: boolean;
+        public isMandatory: boolean;
+        public groupName: string;
+        public subGroupName: string;
+        public parentGrpName: string;
+        public indexValue: number;
+        draggables: Array<any>;
+        selectedComponents: any;
+        selectedComponents1: any;
+        sortingLog: any;
+        draggableOptions: any;
+        sortableOptions: any;
+        sortableOptions1: any;
+        connectWithList: any;
+        pushDataIntoList: boolean;
+        destinationDiv: string;
+        courseIdMap: any;
+        pairCourseIdMapWithCourseId: any;
+        public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService',
+            'programService', 'commonService', 'optCourseOfferService'];
 
         constructor(private appConstants: any,
                     private httpClient: HttpClient,
@@ -48,92 +48,91 @@ module ums{
                     private semesterService: SemesterService,
                     private facultyService: FacultyService,
                     private programService: ProgramService,
-                    private commonService:CommonService,
-                    private optCourseOfferService:OptCourseOfferService
-                    ){
-            this.isMandatory=false;
-            this.groupName="";
-            this.subGroupName="";
-            this.parentGrpName="";
-            this.optOfferedCourseList=[];
-            this.connectWithList=[];
+                    private commonService: CommonService,
+                    private optCourseOfferService: OptCourseOfferService) {
+            this.isMandatory = false;
+            this.groupName = "";
+            this.subGroupName = "";
+            this.parentGrpName = "";
+            this.optOfferedCourseList = [];
+            this.connectWithList = [];
             this.commonService.fetchCurrentUser().then((departmentJson: any) => {
                 this.departmentId = departmentJson.id;
-                this.isSubGroupAvailable= this.departmentId=="05" ? true:false;
+                this.isSubGroupAvailable = this.departmentId == "05" ? true : false;
                 console.log("Dept Id: ");
                 console.log(this.departmentId);
                 this.getSemesters();
-            }).then((data)=>{
-                this.programService.fetchProgram(11).then((data)=>{
+            }).then((data) => {
+                this.programService.fetchProgram(11).then((data) => {
                     var app: Array<Program> = [];
-                    app=data;
-                    this.programs=app;
-                    this.programs=this.programs.filter(f=>f.departmentId==this.departmentId);
-                    this.program=this.programs[0];
-                    this.programId=this.program.id;
-                }).then((data)=>{
-                    this.yearSemList=[];
-                    this.yearSemList=this.appConstants.opYearSemester;
+                    app = data;
+                    this.programs = app;
+                    this.programs = this.programs.filter(f => f.departmentId == this.departmentId);
+                    this.program = this.programs[0];
+                    this.programId = this.program.id;
+                }).then((data) => {
+                    this.yearSemList = [];
+                    this.yearSemList = this.appConstants.opYearSemester;
                     console.log(this.yearSemList);
-                    if(this.departmentId=="04" || this.departmentId=="03"){
-                        this.yearSemList=this.yearSemList.filter(f=>f.id=="42");
+                    if (this.departmentId == "04" || this.departmentId == "03") {
+                        this.yearSemList = this.yearSemList.filter(f => f.id == "42");
                     }
-                    this.yearSem=this.yearSemList[0];
-                    this.yearSemName=this.yearSem.name;
-                    console.log("Y-S: "+this.yearSemName);
+                    this.yearSem = this.yearSemList[0];
+                    this.yearSemName = this.yearSem.name;
+                    console.log("Y-S: " + this.yearSemName);
                 });
             });
-            this.pushDataIntoList=false;
-            this.selectedComponents1=[];
-           // this.initialization();
+            this.pushDataIntoList = false;
+            this.selectedComponents1 = [];
+            // this.initialization();
             this.drag();
-            this.sortingLog=[];
-            this.sortableOptions={};
-            this.sortableOptions1={};
+            this.sortingLog = [];
+            this.sortableOptions = {};
+            this.sortableOptions1 = {};
         }
 
-        public drag(){
+
+        public drag() {
             console.log(this.connectWithList);
             let tmpThis = this;
-            let gpName=this;
-            let checkSource="draggable-element-container";
-            let changeColorToGreen=1;
-                this.draggableOptions = {
-                    connectWith: this.connectWithList,
-                    stop: function (e, ui) {
-                        // if the element is removed from the first container
-                        if (ui.item.sortable.source.hasClass('draggable-element-container') &&
-                            ui.item.sortable.droptarget &&
-                            ui.item.sortable.droptarget != ui.item.sortable.source) {
-                            // restore the removed item
-                            console.log("push");
-                            //draggable-element-container
-                            gpName.destinationDiv=ui.item.sortable.droptarget[0].classList[0].toString();
-                            if(checkSource!=gpName.destinationDiv){
-                                ui.item.sortable.sourceModel.push(ui.item.sortable.model);
-                                tmpThis.insert(ui.item.sortable.model);
-                                tmpThis.changeColor(ui.item.sortable.model.id,changeColorToGreen);
-                            }else{
-                                console.log("Same Source");
-                                console.log("s");
-                            }
+            let gpName = this;
+            let checkSource = "draggable-element-container";
+            let changeColorToGreen = 1;
+            this.draggableOptions = {
+                connectWith: this.connectWithList,
+                stop: function (e, ui) {
+                    // if the element is removed from the first container
+                    if (ui.item.sortable.source.hasClass('draggable-element-container') &&
+                        ui.item.sortable.droptarget &&
+                        ui.item.sortable.droptarget != ui.item.sortable.source) {
+                        // restore the removed item
+                        //draggable-element-container
+                        gpName.destinationDiv = ui.item.sortable.droptarget[0].classList[0].toString();
+                        if (checkSource != gpName.destinationDiv) {
+                            ui.item.sortable.sourceModel.push(ui.item.sortable.model);
+                            tmpThis.insert(ui.item.sortable.model);
+                            tmpThis.changeColor(ui.item.sortable.model.id, changeColorToGreen);
+                        } else {
+                            console.log("Same Source");
                         }
                     }
-                };
+                }
+            };
         }
-        public changeColor(courseId:any,setColor:number){
-            console.log(courseId+" :"+setColor);
+
+        public changeColor(courseId: any, setColor: number) {
+            console.log(courseId + " :" + setColor);
             var parentIndex;
-            for(let i=0;i<this.draggables.length;i++){
-                for(let j=0;j<this.draggables[i].courses.length;j++) {
-                    if(this.draggables[i].courses[j].id==courseId){
-                        this.draggables[i].courses[j].statusId=setColor;
-                        parentIndex=i;
+            for (let i = 0; i < this.draggables.length; i++) {
+                for (let j = 0; j < this.draggables[i].courses.length; j++) {
+                    if (this.draggables[i].courses[j].id == courseId) {
+                        this.draggables[i].courses[j].statusId = setColor;
+                        parentIndex = i;
                         break;
                     }
                 }
             }
-           this.draggables[parentIndex].courses.sort(function(a, b) {
+            this.draggables[parentIndex].courses.sort(function (a, b) {
                 if (a.id > b.id) {
                     return 1;
                 }
@@ -142,51 +141,74 @@ module ums{
                 }
                 return 0;
             });
-            console.log("Detect change[parentIndex]: "+parentIndex);
-            console.log(this.draggables);
         }
 
-        public insert(data:any){
-            console.log("Name: "+this.destinationDiv);
-            console.log(data);
-            var items={
-                id: data.id,
-            no: data.no,
-            title: data.title,
-            crHr:data.crHr,
-            courseType:data.courseType,
-            year: data.year,
-            semester: data.semester,
-            pairCourseId:data.pairCourseId,
-            statusId:data.statusId
-            };
-            var index=0,parentIndex=0,childIndex=0;
-
-            if(this.departmentId=="05"){
-            for(let i=0;i<this.optOfferedCourseList.length;i++){
-              for(let j=0;j<this.optOfferedCourseList[i].subGrpCourses.length;j++){
-                  if(this.optOfferedCourseList[i].subGrpCourses[j].groupName==this.destinationDiv){
-                      parentIndex=i;
-                      childIndex=j;
-                      break;
-                  }
-              }
-             }
-
-                this.optOfferedCourseList[parentIndex].subGrpCourses[childIndex].courses.push(items);
-                if(items.pairCourseId!=null){
-                    this.insertPairCourse(items.pairCourseId,parentIndex,childIndex);
+        public insert(data: any) {
+            var counter = 0;
+            if (this.departmentId != "05") {
+                console.log("NOT EEE");
+                for (let i = 0; i < this.optOfferedCourseList.length; i++) {
+                    for (let j = 0; j < this.optOfferedCourseList[i].courses.length; j++) {
+                        if (this.optOfferedCourseList[i].courses[j].id == data.id) {
+                            counter = 1;
+                            break;
+                        }
+                    }
                 }
-            }else{
+            } else {
+                console.log("NOT EEE");
+                for (let i = 0; i < this.optOfferedCourseList.length; i++) {
+                    for (let j = 0; j < this.optOfferedCourseList[i].subGrpCourses.length; j++) {
+                        for (let k = 0; k < this.optOfferedCourseList[i].subGrpCourses[j].courses.length; k++) {
+                            if (this.optOfferedCourseList[i].subGrpCourses[j].courses[k].id = data.id) {
+                                counter = 1;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            console.log("Counter: "+counter);
+            if (counter != 1) {
+            var items = {
+                id: data.id,
+                no: data.no,
+                title: data.title,
+                crHr: data.crHr,
+                courseType: data.courseType,
+                year: data.year,
+                semester: data.semester,
+                pairCourseId: data.pairCourseId,
+                statusId: data.statusId
+            };
+            var index = 0, parentIndex = 0, childIndex = 0;
+            if (this.departmentId == "05") {
+                for (let i = 0; i < this.optOfferedCourseList.length; i++) {
+                    for (let j = 0; j < this.optOfferedCourseList[i].subGrpCourses.length; j++) {
+                        if (this.optOfferedCourseList[i].subGrpCourses[j].groupName == this.destinationDiv) {
+                            parentIndex = i;
+                            childIndex = j;
+                            break;
+                        }
+                    }
+                }
+                this.optOfferedCourseList[parentIndex].subGrpCourses[childIndex].courses.push(items);
+                if (items.pairCourseId != null) {
+                    this.insertPairCourse(items.pairCourseId, parentIndex, childIndex);
+                }
+            } else {
                 index = this.optOfferedCourseList.map(e => e.groupName).indexOf(this.destinationDiv);
                 this.optOfferedCourseList[index].courses.push(items);
-                if(items.pairCourseId!=null){
-                    this.insertPairCourse(items.pairCourseId,index);
+                if (items.pairCourseId != null) {
+                    this.insertPairCourse(items.pairCourseId, index);
                 }
             }
             console.log("***insert***");
             console.log(this.optOfferedCourseList);
-        }
+        } else {
+         this.notify.error("This Course is Already Assigned");
+    }
+}
         public insertPairCourse(courseId:string,parentIndex:number,childIndex?:number):void{
             console.log("Inside Pair Course");
             var data=this.courseIdMap[courseId];
@@ -366,12 +388,53 @@ module ums{
             this.optCourseOfferService.getOptCourses(this.selectedSemesterId,this.programId,year,sem).then((data)=>{
                 this.optCourseList=[];
                 this.tempList=[];
+                this.draggables=[];
                 this.optCourseList=data;
                 this.tempList=this.optCourseList;
                 console.log("**Courses**");
                 console.log(this.optCourseList);
                 this.draggables=this.optCourseList;
                 this.createMap(this.draggables);
+            }).then((a)=>{
+                console.log("******************");
+                this.getOfferedCoursesList();
+            });
+
+        }
+        public getOfferedCoursesList():void{
+            let YS=this.yearSemName.split("-");
+            let year = +YS[0];
+            let sem= +YS[1];
+            this.optCourseOfferService.getOfferedCourses(this.selectedSemesterId,this.programId,year,sem).then((data)=>{
+                console.log("**data**");
+                this.optOfferedCourseList=[];
+                this.optOfferedCourseList=data;
+                console.log(this.optOfferedCourseList);
+            }).then((data)=>{
+                if(this.departmentId !="05"){
+                    for(let i=0;i<this.optOfferedCourseList.length;i++){
+                        this.connectWithList.push("."+this.optOfferedCourseList[i].groupName);
+                    }
+                    for(let i=0;i<this.optOfferedCourseList.length;i++){
+                        for(let j=0;j<this.optOfferedCourseList[i].courses.length;j++){
+                            this.changeColor(this.optOfferedCourseList[i].courses[j].id,1);
+                            console.log("Course Id: "+this.optOfferedCourseList[i].courses[j].id+"");
+                        }
+                    }
+                }else {
+                    for(let i=0;i<this.optOfferedCourseList.length;i++){
+                        for(let j=0;j<this.optOfferedCourseList[i].subGrpCourses.length;j++){
+                            this.connectWithList.push("."+this.optOfferedCourseList[i].subGrpCourses[j].groupName);
+                        }
+                    }
+                    for(let i=0;i<this.optOfferedCourseList.length;i++){
+                        for(let j=0;j<this.optOfferedCourseList[i].subGrpCourses.length;j++){
+                            for(let k=0;k<this.optOfferedCourseList[i].subGrpCourses[j].courses.length;k++){
+                                this.changeColor(this.optOfferedCourseList[i].subGrpCourses[j].courses[k].id,1);
+                            }
+                        }
+                    }
+                }
             });
         }
         public createMap(data:any){
