@@ -27,6 +27,8 @@ public class PersistentContributorDao extends ContributorDaoDecorator {
       + " COUNTRY=?,CATEGORY_ID=?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   static String DELETE_ONE = "DELETE FROM MST_CONTRIBUTOR ";
 
+  static String EXISTS_ONE = "SELECT COUNT(ID) FROM MST_CONTRIBUTOR ";
+
   private JdbcTemplate mJdbcTemplate;
   public IdGenerator mIdGenerator;
 
@@ -92,6 +94,12 @@ public class PersistentContributorDao extends ContributorDaoDecorator {
   public int delete(final MutableContributor pContributor) {
     String query = DELETE_ONE + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pContributor.getId());
+  }
+
+  @Override
+  public boolean exists(Long pId) {
+    String query = EXISTS_ONE + " WHERE ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, Boolean.class);
   }
 
   class ContributorRowMapper implements RowMapper<Contributor> {
