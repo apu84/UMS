@@ -5,27 +5,35 @@ import org.springframework.stereotype.Component;
 import org.ums.academic.resource.optCourse.optCourseBuilder.OptOfferedGroupBuilder;
 import org.ums.builder.Builder;
 import org.ums.domain.model.immutable.optCourse.OptOfferedGroup;
+import org.ums.domain.model.immutable.optCourse.OptOfferedGroupCourseMap;
 import org.ums.domain.model.mutable.optCourse.MutableOptOfferedGroup;
 import org.ums.domain.model.mutable.optCourse.MutableOptOfferedGroupCourseMap;
 import org.ums.domain.model.mutable.optCourse.MutableOptOfferedGroupSubGroupMap;
 import org.ums.domain.model.mutable.optCourse.MutableOptOfferedSubGroupCourseMap;
 import org.ums.enums.ProgramType;
 import org.ums.generator.IdGenerator;
-import org.ums.manager.ContentManager;
-import org.ums.manager.SemesterManager;
+import org.ums.manager.*;
+import org.ums.manager.optCourse.OptOfferedGroupCourseMapManager;
 import org.ums.manager.optCourse.OptOfferedGroupManager;
+import org.ums.manager.optCourse.OptOfferedGroupSubGroupMapManager;
+import org.ums.manager.optCourse.OptOfferedSubGroupCourseMapManager;
 import org.ums.persistent.model.optCourse.PersistentOptOfferedGroup;
 import org.ums.persistent.model.optCourse.PersistentOptOfferedGroupCourseMap;
 import org.ums.persistent.model.optCourse.PersistentOptOfferedGroupSubGroupMap;
 import org.ums.persistent.model.optCourse.PersistentOptOfferedSubGroupCourseMap;
+import org.ums.report.optReports.CourseList;
 import org.ums.report.optReports.OfferedOptCourseList;
 import org.ums.resource.ResourceHelper;
+import org.ums.usermanagement.user.UserManager;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by Monjur-E-Morshed on 9/18/2018.
@@ -34,13 +42,26 @@ import java.util.List;
 public class OptOfferedGroupResourceHelper extends ResourceHelper<OptOfferedGroup, MutableOptOfferedGroup, Long> {
   @Autowired
   OptOfferedGroupManager mOptOfferedGroupManager;
-
   @Autowired
   OptOfferedGroupBuilder mOptOfferedGroupBuilder;
   @Autowired
   SemesterManager mSemesterManager;
   @Autowired
   IdGenerator mIdGenerator;
+  @Autowired
+  OptOfferedGroupCourseMapManager mOptOfferedGroupCourseMapManager;
+  @Autowired
+  OptOfferedGroupSubGroupMapManager mOptOfferedGroupSubGroupMapManager;
+  @Autowired
+  OptOfferedSubGroupCourseMapManager mOptOfferedSubGroupCourseMapManager;
+  @Autowired
+  ProgramManager mProgramManager;
+  @Autowired
+  UserManager mUserManager;
+  @Autowired
+  EmployeeManager mEmployeeManager;
+  @Autowired
+  CourseManager mCourseManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -49,52 +70,127 @@ public class OptOfferedGroupResourceHelper extends ResourceHelper<OptOfferedGrou
 
   public Response addInfo(Integer pProgramId, Integer pYear, Integer pSemester,
       List<OfferedOptCourseList> offeredCourseList) {
-    for(int i = 0; i < offeredCourseList.size(); i++) {
-      offeredCourseList.get(i).setGroupId(Long.parseLong(mIdGenerator.getAlphaNumericId()));
+    Integer semesterId = mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId();
+    List<OfferedOptCourseList> x = getOptOfferedCourseList(semesterId, pProgramId, pYear, pSemester);
+    /*
+     * String userId = SecurityUtils.getSubject().getPrincipal().toString(); String
+     * deptId=mEmployeeManager.get(userId).getDepartment().getId(); List<Program>
+     * programList=mProgramManager.getProgramByDepartmentId(DepartmentType.EEE.getId());
+     * 
+     * List<MutableOptOfferedGroup> optGroupList = optGroup(pProgramId, pYear, pSemester,semesterId,
+     * offeredCourseList); mOptOfferedGroupManager.create(optGroupList);
+     * 
+     * List<OptOfferedGroup>
+     * grpList=mOptOfferedGroupManager.getBySemesterId(semesterId,pProgramId,pYear,pSemester);
+     * Map<String,Long>
+     * groupNameIdMap=grpList.stream().collect(Collectors.toMap(e->e.getGroupName(),e->e.getId()));
+     * if(pProgramId!=110500){ List<MutableOptOfferedGroupCourseMap> optGroupCourseIdMapList =
+     * getMutableOptOfferedGroupCourseMaps(offeredCourseList, groupNameIdMap);
+     * mOptOfferedGroupCourseMapManager.create(optGroupCourseIdMapList); }
+     * 
+     * if(pProgramId==110500) { List<MutableOptOfferedGroupSubGroupMap> groupSubGroupMapList =
+     * getMutableOptOfferedGroupSubGroupMaps(offeredCourseList, groupNameIdMap);
+     * mOptOfferedGroupSubGroupMapManager.create(groupSubGroupMapList);
+     * 
+     * List<OptOfferedGroupSubGroupMap> grpSubGrpList =
+     * mOptOfferedGroupSubGroupMapManager.getBySemesterId(semesterId, pProgramId, pYear, pSemester);
+     * Map<String, Long> groupSubGroupNameIdMap = grpSubGrpList.stream().collect(Collectors.toMap(e
+     * -> e.getSubGroupName(), e -> e.getSubGroupId())); List<MutableOptOfferedSubGroupCourseMap>
+     * subGroupCourseMap = getMutableOptOfferedSubGroupCourseMaps(offeredCourseList,
+     * groupSubGroupNameIdMap); mOptOfferedSubGroupCourseMapManager.create(subGroupCourseMap); }
+     */
+
+    return null;
+  }
+
+  public List<OfferedOptCourseList> getOptOfferedCourseList(Integer pSemesterId,Integer pProgramId,Integer pYear,Integer pSemester){
+    List<OptOfferedGroup> grpList=mOptOfferedGroupManager.getBySemesterId(pSemesterId,pProgramId,pYear,pSemester);
+    List<OptOfferedGroupCourseMap> groupCourseMap=mOptOfferedGroupCourseMapManager.getInfo(pSemesterId,pProgramId,pYear,pSemester);
+    Map<Long,List<OptOfferedGroupCourseMap>> map=groupCourseMap.stream().collect(Collectors.groupingBy(OptOfferedGroupCourseMap::getGroupId));
+    Map<Long,List<CourseList>> tempCourseList=  new HashMap<>();
+    for(Map.Entry<Long,List<OptOfferedGroupCourseMap>> entry: map.entrySet()){
+      Long groupId=entry.getKey();
+      List<CourseList> courseList= new ArrayList<>();
+      for(int i=0;i<entry.getValue().size();i++){
+        String courseId=entry.getValue().get(i).getCourseId();
+        CourseList app= new CourseList(courseId,
+                mCourseManager.get(courseId).getTitle(),
+                mCourseManager.get(courseId).getNo(),
+                mCourseManager.get(courseId).getCrHr(),
+                mCourseManager.get(courseId).getCourseType().getLabel(),
+                mCourseManager.get(courseId).getYear(),
+                mCourseManager.get(courseId).getSemester(),
+                mCourseManager.get(courseId).getPairCourseId(),
+                0);
+        courseList.add(app);
+      }
+      tempCourseList.put(groupId,courseList);
+    }
+    List<OfferedOptCourseList> newList= new ArrayList<>();
+    for(int i=0;i<grpList.size();i++){
+      OfferedOptCourseList app = new OfferedOptCourseList();
+      app.setGroupId(grpList.get(i).getId());
+      app.setGroupName(grpList.get(i).getGroupName());
+      app.setCourses(tempCourseList.get(grpList.get(i).getId()));
+      newList.add(app);
     }
 
-    List<MutableOptOfferedGroup> optGroupList = optGroup(pProgramId, pYear, pSemester, offeredCourseList);
-    List<MutableOptOfferedGroupCourseMap> optGroupCourseIdMapList = new ArrayList<>();
-    for(int i = 0; i < offeredCourseList.size(); i++) {
-      for(int j = 0; j < offeredCourseList.get(i).courses.size(); j++) {
-        MutableOptOfferedGroupCourseMap app = new PersistentOptOfferedGroupCourseMap();
-        // app.setGroupId(Long.parseLong(String.valueOf(offeredCourseList.get(i).groupId)));
-        app.setCourseId(offeredCourseList.get(i).courses.get(j).getId());
-        optGroupCourseIdMapList.add(app);
-      }
-    }
-    List<MutableOptOfferedGroupSubGroupMap> groupSubGroupMapList = new ArrayList<>();
-    for(int i = 0; i < offeredCourseList.size(); i++) {
-      for(int j = 0; j < offeredCourseList.get(i).subGrpCourses.size(); j++) {
-        MutableOptOfferedGroupSubGroupMap app = new PersistentOptOfferedGroupSubGroupMap();
-        app.setSubGroupName(offeredCourseList.get(i).subGrpCourses.get(j).groupName);
-        // app.setGroupId(offeredCourseList.get(i).groupId);
-        groupSubGroupMapList.add(app);
-      }
-    }
+    return null;
+  }
+
+  public List<MutableOptOfferedSubGroupCourseMap> getMutableOptOfferedSubGroupCourseMaps(
+      List<OfferedOptCourseList> offeredCourseList, Map<String, Long> groupSubGroupNameIdMap) {
     List<MutableOptOfferedSubGroupCourseMap> subGroupCourseMap = new ArrayList<>();
     for(int i = 0; i < offeredCourseList.size(); i++) {
       for(int j = 0; j < offeredCourseList.get(i).subGrpCourses.size(); j++) {
         for(int k = 0; k < offeredCourseList.get(i).subGrpCourses.get(j).courses.size(); k++) {
           MutableOptOfferedSubGroupCourseMap app = new PersistentOptOfferedSubGroupCourseMap();
+          app.setSubGroupId(groupSubGroupNameIdMap.get(offeredCourseList.get(i).subGrpCourses.get(j).groupName));
           app.setCourseId(offeredCourseList.get(i).subGrpCourses.get(j).courses.get(k).getId());
           subGroupCourseMap.add(app);
         }
 
       }
     }
+    return subGroupCourseMap;
+  }
 
-    return null;
+  public List<MutableOptOfferedGroupSubGroupMap> getMutableOptOfferedGroupSubGroupMaps(
+      List<OfferedOptCourseList> offeredCourseList, Map<String, Long> groupNameIdMap) {
+    List<MutableOptOfferedGroupSubGroupMap> groupSubGroupMapList = new ArrayList<>();
+    for(int i = 0; i < offeredCourseList.size(); i++) {
+      for(int j = 0; j < offeredCourseList.get(i).subGrpCourses.size(); j++) {
+        MutableOptOfferedGroupSubGroupMap app = new PersistentOptOfferedGroupSubGroupMap();
+        app.setGroupId(groupNameIdMap.get(offeredCourseList.get(i).getGroupName()));
+        app.setSubGroupName(offeredCourseList.get(i).subGrpCourses.get(j).groupName);
+        groupSubGroupMapList.add(app);
+      }
+    }
+    return groupSubGroupMapList;
+  }
+
+  public List<MutableOptOfferedGroupCourseMap> getMutableOptOfferedGroupCourseMaps(
+      List<OfferedOptCourseList> offeredCourseList, Map<String, Long> groupNameIdMap) {
+    List<MutableOptOfferedGroupCourseMap> optGroupCourseIdMapList = new ArrayList<>();
+    for(int i = 0; i < offeredCourseList.size(); i++) {
+      for(int j = 0; j < offeredCourseList.get(i).courses.size(); j++) {
+        MutableOptOfferedGroupCourseMap app = new PersistentOptOfferedGroupCourseMap();
+        app.setGroupId(groupNameIdMap.get(offeredCourseList.get(i).getGroupName()));
+        app.setCourseId(offeredCourseList.get(i).courses.get(j).getId());
+        optGroupCourseIdMapList.add(app);
+      }
+    }
+    return optGroupCourseIdMapList;
   }
 
   private List<MutableOptOfferedGroup> optGroup(Integer pProgramId, Integer pYear, Integer pSemester,
-      List<OfferedOptCourseList> offeredCourseList) {
+      Integer pSemesterId, List<OfferedOptCourseList> offeredCourseList) {
     List<MutableOptOfferedGroup> optGroup = new ArrayList<>();
     for(int i = 0; i < offeredCourseList.size(); i++) {
       MutableOptOfferedGroup app = new PersistentOptOfferedGroup();
       app.setGroupName(offeredCourseList.get(i).groupName);
       app.setIsMandatory(offeredCourseList.get(i).isMandatory == true ? 1 : 0);
-      app.setSemesterId(mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId());
+      app.setSemesterId(pSemesterId);
       app.setProgramId(pProgramId);
       app.setYear(pYear);
       app.setSemester(pSemester);

@@ -7,6 +7,8 @@ import org.ums.domain.model.mutable.optCourse.MutableOptOfferedGroupCourseMap;
 import org.ums.manager.CacheManager;
 import org.ums.manager.optCourse.OptOfferedGroupCourseMapManager;
 
+import java.util.List;
+
 /**
  * Created by Monjur-E-Morshed on 9/18/2018.
  */
@@ -22,5 +24,11 @@ public class OptOfferedGroupCourseMapCache extends
 
   public OptOfferedGroupCourseMapCache(CacheManager<OptOfferedGroupCourseMap, Long> pCacheManager) {
     mCacheManager = pCacheManager;
+  }
+
+  @Override
+  public List<OptOfferedGroupCourseMap> getInfo(Integer pSemesterId, Integer pProgramId, Integer pYear,
+      Integer pSemester) {
+    return getManager().getInfo(pSemesterId, pProgramId, pYear, pSemester);
   }
 }

@@ -7,7 +7,7 @@ public class CourseList {
   private String Id;
   private String title;
   private String no;
-  private Integer crHr;
+  private Float crHr;
   private String courseType;
   private Integer year;
   private Integer semester;
@@ -18,8 +18,8 @@ public class CourseList {
 
   }
 
-  public CourseList(String id, String title, String no, Integer crHr, String courseType, Integer year,
-      Integer semester, String pairCourseId, Integer statusId) {
+  public CourseList(String id, String title, String no, Float crHr, String courseType, Integer year, Integer semester,
+      String pairCourseId, Integer statusId) {
     Id = id;
     this.title = title;
     this.no = no;
@@ -55,11 +55,11 @@ public class CourseList {
     this.no = no;
   }
 
-  public Integer getCrHr() {
+  public Float getCrHr() {
     return crHr;
   }
 
-  public void setCrHr(Integer crHr) {
+  public void setCrHr(Float crHr) {
     this.crHr = crHr;
   }
 

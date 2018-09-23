@@ -38,7 +38,7 @@ public class RecordLogResourceHelper extends ResourceHelper<RecordLog, MutableRe
     clause += (pEmployeeId.isEmpty() ? "" : " MODIFIED_BY = " + pEmployeeId);
     clause += (pDate.isEmpty() && pEmployeeId.isEmpty()) || (pDate.isEmpty() && pMfn.isEmpty()) ? "" : " AND ";
     clause += (pMfn.isEmpty() ? "" : " MFN = " + Long.parseLong(pMfn));
-   // List<RecordLog> recordLogs = mManager.getAll();
+    // List<RecordLog> recordLogs = mManager.getAll();
 
     List<RecordLog> recordLogs = mManager.get(clause);
     return buildJsonResponse(recordLogs, pUriInfo);

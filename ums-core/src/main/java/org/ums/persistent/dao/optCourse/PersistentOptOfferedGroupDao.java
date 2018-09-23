@@ -4,11 +4,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.optCourse.OptOfferedGroupDaoDecorator;
 import org.ums.domain.model.immutable.optCourse.OptOfferedGroup;
+import org.ums.domain.model.mutable.optCourse.MutableOptOfferedGroup;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.optCourse.PersistentOptOfferedGroup;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Monjur-E-Morshed on 9/18/2018.
@@ -22,6 +26,44 @@ public class PersistentOptOfferedGroupDao extends OptOfferedGroupDaoDecorator {
     mIdGenerator = pIdGenerator;
   }
 
+  String INSERT =
+      "Insert into OPT_GROUP (ID,GROUP_NAME,SEMESTER_ID,PROGRAM_ID,IS_MANDATORY,\"YEAR\",SEMESTER) values (?,?,?,?,?,?,?)";
+
+  String GET_BY_NAME =
+      "SELECT ID,GROUP_NAME,SEMESTER_ID,PROGRAM_ID,IS_MANDATORY,\"YEAR\",SEMESTER_ID FROM OPT_GROUP WHERE SEMESTER_ID=? AND GROUP_NAME=?";
+
+  String GET_BY_SEMESTER_ID =
+      "SELECT ID,GROUP_NAME,SEMESTER_ID,PROGRAM_ID,IS_MANDATORY,\"YEAR\",SEMESTER FROM OPT_GROUP WHERE SEMESTER_ID=? AND PROGRAM_ID=? AND \"YEAR\"=? AND SEMESTER=?";
+
+  @Override
+  public List<OptOfferedGroup> getBySemesterId(Integer pSemesterId, Integer pProgramId, Integer pYear, Integer pSemester) {
+    return mJdbcTemplate.query(GET_BY_SEMESTER_ID, new Object[] {pSemesterId, pProgramId, pYear, pSemester},
+        new OptOfferedGroupRowMapper());
+  }
+
+  @Override
+  public OptOfferedGroup getByGroupName(String pGroupName) {
+    return mJdbcTemplate.queryForObject(GET_BY_NAME, new Object[] {pGroupName}, new OptOfferedGroupRowMapper());
+  }
+
+  @Override
+  public List<Long> create(List<MutableOptOfferedGroup> pMutableList) {
+    List<Object[]>  parameters  =  getInsertParamList(pMutableList);
+    mJdbcTemplate.batchUpdate(INSERT,  parameters);
+    return  parameters.stream()
+            .map(paramArray  ->  (Long)  paramArray[0])
+            .collect(Collectors.toCollection(ArrayList::new));
+  }
+
+  private List<Object[]> getInsertParamList(List<MutableOptOfferedGroup> pOptOfferedGroup) {
+    List<Object[]> params = new ArrayList<>();
+    for(OptOfferedGroup app : pOptOfferedGroup) {
+      params.add(new Object[] {mIdGenerator.getNumericId(), app.getGroupName(), app.getSemesterId(),
+          app.getProgramId(), app.getIsMandatory(), app.getYear(), app.getSemester()});
+    }
+
+    return params;
+  }
 }
 
 
