@@ -70,6 +70,7 @@ module ums{
               },
               (response:ng.IHttpPromiseCallbackArg<any>)=>{
                   console.error(response);
+                  defer.reject(response);
                   this.notify.error("Error in fetching employee data");
               });
 

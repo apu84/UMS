@@ -15,5 +15,9 @@ public interface MutableRecordLog extends RecordLog, Editable<Long>, MutableLast
 
   void setModifiedOn(final Date pModifiedOn);
 
-  void setModification(final String pModification);
+  void setModificationType(final Integer pModificationType);
+
+  void setPreviousJson(final String pPreviousJson);
+
+  void setModifiedJson(final String pModifiedJson);
 }

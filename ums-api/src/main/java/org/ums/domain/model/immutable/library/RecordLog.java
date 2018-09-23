@@ -16,5 +16,9 @@ public interface RecordLog extends Serializable, LastModifier, EditType<MutableR
 
   Date getModifiedOn();
 
-  String getModification();
+  Integer getModificationType();
+
+  String getPreviousJson();
+
+  String getModifiedJson();
 }
