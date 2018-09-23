@@ -30,11 +30,13 @@
 
                                 <label class="col-md-4 control-label">Modified By</label>
                                 <div class="col-md-8">
-                                    <input class="form-control"
-                                           name="nModifiedBy"
-                                           id="iModifiedBy"
-                                           placeholder="ex: 742002"
-                                           data-ng-model="vm.modifiedBy"/>
+                                    <select name="nModifiedBy"
+                                            id="iModifiedBy"
+                                            data-ng-options="employee.employeeName + ' [' + employee.id + ']' for employee in vm.employees track by employee.id"
+                                            data-ng-model="vm.modifiedBy"
+                                            class="form-control">
+                                        <option value="">Select Modified By</option>
+                                    </select>
                                 </div>
                             </div>
 
