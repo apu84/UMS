@@ -1,7 +1,6 @@
-package org.ums.services.academic.helper;
+package org.ums.services.academic.routine.helper;
 
 import java.time.LocalTime;
-import java.util.Date;
 
 /**
  * Created by Monjur-E-Morshed on 08-Sep-18.

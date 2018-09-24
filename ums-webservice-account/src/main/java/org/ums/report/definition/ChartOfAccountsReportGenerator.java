@@ -11,8 +11,8 @@ import org.ums.domain.model.immutable.accounts.Group;
 import org.ums.enums.accounts.definitions.group.GroupType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.*;
-import org.ums.report.itext.UmsCell;
-import org.ums.report.itext.UmsParagraph;
+import org.ums.itext.UmsCell;
+import org.ums.itext.UmsParagraph;
 import org.ums.util.Utils;
 
 import java.io.ByteArrayOutputStream;

@@ -9,9 +9,8 @@ import org.ums.domain.model.immutable.*;
 import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
 import org.ums.manager.*;
-import org.ums.report.itext.UmsPdfPageEventHelper;
+import org.ums.itext.UmsPdfPageEventHelper;
 import org.ums.util.UmsUtils;
-import sun.font.FontFamily;
 
 import javax.ws.rs.WebApplicationException;
 import java.io.ByteArrayOutputStream;

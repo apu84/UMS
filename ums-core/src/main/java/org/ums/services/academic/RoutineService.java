@@ -23,9 +23,10 @@ import org.ums.manager.routine.RoutineConfigManager;
 import org.ums.manager.routine.RoutineManager;
 import org.ums.persistent.model.PersistentCourseTeacher;
 import org.ums.persistent.model.routine.PersistentRoutine;
-import org.ums.services.academic.helper.RoutineTime;
+import org.ums.services.academic.routine.helper.RoutineTime;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -39,8 +40,6 @@ public class RoutineService {
 
   @Autowired
   private RoutineManager mRoutineManager;
-  @Autowired
-  private SemesterManager mSemesterManager;
   @Autowired
   private ProgramManager mProgramManager;
   @Autowired
@@ -184,8 +183,7 @@ public class RoutineService {
       createColumnAndTimeMap(pSheet, row);
     }
     else {
-      // todo change 6 to 5 when there is two weekends.
-      for(int i = 1; i <= 6; i++) {
+      for(int i = 1; i <= routineConfig.getDayTo().getValue(); i++) {
         Row row = pSheet.getRow(i);
         extractRoutineInformationFromRow(row, pSemesterId, pProgramId, pRoutineList, pYear, pSemester, pSection,
             pGlobalRoomNo);
@@ -211,8 +209,8 @@ public class RoutineService {
   private void extractExcelCell(Row pRow, Integer pSemesterId, Integer pProgramId, List<MutableRoutine> pRoutineList,
       int pYear, int pSemester, String pSection, String pGlobalRoomNo, String pDayName, int pI) {
     String[] cellStrings = pRow.getCell(pI).toString().split("\n");
-    Random random = new Random();
-    int groupId = random.nextInt(10000);
+    Random random = new SecureRandom();
+    int groupId = random.nextInt(1000000);
     RoutineTime routineTime = columnMapWithTime.get(pRow.getCell(pI).getColumnIndex());
     for(int k = 0; k < cellStrings.length; k++) {
       k =
@@ -267,25 +265,25 @@ public class RoutineService {
     if(!courseMapWithCourseNo.containsKey(courseNo)) {
       foundError = true;
       this.exceptions.add("Course " + courseNo + " is not correctly assigned at sheet -> "
-          + pRow.getSheet().getSheetName());
+          + pRow.getSheet().getSheetName() + ", row->" + (pRow.getRowNum() + 1));
     }
     else {
       pRoutine.setCourseId(courseMapWithCourseNo.get(courseNo).getId());
       if(pRoutine.getCourse().getCourseType().equals(CourseType.SESSIONAL)) {
         pRoutine.setSection(pCourseRoutineInfo[2]);
-        if(3 < pCourseRoutineInfo.length && classRoomMapWithRoomNo.containsKey(pCourseRoutineInfo[3])) {
+        if(pCourseRoutineInfo.length > 3 && classRoomMapWithRoomNo.containsKey(pCourseRoutineInfo[3])) {
           pRoutine.setRoomId((4 <= pCourseRoutineInfo.length) ? classRoomMapWithRoomNo.get(pCourseRoutineInfo[3])
               .getId() : classRoomMapWithRoomNo.get(pGlobalRoomNo).getId());
         }
         else {
           foundError = true;
-          if(3 > pCourseRoutineInfo.length)
+          if(3 == pCourseRoutineInfo.length)
             this.exceptions.add("Room no is missing in sessional course " + pRoutine.getCourse().getNo()
-                + " in sheet ->" + pRow.getSheet().getSheetName());
+                + " in sheet ->" + pRow.getSheet().getSheetName() + ", row -> " + (pRow.getRowNum() + 1));
           else
-            this.exceptions.add("Romm no->" + pCourseRoutineInfo[3]
+            this.exceptions.add("Room no->" + pCourseRoutineInfo[3]
                 + " is not in correct format or the room number is not stored, in sheet ->"
-                + pRow.getSheet().getSheetName());
+                + pRow.getSheet().getSheetName() + ", row-> " + (pRow.getRowNum() + 1));
         }
 
       }
@@ -296,9 +294,9 @@ public class RoutineService {
               .getId() : classRoomMapWithRoomNo.get(pGlobalRoomNo).getId());
         } catch(Exception e) {
           foundError = true;
-          this.exceptions.add("Romm no->" + (3 <= pCourseRoutineInfo.length ? pCourseRoutineInfo[2] : pGlobalRoomNo)
+          this.exceptions.add("Room no->" + (3 <= pCourseRoutineInfo.length ? pCourseRoutineInfo[2] : pGlobalRoomNo)
               + " is not in correct format or the room number is not stored, in sheet ->"
-              + pRow.getSheet().getSheetName());
+              + pRow.getSheet().getSheetName() + ", row-> " + (pRow.getRowNum() + 1));
         }
 
       }

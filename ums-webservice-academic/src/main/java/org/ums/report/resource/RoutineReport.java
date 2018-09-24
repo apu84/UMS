@@ -23,7 +23,6 @@ import java.io.OutputStream;
 @Component
 @Path("academic/routine")
 @Consumes(Resource.MIME_TYPE_JSON)
-@Produces({"application/vnd.ms-excel"})
 public class RoutineReport {
   @Autowired
   RoutineResourceHelper mRoutineResourceHelper;
@@ -33,6 +32,7 @@ public class RoutineReport {
   @GET
   @Path("/routine-template")
   @GetLog(message = "Requested for downloading routine Template")
+  @Produces({"application/vnd.ms-excel"})
   public StreamingOutput get(@Context HttpServletRequest pHttpServletRequest, final @Context Request pRequest) {
     return new StreamingOutput() {
       @Override
@@ -47,4 +47,5 @@ public class RoutineReport {
       }
     };
   }
+
 }

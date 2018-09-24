@@ -32,6 +32,8 @@ public class ReportUtils {
 
   public static Font mLiteFont = new Font(Font.FontFamily.TIMES_ROMAN, 10);
   public static Font mBoldFont = new Font(Font.FontFamily.TIMES_ROMAN, 10f, Font.BOLD, BaseColor.BLACK);
+  public static Font mLiteMediumFont = new Font(Font.FontFamily.TIMES_ROMAN, 8);
+  public static Font mBoldMediumFont = new Font(Font.FontFamily.TIMES_ROMAN, 8f, Font.BOLD, BaseColor.BLACK);
   public static Font mSmallFont = new Font(Font.FontFamily.TIMES_ROMAN, 3f);
   public static Font mBigBoldFont = new Font(Font.FontFamily.TIMES_ROMAN, 14f, Font.BOLD, BaseColor.BLACK);
 
