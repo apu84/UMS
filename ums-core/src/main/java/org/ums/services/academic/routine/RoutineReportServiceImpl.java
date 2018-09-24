@@ -290,11 +290,13 @@ public class RoutineReportServiceImpl implements RoutineReportService {
             paragraph.add(routine.getCourse().getNo() + "(" + routine.getSection() + ")");
             paragraph.setFont(ReportUtils.mLiteMediumFont);
             paragraph.setAlignment(Element.ALIGN_CENTER);
+            paragraph.setSpacingBefore(-5);
             cell = new UmsCell();
             cell.addElement(paragraph);
             paragraph = new UmsParagraph(routine.getRoom().getRoomNo(), ReportUtils.mLiteMediumFont);
             paragraph.setFont(ReportUtils.mLiteMediumFont);
             paragraph.setAlignment(Element.ALIGN_CENTER);
+            paragraph.setSpacingBefore(-3);
             cell.addElement(paragraph);
             Long cellAlignment =
                 routine.getStartTime().until(routine.getEndTime(), MINUTES) / pRoutineConfig.getDuration();
