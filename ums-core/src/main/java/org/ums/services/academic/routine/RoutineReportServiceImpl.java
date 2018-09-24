@@ -89,8 +89,14 @@ public class RoutineReportServiceImpl implements RoutineReportService {
     paragraph.setAlignment(Element.ALIGN_CENTER);
     document.add(paragraph);
 
+    Map<String, List<CourseTeacher>> courseTeacherMap =
+        createCourseTeacherMapWithSectionAndCourseId(pSemesterId, pTeachersId);
     List<Routine> routineList = mRoutineManager.getRoutineByTeacher(pTeachersId, pSemesterId);
-    createRoutineReportChart(document, pSemesterId, ProgramType.UG, routineList, null, pOutputStream);
+    document =
+        createRoutineReportChart(document, pSemesterId, ProgramType.UG, routineList, courseTeacherMap, pOutputStream);
+
+    document.close();
+    baos.writeTo(pOutputStream);
   }
 
   @Override
@@ -135,7 +141,7 @@ public class RoutineReportServiceImpl implements RoutineReportService {
 
   @Override
   public void createRoomBasedRoutine(Long pRoomId, Integer pSemesterId, OutputStream pOutputStream)
-      throws InvalidObjectException, DocumentException {
+      throws InvalidObjectException, DocumentException, IOException {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
     Document document = initializeDocument(baos);
@@ -155,8 +161,12 @@ public class RoutineReportServiceImpl implements RoutineReportService {
     List<Routine> routineList =
         mRoutineManager.getRoutineBySemesterAndRoom(pSemesterId, Integer.parseInt(pRoomId.toString()));
 
-    createRoutineReportChart(document, pSemesterId, ProgramType.UG, routineList, null, pOutputStream);
-
+    Map<String, List<CourseTeacher>> courseTeacherMap =
+        createCourseTeacherMapWIthSectionAndCourseId(pSemesterId, routineList);
+    document =
+        createRoutineReportChart(document, pSemesterId, ProgramType.UG, routineList, courseTeacherMap, pOutputStream);
+    document.close();
+    baos.writeTo(pOutputStream);
   }
 
   private Document initializeDocument(ByteArrayOutputStream baos) throws DocumentException {
@@ -230,23 +240,35 @@ public class RoutineReportServiceImpl implements RoutineReportService {
   PdfPTable createRoutineRows(List<Routine> pRoutineList,
       Map<String, List<CourseTeacher>> pCourseTeacherMapWithSectionAndCourseId, PdfPTable pTable, DayType pDayType,
       RoutineConfig pRoutineConfig) {
-    Map<Integer, RoutineGroup> routineGroupMap = createRoutineGroupMapWithGroupId(pRoutineList);
-    Map<LocalTime, RoutineGroup> routineGroupMapWithStartTime = createRoutineGroupMapWithStartTime(routineGroupMap);
+
     UmsCell cell = new UmsCell();
     UmsParagraph paragraph = new UmsParagraph(pDayType.getLabel().substring(0, 3), ReportUtils.mBoldFont);
     paragraph.setAlignment(Element.ALIGN_CENTER);
     cell.addElement(paragraph);
     pTable.addCell(cell);
 
-    LocalTime startTime = pRoutineConfig.getStartTime();
-    while(!startTime.equals(pRoutineConfig.getEndTime()) && !startTime.isAfter(pRoutineConfig.getEndTime())) {
-      RoutineReportHelper routineReportHelper =
-          createSlot(startTime, routineGroupMapWithStartTime, pRoutineConfig, pCourseTeacherMapWithSectionAndCourseId);
-      cell = routineReportHelper.getUmsCell();
-      cell.setColspan(routineReportHelper.getAlignment());
-      pTable.addCell(cell);
-      startTime = routineReportHelper.getStartTime();
+    if(pRoutineList != null) {
+      Map<Integer, RoutineGroup> routineGroupMap = createRoutineGroupMapWithGroupId(pRoutineList);
+      Map<LocalTime, RoutineGroup> routineGroupMapWithStartTime = createRoutineGroupMapWithStartTime(routineGroupMap);
+      LocalTime startTime = pRoutineConfig.getStartTime();
+      while(!startTime.equals(pRoutineConfig.getEndTime()) && !startTime.isAfter(pRoutineConfig.getEndTime())) {
+        RoutineReportHelper routineReportHelper =
+            createSlot(startTime, routineGroupMapWithStartTime, pRoutineConfig, pCourseTeacherMapWithSectionAndCourseId);
+        cell = routineReportHelper.getUmsCell();
+        cell.setColspan(routineReportHelper.getAlignment());
+        pTable.addCell(cell);
+        startTime = routineReportHelper.getStartTime();
+      }
     }
+    else {
+      Long totalColumn =
+          pRoutineConfig.getStartTime().until(pRoutineConfig.getEndTime(), MINUTES) / pRoutineConfig.getDuration();
+      for(int i = 1; i <= totalColumn.intValue(); i++) {
+        cell = new UmsCell(new Paragraph(" "));
+        pTable.addCell(cell);
+      }
+    }
+
     return pTable;
   }
 
@@ -301,6 +323,20 @@ public class RoutineReportServiceImpl implements RoutineReportService {
             Long cellAlignment =
                 routine.getStartTime().until(routine.getEndTime(), MINUTES) / pRoutineConfig.getDuration();
             cell.setColspan(cellAlignment.intValue());
+
+            List<String> courseTeacherNameList = new ArrayList<>();
+            if(courseTeacherMapWithCourseIdAndSection.containsKey(routine.getCourseId()+routine.getSection()))
+              courseTeacherNameList = courseTeacherMapWithCourseIdAndSection.get(routine.getCourseId()+routine.getSection())
+                  .stream().map(c->{
+                    String name =  c.getTeacher().getName().trim();
+                    String[] nameArr = name.split(" ");
+                    return nameArr[nameArr.length-1];
+                  }).collect(Collectors.toList());
+
+            paragraph = new UmsParagraph("("+(courseTeacherNameList.isEmpty()?"TBA": StringUtils.join(courseTeacherNameList, ","))+")", ReportUtils.mLiteMediumFont);
+            paragraph.setAlignment(Element.ALIGN_CENTER);
+            paragraph.setSpacingBefore(-3);
+            cell.addElement(paragraph);
             table.addCell(cell);
             startTime = routine.getEndTime();
           }
@@ -378,23 +414,47 @@ public class RoutineReportServiceImpl implements RoutineReportService {
     List<CourseTeacher> courseTeacherList =
         mCourseTeacherManager.getCourseTeacher(pProgramId, pSemesterId, pSection, pAcademicYear, pAcademicSemester);
 
-    for(CourseTeacher courseTeacher : courseTeacherList) {
-      if(courseTeacherMapWithSectionAndCourseId.containsKey(courseTeacher.getCourseId() + courseTeacher.getSection())) {
+    generateCourseTeacherMap(courseTeacherMapWithSectionAndCourseId, courseTeacherList);
+
+    return courseTeacherMapWithSectionAndCourseId;
+  }
+
+  Map<String, List<CourseTeacher>> createCourseTeacherMapWithSectionAndCourseId(Integer pSemesterId, String pTeacherId) {
+    Map<String, List<CourseTeacher>> courseTeacherMapWithSectionAndCourseId = new HashMap<>();
+    List<CourseTeacher> courseTeacherList = mCourseTeacherManager.getAssignedCourses(pSemesterId, pTeacherId);
+
+    generateCourseTeacherMap(courseTeacherMapWithSectionAndCourseId, courseTeacherList);
+    return courseTeacherMapWithSectionAndCourseId;
+  }
+
+  Map<String, List<CourseTeacher>> createCourseTeacherMapWIthSectionAndCourseId(Integer pSemesterId, List<Routine> pRoutineList){
+    Map<String, List<CourseTeacher>> courseTeacherMapWithSectionAndCourseId = new HashMap<>();
+    List<String> courseIdList = pRoutineList.stream()
+        .map(r->r.getCourse().getId())
+        .collect(Collectors.toList());
+    List<CourseTeacher> courseTeacherList = mCourseTeacherManager.getCourseTeacher(pSemesterId, courseIdList);
+    generateCourseTeacherMap(courseTeacherMapWithSectionAndCourseId, courseTeacherList);
+
+    return courseTeacherMapWithSectionAndCourseId;
+  }
+
+  private void generateCourseTeacherMap(Map<String, List<CourseTeacher>> pCourseTeacherMapWithSectionAndCourseId,
+      List<CourseTeacher> pCourseTeacherList) {
+    for(CourseTeacher courseTeacher : pCourseTeacherList) {
+      if(pCourseTeacherMapWithSectionAndCourseId.containsKey(courseTeacher.getCourseId() + courseTeacher.getSection())) {
         List<CourseTeacher> mapCourseTeacherList =
-            courseTeacherMapWithSectionAndCourseId.get(courseTeacher.getCourseId() + courseTeacher.getSection());
+            pCourseTeacherMapWithSectionAndCourseId.get(courseTeacher.getCourseId() + courseTeacher.getSection());
         mapCourseTeacherList.add(courseTeacher);
-        courseTeacherMapWithSectionAndCourseId.put(courseTeacher.getCourseId() + courseTeacher.getSection(),
+        pCourseTeacherMapWithSectionAndCourseId.put(courseTeacher.getCourseId() + courseTeacher.getSection(),
             mapCourseTeacherList);
       }
       else {
         List<CourseTeacher> mapCourseTeacherList = new ArrayList<>();
         mapCourseTeacherList.add(courseTeacher);
-        courseTeacherMapWithSectionAndCourseId.put(courseTeacher.getCourseId() + courseTeacher.getSection(),
+        pCourseTeacherMapWithSectionAndCourseId.put(courseTeacher.getCourseId() + courseTeacher.getSection(),
             mapCourseTeacherList);
       }
     }
-
-    return courseTeacherMapWithSectionAndCourseId;
   }
 
   class HeaderAndFooter extends UmsPdfPageEventHelper {

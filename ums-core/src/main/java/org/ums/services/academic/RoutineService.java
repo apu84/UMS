@@ -26,6 +26,7 @@ import org.ums.persistent.model.routine.PersistentRoutine;
 import org.ums.services.academic.routine.helper.RoutineTime;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -182,7 +183,6 @@ public class RoutineService {
       createColumnAndTimeMap(pSheet, row);
     }
     else {
-      // todo change 6 to 5 when there is two weekends.
       for(int i = 1; i <= routineConfig.getDayTo().getValue(); i++) {
         Row row = pSheet.getRow(i);
         extractRoutineInformationFromRow(row, pSemesterId, pProgramId, pRoutineList, pYear, pSemester, pSection,

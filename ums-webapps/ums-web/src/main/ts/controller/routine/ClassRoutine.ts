@@ -119,6 +119,14 @@ module ums {
       this.classRoutineService.getSemesterWiseRoutineReport(this.classRoutineService.selectedSemester.id, this.classRoutineService.selectedProgram.id, +this.classRoutineService.studentsYear, +this.classRoutineService.studentsSemester, this.classRoutineService.selectedTheorySection.id);
     }
 
+      public downloadTeacherWiseReport(){
+        this.classRoutineService.getTeacherWiseReport( this.classRoutineService.selectedTeacher.id, this.classRoutineService.selectedSemester.id);
+      }
+
+      public downloadRoomWiseReport(){
+        this.classRoutineService.getRoomWiseRoutine(+this.selectedRoom.id , this.classRoutineService.selectedSemester.id);
+      }
+
     public fetchCurrentUser(){
         this.userService.fetchCurrentUserInfo().then((user:User)=>{
             this.loggedUser=<User>{};
@@ -172,6 +180,7 @@ module ums {
       this.classRoutineService.showTeacherWiseRoutine = true;
       this.classRoutineService.showRoomWiseRoutine = false;
       this.showRoutineChart = false;
+      this.classRoutineService.selectedTeacher= <Employee>{};
       this.classRoutineService.sectionSpecific=false;
 
       this.fetchActiveTeachers();
@@ -199,6 +208,7 @@ module ums {
       this.classRoutineService.showRoomWiseRoutine = true;
       this.showRoutineChart = false;
       this.classRoutineService.sectionSpecific=false;
+      this.selectedRoom = <ClassRoom>{};
 
       this.fetchClassRooms();
     }
