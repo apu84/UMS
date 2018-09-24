@@ -80,22 +80,22 @@
                                                      <thead data-ng-hide="vm.isSubGroupAvailable">
                                                      <tr>
                                                          <th width="2%">#</th>
-                                                         <th width="70%">Course Details</th>
-                                                         <th width="8%">crHr</th>
-                                                         <th width="20%">Course Type</th>
+                                                         <th width="20%">Course No</th>
+                                                         <th width="50%">Course Title</th>
+                                                         <th width="8%" style="text-align:right">crHr</th>
+                                                         <th width="20%" style="text-align:center">Course Type</th>
                                                      </tr>
                                                      </thead>
                                                      <tbody data-ng-hide="vm.isSubGroupAvailable">
                                                      <tr data-ng-repeat="app in course.courses track by $index">
                                                          {{app}}
                                                          <td width="2%">{{$index + 1}}</td>
-                                                         <td width="70%">{{app.title}}
-                                                             <b>&nbsp;&nbsp;&nbsp;{{"  ("+app.no+")  "}}&nbsp;&nbsp;&nbsp;</b>
-                                                         </td>
-                                                         <td  width="8%">
+                                                         <td width="20%"><b>{{app.no}}</b></td>
+                                                         <td width="50%">{{app.title}}</td>
+                                                         <td  width="8%" align="right">
                                                              <b>{{app.crHr}}</b>
                                                          </td>
-                                                         <td width="20%">
+                                                         <td width="20%" align="center">
                                                              <span data-ng-if="app.courseType=='THEORY'" class="badge badge-success">{{app.courseType}}</span>
                                                              <span data-ng-if="app.courseType=='SESSIONAL'" class="badge badge-warning">{{app.courseType}}</span></td>
 
