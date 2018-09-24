@@ -197,8 +197,8 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
     for(int i = 0; i < id.length; i++) {
       contributorJson.add(
           "name",
-              id[i] == null ? "" : mContributorManager.exists(Long.parseLong(id[i])) ? mContributorManager.get(Long.parseLong(id[i]))
-              .getFullName() : "").add("roleName",
+          id[i] == null ? "" : mContributorManager.exists(Long.parseLong(id[i])) ? mContributorManager.get(
+              Long.parseLong(id[i])).getFullName() : "").add("roleName",
           role[i] == null ? "" : ContributorRole.get(Integer.parseInt(role[i])).getLabel());
       contributorArrayJson.add(contributorJson);
     }

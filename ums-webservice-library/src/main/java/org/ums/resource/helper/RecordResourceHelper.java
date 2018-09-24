@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
@@ -50,9 +52,9 @@ import java.util.List;
  * Created by Ifti on 19-Feb-17.
  */
 @Component
-public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, Long>
+public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, Long> {
 
-{
+  private static Logger mLogger = LoggerFactory.getLogger(RecordBuilder.class);
 
   @Autowired
   private RecordManager mManager;
@@ -140,7 +142,9 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     List<RecordDocument> recordDocuments =
         mRecordRepository.findByCustomQuery(query, new PageRequest(pPage, pItemPerPage), query.contains("*:*"));
     List<Record> records = new ArrayList<>();
+    mLogger.info("Returned record indexes from solr during search:");
     for(RecordDocument document : recordDocuments) {
+      mLogger.info("Record Id: " + Long.valueOf(document.getId()));
       records.add(mManager.get(Long.valueOf(document.getId())));
     }
     // queryBuilder(pFilter);
