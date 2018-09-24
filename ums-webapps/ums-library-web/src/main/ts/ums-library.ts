@@ -21,6 +21,7 @@ module ums {
         baseUriProvider.setServicePath('/ums-webservice-library/');
     }]);
 
+    UMS.constant("appConstants", Constants.Default());
     UMS.constant("libConstants", Constants.LibConstant());
     UMS.constant("registrarConstants", Constants.RegistrarConstant());
 
@@ -438,6 +439,23 @@ module ums {
                 controller: 'BorrowHistory',
                 templateUrl: 'views/borrow-history.html',
                 controllerAs: 'vm'
+            })
+            .state('recordLog', {
+                url: "/recordLog",
+                controller: 'RecordLog',
+                templateUrl: 'views/admin/logs/record-log.html',
+                controllerAs: 'vm',
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            files: [
+                                'vendors/bootstrap-datepicker/css/datepicker.css',
+                                'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
+                            ]
+                        });
+                    }]
+                }
+
             })
             .state('logout', {
                 url: "/logout",

@@ -16,13 +16,15 @@ public class PersistentOptOfferedSubGroupCourseMap implements MutableOptOfferedS
   private static DepartmentManager sDepartmentManager;
   private static CourseManager sCourseManager;
   private static OptOfferedSubGroupCourseMapManager sOptCourseOfferManager;
+
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sDepartmentManager = applicationContext.getBean("departmentManager", DepartmentManager.class);
     sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
     sOptCourseOfferManager =
-        applicationContext.getBean("optCourseOfferManager", OptOfferedSubGroupCourseMapManager.class);
+        applicationContext.getBean("optOfferedSubGroupCourseMapManager", OptOfferedSubGroupCourseMapManager.class);
   }
+
   private Long mId;
   private Long mSubGroupId;
   private String mCourseId;

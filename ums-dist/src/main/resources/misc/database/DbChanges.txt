@@ -1656,3 +1656,21 @@ declare
    /
 
  ------------------------------------------------------------------------------------------------
+
+
+
+ --------------------------------------RECORD LOG -------------------------------------------
+
+CREATE TABLE DB_IUMS_LIBRARY.RECORDS_LOG
+(
+  ID                 NUMBER,
+  MFN                NUMBER,
+  MODIFIED_BY        VARCHAR2(15 BYTE),
+  MODIFIED_ON        DATE,
+  MODIFICATION_TYPE  NUMBER,
+  PREVIOUS_JSON      VARCHAR2(1024 BYTE),
+  MODIFIED_JSON      VARCHAR2(1024 BYTE),
+  LAST_MODIFIED      VARCHAR2(18 BYTE)
+)
+
+COMMENT ON COLUMN DB_IUMS_LIBRARY.RECORDS_LOG.MODIFICATION_TYPE IS '1=Created, 2=Updated, 3=Deleted';

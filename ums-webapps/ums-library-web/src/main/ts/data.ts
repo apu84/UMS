@@ -16,6 +16,7 @@
         '/cataloging': {title: 'Cataloging', 'breadcrumb': ['Cataloging']},
         '/search/:1': {title: "Catalog: Search", 'breadcrumb': ['Catalog']},
         '/:1/record/:2': {title: 'Catalog: Records', 'breadcrumb': ['Catalog']},
+        '/recordLog': {title: 'Log', 'breadcrumb': ['Log']},
         '/employeeProfile': {title: 'Profile', 'breadcrumb': ['Profile']},
         '/personal': {title: 'Profile', 'breadcrumb': ['Profile']},
         '/academic': {title: 'Profile', 'breadcrumb': ['Profile']},

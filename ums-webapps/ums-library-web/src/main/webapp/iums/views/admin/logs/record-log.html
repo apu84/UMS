@@ -1,0 +1,117 @@
+<style>
+    .v1 {
+        border-left: 5px solid grey;
+        padding-left: 15px;
+    }
+</style>
+<div class="panel">
+    <div class="panel-body shadowPanel" style="min-height: 490px;">
+
+        <div class="row">
+
+                <div class="col-md-4">
+
+                    <fieldset>
+                        <legend style="font-size: medium">Search By:</legend>
+                        <form name="iSearchForm" id="nSearchForm" class="form-horizontal" ng-submit="vm.search()">
+
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">MFN</label>
+                                <div class="col-md-8">
+                                    <input class="form-control"
+                                           name="nMfn"
+                                           id="iMfn"
+                                           placeholder="ex: 34"
+                                           data-ng-model="vm.mfn"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                <label class="col-md-4 control-label">Modified By</label>
+                                <div class="col-md-8">
+                                    <select name="nModifiedBy"
+                                            id="iModifiedBy"
+                                            data-ng-options="employee.employeeName + ' [' + employee.id + ']' for employee in vm.employees track by employee.id"
+                                            data-ng-model="vm.modifiedBy"
+                                            class="form-control">
+                                        <option value="">Select Modified By</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+                                <label class="col-md-4 control-label">Modified On</label>
+                                <div class="col-md-8">
+                                    <input type="text"
+                                           name="nModifiedOn"
+                                           id="iModifiedOn"
+                                           data-ng-model="vm.modifiedOn"
+                                           data-provide="datepicker"
+                                           data-date-format="dd/mm/yyyy"
+                                           placeholder="DD/MM/YYYY"
+                                           autocomplete="off"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+
+
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-success btn-sm">Search
+                                </button>
+                            </div>
+                        </form>
+                    </fieldset>
+            </div>
+
+
+            <div class="col-md-8">
+                <div class="v1">
+
+                <fieldset>
+                    <legend style="font-size: medium">Record Logs &nbsp;({{vm.searchResult.length}})</legend>
+
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>MFN</th>
+                            <th>Modified By</th>
+                            <th>Modified On</th>
+                            <th>Modification Type</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="result in vm.searchResult | limitTo:vm.itemsPerPage:vm.itemsPerPage*(vm.currentPageNumber - 1)">
+                            <td>{{(vm.currentPageNumber - 1) * vm.itemsPerPage + $index + 1}}</td>
+                            <td>{{result.mfn}}</td>
+                            <td>{{result.modifiedBy}}</td>
+                            <td>{{result.modifiedOn}}</td>
+                            <td><span data-ng-show="result.modificationType==1"><button type="button"
+                                                                                        class="btn btn-success btn-xs">CREATED</button></span>
+                                <span data-ng-show="result.modificationType==2"><button type="button"
+                                                                                        class="btn btn-info btn-xs">UPDATED</button></span>
+                                <span data-ng-show="result.modificationType==3"><button type="button"
+                                                                                        class="btn-danger btn-xs">DELETED</button></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </fieldset>
+                </div>
+
+                <div align="right">
+                <pagination total-items="vm.searchResult.length" ng-model="vm.currentPageNumber" max-size="7"
+                            class="pagination-sm" boundary-links="true" rotate="false"
+                            class="pagination-page"
+                            items-per-page="vm.itemsPerPage">
+
+                </pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

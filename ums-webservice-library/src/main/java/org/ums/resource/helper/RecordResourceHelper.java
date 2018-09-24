@@ -3,7 +3,9 @@ package org.ums.resource.helper;
 import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,9 +16,13 @@ import org.ums.domain.model.immutable.library.Item;
 import org.ums.domain.model.immutable.library.Record;
 import org.ums.domain.model.mutable.library.MutableItem;
 import org.ums.domain.model.mutable.library.MutableRecord;
+import org.ums.domain.model.mutable.library.MutableRecordLog;
+import org.ums.formatter.DateFormat;
 import org.ums.manager.library.ItemManager;
+import org.ums.manager.library.RecordLogManager;
 import org.ums.manager.library.RecordManager;
 import org.ums.persistent.model.library.PersistentRecord;
+import org.ums.persistent.model.library.PersistentRecordLog;
 import org.ums.resource.RecordResource;
 import org.ums.resource.ResourceHelper;
 import org.ums.solr.repository.converter.Converter;
@@ -25,6 +31,7 @@ import org.ums.solr.repository.document.lms.RecordDocument;
 import org.ums.solr.repository.lms.RecordRepository;
 import org.ums.usermanagement.user.User;
 import org.ums.usermanagement.user.UserManager;
+import org.ums.util.Constants;
 import org.ums.util.UmsUtils;
 
 import javax.json.Json;
@@ -34,7 +41,9 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,6 +69,9 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
   @Autowired
   ItemManager mItemManger;
 
+  @Autowired
+  RecordLogManager mRecordLogManager;
+
   @Override
   public RecordManager getContentManager() {
     return mManager;
@@ -70,7 +82,12 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     return mBuilder;
   }
 
+  @Autowired
+  @Qualifier("genericDateFormat")
+  private DateFormat mDateFormat;
+
   @Override
+  @Transactional
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) {
     MutableRecord mutableRecord = new PersistentRecord();
     LocalCache localCache = new LocalCache();
@@ -82,12 +99,40 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     getBuilder().build(mutableRecord, pJsonObject, localCache);
     mutableRecord.create();
 
+    createRecordLog(mutableRecord.getId(), 1, "", pJsonObject.toString(), user.getId());
+
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(RecordResource.class).path(RecordResource.class, "get")
             .build(mutableRecord.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
+  }
+
+  public void createRecordLog(Long pMfn, Integer pModificationType, String pPreviousJson, String pModifiedJson,
+      String pModifiedBy) {
+    MutableRecordLog mutableRecordLog = new PersistentRecordLog();
+    mutableRecordLog.setMfn(pMfn);
+    mutableRecordLog.setModificationType(pModificationType);
+    mutableRecordLog.setPreviousJson(pPreviousJson);
+    mutableRecordLog.setModifiedJson(pModifiedJson);
+    mutableRecordLog.setModifiedBy(pModifiedBy.isEmpty() ? getModifiedBy(pModifiedBy).getId() : pModifiedBy);
+    mutableRecordLog.setModifiedOn(mDateFormat.parse(new SimpleDateFormat(Constants.DATE_FORMAT).format(new Date())));
+    mutableRecordLog.create();
+  }
+
+  public void insertRecordLog(Long pObjectId, Integer pModificationType, String pJsonObject) {
+    createRecordLog(pObjectId, pModificationType, "", pJsonObject, "");
+  }
+
+  @Nullable
+  private User getModifiedBy(String pModifiedBy) {
+    User user = null;
+    if(pModifiedBy.isEmpty()) {
+      String userId = SecurityUtils.getSubject().getPrincipal().toString();
+      user = mUserManager.get(userId);
+    }
+    return user;
   }
 
   public JsonObject searchRecord(int pPage, int pItemPerPage, final String pFilter, final UriInfo pUriInfo) {
@@ -145,6 +190,7 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
 
   @Transactional
   public Response deleteRecord(String pMfnNo) {
+    insertRecordLog(Long.parseLong(pMfnNo), 3, "");
     LocalCache localCache = new LocalCache();
     PersistentRecord record = new PersistentRecord();
     record = (PersistentRecord) mManager.get(Long.parseLong(pMfnNo));

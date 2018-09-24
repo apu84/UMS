@@ -26,7 +26,6 @@ import org.ums.persistent.model.routine.PersistentRoutine;
 import org.ums.services.academic.routine.helper.RoutineTime;
 
 import java.io.IOException;
-import java.security.SecureRandom;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;

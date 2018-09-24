@@ -35,12 +35,21 @@ module ums {
       httpClient.get("userHome", HttpClient.MIME_TYPE_JSON, (response) => {
         $scope.userHome = response.infoList;
         $scope.userRole = response.userRole;
+        localStorage["userFullName"] = this.filterValue(response.infoList, "key","Name")['value'];
+        localStorage["userDesignation"] = this.filterValue(response.infoList, "key","Designation")['value'];
+        $("#userName").html(localStorage.getItem("userFullName"));
+        $("#userDesignation").html(localStorage.getItem("userDesignation"));
         if(response.userRole=="student") {
           if(document.getElementById("empProfile"))
           document.getElementById("empProfile").style.display="none";
         }
       });
     }
+
+    filterValue(obj, key, value):any {
+      return obj.find(function(v){ return v[key] === value});
+    }
+
   }
   UMS.controller('MainController', MainController);
 }

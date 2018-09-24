@@ -11,6 +11,7 @@ import java.util.List;
  */
 public interface OptOfferedSubGroupCourseMapManager extends
     ContentManager<OptOfferedSubGroupCourseMap, MutableOptOfferedSubGroupCourseMap, Long> {
-  List<OptOfferedSubGroupCourseMap> getSubGroupCourses();
+  List<OptOfferedSubGroupCourseMap> getSubGroupCourses(Integer pSemesterId, Integer pProgramId, Integer pYear,
+      Integer pSemester);
 
 }

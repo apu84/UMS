@@ -31,6 +31,12 @@ public class PersistentProgramDao extends ProgramDaoDecorator {
     return mJdbcTemplate.query(query, new ProgramRowMapper());
   }
 
+  @Override
+  public List<Program> getProgramByDepartmentId(String pDepartmentId) {
+    String query = SELECT_ALL + " WHERE DEPT_ID = ?";
+    return mJdbcTemplate.query(query, new Object[] {pDepartmentId}, new ProgramRowMapper());
+  }
+
   class ProgramRowMapper implements RowMapper<Program> {
     @Override
     public Program mapRow(ResultSet resultSet, int i) throws SQLException {

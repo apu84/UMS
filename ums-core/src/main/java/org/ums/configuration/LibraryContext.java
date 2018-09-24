@@ -98,4 +98,9 @@ public class LibraryContext {
     fineCache.setManager(new PersistentFineDao(mTemplateFactory.getLmsJdbcTemplate(), mIdGenerator));
     return fineCache;
   }
+
+  @Bean
+  RecordLogManager recordLogManager() {
+    return new PersistentRecordLogDao(mTemplateFactory.getLmsJdbcTemplate(), mIdGenerator);
+  }
 }

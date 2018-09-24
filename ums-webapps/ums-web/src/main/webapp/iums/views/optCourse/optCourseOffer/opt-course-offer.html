@@ -130,6 +130,9 @@
                <div class="col-md-9">
                   <div>Optional Course</div>
                </div>
+               <div class="col-md-3" align="right">
+                  <button type="button" data-ng-click="vm.save()" class="btn btn-dark btn-sm">Save</button>
+               </div>
             </div>
          </div>
          <div class="panel-body">
@@ -240,6 +243,7 @@
                                              </thead>
                                                 <tbody data-ng-hide="vm.isSubGroupAvailable">
                                                 <tr data-ng-repeat="app in course.courses track by $index">
+                                                   {{app}}
                                                    <td width="2%">{{$index + 1}}</td>
                                                    <td width="65%">{{app.title}}
                                                       <b>&nbsp;&nbsp;&nbsp;{{"  ("+app.no+")  "}}&nbsp;&nbsp;&nbsp;</b>

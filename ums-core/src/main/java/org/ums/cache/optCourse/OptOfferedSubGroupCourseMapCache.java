@@ -27,7 +27,8 @@ public class OptOfferedSubGroupCourseMapCache
   }
 
   @Override
-  public List<OptOfferedSubGroupCourseMap> getSubGroupCourses() {
-    return getManager().getSubGroupCourses();
+  public List<OptOfferedSubGroupCourseMap> getSubGroupCourses(Integer pSemesterId, Integer pProgramId, Integer pYear,
+      Integer pSemester) {
+    return getManager().getSubGroupCourses(pSemesterId, pProgramId, pYear, pSemester);
   }
 }

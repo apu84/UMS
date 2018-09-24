@@ -11,10 +11,10 @@ import org.ums.academic.tabulation.service.TabulationServiceImpl;
 import org.ums.cache.*;
 import org.ums.cache.applications.AppConfigCache;
 import org.ums.cache.applications.AppRulesCache;
-import org.ums.cache.optCourse.OptCourseGroupCache;
-import org.ums.cache.optCourse.OptOfferedSubGroupCourseMapCache;
+import org.ums.cache.optCourse.*;
 import org.ums.cache.routine.RoutineCache;
 import org.ums.cache.routine.RoutineConfigCache;
+import org.ums.domain.model.immutable.optCourse.OptOfferedGroupCourseMap;
 import org.ums.fee.semesterfee.SemesterAdmissionCache;
 import org.ums.fee.semesterfee.SemesterAdmissionDao;
 import org.ums.fee.semesterfee.SemesterAdmissionStatusManager;
@@ -24,16 +24,14 @@ import org.ums.generator.XlsGenerator;
 import org.ums.manager.*;
 import org.ums.manager.applications.AppConfigManager;
 import org.ums.manager.applications.AppRulesManager;
-import org.ums.manager.optCourse.OptCourseGroupManager;
-import org.ums.manager.optCourse.OptOfferedSubGroupCourseMapManager;
+import org.ums.manager.optCourse.*;
 import org.ums.manager.routine.RoutineConfigManager;
 import org.ums.manager.routine.RoutineManager;
 import org.ums.message.MessageResource;
 import org.ums.persistent.dao.*;
 import org.ums.persistent.dao.applications.PersistentAppConfigDao;
 import org.ums.persistent.dao.applications.PersistentAppRulesDao;
-import org.ums.persistent.dao.optCourse.PersistentOptCourseGroupDao;
-import org.ums.persistent.dao.optCourse.PersistentOptOfferedSubGroupCourseMapDao;
+import org.ums.persistent.dao.optCourse.*;
 import org.ums.persistent.dao.routine.PersistentRoutineConfigDao;
 import org.ums.persistent.dao.routine.PersistentRoutineDao;
 import org.ums.persistent.model.PersistentAbsLateComingInfoDao;
@@ -342,12 +340,38 @@ public class AcademicContext {
   }
 
   @Bean
-  OptOfferedSubGroupCourseMapManager optCourseOfferManager() {
+  OptOfferedSubGroupCourseMapManager optOfferedSubGroupCourseMapManager() {
     OptOfferedSubGroupCourseMapCache optCourseOfferCache =
         new OptOfferedSubGroupCourseMapCache((mCacheFactory.getCacheManager()));
     optCourseOfferCache.setManager(new PersistentOptOfferedSubGroupCourseMapDao(mTemplateFactory.getJdbcTemplate(),
         mIdGenerator));
     return optCourseOfferCache;
+  }
+
+  @Bean
+  OptOfferedGroupManager optOfferedGroupManager() {
+    OptOfferedGroupCache optOfferedGroupCache = new OptOfferedGroupCache((mCacheFactory.getCacheManager()));
+    optOfferedGroupCache.setManager(new PersistentOptOfferedGroupDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
+    return optOfferedGroupCache;
+  }
+
+  @Bean
+  OptOfferedGroupSubGroupMapManager optOfferedGroupSubGroupMapManager() {
+    OptOfferedGroupSubGroupMapCache optOfferedGroupSubGroupMapCache =
+        new OptOfferedGroupSubGroupMapCache((mCacheFactory.getCacheManager()));
+    optOfferedGroupSubGroupMapCache.setManager(new PersistentOptOfferedGroupSubGroupMapDao(mTemplateFactory
+        .getJdbcTemplate(), mIdGenerator));
+    return optOfferedGroupSubGroupMapCache;
+  }
+
+  @Bean
+  OptOfferedGroupCourseMapManager optOfferedGroupCourseMapManager() {
+
+    OptOfferedGroupCourseMapCache optOfferedGroupCourseMapCache =
+        new OptOfferedGroupCourseMapCache((mCacheFactory.getCacheManager()));
+    optOfferedGroupCourseMapCache.setManager(new PersistentOptOfferedGroupCourseMapDao(mTemplateFactory
+        .getJdbcTemplate(), mIdGenerator));
+    return optOfferedGroupCourseMapCache;
   }
 
   @Bean
