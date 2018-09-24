@@ -309,7 +309,8 @@ public class RoutineReportServiceImpl implements RoutineReportService {
           Routine routine = routineList.remove(0);
           if(routine.getStartTime().equals(startTime)) {
             paragraph = new UmsParagraph();
-            paragraph.add(routine.getCourse().getNo() + "(" + routine.getSection() + ")");
+            String section=routine.getCourse().getCourseType().equals(CourseType.SESSIONAL)?"("+routine.getSection()+")":"";
+            paragraph.add(routine.getCourse().getNo() +section);
             paragraph.setFont(ReportUtils.mLiteMediumFont);
             paragraph.setAlignment(Element.ALIGN_CENTER);
             paragraph.setSpacingBefore(-5);
