@@ -1,13 +1,9 @@
-package org.ums.report.itext;
+package org.ums.itext;
 
-import com.itextpdf.text.AccessibleElementId;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class UmsCell extends PdfPCell {
 

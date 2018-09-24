@@ -14,8 +14,8 @@ import org.ums.enums.accounts.definitions.account.balance.BalanceType;
 import org.ums.manager.CompanyManager;
 import org.ums.manager.accounts.AccountTransactionManager;
 import org.ums.manager.accounts.ChequeRegisterManager;
-import org.ums.report.itext.UmsCell;
-import org.ums.report.itext.UmsParagraph;
+import org.ums.itext.UmsCell;
+import org.ums.itext.UmsParagraph;
 import org.ums.util.UmsUtils;
 import org.ums.util.Utils;
 

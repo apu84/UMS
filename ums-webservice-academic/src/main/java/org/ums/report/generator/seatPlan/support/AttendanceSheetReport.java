@@ -13,7 +13,7 @@ import org.ums.enums.ExamType;
 import org.ums.manager.SeatPlanReportManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.UGRegistrationResultManager;
-import org.ums.report.itext.UmsPdfPageEventHelper;
+import org.ums.itext.UmsPdfPageEventHelper;
 import org.ums.util.UmsUtils;
 
 import java.io.ByteArrayOutputStream;

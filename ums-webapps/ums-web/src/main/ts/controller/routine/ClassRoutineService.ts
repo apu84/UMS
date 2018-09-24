@@ -191,6 +191,19 @@ module ums{
     }
 
 
+    public getSemesterWiseRoutineReport(semesterId: number, programId: number, year: number, semester: number, section: string){
+      this.httpClient.get(`${this.routineUrl}/semester-wise-report/semester-id/${semesterId}/program/${programId}/year/${year}/semester/${semester}/section/${section}`, 'application/pdf',
+          (data:any, etag: string)=>{
+            var file = new Blob([data], {type: 'application/pdf'});
+            UmsUtil.writeFileContent(data, 'application/pdf', 'SemesterWiseRoutine');
+            //this.$window.open(fileURL);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          },'arraybuffer');
+    }
+
+
 
     public getClassRoutineForStudents():ng.IPromise<any>{
       var defer = this.$q.defer();

@@ -1,4 +1,4 @@
-package org.ums.report.itext;
+package org.ums.itext;
 
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Font;

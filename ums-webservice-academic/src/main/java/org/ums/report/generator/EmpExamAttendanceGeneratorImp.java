@@ -19,9 +19,9 @@ import org.ums.enums.common.EmployeeType;
 import org.ums.formatter.DateFormat;
 import org.ums.manager.*;
 import org.ums.persistent.model.PersistentEmpExamAttendance;
-import org.ums.report.itext.UmsCell;
-import org.ums.report.itext.UmsParagraph;
-import org.ums.report.itext.UmsPdfPageEventHelper;
+import org.ums.itext.UmsCell;
+import org.ums.itext.UmsParagraph;
+import org.ums.itext.UmsPdfPageEventHelper;
 import org.ums.util.UmsUtils;
 
 import java.io.ByteArrayOutputStream;

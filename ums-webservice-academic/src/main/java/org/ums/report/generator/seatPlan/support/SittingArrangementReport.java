@@ -11,7 +11,7 @@ import org.ums.domain.model.immutable.Semester;
 import org.ums.enums.ExamType;
 import org.ums.manager.SeatPlanManager;
 import org.ums.manager.SemesterManager;
-import org.ums.report.itext.UmsPdfPageEventHelper;
+import org.ums.itext.UmsPdfPageEventHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

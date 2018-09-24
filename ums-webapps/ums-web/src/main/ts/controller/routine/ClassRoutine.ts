@@ -115,6 +115,10 @@ module ums {
       }
     }
 
+    public downloadSemesterWiseReport(){
+      this.classRoutineService.getSemesterWiseRoutineReport(this.classRoutineService.selectedSemester.id, this.classRoutineService.selectedProgram.id, +this.classRoutineService.studentsYear, +this.classRoutineService.studentsSemester, this.classRoutineService.selectedTheorySection.id);
+    }
+
     public fetchCurrentUser(){
         this.userService.fetchCurrentUserInfo().then((user:User)=>{
             this.loggedUser=<User>{};

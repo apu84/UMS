@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.ums.logs.GetLog;
 import org.ums.manager.routine.RoutineManager;
 import org.ums.resource.Resource;
+import org.ums.services.academic.routine.RoutineReportService;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -23,6 +24,9 @@ import java.io.OutputStream;
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class RoutineResource extends MutableRoutineResource {
+
+  @Autowired
+  RoutineReportService mRoutineReportService;
 
   private static Logger mLogger = org.slf4j.LoggerFactory.getLogger(RoutineResource.class);
   @Autowired
@@ -60,6 +64,27 @@ public class RoutineResource extends MutableRoutineResource {
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
         try {
           mRoutineResourceHelper.getRoutineReportForTeacher(pOutputStream);
+        } catch(Exception e) {
+          mLogger.error(e.getMessage());
+          throw new WebApplicationException(e);
+        }
+      }
+    };
+  }
+
+  @GET
+  @Path("/semester-wise-report/semester-id/{semester-id}/program/{program-id}/year/{year}/semester/{semester}/section/{section}")
+  @Produces("application/pdf")
+  @GetLog(message = "Requested for semester wise Routine report")
+  public StreamingOutput createSemesterWiseReport(final @Context HttpServletRequest pHttpServletRequest,
+      @PathParam("semester-id") Integer pSemesterId, @PathParam("program-id") Integer pProgramId,
+      @PathParam("year") int pYear, @PathParam("semester") int pSemester, @PathParam("section") String pSection) {
+    return new StreamingOutput() {
+      @Override
+      public void write(OutputStream output) throws IOException, WebApplicationException {
+        try {
+          mRoutineReportService.createSemesterWiseRoutine(pSemesterId, pProgramId, pYear, pSemester, pSection, output);
+
         } catch(Exception e) {
           mLogger.error(e.getMessage());
           throw new WebApplicationException(e);

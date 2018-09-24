@@ -13,7 +13,7 @@ import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.enums.ExamType;
 import org.ums.manager.*;
-import org.ums.report.itext.UmsPdfPageEventHelper;
+import org.ums.itext.UmsPdfPageEventHelper;
 import org.ums.util.UmsUtils;
 
 import java.io.ByteArrayOutputStream;
