@@ -1766,14 +1766,7 @@ module ums {
                 url: "/employeeInformation",
                 templateUrl: 'views/ems/employee-information-for-aao.html',
                 controller: 'EmployeeSearch',
-                controllerAs: 'vm',
-                resolve: {
-                    allUsers: ['employeeService', function (employeeService) {
-                        return employeeService.getAll().then((data) => {
-                            return data;
-                        });
-                    }]
-                }
+                controllerAs: 'vm'
             })
             .state('employeeSearch.employeeProfile', {
                 url: "/employeeProfile",

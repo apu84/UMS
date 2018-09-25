@@ -149,14 +149,7 @@ module ums {
                 url: "/employeeSearch",
                 templateUrl: 'views/ems/search/employee-search.html',
                 controller: 'EmployeeSearch',
-                controllerAs: 'vm',
-                resolve: {
-                    allUsers: ['employeeService', function (employeeService) {
-                        return employeeService.getAll().then((data) => {
-                            return data;
-                        });
-                    }]
-                }
+                controllerAs: 'vm'
             })
             .state('employeeSearch.employeeProfile', {
                 url: "/employeeProfile",

@@ -19,205 +19,214 @@
         background-color: #f0f7fd !important; /* or #000 */
     }
 </style>
-<div class="row">
-    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
-        <i class="fa fa-angle-double-right fa-cx"></i>
-    </div>
-    <div class="panel panel-green" id="leftDiv">
-        <div class="panel-heading">
-            <h3 class="panel-title">Select</h3>
+
+<div data-ng-if="vm.showLoader" align="center">
+    <div data-spinner=""></div>
+</div>
+
+<div data-ng-if="!vm.showLoader">
+    <div class="row">
+        <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+            <i class="fa fa-angle-double-right fa-cx"></i>
         </div>
-        <div class="panel-body pan">
-            <form class="form-horizontal" data-validate="" data-onvalidate="getEmployees">
-                <div class="form-body pal">
-                    <!-- <div class="form-group">
-                         <label class="col-md-4 control-label">Search By</label>
-                         <div class="col-md-8">
-                             <select name="nSearchBy" id="iSearchBy" data-ng-model="vm.searchBy"
-                                     data-ng-change="vm.showSearchByField()" class="form-control required">
-                                 <option value="">Select Search Type</option>
-                                 <option value="1">Employee Id</option>
-                                 <option value="2">Employee Name</option>
-                                 <option value="3">Dept/School/Office</option>
-                             </select>
-                         </div>
-                     </div>-->
+        <div class="panel panel-green" id="leftDiv">
+            <div class="panel-heading">
+                <h3 class="panel-title">Select</h3>
+            </div>
+            <div class="panel-body pan">
+                <form class="form-horizontal" data-validate="" data-onvalidate="getEmployees">
+                    <div class="form-body pal">
+                        <!-- <div class="form-group">
+                             <label class="col-md-4 control-label">Search By</label>
+                             <div class="col-md-8">
+                                 <select name="nSearchBy" id="iSearchBy" data-ng-model="vm.searchBy"
+                                         data-ng-change="vm.showSearchByField()" class="form-control required">
+                                     <option value="">Select Search Type</option>
+                                     <option value="1">Employee Id</option>
+                                     <option value="2">Employee Name</option>
+                                     <option value="3">Dept/School/Office</option>
+                                 </select>
+                             </div>
+                         </div>-->
 
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Id</label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="nUserId"
-                                   id="iUserId"
-                                   data-ng-model="vm.changedUserId"
-                                   placeholder="Employee's Id"
-                                   data-ng-change="vm.showSearchByField()"
-                                   class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Name</label>
-                        <div class="col-md-8">
-                            <input type="text"
-                                   name="nUserName"
-                                   id="iUserName"
-                                   data-ng-model="vm.changedUserName"
-                                   placeholder="Employee's Name"
-                                   data-ng-change="vm.showSearchByField()"
-                                   class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Dept/Office</label>
-                        <div class="col-md-8">
-                            <select class="form-control"
-                                    name="nDepartment"
-                                    id="iDepartment"
-                                    data-ng-options="depts.longName group by depts.category for depts in vm.departments | orderBy: 'id' track by depts.id"
-                                    data-ng-change="vm.showSearchByField()"
-                                    data-ng-model="vm.changedDepartment"
-                            >
-                                <option value="">Select Department</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Employee Type</label>
-                        <div class="col-md-8">
-                            <select class="form-control"
-                                    name="nEmployeeTypeSearch"
-                                    id="iEmployeeTypeSearch"
-                                    data-ng-options="empType.name for empType in vm.empTypes track by empType.id"
-                                    data-ng-change="vm.showSearchByField()"
-                                    data-ng-model="vm.changedEmpType"
-                            >
-                                <option value="">Select Type</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Status</label>
-                        <div class="col-md-8">
-                            <select class="form-control"
-                                    name="nStatusSearch"
-                                    id="iStatusSearch"
-                                    data-ng-options="status.name for status in vm.statuses track by status.id"
-                                    data-ng-change="vm.showSearchByField()"
-                                    data-ng-model="vm.changedStatus"
-                            >
-                                <option value="">Select Status</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="col-md-12">
-                                <button type="button" data-tooltip="toggle" title="Print Employee List"
-                                        data-target="#printOptions" data-toggle="modal"
-                                        class="btn btn-default"><i class="fa fa-download"></i>
-                                </button>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Id</label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nUserId"
+                                       id="iUserId"
+                                       data-ng-model="vm.changedUserId"
+                                       placeholder="Employee's Id"
+                                       data-ng-change="vm.showSearchByField()"
+                                       class="form-control">
                             </div>
                         </div>
 
-                        <div class="col-md-6">
-                            <div class="col-md-12">
-                                <div align="right">
-                                    <button type="submit" class="btn btn-success">Search</button>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Name</label>
+                            <div class="col-md-8">
+                                <input type="text"
+                                       name="nUserName"
+                                       id="iUserName"
+                                       data-ng-model="vm.changedUserName"
+                                       placeholder="Employee's Name"
+                                       data-ng-change="vm.showSearchByField()"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Dept/Office</label>
+                            <div class="col-md-8">
+                                <select class="form-control"
+                                        name="nDepartment"
+                                        id="iDepartment"
+                                        data-ng-options="depts.longName group by depts.category for depts in vm.departments | orderBy: 'id' track by depts.id"
+                                        data-ng-change="vm.showSearchByField()"
+                                        data-ng-model="vm.changedDepartment"
+                                >
+                                    <option value="">Select Department</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Employee Type</label>
+                            <div class="col-md-8">
+                                <select class="form-control"
+                                        name="nEmployeeTypeSearch"
+                                        id="iEmployeeTypeSearch"
+                                        data-ng-options="empType.name for empType in vm.empTypes track by empType.id"
+                                        data-ng-change="vm.showSearchByField()"
+                                        data-ng-model="vm.changedEmpType"
+                                >
+                                    <option value="">Select Type</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Status</label>
+                            <div class="col-md-8">
+                                <select class="form-control"
+                                        name="nStatusSearch"
+                                        id="iStatusSearch"
+                                        data-ng-options="status.name for status in vm.statuses track by status.id"
+                                        data-ng-change="vm.showSearchByField()"
+                                        data-ng-model="vm.changedStatus"
+                                >
+                                    <option value="">Select Status</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="col-md-12">
+                                    <button type="button" data-tooltip="toggle" title="Print Employee List"
+                                            data-target="#printOptions" data-toggle="modal"
+                                            class="btn btn-default"><i class="fa fa-download"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="col-md-12">
+                                    <div align="right">
+                                        <button type="submit" class="btn btn-success">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="rightDiv">
+            <div data-ng-show="vm.showListOfEmployeesPanel">
+                <div class="panel">
+                    <div class="panel-heading">Total Employees Found: {{filterd.length}}<span class="subtitle"></span>
+                    </div>
+                    <div class="panel-body pan">
+                        <div class="panel-body shadowPanel" style="min-height: 490px;">
+                            <table class="table table-bordered table-hover">
+                                <thead class="heading well">
+                                <tr>
+                                    <th>Sl.</th>
+                                    <th>Employee Id</th>
+                                    <th>Teacher Name</th>
+                                    <th>Department</th>
+                                    <th>Designation</th>
+                                    <th>Status</th>
+                                    <!--<th>Action</th>-->
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr data-ng-repeat="user in (filterd = (vm.allUser | filter: {id: vm.changedUserId} | filter: {employeeName: vm.changedUserName} | filter: {deptOfficeId: vm.changedDepartment.id} | filter: {employeeType: vm.changedEmpType.id} | filter: {status: vm.changedStatus.id})) | limitTo:vm.itemsPerPage:vm.itemsPerPage*(vm.currentPageNumber - 1)">
+                                    <td>{{(vm.currentPageNumber - 1) * vm.itemsPerPage + $index + 1}}</td>
+                                    <td style="cursor:pointer"
+                                        data-ng-click="vm.view(filterd[(vm.currentPageNumber - 1) * vm.itemsPerPage + $index], (vm.currentPageNumber - 1) * vm.itemsPerPage + $index)">
+                                        {{user.id}}
+                                    </td>
+                                    <td>{{user.employeeName}}</td>
+                                    <td>{{user.deptOfficeName}}</td>
+                                    <td style="cursor: pointer;" data-tooltip="toggle" title="Edit"
+                                        data-target="#editBasicInfo" data-toggle="modal"
+                                        data-ng-click="vm.startEdit($index)">{{user.designationName}}
+                                    </td>
+                                    <td>{{user.statusName}}</td>
+                                    <!--<td data-ng-click="vm.downloadPdf(user.id)"><img class="img-responsive" src="https://cdn1.iconfinder.com/data/icons/CrystalClear/128x128/mimetypes/pdf.png" style="width: 20px; height: 25px; cursor: pointer"></td>-->
+                                </tr>
+                                </tbody>
+                            </table>
+
+
+                            <div class="row">
+                                <div class="col-md-12" align="right">
+                                    <pagination total-items="filterd.length" ng-model="vm.currentPageNumber"
+                                                max-size="7"
+                                                class="pagination-sm" boundary-links="true" rotate="false"
+                                                class="pagination-page"
+                                                items-per-page="vm.itemsPerPage"></pagination>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </form>
-        </div>
-    </div>
-
-    <div id="rightDiv">
-        <div data-ng-show="vm.showListOfEmployeesPanel">
-            <div class="panel">
-                <div class="panel-heading">Total Employees Found: {{filterd.length}}<span class="subtitle"></span></div>
-                <div class="panel-body pan">
-                    <div class="panel-body shadowPanel" style="min-height: 490px;">
-                        <table class="table table-bordered table-hover">
-                            <thead class="heading well">
-                            <tr>
-                                <th>Sl.</th>
-                                <th>Employee Id</th>
-                                <th>Teacher Name</th>
-                                <th>Department</th>
-                                <th>Designation</th>
-                                <th>Status</th>
-                                <!--<th>Action</th>-->
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr data-ng-repeat="user in (filterd = (vm.allUser | filter: {id: vm.changedUserId} | filter: {employeeName: vm.changedUserName} | filter: {deptOfficeId: vm.changedDepartment.id} | filter: {employeeType: vm.changedEmpType.id} | filter: {status: vm.changedStatus.id})) | limitTo:vm.itemsPerPage:vm.itemsPerPage*(vm.currentPageNumber - 1)">
-                                <td>{{(vm.currentPageNumber - 1) * vm.itemsPerPage + $index + 1}}</td>
-                                <td style="cursor:pointer"
-                                    data-ng-click="vm.view(filterd[(vm.currentPageNumber - 1) * vm.itemsPerPage + $index], (vm.currentPageNumber - 1) * vm.itemsPerPage + $index)">
-                                    {{user.id}}
-                                </td>
-                                <td>{{user.employeeName}}</td>
-                                <td>{{user.deptOfficeName}}</td>
-                                <td style="cursor: pointer;" data-tooltip="toggle" title="Edit"
-                                    data-target="#editBasicInfo" data-toggle="modal"
-                                    data-ng-click="vm.startEdit($index)">{{user.designationName}}
-                                </td>
-                                <td>{{user.statusName}}</td>
-                                <!--<td data-ng-click="vm.downloadPdf(user.id)"><img class="img-responsive" src="https://cdn1.iconfinder.com/data/icons/CrystalClear/128x128/mimetypes/pdf.png" style="width: 20px; height: 25px; cursor: pointer"></td>-->
-                            </tr>
-                            </tbody>
-                        </table>
-
-
-                        <div class="row">
-                            <div class="col-md-12" align="right">
-                                <pagination total-items="filterd.length" ng-model="vm.currentPageNumber" max-size="7"
-                                            class="pagination-sm" boundary-links="true" rotate="false"
-                                            class="pagination-page"
-                                            items-per-page="vm.itemsPerPage"></pagination>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-        </div>
 
-        <div data-ng-show="vm.showEmployeeProfilePanel">
-            <div class="panel">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-md-9">
-                            Name : <b>{{vm.employee.employeeName}}</b> & Department:
-                            <b>{{vm.employee.deptOfficeName}}</b>
-                        </div>
-                        <div class="col-md-3">
-                            <div align="right">
-                                <div class="btn-group-sm">
+            <div data-ng-show="vm.showEmployeeProfilePanel">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-9">
+                                Name : <b>{{vm.employee.employeeName}}</b> & Department:
+                                <b>{{vm.employee.deptOfficeName}}</b>
+                            </div>
+                            <div class="col-md-3">
+                                <div align="right">
+                                    <div class="btn-group-sm">
                                 <span data-ng-show="vm.enablePreviousButton">
                                     <button type="button" class="btn btn-white" data-ng-click="vm.previous()"
                                             data-ng-disabled="vm.disablePrevious">
                                         <span class="glyphicon glyphicon-chevron-left"></span> &nbsp;Previous
                                     </button>
                                 </span>
-                                    <span data-ng-show="vm.enableNextButton">
+                                        <span data-ng-show="vm.enableNextButton">
                                 <button type="button" class="btn btn-white" data-ng-click="vm.next()"
                                         data-ng-disabled="vm.disableNext">
                                    Next &nbsp;<span class="glyphicon glyphicon-chevron-right"></span></button>
                                 </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="panel-body pan">
-                    <div class="panel-body shadowPanel" style="min-height: 490px;">
-                        <div data-ng-show="vm.showInformationPanel">
-                            <div ui-view>
+                    <div class="panel-body pan">
+                        <div class="panel-body shadowPanel" style="min-height: 490px;">
+                            <div data-ng-show="vm.showInformationPanel">
+                                <div ui-view>
+                                </div>
                             </div>
                         </div>
                     </div>
