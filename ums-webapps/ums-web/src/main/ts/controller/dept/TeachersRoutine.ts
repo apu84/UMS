@@ -1,92 +1,83 @@
 module ums{
 
-  interface ITeachersRoutine extends ng.IScope{
-
-    routines:Array<IRoutine>;
-    getTeachersRoutine:Function;
-    pdfFile:any;
-    courseMap:any;
-    roomMap:any;
-    showRoutine:boolean;
-    showRoutineDirective:boolean;
-    showRoutineReport:Function;
-    getRoutines:Function;
-
-  }
 
   class TeachersRoutine{
+    private showLoader: boolean;
 
-    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','classRoutineService','courseService','classRoomService'];
-    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: ITeachersRoutine,
-                private $q:ng.IQService, private notify: Notify,
-                private $sce:ng.ISCEService,private $window:ng.IWindowService,private classRoutineService:ClassRoutineService,
-                private courseService:CourseService, private classRoomService:ClassRoomService) {
+    public static $inject = ['$q','notify','$sce','$window','classRoutineService', 'employeeService', 'semesterService','routineConfigService'];
+    constructor(private $q:ng.IQService, private notify: Notify,
+                private $sce:ng.ISCEService,
+                private $window:ng.IWindowService,
+                private classRoutineService:ClassRoutineService,
+                private employeeService: EmployeeService,
+                private semesterService: SemesterService, private routineConfigService: RoutineConfigService) {
 
-      $scope.routines=[];
-      $scope.courseMap={};
-      $scope.showRoutineDirective=false;
-      $scope.getTeachersRoutine = this.getTeachersRoutine.bind(this);
-      $scope.showRoutineReport = this.showRoutineReport.bind(this);
-      $scope.getRoutines = this.getRoutines.bind(this);
-
+        this.fetchRoutineInformation();
     }
 
+    private fetchRoutineInformation(){
 
-    private getRoutines(){
-      this.createCourseMap();
-    }
+      this.classRoutineService.showSectionWiseRoutine = false;
+      this.classRoutineService.showRoomWiseRoutine = false;
+      this.classRoutineService.showTeacherWiseRoutine = true;
 
-
-    private getTeachersRoutine():ng.IPromise<any>{
-      var defer = this.$q.defer();
-      this.classRoutineService.getRoutineForTeacher("nothing",1).then((routines:Array<IRoutine>)=>{
-        this.$scope.routines = routines;
-
+      this.fetchActiveSemester().then((semester:Semester)=>{
+        this.fetchRoutineConfig().then((routineConfig: RoutineConfig)=>{
+          this.fetchUserInformation().then((teacher:Employee)=>{
+            this.classRoutineService.getRoutineForTeacher(this.classRoutineService.selectedTeacher.id, this.classRoutineService.selectedSemester.id).then((routineList: ClassRoutine[])=>{
+              this.classRoutineService.routineData = routineList;
+              this.showLoader = false;
+            });
+          });
+        });
 
       });
-      defer.resolve("success");
+    }
+
+
+    private fetchActiveSemester():ng.IPromise<any>{
+      let defer:ng.IDeferred<Semester> = this.$q.defer();
+      let ACTIVE_STATUS:number = 1;
+      this.semesterService.fetchSemesters(UmsUtil.UNDERGRADUATE).then((semesters: any)=>{
+        semesters.forEach((s: Semester)=>{
+          if(s.status==ACTIVE_STATUS)
+            this.classRoutineService.selectedSemester = s;
+        })
+        defer.resolve(this.classRoutineService.selectedSemester);
+      });
       return defer.promise;
     }
 
 
-    private createCourseMap(){
-      this.courseService.getCourseOfTeacher().then((courses:Array<Course>)=>{
-        for(var i=0;i<courses.length;i++){
-          this.$scope.courseMap[courses[i].id]=courses[i];
-        }
-
-
-
-        this.createRoomMap();
+    public fetchRoutineConfig(): ng.IPromise<any> {
+      let defer = this.$q.defer();
+      this.routineConfigService.getBySemesterAndProgramType(this.classRoutineService.selectedSemester.id,UmsUtil.UNDERGRADUATE).then((routineConfig: RoutineConfig) => {
+        if (routineConfig.id == null)
+          this.notify.error("Routine configuration is not yet set for the semester, please contact with registrar office")
+        this.routineConfigService.routineConfig = routineConfig;
+        defer.resolve(routineConfig);
       });
+      return defer.promise;
     }
 
-    private createRoomMap(){
-      this.$scope.roomMap={};
-      this.classRoomService.getClassRooms().then((rooms:any)=>{
-        for(var i=0;i<rooms.length;i++){
-          this.$scope.roomMap[rooms[i].id]=rooms[i];
-        }
+    private fetchUserInformation():ng.IPromise<any>{
+      let defer: ng.IDeferred<Employee> = this.$q.defer();
 
-        this.getTeachersRoutine().then((success:string)=>{
-          if(success=='success'){
-            this.$scope.showRoutineDirective=true;
-          }
-        });
+      this.showLoader = true;
+
+      this.employeeService.getLoggedEmployeeInfo().then((employee:Employee)=>{
+        this.classRoutineService.selectedTeacher = <Employee>{};
+        this.classRoutineService.selectedTeacher = employee;
+        console.log(employee);
+        console.log(this.classRoutineService.selectedTeacher);
+        defer.resolve(this.classRoutineService.selectedTeacher);
       });
+
+      return defer.promise;
     }
 
-
-
-    private showRoutineReport(){
-      this.$scope.pdfFile;
-      this.classRoutineService.getClassRoutineReportForTeacher().then((file:any)=>{
-        if(file!="failure"){
-          this.$scope.pdfFile=file;
-        }else{
-          this.notify.error("Error in generating routine report");
-        }
-      });
+    public downloadRoutineReport(){
+      this.classRoutineService.getTeacherWiseReport(this.classRoutineService.selectedTeacher.id, this.classRoutineService.selectedSemester.id);
     }
 
   }

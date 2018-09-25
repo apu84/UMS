@@ -89,9 +89,9 @@ public class RoutineReportServiceImpl implements RoutineReportService {
     paragraph.setAlignment(Element.ALIGN_CENTER);
     document.add(paragraph);
 
-    Map<String, List<CourseTeacher>> courseTeacherMap =
-        createCourseTeacherMapWithSectionAndCourseId(pSemesterId, pTeachersId);
     List<Routine> routineList = mRoutineManager.getRoutineByTeacher(pTeachersId, pSemesterId);
+    Map<String, List<CourseTeacher>> courseTeacherMap =
+        createCourseTeacherMapWithSectionAndCourseId(pSemesterId, routineList);
     document =
         createRoutineReportChart(document, pSemesterId, ProgramType.UG, routineList, courseTeacherMap, pOutputStream);
 
@@ -420,9 +420,15 @@ public class RoutineReportServiceImpl implements RoutineReportService {
     return courseTeacherMapWithSectionAndCourseId;
   }
 
-  Map<String, List<CourseTeacher>> createCourseTeacherMapWithSectionAndCourseId(Integer pSemesterId, String pTeacherId) {
+  Map<String, List<CourseTeacher>> createCourseTeacherMapWithSectionAndCourseId(Integer pSemesterId, List<Routine> pRoutineList) {
     Map<String, List<CourseTeacher>> courseTeacherMapWithSectionAndCourseId = new HashMap<>();
-    List<CourseTeacher> courseTeacherList = mCourseTeacherManager.getAssignedCourses(pSemesterId, pTeacherId);
+    List<String> courseIdList = pRoutineList
+        .stream()
+        .map(c->c.getCourse().getId())
+        .collect(Collectors.toList());
+    Set<String> courseIdSet = new HashSet<>(courseIdList);
+    courseIdList = new ArrayList<>(courseIdSet);
+    List<CourseTeacher> courseTeacherList = mCourseTeacherManager.getCourseTeacher(pSemesterId, courseIdList);
 
     generateCourseTeacherMap(courseTeacherMapWithSectionAndCourseId, courseTeacherList);
     return courseTeacherMapWithSectionAndCourseId;
