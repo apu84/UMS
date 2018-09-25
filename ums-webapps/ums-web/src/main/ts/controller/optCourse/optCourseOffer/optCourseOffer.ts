@@ -156,11 +156,12 @@ module ums{
                     }
                 }
             } else {
-                console.log("NOT EEE");
+                console.log("EEE");
+                console.log(this.optOfferedCourseList);
                 for (let i = 0; i < this.optOfferedCourseList.length; i++) {
                     for (let j = 0; j < this.optOfferedCourseList[i].subGrpCourses.length; j++) {
                         for (let k = 0; k < this.optOfferedCourseList[i].subGrpCourses[j].courses.length; k++) {
-                            if (this.optOfferedCourseList[i].subGrpCourses[j].courses[k].id = data.id) {
+                            if (this.optOfferedCourseList[i].subGrpCourses[j].courses[k].id == data.id) {
                                 counter = 1;
                                 break;
                             }
@@ -482,16 +483,54 @@ module ums{
             console.log("Program Id: "+this.programId);
         }
         private save():void{
-            console.log("**After Converting Into Json**");
-            let YS=this.yearSemName.split("-");
-            let year = +YS[0];
-            let sem= +YS[1];
-         var json:any=this.optOfferedCourseList;
-         this.optCourseOfferService.addInfo(this.programId,year,sem,json).then((data)=>{
-             console.log(data);
-         });
+            console.log("**Is Eligible for Insertation**");
+            if(this.optOfferedCourseList.length>0){
+                var courseCounter=true;
+                if(this.departmentId!="05"){
+                    for(let i=0;i<this.optOfferedCourseList.length;i++){
+                        console.log("length: "+this.optOfferedCourseList[i].courses.length);
+                        if(this.optOfferedCourseList[i].courses.length==0){
+                            this.notify.error("No Courses Assigned In Group "+this.optOfferedCourseList[i].groupName);
+                            courseCounter=false;
+                            break;
+                        }
+                    }
 
-         console.log(json);
+                }else{
+                    for(let i=0;i<this.optOfferedCourseList.length;i++) {
+                        if (this.optOfferedCourseList[i].subGrpCourses.length == 0) {
+                            this.notify.error("No SubGroups Created In Group " + this.optOfferedCourseList[i].groupName);
+                            courseCounter = false;
+                            break;
+                        }
+                    }
+                    if(courseCounter==true){
+                        for(let i=0;i<this.optOfferedCourseList.length;i++) {
+                            for(let j=0;j<this.optOfferedCourseList[i].subGrpCourses.length;j++){
+                                if(this.optOfferedCourseList[i].subGrpCourses[j].courses.length==0){
+                                    this.notify.error("No Courses Assigned In Group: " + this.optOfferedCourseList[i].groupName+" Subgroup: "+this.optOfferedCourseList[i].subGrpCourses[j].groupName);
+                                    courseCounter = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                if(courseCounter==true){
+                    let YS=this.yearSemName.split("-");
+                    let year = +YS[0];
+                    let sem= +YS[1];
+                    var json:any=this.optOfferedCourseList;
+                    this.optCourseOfferService.addInfo(this.programId,year,sem,json).then((data)=>{
+                        console.log(data);
+                    });
+                    console.log(json);
+                }
+
+            }else {
+                this.notify.error("No Records Found");
+            }
+
         }
     }
     UMS.controller("OptCourseOffer",OptCourseOffer);
