@@ -1,4 +1,4 @@
-package org.ums.services.academic;
+package org.ums.services.academic.routine;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Row;
@@ -77,7 +77,7 @@ public class RoutineService {
     removeRoutine(pSemesterId, pProgramId);
     removeCourseTeacher(pSemesterId, pProgramId);
 
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < pWorkbook.getNumberOfSheets(); i++) {
       Sheet sheet = pWorkbook.getSheetAt(i);
       System.out.println(sheet.getSheetName() + " ");
       int year = extractYearFromSheetName(sheet.getSheetName());
