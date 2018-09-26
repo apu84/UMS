@@ -28,7 +28,7 @@ import org.ums.persistent.model.PersistentProgram;
 import org.ums.persistent.model.PersistentSemester;
 import org.ums.persistent.model.routine.PersistentRoutine;
 import org.ums.resource.ResourceHelper;
-import org.ums.services.academic.RoutineService;
+import org.ums.services.academic.routine.RoutineService;
 import org.ums.usermanagement.user.UserManager;
 
 import javax.json.*;
@@ -38,7 +38,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

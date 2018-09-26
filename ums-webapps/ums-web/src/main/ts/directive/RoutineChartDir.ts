@@ -249,8 +249,7 @@ module ums{
     }
 
     public getCourseTeacher() {
-      console.log("Section specific");
-      console.log(this.classRoutineService.sectionSpecific);
+
       if(this.classRoutineService.showSectionWiseRoutine){
         this.courseTeacherService.getCourseTeacherByProgramAndSemesterAndYearAndAcademicSemester(
             this.classRoutineService.selectedSemester.id,

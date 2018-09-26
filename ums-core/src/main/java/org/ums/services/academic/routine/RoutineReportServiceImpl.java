@@ -4,6 +4,11 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ums.domain.model.immutable.*;
@@ -89,9 +94,9 @@ public class RoutineReportServiceImpl implements RoutineReportService {
     paragraph.setAlignment(Element.ALIGN_CENTER);
     document.add(paragraph);
 
-    Map<String, List<CourseTeacher>> courseTeacherMap =
-        createCourseTeacherMapWithSectionAndCourseId(pSemesterId, pTeachersId);
     List<Routine> routineList = mRoutineManager.getRoutineByTeacher(pTeachersId, pSemesterId);
+    Map<String, List<CourseTeacher>> courseTeacherMap =
+        createCourseTeacherMapWithSectionAndCourseId(pSemesterId, routineList);
     document =
         createRoutineReportChart(document, pSemesterId, ProgramType.UG, routineList, courseTeacherMap, pOutputStream);
 
@@ -166,6 +171,42 @@ public class RoutineReportServiceImpl implements RoutineReportService {
     document =
         createRoutineReportChart(document, pSemesterId, ProgramType.UG, routineList, courseTeacherMap, pOutputStream);
     document.close();
+    baos.writeTo(pOutputStream);
+  }
+
+  @Override
+  public void createRoutineTemplate(Integer pSemesterId, ProgramType pProgramType, OutputStream pOutputStream)
+      throws Exception {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+    RoutineConfig routineConfig = mRoutineConfigManager.get(pSemesterId, pProgramType);
+
+    Workbook wb = new HSSFWorkbook();
+
+    Sheet sheet = wb.createSheet("1-1-A");
+
+    Long totalColumn =
+        (routineConfig.getStartTime().until(routineConfig.getEndTime(), MINUTES)) / routineConfig.getDuration() + 1;
+    LocalTime startTime = routineConfig.getStartTime();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
+    Row row = sheet.createRow((short) 0);
+    for(int i = 0; i < totalColumn; i++) {
+      if(i == 0)
+        row.createCell(i).setCellValue("Time/Day");
+      else {
+        String startTimeStr = formatter.format(startTime);
+        startTime = startTime.plusMinutes(routineConfig.getDuration());
+        String endTimeStr = formatter.format(startTime);
+        row.createCell(i).setCellValue(startTimeStr + " - " + endTimeStr);
+      }
+    }
+
+    for(int i = routineConfig.getDayFrom().getValue(); i <= routineConfig.getDayTo().getValue(); i++) {
+      row = sheet.createRow((short) i);
+      row.createCell(0).setCellValue(DayType.get(i).getLabel().toUpperCase());
+    }
+
+    wb.write(pOutputStream);
     baos.writeTo(pOutputStream);
   }
 
@@ -420,9 +461,15 @@ public class RoutineReportServiceImpl implements RoutineReportService {
     return courseTeacherMapWithSectionAndCourseId;
   }
 
-  Map<String, List<CourseTeacher>> createCourseTeacherMapWithSectionAndCourseId(Integer pSemesterId, String pTeacherId) {
+  Map<String, List<CourseTeacher>> createCourseTeacherMapWithSectionAndCourseId(Integer pSemesterId, List<Routine> pRoutineList) {
     Map<String, List<CourseTeacher>> courseTeacherMapWithSectionAndCourseId = new HashMap<>();
-    List<CourseTeacher> courseTeacherList = mCourseTeacherManager.getAssignedCourses(pSemesterId, pTeacherId);
+    List<String> courseIdList = pRoutineList
+        .stream()
+        .map(c->c.getCourse().getId())
+        .collect(Collectors.toList());
+    Set<String> courseIdSet = new HashSet<>(courseIdList);
+    courseIdList = new ArrayList<>(courseIdSet);
+    List<CourseTeacher> courseTeacherList = mCourseTeacherManager.getCourseTeacher(pSemesterId, courseIdList);
 
     generateCourseTeacherMap(courseTeacherMapWithSectionAndCourseId, courseTeacherList);
     return courseTeacherMapWithSectionAndCourseId;

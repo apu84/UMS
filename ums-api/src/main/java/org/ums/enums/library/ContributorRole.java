@@ -8,6 +8,7 @@ import java.util.Map;
  * Created by Ifti on 16-Feb-17.
  */
 public enum ContributorRole {
+  SELECT_A_ROLE(101101, "Select A Role"),
   AUTHOR(1, "Author"),
   CO_AUTHOR(2, "Co-Author"),
   EDITOR(2, "Editor"),

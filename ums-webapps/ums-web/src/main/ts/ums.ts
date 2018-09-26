@@ -241,6 +241,7 @@ module ums {
                 url: "/teachersRoutine",
                 controller: 'TeachersRoutine',
                 templateUrl: 'views/dept/teachers-routine.html',
+                controllerAs: 'vm',
                 resolve: {
                     loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                         return $ocLazyLoad.load({

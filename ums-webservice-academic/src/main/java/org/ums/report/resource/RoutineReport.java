@@ -4,9 +4,12 @@ import org.jxls.util.JxlsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.academic.resource.routine.RoutineResourceHelper;
+import org.ums.enums.ProgramType;
 import org.ums.generator.XlsGenerator;
 import org.ums.logs.GetLog;
 import org.ums.resource.Resource;
+import org.ums.services.academic.routine.RoutineReportService;
+import org.ums.services.academic.routine.RoutineService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -27,22 +30,23 @@ public class RoutineReport {
   @Autowired
   RoutineResourceHelper mRoutineResourceHelper;
   @Autowired
+  RoutineReportService mRoutineReportService;
+  @Autowired
   XlsGenerator mXlsGenerator;
 
   @GET
-  @Path("/routine-template")
+  @Path("/routine-template/semester/{semester-id}")
   @GetLog(message = "Requested for downloading routine Template")
   @Produces({"application/vnd.ms-excel"})
-  public StreamingOutput get(@Context HttpServletRequest pHttpServletRequest, final @Context Request pRequest) {
+  public StreamingOutput get(@Context HttpServletRequest pHttpServletRequest, final @Context Request pRequest,
+      @PathParam("semester-id") int pSemesterId) {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
-          InputStream inputStream = RoutineReport.class.getResourceAsStream("/report/xls/template/RoutineTemplate.xls");
-          org.jxls.common.Context context = new org.jxls.common.Context();
-          JxlsHelper.getInstance().processTemplate(inputStream, output, context);
+          mRoutineReportService.createRoutineTemplate(pSemesterId, ProgramType.UG, output);
         } catch(Exception e) {
-
+          e.printStackTrace();
         }
       }
     };

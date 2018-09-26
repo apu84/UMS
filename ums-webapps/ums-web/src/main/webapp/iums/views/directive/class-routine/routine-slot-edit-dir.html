@@ -28,6 +28,8 @@
         overflow:scroll;
         -webkit-overflow-scrolling: touch;
     }
+
+
 </style>
 <div class="row">
     <div class="col-md-6">
@@ -36,9 +38,9 @@
                 <i class="fa fa-plus-circle" aria-hidden="true" ng-click="vm.add()" style="cursor: pointer;"></i>
             </div>
             <br/>
-            <div class="row list-group">
+            <div class="row list-group list-group-striped">
 
-                <form class="form-horizontal" ng-repeat="slotRoutine in vm.classRoutineService.slotRoutineList" name="slotForm">
+                <form class="form-horizontal" ng-repeat="slotRoutine in vm.classRoutineService.slotRoutineList" name="slotForm" ng-style="{'background-color':slotRoutine.color}" >
                     <hr/>
                     <div class="form-group" align="right">
                         <div class="col-sm-12">
