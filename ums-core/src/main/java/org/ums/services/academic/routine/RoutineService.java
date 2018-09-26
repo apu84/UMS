@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.domain.model.immutable.ClassRoom;
 import org.ums.domain.model.immutable.Course;
+import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.immutable.routine.Routine;
 import org.ums.domain.model.immutable.routine.RoutineConfig;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
@@ -74,20 +75,26 @@ public class RoutineService {
             ProgramType.get(mProgramManager.get(pProgramId).getProgramType().getId()));
     createClassRoomMapWithRoomNo();
     createCourseMapWithCourseNo(pSemesterId, pProgramId);
-    removeRoutine(pSemesterId, pProgramId);
-    removeCourseTeacher(pSemesterId, pProgramId);
-
+    List<Routine> deleteRoutineList = new ArrayList<>();
+    List<CourseTeacher> deleteCourseTeacherList = new ArrayList<>();
     for(int i = 0; i < pWorkbook.getNumberOfSheets(); i++) {
       Sheet sheet = pWorkbook.getSheetAt(i);
       System.out.println(sheet.getSheetName() + " ");
       int year = extractYearFromSheetName(sheet.getSheetName());
       int semester = extractSemesterFromSheetName(sheet.getSheetName());
       String section = extractSectionFromSheetName(sheet.getSheetName());
+
+      deleteRoutineList.addAll(mRoutineManager.getRoutineBySemesterProgramIdYearSemesterAndSection(pSemesterId,
+          pProgramId, year, semester, section));
+      deleteCourseTeacherList.addAll(mCourseTeacherManager.getCourseTeacher(pProgramId, pSemesterId, section, year,
+          semester));
       String globalRoomNo = extractRoomNumberFromSheetName(sheet.getSheetName());
       extractRoutineInformationFromSheet(sheet, pSemesterId, pProgramId, routineList, year, semester, section,
           globalRoomNo);
     }
 
+    removeRoutine(deleteRoutineList);
+    removeCourseTeacher(deleteCourseTeacherList);
     mRoutineManager.create(routineList);
     insertCourseTeacher(pSemesterId, pProgramId);
     System.out.println(this.exceptions);
@@ -117,22 +124,24 @@ public class RoutineService {
   }
 
   @Transactional
-  public void removeCourseTeacher(Integer pSemesterId, Integer pProgramId){
-    List<MutableCourseTeacher> courseTeacherList = mCourseTeacherManager.getCourseTeacher(pSemesterId, pProgramId)
+  public void removeCourseTeacher(List<CourseTeacher> pCourseTeachers){
+    List<MutableCourseTeacher> courseTeacherList =pCourseTeachers
         .stream()
         .map(p-> (MutableCourseTeacher) p)
         .collect(Collectors.toList());
 
+    if(courseTeacherList.size()>0)
     mCourseTeacherManager.delete(courseTeacherList);
   }
 
   @Transactional
-  public void removeRoutine(Integer pSemesterId, Integer pProgramId){
-    List<MutableRoutine> routineList = mRoutineManager.getRoutineBySemesterAndProgram(pSemesterId, pProgramId)
+  public void removeRoutine(List<Routine> pRoutines){
+    List<MutableRoutine> routineList = pRoutines
         .parallelStream()
         .map(p-> (MutableRoutine) p)
         .collect(Collectors.toList());
 
+    if(routineList.size()>0)
     mRoutineManager.delete(routineList);
   }
 
@@ -224,7 +233,7 @@ public class RoutineService {
       int pYear, int pSemester, String pSection, String pGlobalRoomNo, String pDayName, String[] pCellStrings,
       int pGroupId, RoutineTime pRoutineTime, int cellStringIndex) {
     List<MutableRoutine> cellRoutineList = new ArrayList<>();
-    String[] courseStrings = pCellStrings[cellStringIndex].split("\\|");
+    String[] courseStrings = pCellStrings[cellStringIndex].split(" \\| ");
     LocalTime startTime = pRoutineTime.getStartTime();
 
     for(String courseString : courseStrings) {
@@ -323,7 +332,7 @@ public class RoutineService {
       List<MutableRoutine> pRoutineList, String cellCourseTeacherString) {
     cellCourseTeacherString = cellCourseTeacherString.replaceAll("\\[", "").replaceAll("\\]", "");
     cellCourseTeacherString = cellCourseTeacherString.trim();
-    String[] courseTeacherListBasedOnCourse = cellCourseTeacherString.split("\\|");
+    String[] courseTeacherListBasedOnCourse = cellCourseTeacherString.split(" \\| ");
     for(int i = 0; i < pRoutineList.size(); i++) {
       if(!courseTeacherListBasedOnCourse[i].equalsIgnoreCase("")) {
         String[] courseTeacher = courseTeacherListBasedOnCourse[i].split(",");

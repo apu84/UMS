@@ -99,7 +99,7 @@ module ums{
       let slotRoutine: ClassRoutine = <ClassRoutine>{};
       slotRoutine.slotGroup = this.slotGroupNo;
       slotRoutine = this.initialzeRoutine(slotRoutine);
-      this.classRoutineService.slotRoutineList.push(slotRoutine);
+      this.classRoutineService.slotRoutineList.unshift(slotRoutine);
       //$("#courseNo").focus();
     }
 
