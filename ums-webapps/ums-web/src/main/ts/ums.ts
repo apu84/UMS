@@ -1009,6 +1009,25 @@ module ums {
                     });
                 }]
             }
+        }).state('optStudentCourseSelection', {
+            url: "/optStudentCourseSelection",
+            controller: 'OptStudentCourseSelection',
+            controllerAs: 'vm',
+            templateUrl: 'views/optCourse/optStudentCourseSelection/opt-student-course-selection.html',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        files: [
+                            'vendors/bootstrap-datepicker/css/datepicker.css',
+                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                            'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
+                            'vendors/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
+                            'vendors/bootstrap-timepicker/css/bootstrap-timepicker.css',
+                            'vendors/bootstrap-timepicker/js/bootstrap-timepicker.js'
+                        ]
+                    });
+                }]
+            }
         }).state('leaveApplication', {
             url: "/leaveApplication",
             controller: 'LeaveApplicationController',

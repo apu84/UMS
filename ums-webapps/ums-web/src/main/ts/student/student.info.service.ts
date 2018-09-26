@@ -11,7 +11,7 @@ module ums {
     public getStudent(): ng.IPromise<Student> {
       let defer: ng.IDeferred<Student> = this.$q.defer();
       this.httpClient.get('academic/student', HttpClient.MIME_TYPE_JSON,
-          (response: Student) => defer.resolve(response));
+          (response: any) => defer.resolve(response));
       return defer.promise;
     }
   }

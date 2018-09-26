@@ -1,0 +1,194 @@
+<style xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+    fieldset.scheduler-border {
+        border: 1px groove #ddd !important;
+        padding: 0 1.4em 1.4em 1.4em !important;
+        margin: 0 0 1.5em 0 !important;
+        -webkit-box-shadow: 0px 0px 0px 0px #000;
+        box-shadow: 0px 0px 0px 0px #000;
+    }
+
+
+
+    legend.scheduler-border {
+        font-size: 1.2em !important;
+        font-weight: bold !important;
+        text-align: left !important;
+        width: auto;
+        padding: 0 10px;
+        border-bottom: none;
+    }
+    .btn-group button {
+        background-color: #f1f1f1; /* Green background */
+        border: 1px solid black; /* Green border */
+        color: black; /* White text */
+        padding: 5px 10px; /* Some padding */
+        cursor: pointer; /* Pointer/hand icon */
+        float: left; /* Float the buttons side by side */
+    }
+
+    /* Clear floats (clearfix hack) */
+    .btn-group:after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+
+    .btn-group button:not(:last-child) {
+        border-right: none; /* Prevent double borders */
+    }
+
+    /* Add a background color on hover */
+    .btn-group button:hover {
+        background-color: #3e8e41;
+    }
+    </style>
+<div class="panel">
+        <div class="panel-heading">
+            <b>Optional Course Selection {{vm.semesterName}}</b>
+        </div>
+     <div class="panel-body">
+             <div class="row">
+                 <div class="col-md-12">
+                     <fieldset class="scheduler-border">
+                         <legend class="scheduler-border">Offered Courses By <b>{{" "+vm.departmentName}}</b></legend>
+                         <div>
+                             <div class="control-group">
+                                 <table width="100%">
+                                     <tr data-ng-repeat="course in vm.optOfferedCourseList" data-ng-if="$index % 1 == 0" >
+                                         <td ng-repeat="course in vm.optOfferedCourseList.slice($index, $index + 1)" style="vertical-align: top">
+                                             <div ui-sortable="vm.sortableOptions1" class="{{course.groupName}}" ng-model="vm.selectedComponents1" style="border: 1px dashed #a2a7ae;padding: 10px">
+                                                 <div>
+                                                     <div class="row" style="background-color: #FAFAFA">
+                                                         <div class="col-md-3">
+                                                             <span  class="badge badge-dark"><b>{{course.groupName}}</b></span>
+                                                         </div>
+                                                         <div class="col-md-2" >
+                                                             <span data-ng-if="course.isMandatory==true"  data-ng-hide="vm.isSubGroupAvailable" class="badge badge-danger pull-right"><span class="glyphicon glyphicon-check"></span>{{" Mandatory"}}</span>
+                                                             <span data-ng-if="course.isMandatory!=true" data-ng-hide="vm.isSubGroupAvailable" class="badge badge-danger pull-right"><span class="glyphicon glyphicon-time"></span>{{" Optional"}}</span>
+                                                         </div>
+                                                         <div class="col-md-2" align="right">
+                                                             Status:<b>Pending</b>
+                                                         </div>
+                                                         <div class="col-md-5" align="right">
+                                                            <div class="btn-group" data-ng-repeat="app in vm.optOfferedCourseList">
+                                                                    <button data-ng-click="vm.setSelection(course.groupId,$index+1)">{{$index+1}}</button>
+                                                            </div>
+                                                         </div>
+                                                     </div>
+                                                 </div>
+                                                 <table width="100%" class="table table-hover table-condensed">
+                                                     <thead data-ng-hide="vm.isSubGroupAvailable">
+                                                     <tr>
+                                                         <th width="2%">#</th>
+                                                         <th width="20%">Course No</th>
+                                                         <th width="50%">Course Title</th>
+                                                         <th width="8%" style="text-align:right">crHr</th>
+                                                         <th width="20%" style="text-align:center">Course Type</th>
+                                                     </tr>
+                                                     </thead>
+                                                     <tbody data-ng-hide="vm.isSubGroupAvailable">
+                                                     <tr data-ng-repeat="app in course.courses track by $index">
+                                                         {{app}}
+                                                         <td width="2%">{{$index + 1}}</td>
+                                                         <td width="20%"><b>{{app.no}}</b></td>
+                                                         <td width="50%">{{app.title}}</td>
+                                                         <td  width="8%" align="right">
+                                                             <b>{{app.crHr}}</b>
+                                                         </td>
+                                                         <td width="20%" align="center">
+                                                             <span data-ng-if="app.courseType=='THEORY'" class="badge badge-success">{{app.courseType}}</span>
+                                                             <span data-ng-if="app.courseType=='SESSIONAL'" class="badge badge-warning">{{app.courseType}}</span></td>
+
+                                                     </tr>
+                                                     </tbody>
+                                                     <div style="padding-top: 0px" data-ng-if="vm.isSubGroupAvailable" align="right">
+                                                         <button  type="button"
+                                                                  data-toggle="modal"
+                                                                  data-target="#myModalSub"
+                                                                  data-ng-click="vm.getParentGrpId(course.groupName,course.index,course)"
+                                                                  class="btn btn-light btn-xs"><span class="glyphicon glyphicon-folder-open"></span></button>
+                                                     </div>
+                                                     <br>
+                                                     <div style="padding-left: 40px">
+                                                         <table width="100%" data-ng-show="vm.isSubGroupAvailable" >
+                                                             <tr data-ng-repeat="subCourses in course.subGrpCourses" data-ng-if="$index % 1 == 0" >
+                                                                 <td ng-repeat="subApp in course.subGrpCourses.slice($index, $index + 1)" style="vertical-align: top">
+                                                                     <div ui-sortable="vm.sortableOptions1" class="{{subApp.groupName}}" ng-model="vm.selectedComponents1" style="border: 1px solid black">
+
+                                                                         <div style="padding-left: 20px">
+                                                                             <div>
+                                                                                 <div class="row">
+                                                                                     <div class="col-md-4" style="background-color: #FAFAFA">
+                                                                                         <span  class="badge badge-info"><b>{{subApp.groupName}}</b></span>
+                                                                                     </div>
+                                                                                     <div class="col-md-2" style="background-color: #FAFAFA">
+                                                                                         <b>Total Applied: {{0}}</b>
+                                                                                     </div>
+                                                                                     <div class="col-md-2" style="background-color: #FAFAFA">
+                                                                                         <b>No. of Seats: {{0}}</b>
+                                                                                     </div>
+                                                                                     <div class="col-md-2" style="background-color: #FAFAFA">
+                                                                                         <span class="badge badge-danger pull-right"><span class="glyphicon glyphicon-check"></span>{{" N/R"}}</span>
+                                                                                     </div>
+                                                                                     <div class="col-md-2" style="background-color: #FAFAFA" align="right">
+                                                                                         <a class="btn btn-xs btn-default btn-round"
+                                                                                            data-ng-click="vm.removeSubGroup(course.groupName,subApp.groupName)">
+                                                                                             <i class="fa fa-times" style="color: blue;"></i>
+                                                                                         </a>
+                                                                                     </div>
+
+                                                                                 </div>
+                                                                             </div>
+                                                                         </div>
+                                                                         <table class="table table-hover table-condensed" width="100%">
+                                                                             <thead>
+                                                                             <tr>
+                                                                                 <th width="2%">#</th>
+                                                                                 <th width="65%">Course Details</th>
+                                                                                 <th width="8%" > crHr</th>
+                                                                                 <th width="20%">Course Type</th>
+                                                                                 <th width="5%">Remove</th>
+                                                                             </tr>
+                                                                             </thead>
+                                                                             <tbody>
+                                                                             <tr data-ng-repeat="app in subApp.courses track by $index">
+                                                                                 <td width="2%">{{$index + 1}}</td>
+                                                                                 <td width="65%">{{app.title}}
+                                                                                     <b>&nbsp;&nbsp;&nbsp;{{"  ("+app.no+")  "}}&nbsp;&nbsp;&nbsp;</b>
+                                                                                 </td>
+                                                                                 <td width="8%" >
+                                                                                     <b>{{app.crHr}}</b>
+                                                                                 </td>
+                                                                                 <td width="20%">
+                                                                                     <span data-ng-if="app.courseType=='THEORY'" class="badge badge-success">{{app.courseType}}</span>
+                                                                                     <span data-ng-if="app.courseType=='SESSIONAL'" class="badge badge-warning">{{app.courseType}}</span>
+                                                                                 </td>
+                                                                                 <td width="5%">
+                                                                                     <button type="button"
+                                                                                             data-ng-click="vm.deleteSubItems(course.groupName,subApp.groupName,$index,app.id)"
+                                                                                             class="btn btn-default btn-sm">
+                                                                                         <span class="glyphicon glyphicon-trash"></span>
+                                                                                     </button>
+                                                                                 </td>
+                                                                             </tr>
+                                                                             </tbody>
+                                                                         </table>
+                                                                     </div>
+                                                                     <br><br>
+                                                                 </td>
+                                                             </tr>
+                                                         </table>
+                                                     </div>
+                                                     <br><br>
+                                                 </table>
+                                             </div>
+                                         </td>
+                                     </tr>
+                                 </table>
+                             </div>
+                         </div>
+                     </fieldset>
+                 </div>
+             </div>
+     </div>
+ </div>
