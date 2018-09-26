@@ -38,6 +38,7 @@ module ums{
     courseTeacher: CourseTeacherInterface[];
     employee: Employee;
     slotGroup: number;
+    color: string;
   }
 
   export interface RoutineSlot{

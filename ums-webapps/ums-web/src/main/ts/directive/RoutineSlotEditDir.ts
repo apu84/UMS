@@ -60,6 +60,7 @@ module ums{
         slotRoutine.slotGroup = this.slotGroupNo;
         slotRoutine = this.initialzeRoutine(slotRoutine);
         this.classRoutineService.slotRoutineList.push(slotRoutine);
+        this.updateColor();
       }else{
         console.log("Existing slot");
         console.log(this.classRoutineService.slotRoutineList);
@@ -68,6 +69,7 @@ module ums{
           c.endTimeObj = moment(c.endTime,'hh:mm A').toDate();
           this.slotGroupNo = c.slotGroup;
         });
+        this.updateColor();
       }
       this.setSessionalSection().then((sectionList: any) => {
         this.assignSectionsToSessionalCourses();
@@ -95,11 +97,21 @@ module ums{
       return slotRoutine;
     }
 
+    private updateColor(){
+      for(var i=0; i<this.classRoutineService.slotRoutineList.length; i++){
+        if(i%2==0)
+          this.classRoutineService.slotRoutineList[i].color='#FFEFD5';
+        else
+          this.classRoutineService.slotRoutineList[i].color = '#FFDAB9';
+      }
+    }
+
     public add() {
       let slotRoutine: ClassRoutine = <ClassRoutine>{};
       slotRoutine.slotGroup = this.slotGroupNo;
       slotRoutine = this.initialzeRoutine(slotRoutine);
       this.classRoutineService.slotRoutineList.unshift(slotRoutine);
+      this.updateColor();
       //$("#courseNo").focus();
     }
 
