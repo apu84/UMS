@@ -134,8 +134,9 @@
                   <button type="button"
                           data-toggle="modal"
                           data-target="#assignSeat"
+                          data-ng-click="vm.allocateSeat()"
                           class="btn btn-default btn-sm">Assign Seats</button>
-                  <button type="button" data-ng-click="vm.save()" class="btn btn-dark btn-sm">Save</button>
+                  <button type="button" data-ng-click="vm.save()"  class="btn btn-dark btn-xs">Save</button>
                </div>
             </div>
          </div>
@@ -435,7 +436,7 @@
 
 <div class="modal fade" id="assignSeat" role="dialog">
    <!--   <div class="modal-backdrop"> --->
-   <div class="modal-dialog  modal-lg">
+   <div class="modal-dialog  modal-md">
       <!-- Modal content-->
       <div class="modal-content">
          <div class="modal-header" >
@@ -454,18 +455,18 @@
                   <tr>
                      <th>#</th>
                      <th >Group Name</th>
-                     <th>Seat</th>
+                     <th style="text-align: right">No. of  Seats</th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr >
+                  <tr  data-ng-repeat="app in vm.allocateSeatForGroups">
                      <td>{{$index + 1}}</td>
-                     <td>{{"Elective_1"}}</td>
-                     <td>
+                     <td>{{app.groupName}}</td>
+                     <td align="right">
                         <input type="number"
                                class="form-control required"
-                               style="width: 15%";
-                               data-ng-model="vm.subGroupName"
+                               style="width: 30%";
+                               data-ng-model="app.seat"
                         />
                      </td>
                   </tr>
@@ -474,7 +475,7 @@
          </div>
          <div class="modal-footer">
             <button type="button" class="btn btn-info"  data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-success" data-ng-click="vm.addOfferedCourse()" data-dismiss="modal">Confirm</button>
+            <button type="button" class="btn btn-success" data-ng-click="vm.insertSeatInfo()" data-dismiss="modal">Confirm</button>
 
          </div>
       </div>

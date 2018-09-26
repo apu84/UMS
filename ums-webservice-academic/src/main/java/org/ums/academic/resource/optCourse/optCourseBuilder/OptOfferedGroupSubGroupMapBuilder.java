@@ -32,6 +32,9 @@ public class OptOfferedGroupSubGroupMapBuilder implements
     if(pReadOnly.getSubGroupName() != null) {
       pBuilder.add("subGroupName", pReadOnly.getSubGroupName());
     }
+    if(pReadOnly.getGroupName() != null) {
+      pBuilder.add("groupName", pReadOnly.getGroupName());
+    }
 
   }
 

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.academic.resource.optCourse.optCourseBuilder.OptOfferedGroupBuilder;
 import org.ums.builder.Builder;
+import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.SubGroup;
 import org.ums.domain.model.immutable.optCourse.OptOfferedGroup;
@@ -33,7 +34,10 @@ import org.ums.report.optReports.SubGroupList;
 import org.ums.resource.ResourceHelper;
 import org.ums.usermanagement.user.UserManager;
 
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
@@ -308,6 +312,21 @@ public class OptOfferedGroupResourceHelper extends ResourceHelper<OptOfferedGrou
       optGroup.add(app);
     }
     return optGroup;
+  }
+
+  public JsonObject getGroupInfo(Integer pSemesterId, Integer pProgramId, Integer pYear, Integer pSemester,
+      final UriInfo pUriInfo) {
+    List<OptOfferedGroup> optOfferedGroup =
+        mOptOfferedGroupManager.getBySemesterId(pSemesterId, pProgramId, pYear, pSemester);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(OptOfferedGroup app : optOfferedGroup) {
+      children.add(toJson(app, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
   }
 
   @Override

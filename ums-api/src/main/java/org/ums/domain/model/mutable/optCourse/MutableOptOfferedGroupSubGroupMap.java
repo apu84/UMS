@@ -17,4 +17,6 @@ public interface MutableOptOfferedGroupSubGroupMap extends OptOfferedGroupSubGro
   void setSubGroupId(Long pSubGroupId);
 
   void setSubGroupName(String pSubGroupName);
+
+  void setGroupName(String pGroupName);
 }

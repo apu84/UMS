@@ -29,6 +29,21 @@ module ums{
         totalSeats:number;
         courses:IOptCourse[];
     }
+    export interface IGroupInfo{
+       groupId:number;
+       groupName:string;
+       semesterId:number;
+       programId:number;
+       year:number;
+       semester:number;
+       isMandatory:boolean;
+       seat:number;
+    }
+    export interface ISubGroupInfo{
+        groupId:number;
+        groupName:string;
+        subGroups:IGroupInfo[];
+    }
     export class OptCourseOfferService{
         public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
         constructor(private appConstants: any, private httpClient: HttpClient,
@@ -62,11 +77,26 @@ module ums{
                 });
             return defer.promise;
         }
-        public getOfferEligibleCourses(semesterId:number,examType:number):ng.IPromise<any>{
+
+        public getGroupInfo(semesterId:number,programId:number,year:number,semester:number):ng.IPromise<any> {
             var defer = this.$q.defer();
-            this.httpClient.get('academic/empExamAttendance/getEmpExamAttendanceList/semesterId/'+semesterId+'/examType/'+examType,HttpClient.MIME_TYPE_JSON,
-                (response: any) => {
+            this.httpClient.get('academic/optOfferedGroup/getGroupInfo/semesterId/'+semesterId+'/program/'+programId+'/year/'+year+'/semester/'+semester,'application/json',
+                (response:any) => {
                     defer.resolve(response.entries);
+                },
+                (response:ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
+                });
+            return defer.promise;
+        }
+        public getSubGroupInfo(semesterId:number,programId:number,year:number,semester:number):ng.IPromise<any> {
+            var defer = this.$q.defer();
+            this.httpClient.get('academic/optOfferedGroupSubGroupMap/getGroupInfo/semesterId/'+semesterId+'/program/'+programId+'/year/'+year+'/semester/'+semester,'application/json',
+                (response:any) => {
+                    defer.resolve(response.entries);
+                },
+                (response:ng.IHttpPromiseCallbackArg<any>) => {
+                    console.error(response);
                 });
             return defer.promise;
         }

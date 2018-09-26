@@ -20,4 +20,6 @@ public interface OptOfferedGroupSubGroupMap extends Serializable, LastModifier,
 
   String getSubGroupName();
 
+  String getGroupName();
+
 }

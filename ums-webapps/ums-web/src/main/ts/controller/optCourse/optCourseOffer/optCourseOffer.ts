@@ -36,6 +36,7 @@ module ums{
         destinationDiv: string;
         courseIdMap: any;
         pairCourseIdMapWithCourseId: any;
+        public allocateSeatForGroups:Array<IGroupInfo>;
         public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window', 'semesterService', 'facultyService',
             'programService', 'commonService', 'optCourseOfferService'];
 
@@ -481,6 +482,28 @@ module ums{
         private changeProgram(data:any):void{
             this.programId=data.id;
             console.log("Program Id: "+this.programId);
+        }
+        public allocateSeat():void{
+            console.log("Allocate Seat");
+            let YS=this.yearSemName.split("-");
+            let year = +YS[0];
+            let sem= +YS[1];
+            this.allocateSeatForGroups=[];
+            if(this.departmentId=="05"){
+                this.optCourseOfferService.getSubGroupInfo(this.selectedSemesterId, this.programId, year, sem).then((data)=>{
+                    console.log("***Sub Group*");
+                    console.log(data);
+                });
+            }else {
+                this.optCourseOfferService.getGroupInfo(this.selectedSemesterId, this.programId, year, sem).then((data) => {
+                    console.log("***group*");
+                    this.allocateSeatForGroups = data;
+                    console.log(this.allocateSeatForGroups);
+                });
+            }
+        }
+        public insertSeatInfo():void{
+            console.log(this.allocateSeatForGroups);
         }
         private save():void{
             console.log("**Is Eligible for Insertation**");
