@@ -55,7 +55,7 @@ import java.util.List;
 public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmployee, String> {
 
   @Autowired
-  private EmployeeManager mEmployeeManager;
+  private EmployeeManager mManager;
 
   @Autowired
   private EmployeeBuilder mBuilder;
@@ -128,7 +128,6 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
       mutableAdditionalInformation.setExtNo("");
       mutableAdditionalInformation.setRoomNo("");
       mutableAdditionalInformation.setId(pJsonObject.getJsonObject("entries").getString("id"));
-
       mAdditionalInformationManager.create(mutableAdditionalInformation);
     }
 
@@ -144,9 +143,6 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
           .getInt("roleId")));
       mutableUser.setTemporaryPassword(tempPassword.toCharArray());
       mUserManager.create(mutableUser);
-
-      mNewIUMSAccountInfoEmailService.sendEmail(mutablePersonalInformation.getFullName(), mutableUser.getId(),
-          tempPassword, mutablePersonalInformation.getPersonalEmail(), "IUMS", "AUST: IUMS Account Credentials");
     }
 
     URI contextURI =
@@ -199,7 +195,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     String currentMax = "";
     String newId = "";
     try {
-      currentMax = mEmployeeManager.getLastEmployeeId(pDepartmentId, pEmployeeType);
+      currentMax = mManager.getLastEmployeeId(pDepartmentId, pEmployeeType);
       newId =
           Integer.parseInt(pDepartmentId) < 10 ? "0" + String.valueOf(Integer.parseInt(currentMax) + 1) : String
               .valueOf(Integer.parseInt(currentMax) + 1);
@@ -213,7 +209,12 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   }
 
   public boolean validateShortName(final String pShortName) {
-    return mEmployeeManager.validateShortName(pShortName);
+    return mManager.validateShortName(pShortName);
+  }
+
+  public JsonObject getEmployeesWaitingForAccountVerification(final UriInfo pUriInfo) {
+    List<Employee> employees = mManager.waitingForAccountVerification();
+    return buildJsonResponse(employees, pUriInfo);
   }
 
   public JsonObject getByDesignation(final String designationId, final Request pRequest, final UriInfo pUriInfo) {
@@ -227,6 +228,55 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     String employeeId = user.getEmployeeId();
     Employee employee = getContentManager().get(employeeId);
     return employee;
+  }
+
+  @Transactional
+  public Response update(JsonObject pJsonObject, final UriInfo pUriInfo) {
+    LocalCache localCache = new LocalCache();
+    MutableEmployee mutableEmployee = new PersistentEmployee();
+    mBuilder.build(mutableEmployee, pJsonObject.getJsonObject("entries"), localCache);
+    mutableEmployee.setStatus(1);
+    mManager.update(mutableEmployee);
+    if(mutableEmployee.getStatus() == 1) {
+      MutablePersonalInformation mutablePersonalInformation =
+          (MutablePersonalInformation) mPersonalInformationManager.get(pJsonObject.getJsonObject("entries").getString(
+              "id"));
+      MutableUser mutableUser = mUserManager.exists(pJsonObject.getJsonObject("entries").getString("id")) ?
+      (MutableUser) mUserManager.get(pJsonObject.getJsonObject("entries").getString("id")) : null;
+      if(mutableUser != null) {
+        mNewIUMSAccountInfoEmailService.sendEmail(mutablePersonalInformation.getFullName(), mutableUser.getId(),
+                new String(mutableUser.getTemporaryPassword()), mutablePersonalInformation.getPersonalEmail(), "IUMS",
+                "AUST: IUMS Account Credentials");
+      }
+    }
+    localCache.invalidate();
+    return Response.ok().build();
+  }
+
+  @Transactional
+  public Response deleteEmployee(String pId) {
+    LocalCache localCache = new LocalCache();
+    MutableEmployee mutableEmployee = new PersistentEmployee();
+    mutableEmployee = mManager.exists(pId) ? (MutableEmployee) mManager.get(pId) : null;
+    if(mutableEmployee != null) {
+      MutablePersonalInformation mutablePersonalInformation = new PersistentPersonalInformation();
+      mutablePersonalInformation =
+          mPersonalInformationManager.exists(pId) ? (MutablePersonalInformation) mPersonalInformationManager.get(pId)
+              : null;
+
+      MutableUser mutableUser = new PersistentUser();
+      mutableUser = mUserManager.exists(pId) ? (MutableUser) mUserManager.get(pId) : null;
+
+      if(mutablePersonalInformation != null) {
+        mutablePersonalInformation.delete();
+      }
+      if(mutableUser != null) {
+        mutableUser.delete();
+      }
+      mutableEmployee.delete();
+    }
+    localCache.invalidate();
+    return Response.ok().build();
   }
 
   private JsonObject convertToJson(List<Employee> employees, UriInfo pUriInfo) {
@@ -246,7 +296,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     List<EmployeeDocument> userDocuments = mEmployeeRepository.findByCustomQuery(pQuery, new PageRequest(page, 10));
     List<Employee> users = new ArrayList<>();
     for(EmployeeDocument document : userDocuments) {
-      users.add(mEmployeeManager.get(document.getId()));
+      users.add(mManager.get(document.getId()));
     }
     return convertToJson(users, pUriInfo);
   }
@@ -255,7 +305,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     List<EmployeeDocument> userDocuments = mEmployeeRepository.findByDepartment(pQuery, new PageRequest(page, 10));
     List<Employee> users = new ArrayList<>();
     for(EmployeeDocument document : userDocuments) {
-      users.add(mEmployeeManager.get(document.getId()));
+      users.add(mManager.get(document.getId()));
     }
     return convertToJson(users, pUriInfo);
   }
@@ -263,7 +313,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   public JsonObject getEmployees(final String pPublicationStatus, final Request pRequest, final UriInfo pUriInfo) {
     Department department = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString()).getDepartment();
     String departmentId = department.getId().toString();
-    List<Employee> employees = mEmployeeManager.getEmployees(departmentId, pPublicationStatus);
+    List<Employee> employees = mManager.getEmployees(departmentId, pPublicationStatus);
     return JsonCreator(employees, pUriInfo);
   }
 
@@ -361,7 +411,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
 
   @Override
   public EmployeeManager getContentManager() {
-    return mEmployeeManager;
+    return mManager;
   }
 
   @Override

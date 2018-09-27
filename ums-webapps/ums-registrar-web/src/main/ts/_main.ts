@@ -140,6 +140,7 @@
 /// <reference path='controller/meeting/Search.ts'/>
 
 /// <reference path='ems/create-new/NewEmployee.ts'/>
+/// <reference path='ems/create-new/VerifyEmployee.ts'/>
 /// <reference path='ems/search/employee.search.controller.ts'/>
 /// <reference path='ems/search/employee.search.service.ts'/>
 

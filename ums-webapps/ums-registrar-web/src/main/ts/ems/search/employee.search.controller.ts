@@ -5,7 +5,8 @@ module ums {
     }
 
     class EmployeeSearch {
-        public static $inject = ['appConstants', 'registrarConstants', '$scope', '$q', 'notify', 'departmentService', 'designationService', 'employeeService', 'employeeSearchService', '$state', 'allUsers', 'userService'];
+        public static $inject = ['appConstants', 'registrarConstants', '$scope', '$q', 'notify', 'departmentService', 'designationService', 'employeeService',
+            'employeeSearchService', '$state', 'userService'];
         private searchBy: string = "";
         private changedUserName: string = "";
         private showSearchByUserId: boolean = false;
@@ -42,6 +43,7 @@ module ums {
         private currentUser: LoggedInUser;
         private statuses: ICommon[] = [];
         private empTypes: ICommon[] = [];
+        private showLoader: boolean = true;
 
         constructor(private appConstants: any,
                     private registrarConstants: any,
@@ -53,36 +55,40 @@ module ums {
                     private employeeService: EmployeeService,
                     private employeeSearchService: EmployeeSearchService,
                     private $state: any,
-                    private allUsers: any,
                     private userService: UserService) {
 
             $scope.filterd = Array<Employee>();
             this.state = $state;
             $scope.getEmployees = this.getEmployees.bind(this);
-            this.allUser = allUsers;
-            this.totalItemsNumber = this.allUsers.length;
+
             this.statuses = this.registrarConstants.empStatus;
             this.empTypes = this.appConstants.employeeTypes;
             this.initialization();
         }
 
         private initialization() {
-            this.departmentService.getAll().then((departments: any) => {
-                this.departments = departments;
+            this.showLoader = true;
+            this.employeeService.getAll().then((data) => {
+                this.allUser = data;
+                this.totalItemsNumber = data.length;
+                this.showLoader = false;
+                this.departmentService.getAll().then((departments: any) => {
+                    this.departments = departments;
 
-                this.designationService.getAll().then((designations: any) => {
-                    this.designations = designations;
-                    this.filteredDesignation = designations;
-                });
+                    this.designationService.getAll().then((designations: any) => {
+                        this.designations = designations;
+                        this.filteredDesignation = designations;
+                    });
 
-                this.userService.fetchCurrentUserInfo().then((result) => {
-                    this.currentUser = result;
-                    if (this.currentUser.roleId === 1041 || this.currentUser.roleId == 7701 || this.currentUser.roleId == 7108 || this.currentUser.roleId == 7303
-                     || this.currentUser.roleId == 7005 || this.currentUser.roleId == 7403 || this.currentUser.roleId == 7503) {
-                        this.modifiedUserList = this.allUser.filter((value, index) => {
-                            return this.currentUser.departmentId == this.allUser[index].deptOfficeId && this.allUser[index].employeeType == 3;
-                        });
-                    }
+                    this.userService.fetchCurrentUserInfo().then((result) => {
+                        this.currentUser = result;
+                        if (this.currentUser.roleId === 1041 || this.currentUser.roleId == 7701 || this.currentUser.roleId == 7108 || this.currentUser.roleId == 7303
+                            || this.currentUser.roleId == 7005 || this.currentUser.roleId == 7403 || this.currentUser.roleId == 7503) {
+                            this.modifiedUserList = this.allUser.filter((value, index) => {
+                                return this.currentUser.departmentId == this.allUser[index].deptOfficeId && this.allUser[index].employeeType == 3;
+                            });
+                        }
+                    });
                 });
             });
         }

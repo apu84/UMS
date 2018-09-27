@@ -15,6 +15,7 @@
       '/search': {title: 'Search', 'breadcrumb': ['Search']},
       '/newEmployee': {title: 'Create New Employee', 'breadcrumb': ['Create New Employee']},
       '/employeeProfile': {title: 'Profile', 'breadcrumb': ['Profile']},
+      '/verifyEmployee': {title: 'Verification', 'breadcrumb': ['Verification']},
       '/personal': {title: 'Profile', 'breadcrumb': ['Profile']},
       '/academic': {title: 'Profile', 'breadcrumb': ['Profile']},
       '/publication': {title: 'Profile', 'breadcrumb': ['Profile']},

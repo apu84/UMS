@@ -39,7 +39,7 @@ public class LogstashConfiguration {
   }
 
   public void addLogstashAppender() {
-    log.info("Initializing Logstash logging");
+    log.info("Initializing Logstash logging: ");
 
     LogstashTcpSocketAppender logstashAppender = new LogstashTcpSocketAppender();
     logstashAppender.setName("LOGSTASH");

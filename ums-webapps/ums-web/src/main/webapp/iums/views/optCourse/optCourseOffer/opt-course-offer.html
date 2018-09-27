@@ -131,7 +131,12 @@
                   <div>Optional Course</div>
                </div>
                <div class="col-md-3" align="right">
-                  <button type="button" data-ng-click="vm.save()" class="btn btn-dark btn-sm">Save</button>
+                  <button type="button"
+                          data-toggle="modal"
+                          data-target="#assignSeat"
+                          data-ng-click="vm.allocateSeat()"
+                          class="btn btn-default btn-sm">Assign Seats</button>
+                  <button type="button" data-ng-click="vm.save()"  class="btn btn-dark btn-xs">Save</button>
                </div>
             </div>
          </div>
@@ -210,7 +215,7 @@
                                                 </div>
                                                 <div class="col-md-2">
                                                    <p data-ng-hide="vm.isSubGroupAvailable" >
-                                                      <b>Total Applied: {{0}}</b>
+                                                      <b> 1st Choice: {{0}}</b>
                                                    </p>
 
                                                 </div>
@@ -235,7 +240,8 @@
                                              <thead data-ng-hide="vm.isSubGroupAvailable">
                                              <tr>
                                                 <th width="2%">#</th>
-                                                <th width="65%">Course Details</th>
+                                                <th width="15%">Course No</th>
+                                                <th width="50%">Course Title</th>
                                                 <th width="8%">crHr</th>
                                                 <th width="20%">Course Type</th>
                                                 <th width="5%">Remove</th>
@@ -243,11 +249,9 @@
                                              </thead>
                                                 <tbody data-ng-hide="vm.isSubGroupAvailable">
                                                 <tr data-ng-repeat="app in course.courses track by $index">
-                                                   {{app}}
                                                    <td width="2%">{{$index + 1}}</td>
-                                                   <td width="65%">{{app.title}}
-                                                      <b>&nbsp;&nbsp;&nbsp;{{"  ("+app.no+")  "}}&nbsp;&nbsp;&nbsp;</b>
-                                                   </td>
+                                                   <td width="15%"><b>{{app.no}}</b></td>
+                                                   <td width="50%">{{app.title}}</td>
                                                    <td  width="8%">
                                                       <b>{{app.crHr}}</b>
                                                    </td>
@@ -284,7 +288,7 @@
                                                                         <span  class="badge badge-info"><b>{{subApp.groupName}}</b></span>
                                                                      </div>
                                                                      <div class="col-md-2" style="background-color: #FAFAFA">
-                                                                        <b>Total Applied: {{0}}</b>
+                                                                        <b> 1st Choice: {{0}}</b>
                                                                      </div>
                                                                      <div class="col-md-2" style="background-color: #FAFAFA">
                                                                         <b>No. of Seats: {{0}}</b>
@@ -306,7 +310,8 @@
                                                                <thead>
                                                                <tr>
                                                                   <th width="2%">#</th>
-                                                                  <th width="65%">Course Details</th>
+                                                                  <th width="15%">Course No</th>
+                                                                  <th width="50%">Course Title</th>
                                                                   <th width="8%" > crHr</th>
                                                                   <th width="20%">Course Type</th>
                                                                   <th width="5%">Remove</th>
@@ -315,9 +320,8 @@
                                                                <tbody>
                                                                <tr data-ng-repeat="app in subApp.courses track by $index">
                                                                   <td width="2%">{{$index + 1}}</td>
-                                                                  <td width="65%">{{app.title}}
-                                                                     <b>&nbsp;&nbsp;&nbsp;{{"  ("+app.no+")  "}}&nbsp;&nbsp;&nbsp;</b>
-                                                                  </td>
+                                                                  <td width="15%"><b>{{app.no}}</b></td>
+                                                                  <td width="50%">{{app.title}}</td>
                                                                   <td width="8%" >
                                                                      <b>{{app.crHr}}</b>
                                                                   </td>
@@ -424,6 +428,54 @@
          <div class="modal-footer">
             <button type="button" class="btn btn-info"  data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-success" data-ng-click="vm.subGroup()" data-dismiss="modal">Confirm</button>
+
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="modal fade" id="assignSeat" role="dialog">
+   <!--   <div class="modal-backdrop"> --->
+   <div class="modal-dialog  modal-md">
+      <!-- Modal content-->
+      <div class="modal-content">
+         <div class="modal-header" >
+            <button type="button"  data-ng-click="vm.reset()" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Assign Seats:</h4>
+         </div>
+         <div class="modal-body">
+            <div>
+               <div class="row">
+                  <div class="col-md-12" >
+                     <b>Total Number of Current Enrolled Students: 100</b>
+               </div>
+            </div>
+               <table width="100%" class="table table-hover table-condensed">
+                  <thead>
+                  <tr>
+                     <th>#</th>
+                     <th >Group Name</th>
+                     <th style="text-align: right">No. of  Seats</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr  data-ng-repeat="app in vm.allocateSeatForGroups">
+                     <td>{{$index + 1}}</td>
+                     <td>{{app.groupName}}</td>
+                     <td align="right">
+                        <input type="number"
+                               class="form-control required"
+                               style="width: 30%";
+                               data-ng-model="app.seat"
+                        />
+                     </td>
+                  </tr>
+                  </tbody>
+               </table>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-info"  data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-success" data-ng-click="vm.insertSeatInfo()" data-dismiss="modal">Confirm</button>
 
          </div>
       </div>

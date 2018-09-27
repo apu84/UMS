@@ -149,14 +149,7 @@ module ums {
                 url: "/employeeSearch",
                 templateUrl: 'views/ems/search/employee-search.html',
                 controller: 'EmployeeSearch',
-                controllerAs: 'vm',
-                resolve: {
-                    allUsers: ['employeeService', function (employeeService) {
-                        return employeeService.getAll().then((data) => {
-                            return data;
-                        });
-                    }]
-                }
+                controllerAs: 'vm'
             })
             .state('employeeSearch.employeeProfile', {
                 url: "/employeeProfile",
@@ -327,6 +320,12 @@ module ums {
                         });
                     }]
                 }
+            })
+            .state('verifyEmployee', {
+                url: "/verifyEmployee",
+                templateUrl: 'views/ems/create-new/verify-employee.html',
+                controller: 'VerifyEmployee',
+                controllerAs: 'vm'
             })
             .state('schedule', {
                 url: "/schedule",

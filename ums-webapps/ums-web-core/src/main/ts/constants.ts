@@ -970,6 +970,7 @@ module ums {
                     {id: 20, name: "Research"}
                 ],
                 empStatus: [
+                    {id: 0, name: "In Process"},
                     {id: 1, name: "Active"},
                     {id: 2, name: "On Leave"},
                     {id: 3, name: "Inactive"}

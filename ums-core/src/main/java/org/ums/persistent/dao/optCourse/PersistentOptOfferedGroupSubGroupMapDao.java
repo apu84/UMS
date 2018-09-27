@@ -27,6 +27,7 @@ public class PersistentOptOfferedGroupSubGroupMapDao extends OptOfferedGroupSubG
   }
 
   String INSERT = "Insert into OPT_GROUP_SUB_GROUP_MAP (ID,GROUP_ID,SUB_GROUP_ID,SUB_GROUP_NAME) values (?,?,?,?)";
+  String DELETE = "DELETE FROM OPT_GROUP_SUB_GROUP_MAP WHERE GROUP_ID=? AND SUB_GROUP_ID=?";
   String GET_BY_SEMESTER_ID =
       "SELECT b.GROUP_ID,b.SUB_GROUP_ID,b.SUB_GROUP_NAME FROM OPT_GROUP a,OPT_GROUP_SUB_GROUP_MAP b WHERE a.SEMESTER_ID=? AND a.PROGRAM_ID=? AND a.\"YEAR\"=? AND a.SEMESTER=? AND a.ID=b.GROUP_ID";
 
@@ -55,6 +56,19 @@ public class PersistentOptOfferedGroupSubGroupMapDao extends OptOfferedGroupSubG
     return params;
   }
 
+  @Override
+  public int delete(List<MutableOptOfferedGroupSubGroupMap> pMutableList) {
+    List<Object[]> parameters = getDeleteParamList(pMutableList);
+    return mJdbcTemplate.batchUpdate(DELETE, parameters).length;
+  }
+
+  private List<Object[]> getDeleteParamList(List<MutableOptOfferedGroupSubGroupMap> pMutableList) {
+    List<Object[]> params = new ArrayList<>();
+    for(OptOfferedGroupSubGroupMap app : pMutableList) {
+      params.add(new Object[] {app.getGroupId(), app.getSubGroupId()});
+    }
+    return params;
+  }
 }
 
 

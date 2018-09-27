@@ -24,5 +24,7 @@ public interface EmployeeManager extends ContentManager<Employee, MutableEmploye
 
   boolean validateShortName(String pShortName);
 
+  List<Employee> waitingForAccountVerification();
+
   List<Employee> downloadEmployeeList(String pDeptList, String pEmployeeTypeList);
 }

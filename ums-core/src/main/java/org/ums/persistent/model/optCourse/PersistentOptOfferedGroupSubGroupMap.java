@@ -22,6 +22,7 @@ public class PersistentOptOfferedGroupSubGroupMap implements MutableOptOfferedGr
   private Long mGroupId;
   private Long mSubGroupId;
   private String mSubGroupName;
+  private String mGroupName;
 
   public PersistentOptOfferedGroupSubGroupMap() {
 
@@ -32,6 +33,7 @@ public class PersistentOptOfferedGroupSubGroupMap implements MutableOptOfferedGr
     mGroupId = pPersistentOptOfferedGroupSubGroupMap.getGroupId();
     mSubGroupId = pPersistentOptOfferedGroupSubGroupMap.getSubGroupId();
     mSubGroupName = pPersistentOptOfferedGroupSubGroupMap.getSubGroupName();
+    mGroupName = pPersistentOptOfferedGroupSubGroupMap.getGroupName();
   }
 
   @Override
@@ -52,6 +54,11 @@ public class PersistentOptOfferedGroupSubGroupMap implements MutableOptOfferedGr
   @Override
   public void setSubGroupName(String pSubGroupName) {
     mSubGroupName = pSubGroupName;
+  }
+
+  @Override
+  public void setGroupName(String pGroupName) {
+    mGroupName = pGroupName;
   }
 
   @Override
@@ -87,6 +94,11 @@ public class PersistentOptOfferedGroupSubGroupMap implements MutableOptOfferedGr
   @Override
   public String getSubGroupName() {
     return mSubGroupName;
+  }
+
+  @Override
+  public String getGroupName() {
+    return mGroupName;
   }
 
   @Override

@@ -55,6 +55,11 @@ public class EmployeeDaoDecorator extends ContentDaoDecorator<Employee, MutableE
   }
 
   @Override
+  public List<Employee> waitingForAccountVerification() {
+    return getManager().waitingForAccountVerification();
+  }
+
+  @Override
   public List<Employee> downloadEmployeeList(String pDeptList, String pEmployeeTypeList) {
     return getManager().downloadEmployeeList(pDeptList, pEmployeeTypeList);
   }

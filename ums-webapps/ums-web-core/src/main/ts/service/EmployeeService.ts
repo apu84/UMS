@@ -118,6 +118,19 @@ module ums{
           return defer.promise;
       }
 
+      public updateEmployee(json: any): ng.IPromise<any> {
+          let defer = this.$q.defer();
+          this.httpClient.put("academic/employee/update/verify", json, 'application/json')
+              .success(() => {
+                  defer.resolve("Success");
+              })
+              .error((data) => {
+                  console.log(data);
+                  defer.reject();
+              });
+          return defer.promise;
+      }
+
 
       public getNewEmployeeId(pDept: string, pEmployeeType: number):ng.IPromise<any>{
           var defer = this.$q.defer();
@@ -184,6 +197,33 @@ module ums{
                   console.error(response);
               });
 
+          return defer.promise;
+      }
+
+      public getEmployeeListWaitingForAccountVerification(): ng.IPromise<any>{
+          var defer = this.$q.defer();
+          this.httpClient.get("academic/employee/status/pending", 'application/json',
+              (result:any,etag:string)=>{
+                  defer.resolve(result.entries);
+              },
+              (response:ng.IHttpPromiseCallbackArg<any>)=>{
+                  this.notify.error("Error in fetching");
+                  console.error(response);
+              });
+
+          return defer.promise;
+      }
+
+      public deleteEmployee(id: string): ng.IPromise<any> {
+          let defer = this.$q.defer();
+          this.httpClient.doDelete("academic/employee" + "/" + id)
+              .success(() => {
+                  this.notify.success("Delete Successful");
+                  defer.resolve();
+              })
+              .error((data) => {
+                  this.notify.error("Error in Deleting");
+              });
           return defer.promise;
       }
   }
