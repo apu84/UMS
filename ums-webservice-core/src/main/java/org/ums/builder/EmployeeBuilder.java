@@ -39,7 +39,7 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
     pBuilder.add("joiningDate",
         pReadOnly.getJoiningDate() == null ? null : mDateFormat.format(pReadOnly.getJoiningDate()));
     pBuilder.add("status", pReadOnly.getStatus());
-    pBuilder.add("statusName", pReadOnly.getStatus() == 1 ? "Active" : pReadOnly.getStatus() == 2 ? "On Leave"
+    pBuilder.add("statusName", pReadOnly.getStatus() == 0 ? "In Process" : pReadOnly.getStatus() == 1 ? "Active" : pReadOnly.getStatus() == 2 ? "On Leave"
         : pReadOnly.getStatus() == 3 ? "Inactive" : "Unknown");
     pBuilder.add("shortName", pReadOnly.getShortName() == null ? "" : pReadOnly.getShortName());
     pBuilder.add("employeeType", pReadOnly.getEmployeeType());
