@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
 import java.net.InetSocketAddress;
-import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class LogstashConfiguration {
@@ -40,8 +39,7 @@ public class LogstashConfiguration {
   }
 
   public void addLogstashAppender() {
-    long startTime = System.currentTimeMillis();
-    log.info("Initializing Logstash logging : " + startTime);
+    log.info("Initializing Logstash logging: ");
 
     LogstashTcpSocketAppender logstashAppender = new LogstashTcpSocketAppender();
     logstashAppender.setName("LOGSTASH");
@@ -65,10 +63,5 @@ public class LogstashConfiguration {
     // System.out.println(logger.getName());
     // }
     context.getLogger("ROOT").addAppender(asyncLogstashAppender);
-
-
-    long endTime   = System.currentTimeMillis();
-    log.info("End of Initialization Logstash logging: " + endTime);
-    log.info("Total time to initialize logstash: " + TimeUnit.MILLISECONDS.toSeconds(endTime - startTime) + " second(s).");
   }
 }
