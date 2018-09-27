@@ -241,12 +241,13 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
       MutablePersonalInformation mutablePersonalInformation =
           (MutablePersonalInformation) mPersonalInformationManager.get(pJsonObject.getJsonObject("entries").getString(
               "id"));
-      MutableUser mutableUser = mUserManager.exists(pJsonObject.getJsonObject("entries").getString("id")) ?
-      (MutableUser) mUserManager.get(pJsonObject.getJsonObject("entries").getString("id")) : null;
+      MutableUser mutableUser =
+          mUserManager.exists(pJsonObject.getJsonObject("entries").getString("id")) ? (MutableUser) mUserManager
+              .get(pJsonObject.getJsonObject("entries").getString("id")) : null;
       if(mutableUser != null) {
         mNewIUMSAccountInfoEmailService.sendEmail(mutablePersonalInformation.getFullName(), mutableUser.getId(),
-                new String(mutableUser.getTemporaryPassword()), mutablePersonalInformation.getPersonalEmail(), "IUMS",
-                "AUST: IUMS Account Credentials");
+            new String(mutableUser.getTemporaryPassword()), mutablePersonalInformation.getPersonalEmail(), "IUMS",
+            "AUST: IUMS Account Credentials");
       }
     }
     localCache.invalidate();

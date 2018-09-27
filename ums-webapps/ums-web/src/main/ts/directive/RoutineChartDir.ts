@@ -163,7 +163,6 @@ module ums{
           let routineList: ClassRoutine[] = [];
           routineList.push(routineTmp);
 
-          console.log(routine.day);
           this.classRoutineService.dayAndTimeMapWithRoutine[routine.day + routine.startTime] = routineList;
         } else {
           let routineList: ClassRoutine[] = this.classRoutineService.dayAndTimeMapWithRoutine[routine.day.toString() + routine.startTime];
@@ -172,13 +171,9 @@ module ums{
         }
       });
 
-      console.log("Day time map");
-      console.log(this.classRoutineService.dayAndTimeMapWithRoutine);
     }
 
     public getDayAndTimeMapWithRoutine(day: string, startTime: string): RoutineSlot {
-      console.log("Day and time map------>");
-      console.log(this.classRoutineService.dayAndTimeMapWithRoutine);
       if(this.classRoutineService.dayAndTimeMapWithGroup[day + startTime]==undefined){
         return undefined;
       }else{
@@ -298,10 +293,8 @@ module ums{
       this.classRoutineService.selectedDay = day;
       this.classRoutineService.selectedHeader = header;
       if (this.classRoutineService.dayAndTimeMapWithGroup[day.id + header.startTime]) {
-        console.log("Routine list ----");
         let routineList: ClassRoutine[] = this.getDayAndTimeMapWithRoutine(day.id, header.startTime).routineList;
         routineList.forEach((r:ClassRoutine)=>console.log(r));
-        console.log("ENd of experiment");
         this.classRoutineService.slotRoutineList = this.getDayAndTimeMapWithRoutine(day.id, header.startTime).routineList;
         this.assignCourseTeachersToSlotRoutineList();
         this.showSlotEditForm=true;

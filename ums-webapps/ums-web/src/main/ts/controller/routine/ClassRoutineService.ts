@@ -105,7 +105,7 @@ module ums{
     public showRoomWiseRoutine:boolean;
     public selectedTeacher: Employee;
     public exceptions: IRoutineErrorLog[];
-    public exceptionsMapWithYearSemesterSectionDayAndTime:{[key:string]: IRoutineErrorLog};
+    public exceptionsMapWithYearSemesterSectionDayAndTime:{[key:string]: IRoutineErrorLog[]};
 
 
 
