@@ -321,6 +321,12 @@ module ums {
                     }]
                 }
             })
+            .state('verifyEmployee', {
+                url: "/verifyEmployee",
+                templateUrl: 'views/ems/create-new/verify-employee.html',
+                controller: 'VerifyEmployee',
+                controllerAs: 'vm'
+            })
             .state('schedule', {
                 url: "/schedule",
                 templateUrl: 'views/meeting/schedule.html',

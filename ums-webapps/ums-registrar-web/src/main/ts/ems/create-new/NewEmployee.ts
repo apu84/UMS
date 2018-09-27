@@ -63,7 +63,7 @@ module ums {
                 this.notify.error("Academic initial is not unique");
             }
             else {
-                this.newEmployee.status = 1;
+                this.newEmployee.status = 0;
                 this.convertToJson().then((result: any) => {
                     this.employeeService.save(result).then((message: any) => {
                         this.resetForm(form);
