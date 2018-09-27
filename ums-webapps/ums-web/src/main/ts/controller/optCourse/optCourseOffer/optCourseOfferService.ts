@@ -42,7 +42,9 @@ module ums{
     export interface ISubGroupInfo{
         groupId:number;
         groupName:string;
-        subGroups:IGroupInfo[];
+        subGroupId:number;
+        subGroupName:string;
+        seat:number;
     }
     export class OptCourseOfferService{
         public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
@@ -61,6 +63,23 @@ module ums{
                 },
                 (response:ng.IHttpPromiseCallbackArg<any>) => {
                     console.error(response);
+                });
+            return defer.promise;
+        }
+        public addRecord(json:any):ng.IPromise<any>{
+            var defer = this.$q.defer();
+            var that=this;
+            console.log("Inside-Service")
+            console.log(json);
+            this.httpClient.post("academic/optSeatAllocation/addRecords",json,'application/json')
+                .success(()=>{
+                    this.notify.success("Successfully Saved");
+                    defer.resolve('success')
+                })
+                .error((data)=>{
+                    console.log(data);
+                    this.notify.error("Problem in saving data");
+                    defer.resolve('failure');
                 });
             return defer.promise;
         }

@@ -375,6 +375,14 @@ public class AcademicContext {
   }
 
   @Bean
+  OptSeatAllocationManager optSeatAllocationManager() {
+    OptSeatAllocationCache optSeatAllocationCache = new OptSeatAllocationCache((mCacheFactory.getCacheManager()));
+    optSeatAllocationCache.setManager(new PersistentOptSeatAllocationDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
+    return optSeatAllocationCache;
+  }
+
+  @Bean
   OptCourseGroupManager optCourseGroupManager() {
     OptCourseGroupCache optCourseGroupCache = new OptCourseGroupCache((mCacheFactory.getCacheManager()));
     optCourseGroupCache.setManager(new PersistentOptCourseGroupDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));

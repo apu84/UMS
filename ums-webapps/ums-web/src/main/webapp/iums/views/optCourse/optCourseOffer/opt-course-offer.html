@@ -436,7 +436,7 @@
 
 <div class="modal fade" id="assignSeat" role="dialog">
    <!--   <div class="modal-backdrop"> --->
-   <div class="modal-dialog  modal-md">
+   <div class="modal-dialog  modal-lg">
       <!-- Modal content-->
       <div class="modal-content">
          <div class="modal-header" >
@@ -447,10 +447,10 @@
             <div>
                <div class="row">
                   <div class="col-md-12" >
-                     <b>Total Number of Current Enrolled Students: 100</b>
+                     <b>Total Number of Current Enrolled Students: 100</b><br><br>
                </div>
             </div>
-               <table width="100%" class="table table-hover table-condensed">
+               <table width="100%" class="table table-hover table-condensed" data-ng-if="!vm.isSubGroupAvailable">
                   <thead>
                   <tr>
                      <th>#</th>
@@ -462,6 +462,30 @@
                   <tr  data-ng-repeat="app in vm.allocateSeatForGroups">
                      <td>{{$index + 1}}</td>
                      <td>{{app.groupName}}</td>
+                     <td align="right">
+                        <input type="number"
+                               class="form-control required"
+                               style="width: 30%";
+                               data-ng-model="app.seat"
+                        />
+                     </td>
+                  </tr>
+                  </tbody>
+               </table>
+               <table width="100%" class="table table-hover table-condensed" data-ng-if="vm.isSubGroupAvailable">
+                  <thead>
+                  <tr>
+                     <th>#</th>
+                     <th >Group Name</th>
+                     <th >Sub Group Name</th>
+                     <th style="text-align: right">No. of  Seats</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr  data-ng-repeat="app in vm.allocateSeatForSubGroups">
+                     <td>{{$index + 1}}</td>
+                     <td><b>{{app.groupName}}</b></td>
+                     <td style="color: #a2a7ae"><b>{{app.subGroupName}}</b></td>
                      <td align="right">
                         <input type="number"
                                class="form-control required"
