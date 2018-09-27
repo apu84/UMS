@@ -18,11 +18,11 @@
                     <i class="fa fa-spinner fa-4x" aria-hidden="true"></i>
                 </div>
                 <br/>
-                <div class="row" ng-if="vm.exceptions.length>0">
+                <div class="row" ng-if="vm.classRoutineService.exceptions.length>0">
                     <div class="col-md-12">
                         <h3>Exceptions</h3>
-                        <ul class="list-group" ng-repeat="e in vm.exceptions">
-                            <li class="list-group-item">{{e}}</li>
+                        <ul class="list-group" ng-repeat="e in vm.classRoutineService.exceptions">
+                            <li class="list-group-item">Year:{{e.year}}, semester: {{e.semester}}, section: {{e.section}}, <b>Error:</b>  {{e.errorMessage}}</li>
                         </ul>
                     </div>
 

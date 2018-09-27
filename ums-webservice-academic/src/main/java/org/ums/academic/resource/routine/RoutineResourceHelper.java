@@ -29,6 +29,7 @@ import org.ums.persistent.model.PersistentSemester;
 import org.ums.persistent.model.routine.PersistentRoutine;
 import org.ums.resource.ResourceHelper;
 import org.ums.services.academic.routine.RoutineService;
+import org.ums.services.academic.routine.helper.RoutineErrorLog;
 import org.ums.usermanagement.user.UserManager;
 
 import javax.json.*;
@@ -190,7 +191,7 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return null;
   }
 
-  public List<String> uploadFile(File pFile, Integer pSemesterId, Integer pProgramId) throws IOException,
+  public List<RoutineErrorLog> uploadFile(File pFile, Integer pSemesterId, Integer pProgramId) throws IOException,
       InvalidFormatException, Exception {
     try {
       Workbook workbook = WorkbookFactory.create(pFile);

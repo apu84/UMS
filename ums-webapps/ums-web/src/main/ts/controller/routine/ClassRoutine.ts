@@ -97,6 +97,7 @@ module ums {
     }
 
     public uploadFile():void{
+      this.classRoutineService.exceptions = [];
       let formData = new FormData();
       formData.append("file", this.routineTemplateFile);
       formData.append("semesterId",this.classRoutineService.selectedSemester.id.toString());
@@ -108,11 +109,37 @@ module ums {
         this.showLoader = false;
       }
       else{
-        this.classRoutineService.uploadFile(formData).then((exceptions:string[])=>{
-          this.exceptions = exceptions;
-          this.showLoader = false;
+        this.classRoutineService.uploadFile(formData).then((exceptions:IRoutineErrorLog[])=>{
+          this.classRoutineService.exceptions = exceptions;
+          console.log("Exceptions");
+          console.log(this.classRoutineService.exceptions);
+
+          this.createExceptionsMapWithYearSemesterSectionDayAndTime(exceptions).then((response)=>{
+            this.showLoader = false;
+            console.log("Exception map---------------->");
+            console.log(this.classRoutineService.exceptionsMapWithYearSemesterSectionDayAndTime);
+          });
         })
       }
+    }
+
+    private createExceptionsMapWithYearSemesterSectionDayAndTime(exceptions: IRoutineErrorLog[]):ng.IPromise<any>{
+      let defer = this.$q.defer();
+      this.classRoutineService.exceptionsMapWithYearSemesterSectionDayAndTime = {};
+      for(var i=0; i< exceptions.length; i++){
+        let exception: IRoutineErrorLog = exceptions[i];
+        exception.routine = <ClassRoutine>{};
+        exception.routine.startTime = exception.startTime;
+        exception.routine.endTime = exception.endTime;
+        exception.routine.section = exception.section;
+        exception.routine.color = "red";
+        exception.routine.day = exception.day.toString();
+        exception.routine.slotGroup=9999999;
+        let sectionstr = exception.section.length==1? exception.section: exception.section.substring(0,1);
+        this.classRoutineService.exceptionsMapWithYearSemesterSectionDayAndTime[exception.year+''+exception.semester+''+sectionstr] = exception;
+      }
+      defer.resolve(this.classRoutineService.exceptionsMapWithYearSemesterSectionDayAndTime);
+      return defer.promise;
     }
 
     public downloadSemesterWiseReport(){
@@ -237,8 +264,12 @@ module ums {
         }
         else {
           this.fetchRoutineInfo().then((routineData: ClassRoutine[]) => {
-            console.log("Routine data");
-            console.log(routineData);
+            console.log("Key-->"+(this.classRoutineService.studentsYear+''+this.classRoutineService.studentsSemester+''+this.classRoutineService.selectedTheorySection.id));
+            if(this.classRoutineService.exceptionsMapWithYearSemesterSectionDayAndTime!=undefined && this.classRoutineService.exceptionsMapWithYearSemesterSectionDayAndTime[this.classRoutineService.studentsYear+''+this.classRoutineService.studentsSemester+''+this.classRoutineService.selectedTheorySection.id]){
+              routineData.push(this.classRoutineService.exceptionsMapWithYearSemesterSectionDayAndTime[this.classRoutineService.studentsYear+''+this.classRoutineService.studentsSemester+''+this.classRoutineService.selectedTheorySection.id].routine);
+              console.log("Routine data");
+              console.log(routineData);
+            }
             this.classRoutineService.routineData = [];
             this.classRoutineService.dayAndTimeMapWithRoutine = {};
             routineData.forEach((r:ClassRoutine)=>{

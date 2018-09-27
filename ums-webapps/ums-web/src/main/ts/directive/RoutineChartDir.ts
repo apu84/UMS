@@ -162,6 +162,8 @@ module ums{
         if (this.classRoutineService.dayAndTimeMapWithRoutineSlot[routine.day + routine.startTime] == null) {
           let routineList: ClassRoutine[] = [];
           routineList.push(routineTmp);
+
+          console.log(routine.day);
           this.classRoutineService.dayAndTimeMapWithRoutine[routine.day + routine.startTime] = routineList;
         } else {
           let routineList: ClassRoutine[] = this.classRoutineService.dayAndTimeMapWithRoutine[routine.day.toString() + routine.startTime];
@@ -169,9 +171,14 @@ module ums{
           this.classRoutineService.dayAndTimeMapWithRoutine[routine.day + routine.startTime] = routineList;
         }
       });
+
+      console.log("Day time map");
+      console.log(this.classRoutineService.dayAndTimeMapWithRoutine);
     }
 
     public getDayAndTimeMapWithRoutine(day: string, startTime: string): RoutineSlot {
+      console.log("Day and time map------>");
+      console.log(this.classRoutineService.dayAndTimeMapWithRoutine);
       if(this.classRoutineService.dayAndTimeMapWithGroup[day + startTime]==undefined){
         return undefined;
       }else{

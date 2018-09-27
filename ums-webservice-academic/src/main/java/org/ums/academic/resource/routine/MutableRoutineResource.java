@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.logs.DeleteLog;
 import org.ums.logs.PutLog;
 import org.ums.resource.Resource;
+import org.ums.services.academic.routine.helper.RoutineErrorLog;
 
 import javax.json.JsonArray;
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +40,7 @@ public class MutableRoutineResource extends Resource {
   @POST
   @Path("/upload")
   @Consumes({MediaType.MULTIPART_FORM_DATA})
-  public List<String> uploadRoutineTemplate(@FormDataParam("file") File pFile,
+  public List<RoutineErrorLog> uploadRoutineTemplate(@FormDataParam("file") File pFile,
       @FormDataParam("semesterId") Integer pSemesterId, @FormDataParam("programId") Integer pProgramId)
       throws Exception, IOException, InvalidFormatException {
     return mRoutineResourceHelper.uploadFile(pFile, pSemesterId, pProgramId);
