@@ -3,6 +3,13 @@
 </div>
 
 <div data-ng-if="!vm.showLoader">
+    <div class="alert alert-danger alert-dismissable"
+         style="-moz-border-radius: 15px !important;border-radius: 15px !important;">
+        <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
+        Please <strong>do not provide</strong> any experiences related to <strong>Ahsanullah University of Science &
+        Technology (AUST)</strong>.
+        That will be counted as <strong>service</strong> and will be available in <strong>Service tab</strong>.
+    </div>
     <div data-ng-repeat="experience in vm.experience track by $index">
         <form name="nForm[$index]" ng-submit="vm.submit($index)" novalidate>
             <div class="panel panel-default">
