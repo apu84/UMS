@@ -38,6 +38,7 @@ module ums{
     courseTeacher: CourseTeacherInterface[];
     employee: Employee;
     slotGroup: number;
+    color: string;
   }
 
   export interface RoutineSlot{
@@ -281,10 +282,10 @@ module ums{
       return defer.promise;
     }
 
-    public downloadRoutineTemplate():any{
+    public downloadRoutineTemplate(semesterId: number):any{
       let fileName: string = "RoutineTemplate";
       let contentType: string = UmsUtil.getFileContentType("xls");
-      let url = this.routineUrl+"/routine-template";
+      let url = this.routineUrl+"/routine-template/semester/"+semesterId;
 
       this.httpClient.get(url, contentType,
           (data:any, etag:string)=>{

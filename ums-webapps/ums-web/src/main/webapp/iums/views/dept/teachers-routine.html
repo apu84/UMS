@@ -3,17 +3,21 @@
 
         <div class="alert alert-danger alert-dismissable" style="-moz-border-radius: 15px !important;border-radius: 15px !important;">
             <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
-            If this routine is empty or inaccurate, please contact with <strong>Dept./School Admin Officer.</strong> He is responsible for updating this information.
+            If this routine is empty or inaccurate, please contact with <strong>Routine Committee.</strong> The committee is responsible for updating this information.
         </div>
 
         <div class="row">
-            <div class="col-md-12" data-ng-if="showRoutineDirective==true">
-                <div  class-routine-dir routines="routines" course-map="courseMap"  room-map="roomMap"></div>
+            <div class="col-md-12" data-ng-if="vm.showLoader==true" align="center">
+                <i class="fa fa-spinner fa-spin fa-lg fa-fw"></i>
+                <span class="sr-only">Loading...</span>
+            </div>
+            <div class="col-md-12" data-ng-if="vm.showLoader==false">
+               <div routine-chart-dir=""></div>
             </div>
         </div>
         <div class="row" align="right">
             <div class="col-md-12">
-                <button class="btn btn-success" data-ng-click="showRoutineReport()">Print</button>
+                <button class="btn btn-success" data-ng-click="vm.downloadRoutineReport()">Download Pdf</button>
             </div>
         </div>
     </div>

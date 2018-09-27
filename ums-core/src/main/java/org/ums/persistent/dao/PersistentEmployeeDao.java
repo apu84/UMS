@@ -136,6 +136,13 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
   }
 
   @Override
+  public boolean exists(String pId) {
+    String query = EXISTS + "  where employee_id=?";
+    int size = mJdbcTemplate.queryForObject(query, new Object[] {pId}, Integer.class);
+    return size == 0 ? false : true;
+  }
+
+  @Override
   public List<Employee> downloadEmployeeList(String pDeptList, String pEmployeeTypeList) {
 
     /*

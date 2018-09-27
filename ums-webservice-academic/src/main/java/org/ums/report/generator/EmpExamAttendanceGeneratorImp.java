@@ -182,7 +182,7 @@ public class EmpExamAttendanceGeneratorImp implements EmpExamAttendanceGenerator
                       get(entry.getValue().get(i).getEmployeeId()).getDepartment().getShortName(), fontTimes8Normal));
               cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
               classRoomTable.addCell(cell);
-              if(entry.getValue().get(i).getInvigilatorDate().length()>1){
+              if((entry.getValue().get(i).getInvigilatorDate().length()>1 || entry.getValue().get(i).getReserveDate().length()>1)){
                   cell = new UmsCell(new Phrase(""+entry.getValue().get(i).getInvigilatorDate(), fontTimes8Normal));
                   cell.setHorizontalAlignment(UmsCell.ALIGN_LEFT);
                   classRoomTable.addCell(cell);

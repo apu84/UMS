@@ -31,9 +31,17 @@ public class PersistentOptOfferedGroupDao extends OptOfferedGroupDaoDecorator {
 
   String GET_BY_NAME =
       "SELECT ID,GROUP_NAME,SEMESTER_ID,PROGRAM_ID,IS_MANDATORY,\"YEAR\",SEMESTER_ID FROM OPT_GROUP WHERE SEMESTER_ID=? AND GROUP_NAME=?";
+  String DELETE = "DELETE FROM OPT_GROUP WHERE ID=?";
 
   String GET_BY_SEMESTER_ID =
       "SELECT ID,GROUP_NAME,SEMESTER_ID,PROGRAM_ID,IS_MANDATORY,\"YEAR\",SEMESTER FROM OPT_GROUP WHERE SEMESTER_ID=? AND PROGRAM_ID=? AND \"YEAR\"=? AND SEMESTER=?";
+  String GET_BY_ID =
+      "select ID,GROUP_NAME,SEMESTER_ID,PROGRAM_ID,IS_MANDATORY,\"YEAR\",SEMESTER from OPT_GROUP  WHERE ID=?";
+
+  @Override
+  public OptOfferedGroup get(Long pId) {
+    return mJdbcTemplate.queryForObject(GET_BY_ID, new Object[] {pId}, new OptOfferedGroupRowMapper());
+  }
 
   @Override
   public List<OptOfferedGroup> getBySemesterId(Integer pSemesterId, Integer pProgramId, Integer pYear, Integer pSemester) {
@@ -62,6 +70,20 @@ public class PersistentOptOfferedGroupDao extends OptOfferedGroupDaoDecorator {
           app.getProgramId(), app.getIsMandatory(), app.getYear(), app.getSemester()});
     }
 
+    return params;
+  }
+
+  @Override
+  public int delete(List<MutableOptOfferedGroup> pMutableList) {
+    List<Object[]> parameters = getDeleteParamList(pMutableList);
+    return mJdbcTemplate.batchUpdate(DELETE, parameters).length;
+  }
+
+  private List<Object[]> getDeleteParamList(List<MutableOptOfferedGroup> pMutableList) {
+    List<Object[]> params = new ArrayList<>();
+    for(OptOfferedGroup app : pMutableList) {
+      params.add(new Object[] {app.getId()});
+    }
     return params;
   }
 }

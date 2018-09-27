@@ -5,7 +5,8 @@ module ums {
      */
     static PDF: string="application/pdf";
     static XLS: string="application/vnd.ms-excel";
-
+    static UNDERGRADUATE: number = 11;
+    static POSTGRADUATE: number = 22;
 
     public static getNumberWithSuffix(n: number): string {
       var suffix: string = "";
