@@ -23,6 +23,9 @@
                 <p ng-if="vm.getCourseTeacher(l.course.id, l.section)!=='(TBA)'" style="color: #1f232a"><span >{{vm.getCourseTeacher(l.course.id, l.section)}}</span></p>
                 <p ng-if="vm.getCourseTeacher(l.course.id, l.section)==='(TBA)'" style="color: red"><span >{{vm.getCourseTeacher(l.course.id, l.section)}}</span></p>
             </div>
+            <div ng-if="l.course==undefined">
+                <p  ng-style="{'background-color':l.color}">Error</p>
+            </div>
 
            <!-- {{vm.getCourseTeacherByCourseAndSection(routine.courseId, routine.section)}}-->
         </td>

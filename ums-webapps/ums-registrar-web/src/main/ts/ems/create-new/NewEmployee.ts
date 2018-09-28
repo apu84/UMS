@@ -12,8 +12,8 @@ module ums {
             'designations',
             'employmentTypes',
             'employeeService',
-            'roles',
-            'additionalService'];
+            'roles'
+        ];
 
 
         private salutations: ICommon[] = [];
@@ -43,8 +43,7 @@ module ums {
                     private designations: any,
                     private employmentTypes: any,
                     private employeeService: EmployeeService,
-                    private roles: any,
-                    private additionalService: AdditionalService) {
+                    private roles: any) {
 
             this.newEmployee = <INewEmployee>{};
             this.salutations = this.registrarConstants.salutationTypes;
@@ -59,21 +58,20 @@ module ums {
         }
 
         public submitNewEmployeeForm(form: ng.IFormController): void {
-            if (this.isNotUniqueAcademicInitial) {
-                this.notify.error("Academic initial is not unique");
-            }
-            else {
-                this.newEmployee.status = 1;
-                this.convertToJson().then((result: any) => {
-                    this.employeeService.save(result).then((message: any) => {
-                        this.resetForm(form);
-                        this.notify.success(message);
+            this.newEmployee.status = 0;
+            this.convertToJson().then((result: any) => {
+                this.employeeService.save(result).then((message: any) => {
+                    this.resetForm(form);
+                    this.notify.success(message);
 
-                    }).catch((message: any) => {
-                        this.notify.error("Error in new employee creation");
-                    });
+                }).catch((message: any) => {
+                    this.notify.error("Error in new employee creation");
                 });
-            }
+            });
+        }
+
+        public modifyToUpperCase(): void{
+            this.newEmployee.academicInitial = this.newEmployee.academicInitial.toUpperCase();
         }
 
         private resetForm(form: ng.IFormController) {
@@ -94,15 +92,6 @@ module ums {
             else {
                 this.showRightDiv = false;
             }
-        }
-
-        public validateAcademicInitial(): void {
-            this.additionalService.checkDuplicateAcademicInitial(this.newEmployee.academicInitial, this.newEmployee.department['id']).then((result: any) => {
-                this.isNotUniqueAcademicInitial = !!result;
-                if (this.isNotUniqueAcademicInitial) {
-                    this.notify.error("Academic initial already exists");
-                }
-            });
         }
 
         public changeDesignationSelection(): void {
@@ -138,7 +127,7 @@ module ums {
             if (this.newEmployee.name != undefined) {
                 this.employeeService.getSimilarUsers(this.newEmployee.name,).then((data: any) => {
                     this.similarUsers = data;
-                    if(data.length > 0) {
+                    if (data.length > 0) {
                         this.showSimilarUsersPortion = true;
                     }
                 });

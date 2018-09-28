@@ -37,7 +37,11 @@ module ums{
         private initialize(){
             if(this.$scope.routineSlot!=undefined){
                 this.routineList = angular.copy(this.$scope.routineSlot.routineList);
+                console.log("Slot routine list-------------->");
+                console.log(this.$scope.routineSlot.routineList);
                 this.routineSlot = angular.copy(this.$scope.routineSlot);
+                console.log("Routine slot");
+                console.log(this.routineSlot);
             }
 
             this.createSlot();
@@ -90,8 +94,8 @@ module ums{
                       let slotEndTime:any = moment(this.routine.endTime, 'hh:mm A');
                       let diff=slotEndTime.diff(slotStartTime,'minutes');
                       this.colSpan = diff/this.routineConfigService.routineConfig.duration;
-                      this.template = this.template+'<td align="center" colspan="'+this.colSpan.toString()+'">';
-                      this.template = this.template+this.routine.course.no+" ("+this.routine.section+")<br>"+this.routine.room.roomNo;
+                      /*this.template = this.template+'<td align="center" colspan="'+this.colSpan.toString()+'">';
+                      this.template = this.template+this.routine.course.no+" ("+this.routine.section+")<br>"+this.routine.room.roomNo;*/
                       this.template=this.template+`</td>`;
                       if (this.routine.endTime==this.routineSlot.endTime){
                         iterationStartTime = angular.copy( this.routineSlot.startTime);

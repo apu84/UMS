@@ -52,6 +52,7 @@ module ums {
     routineTemplateFile: any;
     exceptions:string[];
     showLoader: boolean;
+    exceptionRoutineList: ClassRoutine[];
 
 
     public static $inject = ['appConstants', '$q', 'notify', 'semesterService', 'classRoomService', 'classRoutineService',
@@ -97,6 +98,7 @@ module ums {
     }
 
     public uploadFile():void{
+      this.classRoutineService.exceptions = [];
       let formData = new FormData();
       formData.append("file", this.routineTemplateFile);
       formData.append("semesterId",this.classRoutineService.selectedSemester.id.toString());
@@ -108,11 +110,49 @@ module ums {
         this.showLoader = false;
       }
       else{
-        this.classRoutineService.uploadFile(formData).then((exceptions:string[])=>{
-          this.exceptions = exceptions;
-          this.showLoader = false;
+        this.classRoutineService.uploadFile(formData).then((exceptions:IRoutineErrorLog[])=>{
+          this.classRoutineService.exceptions = exceptions;
+          console.log("Exceptions");
+          console.log(this.classRoutineService.exceptions);
+
+          this.createExceptionsMapWithYearSemesterSectionDayAndTime(exceptions).then((response)=>{
+            this.showLoader = false;
+            console.log("Exception map---------------->");
+            console.log(this.classRoutineService.exceptionsMapWithYearSemesterSectionDayAndTime);
+          });
         })
       }
+    }
+
+    private createExceptionsMapWithYearSemesterSectionDayAndTime(exceptions: IRoutineErrorLog[]):ng.IPromise<any>{
+      let defer = this.$q.defer();
+      this.classRoutineService.exceptionsMapWithYearSemesterSectionDayAndTime = {};
+      for(var i=0; i< exceptions.length; i++){
+        let exception: IRoutineErrorLog = exceptions[i];
+        exception.routine = <ClassRoutine>{};
+        exception.routine.startTime = exception.startTime;
+        exception.routine.endTime = exception.endTime;
+        exception.routine.section = exception.section;
+        exception.routine.color = "red";
+        exception.routine.day = exception.day.toString();
+        exception.routine.slotGroup=Math.floor(Math.random()*10000);
+        let sectionstr = exception.section.length==1? exception.section: exception.section.substring(0,1);
+       if(this.classRoutineService.exceptionsMapWithYearSemesterSectionDayAndTime[exception.year+''+exception.semester+''+sectionstr]!=undefined && this.classRoutineService.exceptionsMapWithYearSemesterSectionDayAndTime[exception.year+''+exception.semester+''+sectionstr].length>0){
+         let existingExceptions = this.classRoutineService.exceptionsMapWithYearSemesterSectionDayAndTime[exception.year+''+exception.semester+''+sectionstr];
+         existingExceptions.push(exception);
+           this.classRoutineService.exceptionsMapWithYearSemesterSectionDayAndTime[exception.year+''+exception.semester+''+sectionstr] = existingExceptions;
+           this.exceptionRoutineList.push(exception.routine);
+       }else{
+         let existingExceptions: IRoutineErrorLog[] = [];
+         this.exceptionRoutineList = [];
+         existingExceptions.push(exception);
+           this.classRoutineService.exceptionsMapWithYearSemesterSectionDayAndTime[exception.year+''+exception.semester+''+sectionstr] = existingExceptions;
+           this.exceptionRoutineList.push(exception.routine);
+
+       }
+      }
+      defer.resolve(this.classRoutineService.exceptionsMapWithYearSemesterSectionDayAndTime);
+      return defer.promise;
     }
 
     public downloadSemesterWiseReport(){
@@ -236,21 +276,44 @@ module ums {
           defer.resolve(undefined);
         }
         else {
-          this.fetchRoutineInfo().then((routineData: ClassRoutine[]) => {
-            console.log("Routine data");
-            console.log(routineData);
-            this.classRoutineService.routineData = [];
-            this.classRoutineService.dayAndTimeMapWithRoutine = {};
-            routineData.forEach((r:ClassRoutine)=>{
-              r.startTimeObj = moment(r.startTime, "hh:mm A").toDate();
-              r.endTimeObj = moment(r.endTime, "hh:mm A").toDate();
-            })
-            this.classRoutineService.routineData = routineData;
-            this.showRoutineChart=true;
-            defer.resolve(routineData);
-          });
+
+          this.extractFromExceptions().then((routine:ClassRoutine[])=>{
+
+            console.log("Exception routine");
+            console.log(routine);
+              this.fetchRoutineInfo().then((routineData: ClassRoutine[]) => {
+                if(routine.length>0)
+                  routineData.push.apply(routineData, routine);
+                console.log("Updated routine data");
+                console.log(routineData);
+                  this.classRoutineService.routineData = [];
+                  this.classRoutineService.dayAndTimeMapWithRoutine = {};
+                  routineData.forEach((r:ClassRoutine)=>{
+                      r.startTimeObj = moment(r.startTime, "hh:mm A").toDate();
+                      r.endTimeObj = moment(r.endTime, "hh:mm A").toDate();
+                  })
+                  this.classRoutineService.routineData = routineData;
+                  this.showRoutineChart=true;
+                  defer.resolve(routineData);
+              });
+          })
+
         }
       });
+      return defer.promise;
+    }
+
+
+    private extractFromExceptions():ng.IPromise<ClassRoutine[]>{
+      let defer:ng.IDeferred<ClassRoutine[]> = this.$q.defer();
+      let routine: ClassRoutine[] = [];
+      if(this.classRoutineService.exceptionsMapWithYearSemesterSectionDayAndTime[this.classRoutineService.studentsYear+''+this.classRoutineService.studentsSemester+''+this.classRoutineService.selectedTheorySection.id]!=undefined && this.classRoutineService.exceptionsMapWithYearSemesterSectionDayAndTime[this.classRoutineService.studentsYear+''+this.classRoutineService.studentsSemester+''+this.classRoutineService.selectedTheorySection.id].length>0){
+        let routineExceptions: IRoutineErrorLog[] = this.classRoutineService.exceptionsMapWithYearSemesterSectionDayAndTime[this.classRoutineService.studentsYear+''+this.classRoutineService.studentsSemester+''+this.classRoutineService.selectedTheorySection.id];
+        for(var i=0;i<routineExceptions.length; i++){
+          routine.push(routineExceptions[i].routine);
+        }
+      }
+      defer.resolve(routine);
       return defer.promise;
     }
 

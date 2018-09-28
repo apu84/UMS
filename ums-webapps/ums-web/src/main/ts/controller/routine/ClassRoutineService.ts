@@ -60,6 +60,17 @@ module ums{
     endTime: string;
   }
 
+  export interface IRoutineErrorLog{
+    year: number;
+    semester: number;
+    section: string;
+    errorMessage: string;
+    startTime: string;
+    endTime: string;
+    day: number;
+    routine: ClassRoutine;
+  }
+
   export class ClassRoutineService{
 
     public routineData: ClassRoutine[];
@@ -89,10 +100,12 @@ module ums{
     public courseTeacherMapWithCourseIdAndSection: { [key: string]: CourseTeacherInterface[] }; // map[courseId]= CourseTeacher[];
     public courseTeacherWithSectionMap: { [key: string]: CourseTeacherInterface[] }; // map[courseId+section]= CourseTeacher[];
     public routineUrl: string = '/ums-webservice-academic/academic/routine';
-    showSectionWiseRoutine:boolean;
-    showTeacherWiseRoutine: boolean;
-    showRoomWiseRoutine:boolean;
-    selectedTeacher: Employee;
+    public showSectionWiseRoutine:boolean;
+    public showTeacherWiseRoutine: boolean;
+    public showRoomWiseRoutine:boolean;
+    public selectedTeacher: Employee;
+    public exceptions: IRoutineErrorLog[];
+    public exceptionsMapWithYearSemesterSectionDayAndTime:{[key:string]: IRoutineErrorLog[]};
 
 
 
@@ -296,12 +309,12 @@ module ums{
           }, 'arraybuffer');
     }
 
-    public uploadFile(formData: any): ng.IPromise<any> {
-      var defer = this.$q.defer();
+    public uploadFile(formData: any): ng.IPromise<IRoutineErrorLog[]> {
+      var defer: ng.IDeferred<IRoutineErrorLog[]> = this.$q.defer();
 
       var url = this.routineUrl+"/upload";
       this.httpClient.post(url, formData, undefined)
-          .success((response) => {
+          .success((response: IRoutineErrorLog[]) => {
             this.notify.success("Routine template parsed successfully");
             console.log('response');
             console.log(response);

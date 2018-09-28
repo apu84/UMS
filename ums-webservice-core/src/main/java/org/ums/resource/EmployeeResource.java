@@ -108,6 +108,13 @@ public class EmployeeResource extends MutableEmployeeResource {
   }
 
   @GET
+  @Path("/status/pending")
+  public JsonObject getEmployeeListWaitingForAccountVerification(@Context HttpServletRequest httpServletRequest,
+      final @Context Request pRequest) {
+    return mEmployeeResourceHelper.getEmployeesWaitingForAccountVerification(mUriInfo);
+  }
+
+  @GET
   @Path("/report/employeeList/deptList/{dept-list}/empTypeList/{emp-type}/choice/{choice}")
   @Produces("application/pdf")
   @GetLog(message = "Download Employee List")

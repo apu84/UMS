@@ -143,6 +143,12 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
   }
 
   @Override
+  public List<Employee> waitingForAccountVerification() {
+    String query = SELECT_ALL + " WHERE STATUS = 0 ORDER BY DESIGNATION";
+    return mJdbcTemplate.query(query, new EmployeeRowMapper());
+  }
+
+  @Override
   public List<Employee> downloadEmployeeList(String pDeptList, String pEmployeeTypeList) {
 
     /*

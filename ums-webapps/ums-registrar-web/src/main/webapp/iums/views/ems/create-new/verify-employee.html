@@ -1,0 +1,27 @@
+<div class="panel">
+    <div class="panel-body" style="min-height: 490px">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#Sl</th>
+                <th>Employee Id</th>
+                <th>Name</th>
+                <th>Dept/Office</th>
+                <th>Designation</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="emp in vm.waitingForApproval">
+                <td>{{$index + 1}}</td>
+                <td>{{emp.id}}</td>
+                <td>{{emp.employeeName}}</td>
+                <td>{{emp.deptOfficeName}}</td>
+                <td>{{emp.designationName}}</td>
+                <td><button type="button" class="btn btn-danger btn-xs" data-ng-click="vm.decline($index)">Decline</button>
+                    <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.approve($index)">Approve</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -24,6 +24,7 @@ import org.ums.manager.routine.RoutineConfigManager;
 import org.ums.manager.routine.RoutineManager;
 import org.ums.persistent.model.PersistentCourseTeacher;
 import org.ums.persistent.model.routine.PersistentRoutine;
+import org.ums.services.academic.routine.helper.RoutineErrorLog;
 import org.ums.services.academic.routine.helper.RoutineTime;
 
 import java.io.IOException;
@@ -62,13 +63,15 @@ public class RoutineService {
   private Map<String, List<MutableCourseTeacher>> courseIdMapWithCourseTeacher;
   private RoutineConfig routineConfig;
   private List<String> exceptions;
+  private List<RoutineErrorLog> routineErrorLogs;
 
   @Transactional
-  public List<String> extractWorkBook(Workbook pWorkbook, Integer pSemesterId, Integer pProgramId) throws Exception,
-      IOException, InvalidFormatException {
+  public List<RoutineErrorLog> extractWorkBook(Workbook pWorkbook, Integer pSemesterId, Integer pProgramId)
+      throws Exception, IOException, InvalidFormatException {
 
     List<MutableRoutine> routineList = new ArrayList<>();
     exceptions = new ArrayList<>();
+    routineErrorLogs = new ArrayList<>();
     courseIdMapWithCourseTeacher = new HashMap<>();
     routineConfig =
         mRoutineConfigManager.get(pSemesterId,
@@ -97,8 +100,7 @@ public class RoutineService {
     removeCourseTeacher(deleteCourseTeacherList);
     mRoutineManager.create(routineList);
     insertCourseTeacher(pSemesterId, pProgramId);
-    System.out.println(this.exceptions);
-    return this.exceptions;
+    return this.routineErrorLogs;
   }
 
   public void insertIntoRoutine(List<MutableRoutine> pRoutineList) {
@@ -271,14 +273,25 @@ public class RoutineService {
     pRoutine.setSlotGroup(pGroupId);
     pRoutine.setId(mIdGenerator.getNumericId());
     String courseNo = pCourseRoutineInfo[0] + " " + pCourseRoutineInfo[1];
+    LocalTime endTime;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
     if(!courseMapWithCourseNo.containsKey(courseNo)) {
       foundError = true;
-      this.exceptions.add("Course " + courseNo + " is not correctly assigned at sheet -> "
-          + pRow.getSheet().getSheetName() + ", row->" + (pRow.getRowNum() + 1));
+
+      String errorMessage =
+          "Course " + courseNo + " is not correctly assigned at sheet -> " + pRow.getSheet().getSheetName() + ", row->"
+              + (pRow.getRowNum() + 1);
+      endTime = pStartTime.plusMinutes(routineConfig.getDuration());
+      RoutineErrorLog routineErrorLog =
+          new RoutineErrorLog(pRoutine.getAcademicYear(), pRoutine.getAcademicSemester(), pRoutine.getSection(),
+              errorMessage, formatter.format(pStartTime), formatter.format(endTime), DayType.getByLabel(pDayName)
+                  .getValue());
+      routineErrorLogs.add(routineErrorLog);
     }
     else {
       pRoutine.setCourseId(courseMapWithCourseNo.get(courseNo).getId());
       if(pRoutine.getCourse().getCourseType().equals(CourseType.SESSIONAL)) {
+        endTime = pStartTime.plusMinutes(3 * routineConfig.getDuration());
         pRoutine.setSection(pCourseRoutineInfo[2]);
         if(pCourseRoutineInfo.length > 3 && classRoomMapWithRoomNo.containsKey(pCourseRoutineInfo[3])) {
           pRoutine.setRoomId((4 <= pCourseRoutineInfo.length) ? classRoomMapWithRoomNo.get(pCourseRoutineInfo[3])
@@ -286,26 +299,46 @@ public class RoutineService {
         }
         else {
           foundError = true;
-          if(3 == pCourseRoutineInfo.length)
-            this.exceptions.add("Room no is missing in sessional course " + pRoutine.getCourse().getNo()
-                + " in sheet ->" + pRow.getSheet().getSheetName() + ", row -> " + (pRow.getRowNum() + 1));
-          else
-            this.exceptions.add("Room no->" + pCourseRoutineInfo[3]
-                + " is not in correct format or the room number is not stored, in sheet ->"
-                + pRow.getSheet().getSheetName() + ", row-> " + (pRow.getRowNum() + 1));
+          if(3 == pCourseRoutineInfo.length) {
+            String errorMessage =
+                "Room no is missing in sessional course " + pRoutine.getCourse().getNo() + " in sheet ->"
+                    + pRow.getSheet().getSheetName() + ", row -> " + (pRow.getRowNum() + 1);
+            RoutineErrorLog routineErrorLog =
+                new RoutineErrorLog(pYear, pSemester, pSection, errorMessage, formatter.format(pStartTime),
+                    formatter.format(endTime), DayType.getByLabel(pDayName).getValue());
+            routineErrorLogs.add(routineErrorLog);
+          }
+
+          else {
+            String errorMessage =
+                "Room no->" + pCourseRoutineInfo[3]
+                    + " is not in correct format or the room number is not stored, in sheet ->"
+                    + pRow.getSheet().getSheetName() + ", row-> " + (pRow.getRowNum() + 1);
+            RoutineErrorLog routineErrorLog =
+                new RoutineErrorLog(pYear, pSemester, pSection, errorMessage, formatter.format(pStartTime),
+                    formatter.format(endTime), DayType.getByLabel(pDayName).getValue());
+            routineErrorLogs.add(routineErrorLog);
+          }
+
         }
 
       }
       else {
         pRoutine.setSection(pSection);
+        endTime = pStartTime.plusMinutes(routineConfig.getDuration());
         try {
           pRoutine.setRoomId((3 <= pCourseRoutineInfo.length) ? classRoomMapWithRoomNo.get(pCourseRoutineInfo[2])
               .getId() : classRoomMapWithRoomNo.get(pGlobalRoomNo).getId());
         } catch(Exception e) {
           foundError = true;
-          this.exceptions.add("Room no->" + (3 <= pCourseRoutineInfo.length ? pCourseRoutineInfo[2] : pGlobalRoomNo)
-              + " is not in correct format or the room number is not stored, in sheet ->"
-              + pRow.getSheet().getSheetName() + ", row-> " + (pRow.getRowNum() + 1));
+          String errorMessage =
+              "Room no->" + (3 <= pCourseRoutineInfo.length ? pCourseRoutineInfo[2] : pGlobalRoomNo)
+                  + " is not in correct format or the room number is not stored, in sheet ->"
+                  + pRow.getSheet().getSheetName() + ", row-> " + (pRow.getRowNum() + 1);
+          RoutineErrorLog routineErrorLog =
+              new RoutineErrorLog(pYear, pSemester, pSection, errorMessage, formatter.format(pStartTime),
+                  formatter.format(endTime), DayType.getByLabel(pDayName).getValue());
+          routineErrorLogs.add(routineErrorLog);
         }
 
       }
@@ -318,10 +351,8 @@ public class RoutineService {
       pRoutine.setAcademicYear(pYear);
       pRoutine.setAcademicSemester(pSemester);
       pRoutine.setStartTime(pStartTime);
-      if(pRoutine.getCourse().getCourseType().equals(CourseType.SESSIONAL))
-        pRoutine.setEndTime(pRoutine.getStartTime().plusMinutes(routineConfig.getDuration() * 3));
-      else
-        pRoutine.setEndTime(pStartTime.plusMinutes(routineConfig.getDuration()));
+      pRoutine.setEndTime(endTime);
+
     }
 
     if(foundError == true)
@@ -344,6 +375,8 @@ public class RoutineService {
 
   private void insertOrUpdateCourseTeacher(Row pRow, Integer pSemesterId, Integer pProgramId, Routine pRoutine,
       String[] courseTeacherIdArray) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
+
     if(!courseIdMapWithCourseTeacher.containsKey(pRoutine.getCourseId() + pRoutine.getSection())) {
       List<MutableCourseTeacher> courseTeacherList = new ArrayList<>();
       for(int i = 0; i < courseTeacherIdArray.length; i++) {
@@ -356,10 +389,18 @@ public class RoutineService {
         courseTeacher.setTeacherId(teacherId);
         if(mEmployeeManager.exists(teacherId))
           courseTeacherList.add(courseTeacher);
-        else
-          this.exceptions.add("Teacher id->" + teacherId
-              + " not found in course teacher list, or the teacher id is not inserted properly, in sheet -> "
-              + pRow.getSheet().getSheetName() + " and row->" + (pRow.getRowNum() + 1));
+        else {
+          String errorMessage =
+              "Teacher id->" + teacherId
+                  + " not found in course teacher list, or the teacher id is not inserted properly, in sheet -> "
+                  + pRow.getSheet().getSheetName() + " and row->" + (pRow.getRowNum() + 1);
+          RoutineErrorLog routineErrorLog =
+              new RoutineErrorLog(pRoutine.getAcademicYear(), pRoutine.getAcademicSemester(), pRoutine.getSection(),
+                  errorMessage, formatter.format(pRoutine.getStartTime()), formatter.format(pRoutine.getEndTime()),
+                  pRoutine.getDay());
+          routineErrorLogs.add(routineErrorLog);
+        }
+
       }
       courseIdMapWithCourseTeacher.put(pRoutine.getCourseId() + pRoutine.getSection(), courseTeacherList);
     }
