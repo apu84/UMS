@@ -135,7 +135,7 @@
                           data-toggle="modal"
                           data-target="#assignSeat"
                           data-ng-click="vm.allocateSeat()"
-                          class="btn btn-default btn-sm">Assign Seats</button>
+                          class="btn btn-default btn-xs">Assign Seats</button>
                   <button type="button" data-ng-click="vm.save()"  class="btn btn-dark btn-xs">Save</button>
                </div>
             </div>
@@ -221,7 +221,7 @@
                                                 </div>
                                                 <div class="col-md-2" >
                                                    <p data-ng-hide="vm.isSubGroupAvailable">
-                                                   <b>No. of Seats: {{30}}</b>
+                                                   <b>No. of Seats: {{course.totalSeats}}</b>
                                                    </p>
                                                 </div>
                                                 <div class="col-md-2" >
@@ -291,7 +291,7 @@
                                                                         <b> 1st Choice: {{0}}</b>
                                                                      </div>
                                                                      <div class="col-md-2" style="background-color: #FAFAFA">
-                                                                        <b>No. of Seats: {{0}}</b>
+                                                                        <b>No. of Seats: {{subApp.totalSeats}}</b>
                                                                      </div>
                                                                      <div class="col-md-2" style="background-color: #FAFAFA">
                                                                         <span class="badge badge-danger pull-right"><span class="glyphicon glyphicon-check"></span>{{" N/R"}}</span>
@@ -503,5 +503,6 @@
 
          </div>
       </div>
+   </div>
    </div>
 </div>

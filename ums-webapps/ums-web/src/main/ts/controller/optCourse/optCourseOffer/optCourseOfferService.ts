@@ -31,6 +31,7 @@ module ums{
     }
     export interface IGroupInfo{
        groupId:number;
+       id:number;
        groupName:string;
        semesterId:number;
        programId:number;

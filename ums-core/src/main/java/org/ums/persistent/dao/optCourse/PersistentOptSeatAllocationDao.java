@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.optCourse.OptSeatAllocationDaoDecorator;
 import org.ums.domain.model.immutable.optCourse.OptSeatAllocation;
 import org.ums.domain.model.mutable.optCourse.MutableOptSeatAllocation;
+import org.ums.enums.ProgramType;
 import org.ums.enums.common.DepartmentType;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.EmployeeManager;
@@ -38,6 +39,21 @@ public class PersistentOptSeatAllocationDao extends OptSeatAllocationDaoDecorato
   String INSERT_SUB_GROUP = "MERGE INTO OPT_SUB_GROUP_SEAT_ALLOCATION D " + "          using (select 1 from DUAL) s "
       + "               on (D.GROUP_ID=?) " + "          WHEN MATCHED THEN UPDATE SET D.SEAT=? "
       + "           WHEN NOT MATCHED THEN " + "           INSERT (ID,GROUP_ID,SEAT) " + "            VALUES (?,?,?)";
+
+  String GET_GROUP_INFO =
+      "SELECT b.GROUP_ID,b.SEAT FROM OPT_GROUP a,OPT_GROUP_SEAT_ALLOCATION b WHERE a.SEMESTER_ID=? AND a.PROGRAM_ID=? AND a.\"YEAR\"=? AND a.SEMESTER=? AND a.ID=b.GROUP_ID";
+  String GET_SUB_GROUP_INFO =
+      "SELECT c.GROUP_ID,c.SEAT FROM OPT_GROUP a,OPT_GROUP_SUB_GROUP_MAP b,OPT_SUB_GROUP_SEAT_ALLOCATION c  "
+          + "WHERE a.SEMESTER_ID=? AND a.PROGRAM_ID=? AND a.\"YEAR\"=? AND a.SEMESTER=? AND a.ID=b.GROUP_ID AND c.GROUP_ID=b.SUB_GROUP_ID";
+
+  @Override
+  public List<OptSeatAllocation> getInfoBySemesterId(Integer pSemesterId, Integer pProgramId, Integer pYear,
+      Integer pSemester) {
+    String query = "";
+    query = pProgramId != 110500 ? GET_GROUP_INFO : GET_SUB_GROUP_INFO;
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramId, pYear, pSemester},
+        new OptSeatAllocationRowMapper());
+  }
 
   @Override
     public List<Long> create(List<MutableOptSeatAllocation> pMutableList) {
@@ -71,7 +87,6 @@ class OptSeatAllocationRowMapper implements RowMapper<OptSeatAllocation> {
   @Override
   public OptSeatAllocation mapRow(ResultSet pResultSet, int pI) throws SQLException {
     PersistentOptSeatAllocation application = new PersistentOptSeatAllocation();
-    application.setId(pResultSet.getLong("ID"));
     application.setGroupID(pResultSet.getLong("GROUP_ID"));
     application.setSeatNumber(pResultSet.getInt("SEAT"));
     return application;

@@ -3,15 +3,13 @@ package org.ums.academic.resource.optCourse.optCourseHelper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.academic.resource.optCourse.optCourseBuilder.OptOfferedGroupBuilder;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.SubGroup;
-import org.ums.domain.model.immutable.optCourse.OptOfferedGroup;
-import org.ums.domain.model.immutable.optCourse.OptOfferedGroupCourseMap;
-import org.ums.domain.model.immutable.optCourse.OptOfferedGroupSubGroupMap;
-import org.ums.domain.model.immutable.optCourse.OptOfferedSubGroupCourseMap;
+import org.ums.domain.model.immutable.optCourse.*;
 import org.ums.domain.model.mutable.optCourse.MutableOptOfferedGroup;
 import org.ums.domain.model.mutable.optCourse.MutableOptOfferedGroupCourseMap;
 import org.ums.domain.model.mutable.optCourse.MutableOptOfferedGroupSubGroupMap;
@@ -20,10 +18,7 @@ import org.ums.enums.ProgramType;
 import org.ums.enums.common.DepartmentType;
 import org.ums.generator.IdGenerator;
 import org.ums.manager.*;
-import org.ums.manager.optCourse.OptOfferedGroupCourseMapManager;
-import org.ums.manager.optCourse.OptOfferedGroupManager;
-import org.ums.manager.optCourse.OptOfferedGroupSubGroupMapManager;
-import org.ums.manager.optCourse.OptOfferedSubGroupCourseMapManager;
+import org.ums.manager.optCourse.*;
 import org.ums.persistent.model.optCourse.PersistentOptOfferedGroup;
 import org.ums.persistent.model.optCourse.PersistentOptOfferedGroupCourseMap;
 import org.ums.persistent.model.optCourse.PersistentOptOfferedGroupSubGroupMap;
@@ -40,6 +35,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,12 +69,15 @@ public class OptOfferedGroupResourceHelper extends ResourceHelper<OptOfferedGrou
   EmployeeManager mEmployeeManager;
   @Autowired
   CourseManager mCourseManager;
+  @Autowired
+  OptSeatAllocationManager mOptSeatAllocationManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     return null;
   }
 
+  @Transactional
   public Response addInfo(Integer pProgramId, Integer pYear, Integer pSemester,
       List<OfferedOptCourseList> offeredCourseList) {
     Integer semesterId = mSemesterManager.getActiveSemester(ProgramType.UG.getValue()).getId();
@@ -163,8 +162,10 @@ public class OptOfferedGroupResourceHelper extends ResourceHelper<OptOfferedGrou
       groupSubGroupNameIdMap); mOptOfferedSubGroupCourseMapManager.create(subGroupCourseMap);
       }
 
-
-    return null;
+  URI contextURI = null;
+  Response.ResponseBuilder builder = Response.created(contextURI);
+  builder.status(Response.Status.CREATED);
+  return builder.build();
   }
 
   public List<OfferedOptCourseList> getOptOfferedCourseList(Integer pSemesterId,Integer pProgramId,Integer pYear,Integer pSemester){
@@ -217,6 +218,10 @@ public class OptOfferedGroupResourceHelper extends ResourceHelper<OptOfferedGrou
 
     }
     //Group && sub Group object Map
+    Map<Long, Integer> groupSeatNumMap= new HashMap<>();
+    List<OptSeatAllocation> optSeatAllocation = mOptSeatAllocationManager.getInfoBySemesterId(pSemesterId, pProgramId, pYear, pSemester);
+    groupSeatNumMap = optSeatAllocation.stream().collect(Collectors.toMap(e -> e.getGroupID(), e -> e.getSeatNumber(), (o, n) -> n));
+
     Map<Long,List<SubGroupList>> subGroupCourseList= new HashMap<>();
     for(Map.Entry<Long,List<OptOfferedGroupSubGroupMap>> entry:subGrpMap.entrySet()){
       Long grpId=entry.getKey();
@@ -226,14 +231,13 @@ public class OptOfferedGroupResourceHelper extends ResourceHelper<OptOfferedGrou
         app.setSubGroupId(entry.getValue().get(i).getSubGroupId());
         app.setSubGroupName(entry.getValue().get(i).getSubGroupName());
         app.setTotalApplied(0);
-        app.setTotalSeats(20);
+        app.setTotalSeats(groupSeatNumMap.get(entry.getValue().get(i).getSubGroupId()));
         app.setCourses(tempSubGroupCourseList.get(entry.getValue().get(i).getSubGroupId()));
         subGroupList.add(app);
       }
       subGroupCourseList.put(grpId,subGroupList);
     }
     //End of Sub group
-
 
 
     List<OfferedOptCourseList> newList= new ArrayList<>();
@@ -244,6 +248,7 @@ public class OptOfferedGroupResourceHelper extends ResourceHelper<OptOfferedGrou
       app.setProgramId(grpList.get(i).getProgramId());
       app.setYear(grpList.get(i).getYear());
       app.setSemester(grpList.get(i).getSemester());
+      app.setTotalSeats(groupSeatNumMap.get(grpList.get(i).getId()));
       app.setMandatory(grpList.get(i).getIsMandatory()==1 ?true:false);
       app.setCourses(tempCourseList.get(grpList.get(i).getId()));
       app.setSubGrpCourses(subGroupCourseList.get(grpList.get(i).getId()));
