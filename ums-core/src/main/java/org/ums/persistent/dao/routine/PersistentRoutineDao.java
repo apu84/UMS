@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static java.time.temporal.ChronoUnit.MINUTES;
+
 public class PersistentRoutineDao extends RoutineDaoDecorator {
   static String SELECT_ALL =
       "SELECT ROUTINE_ID,SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_ID,LAST_MODIFIED, SLOT_GROUP FROM CLASS_ROUTINE ";
@@ -185,7 +187,8 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
     parameter.put("semester", pMutableRoutine.getAcademicSemester());
     parameter.put("startTime", Time.valueOf(pMutableRoutine.getStartTime()));
     parameter.put("endTime", Time.valueOf(pMutableRoutine.getEndTime()));
-    parameter.put("duration", pMutableRoutine.getDuration());
+    Long duration = pMutableRoutine.getStartTime().until(pMutableRoutine.getEndTime(), MINUTES);
+    parameter.put("duration", duration.intValue());
     parameter.put("roomId", pMutableRoutine.getRoom().getId());
     parameter.put("lastModified", UmsUtils.formatDate(new Date(), "YYYYMMDDHHMMSS"));
     parameter.put("slotGroup", pMutableRoutine.getSlotGroup());

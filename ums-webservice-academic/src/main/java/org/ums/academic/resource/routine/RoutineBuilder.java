@@ -18,6 +18,8 @@ import javax.ws.rs.core.UriInfo;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import static java.time.temporal.ChronoUnit.MINUTES;
+
 @Component
 public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
 
@@ -82,7 +84,8 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
     pMutable.setStartTime(LocalTime.parse(pJsonObject.getString("startTime"), formatter));
     pMutable.setEndTime(LocalTime.parse(pJsonObject.getString("endTime"), formatter));
-    pMutable.setDuration(Integer.parseInt(pJsonObject.getString("duration")));
+    Long duration = pMutable.getStartTime().until(pMutable.getEndTime(), MINUTES);
+    pMutable.setDuration(duration.intValue());
     pMutable.setRoomId(Long.parseLong(pJsonObject.getString("roomId")));
     pMutable.setDay(Integer.parseInt(pJsonObject.getString("day")));
     pMutable.setProgramId(Integer.parseInt(pJsonObject.getString("programId")));
