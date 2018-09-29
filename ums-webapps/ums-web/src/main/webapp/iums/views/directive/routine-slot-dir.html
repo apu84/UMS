@@ -24,7 +24,7 @@
                 <p ng-if="vm.getCourseTeacher(l.course.id, l.section)==='(TBA)'" style="color: red"><span >{{vm.getCourseTeacher(l.course.id, l.section)}}</span></p>
             </div>
             <div ng-if="l.course==undefined">
-                <p  ng-style="{'background-color':l.color}">Error</p>
+                <p  ng-style="{'background-color':l.color}" title="{{l.message}}">Error</p>
             </div>
 
            <!-- {{vm.getCourseTeacherByCourseAndSection(routine.courseId, routine.section)}}-->
