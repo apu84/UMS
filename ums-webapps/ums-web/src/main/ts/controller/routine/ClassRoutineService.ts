@@ -39,6 +39,7 @@ module ums{
     employee: Employee;
     slotGroup: number;
     color: string;
+    message: string;
   }
 
   export interface RoutineSlot{
