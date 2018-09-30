@@ -13,6 +13,7 @@ public class OfferedOptCourseList {
   public Integer totalSeats;
   public Integer year;
   public Integer semester;
+  public Integer choice;
   public Boolean isMandatory;
   public List<CourseList> courses;
   public List<SubGroupList> subGrpCourses;
@@ -20,8 +21,8 @@ public class OfferedOptCourseList {
   public OfferedOptCourseList() {}
 
   public OfferedOptCourseList(Long groupId, String groupName, Integer programId, Integer totalApplied,
-      Integer totalSeats, Integer year, Integer semester, Boolean isMandatory, List<CourseList> courses,
-      List<SubGroupList> subGroupCourses) {
+      Integer totalSeats, Integer year, Integer semester, Integer choice, Boolean isMandatory,
+      List<CourseList> courses, List<SubGroupList> subGroupCourses) {
     this.groupId = groupId;
     this.groupName = groupName;
     this.programId = programId;
@@ -29,9 +30,18 @@ public class OfferedOptCourseList {
     this.totalSeats = totalSeats;
     this.year = year;
     this.semester = semester;
+    this.choice = choice;
     this.isMandatory = isMandatory;
     this.courses = courses;
     this.subGrpCourses = subGroupCourses;
+  }
+
+  public Integer getChoice() {
+    return choice;
+  }
+
+  public void setChoice(Integer choice) {
+    this.choice = choice;
   }
 
   public Boolean getMandatory() {

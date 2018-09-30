@@ -10,19 +10,29 @@ public class SubGroupList {
   public String groupName;
   public Integer totalApplied;
   public Integer totalSeats;
+  public Integer choice;
   public boolean isMandatory;
   public List<CourseList> courses;
 
   public SubGroupList() {}
 
-  public SubGroupList(Long subGroupId, String subGroupName, Integer totalApplied, Integer totalSeats,
+  public SubGroupList(Long subGroupId, String subGroupName, Integer totalApplied, Integer totalSeats, Integer choice,
       boolean isMandatory, List<CourseList> courses) {
     this.groupId = subGroupId;
     this.groupName = subGroupName;
     this.totalApplied = totalApplied;
     this.totalSeats = totalSeats;
+    this.choice = choice;
     this.isMandatory = isMandatory;
     this.courses = courses;
+  }
+
+  public Integer getChoice() {
+    return choice;
+  }
+
+  public void setChoice(Integer choice) {
+    this.choice = choice;
   }
 
   public boolean isMandatory() {

@@ -231,6 +231,7 @@ public class OptOfferedGroupResourceHelper extends ResourceHelper<OptOfferedGrou
         app.setSubGroupId(entry.getValue().get(i).getSubGroupId());
         app.setSubGroupName(entry.getValue().get(i).getSubGroupName());
         app.setTotalApplied(0);
+        app.setChoice(0);
         app.setTotalSeats(groupSeatNumMap.get(entry.getValue().get(i).getSubGroupId()));
         app.setCourses(tempSubGroupCourseList.get(entry.getValue().get(i).getSubGroupId()));
         subGroupList.add(app);
@@ -249,6 +250,7 @@ public class OptOfferedGroupResourceHelper extends ResourceHelper<OptOfferedGrou
       app.setYear(grpList.get(i).getYear());
       app.setSemester(grpList.get(i).getSemester());
       app.setTotalSeats(groupSeatNumMap.get(grpList.get(i).getId()));
+      app.setChoice(0);
       app.setMandatory(grpList.get(i).getIsMandatory()==1 ?true:false);
       app.setCourses(tempCourseList.get(grpList.get(i).getId()));
       app.setSubGrpCourses(subGroupCourseList.get(grpList.get(i).getId()));

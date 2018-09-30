@@ -14,7 +14,6 @@ import org.ums.cache.applications.AppRulesCache;
 import org.ums.cache.optCourse.*;
 import org.ums.cache.routine.RoutineCache;
 import org.ums.cache.routine.RoutineConfigCache;
-import org.ums.domain.model.immutable.optCourse.OptOfferedGroupCourseMap;
 import org.ums.fee.semesterfee.SemesterAdmissionCache;
 import org.ums.fee.semesterfee.SemesterAdmissionDao;
 import org.ums.fee.semesterfee.SemesterAdmissionStatusManager;
@@ -387,6 +386,15 @@ public class AcademicContext {
     OptCourseGroupCache optCourseGroupCache = new OptCourseGroupCache((mCacheFactory.getCacheManager()));
     optCourseGroupCache.setManager(new PersistentOptCourseGroupDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return optCourseGroupCache;
+  }
+
+  @Bean
+  OptStudentCourseSelectionManager optStudentCourseSelectionManager() {
+    OptStudentCourseSelectionCache optStudentCourseSelectionCache =
+        new OptStudentCourseSelectionCache((mCacheFactory.getCacheManager()));
+    optStudentCourseSelectionCache.setManager(new PersistentOptStudentCourseSelectionDao(mTemplateFactory
+        .getJdbcTemplate(), mIdGenerator));
+    return optStudentCourseSelectionCache;
   }
 
   @Bean

@@ -11,8 +11,6 @@ module ums{
             this.httpClient.get('academic/optOfferedGroup/getOfferedCourses/semesterId/'+semesterId+'/program/'+programId+'/year/'+year+'/semester/'+semester,'application/json',
                 (response:any[]) => {
                     defer.resolve(response);
-                    console.log("Response");
-                    console.log(response);
                 },
                 (response:ng.IHttpPromiseCallbackArg<any>) => {
                     console.error(response);
