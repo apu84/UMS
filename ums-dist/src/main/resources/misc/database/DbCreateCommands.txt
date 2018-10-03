@@ -1,6 +1,8 @@
 sqlplus /nolog
 connect / as sysdba
 
+alter session set "_ORACLE_SCRIPT"=true;
+
 drop user DB_IUMS cascade;
 
 create user DB_IUMS identified by ig100;

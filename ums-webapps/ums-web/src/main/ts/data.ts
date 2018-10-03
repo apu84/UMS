@@ -96,6 +96,7 @@
         '/experience': {title: 'Profile', 'breadcrumb': ['Profile']},
         '/additional': {title: 'Profile', 'breadcrumb': ['Profile']},
         '/service': {title: 'Profile', 'breadcrumb': ['Profile']},
+        '/classRoutineConfig': {title: 'Class Routine Configuration', 'breadcrumb': ['Class Routine Configuration']},
         '/employeeInformation': {title: 'Search', 'breadcrumb': ['Search']}
     };
 

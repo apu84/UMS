@@ -1,5 +1,6 @@
 package org.ums.services.academic.routine;
 
+import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import org.omg.CORBA.DynAnyPackage.Invalid;
 import org.springframework.stereotype.Service;
@@ -24,4 +25,10 @@ public interface RoutineReportService {
 
   void createRoutineTemplate(Integer pSemesterId, ProgramType pProgramType, OutputStream pOutputStream)
       throws Exception;
+
+  void createAllTeachersRoutine(Integer pSemesterId, Integer pProgramId, OutputStream pOutputStream)
+      throws InvalidObjectException, DocumentException, IOException;
+
+  void createAllRoomBasedRoutine(Integer pSemesterId, Integer pProgramId, OutputStream pOutputStream)
+      throws InvalidObjectException, DocumentException, IOException;
 }

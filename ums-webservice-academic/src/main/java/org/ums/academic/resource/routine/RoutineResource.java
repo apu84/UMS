@@ -114,6 +114,26 @@ public class RoutineResource extends MutableRoutineResource {
   }
 
   @GET
+  @Path("/room-wise-report/semester/{semester-id}/program/{program-id}")
+  @Produces("application/pdf")
+  @GetLog(message = "Requested for room wise Routine report")
+  public StreamingOutput createAllRoomBasedReport(final @Context HttpServletRequest pHttpServletRequest,
+      @PathParam("semester-id") Integer pSemesterId, @PathParam("program-id") Integer pProgramid) {
+    return new StreamingOutput() {
+      @Override
+      public void write(OutputStream output) throws IOException, WebApplicationException {
+        try {
+          mRoutineReportService.createAllRoomBasedRoutine(pSemesterId, pProgramid, output);
+
+        } catch(Exception e) {
+          mLogger.error(e.getMessage());
+          throw new WebApplicationException(e);
+        }
+      }
+    };
+  }
+
+  @GET
   @Path("/teacher-wise-report/teacher-id/{teacher-id}/semester/{semester-id}")
   @Produces("application/pdf")
   @GetLog(message = "Requested for course teacher based Routine report")
@@ -124,6 +144,26 @@ public class RoutineResource extends MutableRoutineResource {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
           mRoutineReportService.createTeachersRoutine(pTeacherId, pSemesterId, output);
+
+        } catch(Exception e) {
+          mLogger.error(e.getMessage());
+          throw new WebApplicationException(e);
+        }
+      }
+    };
+  }
+
+  @GET
+  @Path("/teacher-wise-report/semester/{semester-id}/program/{program-id}")
+  @Produces("application/pdf")
+  @GetLog(message = "Requested for course teacher based Routine report")
+  public StreamingOutput createAllTeacherBasedReport(final @Context HttpServletRequest pHttpServletRequest,
+      @PathParam("semester-id") Integer pSemesterId, @PathParam("program-id") Integer pProgramId) {
+    return new StreamingOutput() {
+      @Override
+      public void write(OutputStream output) throws IOException, WebApplicationException {
+        try {
+          mRoutineReportService.createAllTeachersRoutine(pSemesterId, pProgramId, output);
 
         } catch(Exception e) {
           mLogger.error(e.getMessage());

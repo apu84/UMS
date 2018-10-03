@@ -73,6 +73,14 @@ public class RoutineReportServiceImpl implements RoutineReportService {
 
     Document document = initializeDocument(baos);
 
+    document = createSingleTeacherRoutineReport(pTeachersId, pSemesterId, pOutputStream, document);
+
+    document.close();
+    baos.writeTo(pOutputStream);
+  }
+
+  private Document createSingleTeacherRoutineReport(String pTeachersId, Integer pSemesterId,
+      OutputStream pOutputStream, Document pDocument) throws DocumentException, InvalidObjectException {
     Employee employee = mEmployeeManager.get(pTeachersId);
     Semester semester = mSemesterManager.get(pSemesterId);
 
@@ -80,28 +88,26 @@ public class RoutineReportServiceImpl implements RoutineReportService {
         new UmsParagraph(employee.getDepartment().getLongName() + ", AUST", FontFactory.getFont(FontFactory.TIMES_BOLD,
             12.0f));
     paragraph.setAlignment(Element.ALIGN_CENTER);
-    document.add(paragraph);
+    pDocument.add(paragraph);
 
     paragraph =
         new UmsParagraph(EmploymentType.get(employee.getEmployeeType()).getLabel() + " Teacher Class Schedule, "
             + semester.getName(), FontFactory.getFont(FontFactory.TIMES, 12f));
     paragraph.setAlignment(Element.ALIGN_CENTER);
-    document.add(paragraph);
+    pDocument.add(paragraph);
 
     paragraph =
         new UmsParagraph(employee.getPersonalInformation().getFullName(), FontFactory.getFont(FontFactory.TIMES_BOLD,
             11.0f));
     paragraph.setAlignment(Element.ALIGN_CENTER);
-    document.add(paragraph);
+    pDocument.add(paragraph);
 
     List<Routine> routineList = mRoutineManager.getRoutineByTeacher(pTeachersId, pSemesterId);
     Map<String, List<CourseTeacher>> courseTeacherMap =
         createCourseTeacherMapWithSectionAndCourseId(pSemesterId, routineList);
-    document =
-        createRoutineReportChart(document, pSemesterId, ProgramType.UG, routineList, courseTeacherMap, pOutputStream);
-
-    document.close();
-    baos.writeTo(pOutputStream);
+    pDocument =
+        createRoutineReportChart(pDocument, pSemesterId, ProgramType.UG, routineList, courseTeacherMap, pOutputStream);
+    return pDocument;
   }
 
   @Override
@@ -151,25 +157,87 @@ public class RoutineReportServiceImpl implements RoutineReportService {
 
     Document document = initializeDocument(baos);
 
+    document = createSingleRoomRoutineReport(pRoomId, pSemesterId, pOutputStream, document);
+    document.close();
+    baos.writeTo(pOutputStream);
+  }
+
+  private Document createSingleRoomRoutineReport(Long pRoomId, Integer pSemesterId, OutputStream pOutputStream,
+      Document pDocument) throws DocumentException, InvalidObjectException {
     Semester semester = mSemesterManager.get(pSemesterId);
     ClassRoom classRoom = mClassRoomManager.get(pRoomId);
     UmsParagraph paragraph =
         new UmsParagraph(classRoom.getRoomNo(), FontFactory.getFont(FontFactory.TIMES_BOLD, 12.0f));
     paragraph.setAlignment(Element.ALIGN_CENTER);
-    document.add(paragraph);
+    pDocument.add(paragraph);
 
     paragraph =
         new UmsParagraph("Room Wise Class Schedule, " + semester.getName(), FontFactory.getFont(FontFactory.TIMES, 12f));
     paragraph.setAlignment(Element.ALIGN_CENTER);
-    document.add(paragraph);
+    pDocument.add(paragraph);
 
     List<Routine> routineList =
         mRoutineManager.getRoutineBySemesterAndRoom(pSemesterId, Integer.parseInt(pRoomId.toString()));
 
     Map<String, List<CourseTeacher>> courseTeacherMap =
         createCourseTeacherMapWIthSectionAndCourseId(pSemesterId, routineList);
-    document =
-        createRoutineReportChart(document, pSemesterId, ProgramType.UG, routineList, courseTeacherMap, pOutputStream);
+    pDocument =
+        createRoutineReportChart(pDocument, pSemesterId, ProgramType.UG, routineList, courseTeacherMap, pOutputStream);
+    return pDocument;
+  }
+
+  @Override
+  public void createAllTeachersRoutine(Integer pSemesterId, Integer pProgramId, OutputStream pOutputStream) throws InvalidObjectException, DocumentException, IOException {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+    Document document = initializeDocument(baos);
+
+    List<CourseTeacher> courseTeacherList = mCourseTeacherManager.getCourseTeacher(pSemesterId, pProgramId);
+    Set<String> teacherIdSet = courseTeacherList.stream()
+        .map(r-> r.getTeacher().getId())
+        .collect(Collectors.toSet());
+
+    List<String> teacherIdList = new ArrayList<>(teacherIdSet);
+
+    int i=0;
+    for(String teacherId: teacherIdList){
+      if(i>0)
+        document.newPage();
+
+      document = createSingleTeacherRoutineReport(teacherId, pSemesterId, pOutputStream, document);
+
+      i+=1;
+    }
+
+    document.close();
+    baos.writeTo(pOutputStream);
+  }
+
+  @Override
+  public void createAllRoomBasedRoutine(Integer pSemesterId, Integer pProgramId, OutputStream pOutputStream) throws InvalidObjectException, DocumentException, IOException {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+    Document document = initializeDocument(baos);
+
+    List<Routine> routineList = mRoutineManager.getRoutineBySemesterAndProgram(pSemesterId, pProgramId);
+    Set<Long> roomidSet = routineList
+        .stream()
+        .map(r-> r.getRoomId())
+        .collect(Collectors.toSet());
+    List<Long> roomIdList = new ArrayList<>(roomidSet);
+
+    int i=0;
+
+    for(Long roomid: roomIdList){
+
+      if(i>0)
+        document.newPage();
+
+      document = createSingleRoomRoutineReport(roomid, pSemesterId, pOutputStream, document);
+
+      i+=1;
+    }
+
     document.close();
     baos.writeTo(pOutputStream);
   }

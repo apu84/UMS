@@ -40,6 +40,7 @@ module ums{
     slotGroup: number;
     color: string;
     message: string;
+    showEditOption: boolean;
   }
 
   export interface RoutineSlot{
@@ -232,6 +233,19 @@ module ums{
     }
 
 
+    public getAllTeacherWiseReport(semesterId: number, programId: number){
+      this.httpClient.get(`${this.routineUrl}/teacher-wise-report/semester/${semesterId}/program/${programId}`, 'application/pdf',
+          (data:any, etag: string)=>{
+            var file = new Blob([data], {type: 'application/pdf'});
+            UmsUtil.writeFileContent(data, 'application/pdf', 'TeacherWiseRoutine');
+            //this.$window.open(fileURL);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          },'arraybuffer');
+    }
+
+
     public getRoomWiseRoutine(roomId: number, semesterId: number){
       this.httpClient.get(`${this.routineUrl}/room-wise-report/room-id/${roomId}/semester/${semesterId}`, 'application/pdf',
           (data:any, etag: string)=>{
@@ -244,7 +258,17 @@ module ums{
           },'arraybuffer');
     }
 
-
+    public getAllRoomWiseRoutine(semesterId: number, programId: number){
+      this.httpClient.get(`${this.routineUrl}/room-wise-report/semester/${semesterId}/program/${programId}`, 'application/pdf',
+          (data:any, etag: string)=>{
+            var file = new Blob([data], {type: 'application/pdf'});
+            UmsUtil.writeFileContent(data, 'application/pdf', 'RoomWiseRoutine');
+            //this.$window.open(fileURL);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          },'arraybuffer');
+    }
 
     public getClassRoutineForStudents():ng.IPromise<any>{
       var defer = this.$q.defer();

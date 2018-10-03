@@ -181,7 +181,16 @@ module ums {
         this.classRoutineService.getRoomWiseRoutine(+this.selectedRoom.id , this.classRoutineService.selectedSemester.id);
       }
 
-    public fetchCurrentUser(){
+      public downloadAllRoomBasedReport(){
+        this.classRoutineService.getAllRoomWiseRoutine(this.classRoutineService.selectedSemester.id, this.classRoutineService.selectedProgram.id);
+      }
+
+      public downloadAllTeacherBasedReport(){
+        this.classRoutineService.getAllTeacherWiseReport(this.classRoutineService.selectedSemester.id, this.classRoutineService.selectedProgram.id);
+      }
+
+
+      public fetchCurrentUser(){
         this.userService.fetchCurrentUserInfo().then((user:User)=>{
           console.log("Logged user");
           console.log(user);
