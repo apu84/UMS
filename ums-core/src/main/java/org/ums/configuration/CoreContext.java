@@ -23,6 +23,8 @@ import org.ums.bank.designation.BankDesignationDao;
 import org.ums.bank.designation.BankDesignationManager;
 import org.ums.cache.*;
 import org.ums.cache.common.*;
+import org.ums.ems.createnew.EmployeeCreateRequestManager;
+import org.ums.ems.createnew.PersistentEmployeeCreateRequestDao;
 import org.ums.ems.profilemanagement.academic.AcademicInformationManager;
 import org.ums.ems.profilemanagement.academic.PersistentAcademicInformationDao;
 import org.ums.ems.profilemanagement.additional.AdditionalInformationManager;
@@ -558,6 +560,11 @@ public class CoreContext {
   @Bean
   FCMTokenManager fcmTokenManager() {
     return new PersistentFCMTokenDao(mTemplateFactory.getJdbcTemplate());
+  }
+
+  @Bean
+  EmployeeCreateRequestManager employeeCreateRequestManager() {
+    return new PersistentEmployeeCreateRequestDao(mTemplateFactory.getJdbcTemplate());
   }
 
 }
