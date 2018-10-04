@@ -12,13 +12,15 @@ module ums{
 
     export interface RoutineConfig{
         id: string;
-      programType: number;
+        programType: number;
         semester: Semester;
         semesterId: number;
         dayFrom: DayType;
         dayTo: DayType;
         startTime: string;
         endTime: string;
+        startTimeObj: Date;
+        endTimeObj: Date;
         duration: number;
     }
 

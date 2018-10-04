@@ -56,8 +56,8 @@ module ums{
         Utils.expandRightDiv();
 
         this.routineConfigService.getBySemesterAndProgramType(this.selectedSemester.id, +this.selectedProgramType.id).then((routineConfigData: RoutineConfig) => {
-          console.log("Routine data");
-          console.log(routineConfigData);
+          routineConfigData.startTimeObj = moment(routineConfigData.startTime, "hh:mm A").toDate();
+          routineConfigData.endTimeObj = moment(routineConfigData.endTime, "hh:mm A").toDate();
           this.routineConfigData = routineConfigData;
         })
       }
@@ -66,6 +66,8 @@ module ums{
         console.log("In save or update section");
         this.routineConfigData.programType = +this.selectedProgramType.id;
         this.routineConfigData.semesterId = this.selectedSemester.id;
+        this.routineConfigData.startTime = moment(this.routineConfigData.startTimeObj).format("hh:mm A");
+        this.routineConfigData.endTime = moment(this.routineConfigData.endTimeObj).format("hh:mm A");
         this.routineConfigService.saveOrUpdate(this.routineConfigData).then((routineConfigData: RoutineConfig) => {
           this.routineConfigData = routineConfigData;
         })
