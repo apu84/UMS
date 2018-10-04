@@ -159,7 +159,6 @@ module ums{
                 }
             } else {
                 console.log("EEE");
-                console.log(this.optOfferedCourseList);
                 for (let i = 0; i < this.optOfferedCourseList.length; i++) {
                     for (let j = 0; j < this.optOfferedCourseList[i].subGrpCourses.length; j++) {
                         for (let k = 0; k < this.optOfferedCourseList[i].subGrpCourses[j].courses.length; k++) {

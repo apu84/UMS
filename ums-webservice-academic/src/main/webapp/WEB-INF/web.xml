@@ -91,7 +91,8 @@
           org.ums.twofa,
           org.ums.logs,
           org.ums.usermanagement,
-          org.ums.punishment
+          org.ums.punishment,
+          org.ums.external
       </param-value>
     </init-param>
     <init-param>

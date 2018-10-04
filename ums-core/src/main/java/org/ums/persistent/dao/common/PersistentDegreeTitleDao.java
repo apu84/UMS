@@ -13,7 +13,7 @@ import java.util.List;
 
 public class PersistentDegreeTitleDao extends DegreeTitleDaoDecorator {
 
-  static String GET_ALL = "SELECT ID, TITLE, DEGREE_LEVEL, LAST_MODIFIED FROM MST_DEGREE_TITLE ORDER BY ID ASC";
+  static String GET_ALL = "SELECT ID, TITLE, DEGREE_LEVEL, LAST_MODIFIED FROM MST_DEGREE_TITLE ";
 
   static String INSERT_ONE = "INSERT INTO MST_DEGREE_TITLE(ID, TITLE, DEGREE_LEVEL, LAST_MODIFIED) VALUES "
       + " (?, ?, ?, " + getLastModifiedSql() + " )";
@@ -26,14 +26,14 @@ public class PersistentDegreeTitleDao extends DegreeTitleDaoDecorator {
 
   @Override
   public DegreeTitle get(final Integer pId) {
-    String query = GET_ALL + " WHERE ID = ?";
+    String query = GET_ALL + " WHERE ID = ? ORDER BY ID ASC";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId},
         new PersistentDegreeTitleDao.AcademicDegreeRowMapper());
   }
 
   @Override
   public List<DegreeTitle> getAll() {
-    return mJdbcTemplate.query(GET_ALL, new PersistentDegreeTitleDao.AcademicDegreeRowMapper());
+    return mJdbcTemplate.query(GET_ALL + " ORDER BY ID ASC", new PersistentDegreeTitleDao.AcademicDegreeRowMapper());
   }
 
   @Override
