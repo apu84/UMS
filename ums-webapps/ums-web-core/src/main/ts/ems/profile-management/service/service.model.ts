@@ -23,7 +23,7 @@ module ums{
         id: string;
         shortName: string;
         longName: string;
-        type: string;
+        type: number;
     }
 
     export interface IDesignation {

@@ -19,6 +19,7 @@ public class PersistentEmployeeCreateRequest implements MutableEmployeeCreateReq
   private String mEmail;
   private Integer mSalutation;
   private String mEmployeeName;
+  private String mAcademicInitial;
   private String mDepartmentId;
   private Integer mEmployeeType;
   private Integer mDesignation;
@@ -39,6 +40,7 @@ public class PersistentEmployeeCreateRequest implements MutableEmployeeCreateReq
     mEmail = pPersistentEmployeeCreateRequest.getEmail();
     mSalutation = pPersistentEmployeeCreateRequest.getSalutation();
     mEmployeeName = pPersistentEmployeeCreateRequest.getEmployeeName();
+    mAcademicInitial = pPersistentEmployeeCreateRequest.getAcademicInitial();
     mDepartmentId = pPersistentEmployeeCreateRequest.getDepartmentId();
     mEmployeeType = pPersistentEmployeeCreateRequest.getEmployeeType();
     mDesignation = pPersistentEmployeeCreateRequest.getDesignation();
@@ -109,6 +111,11 @@ public class PersistentEmployeeCreateRequest implements MutableEmployeeCreateReq
   }
 
   @Override
+  public void setAcademicInitial(String pAcademicInitial) {
+    mAcademicInitial = pAcademicInitial;
+  }
+
+  @Override
   public void setDepartmentId(String pDepartmentId) {
     mDepartmentId = pDepartmentId;
   }
@@ -176,6 +183,11 @@ public class PersistentEmployeeCreateRequest implements MutableEmployeeCreateReq
   @Override
   public String getEmployeeName() {
     return mEmployeeName;
+  }
+
+  @Override
+  public String getAcademicInitial() {
+    return mAcademicInitial;
   }
 
   @Override

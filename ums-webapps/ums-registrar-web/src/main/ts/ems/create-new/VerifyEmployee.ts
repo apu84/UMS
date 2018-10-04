@@ -10,7 +10,7 @@ module ums {
             'HttpClient',
             'employeeService'];
 
-        private waitingForApproval : Employee[] = [];
+        private waitingForApproval : INewEmployee[] = [];
 
         constructor(private appConstants: any,
                     private registrarConstants: any,
@@ -49,7 +49,7 @@ module ums {
             })
         }
 
-        private convertToJson(employee: Employee): ng.IPromise<any> {
+        private convertToJson(employee: INewEmployee): ng.IPromise<any> {
             let defer = this.$q.defer();
             let JsonObject = {};
             JsonObject['entries'] = employee;

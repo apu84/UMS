@@ -100,13 +100,12 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   @Override
   @Transactional
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
-
-    String tempPassword = "";
-
     MutableEmployee mutableEmployee = new PersistentEmployee();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableEmployee, pJsonObject.getJsonObject("entries"), localCache);
     mutableEmployee.create();
+
+    String tempPassword = "";
 
     MutablePersonalInformation mutablePersonalInformation = new PersistentPersonalInformation();
     preparePersonalInformation(mutablePersonalInformation, pJsonObject.getJsonObject("entries"));

@@ -26,10 +26,10 @@ public class EmployeeCreateRequestResource extends MutableEmployeeCreateRequestR
   }
 
   @GET
-  @Path("/{employee-id}")
+  @Path("/{status}")
   public JsonObject get(@Context HttpServletRequest pHttpServletRequest, final @Context Request pRequest,
-      final @PathParam("employee-id") String pEmployeeId) throws Exception {
-    return mHelper.getAll(mUriInfo);
+      final @PathParam("status") Integer pActionStatus) throws Exception {
+    return mHelper.get(pActionStatus, mUriInfo);
   }
 
 }

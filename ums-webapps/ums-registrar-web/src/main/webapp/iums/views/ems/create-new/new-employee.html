@@ -236,7 +236,7 @@
                                            name="nName"
                                            class="form-control"
                                            ng-blur="vm.findSimilarUsers()"
-                                           ng-model="vm.newEmployee.name" required>
+                                           ng-model="vm.newEmployee.employeeName" required>
                                     <label data-ng-show="nEmployeeForm.nName.$invalid && !nEmployeeForm.nName.$pristine"
                                            class="help-block control-label">Name is required.</label>
                                 </div>
@@ -288,8 +288,8 @@
                                     <div data-ng-if="vm.newEmployee.designation.roleId!=0">
                                         <div class="checkbox">
                                             <label>
-                                                <input id="iIUMSAccount" name="nIUMSACCOUNT" type="checkbox"
-                                                       data-ng-model="vm.newEmployee.IUMSAccount">
+                                                <input id="iCreateAccount" name="nCreateAccount" type="checkbox"
+                                                       data-ng-model="vm.newEmployee.createAccount">
                                                 <span class="cr"><i
                                                         class="cr-icon glyphicon glyphicon-ok"></i></span>
                                                 <b>Create IUMS account</b>

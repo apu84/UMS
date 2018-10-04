@@ -16,6 +16,8 @@ public interface EmployeeCreateRequest extends Serializable, LastModifier, EditT
 
   String getEmployeeName();
 
+  String getAcademicInitial();
+
   String getDepartmentId();
 
   Integer getEmployeeType();

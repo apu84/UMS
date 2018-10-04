@@ -15,9 +15,9 @@
             <tr data-ng-repeat="emp in vm.waitingForApproval">
                 <td>{{$index + 1}}</td>
                 <td>{{emp.id}}</td>
-                <td>{{emp.employeeName}}</td>
-                <td>{{emp.deptOfficeName}}</td>
-                <td>{{emp.designationName}}</td>
+                <td>{{emp.salutation.name + emp.employeeName}}</td>
+                <td>{{emp.department.shortName}}</td>
+                <td>{{emp.designation.name}}</td>
                 <td><button type="button" class="btn btn-danger btn-xs" data-ng-click="vm.decline($index)">Decline</button>
                     <button type="button" class="btn btn-success btn-xs" data-ng-click="vm.approve($index)">Approve</button></td>
             </tr>

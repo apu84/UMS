@@ -94,7 +94,7 @@ module ums{
 
       public save(json: any): ng.IPromise<any> {
           let defer = this.$q.defer();
-          this.httpClient.post("academic/employee/", json, 'application/json')
+          this.httpClient.post("employee/create/request", json, 'application/json')
               .success(() => {
                   defer.resolve("Success");
               })
@@ -120,7 +120,7 @@ module ums{
 
       public updateEmployee(json: any): ng.IPromise<any> {
           let defer = this.$q.defer();
-          this.httpClient.put("academic/employee/update/verify", json, 'application/json')
+          this.httpClient.put("employee/create/request", json, 'application/json')
               .success(() => {
                   defer.resolve("Success");
               })
@@ -202,7 +202,7 @@ module ums{
 
       public getEmployeeListWaitingForAccountVerification(): ng.IPromise<any>{
           var defer = this.$q.defer();
-          this.httpClient.get("academic/employee/status/pending", 'application/json',
+          this.httpClient.get("employee/create/request/" + 0, 'application/json',
               (result:any,etag:string)=>{
                   defer.resolve(result.entries);
               },

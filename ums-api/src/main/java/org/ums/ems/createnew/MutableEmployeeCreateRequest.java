@@ -15,6 +15,8 @@ public interface MutableEmployeeCreateRequest extends EmployeeCreateRequest, Edi
 
   void setEmployeeName(final String pEmployeeName);
 
+  void setAcademicInitial(final String pAcademicInitial);
+
   void setDepartmentId(final String pDepartmentId);
 
   void setEmployeeType(final Integer pEmployeeType);

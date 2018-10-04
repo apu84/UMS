@@ -66,9 +66,9 @@ public class ExternalResource extends Resource {
   private JsonObject getTeachersInformation(final UriInfo pUriInfo) {
     List<User> users = getUsers(RoleType.TEACHER);
     List<Employee> employees = getEmployees(users);
-    //Map<String, List<AcademicInformation>> academicListMap = getAcademicListMap(users);
+    // Map<String, List<AcademicInformation>> academicListMap = getAcademicListMap(users);
     Map<String, List<PublicationInformation>> publicationListMap = getPublicationListMap(users);
-    return getJson(users, employees, publicationListMap); //academicListMap);
+    return getJson(users, employees, publicationListMap); // academicListMap);
   }
 
   @NotNull
@@ -113,7 +113,7 @@ public class ExternalResource extends Resource {
 
     for(User user : users) {
       getJson(jsonObjectBuilder, mEmployeeManager.get(user.getId()));
-      //getJson(academicListMap, jsonObjectBuilder, user);
+      // getJson(academicListMap, jsonObjectBuilder, user);
       getJson(publicationListMap, jsonObjectBuilder, jsonArrayBuilder, user);
     }
 

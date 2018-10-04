@@ -9,17 +9,19 @@ import java.util.List;
 
 public class PersistentEmployeeCreateRequestDao extends EmployeeCreateRequestDaoDecorator {
 
-  static String INSERT_ONE = "INSERT INTO EMP_CREATE_REQUESTS(EMPLOYEE_ID, EMAIL, SALUTATION, EMPLOYEE_NAME, "
-      + "DEPARTMENT, EMPLOYEE_TYPE, DESIGNATION, EMPLOYMENT_TYPE, JOINING_DATE, CREATE_ACCOUNT, REQUESTED_BY, "
-      + "REQUESTED_ON, ACTION_TAKEN_BY, ACTION_TAKEN_ON, ACTION_STATUS, LAST_MODIFIED ) VALUES(?, ?, ?, ?, ?, ?, ?, "
-      + "?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + " ) ";
+  static String INSERT_ONE =
+      "INSERT INTO EMP_CREATE_REQUESTS(EMPLOYEE_ID, EMAIL, SALUTATION, EMPLOYEE_NAME, ACADEMIC_INITIAL, "
+          + "DEPARTMENT, EMPLOYEE_TYPE, DESIGNATION, EMPLOYMENT_TYPE, JOINING_DATE, CREATE_ACCOUNT, REQUESTED_BY, "
+          + "REQUESTED_ON, ACTION_TAKEN_BY, ACTION_TAKEN_ON, ACTION_STATUS, LAST_MODIFIED ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, "
+          + "?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + " ) ";
 
-  static String SELECT_ALL = "SELECT EMPLOYEE_ID, EMAIL, SALUTATION, EMPLOYEE_NAME, DEPARTMENT, EMPLOYEE_TYPE, "
-      + "DESIGNATION, EMPLOYMENT_TYPE, JOINING_DATE, CREATE_ACCOUNT, REQUESTED_BY, REQUESTED_ON, ACTION_TAKEN_BY, "
-      + "ACTION_TAKEN_ON, ACTION_STATUS, LAST_MODIFIED FROM EMP_CREATE_REQUESTS";
+  static String SELECT_ALL =
+      "SELECT EMPLOYEE_ID, EMAIL, SALUTATION, EMPLOYEE_NAME, ACADEMIC_INITIAL, DEPARTMENT, EMPLOYEE_TYPE, "
+          + "DESIGNATION, EMPLOYMENT_TYPE, JOINING_DATE, CREATE_ACCOUNT, REQUESTED_BY, REQUESTED_ON, ACTION_TAKEN_BY, "
+          + "ACTION_TAKEN_ON, ACTION_STATUS, LAST_MODIFIED FROM EMP_CREATE_REQUESTS";
 
   static String UPDATE_ONE =
-      "UPDATE EMP_CREATE_REQUESTS SET EMPLOYEE_ID = ?, EMAIL = ?, SALUTATION = ?, EMPLOYEE_NAME = ?, "
+      "UPDATE EMP_CREATE_REQUESTS SET EMPLOYEE_ID = ?, EMAIL = ?, SALUTATION = ?, EMPLOYEE_NAME = ?, ACADEMIC_INITIAL = ?, "
           + " DEPARTMENT = ?, EMPLOYEE_TYPE = ?, DESIGNATION = ?, EMPLOYMENT_TYPE = ?, JOINING_DATE = ?, CREATE_ACCOUNT = ?, REQUESTED_BY = ?, "
           + " REQUESTED_ON = ?, ACTION_TAKEN_BY = ?, ACTION_TAKEN_ON = ?, ACTION_STATUS = ?, LAST_MODIFIED = "
           + getLastModifiedSql() + " ";
@@ -37,16 +39,22 @@ public class PersistentEmployeeCreateRequestDao extends EmployeeCreateRequestDao
   @Override
   public String create(MutableEmployeeCreateRequest pMutable) {
     mJdbcTemplate.update(INSERT_ONE, pMutable.getId(), pMutable.getEmail(), pMutable.getSalutation(),
-        pMutable.getEmployeeName(), pMutable.getDepartmentId(), pMutable.getEmployeeType(), pMutable.getDesignation(),
-        pMutable.getEmploymentType(), pMutable.getJoiningDate(), pMutable.getCreateAccount(),
-        pMutable.getRequestedBy(), pMutable.getRequestedOn(), pMutable.getActionTakenBy(), pMutable.getActionTakenOn(),
-        pMutable.getActionStatus());
+        pMutable.getEmployeeName(), pMutable.getAcademicInitial(), pMutable.getDepartmentId(),
+        pMutable.getEmployeeType(), pMutable.getDesignation(), pMutable.getEmploymentType(), pMutable.getJoiningDate(),
+        pMutable.getCreateAccount(), pMutable.getRequestedBy(), pMutable.getRequestedOn(), pMutable.getActionTakenBy(),
+        pMutable.getActionTakenOn(), pMutable.getActionStatus());
     return pMutable.getId();
   }
 
   @Override
   public List<EmployeeCreateRequest> getAll() {
     return mJdbcTemplate.query(SELECT_ALL, new PersistentEmployeeCreateRequestDao.EmployeeCreateRequestRowMapper());
+  }
+
+  @Override
+  public List<EmployeeCreateRequest> getAll(Integer pActionStatus) {
+    return mJdbcTemplate.query(SELECT_ALL + " WHERE ACTION_STATUS = ? ", new Object[] {pActionStatus},
+        new PersistentEmployeeCreateRequestDao.EmployeeCreateRequestRowMapper());
   }
 
   @Override
@@ -60,10 +68,10 @@ public class PersistentEmployeeCreateRequestDao extends EmployeeCreateRequestDao
   public int update(MutableEmployeeCreateRequest pMutable) {
     String query = UPDATE_ONE + " WHERE EMPLOYEE_ID = ? ";
     return mJdbcTemplate.update(query, pMutable.getId(), pMutable.getEmail(), pMutable.getSalutation(),
-        pMutable.getEmployeeName(), pMutable.getDesignation(), pMutable.getEmployeeType(), pMutable.getDesignation(),
-        pMutable.getEmployeeType(), pMutable.getJoiningDate(), pMutable.getCreateAccount(), pMutable.getRequestedBy(),
-        pMutable.getRequestedOn(), pMutable.getActionTakenBy(), pMutable.getActionTakenOn(),
-        pMutable.getActionStatus(), pMutable.getId());
+        pMutable.getEmployeeName(), pMutable.getAcademicInitial(), pMutable.getDesignation(),
+        pMutable.getEmployeeType(), pMutable.getDesignation(), pMutable.getEmployeeType(), pMutable.getJoiningDate(),
+        pMutable.getCreateAccount(), pMutable.getRequestedBy(), pMutable.getRequestedOn(), pMutable.getActionTakenBy(),
+        pMutable.getActionTakenOn(), pMutable.getActionStatus(), pMutable.getId());
   }
 
   @Override
@@ -87,10 +95,11 @@ public class PersistentEmployeeCreateRequestDao extends EmployeeCreateRequestDao
       persistentEmployeeCreateRequest.setEmail(rs.getString("EMAIL"));
       persistentEmployeeCreateRequest.setSalutation(rs.getInt("SALUTATION"));
       persistentEmployeeCreateRequest.setEmployeeName(rs.getString("EMPLOYEE_NAME"));
+      persistentEmployeeCreateRequest.setAcademicInitial(rs.getString("ACADEMIC_INITIAL"));
       persistentEmployeeCreateRequest.setDepartmentId(rs.getString("DEPARTMENT"));
       persistentEmployeeCreateRequest.setEmployeeType(rs.getInt("EMPLOYEE_TYPE"));
       persistentEmployeeCreateRequest.setDesignation(rs.getInt("DESIGNATION"));
-      persistentEmployeeCreateRequest.setEmployeeType(rs.getInt("EMPLOYMENT_TYPE"));
+      persistentEmployeeCreateRequest.setEmploymentType(rs.getInt("EMPLOYMENT_TYPE"));
       persistentEmployeeCreateRequest.setJoiningDate(rs.getDate("JOINING_DATE"));
       persistentEmployeeCreateRequest.setCreateAccount(rs.getInt("CREATE_ACCOUNT"));
       persistentEmployeeCreateRequest.setRequestedBy(rs.getString("REQUESTED_BY"));

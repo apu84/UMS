@@ -58,7 +58,7 @@ module ums {
         }
 
         public submitNewEmployeeForm(form: ng.IFormController): void {
-            this.newEmployee.status = 0;
+            this.newEmployee.actionStatus = 0;
             this.convertToJson().then((result: any) => {
                 this.employeeService.save(result).then((message: any) => {
                     this.resetForm(form);
@@ -86,7 +86,7 @@ module ums {
                     this.newEmployee.employeeType["id"]).then((result: any) => {
                     this.newEmployee.id = result;
                     this.showRightDiv = true;
-                    this.newEmployee.IUMSAccount = true;
+                    this.newEmployee.createAccount = true;
                 });
             }
             else {
@@ -97,12 +97,12 @@ module ums {
         public changeDesignationSelection(): void {
             this.changedDesignationTypes = [];
             if (this.newEmployee.department != undefined && this.newEmployee.employeeType != undefined) {
-                this.employeeService.getFilteredDesignation(this.newEmployee.department["id"], this.newEmployee.employeeType["id"]).then((response: any) => {
+                this.employeeService.getFilteredDesignation(this.newEmployee.department.id, this.newEmployee.employeeType.id).then((response: any) => {
                     if (response.length < 1) {
                         this.notify.error("No designation found");
                     }
                     else {
-                        this.newEmployee.employeeType["id"] == 3 ? this.isStaff = true : this.isStaff = false;
+                        this.newEmployee.employeeType.id == 3 ? this.isStaff = true : this.isStaff = false;
                         for (let i = 0; i < response.length; i++) {
                             for (let j = 0; j < this.allDesignations.length; j++) {
                                 if (response[i].designationId == this.allDesignations[j].id) {
@@ -118,14 +118,14 @@ module ums {
 
         public changeEmployeeTypeSelection(): void {
             this.changedEmployeeTypes = [];
-            this.changedEmployeeTypes = this.newEmployee.department["type"] == 1 ? this.academicEmployeeTypes : this.officialEmployeeTypes;
+            this.changedEmployeeTypes = this.newEmployee.department.type == 1 ? this.academicEmployeeTypes : this.officialEmployeeTypes;
         }
 
         public findSimilarUsers(): void {
             this.similarUsers = [];
             this.showSimilarUsersPortion = false;
-            if (this.newEmployee.name != undefined) {
-                this.employeeService.getSimilarUsers(this.newEmployee.name,).then((data: any) => {
+            if (this.newEmployee.employeeName != undefined) {
+                this.employeeService.getSimilarUsers(this.newEmployee.employeeName).then((data: any) => {
                     this.similarUsers = data;
                     if (data.length > 0) {
                         this.showSimilarUsersPortion = true;
