@@ -6,3 +6,22 @@ services:
       - "5001:5000"
     volumes:
       - /mnt/nfsshare/registry:/var/lib/registry
+    networks:
+      ums-net:
+        aliases:
+          - ums-registry
+
+  ums-registry-ui:
+    image: konradkleine/docker-registry-frontend:v2
+    ports:
+      - "5002:80"
+    environment:
+      - ENV_DOCKER_REGISTRY_HOST=ums-registry
+      - ENV_DOCKER_REGISTRY_PORT=5000
+    networks:
+      ums-net:
+        aliases:
+          - ums-registry-ui
+
+networks:
+  ums-net:

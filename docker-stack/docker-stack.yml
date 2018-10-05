@@ -8,7 +8,7 @@ services:
       - SOLR_HOME=/opt/mysolrhome
       - SOLR_OPTS=-Dsolr.lock.type=single
     volumes:
-      - /mnt/nfsshare/iums-solr:/opt/mysolrhome
+      - //mnt/nfsshare/iums-solr:/opt/mysolrhome
     entrypoint:
       - docker-entrypoint.sh
       - solr-precreate
@@ -27,30 +27,50 @@ services:
           - ums-memcached
   ums-webservice-academic:
     image: harrenhall:5001/ums-webservice-academic:${TAG}
+    volumes:
+      - //mnt/nfsshare/ums/mapdb:/opt/mapdb
+    deploy:
+      replicas: 5
     networks:
       ums-net:
         aliases:
           - ums-webservice-academic
   ums-webservice-library:
       image: harrenhall:5001/ums-webservice-library:${TAG}
+      volumes:
+        - //mnt/nfsshare/ums/mapdb:/opt/mapdb
+      deploy:
+        replicas: 5
       networks:
         ums-net:
           aliases:
             - ums-webservice-library
   ums-webservice-registrar:
       image: harrenhall:5001/ums-webservice-registrar:${TAG}
+      volumes:
+        - //mnt/nfsshare/ums/mapdb:/opt/mapdb
+      deploy:
+        replicas: 5
       networks:
         ums-net:
           aliases:
             - ums-webservice-registrar
   ums-webservice-bank:
       image: harrenhall:5001/ums-webservice-bank:${TAG}
+      deploy:
+        replicas: 5
+      volumes:
+        - //mnt/nfsshare/ums/mapdb:/opt/mapdb
       networks:
         ums-net:
           aliases:
             - ums-webservice-bank
   ums-webservice-account:
       image: harrenhall:5001/ums-webservice-account:${TAG}
+      deploy:
+        replicas: 5
+      volumes:
+        - //mnt/nfsshare/ums/mapdb:/opt/mapdb
       networks:
         ums-net:
           aliases:
@@ -70,11 +90,24 @@ services:
         aliases:
           - ums-microservice-cache-warmer
   ums-microservice-indexer:
-      image: harrenhall:5001/ums-microservice-indexer:${TAG}
-      networks:
-        ums-net:
-          aliases:
-            - ums-microservice-indexer
+    image: harrenhall:5001/ums-microservice-indexer:${TAG}
+    networks:
+      ums-net:
+        aliases:
+          - ums-microservice-indexer
+  visualizer:
+    image: dockersamples/visualizer:stable
+    environment:
+      - CTX_ROOT=/visualizer
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      ums-net:
+        aliases:
+          - visualizer
 networks:
   ums-net:
 
